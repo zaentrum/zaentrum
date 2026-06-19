@@ -1,0 +1,9 @@
+{
+  "channels": { "stable": "latest", "edge": "latest" },
+  "versions": {
+    "latest": {
+      "released": "2026-06-19",
+      "notes": "Pre-release. No semver tags cut yet; both channels track the latest published images. Pin spec.version to a concrete tag once tagged releases begin."
+    }
+  }
+}
