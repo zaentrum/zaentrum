@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>zaentrum</title>
+  <meta name="description" content="zaentrum — a neutral, self-hosted media platform for a library you own and are entitled to stream. bring your own files; it catalogs, processes, and streams them to clean web, phone, and tv clients.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0B0F19">
+
+  <!-- open graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="zaentrum — your media, your server">
+  <meta property="og:description" content="a neutral, self-hosted media platform for a library you own. one command to run; scales out on kubernetes.">
+  <meta property="og:url" content="https://zaentrum.github.io/zaentrum/">
+
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- fonts: the design system does not bundle them; load the same two families the platform uses -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- vendored nalet design system (tokens + components) + landing layout -->
+  <link rel="stylesheet" href="./nalet.css">
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+
+<a class="skip" href="#start">skip to install</a>
+
+<!-- ───────────────────────── header ───────────────────────── -->
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="brand" href="./" aria-label="zaentrum home">
+      <svg class="lockup" viewBox="0 0 170 40" role="img" aria-label="zaentrum">
+        <path d="M6 9 L17 20 L6 31" fill="none" stroke="#58A6FF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="28" y="28" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="700" font-size="22" fill="#C9D1D9" letter-spacing="0.5">zaentrum</text>
+        <rect class="nc-lockup__cursor" x="151" y="11" width="9" height="19" fill="#58A6FF">
+          <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.5;1" dur="1.05s" repeatCount="indefinite"/>
+        </rect>
+      </svg>
+    </a>
+    <nav class="head-nav" aria-label="primary">
+      <a href="#platform">platform</a>
+      <a href="#start">install</a>
+      <a href="https://github.com/zaentrum/zaentrum/wiki">docs</a>
+      <a href="https://github.com/zaentrum/zaentrum">github</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ───────────────────────── hero ───────────────────────── -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <p class="eyebrow"><span class="chev">&gt;</span> neutral · self-hosted media platform <span class="nc-badge nc-badge--blue">pre-release</span></p>
+    <h1 class="hero-title">your media.<br>your server.</h1>
+    <p class="lede">
+      bring your own files; zaentrum catalogs, processes, and streams them to clean
+      clients on the web, your phone, and your tv. one command to run — and it
+      never acquires content.
+    </p>
+    <div class="cta-row">
+      <a class="nc-btn nc-btn--primary nc-btn--lg" href="#start">get started</a>
+      <a class="nc-btn nc-btn--default nc-btn--lg" href="https://github.com/zaentrum/zaentrum/wiki">read the docs</a>
+    </div>
+
+    <div class="term hero-term" role="figure" aria-label="install command">
+      <div class="term-bar"><span>bash</span></div>
+      <pre class="term-body"><span class="p">$</span> docker run -d --privileged -p 80:80 \
+    --name zaentrum ghcr.io/zaentrum/zaentrum:latest
+<span class="p">$</span> open http://zaentrum.localhost<span class="cursor" aria-hidden="true"></span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── principle ───────────────────────── -->
+<section class="band">
+  <div class="wrap band-inner">
+    <h2 class="band-title"><span class="chev">&gt;</span> you own your library</h2>
+    <p class="band-body">
+      zaentrum is content-neutral. you point it at files that are already on disk; it
+      catalogs and streams them. there are no built-in downloaders and no indexer
+      integrations — how the files got there is out of scope, by design.
+    </p>
+  </div>
+</section>
+
+<!-- ───────────────────────── platform / features ───────────────────────── -->
+<section id="platform" class="section">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="chev">&gt;</span> the platform</h2>
+    <p class="sec-lede">roughly sixteen services — one image on your laptop, or a full cluster. same manifests, either way.</p>
+
+    <div class="grid">
+      <article class="feat">
+        <svg class="feat-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        <h3>one command</h3>
+        <p>a single container runs a full kubernetes in-process: web, admin, catalog, transcode, package, streaming. one image, one port, no external dependencies.</p>
+      </article>
+
+      <article class="feat">
+        <svg class="feat-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+        <h3>bundled backends</h3>
+        <p>postgres, valkey and a kafka broker ship inside the container. nothing external to stand up before you can browse your first title.</p>
+      </article>
+
+      <article class="feat">
+        <svg class="feat-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+        <h3>event-driven pipeline</h3>
+        <p>scan → enrich → analyze → transcode → package. every stage handoff is a kafka event keyed by item. optional gpu (nvenc) acceleration; software by default.</p>
+      </article>
+
+      <article class="feat">
+        <svg class="feat-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="15" x="2" y="7" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+        <h3>clean clients</h3>
+        <p>web, phone/tablet and tv — skins over one shared core. point any of them at your server with add server: an ip, a .local name, or a real domain.</p>
+      </article>
+
+      <article class="feat">
+        <svg class="feat-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        <h3>scales out</h3>
+        <p>the same platform runs on any kubernetes cluster, reconciled by an operator from a single custom resource — with day-2 scaling and channel auto-updates.</p>
+      </article>
+
+      <article class="feat">
+        <svg class="feat-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        <h3>your identity</h3>
+        <p>run the bundled keycloak, federate your existing provider, or delegate to an external oidc provider — chosen in the first-run setup wizard.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── clients ───────────────────────── -->
+<section class="section section--tight">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="chev">&gt;</span> one core, many skins</h2>
+    <div class="clients">
+      <div class="client">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 6 L10 12 L4.5 18" stroke="#58A6FF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><text x="12" y="16.6" font-family="'JetBrains Mono',ui-monospace,monospace" font-weight="800" font-size="13" fill="#C9D1D9">c</text></svg>
+        <span class="client-name">chino</span>
+        <span class="client-kind">video</span>
+        <span class="nc-badge nc-badge--green">live</span>
+      </div>
+      <div class="client">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 6 L10 12 L4.5 18" stroke="#58A6FF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><text x="12" y="16.6" font-family="'JetBrains Mono',ui-monospace,monospace" font-weight="800" font-size="13" fill="#C9D1D9">t</text></svg>
+        <span class="client-name">tv</span>
+        <span class="client-kind">live tv</span>
+        <span class="nc-badge">planned</span>
+      </div>
+      <div class="client">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 6 L10 12 L4.5 18" stroke="#58A6FF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><text x="12" y="16.6" font-family="'JetBrains Mono',ui-monospace,monospace" font-weight="800" font-size="13" fill="#C9D1D9">m</text></svg>
+        <span class="client-name">musig</span>
+        <span class="client-kind">music</span>
+        <span class="nc-badge">planned</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── get started ───────────────────────── -->
+<section id="start" class="section">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="chev">&gt;</span> get started</h2>
+    <p class="sec-lede">two paths, same platform. start on your laptop; move to a cluster when you outgrow it.</p>
+
+    <div class="start-grid">
+      <div class="start-col">
+        <div class="start-head">one box</div>
+        <p class="start-cap">everything in a single container.</p>
+        <div class="term">
+          <div class="term-bar"><span>bash</span></div>
+          <pre class="term-body"><span class="p">$</span> docker run -d --privileged -p 80:80 \
+    --name zaentrum \
+    ghcr.io/zaentrum/zaentrum:latest
+<span class="p">$</span> open http://zaentrum.localhost</pre>
+        </div>
+        <p class="start-note">
+          the first-run wizard names it, sets identity, and points it at your library.
+          <a href="https://github.com/zaentrum/zaentrum/wiki/self-hosting">self-hosting guide →</a>
+        </p>
+      </div>
+
+      <div class="start-col">
+        <div class="start-head">on kubernetes</div>
+        <p class="start-cap">the same platform, operator-managed.</p>
+        <div class="term">
+          <div class="term-bar"><span>bash</span></div>
+          <pre class="term-body"><span class="p">$</span> kubectl apply -k \
+    github.com/zaentrum/zaentrum-operator/config
+<span class="p">$</span> kubectl apply -f zaentrum.yaml   <span class="c"># your Zaentrum CR</span></pre>
+        </div>
+        <p class="start-note">
+          one operator reconciles ~16 services from one custom resource.
+          <a href="https://github.com/zaentrum/zaentrum/wiki/operator">operator &amp; cr reference →</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── docs callout ───────────────────────── -->
+<section class="band">
+  <div class="wrap band-inner">
+    <h2 class="band-title"><span class="chev">&gt;</span> the full manual lives in the wiki</h2>
+    <p class="band-body">deployment and operations, by audience — prerequisites, self-hosting, the operator and every <code class="nc-code nc-code--inline">Zaentrum</code> field, a worked demo, day-2 updates, and troubleshooting.</p>
+    <div class="doc-links">
+      <a class="nc-btn nc-btn--default" href="https://github.com/zaentrum/zaentrum/wiki/prerequisites">prerequisites</a>
+      <a class="nc-btn nc-btn--default" href="https://github.com/zaentrum/zaentrum/wiki/self-hosting">self-hosting</a>
+      <a class="nc-btn nc-btn--default" href="https://github.com/zaentrum/zaentrum/wiki/operator">operator &amp; cr</a>
+      <a class="nc-btn nc-btn--default" href="https://github.com/zaentrum/zaentrum/wiki/reference-demo">reference demo</a>
+      <a class="nc-btn nc-btn--default" href="https://github.com/zaentrum/zaentrum/wiki/troubleshooting">troubleshooting</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ───────────────────────── footer ───────────────────────── -->
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <span class="chev">&gt;</span><span class="foot-word">zaentrum</span>
+      <span class="foot-tag">· a neutral, self-hosted media platform</span>
+    </div>
+    <nav class="foot-nav" aria-label="footer">
+      <a href="https://github.com/zaentrum/zaentrum">github</a>
+      <a href="https://github.com/zaentrum/zaentrum/wiki">docs</a>
+      <a href="https://github.com/zaentrum/zaentrum/blob/main/releases.json">releases</a>
+    </nav>
+    <p class="foot-fine">mpl-2.0 · pre-release · content-neutral by design</p>
+  </div>
+</footer>
+
+</body>
+</html>

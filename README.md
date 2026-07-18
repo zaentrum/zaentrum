@@ -7,6 +7,9 @@ web, your phone/tablet, and your TV.
 This repo is the **front door**: how to install, the release channels, and pointers to the
 rest of the project.
 
+**Product page → [zaentrum.github.io/zaentrum](https://zaentrum.github.io/zaentrum/)** ·
+**Docs → [the wiki](https://github.com/zaentrum/zaentrum/wiki)**
+
 > **Status: pre-release.** Container images are published as releases are cut — see
 > [`releases.json`](./releases.json). The commands below describe the intended install flow.
 
