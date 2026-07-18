@@ -57,6 +57,20 @@ kubectl apply -k 'github.com/zaentrum/zaentrum-operator/config'
 # or install the OLM bundle on OpenShift — see the operator repo
 ```
 
+## Documentation
+
+Full deployment & operations docs live in **[`docs/`](docs/README.md)** — start there. It routes
+by audience and covers every path:
+
+- **[docs/README.md](docs/README.md)** — index + the four-layer deploy model
+- **[Prerequisites](docs/prerequisites.md)** — cluster + external dependencies
+- **[Self-hosting](docs/self-hosting.md)** — appliance · your-own-k8s · helm · k3s/Compose (+ values reference)
+- **[Operator & CR reference](docs/operator.md)** — the operator + the complete `Zaentrum` CR spec
+- **[Reference demo](docs/reference-demo.md)** — a worked operator + CI GitOps deploy
+- **[Updating](docs/updating.md)** — day-2: app image · chart/operator roll · CR change
+- **[Troubleshooting](docs/troubleshooting.md)** — symptom → cause → fix
+- **[Architecture](docs/architecture.md)** — how it fits together
+
 ## Releases
 
 Channels are tracked in [`releases.json`](./releases.json): `stable` and `edge`. The bundled
