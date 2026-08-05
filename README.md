@@ -18,7 +18,7 @@ rest of the project.
 ## Install in one command
 
 ```bash
-docker run -d --privileged -p 80:80 --name zaentrum ghcr.io/zaentrum/zaentrum:latest
+docker run -d --privileged -p 80:80 --name zaentrum ghcr.io/zaentrum/appliance:latest
 open http://zaentrum.localhost
 ```
 
