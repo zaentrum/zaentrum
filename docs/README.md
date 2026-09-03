@@ -20,7 +20,8 @@ single `Zaentrum` custom resource. Chart values map 1:1 onto the CR spec.
 | **Reproduce the public reference demo** (OKD + GitLab CI GitOps) | [Reference demo](./reference-demo.md) |
 | **Ship a change** to a running platform (day-2) | [Updating](./updating.md) |
 | **Fix a broken deploy** | [Troubleshooting](./troubleshooting.md) |
-| **Understand how it fits together** | [Architecture](./architecture.md) |
+| **Extend it with an addon** (or write one) | [Extending zaentrum](./extending/README.md) |
+| **Understand how it fits together** | [Architecture](./architecture.md) · [Decision records](./adr/README.md) |
 
 Start with [Prerequisites](./prerequisites.md) regardless of path.
 

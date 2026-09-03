@@ -1,0 +1,23 @@
+name: docs-check
+
+# The docs have lied before — a section described a setup API no service
+# implements. Structure we can check, we check: every relative link resolves,
+# every anchor exists, and the wiki build (slugs, sidebar) succeeds.
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**", "scripts/**", ".github/workflows/docs-check.yml"]
+  pull_request:
+    paths: ["docs/**", "scripts/**"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: link + anchor check
+        run: python3 scripts/check-docs.py
+      - name: wiki build dry-run (slugs + sidebar)
+        run: |
+          mkdir -p /tmp/wiki
+          python3 scripts/build-wiki.py docs /tmp/wiki
