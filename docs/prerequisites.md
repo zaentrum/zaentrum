@@ -8,7 +8,7 @@ The three topologies:
 
 | Topology | What it is | Guide |
 |---|---|---|
-| **Appliance** | One container — `docker run --privileged ghcr.io/zaentrum/appliance:latest` boots an in-process single-node k3s that auto-applies `deploy/base`. Zero-clone. | [self-hosting.md](./self-hosting.md#quick-start-all-in-one) |
+| **Appliance** | One container — `docker run --privileged ghcr.io/zaentrum/appliance:latest` boots an in-process single-node k3s that auto-applies `deploy/base`. Zero-clone. | [self-hosting.md](./self-hosting.md#a-one-command-appliance) |
 | **Self-host on k8s** | Install the operator once, then apply a `Zaentrum` CR; or `helm install` the chart (`operator/platform/chart`) directly. Non-k8s `deploy/k3s` (`up.sh`) and `deploy/compose` (docker-compose + Caddy) profiles also exist. | [self-hosting.md](./self-hosting.md), [operator.md](./operator.md) |
 | **Reference demo** | The public demo at `https://zaentrum.demo.nalet.cloud` on an OKD cluster, deployed by CI from a deploy-only repo. | [reference-demo.md](./reference-demo.md) |
 
@@ -50,7 +50,7 @@ app, admin UI, catalog, streaming, and bundled Postgres, Valkey, and Kafka.
 - **Network egress to `ghcr.io`** to pull the appliance image.
 - **A host you can reach it by.** `http://zaentrum.localhost` resolves to `127.0.0.1` in modern
   browsers with no `/etc/hosts` edit, and the issuer host matches the host you reach it at. To reach
-  it by another name, align the issuer host per [self-hosting.md](./self-hosting.md#running-under-a-different-name).
+  it by another name, align the issuer host per [self-hosting.md](./self-hosting.md).
 
 Optional:
 
@@ -118,7 +118,7 @@ the ffmpeg-nvenc ↔ driver version coupling applies to you.
 - With `identity.mode: bundled` (default), the chart ships Keycloak (realm `zaentrum`); nothing to
   provide up front. With `identity.mode: external`, register a public OIDC client at your own provider
   and set `identity.issuer` / `identity.clientId` / `identity.audience` (see the operator contract in
-  [self-hosting.md](./self-hosting.md#operator-contract)).
+  [self-hosting.md](./self-hosting.md#b-self-host-with-the-operator)).
 
 ### Network egress
 
