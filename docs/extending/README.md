@@ -23,6 +23,7 @@ this page.
 | **[Catalog ingest](./ingest.md)** | "This file on disk is now a library item" — the pipeline takes it from there | `POST /api/ingest` on katalog-manager |
 | **[Event bus](./events.md)** | React to pipeline stages; publish your own domain events | Kafka topics under the tenant prefix |
 | **[Identity](./identity.md)** | A service account that may self-register its UI contributions | OIDC client-credentials + the addon role |
+| **[CLI capability](./cli.md)** | Commands and checks in the [`zae`](https://github.com/zaentrum/zae) CLI on any instance running the addon | A descriptor at `/.well-known/zaentrum-capability.json` |
 
 Two properties make this composition honest:
 
@@ -49,6 +50,7 @@ ahead of the shipped platform, it is marked, not asserted:
 | Addon service-account role in the bundled realm | 🧭 roadmap — see [identity](./identity.md) |
 | Addon self-registering its **app/tile** (not just slot rows) | 🧭 roadmap (admin registers them today) |
 | Declarative install (`spec.addons[]` on the CR) | 🧭 roadmap — see [installing](./installing.md) |
+| CLI capability discovery + a worked descriptor | ✅ shipped — see [the CLI contract](./cli.md) |
 
 ## Installing an addon today
 

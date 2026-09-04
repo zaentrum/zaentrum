@@ -46,6 +46,7 @@ NAV = [
         ("extending-events", "Event bus"),
         ("extending-identity", "Addon identity"),
         ("extending-installing", "Installing addons"),
+        ("extending-cli", "The CLI contract (zae)"),
     ]),
     ("Understand it", [
         ("architecture", "Architecture"),
