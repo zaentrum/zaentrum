@@ -128,6 +128,13 @@ oc create token <deploy-sa> -n <deploy-namespace> --duration=<long>
 
 ---
 
+> **Operator pull policy.** The operator's ServiceAccount must carry **no** registry credential:
+> its image is public, and GHCR rejects a dead credential with `403` rather than falling back to
+> anonymous — which put the operator into `ImagePullBackOff` for 23 days while the CR still said
+> `Ready`. `bootstrap.yaml` includes a scoped *janitor* Role so the deploy job can remove a stale
+> `ghcr-pull` from that namespace; the job's operator preflight refuses to deploy against a dead
+> operator either way.
+
 ## Layer 2 — The repeatable deploy
 
 Everything namespaced is applied by the CI deploy job (source: the pipeline

@@ -122,8 +122,11 @@ the ffmpeg-nvenc ↔ driver version coupling applies to you.
 
 ### Network egress
 
-- **`ghcr.io`** — mandatory, to pull every image. Add a pull secret via `imagePullSecrets` only if you
-  mirror behind a private registry.
+- **`ghcr.io`** — mandatory, to pull every image. **Do not attach a pull secret for it**: the images
+  are public, and GHCR answers a dead or expired credential with `403` instead of falling back to
+  anonymous — an attached credential that later expires makes public images unpullable. Add
+  `imagePullSecrets` only if you mirror behind a private registry. This applies to the operator's
+  own ServiceAccount too; the deploy pipeline's preflight checks for exactly this.
 - **TMDB** — only if you enrich metadata (see [Network egress](#network-egress)).
 
 ---
@@ -199,7 +202,7 @@ choreography — the operator forces `jobs.seed: false`).
 |---|---|---|
 | Group | `OC_SERVER`, `OC_TOKEN` | OKD API URL + a long-lived deployer SA token (`oc create token <deploy-sa> -n <deploy-namespace> --duration=<long>`). |
 | Project | `DEMO_DB_PW`, `DEMO_MANAGER_SECRET`, `DEMO_KC_ADMIN_PW`, `DEMO_REALM_ADMIN_PW`, `DEMO_USER_PW` | Secrets CI creates as the `zaentrum-*` secrets. |
-| Group | `GHCR_PULL_TOKEN`, `GHCR_PULL_USER` | A GitHub PAT with `read:packages` for the `ghcr-pull` secret. |
+| Group | `GHCR_PULL_TOKEN`, `GHCR_PULL_USER` | **Optional — only for a private mirror.** Leave unset for public `ghcr.io/zaentrum/*`; when unset the deploy removes any stale `ghcr-pull` secret it finds. |
 
 > Trap: an expired `OC_TOKEN` fails the deploy pre-flight with "namespace missing" — refresh with a new
 > long-lived token. See [troubleshooting.md](./troubleshooting.md).
