@@ -240,7 +240,8 @@ spec:
   version: latest
   hostname: zaentrum.demo.nalet.cloud
   partOf: zaentrum-demo
-  imagePullSecrets: [ghcr-pull, registry-pull]   # names of pre-created pull secrets
+  imagePullSecrets: []   # ghcr.io/zaentrum/* is public: leave EMPTY. Name secrets here only for a
+                         # private mirror — a dead credential makes even a public image unpullable.
   identity:
     mode: bundled
     issuerScheme: https             # TLS terminated at the OpenShift router
