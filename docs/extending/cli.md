@@ -57,6 +57,43 @@ anyone's terminal. The worst a descriptor can do is describe an HTTP call the
 CLI then makes with the caller's own token against the instance's own APIs —
 no new surface beyond what those APIs already gate.
 
+## Reaching a command from outside
+
+Descriptor paths are service-relative. From outside the cluster, `zae` reaches
+them through the portal's app proxy: `/api/portal/apps/<key>/<path>`, where
+`<key>` is the service's app-registry key — by default its `service` name; a
+descriptor may set `proxyKey` when they differ. So an addon that wants CLI
+commands needs its app registered with a `proxyUrl` (the same registration
+that hosts its console), and nothing else: no route, no origin.
+
+## Exit codes — the scripting contract
+
+A dynamic surface creates a failure mode static CLIs never had: a command can
+vanish between two runs of the same script because the **instance** changed.
+`zae` therefore distinguishes, by exit code, "the invocation is malformed",
+"this instance definitively does not offer that", and "zae could not find
+out" — the last two demand opposite reactions from a script. These are
+stable and part of this contract:
+
+| exit | meaning |
+|---|---|
+| `0` | ran |
+| `1` | ran; the instance returned an error |
+| `2` | usage — malformed invocation, missing `--url`, a placeholder not supplied |
+| `3` | **not offered** — discovery answered and the instance declares no such service or command |
+| `4` | **undetermined** — discovery unreachable, or the instance predates it; do **not** conclude the command is gone |
+| `5` | declared, but the instance refused the caller (401/403) |
+| `6` | the instance speaks a newer capability schema than the binary |
+
+`zae require <service>[.<command>] --url …` answers with `0`/`3`/`4`/`6` and
+prints nothing on stdout, so scripts assert prerequisites before doing work.
+A `404` during execution triggers one re-discovery and is reclassified as `3`
+if the command is now absent.
+
+Authentication is a stated stopgap until `zae login` ships: a bearer in
+`ZAE_TOKEN` (for example an addon service account's client-credentials
+token) is sent as-is.
+
 ## Rules for a good descriptor
 
 - **Declare only what is routed.** Put the drift-killer in your tests:
@@ -76,5 +113,6 @@ no new surface beyond what those APIs already gate.
 | Aggregation endpoint (`/api/portal/cli/discovery`) | ✅ shipped in portal-api |
 | A worked descriptor | ✅ [acquire](https://github.com/laedeli/acquire) declares 10 commands, 1 check, 4 topics |
 | `zae discover` / doctor integration | ✅ shipped in zae v0.1 |
-| `zae login` (device flow) + executing role-gated commands | 🧭 next — until then the discovered surface is browsable, not yet invokable |
+| Executing discovered commands + the exit-code contract + `zae require` | ✅ zae v0.2 (`ZAE_TOKEN` for auth until login) |
+| `zae login` (device flow) | 🧭 next |
 | Registered checks executed by doctor | 🧭 with login (the portal will not expose in-cluster check endpoints unauthenticated) |
