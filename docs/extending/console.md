@@ -12,9 +12,10 @@ or releasing the portal.
 ## How hosting works
 
 1. An app is registered in the portal (key, title, and a **proxy url** — the
-   addon's in-cluster address, e.g. `http://acquire`). Registration is
-   admin-only today (settings console → apps); addon self-registration of apps
-   is 🧭 roadmap.
+   addon's in-cluster address, e.g. `http://acquire`). [Installing the
+   addon](./installing.md) does this from its manifest: `ui.console: true`
+   also places a launchpad tile that opens the console. (An admin can still
+   register apps by hand under settings → apps.)
 2. The portal serves `/portal/app/{key}` and reverse-proxies
    `/api/apps/{key}/*` to the proxy url. The proxy is deliberately the front
    door: a browser cannot attach a bearer token to a module `import()`, and the

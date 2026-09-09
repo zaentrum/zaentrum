@@ -16,7 +16,7 @@ An earlier internal decision pushed request intake into the product clients and 
 
 The core stays content-neutral by construction. It exposes exactly two extension seams, plus one hosting mechanism, and nothing else. Anything acquisition-shaped lives out of tree as an addon; the worked example is [acquire](https://github.com/laedeli/acquire).
 
-**Seam 1 — UI extension slots.** `portal-api` keeps a `ui_extensions` registry: one row is a contribution (link or action — label, icon, URL, order, enabled) to a **named slot** in a product app. Writes are gated on the admin or `zaentrum-addon` role, so an addon's service account self-registers its rows on install. Any authenticated user can read a slot via `/api/portal/slots/{slot}`; product apps fetch the enabled rows for their slots and render them as native buttons. chino's search-empty state is such a slot: with the addon installed, a "Request this" button appears there; without it, the slot renders nothing.
+**Seam 1 — UI extension slots.** `portal-api` keeps a `ui_extensions` registry: one row is a contribution (link or action — label, icon, URL, order, enabled) to a **named slot** in a product app. Writes are gated on the admin or `zaentrum-addon` role. Rows arrive when an admin installs the addon and the platform reads its manifest ([ADR-0009](./0009-pull-based-addon-installation.md) — originally the addon's service account self-registered them). Any authenticated user can read a slot via `/api/portal/slots/{slot}`; product apps fetch the enabled rows for their slots and render them as native buttons. chino's search-empty state is such a slot: with the addon installed, a "Request this" button appears there; without it, the slot renders nothing.
 
 **Seam 2 — neutral ingest.** `katalog-manager` exposes `POST /api/ingest`: register a staged file as a catalog item (`{path, type, title, year?, description?}`; the path must resolve under the media or packages root; idempotent on the path). It is the scanner's create-path published as a machine contract, and it knows nothing about how the file got there. It creates the item plus its primary playback asset and emits `catalog.item.discovered` — the same entry event the scanner emits — so ingested files flow the normal pipeline. The invariant: the item creator owns the `discovered` emit; addons are consume-only on catalog events.
 
@@ -38,7 +38,7 @@ flowchart LR
         spa["request console"]
         orch["request orchestration +<br/>its own download plane"]
     end
-    orch -- "self-registers slot row on install" --> reg
+    orch -. "declares slot row (manifest)" .-> reg
     reg --> chino
     chino -- "user taps contributed button" --> spa
     spa --> orch
