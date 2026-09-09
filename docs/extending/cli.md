@@ -16,9 +16,10 @@ uninstalling it leaves no trace.
 2. portal-api aggregates: `GET /api/portal/cli/discovery` fans out to every
    workload the platform knows — the operator console's instance list
    (platform services) and the app registry's proxy URLs (addons) — and
-   returns one document. **Registering an addon's app is what registers its
-   CLI surface.** Candidates never come from the request, which is what keeps
-   a fanning-out endpoint SSRF-proof.
+   returns one document. **Installing an addon is what registers its CLI
+   surface** — the install creates the app with its proxy URL. Candidates
+   never come from the request, which is what keeps a fanning-out endpoint
+   SSRF-proof.
 3. `zae discover --url https://…` renders the document; `zae doctor` reports
    how many services declare capabilities.
 
@@ -36,7 +37,16 @@ uninstalling it leaves no trace.
   "checks": [
     { "name": "system", "path": "/api/health/system" }
   ],
-  "topics": ["download.client.completed"]
+  "topics": ["download.client.completed"],
+  "ui": {
+    "app": { "title": "acquire", "description": "requests and downloads", "icon": "download" },
+    "console": true,
+    "slots": [
+      { "key": "search-request", "slot": "search.empty", "kind": "link",
+        "label": "Request this", "icon": "download",
+        "url": "/portal/app/acquire?q={q}#/discover", "ord": 10 }
+    ]
+  }
 }
 ```
 
@@ -51,6 +61,12 @@ uninstalling it leaves no trace.
   exactly when auth is what broke.
 - `topics[]` — event topics the service emits (logical names; the tenant
   prefix is instance configuration).
+- `ui` — optional; what the addon contributes to the portal and product apps.
+  The CLI ignores it. The platform reads it when an admin
+  [installs the addon](./installing.md): `app` names the portal app,
+  `console: true` places a tile for the [hosted console](./console.md),
+  `slots[]` become [slot rows](./slots.md). One manifest declares the whole
+  addon.
 
 **Descriptors are data, never code.** Nothing an instance serves executes in
 anyone's terminal. The worst a descriptor can do is describe an HTTP call the
@@ -63,8 +79,8 @@ Descriptor paths are service-relative. From outside the cluster, `zae` reaches
 them through the portal's app proxy: `/api/portal/apps/<key>/<path>`, where
 `<key>` is the service's app-registry key — by default its `service` name; a
 descriptor may set `proxyKey` when they differ. So an addon that wants CLI
-commands needs its app registered with a `proxyUrl` (the same registration
-that hosts its console), and nothing else: no route, no origin.
+commands needs to be [installed](./installing.md) — which registers its app
+with a `proxyUrl` — and nothing else: no route, no origin.
 
 ## Exit codes — the scripting contract
 
@@ -111,7 +127,7 @@ token) is sent as-is.
 | | |
 |---|---|
 | Aggregation endpoint (`/api/portal/cli/discovery`) | ✅ shipped in portal-api |
-| A worked descriptor | ✅ [acquire](https://github.com/laedeli/acquire) declares 10 commands, 1 check, 4 topics |
+| A worked descriptor | ✅ [acquire](https://github.com/laedeli/acquire) declares 10 commands, 1 check, 4 topics; the [sample addon](https://github.com/zaentrum/sample-addon) declares 2 commands, 1 check and a full `ui` section |
 | `zae discover` / doctor integration | ✅ shipped in zae v0.1 |
 | Executing discovered commands + the exit-code contract + `zae require` | ✅ zae v0.2 (`ZAE_TOKEN` for auth until login) |
 | `zae login` (device flow) | 🧭 next |
