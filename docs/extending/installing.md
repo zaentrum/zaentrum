@@ -4,7 +4,7 @@ Installing an addon is **pull, not push**. The addon never registers itself
 and needs no identity to appear. It *declares* what it contributes in its
 [capability manifest](./cli.md#descriptor-schema-v1), and an admin adds it in
 the portal's settings by its in-cluster address. portal-api fetches the
-manifest and creates what it declares — an app, a launchpad tile, slot rows —
+manifest and creates what it declares — an app, launchpad tiles, slot rows —
 all owned by the addon's key. Removing the addon deletes everything by that
 key. The core learns nothing about the addon except what the manifest said.
 
@@ -18,7 +18,7 @@ sequenceDiagram
     Settings->>API: POST /api/portal/addons {proxyUrl}
     API->>Addon: GET /.well-known/zaentrum-capability.json
     Addon-->>API: manifest (commands, checks, topics, ui)
-    API->>API: create app, tile, slot rows — owned by key
+    API->>API: create app, tiles, slot rows — owned by key
     API-->>Settings: what was created
 ```
 
@@ -70,8 +70,8 @@ like something nobody owns.
 ## 2. Install it in the portal
 
 Settings → **addons** → the addon's in-cluster address (the Service name,
-e.g. `http://my-addon`) → **install**. Optionally pick the space its tile
-goes into; the default is the first space.
+e.g. `http://my-addon`) → **install**. Optionally pick the space its tiles
+go into; the default is the first space, and an addon may bring its own.
 
 What the platform creates from the manifest's `ui` section:
 
@@ -80,6 +80,8 @@ What the platform creates from the manifest's `ui` section:
 | `service` (always) | An **app** with key `service`, `proxyUrl` = the address you typed, base URL `/portal/app/<service>` | the app key |
 | `ui.app` | The app's title, description and icon | |
 | `ui.console: true` | A **tile** `addon.<service>` in the chosen space, opening the [hosted console](./console.md) | the `addon.` prefix |
+| `ui.space` | A **launchpad section** of the addon's own, which its tiles go into instead of the chosen space | it is removed with the addon, once empty |
+| `ui.tiles[]` | One tile per entry, keyed `addon.<service>.<key>`, each opening a path inside the addon's console. Replaces the single `console` tile | the `addon.<service>.` prefix |
 | `ui.slots[]` | One [slot row](./slots.md) per entry, keyed `<service>.<key>`, `addon = service` | the `addon` column |
 | `commands[]`, `checks[]` | Nothing to create — registering the app is what puts the addon on the [CLI discovery](./cli.md) list | |
 
@@ -94,7 +96,7 @@ Scripted, with an admin bearer:
 curl -X POST https://<instance>/api/portal/addons \
   -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
   -d '{"proxyUrl":"http://my-addon"}'
-# {"key":"my-addon","app":{…},"tile":{…},"slots":1,"commands":2,"checks":1}
+# {"key":"my-addon","app":{…},"space":null,"tiles":1,"slots":1,"commands":2,"checks":1}
 ```
 
 `space` and `publicBase` are optional fields of that body; `publicBase`
@@ -104,12 +106,37 @@ the cluster rather than through the public route.
 The address is validated the same way the embed proxy validates its targets:
 in-cluster names only. portal-api will not fetch a manifest from the internet.
 
+### Declaring a layout, not just a console
+
+An addon with real internal structure — a backlog, a queue, a settings area —
+can place several tiles instead of one, in a section of its own:
+
+```json
+"ui": {
+  "app": { "title": "acquire", "icon": "download" },
+  "console": true,
+  "space": { "key": "acquire", "title": "acquire", "ord": 30 },
+  "tiles": [
+    { "key": "requests",  "title": "requests",  "description": "who asked for what", "icon": "download", "target": "#/requests",  "ord": 10 },
+    { "key": "downloads", "title": "downloads", "description": "the queue, live",    "icon": "gauge",    "target": "#/downloads", "ord": 20 }
+  ]
+}
+```
+
+A tile `target` opens a view **inside the addon's own console** — a hash route
+or a path, never another origin. That keeps this a curated set of entry
+points rather than a second navigation model competing with the addon's own:
+place the few views an operator starts from, not every tab the console has.
+
+Tiles without an `icon` inherit the app's. Without a `space`, they land in
+the space the admin picked at install.
+
 ## Upgrades
 
 An addon whose new version declares different contributions: settings →
-addons → **refresh**. It is the same call as install; slot rows are
-**replaced, not merged**, so a button the addon dropped disappears instead of
-lingering. Commands and checks need nothing — the CLI reads the live
+addons → **refresh**. It is the same call as install; tiles and slot rows are
+**replaced, not merged**, so a card or button the addon dropped disappears
+instead of lingering. Commands and checks need nothing — the CLI reads the live
 descriptor on every discovery.
 
 ## Uninstall
@@ -117,7 +144,8 @@ descriptor on every discovery.
 Subtraction, in order:
 
 1. Settings → addons → **remove** (or `DELETE /api/portal/addons/<key>`):
-   deletes the slot rows, the tile and the app by key. The core shows no
+   deletes the slot rows, every tile the addon owns, and the app by key — plus
+   the addon's own space, once nothing else is left in it. The core shows no
    trace; `zae discover` no longer lists it.
 2. Delete the addon's Kubernetes objects.
 3. Drop its database if you are done with the data.

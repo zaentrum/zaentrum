@@ -41,6 +41,11 @@ uninstalling it leaves no trace.
   "ui": {
     "app": { "title": "acquire", "description": "requests and downloads", "icon": "download" },
     "console": true,
+    "space": { "key": "acquire", "title": "acquire", "ord": 30 },
+    "tiles": [
+      { "key": "requests", "title": "requests", "description": "who asked for what",
+        "icon": "download", "target": "#/requests", "ord": 10 }
+    ],
     "slots": [
       { "key": "search-request", "slot": "search.empty", "kind": "link",
         "label": "Request this", "icon": "download",
@@ -65,6 +70,7 @@ uninstalling it leaves no trace.
   The CLI ignores it. The platform reads it when an admin
   [installs the addon](./installing.md): `app` names the portal app,
   `console: true` places a tile for the [hosted console](./console.md),
+  `space` and `tiles[]` place a curated set of entry points instead,
   `slots[]` become [slot rows](./slots.md). One manifest declares the whole
   addon.
 
