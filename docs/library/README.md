@@ -22,6 +22,10 @@ thrown away and rebuilt by reading the folders.
   compatible) as keys, without an export step.
 - **One place to lose, one place to back up.** When the database is a cache, a
   lost or corrupted database is an inconvenience, not data loss.
+- **Data, not behaviour.** The library describes what is on storage — what a
+  track contains, what an original had, what a package lost. What to play or show
+  by default is behaviour: it belongs to players and to per-user settings in a
+  database, derived from that description.
 - **Nothing is guessed.** A value the source does not hold stays empty. Where
   automation cannot decide — an unmatched item, an edition, a black-and-white
   call from a few sampled frames, an episode whose filename contradicts its
@@ -110,8 +114,9 @@ checks the schemas and the rules that span files or need arithmetic: every
 `itemId` equals its folder name and shard; every listed image exists with the
 recorded hash, size, content type and dimensions; a series lists exactly the
 episode folders it contains and agrees with their numbering; version paths,
-default audio tracks, truth and deletion state are consistent; probe files and
-sidecars match their hashes.
+truth and deletion state are consistent, every track says what it is for, and the
+version 2 playback hints do not contradict it; probe files and sidecars match their
+hashes.
 
 ```sh
 pip install "jsonschema[format-nongpl]>=4.23" referencing

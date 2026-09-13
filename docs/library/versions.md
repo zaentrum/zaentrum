@@ -74,64 +74,57 @@ apart.
 
 A film where characters speak an invented language in a few scenes typically
 ships an English audio track, an English forced track that translates only those
-scenes, and full English and SDH tracks. Each audio track names the forced track
-of its language in `forcedSubtitle`:
+scenes, and full English and SDH tracks. The library records what each track
+contains, and nothing about when to show it:
 
 ```json
 "renditions": { "audio": [
-  { "id": "a0", "language": "eng", "purpose": "main",       "forcedSubtitle": "sub0", "…": "…" },
-  { "id": "a1", "language": "eng", "purpose": "commentary", "forcedSubtitle": "sub0", "…": "…" }
+  { "id": "a0", "language": "eng", "purpose": "main", "…": "…" },
+  { "id": "a1", "language": "eng", "purpose": "commentary", "…": "…" }
 ] },
 "subtitles": [
-  { "id": "sub0", "language": "eng", "title": "Forced", "forced": true,  "purpose": "forced",   "…": "…" },
-  { "id": "sub1", "language": "eng", "title": "",       "forced": false, "purpose": "dialogue", "…": "…" },
-  { "id": "sub2", "language": "eng", "title": "SDH",    "forced": false, "purpose": "sdh",      "…": "…" }
+  { "id": "sub0", "language": "eng", "title": "Forced", "purpose": "forced",   "…": "…" },
+  { "id": "sub1", "language": "eng", "title": "",       "purpose": "dialogue", "…": "…" },
+  { "id": "sub2", "language": "eng", "title": "SDH",    "purpose": "sdh",      "…": "…" }
 ]
 ```
 
-with `package.decisions.defaultSubtitle` set to `null` — subtitles off. The
-[example episode](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows)
+The [example episode](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows)
 is exactly this.
 
-**No player implements `purpose` or `forcedSubtitle` yet; today's clients see only
-the version 2 `forced` flag.** A player that adopts the format should:
+**Showing them is behaviour, and behaviour is not library data.** Which track a
+viewer sees is decided by the player and by the viewer's settings, kept in a
+database. A player derives it from `purpose` and language:
 
-1. While subtitles are off, show the playing audio track's `forcedSubtitle`, so
+1. While subtitles are off, show the forced track of the playing audio's language:
    the invented-language scenes are translated and nothing else is.
 2. When the viewer picks a full or SDH track, show that instead.
-3. When the audio changes, switch to the new track's `forcedSubtitle`.
-4. When it cannot render the named track (an image track on a text-only client),
-   take another forced track of the same language, preferring text.
+3. When the audio changes language, switch to that language's forced track.
+4. To find "the forced track of a language": take `forced` and `signs-songs`
+   tracks of the same primary language (Bokmål and Nynorsk count as Norwegian;
+   a matching `variant` wins); prefer `forced` over `signs-songs`, then the track
+   with the most events (a forced track that stops early is incomplete), then one
+   flagged by the file over one recognised by title or content, then text over
+   image — or the first the device can render. Audio of undetermined language
+   gets none.
 
-What a particular viewer prefers — always forced only, always SDH — is per-user
-state and stays in a database; the library records what each track is and which
-forced track belongs to which audio.
+No player implements this yet. In HLS terms it is `FORCED=YES` with
+`AUTOSELECT=YES` on the chosen track of each language, derived from `purpose`;
+other forced tracks of that language are left out of the automatic choice.
+(Today the streaming origin serves subtitles as sidecar files and writes no
+subtitle playlist entries.)
 
-In HLS terms this is `FORCED=YES` with `AUTOSELECT=YES` on the track an audio
-language pairs with — derived from `forcedSubtitle` or `purpose`, not from the
-version 2 `forced` flag — with one such track per language; other forced tracks of
-the same language are left out of the automatic choice. (Today the streaming
-origin serves subtitles as sidecar files and writes no subtitle playlist entries.)
-
-The migrator pairs every audio track — main, commentary or description — with the
-forced or signs-and-songs track of the same primary language (Bokmål and Nynorsk
-count as Norwegian; a matching `variant` wins), and leaves audio of undetermined
-language unpaired. When a language has several forced tracks it takes the one
-with the most events, then a flagged one over a titled one, then text over image,
-and reports the choice as `forced-pairing-ambiguous`.
-
-The validator requires a `forcedSubtitle` to name a forced or signs-and-songs
-track in the audio's language; refuses a forced or signs-and-songs track as the
-default subtitle, whether by `decisions.defaultSubtitle` or by its `default`
-flag — the mistake that makes a player open with a nearly empty track; refuses a
-`forced` flag on a dialogue, SDH, commentary or lyrics track; and allows
-`assumed` only for `dialogue` and `main`.
-
-The packager flags a track `forced` only when the original's stream flag says so.
-A forced or signs-and-songs track recognised by its title or content keeps
-`forced: false` in the version 2 fields and is listed in the migrator's report as
-`package-forced-flag-missing`: a version 2 reader will not show it automatically
-until the package is corrected.
+**The version 2 `default`, `forced` and `visible` fields are hints, not data.**
+The packager writes them into the playback fields so that today's readers keep
+working; they are not the library's account of anything. The packager flags a
+track `forced` only when the original's stream flag says so, so a forced or
+signs-and-songs track recognised by its title or content keeps `forced: false`
+and is listed in the migrator's report as `package-forced-flag-missing` — a
+version 2 reader will not show it automatically, while a reader of `purpose`
+will. The validator only makes sure the hints do not contradict the
+descriptions: a `forced` flag only on a forced or signs-and-songs track, and never
+a forced track flagged default, which would make a version 2 reader open with a
+nearly empty track. It also allows `assumed` only for `dialogue` and `main`.
 
 ### Building the track menu
 
@@ -154,7 +147,7 @@ implements them yet.
    - Label an entry from the language, `variant` and `purpose`, and from `channels`
      (Stereo, 5.1, 7.1) when a language offers more than one channel count — never
      from the former title, except a commentary's title, which says who is speaking.
-3. **Subtitles.** Start with *Off* (the audio's `forcedSubtitle` still shows), then
+3. **Subtitles.** Start with *Off* (the forced track of the audio's language still shows), then
    group by language, `variant` and `purpose` (a commentary also by its title).
    - Within a group, offer one file the device can render: text (`webvtt`) on a
      client that renders text, otherwise an image track (`pgs`, `vobsub`, `dvb`). A TV
@@ -163,13 +156,15 @@ implements them yet.
      language: choosing one shows that track and nothing else.
    - Label: "English", "English SDH", "English — forced only", "Spanish (Latin
      American)", "English — commentary: …".
-4. **Defaults.** Audio: the rendition flagged default (`decisions.defaultAudio`).
-   Subtitles: `decisions.defaultSubtitle`, or *Off* when it is `null`. Forced
-   subtitles: the playing audio's `forcedSubtitle`.
+4. **Defaults.** Defaults are behaviour, so they come from rules and settings, not
+   from the library. Audio: the viewer's preferred language, otherwise the `main`
+   track of the original language, otherwise the rendition the version 2 `default`
+   hint names. Subtitles: *Off*, with the forced track of the audio's language
+   shown (see above).
 5. **Viewer preferences.** A preferred audio language, a subtitle mode (off, forced
    only, full, SDH) and a preferred subtitle language are per-user settings kept in a
-   database and applied over the defaults. "Forced only" is *Off* plus the audio's
-   `forcedSubtitle`.
+   database and applied over the defaults. "Forced only" is *Off* plus the forced
+   track of the audio's language.
 
 For a film whose package holds five English audio renditions once titled
 "TrueHD 7.1 Atmos", "DTS-HD MA 7.1", "DD 5.1" and twice "DD 2.0" (all now stereo

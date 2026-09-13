@@ -40,8 +40,8 @@ types gives values identical to the original version 2 manifests.
 | `itemId`, `type`, `title`, `year` | As above. |
 | `tmdbId` | Ambiguous — the movie id on a movie but the **series** id on an episode. Kept for version 2 readers; new readers use `externalIds`. Absent on a series. |
 | `durationMs`, `packagedAt`, `packager` | The package stored in the item folder. Every timestamp in the format is RFC 3339 with an upper-case `T` and `Z`, and integer fields are whole numbers within 64 bits (`2`, never `2.0`), because the version 2 reader rejects anything else. |
-| `renditions.video[]`, `renditions.audio[]` | HLS renditions. More than one video entry is a quality ladder. Version 3 adds `sourceStreamIndex` to each, `dynamicRange` to video, and to audio `sourceChannels` (6 when a 5.1 track was downmixed to stereo), `purpose` (`main`, `commentary`, `description`, `unknown`), `purposeFrom`, `variant`, `original` (true when the file flags the track as the original language, otherwise null) and `forcedSubtitle` — see [subtitles and audio for different viewers](./versions.md#subtitles-and-audio-for-different-viewers). |
-| `subtitles[]` | Version 3 adds `sourceStreamIndex` (null when the original stream is not known), `purpose` (`dialogue`, `sdh`, `forced`, `signs-songs`, `commentary`, `lyrics`, `unknown`), `purposeFrom` and `variant`. Every rendition must carry `purpose` and `purposeFrom`. |
+| `renditions.video[]`, `renditions.audio[]` | HLS renditions. More than one video entry is a quality ladder. Version 3 adds `sourceStreamIndex` to each, `dynamicRange` to video, and to audio `sourceChannels` (6 when a 5.1 track was downmixed to stereo), `purpose` (`main`, `commentary`, `description`, `unknown`), `purposeFrom`, `variant` and `original` (true when the file flags the track as the original language, otherwise null) — see [subtitles and audio for different viewers](./versions.md#subtitles-and-audio-for-different-viewers). The version 2 `default` and `visible` fields are playback hints the packager writes for existing readers, not library data. |
+| `subtitles[]` | Version 3 adds `sourceStreamIndex` (null when the original stream is not known), `purpose` (`dialogue`, `sdh`, `forced`, `signs-songs`, `commentary`, `lyrics`, `unknown`), `purposeFrom` and `variant`. Every rendition must carry `purpose` and `purposeFrom`. The version 2 `default`, `forced` and `visible` fields are playback hints, not library data. |
 | `trickplay`, `trailers[]` | Unchanged. |
 | `seriesTitle`, `seasonNumber`, `episodeNumber`, `episodeCode` | Episodes only, aired order. |
 
@@ -115,7 +115,7 @@ this is the shape.
 | `master` | `fingerprint` of the original and whether it is an untouched `original`, already a `derivative` re-encode, or `unknown`. |
 | `truth` | `source` while any original exists, `package` once every original of the version is deleted. |
 | `sources[]` | The original file(s) — see [source record](#source-record). |
-| `package` | The package's account of itself — see [package record](#package-record). `null` when nothing is packaged. The top-level playback fields exist exactly when the version at `.` has a package. |
+| `package` | The package's account of itself — what it carries and lost, not how it should be played — see [package record](#package-record). `null` when nothing is packaged. The top-level playback fields exist exactly when the version at `.` has a package. |
 | `lostIfOriginalDeleted[]` | Everything the original has that the package lacks. See [deleting an original](./versions.md#deleting-an-original). |
 
 ### Source record
@@ -132,7 +132,6 @@ Everything known about an original file, kept after the file is deleted.
 | `streams[]` | Every stream. Video: codec, profile, bit depth, resolution, colour, HDR10 mastering data, Dolby Vision profile, 3D. Audio: codec, profile, `channels`, `channelLayout` (null when the probe did not record one), lossless, Atmos/DTS:X, `titleClaim`, `purpose`, `purposeFrom` and `variant`. Subtitles: text or image, styled, `variant`, `events` (the number of subtitle events the container records), `purpose` and `purposeFrom`. Video also records embedded `closedCaptions`. Attachments: fonts and covers. Each with language and dispositions exactly as the file flags them (default, forced, original, dub, commentary, hearing impaired, visual impaired, captions, lyrics, descriptions). |
 | `chapters[]`, `segments[]` | Chapter marks; detected intro, recap and credits ranges. |
 | `sidecars[]` | Small files that sat next to the original (external subtitles, NFO), copied into `source/<sourceId>/` with size, hash and, for subtitles, `purpose`. |
-| `subtitleDecisions` | A curated default subtitle mapped to one of these streams, when the mapping is unambiguous. |
 | `covers[]` | Episode ids this file contains, when one file holds several episodes. |
 | `essence` | The irreplaceable properties, reduced for comparison: max audio channels, surround, lossless and object audio, video height and bit depth, HDR10 metadata, Dolby Vision, 3D, audio and subtitle languages, SDH and forced subtitle languages (forced includes signs-and-songs tracks), commentary subtitles, audio description tracks, closed captions, image and styled subtitles, fonts, chapters, commentary tracks. |
 | `probe` | Where the verbatim `ffprobe` output is (`source/<sourceId>/ffprobe.json`), its `sha256`, and when the probe ran — all `null` for an original that was never probed. |
@@ -148,7 +147,6 @@ Everything known about an original file, kept after the file is deleted.
 | `fidelity` | `lossless` (true exactly when `losses` is empty), and `losses[]` — every way the package is poorer than the original: `audio-downmix`, `audio-codec`, `audio-dropped`, `video-resolution`, `video-bitdepth`, `dynamic-range`, `dolby-vision`, `stereo3d`, `subtitle-dropped`, `subtitle-styling`, `closed-captions-dropped`, `attachments-dropped`, `chapters-dropped`, `other`. |
 | `essence` | The same reduced properties as the source, for the package. |
 | `chapters[]` | Chapter marks the package carries. A canonical package must carry the chapters its original had. |
-| `decisions` | The default audio and subtitle a viewer gets, and where each decision came from. Often hand-corrected, and irreplaceable. Each playback set has exactly one default audio rendition, the decisions name the renditions flagged default, and the default subtitle is never a forced or signs-and-songs track. |
 | `playback` | Only for a version stored in `versions/<id>/`: its `durationMs`, `packagedAt`, `packager`, `renditions`, `subtitles`, `trickplay`. |
 
 ## Processing and provenance
