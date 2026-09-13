@@ -32,67 +32,106 @@ original was.
 
 ## Subtitles and audio for different viewers
 
-Every subtitle and audio track — in the original's `streams[]` and in the
-package's renditions — records what it is for in `purpose`:
+Every subtitle and audio track the migrator writes — in the original's
+`streams[]` and in the package's renditions — records what it is for in
+`purpose`, and the schema requires it on every rendition:
 
 | Subtitle `purpose` | Contains | Typical title |
 |---|---|---|
-| `dialogue` | All spoken dialogue. | "English" |
-| `sdh` | Dialogue plus sound cues ("[door slams]") and speaker names, for deaf and hard-of-hearing viewers. Closed captions count here. | "English SDH", "CC" |
+| `dialogue` | All spoken dialogue; a full track normally includes the forced lines too. | "English" |
+| `sdh` | Dialogue plus sound cues ("[door slams]") and speaker names, for deaf and hard-of-hearing viewers. Subtitle tracks marked as closed captions count here; captions embedded in the video are recorded separately as `closedCaptions`. | "English SDH", "CC" |
 | `forced` | Only what a viewer of the audio's language would not otherwise understand: an invented or foreign language spoken in a few scenes, signs, letters. | "English Forced" |
 | `signs-songs` | On-screen text and song lyrics only — the usual companion of a dubbed audio track. | "Signs & Songs" |
 | `commentary` | The text of a commentary. | "Cast Commentary" |
 | `lyrics` | Song lyrics only. | |
+| `unknown` | A package track that could not be traced to the original's stream. | |
 
 | Audio `purpose` | Contains |
 |---|---|
 | `main` | The film's soundtrack, in one language. |
 | `commentary` | A commentary over the film. |
 | `description` | Audio description for blind and partially sighted viewers. |
+| `unknown` | A package track that could not be traced to the original's stream. |
 
-`purposeFrom` says what the purpose rests on: the file's stream flags
-(`disposition`), the track title (`title`), a person (`human`), or nothing at all
-(`assumed` — a track with no sign of anything else is taken as `dialogue` or `main`).
-Regional variants such as "Latin American" or "Simplified" are kept in `variant`.
+`purposeFrom` says what the purpose rests on:
+
+| `purposeFrom` | Meaning |
+|---|---|
+| `disposition` | The file's own stream flag (forced, hearing impaired, commentary, visual impaired, captions, lyrics, descriptions). |
+| `title` | The track title, e.g. "Forced", "SDH", "Signs & Songs", "Commentary" — not "Non-Forced". |
+| `content` | The track itself: an untitled, unflagged subtitle with less than a tenth of the events of the full track in its language is a forced track. |
+| `human` | A person decided. |
+| `assumed` | Nothing marks the track, so it is taken as `dialogue` or `main` — never as anything else. |
+| `null` | Only with purpose `unknown`. |
+
+The stream `dispositions` record exactly what the file says; anything inferred
+lives in `purpose`. A region or script word anywhere in a title — "Latin
+American", "Castilian", "Brazilian", "Canadian", "Simplified", "Traditional" — is
+kept in `variant`, on subtitles and on audio, so two Spanish tracks can be told
+apart.
 
 ### Forced subtitles without full subtitles
 
 A film where characters speak an invented language in a few scenes typically
 ships an English audio track, an English forced track that translates only those
-scenes, and full English and SDH tracks. The package pairs the audio with its
-forced track:
+scenes, and full English and SDH tracks. Each audio track names the forced track
+of its language in `forcedSubtitle`:
 
 ```json
 "renditions": { "audio": [
-  { "id": "a0", "language": "eng", "purpose": "main", "forcedSubtitle": "sub0", "…": "…" },
-  { "id": "a1", "language": "eng", "purpose": "commentary", "forcedSubtitle": null, "…": "…" }
+  { "id": "a0", "language": "eng", "purpose": "main",       "forcedSubtitle": "sub0", "…": "…" },
+  { "id": "a1", "language": "eng", "purpose": "commentary", "forcedSubtitle": "sub0", "…": "…" }
 ] },
 "subtitles": [
-  { "id": "sub0", "language": "eng", "title": "Forced", "forced": true, "purpose": "forced", "…": "…" },
+  { "id": "sub0", "language": "eng", "title": "Forced", "forced": true,  "purpose": "forced",   "…": "…" },
   { "id": "sub1", "language": "eng", "title": "",       "forced": false, "purpose": "dialogue", "…": "…" },
-  { "id": "sub2", "language": "eng", "title": "SDH",    "forced": false, "purpose": "sdh", "…": "…" }
+  { "id": "sub2", "language": "eng", "title": "SDH",    "forced": false, "purpose": "sdh",      "…": "…" }
 ]
 ```
 
-with `package.decisions.defaultSubtitle` set to `null` — subtitles off. A player
-shows the playing audio track's `forcedSubtitle` while subtitles are off, so the
-invented-language scenes are translated and nothing else is; a viewer who picks
-the full or SDH track gets that instead. Switching to a dubbed audio track
-switches to that track's own forced subtitle. The
+with `package.decisions.defaultSubtitle` set to `null` — subtitles off. The
 [example episode](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows)
 is exactly this.
 
+**No player implements `purpose` or `forcedSubtitle` yet; today's clients see only
+the version 2 `forced` flag.** A player that adopts the format should:
+
+1. While subtitles are off, show the playing audio track's `forcedSubtitle`, so
+   the invented-language scenes are translated and nothing else is.
+2. When the viewer picks a full or SDH track, show that instead.
+3. When the audio changes, switch to the new track's `forcedSubtitle`.
+4. When it cannot render the named track (an image track on a text-only client),
+   take another forced track of the same language, preferring text.
+
 What a particular viewer prefers — always forced only, always SDH — is per-user
 state and stays in a database; the library records what each track is and which
-forced track belongs to which audio. The validator requires a `forcedSubtitle` to
-name a forced or signs-and-songs track, and refuses a forced track as the default
-subtitle, the mistake that makes a player open with a nearly empty subtitle track.
+forced track belongs to which audio.
 
-Older packages flag a track `forced` only when the original's stream flag said
-so. A track titled "Forced" without that flag keeps `forced: false` in the
-version 2 fields, gets `purpose: forced` with `purposeFrom: title`, and is listed in
-the migrator's report as `package-forced-flag-missing`: a version 2 reader will not
-treat it as forced until the package is corrected.
+In HLS terms this is `FORCED=YES` with `AUTOSELECT=YES` on the track an audio
+language pairs with — derived from `forcedSubtitle` or `purpose`, not from the
+version 2 `forced` flag — with one such track per language; other forced tracks of
+the same language are left out of the automatic choice. (Today the streaming
+origin serves subtitles as sidecar files and writes no subtitle playlist entries.)
+
+The migrator pairs every audio track — main, commentary or description — with the
+forced or signs-and-songs track of the same primary language (Bokmål and Nynorsk
+count as Norwegian; a matching `variant` wins), and leaves audio of undetermined
+language unpaired. When a language has several forced tracks it takes the one
+with the most events, then a flagged one over a titled one, then text over image,
+and reports the choice as `forced-pairing-ambiguous`.
+
+The validator requires a `forcedSubtitle` to name a forced or signs-and-songs
+track in the audio's language; refuses a forced or signs-and-songs track as the
+default subtitle, whether by `decisions.defaultSubtitle` or by its `default`
+flag — the mistake that makes a player open with a nearly empty track; refuses a
+`forced` flag on a dialogue, SDH, commentary or lyrics track; and allows
+`assumed` only for `dialogue` and `main`.
+
+The packager flags a track `forced` only when the original's stream flag says so.
+A forced or signs-and-songs track recognised by its title or content keeps
+`forced: false` in the version 2 fields and is listed in the migrator's report as
+`package-forced-flag-missing`: a version 2 reader will not show it automatically
+until the package is corrected.
 
 ## Quality
 

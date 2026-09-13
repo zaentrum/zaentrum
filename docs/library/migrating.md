@@ -73,7 +73,10 @@ Report entries:
 | `mixed-masters` | A series whose episodes come from different masters. |
 | `lost-if-original-deleted` | Every version whose package lacks something its original has. |
 | `subtitle-default-kept-on-package` | A curated default subtitle that maps to several original streams. |
-| `package-forced-flag-missing` | A forced track (by its title) that the package does not flag forced. |
+| `package-forced-flag-missing` | A forced or signs-and-songs track, recognised by its title or content, that the package does not flag forced. |
+| `forced-track-flagged-default` | A forced or signs-and-songs track the package flags default. |
+| `forced-pairing-ambiguous` | An audio language with several forced tracks, and which one was paired. |
+| `commentary-subtitles-without-commentary-audio` | Commentary subtitles, but no audio track recognisable as the commentary: set its purpose by hand. |
 | `empty-in-legacy-catalog` | Movie release date or content rating missing. |
 | `credits-without-tmdb-person` | Credits that could not be tied to a reference-database person. |
 | `episode-identity-differs-from-package` | An episode's series title or code in the old package manifest differs from the catalog; the package's value is kept. |
@@ -128,7 +131,8 @@ or deleting the old package folders or any original, needs these changes first:
 | Component | Today | Needed |
 |---|---|---|
 | Streaming origin, catalog manager | Find a package at `{movies,shows}/<aa>/<itemId>/`; episode packages are flat. | Resolve an episode through its series manifest, or an index built from the manifests. Until then, keep the flat episode folders. |
-| Packager | Re-packaging empties the whole item folder and writes a version 2 manifest. | Replace only package artifacts (`hls/`, `subs/`, `trickplay/`, markers) and merge the version 2 playback fields into the existing version 3 manifest, incrementing `rev`. Until then, do not point it at a migrated library. |
+| Packager | Re-packaging empties the whole item folder and writes a version 2 manifest; it flags a subtitle `forced` only from the stream flag. | Replace only package artifacts (`hls/`, `subs/`, `trickplay/`, markers) and merge the version 2 playback fields into the existing version 3 manifest, keeping or recomputing the version 3 track fields (`purpose`, `purposeFrom`, `variant`, `original`, `forcedSubtitle`) and incrementing `rev`. Until then, do not point it at a migrated library. |
+| Players (web, TV, mobile) | Read only the version 2 `forced` and `default` flags. | Show the playing audio's `forcedSubtitle` while subtitles are off, and build the track menu from language, `variant` and `purpose`. |
 | Catalog | Keeps its truth in a database. | A cache builder that reads the folders, and writers that update the documents. |
 | Stream manifest reader | Documents a policy of rejecting unknown versions, not implemented. | Accept version 3 explicitly, with a test on a version 3 manifest. |
 

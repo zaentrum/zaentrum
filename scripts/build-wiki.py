@@ -52,7 +52,7 @@ NAV = [
         ("library", "Overview"),
         ("library-manifest", "manifest.json"),
         ("library-metadata", "metadata.json"),
-        ("library-versions", "Versions, audio, subtitles"),
+        ("library-versions", "Versions, audio, subtitles & quality"),
         ("library-migrating", "Migrating a library"),
     ]),
     ("Understand it", [
@@ -145,6 +145,7 @@ def main():
         sys.exit("usage: build-wiki.py <src-docs-dir> <dst-wiki-dir>")
     src, dst = sys.argv[1], sys.argv[2]
 
+    os.makedirs(dst, exist_ok=True)
     # Clear previously-generated markdown (keep .git and any non-.md assets).
     for name in os.listdir(dst):
         if name.endswith(".md") and name != ".git":
