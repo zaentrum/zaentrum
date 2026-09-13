@@ -3,6 +3,11 @@
 Every text and image of an item, in the item's `metadata/` folder. Schema:
 <https://zaentrum.github.io/schemas/library/v1/metadata.schema.json>.
 
+> **Status — format ahead of the code.** No platform service writes or reads
+> this document yet; the [reference migrator](./migrating.md) produces it. The
+> re-sync described below is how the format is designed to be maintained, not a
+> shipped job.
+
 The images sit in the same folder as `metadata.json`, so the folder is complete
 on its own: copy it and you have everything a viewer sees about the item.
 
@@ -21,18 +26,19 @@ on its own: copy it and you have everything a viewer sees about the item.
 | `series` | Series only: `status`, `firstAirDate`, `lastAirDate`, `network`, and `seasons[]`. |
 | `episode.airDate` | Episode only. An episode's own name and overview are in `titles`. |
 | `images[]` | Every image file in this folder. |
+| `videos[]` | Trailers, teasers and clips published elsewhere, by reference: `site`, `key`, `url`, `name`, `kind`, `language`, `durationMs`, `publishedAt`. A downloaded, packaged trailer is listed in the manifest's `trailers[]` instead. |
 | `curation` | What a person decided: `metadataLocked`, `lockedFields`, `notes`. |
-| `fieldOrigins` | Where each set value came from (`tmdb`, `legacy-catalog`, `filename`, `file-tags`, `manual`), keyed by field path. |
+| `fieldOrigins` | Where each set value came from (`tmdb`, `legacy-catalog`, `filename`, `folder-name`, `file-tags`, `manual`), keyed by field path. Images carry their own `origin`. |
 
 ## Images
 
 | Field | Meaning |
 |---|---|
 | `kind` | `poster`, `backdrop`, `logo`, `still`, `banner`, `thumb`. |
-| `file` | A plain file name in this folder — no subfolders. |
+| `file` | A plain file name in this folder — no subfolders — listed once. |
 | `season` | On a series: the season the image belongs to, or `null` for the series itself. |
 | `language` | For posters and logos with text, the language of that text. |
-| `sha256`, `sizeBytes`, `contentType`, `width`, `height` | Checked by the validator. Caches key on `sha256`. |
+| `sha256`, `sizeBytes`, `contentType`, `width`, `height` | The validator checks each against the file itself. Caches key on `sha256`. |
 | `sourceUrl`, `fetchedAt`, `origin` | Where the image came from, so the exact chosen image can be fetched again. |
 
 File names say what the image is:
@@ -51,17 +57,18 @@ shows its season poster, then the series poster. Nothing is copied to fill a gap
 
 A series' `metadata.json` describes the series as a whole and **every season the
 reference database lists**, whether or not its episodes are on storage — so a
-viewer can see which seasons are missing:
+viewer can see which seasons are missing. Each season keeps its own reference id.
+From the [example series](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows):
 
 ```json
 "series": {
-  "status": "ended",
-  "firstAirDate": "2011-01-09",
-  "lastAirDate": "2021-04-11",
-  "network": "Example Network",
+  "status": "returning",
+  "firstAirDate": "2024-01-10",
+  "lastAirDate": "2024-03-06",
+  "network": null,
   "seasons": [
-    { "number": 0, "name": "Specials", "overview": null, "airDate": "2011-01-09", "episodeCountReference": 4 },
-    { "number": 1, "name": "Season 1", "overview": "…", "airDate": "2011-01-09", "episodeCountReference": 12 }
+    { "number": 1, "tmdbSeason": null, "name": "Season 1", "overview": "The first season.",
+      "airDate": "2024-01-10", "episodeCountReference": 8 }
   ]
 }
 ```
@@ -73,7 +80,7 @@ to show gaps.
 ## Re-syncing from a reference database
 
 Because the manifest carries explicit reference ids, the metadata of any item
-can be fetched again:
+can be fetched again. This is the designed procedure:
 
 ```mermaid
 flowchart LR
@@ -84,14 +91,15 @@ flowchart LR
   A & B & C --> W["write metadata.json + images<br/>skip lockedFields"]
 ```
 
-1. Read `type` and `externalIds` from the manifest. On an episode, `tmdbTv` is
-   the parent series; the episode is fetched through the series with its aired
-   season and episode numbers (or `tmdbEpisode`).
+1. Read `type`, `externalIds` and `match` from the manifest. Skip items whose
+   match is `unmatched` or `disputed` until a person has resolved the `review`.
+   On an episode, `tmdbTv` is the parent series; the episode is fetched through
+   the series with its aired season and episode numbers (or `tmdbEpisode`).
 2. Build the new texts and download the chosen images.
 3. Keep every field listed in `curation.lockedFields` — and everything, if
    `metadataLocked` — exactly as it was.
 4. Write the images first, then `metadata.json` (see
-   [writing safely](./migrating.md#writing-safely)).
+   [writing safely](./migrating.md#writing-safely)), incrementing `rev`.
 
 A re-sync never touches `manifest.json`: identity, versions and playback belong
 to the media pipeline.

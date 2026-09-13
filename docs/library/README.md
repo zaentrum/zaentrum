@@ -6,11 +6,14 @@ it is, every text and image about it, what is playable, and what the original
 file contained. Storage is the source of truth. Databases are caches that can be
 thrown away and rebuilt by reading the folders.
 
-> **Status — format ahead of the code.** Schema v1 is published and a migrated
-> sample library validates against it. Platform services do not read the format
-> yet: the catalog still keeps its truth in a database, and the streaming origin
-> still finds packages at `shows/<aa>/<episodeId>/` rather than inside a series
-> folder. This section documents the format so tools and services can adopt it.
+> **Status — format ahead of the code.** Schema v1 is published, and a sample
+> library built by the reference migrator validates against it. No platform
+> service reads or writes the format yet: the catalog keeps its truth in a
+> database, the packager writes version 2 package folders, and the streaming
+> origin finds episode packages at `shows/<aa>/<episodeId>/` rather than inside
+> a series folder. This section documents the format so tools and services can
+> adopt it; [Migrating a library](./migrating.md#before-a-platform-uses-the-format)
+> lists what has to change first.
 
 ## Why storage, not a database
 
@@ -19,8 +22,10 @@ thrown away and rebuilt by reading the folders.
   compatible) as keys, without an export step.
 - **One place to lose, one place to back up.** When the database is a cache, a
   lost or corrupted database is an inconvenience, not data loss.
-- **Nothing is invented.** A value the source never held stays empty and is
-  reported, so a later re-sync can fill it and the gap stays visible.
+- **Nothing is guessed.** A value the source does not hold stays empty. Where
+  automation cannot decide — an unmatched item, an edition, a black-and-white
+  call from a few sampled frames, an episode whose filename contradicts its
+  match — the document records a `review` saying what a person should check.
 
 Per-user state — watch progress, history, lists — is not library data and stays
 in a database.
@@ -44,18 +49,19 @@ flowchart TD
 `<aa>` is the first two hex characters of the id, which keeps any one folder's
 child count small. Folders are named only by stable ids, never by titles or
 numbers, so renaming a title, renumbering an episode or switching to a DVD
-ordering never moves a file.
+ordering never moves a file. An episode folder is named by the episode's own id —
+the same id its package folder has today.
 
-| File | Holds | Written by |
+| File | Holds | Meant to be written by |
 |---|---|---|
 | `manifest.json` | The entry point: type, primary title, reference ids, the playback fields a streaming origin reads, and every version with what its original contained and what its package lost. See [manifest.json](./manifest.md). | The media pipeline (scan, analyze, package) and people deciding editions |
-| `metadata/metadata.json` | Every text — localised titles, overviews, credits, dates, series and season details — and the list of images in the same folder. See [metadata.json](./metadata.md). | Enrichment from a reference database, and people editing texts |
+| `metadata/metadata.json` | Every text — localised titles, overviews, credits, dates, series and season details, video references — and the list of images in the same folder. See [metadata.json](./metadata.md). | Enrichment from a reference database, and people editing texts |
 | `metadata/*.jpg`, `*.png` | The images, named by what they are: `poster.jpg`, `still.jpg`, `season-02-poster.jpg`. | Same as metadata.json |
-| `source/<sourceId>/ffprobe.json` | The verbatim probe of the original file, kept after the original is gone. | The media pipeline |
-| `hls/`, `subs/`, `trickplay/`, `.complete` | The package: HLS/CMAF segments, WebVTT subtitles, scrub thumbnails. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
+| `source/<sourceId>/` | The verbatim probe of the original file (`ffprobe.json`) and small files that sat next to it, kept after the original is gone. | The media pipeline |
+| `hls/`, `subs/`, `trickplay/`, `.complete` | The package: HLS/CMAF segments, subtitles (WebVTT, or PGS/VobSub files for image subtitles), scrub thumbnails. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
 
-Two files per item, split by writer: the pipeline never touches texts, and a
-re-sync from a reference database never touches what is playable.
+Two documents per item, split by writer: the pipeline would never touch texts,
+and a re-sync from a reference database would never touch what is playable.
 
 ## Reading an item
 
@@ -72,7 +78,7 @@ sequenceDiagram
 ```
 
 1. Read `manifest.json`. `type` says what follows: a movie or episode has
-   `versions` and (when packaged) playback fields; a series has `series.seasons`
+   `versions` and, when packaged, playback fields; a series has `series.seasons`
    listing its episode folders.
 2. Read `metadata/metadata.json` for everything shown to a viewer.
 3. Fetch images by the file names in `images[]`. Cache them by their `sha256`,
@@ -80,11 +86,11 @@ sequenceDiagram
    parent: an episode without a `still` shows its season poster, then the series
    poster.
 
-A cache builder does exactly this for every folder under `movies/` and `shows/`.
+A cache builder would do exactly this for every folder under `movies/` and `shows/`.
 
 ## Schemas and validation
 
-The format is defined by JSON Schema (draft 2020-12), published with stable URLs:
+The format is defined by JSON Schema (draft 2020-12):
 
 | Schema | URL |
 |---|---|
@@ -93,21 +99,27 @@ The format is defined by JSON Schema (draft 2020-12), published with stable URLs
 | Shared definitions | <https://zaentrum.github.io/schemas/library/v1/defs.schema.json> |
 
 Every document names its schema in a `schema` field
-(`zaentrum.library.manifest/1`, `zaentrum.library.metadata/1`).
+(`zaentrum.library.manifest/1`, `zaentrum.library.metadata/1`). Schema v1 was
+revised once, on 2026-09-13, before any service adopted it; its URLs are stable
+from that revision on.
 
 The validator in the [schemas repository](https://github.com/zaentrum/schemas)
-checks the schemas and the rules that span files: every `itemId` equals its
-folder name, every listed image exists with the recorded hash and size, a series
-lists exactly the episode folders it contains, and probe files match their hashes.
+checks the schemas and the rules that span files or need arithmetic: every
+`itemId` equals its folder name and shard; every listed image exists with the
+recorded hash, size, content type and dimensions; a series lists exactly the
+episode folders it contains and agrees with their numbering; version paths,
+default audio tracks, truth and deletion state are consistent; probe files and
+sidecars match their hashes.
 
 ```sh
-pip install "jsonschema>=4.23" referencing
+pip install "jsonschema[format-nongpl]>=4.23" referencing
 python tools/validate-library.py /path/to/library                 # documents and cross-file rules
-python tools/validate-library.py --check-media /path/to/library   # also every playback path
+python tools/validate-library.py --check-media /path/to/library   # also every playback path and .complete marker
+python tools/test-validate-library.py                             # the broken trees it must reject
 ```
 
-Worked examples — an open movie, and a fictional series whose episode exists in
-two versions — are in
+Worked examples — an open movie with a quality ladder, and a fictional series
+whose episode exists in two versions — are in
 [`library/v1/examples`](https://github.com/zaentrum/schemas/tree/main/library/v1/examples).
 
 ## In this section
@@ -115,6 +127,6 @@ two versions — are in
 | Page | Covers |
 |---|---|
 | [manifest.json](./manifest.md) | Every field of the entry point, and how it stays readable by version 2 readers |
-| [metadata.json](./metadata.md) | Texts, images and their naming, credits, locks, and how a re-sync works |
+| [metadata.json](./metadata.md) | Texts, images and their naming, credits, video references, locks, and how a re-sync would work |
 | [Versions, audio and quality](./versions.md) | Director's cuts, black-and-white and colour presentations, stereo and 5.1, quality ladders, and when an original may be deleted |
-| [Migrating a library](./migrating.md) | Building item folders from an existing catalog and applying them on storage safely |
+| [Migrating a library](./migrating.md) | Building item folders from an existing catalog, applying them on storage safely, and what must change before a platform uses the format |
