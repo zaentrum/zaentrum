@@ -130,5 +130,5 @@ whose episode exists in two versions — are in
 |---|---|
 | [manifest.json](./manifest.md) | Every field of the entry point, and how it stays readable by version 2 readers |
 | [metadata.json](./metadata.md) | Texts, images and their naming, credits, video references, locks, and how a re-sync would work |
-| [Versions, audio and quality](./versions.md) | Director's cuts, black-and-white and colour presentations, stereo and 5.1, quality ladders, and when an original may be deleted |
+| [Versions, audio, subtitles and quality](./versions.md) | Director's cuts, black-and-white and colour presentations, stereo and 5.1, SDH, forced and commentary tracks, quality ladders, and when an original may be deleted |
 | [Migrating a library](./migrating.md) | Building item folders from an existing catalog, applying them on storage safely, and what must change before a platform uses the format |

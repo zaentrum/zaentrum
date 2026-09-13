@@ -73,6 +73,7 @@ Report entries:
 | `mixed-masters` | A series whose episodes come from different masters. |
 | `lost-if-original-deleted` | Every version whose package lacks something its original has. |
 | `subtitle-default-kept-on-package` | A curated default subtitle that maps to several original streams. |
+| `package-forced-flag-missing` | A forced track (by its title) that the package does not flag forced. |
 | `empty-in-legacy-catalog` | Movie release date or content rating missing. |
 | `credits-without-tmdb-person` | Credits that could not be tied to a reference-database person. |
 | `episode-identity-differs-from-package` | An episode's series title or code in the old package manifest differs from the catalog; the package's value is kept. |

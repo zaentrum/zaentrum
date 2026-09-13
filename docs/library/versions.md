@@ -1,4 +1,4 @@
-# Versions, audio and quality
+# Versions, audio, subtitles and quality
 
 A reference database gives a film one id, whether you have its theatrical cut,
 its director's cut, or a black-and-white presentation. The library format keeps
@@ -29,6 +29,70 @@ A track title that names a format the stream no longer has — "TrueHD 7.1" on a
 stereo AAC track — is kept as `titleClaim` with `contradictsActual: true`. It is
 evidence that the file was re-encoded, and often the only record of what the
 original was.
+
+## Subtitles and audio for different viewers
+
+Every subtitle and audio track — in the original's `streams[]` and in the
+package's renditions — records what it is for in `purpose`:
+
+| Subtitle `purpose` | Contains | Typical title |
+|---|---|---|
+| `dialogue` | All spoken dialogue. | "English" |
+| `sdh` | Dialogue plus sound cues ("[door slams]") and speaker names, for deaf and hard-of-hearing viewers. Closed captions count here. | "English SDH", "CC" |
+| `forced` | Only what a viewer of the audio's language would not otherwise understand: an invented or foreign language spoken in a few scenes, signs, letters. | "English Forced" |
+| `signs-songs` | On-screen text and song lyrics only — the usual companion of a dubbed audio track. | "Signs & Songs" |
+| `commentary` | The text of a commentary. | "Cast Commentary" |
+| `lyrics` | Song lyrics only. | |
+
+| Audio `purpose` | Contains |
+|---|---|
+| `main` | The film's soundtrack, in one language. |
+| `commentary` | A commentary over the film. |
+| `description` | Audio description for blind and partially sighted viewers. |
+
+`purposeFrom` says what the purpose rests on: the file's stream flags
+(`disposition`), the track title (`title`), a person (`human`), or nothing at all
+(`assumed` — a track with no sign of anything else is taken as `dialogue` or `main`).
+Regional variants such as "Latin American" or "Simplified" are kept in `variant`.
+
+### Forced subtitles without full subtitles
+
+A film where characters speak an invented language in a few scenes typically
+ships an English audio track, an English forced track that translates only those
+scenes, and full English and SDH tracks. The package pairs the audio with its
+forced track:
+
+```json
+"renditions": { "audio": [
+  { "id": "a0", "language": "eng", "purpose": "main", "forcedSubtitle": "sub0", "…": "…" },
+  { "id": "a1", "language": "eng", "purpose": "commentary", "forcedSubtitle": null, "…": "…" }
+] },
+"subtitles": [
+  { "id": "sub0", "language": "eng", "title": "Forced", "forced": true, "purpose": "forced", "…": "…" },
+  { "id": "sub1", "language": "eng", "title": "",       "forced": false, "purpose": "dialogue", "…": "…" },
+  { "id": "sub2", "language": "eng", "title": "SDH",    "forced": false, "purpose": "sdh", "…": "…" }
+]
+```
+
+with `package.decisions.defaultSubtitle` set to `null` — subtitles off. A player
+shows the playing audio track's `forcedSubtitle` while subtitles are off, so the
+invented-language scenes are translated and nothing else is; a viewer who picks
+the full or SDH track gets that instead. Switching to a dubbed audio track
+switches to that track's own forced subtitle. The
+[example episode](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows)
+is exactly this.
+
+What a particular viewer prefers — always forced only, always SDH — is per-user
+state and stays in a database; the library records what each track is and which
+forced track belongs to which audio. The validator requires a `forcedSubtitle` to
+name a forced or signs-and-songs track, and refuses a forced track as the default
+subtitle, the mistake that makes a player open with a nearly empty subtitle track.
+
+Older packages flag a track `forced` only when the original's stream flag said
+so. A track titled "Forced" without that flag keeps `forced: false` in the
+version 2 fields, gets `purpose: forced` with `purposeFrom: title`, and is listed in
+the migrator's report as `package-forced-flag-missing`: a version 2 reader will not
+treat it as forced until the package is corrected.
 
 ## Quality
 
@@ -98,8 +162,10 @@ stateDiagram-v2
 
 - Every version carries `lostIfOriginalDeleted`: each property of the original's
   `essence` that the package's `essence` lacks — surround channels, lossless or
-  object audio, HDR10 metadata, Dolby Vision, a subtitle language, image or
-  styled subtitles, fonts, chapters, commentary tracks, resolution, bit depth.
+  object audio, HDR10 metadata, Dolby Vision, a subtitle language, an SDH or
+  forced subtitle language, commentary subtitles, audio description, closed
+  captions, image or styled subtitles, fonts, chapters, commentary tracks,
+  resolution, bit depth.
   A property the package does not record counts as lost: a version 2 package
   records HDR only as a flag, so HDR10 mastering metadata is listed as lost until
   a package records it.

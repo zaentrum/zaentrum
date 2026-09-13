@@ -52,7 +52,7 @@ NAV = [
         ("library", "Overview"),
         ("library-manifest", "manifest.json"),
         ("library-metadata", "metadata.json"),
-        ("library-versions", "Versions, audio & quality"),
+        ("library-versions", "Versions, audio, subtitles"),
         ("library-migrating", "Migrating a library"),
     ]),
     ("Understand it", [
