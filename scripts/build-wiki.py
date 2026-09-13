@@ -48,6 +48,13 @@ NAV = [
         ("extending-installing", "Installing addons"),
         ("extending-cli", "The CLI contract (zae)"),
     ]),
+    ("The library format", [
+        ("library", "Overview"),
+        ("library-manifest", "manifest.json"),
+        ("library-metadata", "metadata.json"),
+        ("library-versions", "Versions, audio & quality"),
+        ("library-migrating", "Migrating a library"),
+    ]),
     ("Understand it", [
         ("architecture", "Architecture"),
         ("adr", "Decision records (ADRs)"),
