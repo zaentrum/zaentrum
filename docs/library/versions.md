@@ -133,6 +133,54 @@ A forced or signs-and-songs track recognised by its title or content keeps
 `package-forced-flag-missing`: a version 2 reader will not show it automatically
 until the package is corrected.
 
+### Building the track menu
+
+The format does not prescribe a user interface, but these rules turn the
+renditions into a menu with no duplicate or misleading entries. No player
+implements them yet.
+
+1. **Version.** Offer a choice only when `versions[]` has more than one entry:
+   each version's `label`, the primary version first.
+2. **Audio.** Leave out renditions with `visible: false`, then group the rest by
+   language, `variant` and `purpose` (a commentary also by its title).
+   - Within a group, renditions with the same `channels` and codec whose titles only
+     name the format they once had — "TrueHD 7.1 Atmos" on a two-channel AAC
+     rendition — are one choice: offer the one flagged default, or the first. The
+     migrator lists them as `interchangeable-audio-renditions`, and titles that
+     claim more than the rendition carries as `rendition-title-overclaims`.
+   - Renditions that look identical but have no such titles stay separate: they may
+     differ in content, such as an untitled commentary. The migrator lists them as
+     `indistinguishable-audio-renditions` for a person to name.
+   - Label an entry from the language, `variant` and `purpose`, and from `channels`
+     (Stereo, 5.1, 7.1) when a language offers more than one channel count — never
+     from the former title, except a commentary's title, which says who is speaking.
+3. **Subtitles.** Start with *Off* (the audio's `forcedSubtitle` still shows), then
+   group by language, `variant` and `purpose` (a commentary also by its title).
+   - Within a group, offer one file the device can render: text (`webvtt`) on a
+     client that renders text, otherwise an image track (`pgs`, `vobsub`, `dvb`). A TV
+     with a bitmap renderer may prefer the image track, often the disc's own.
+   - Offer `forced` and `signs-songs` tracks as *forced only* entries of their
+     language: choosing one shows that track and nothing else.
+   - Label: "English", "English SDH", "English — forced only", "Spanish (Latin
+     American)", "English — commentary: …".
+4. **Defaults.** Audio: the rendition flagged default (`decisions.defaultAudio`).
+   Subtitles: `decisions.defaultSubtitle`, or *Off* when it is `null`. Forced
+   subtitles: the playing audio's `forcedSubtitle`.
+5. **Viewer preferences.** A preferred audio language, a subtitle mode (off, forced
+   only, full, SDH) and a preferred subtitle language are per-user settings kept in a
+   database and applied over the defaults. "Forced only" is *Off* plus the audio's
+   `forcedSubtitle`.
+
+For a film whose package holds five English audio renditions once titled
+"TrueHD 7.1 Atmos", "DTS-HD MA 7.1", "DD 5.1" and twice "DD 2.0" (all now stereo
+AAC), two titled commentaries, and English subtitles as both WebVTT and PGS files,
+the menu becomes:
+
+| Menu | Entries |
+|---|---|
+| Audio | English · English — commentary: *first title* · English — commentary: *second title* |
+| Subtitles | Off · English · English SDH · English — forced only |
+
 ## Quality
 
 - **A quality ladder** is several entries in `renditions.video[]` of one package,

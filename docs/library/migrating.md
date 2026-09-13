@@ -76,6 +76,9 @@ Report entries:
 | `package-forced-flag-missing` | A forced or signs-and-songs track, recognised by its title or content, that the package does not flag forced. |
 | `forced-track-flagged-default` | A forced or signs-and-songs track the package flags default. |
 | `forced-pairing-ambiguous` | An audio language with several forced tracks, and which one was paired. |
+| `rendition-title-overclaims` | A package audio rendition whose title names more channels or another format than it carries, e.g. "TrueHD 7.1 Atmos" on two-channel AAC. |
+| `interchangeable-audio-renditions` | Renditions of one language and purpose that are identical and titled only by their former format; a menu offers them once. |
+| `indistinguishable-audio-renditions` | Renditions that look identical without such titles and may differ in content; name them by hand. |
 | `commentary-subtitles-without-commentary-audio` | Commentary subtitles, but no audio track recognisable as the commentary: set its purpose by hand. |
 | `empty-in-legacy-catalog` | Movie release date or content rating missing. |
 | `credits-without-tmdb-person` | Credits that could not be tied to a reference-database person. |
