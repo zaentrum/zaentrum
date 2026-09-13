@@ -52,12 +52,21 @@ python tools/library-migrate.py --inputs export/ --out staging/ \
 ```
 
 `--library-root` and `--packages-root` are the path prefixes the export's paths
-start with. The report (`staging/report.json`) lists what needs a person or
-blocks deleting originals:
+start with. The run writes:
+
+| Output | Content |
+|---|---|
+| `staging/library/` | The item folders: `movies/` and `shows/`. Validate this folder: `python tools/validate-library.py staging/library`. |
+| `staging/links.tsv` | The storage plan, one row per package: `linkpkg`, the existing package folder, the item folder it belongs in. |
+| `staging/browse.tsv` | Optional human-readable view: kind, `Title (Year)`, item folder. |
+| `staging/report.json` | What needs a person or blocks deleting originals, below. |
+
+Report entries:
 
 | Report entry | Meaning |
 |---|---|
 | `unmatched-needs-review` | No reference id. |
+| `disc-image-not-probed` | A disc image whose streams, runtime and colour were never measured. |
 | `episode-match-disputed` | The original filename names a different episode of the season than the one the catalog matched. |
 | `edition-needs-review` | Runtime far beyond the reference with no edition wording. |
 | `colour-needs-review` | Black-and-white from sparse samples. |
@@ -68,16 +77,19 @@ blocks deleting originals:
 | `credits-without-tmdb-person` | Credits that could not be tied to a reference-database person. |
 | `episode-identity-differs-from-package` | An episode's series title or code in the old package manifest differs from the catalog; the package's value is kept. |
 | `episode-art-kept-as-two-images` | An episode whose catalog poster and backdrop were different images. |
+| `created-at-missing` | An item without a catalog creation time; it gets the migration time. |
 
 A staging tree is always `rev` 1. The migration time is recorded as such
-(`provenance.migratedAt`, decision times); a probe's `at` is when the export
-probed the original, not when the migrator ran.
+(`provenance.migratedAt`, decision times). A probe's `at` and a fetched image's
+`fetchedAt` are the modification times of `probes.jsonl` and `tmdb_images.json`,
+so keep file times when copying an export (`cp -p`, `rsync -t`). Catalog times
+without a time zone are taken as UTC.
 
 ### 3–6. Validate, apply, check, swap
 
-Validate the staging tree, apply it on storage into a new folder next to the live
-one, validate that folder with `--check-media`, then swap it into place with one
-rename and keep the old folder until the new one has been read back.
+Validate `staging/library`, apply it on storage into a new folder next to the
+live one, validate that folder with `--check-media`, then swap it into place with
+one rename and keep the old folder until the new one has been read back.
 
 ## Applying on storage
 

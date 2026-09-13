@@ -39,7 +39,7 @@ types gives values identical to the original version 2 manifests.
 |---|---|
 | `itemId`, `type`, `title`, `year` | As above. |
 | `tmdbId` | Ambiguous — the movie id on a movie but the **series** id on an episode. Kept for version 2 readers; new readers use `externalIds`. Absent on a series. |
-| `durationMs`, `packagedAt`, `packager` | The package stored in the item folder. `packagedAt` is an RFC 3339 time; integer fields must be whole numbers (`2`, never `2.0`), because the version 2 reader rejects anything else. |
+| `durationMs`, `packagedAt`, `packager` | The package stored in the item folder. Every timestamp in the format is RFC 3339 with an upper-case `T` and `Z`, and integer fields are whole numbers within 64 bits (`2`, never `2.0`), because the version 2 reader rejects anything else. |
 | `renditions.video[]`, `renditions.audio[]` | HLS renditions. More than one video entry is a quality ladder. Version 3 adds `sourceStreamIndex` to each, `sourceChannels` to audio (6 when a 5.1 track was downmixed to stereo), and `dynamicRange` to video. |
 | `subtitles[]` | Version 3 adds `sourceStreamIndex` (null when the original stream is not known). |
 | `trickplay`, `trailers[]` | Unchanged. |
@@ -109,10 +109,10 @@ this is the shape.
 | `label` | What a viewer picks between: `Director's Cut`, `Black & White`, `Dolby Vision`. `null` when nothing distinguishes it. |
 | `primary` | Played when the viewer does not choose. Exactly one version is primary, independent of where it is stored. |
 | `edition` | `kind` (`theatrical`, `directors-cut`, `extended`, `unrated`, … `unknown`), with evidence, confidence, who decided, and `review` when a person should confirm. |
-| `presentation` | `colour` (`colour`, `black-and-white`, `partial-colour` — measured from the picture, with its own decision and review), `dynamicRange`, `stereo3d`, `aspectRatio`. |
+| `presentation` | `colour` (`colour`, `black-and-white`, `partial-colour`, `unknown` — measured from the picture, with its own decision and review), `dynamicRange`, `stereo3d`, `aspectRatio`. |
 | `runtime` | `measuredMs` from the original against `referenceMs` from the reference database, and the difference. |
 | `completeness` | `complete`, `truncated`, `suspect` or `unknown`, with evidence. |
-| `master` | `fingerprint` of the original and whether it is an untouched `original` or already a `derivative` re-encode. |
+| `master` | `fingerprint` of the original and whether it is an untouched `original`, already a `derivative` re-encode, or `unknown`. |
 | `truth` | `source` while any original exists, `package` once every original of the version is deleted. |
 | `sources[]` | The original file(s) — see [source record](#source-record). |
 | `package` | The package's account of itself — see [package record](#package-record). `null` when nothing is packaged. The top-level playback fields exist exactly when the version at `.` has a package. |
@@ -126,7 +126,7 @@ Everything known about an original file, kept after the file is deleted.
 |---|---|
 | `state` | `present` or `deleted`. |
 | `file` | Original `name`, `sizeBytes`, `mtime`, `fixity` (`qh1` always, full `sha256` when computed), `origin.libraryPath` and `origin.folder` (the folder name is often the only record of an edition or of a series qualifier such as `(US)`), `ownership`, `part` when a version is split into files, and `deletedAt`/`deletionReason` once gone. |
-| `labels` | What the filename claims: the quality token as found, the `medium` it names (`disc`, `web`, `broadcast`), resolution, edition wording. Unreliable — a name can claim a disc copy that is a re-encode — and kept exactly as found. |
+| `labels` | What the filename claims: the quality token as found, the `medium` it names (`disc`, `web`, `broadcast`, `unknown`), resolution, edition wording. Unreliable — a name can claim a disc copy that is a re-encode — and kept exactly as found. |
 | `container` | Format, duration, bitrate, tags, and the container title, often the richest record of what the file was before any re-encode. |
 | `fidelity` | `original`, `derivative` or `unknown`, with evidence (encoder tags, a track title naming a format the stream no longer has). |
 | `streams[]` | Every stream. Video: codec, profile, bit depth, resolution, colour, HDR10 mastering data, Dolby Vision profile, 3D. Audio: codec, profile, `channels`, `channelLayout` (null when the probe did not record one), lossless, Atmos/DTS:X, and `titleClaim`. Subtitles: text or image, styled, variant. Attachments: fonts and covers. Each with language and dispositions (default, forced, commentary, hearing impaired, audio description). |
@@ -135,20 +135,20 @@ Everything known about an original file, kept after the file is deleted.
 | `subtitleDecisions` | A curated default subtitle mapped to one of these streams, when the mapping is unambiguous. |
 | `covers[]` | Episode ids this file contains, when one file holds several episodes. |
 | `essence` | The irreplaceable properties, reduced for comparison: max audio channels, surround, lossless and object audio, video height and bit depth, HDR10 metadata, Dolby Vision, 3D, audio and subtitle languages, image and styled subtitles, fonts, chapters, commentary tracks. |
-| `probe` | Where the verbatim `ffprobe` output is (`source/<sourceId>/ffprobe.json`), its `sha256`, and when the probe ran. |
+| `probe` | Where the verbatim `ffprobe` output is (`source/<sourceId>/ffprobe.json`), its `sha256`, and when the probe ran — all `null` for an original that was never probed. |
 
 ### Package record
 
 | Field | Meaning |
 |---|---|
-| `state` | `complete`, `failed`, `stale` or `building`. |
+| `state` | `complete`, `failed`, `stale` (complete and playable, but outdated against its original or recipe) or `building`. |
 | `role` | `derived` while an original exists; `canonical` once the package is the only copy. |
-| `sizeBytes`, `bitrateBps` | Total size of the package's files and its average video bitrate. (The version 2 rendition field `bitrateBps` is often `0`.) |
+| `sizeBytes`, `peakBandwidthBps` | Total size of the package's files, and the highest `BANDWIDTH` in its master playlist, audio included — a peak, not an average. (The version 2 rendition field `bitrateBps` is often `0`.) |
 | `recipe` | How video, audio and subtitles were produced. |
-| `fidelity` | `lossless` (true exactly when `losses` is empty), and `losses[]` — every way the package is poorer than the original: `audio-downmix`, `audio-codec`, `audio-dropped`, `video-resolution`, `video-bitdepth`, `dynamic-range`, `dolby-vision`, `stereo3d`, `subtitle-dropped`, `subtitle-styling`, `attachments-dropped`, `chapters-dropped`. |
+| `fidelity` | `lossless` (true exactly when `losses` is empty), and `losses[]` — every way the package is poorer than the original: `audio-downmix`, `audio-codec`, `audio-dropped`, `video-resolution`, `video-bitdepth`, `dynamic-range`, `dolby-vision`, `stereo3d`, `subtitle-dropped`, `subtitle-styling`, `attachments-dropped`, `chapters-dropped`, `other`. |
 | `essence` | The same reduced properties as the source, for the package. |
 | `chapters[]` | Chapter marks the package carries. A canonical package must carry the chapters its original had. |
-| `decisions` | The default audio and subtitle a viewer gets, naming existing renditions, and where each decision came from. Often hand-corrected, and irreplaceable. Each playback set has exactly one default audio rendition. |
+| `decisions` | The default audio and subtitle a viewer gets, and where each decision came from. Often hand-corrected, and irreplaceable. Each playback set has exactly one default audio rendition, and the decisions name the renditions flagged default. |
 | `playback` | Only for a version stored in `versions/<id>/`: its `durationMs`, `packagedAt`, `packager`, `renditions`, `subtitles`, `trickplay`. |
 
 ## Processing and provenance
@@ -198,7 +198,7 @@ A shortened movie manifest; `"…"` marks what was left out. The full file is in
       "…": "…"
     } ],
     "package": {
-      "state": "complete", "role": "derived", "sizeBytes": 734000000, "bitrateBps": 8000000,
+      "state": "complete", "role": "derived", "sizeBytes": 734000000, "peakBandwidthBps": 8192000,
       "fidelity": { "lossless": false, "losses": [ { "kind": "audio-downmix", "detail": "6ch -> 2ch (a0)" }, "…" ] },
       "…": "…"
     },

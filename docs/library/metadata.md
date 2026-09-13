@@ -26,7 +26,7 @@ on its own: copy it and you have everything a viewer sees about the item.
 | `series` | Series only: `status`, `firstAirDate`, `lastAirDate`, `network`, and `seasons[]`. |
 | `episode.airDate` | Episode only. An episode's own name and overview are in `titles`. |
 | `images[]` | Every image file in this folder. |
-| `videos[]` | Trailers, teasers and clips published elsewhere, by reference: `site`, `key`, `url`, `name`, `kind`, `language`, `durationMs`, `publishedAt`. A downloaded, packaged trailer is listed in the manifest's `trailers[]` instead. |
+| `videos[]` | Trailers, teasers and clips published elsewhere, by reference: `site`, `key`, `url`, `name`, `kind`, `language`, `durationMs`, `publishedAt`, and `origin` (where the reference came from). A downloaded, packaged trailer is listed in the manifest's `trailers[]` instead. |
 | `curation` | What a person decided: `metadataLocked`, `lockedFields`, `notes`. |
 | `fieldOrigins` | Where each set value came from (`tmdb`, `legacy-catalog`, `filename`, `folder-name`, `file-tags`, `manual`), keyed by field path. Images carry their own `origin`. |
 

@@ -39,7 +39,7 @@ original was.
 - **HDR and SDR** of the same cut are either rungs of one ladder
   (`dynamicRange` per rendition) or separate versions when they come from
   different masters.
-- **The package as a whole** records `sizeBytes` and an average `bitrateBps`.
+- **The package as a whole** records `sizeBytes` and `peakBandwidthBps`, the highest bandwidth its master playlist announces.
 - **The original's quality** is in its video stream: resolution, bit depth, HDR10
   mastering metadata, Dolby Vision profile. `master.fidelity` says whether that
   original was untouched or already a re-encode.

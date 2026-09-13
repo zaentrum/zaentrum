@@ -58,7 +58,7 @@ the same id its package folder has today.
 | `metadata/metadata.json` | Every text — localised titles, overviews, credits, dates, series and season details, video references — and the list of images in the same folder. See [metadata.json](./metadata.md). | Enrichment from a reference database, and people editing texts |
 | `metadata/*.jpg`, `*.png` | The images, named by what they are: `poster.jpg`, `still.jpg`, `season-02-poster.jpg`. | Same as metadata.json |
 | `source/<sourceId>/` | The verbatim probe of the original file (`ffprobe.json`) and small files that sat next to it, kept after the original is gone. | The media pipeline |
-| `hls/`, `subs/`, `trickplay/`, `.complete` | The package: HLS/CMAF segments, subtitles (WebVTT, or PGS/VobSub files for image subtitles), scrub thumbnails. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
+| `hls/`, `subs/`, `trickplay/`, `.complete` | The package: HLS/CMAF segments, subtitles (WebVTT, or PGS/VobSub/DVB files for image subtitles), scrub thumbnails. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
 
 Two documents per item, split by writer: the pipeline would never touch texts,
 and a re-sync from a reference database would never touch what is playable.
@@ -99,9 +99,11 @@ The format is defined by JSON Schema (draft 2020-12):
 | Shared definitions | <https://zaentrum.github.io/schemas/library/v1/defs.schema.json> |
 
 Every document names its schema in a `schema` field
-(`zaentrum.library.manifest/1`, `zaentrum.library.metadata/1`). Schema v1 was
-revised once, on 2026-09-13, before any service adopted it; its URLs are stable
-from that revision on.
+(`zaentrum.library.manifest/1`, `zaentrum.library.metadata/1`). **v1 is a draft
+until a platform service adopts it:** until then it may still change, and every
+change is listed in the
+[schemas changelog](https://github.com/zaentrum/schemas#library-v1-changelog).
+Rebuild a library with the current migrator after a change.
 
 The validator in the [schemas repository](https://github.com/zaentrum/schemas)
 checks the schemas and the rules that span files or need arithmetic: every
