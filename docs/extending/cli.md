@@ -132,10 +132,10 @@ anything else about it ([ADR-0010](../adr/0010-addon-component-groups-and-setup.
 | Field | Rule |
 |---|---|
 | `name` | A DNS-1123 label (lowercase letters, digits and `-`), unique in the manifest |
-| `workload` | A DNS-1123 label, no dots: the name of the **Deployment and the Service** in the addon's namespace. One workload has one owner — see [installing](./installing.md#what-install-refuses) |
+| `workload` | A DNS-1123 label, no dots: the name of the **Deployment and the Service** in the addon's namespace, unique in the manifest. One workload has one owner — see [installing](./installing.md#what-install-refuses) |
 | `role` | `primary` — exactly one; it serves this descriptor, and its `workload` equals the host of the address the addon is installed from. `required` — the addon does not work without it. `optional` — the addon works without it, with less |
 | `summary` | Plain text, at most 120 characters |
-| `topics` | Event topics this component emits. Top-level `topics[]` stay what the primary emits; list each topic once, under the component that emits it |
+| `topics` | Event topics this component emits, each under the component that emits it. Top-level `topics[]` stay what the primary emits, so the primary's `topics` may repeat them |
 
 A manifest without `components` is a group of one:
 `[{"name": <service>, "workload": <install host>, "role": "primary"}]`.
@@ -149,7 +149,7 @@ its host is a DNS-1123 label (or starts with one, as in
 
 | Field | Rule |
 |---|---|
-| `path` | A GET route on the primary, relative: starts with `/`, no `//`, no `..` — spelled out or percent-encoded (`%2e%2e`, `.%2e`) — no encoded `/` or `\`, no scheme or host |
+| `path` | A GET route on the primary, relative: starts with `/`, no `//`, no `..` — spelled out or percent-encoded (`%2e%2e`, `.%2e`) — no `\` or encoded `/` or `\`, no scheme or host, no `#` fragment, spaces or control characters. A query is allowed |
 | `sections[].key` | A DNS-1123 label; the status document reports the section under this key |
 | `sections[].title` | At most 60 characters |
 | `sections[].description` | One line saying what the section covers |

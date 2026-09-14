@@ -150,7 +150,10 @@ curl -X POST https://<instance>/api/portal/addons \
 curl -X POST https://<instance>/api/portal/addons \
   -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
   -d '{"proxyUrl":"http://my-addon"}'
-# {"key":"my-addon","app":{…},"space":null,"tiles":1,"slots":1,"commands":2,"checks":1}
+# {"key":"my-addon","app":{…},"space":null,"tiles":1,"slots":1,"commands":2,"checks":1,
+#  "version":"0.4.0","components":[{"name":"my-addon","workload":"my-addon","role":"primary",
+#  "summary":"","phase":"ready","ready":1,"desired":1,"restarts":0,"reason":""}],
+#  "setup":null,"refresh":false,"adopt":false,"previousAddress":"","dryRun":false}
 ```
 
 `space`, `publicBase`, `dryRun` and `replaceAddress` are optional fields of
@@ -272,9 +275,13 @@ Subtraction, in order:
    deletes the slot rows, every tile the addon owns, the addon record with its
    components, and the app by key — plus the addon's own space, once nothing
    else is left in it. The core shows no trace; `zae discover` no longer lists
-   it. The answer says what was removed and lists `remainingWorkloads`: the
-   addon's workloads that are still deployed, which the remove dialog names.
-   The portal does not delete them — it did not create them.
+   it. The answer says what was removed —
+   `{"removed":{"tiles":1,"rows":1,"space":""},"remainingWorkloads":["my-addon"]}`,
+   where `space` names the removed spaces, comma-separated, or is empty — and
+   `remainingWorkloads` lists the addon's workloads that are still deployed
+   (every declared one when the portal cannot list workloads), which the
+   remove dialog names. The portal does not delete them — it did not create
+   them.
 2. Delete those workloads and the addon's other Kubernetes objects through the
    channel that deployed them; the `zaentrum.io/addon` label finds them.
 3. Drop its database if you are done with the data. The addon's configuration

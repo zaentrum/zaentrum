@@ -18,7 +18,7 @@ or releasing the portal.
    places several entry points into it instead. (An admin can still register
    apps by hand under settings → apps.)
 2. The portal serves `/portal/app/{key}` and reverse-proxies
-   `/api/apps/{key}/*` to the proxy url. The proxy is deliberately the front
+   `/api/portal/apps/{key}/*` to the proxy url. The proxy is deliberately the front
    door: a browser cannot attach a bearer token to a module `import()`, and the
    proxy also guards against SSRF by only accepting in-cluster targets.
 3. The shell fetches the addon's federated bundle **through that proxy**, mounts
@@ -48,7 +48,7 @@ The host renders:
 ```
 
 - `apiBase` — the base URL for your own API **through the portal proxy**
-  (`/api/apps/{key}`). Call your backend via this base and every request
+  (`/api/portal/apps/{key}/`). Call your backend via this base and every request
   carries the user's bearer.
 - `token` — the current access token, when you need it directly (e.g. an SSE
   fetch-stream).
