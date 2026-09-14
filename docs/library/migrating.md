@@ -62,8 +62,7 @@ writes:
 | Output | Content |
 |---|---|
 | `staging/library/` | The item folders: `movies/` and `shows/`. Validate this folder: `python tools/validate-library.py staging/library`. |
-| `staging/links.tsv` | The storage plan: an `original` row per original file (the file in the source library, and where it goes in its version folder) and a `linkpkg` row per package (the existing package folder, and the item folder it belongs in). |
-| `staging/browse.tsv` | Optional human-readable view: kind, `Title (Year)`, item folder. |
+| `staging/plan.tsv` | The storage plan: an `original` row per original file (the file in the source library, and where it goes in its version folder) and a `package` row per package (the existing package folder, and the item folder it belongs in). |
 | `staging/report.json` | What needs a person or blocks deleting originals, below. |
 
 Report entries:
@@ -107,16 +106,17 @@ keep the old folder until the new one has been read back.
 
 ## Applying on storage
 
-The documents and images are small and are copied. Originals and packages are
-large: they are **hard-linked** into the new item folders — or, for a final
-migration, renamed into them — which is instant and uses no space when the source
-library, the package store and the library are on one filesystem. Afterwards each
-version folder holds its original and its package side by side, and the source
-library and old package store can be removed once nothing else refers to them.
+The library is read by machines. It holds nothing but `<category>/<aa>/<id>` item
+folders — no browsing views, no symbolic links, no hard links — so it can be
+copied anywhere, including object storage, and read back unchanged.
 
-The plan lists one operation per package: link every file of the existing
-package folder into the item folder **except its `manifest.json`** — the item
-folder gets the new manifest instead.
+The documents and images are small and are copied. Originals and packages are
+large: the plan **moves** each into its version folder. On the same filesystem a
+move is a rename — instant, no extra space, and nothing is left behind at the
+old path. Across filesystems it is a copy followed by removing the source once the
+copy is verified. Either way every file in the library is an ordinary, independent
+file. The existing package's `manifest.json` is not moved: the item folder gets
+the new manifest instead.
 
 When applying over an existing library rather than into a new folder, carry each
 document's `rev` forward and increment it, so a cache that keys on `rev` sees the
@@ -124,18 +124,18 @@ change.
 
 ### Writing safely
 
-A hard link is the same file under two names. Writing into it changes both.
-
-- **Never write through a hard link.** Replace a file by writing a new file next
-  to it and renaming it over the old name; the other name keeps the old content.
-- **Set ownership and permissions on new files before creating any link.** A
-  recursive `chown` or `chmod` afterwards changes the linked originals too.
 - **Build next to the live tree, then rename.** A half-applied tree is never
   visible to readers.
-- **Check afterwards** that every linked file has the same inode and size as its
-  source, that the new manifests are not linked to the old ones, and that the
-  old manifests are byte-for-byte unchanged. `package-checksums.py` replaces the
-  manifest by renaming a new file over it, so it never writes through a link.
+- **Replace a document by writing a new file next to it and renaming it over the
+  old name**, as `package-checksums.py` does with `manifest.json`: a reader sees
+  either the old or the new file, never a partial one.
+- **Verify before removing anything:** compute the package checksums in the new
+  folder and check them (`validate-library.py --check-checksums`); only then
+  remove the old package folder or original.
+- **No hard links.** A test library may be filled faster with hard links, but a
+  hard link ties a library file to another path — a write through either name
+  changes both, and a copy of the tree duplicates the data. `--check-media`
+  rejects any package or original file that is a hard link.
 
 ## Before a platform uses the format
 
