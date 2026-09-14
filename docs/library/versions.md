@@ -89,7 +89,7 @@ contains, and nothing about when to show it:
 ]
 ```
 
-The [example episode](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows)
+The [example episode](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/series)
 is exactly this.
 
 **Showing them is behaviour, and behaviour is not library data.** Which track a

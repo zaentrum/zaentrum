@@ -46,7 +46,7 @@ types gives values identical to the original version 2 manifests.
 | `seriesTitle`, `seasonNumber`, `episodeNumber`, `episodeCode` | Episodes only, aired order. |
 
 The document is compatible; the **location** of episodes is not. A version 2
-reader finds a package at `shows/<aa>/<episodeId>/`, while this format nests the
+reader finds a package in today's store at `shows/<aa>/<episodeId>/`, while this format nests the
 episode under its series. See
 [before a platform uses the format](./migrating.md#before-a-platform-uses-the-format).
 

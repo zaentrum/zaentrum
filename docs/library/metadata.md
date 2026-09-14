@@ -58,7 +58,7 @@ shows its season poster, then the series poster. Nothing is copied to fill a gap
 A series' `metadata.json` describes the series as a whole and **every season the
 reference database lists**, whether or not its episodes are on storage — so a
 viewer can see which seasons are missing. Each season keeps its own reference id.
-From the [example series](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/shows):
+From the [example series](https://github.com/zaentrum/schemas/tree/main/library/v1/examples/series):
 
 ```json
 "series": {

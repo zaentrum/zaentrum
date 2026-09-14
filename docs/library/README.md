@@ -10,7 +10,7 @@ thrown away and rebuilt by reading the folders.
 > library built by the reference migrator validates against it. No platform
 > service reads or writes the format yet: the catalog keeps its truth in a
 > database, the packager writes version 2 package folders, and the streaming
-> origin finds episode packages at `shows/<aa>/<episodeId>/` rather than inside
+> origin finds episode packages in today's store at `shows/<aa>/<episodeId>/` rather than inside
 > a series folder. This section documents the format so tools and services can
 > adopt it; [Migrating a library](./migrating.md#before-a-platform-uses-the-format)
 > lists what has to change first.
@@ -39,7 +39,7 @@ in a database.
 ```mermaid
 flowchart TD
   L["library root"] --> MV["movies/&lt;aa&gt;/&lt;movieId&gt;/"]
-  L --> SH["shows/&lt;aa&gt;/&lt;seriesId&gt;/"]
+  L --> SH["series/&lt;aa&gt;/&lt;seriesId&gt;/"]
   MV --> M1["manifest.json"]
   MV --> M2["metadata/<br/>metadata.json · poster.jpg · backdrop.jpg · logo.png"]
   MV --> M0["Title (Year).mkv<br/>the original file, while it is kept"]
@@ -55,6 +55,8 @@ A version's folder is the **one destination** for its media: the original file,
 the package made from it, or both side by side — never a separate library of
 originals. An item that has not been packaged yet simply has its original there
 and no package; once an original is deleted, only its record in `source/` remains.
+
+The two categories are `movies/` and `series/`, the same words as the manifest's `type` (`movie`, `series`) and its `seriesId`.
 
 `<aa>` is the first two hex characters of the id, which keeps any one folder's
 child count small. Folders are named only by stable ids, never by titles or
@@ -97,7 +99,7 @@ sequenceDiagram
    parent: an episode without a `still` shows its season poster, then the series
    poster.
 
-A cache builder would do exactly this for every folder under `movies/` and `shows/`.
+A cache builder would do exactly this for every folder under `movies/` and `series/`.
 
 ## Schemas and validation
 
