@@ -132,7 +132,7 @@ anything else about it ([ADR-0010](../adr/0010-addon-component-groups-and-setup.
 | Field | Rule |
 |---|---|
 | `name` | A DNS-1123 label (lowercase letters, digits and `-`), unique in the manifest |
-| `workload` | A DNS-1123 label, no dots: the name of the **Deployment and the Service** in the addon's namespace. One workload has one owner — see [installing](./installing.md) |
+| `workload` | A DNS-1123 label, no dots: the name of the **Deployment and the Service** in the addon's namespace. One workload has one owner — see [installing](./installing.md#what-install-refuses) |
 | `role` | `primary` — exactly one; it serves this descriptor, and its `workload` equals the host of the address the addon is installed from. `required` — the addon does not work without it. `optional` — the addon works without it, with less |
 | `summary` | Plain text, at most 120 characters |
 | `topics` | Event topics this component emits. Top-level `topics[]` stay what the primary emits; list each topic once, under the component that emits it |
@@ -251,7 +251,7 @@ token) is sent as-is.
 |---|---|
 | Aggregation endpoint (`/api/portal/cli/discovery`) | ✅ shipped in portal-api |
 | A worked descriptor | ✅ [acquire](https://github.com/laedeli/acquire) declares 10 commands, 1 check, 4 topics; the [sample addon](https://github.com/zaentrum/sample-addon) declares 2 commands, 1 check and a full `ui` section |
-| `components[]` and `setup` read on install; containers and setup checklist in settings → addons | ✅ shipped in portal-api — see [installing](./installing.md) |
+| `components[]` and `setup` read on install; containers and setup checklist in settings → addons | ✅ shipped in portal-api — see [installing](./installing.md#what-settings--addons-shows) |
 | `zae discover` / doctor integration | ✅ shipped in zae v0.1 |
 | Executing discovered commands + the exit-code contract + `zae require` | ✅ zae v0.2 (`ZAE_TOKEN` for auth until login) |
 | `zae login` (device flow) | 🧭 next |

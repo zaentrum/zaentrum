@@ -35,11 +35,12 @@ sequenceDiagram
 | Links **configure** to a view inside the addon's console | Serves that view and the API behind it |
 | Stores no value, receives no value, renders no input field | Hands no value to the core |
 
-The platform side is described in [installing](./installing.md) and the
-manifest side in [components and setup](./cli.md#components-and-setup). This
-page is the addon side: a pattern, not a library. Each addon implements it,
-and the rest of this page is what that implementation should look like so
-every addon behaves the same in front of an admin.
+The platform side is described in
+[installing](./installing.md#what-settings--addons-shows) and the manifest
+side in [components and setup](./cli.md#components-and-setup). This page is
+the addon side: a pattern, not a library. Each addon implements it, and the
+rest of this page is what that implementation should look like so every addon
+behaves the same in front of an admin.
 
 ## 1. Keep it in your own database
 

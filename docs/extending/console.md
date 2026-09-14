@@ -63,6 +63,30 @@ broken remote degrades to an error card rather than taking the shell down.
 > importable types package is roadmap; until then, treat this page as the
 > contract and expect it to change only with a note in the release notes.
 
+## The console is where configuration is edited
+
+An addon's settings are edited in its own console, never in the portal — the
+addon stores them, validates them and keeps its secrets
+([configuration](./configuration.md)). The portal's part is to say what is
+missing and send the admin to the right view:
+
+- When the manifest declares [`setup`](./cli.md#components-and-setup),
+  settings → addons shows a checklist per addon, and each section's
+  **configure** opens `/portal/app/{key}{target}`. Every section `target` must
+  therefore be a view your console routes — the same rule as a tile target —
+  and it should land on exactly the form that section is about, not on a
+  landing page.
+- The console mounts there with the same host props as anywhere else. Nothing
+  about setup is passed in: the view loads its state from your API through
+  `apiBase`, like every other view.
+- Settings views are admin views. Hide them from non-admins if you like, but
+  the API is what enforces the role.
+- Secret inputs are write-only: `type="password"`, never prefilled, cleared
+  after save, with a *stored* badge when a value is set.
+
+After a save, the checklist reflects the change the next time settings →
+addons asks the addon's setup endpoint; the portal holds no state to update.
+
 ## Worked example
 
 [acquire](https://github.com/laedeli/acquire) ships its console this way: one
