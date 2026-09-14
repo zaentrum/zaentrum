@@ -9,8 +9,8 @@ The entry point of every item folder. Schema:
 
 **Paths.** The top-level playback fields, `versions[].path`, probe files and
 sidecars are relative to the item folder. Paths inside a version's
-`package.playback` block are relative to that version's folder
-(`versions/<id>/`). A source's `origin.libraryPath` is relative to the root of
+`package.playback` block and its checksums file are relative to that version's
+folder (the item folder for `.`, otherwise `versions/<id>/`). A source's `origin.libraryPath` is relative to the root of
 the source library it came from.
 
 ## Identity
@@ -111,6 +111,8 @@ this is the shape.
 | `edition` | `kind` (`theatrical`, `directors-cut`, `extended`, `unrated`, … `unknown`), with evidence, confidence, who decided, and `review` when a person should confirm. |
 | `presentation` | `colour` (`colour`, `black-and-white`, `partial-colour`, `unknown` — measured from the picture, with its own decision and review), `dynamicRange`, `stereo3d`, `aspectRatio`. |
 | `runtime` | `measuredMs` from the original against `referenceMs` from the reference database, and the difference. |
+| `chapters[]`, `chaptersFrom` | Chapter marks (start, end, title) on this version's timeline, and where they came from: the `original-file`, the `legacy-catalog`, or a `human`. Kept on the version rather than in any file, so they survive the original's deletion and apply to every package of the version. |
+| `segments[]` | Intro, recap and credits ranges on the version's timeline, each with the `detector` that found it and its `confidence`. |
 | `completeness` | `complete`, `truncated`, `suspect` or `unknown`, with evidence. |
 | `master` | `fingerprint` of the original and whether it is an untouched `original`, already a `derivative` re-encode, or `unknown`. |
 | `truth` | `source` while any original exists, `package` once every original of the version is deleted. |
@@ -130,7 +132,6 @@ Everything known about an original file, kept after the file is deleted.
 | `container` | Format, duration, bitrate, tags, and the container title, often the richest record of what the file was before any re-encode. |
 | `fidelity` | `original`, `derivative` or `unknown`, with evidence (encoder tags, a track title naming a format the stream no longer has). |
 | `streams[]` | Every stream. Video: codec, profile, bit depth, resolution, colour, HDR10 mastering data, Dolby Vision profile, 3D. Audio: codec, profile, `channels`, `channelLayout` (null when the probe did not record one), lossless, Atmos/DTS:X, `titleClaim`, `purpose`, `purposeFrom` and `variant`. Subtitles: text or image, styled, `variant`, `events` (the number of subtitle events the container records), `purpose` and `purposeFrom`. Video also records embedded `closedCaptions`. Attachments: fonts and covers. Each with language and dispositions exactly as the file flags them (default, forced, original, dub, commentary, hearing impaired, visual impaired, captions, lyrics, descriptions). |
-| `chapters[]`, `segments[]` | Chapter marks; detected intro, recap and credits ranges. |
 | `sidecars[]` | Small files that sat next to the original (external subtitles, NFO), copied into `source/<sourceId>/` with size, hash and, for subtitles, `purpose`. |
 | `covers[]` | Episode ids this file contains, when one file holds several episodes. |
 | `essence` | The irreplaceable properties, reduced for comparison: max audio channels, surround, lossless and object audio, video height and bit depth, HDR10 metadata, Dolby Vision, 3D, audio and subtitle languages, SDH and forced subtitle languages (forced includes signs-and-songs tracks), commentary subtitles, audio description tracks, closed captions, image and styled subtitles, fonts, chapters, commentary tracks. |
@@ -144,9 +145,9 @@ Everything known about an original file, kept after the file is deleted.
 | `role` | `derived` while an original exists; `canonical` once the package is the only copy. |
 | `sizeBytes`, `peakBandwidthBps` | Total size of the package's files, and the highest `BANDWIDTH` in its master playlist, audio included — a peak, not an average. (The version 2 rendition field `bitrateBps` is often `0`.) |
 | `recipe` | How video, audio and subtitles were produced. |
-| `fidelity` | `lossless` (true exactly when `losses` is empty), and `losses[]` — every way the package is poorer than the original: `audio-downmix`, `audio-codec`, `audio-dropped`, `video-resolution`, `video-bitdepth`, `dynamic-range`, `dolby-vision`, `stereo3d`, `subtitle-dropped`, `subtitle-styling`, `closed-captions-dropped`, `attachments-dropped`, `chapters-dropped`, `other`. |
+| `fidelity` | `lossless` (true exactly when `losses` is empty), and `losses[]` — every way the package is poorer than the original: `audio-downmix`, `audio-codec`, `audio-dropped`, `video-resolution`, `video-bitdepth`, `dynamic-range`, `dolby-vision`, `stereo3d`, `subtitle-dropped`, `subtitle-styling`, `closed-captions-dropped`, `attachments-dropped`, `other`. Chapter marks are not a loss: the version keeps them. |
 | `essence` | The same reduced properties as the source, for the package. |
-| `chapters[]` | Chapter marks the package carries. A canonical package must carry the chapters its original had. |
+| `checksums` | The package's fixity: `file` (`checksums.sha256` in the version's folder, one `<sha256>  <path>` line per file of `hls/`, `subs/`, `trickplay/`, `trailers/` and `.complete`, readable by `sha256sum -c`), the file's own `sha256`, the number of `files`, their total `bytes`, and when it was computed. `null` until computed on storage. Once the original is deleted the package is the truth, and this is how a copy of it is verified file by file. |
 | `playback` | Only for a version stored in `versions/<id>/`: its `durationMs`, `packagedAt`, `packager`, `renditions`, `subtitles`, `trickplay`. |
 
 ## Processing and provenance
@@ -200,7 +201,7 @@ A shortened movie manifest; `"…"` marks what was left out. The full file is in
       "fidelity": { "lossless": false, "losses": [ { "kind": "audio-downmix", "detail": "6ch -> 2ch (a0)" }, "…" ] },
       "…": "…"
     },
-    "lostIfOriginalDeleted": [ "surround", "chapters", "audioChannels 6->2", "…" ]
+    "lostIfOriginalDeleted": [ "surround", "audioChannels 6->2", "…" ]
   } ],
   "…": "…"
 }

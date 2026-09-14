@@ -236,7 +236,7 @@ delete an original **only when it knows exactly what that costs**.
 stateDiagram-v2
   [*] --> SourceIsTruth: item scanned and packaged
   SourceIsTruth: truth.kind = source<br/>package.role = derived
-  SourceIsTruth --> SourceIsTruth: re-package to carry more<br/>(surround audio, subtitles, chapters)
+  SourceIsTruth --> SourceIsTruth: re-package to carry more<br/>(surround audio, subtitles)
   SourceIsTruth --> PackageIsTruth: lostIfOriginalDeleted is empty,<br/>original deleted
   PackageIsTruth: truth.kind = package<br/>package.role = canonical<br/>source.state = deleted
   PackageIsTruth --> [*]
@@ -246,8 +246,9 @@ stateDiagram-v2
   `essence` that the package's `essence` lacks — surround channels, lossless or
   object audio, HDR10 metadata, Dolby Vision, a subtitle language, an SDH or
   forced subtitle language, commentary subtitles, audio description, closed
-  captions, image or styled subtitles, fonts, chapters, commentary tracks,
-  resolution, bit depth.
+  captions, image or styled subtitles, fonts, commentary tracks, resolution, bit
+  depth. Chapter marks and intro/credits ranges are not lost: they are kept on the
+  version, not in the file.
   A property the package does not record counts as lost: a version 2 package
   records HDR only as a flag, so HDR10 mastering metadata is listed as lost until
   a package records it.
@@ -259,3 +260,6 @@ stateDiagram-v2
   agree. The verbatim probe stays in `source/<sourceId>/ffprobe.json`. The library
   still knows what the original was; from then on, every loss the package
   records is permanent.
+- Before deleting, compute the package's `checksums` on storage: from then on they
+  are the only way to prove that a copy of the package — a backup, a move to
+  object storage — is complete and unchanged.

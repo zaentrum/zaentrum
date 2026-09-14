@@ -15,6 +15,7 @@ a running platform can use the result.
 | [`tools/library-migrate.py`](https://github.com/zaentrum/schemas/blob/main/tools/library-migrate.py) | Builds a staging tree of `manifest.json`, `metadata/` and `source/` for every item, a plan of storage operations for the large files, and a report. |
 | [`tools/validate-library.py`](https://github.com/zaentrum/schemas/blob/main/tools/validate-library.py) | Validates a tree against the schemas and the cross-file rules. |
 | [`tools/test-validate-library.py`](https://github.com/zaentrum/schemas/blob/main/tools/test-validate-library.py) | The broken trees the validator must reject. |
+| [`tools/package-checksums.py`](https://github.com/zaentrum/schemas/blob/main/tools/package-checksums.py) | Writes each package's `checksums.sha256` and records it in the manifest, or verifies them with `--verify`. Runs where the package files are readable. |
 | [`tools/make-library-examples.py`](https://github.com/zaentrum/schemas/blob/main/tools/make-library-examples.py) | Regenerates the published examples. |
 
 ## Steps
@@ -66,6 +67,8 @@ Report entries:
 | Report entry | Meaning |
 |---|---|
 | `unmatched-needs-review` | No reference id. |
+| `package-checksums-to-compute` | Every package: its checksums can only be computed where its files are. |
+| `segments-beyond-runtime` | A detected intro or credits range that ends after the measured runtime — a detector error, kept as found. |
 | `disc-image-not-probed` | A disc image whose streams, runtime and colour were never measured. |
 | `episode-match-disputed` | The original filename names a different episode of the season than the one the catalog matched. |
 | `edition-needs-review` | Runtime far beyond the reference with no edition wording. |
@@ -93,8 +96,10 @@ without a time zone are taken as UTC.
 ### 3–6. Validate, apply, check, swap
 
 Validate `staging/library`, apply it on storage into a new folder next to the
-live one, validate that folder with `--check-media`, then swap it into place with
-one rename and keep the old folder until the new one has been read back.
+live one, compute the package checksums there with `tools/package-checksums.py`
+(on storage, or in a pod that mounts it — the staging tree has no media), validate
+that folder with `--check-checksums`, then swap it into place with one rename and
+keep the old folder until the new one has been read back.
 
 ## Applying on storage
 
@@ -122,7 +127,8 @@ A hard link is the same file under two names. Writing into it changes both.
   visible to readers.
 - **Check afterwards** that every linked file has the same inode and size as its
   source, that the new manifests are not linked to the old ones, and that the
-  old manifests are byte-for-byte unchanged.
+  old manifests are byte-for-byte unchanged. `package-checksums.py` replaces the
+  manifest by renaming a new file over it, so it never writes through a link.
 
 ## Before a platform uses the format
 

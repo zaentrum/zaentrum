@@ -62,7 +62,7 @@ the same id its package folder has today.
 | `metadata/metadata.json` | Every text — localised titles, overviews, credits, dates, series and season details, video references — and the list of images in the same folder. See [metadata.json](./metadata.md). | Enrichment from a reference database, and people editing texts |
 | `metadata/*.jpg`, `*.png` | The images, named by what they are: `poster.jpg`, `still.jpg`, `season-02-poster.jpg`. | Same as metadata.json |
 | `source/<sourceId>/` | The verbatim probe of the original file (`ffprobe.json`) and small files that sat next to it, kept after the original is gone. | The media pipeline |
-| `hls/`, `subs/`, `trickplay/`, `.complete` | The package: HLS/CMAF segments, subtitles (WebVTT, or PGS/VobSub/DVB files for image subtitles), scrub thumbnails. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
+| `hls/`, `subs/`, `trickplay/`, `.complete`, `checksums.sha256` | The package: HLS/CMAF segments, subtitles (WebVTT, or PGS/VobSub/DVB files for image subtitles), scrub thumbnails (a VTT naming 10×10 sprite sheets), and the checksum of every one of its files. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
 
 Two documents per item, split by writer: the pipeline would never touch texts,
 and a re-sync from a reference database would never touch what is playable.
@@ -115,13 +115,17 @@ checks the schemas and the rules that span files or need arithmetic: every
 recorded hash, size, content type and dimensions; a series lists exactly the
 episode folders it contains and agrees with their numbering; version paths,
 truth and deletion state are consistent, every track says what it is for, and the
-version 2 playback hints do not contradict it; probe files and sidecars match their
-hashes.
+version 2 playback hints do not contradict it; chapters and intro/credits ranges
+are well formed; probe files, sidecars and checksums files match their hashes. With
+`--check-media` it also checks that every sprite sheet the trickplay VTT names
+exists and the cues cover the duration, and that the checksums file lists exactly
+the package's files; `--check-checksums` also hashes every file.
 
 ```sh
 pip install "jsonschema[format-nongpl]>=4.23" referencing
 python tools/validate-library.py /path/to/library                 # documents and cross-file rules
-python tools/validate-library.py --check-media /path/to/library   # also every playback path and .complete marker
+python tools/validate-library.py --check-media /path/to/library   # also playback paths, markers, trickplay sheets, checksum listings
+python tools/validate-library.py --check-checksums /path/to/library  # also hash every package file
 python tools/test-validate-library.py                             # the broken trees it must reject
 ```
 
