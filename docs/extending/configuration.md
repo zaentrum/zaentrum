@@ -36,10 +36,10 @@ sequenceDiagram
 | Stores no value, receives no value, renders no input field | Hands no value to the core |
 
 The platform side is described in [installing](./installing.md) and the
-manifest side in [the CLI contract](./cli.md). This page is the addon side: a
-pattern, not a library. Each addon implements it, and the rest of this page
-is what that implementation should look like so every addon behaves the same
-in front of an admin.
+manifest side in [components and setup](./cli.md#components-and-setup). This
+page is the addon side: a pattern, not a library. Each addon implements it,
+and the rest of this page is what that implementation should look like so
+every addon behaves the same in front of an admin.
 
 ## 1. Keep it in your own database
 
@@ -136,7 +136,8 @@ and the values are not copied into a Secret it re-reads.
 ## 7. The setup endpoint
 
 Declare `setup` in the manifest and serve the
-[setup status document](./cli.md) at its path. Beyond the rules there:
+[setup status document](./cli.md#the-setup-status-document) at its path.
+Beyond the rules there:
 
 - **One section per place an admin edits.** The section's `target` is that
   view in the console; **configure** lands exactly there.
