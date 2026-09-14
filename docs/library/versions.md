@@ -254,7 +254,8 @@ stateDiagram-v2
   a package records it.
 - **Delete only when that list is empty.** Otherwise re-package first, so the
   package carries what matters, and check again.
-- After deletion the source record stays in the manifest with `state: deleted`,
+- Deleting an original removes its file from the version folder. The source record
+  stays in the manifest with `state: deleted`, `path: null`,
   `deletedAt` and `deletionReason`; `truth.kind` becomes `package` and the
   package's `role` becomes `canonical`, and the validator requires all three to
   agree. The verbatim probe stays in `source/<sourceId>/ffprobe.json`. The library

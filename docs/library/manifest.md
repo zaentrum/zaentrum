@@ -8,9 +8,9 @@ The entry point of every item folder. Schema:
 > [the library format](./README.md) for what exists today.
 
 **Paths.** The top-level playback fields, `versions[].path`, probe files and
-sidecars are relative to the item folder. Paths inside a version's
-`package.playback` block and its checksums file are relative to that version's
-folder (the item folder for `.`, otherwise `versions/<id>/`). A source's `origin.libraryPath` is relative to the root of
+sidecars are relative to the item folder. The original file (`sources[].file.path`),
+paths inside a version's `package.playback` block and its checksums file are
+relative to that version's folder (the item folder for `.`, otherwise `versions/<id>/`). A source's `origin.libraryPath` is relative to the root of
 the source library it came from.
 
 ## Identity
@@ -127,7 +127,7 @@ Everything known about an original file, kept after the file is deleted.
 | Field | Meaning |
 |---|---|
 | `state` | `present` or `deleted`. |
-| `file` | Original `name`, `sizeBytes`, `mtime`, `fixity` (`qh1` always, full `sha256` when computed), `origin.libraryPath` and `origin.folder` (the folder name is often the only record of an edition or of a series qualifier such as `(US)`), `ownership`, `part` when a version is split into files, and `deletedAt`/`deletionReason` once gone. |
+| `file` | Original `name`; `path`, the original file in the version's folder while it is kept there (null while it still lives only in the source library, and after deletion); `sizeBytes`, `mtime`, `fixity` (`qh1` always, full `sha256` when computed), `origin.libraryPath` and `origin.folder` (the folder name is often the only record of an edition or of a series qualifier such as `(US)`), `ownership`, `part` when a version is split into files, and `deletedAt`/`deletionReason` once gone. |
 | `labels` | What the filename claims: the quality token as found, the `medium` it names (`disc`, `web`, `broadcast`, `unknown`), resolution, edition wording. Unreliable — a name can claim a disc copy that is a re-encode — and kept exactly as found. |
 | `container` | Format, duration, bitrate, tags, and the container title, often the richest record of what the file was before any re-encode. |
 | `fidelity` | `original`, `derivative` or `unknown`, with evidence (encoder tags, a track title naming a format the stream no longer has). |

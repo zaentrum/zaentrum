@@ -58,7 +58,7 @@ start with. The run writes:
 | Output | Content |
 |---|---|
 | `staging/library/` | The item folders: `movies/` and `shows/`. Validate this folder: `python tools/validate-library.py staging/library`. |
-| `staging/links.tsv` | The storage plan, one row per package: `linkpkg`, the existing package folder, the item folder it belongs in. |
+| `staging/links.tsv` | The storage plan: an `original` row per original file (the file in the source library, and where it goes in its version folder) and a `linkpkg` row per package (the existing package folder, and the item folder it belongs in). |
 | `staging/browse.tsv` | Optional human-readable view: kind, `Title (Year)`, item folder. |
 | `staging/report.json` | What needs a person or blocks deleting originals, below. |
 
@@ -103,9 +103,12 @@ keep the old folder until the new one has been read back.
 
 ## Applying on storage
 
-The documents and images are small and are copied. The packages are large and
-are **hard-linked** from the existing package store into the new item folders,
-which is instant and uses no space when both are on one filesystem.
+The documents and images are small and are copied. Originals and packages are
+large: they are **hard-linked** into the new item folders — or, for a final
+migration, renamed into them — which is instant and uses no space when the source
+library, the package store and the library are on one filesystem. Afterwards each
+version folder holds its original and its package side by side, and the source
+library and old package store can be removed once nothing else refers to them.
 
 The plan lists one operation per package: link every file of the existing
 package folder into the item folder **except its `manifest.json`** — the item
@@ -140,6 +143,7 @@ or deleting the old package folders or any original, needs these changes first:
 | Streaming origin, catalog manager | Find a package at `{movies,shows}/<aa>/<itemId>/`; episode packages are flat. | Resolve an episode through its series manifest, or an index built from the manifests. Until then, keep the flat episode folders. |
 | Packager | Re-packaging empties the whole item folder and writes a version 2 manifest; it flags a subtitle `forced` only from the stream flag. | Replace only package artifacts (`hls/`, `subs/`, `trickplay/`, markers) and merge the version 2 playback fields into the existing version 3 manifest, keeping or recomputing the version 3 track fields (`purpose`, `purposeFrom`, `variant`, `original`) and incrementing `rev`. Until then, do not point it at a migrated library. |
 | Players (web, TV, mobile) | Read only the version 2 `forced` and `default` hints. | Derive forced display and defaults from `purpose`, language and the viewer's settings, and build the track menu from language, `variant` and `purpose`. |
+| Streaming origin, unpackaged items | Plays an original from the path the catalog stores, in the source library. | Play it from the version folder named by `sources[].file.path`. |
 | Catalog | Keeps its truth in a database. | A cache builder that reads the folders, and writers that update the documents. |
 | Stream manifest reader | Documents a policy of rejecting unknown versions, not implemented. | Accept version 3 explicitly, with a test on a version 3 manifest. |
 

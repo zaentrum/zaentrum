@@ -42,13 +42,19 @@ flowchart TD
   L --> SH["shows/&lt;aa&gt;/&lt;seriesId&gt;/"]
   MV --> M1["manifest.json"]
   MV --> M2["metadata/<br/>metadata.json · poster.jpg · backdrop.jpg · logo.png"]
+  MV --> M0["Title (Year).mkv<br/>the original file, while it is kept"]
   MV --> M3["source/&lt;sourceId&gt;/ffprobe.json"]
-  MV --> M4["hls/ · subs/ · trickplay/ · .complete<br/>the playable package"]
+  MV --> M4["hls/ · subs/ · trickplay/ · .complete · checksums.sha256<br/>the package"]
   MV --> M5["versions/&lt;versionId&gt;/<br/>only for a second version"]
   SH --> S1["manifest.json<br/>seasons and their episodes"]
   SH --> S2["metadata/<br/>metadata.json · poster.jpg · season-01-poster.jpg"]
   SH --> EP["episodes/&lt;episodeId&gt;/<br/>same shape as a movie folder"]
 ```
+
+A version's folder is the **one destination** for its media: the original file,
+the package made from it, or both side by side — never a separate library of
+originals. An item that has not been packaged yet simply has its original there
+and no package; once an original is deleted, only its record in `source/` remains.
 
 `<aa>` is the first two hex characters of the id, which keeps any one folder's
 child count small. Folders are named only by stable ids, never by titles or
@@ -61,6 +67,7 @@ the same id its package folder has today.
 | `manifest.json` | The entry point: type, primary title, reference ids, the playback fields a streaming origin reads, and every version with what its original contained and what its package lost. See [manifest.json](./manifest.md). | The media pipeline (scan, analyze, package) and people deciding editions |
 | `metadata/metadata.json` | Every text — localised titles, overviews, credits, dates, series and season details, video references — and the list of images in the same folder. See [metadata.json](./metadata.md). | Enrichment from a reference database, and people editing texts |
 | `metadata/*.jpg`, `*.png` | The images, named by what they are: `poster.jpg`, `still.jpg`, `season-02-poster.jpg`. | Same as metadata.json |
+| The original file, e.g. `Tears of Steel (2012).mkv` | The version's original, under its original name, while it is kept. Named by the source record's `file.path`. | The media pipeline |
 | `source/<sourceId>/` | The verbatim probe of the original file (`ffprobe.json`) and small files that sat next to it, kept after the original is gone. | The media pipeline |
 | `hls/`, `subs/`, `trickplay/`, `.complete`, `checksums.sha256` | The package: HLS/CMAF segments, subtitles (WebVTT, or PGS/VobSub/DVB files for image subtitles), scrub thumbnails (a VTT naming 10×10 sprite sheets), and the checksum of every one of its files. See [ADR-0002](../adr/0002-prepackaged-playback.md). | The packager |
 
