@@ -26,8 +26,9 @@ everything on this page.
 | **[Event bus](./events.md)** | React to pipeline stages; publish your own domain events | Kafka topics under the tenant prefix |
 | **[Identity](./identity.md)** | A service account for calling platform APIs (ingest, events) — not needed to install | OIDC client-credentials + the addon role |
 | **[CLI capability](./cli.md)** | Commands and checks in the [`zae`](https://github.com/zaentrum/zae) CLI on any instance running the addon | A descriptor at `/.well-known/zaentrum-capability.json` |
+| **[Configuration](./configuration.md)** | Settings the addon owns and edits in its console, with a setup checklist in settings → addons that links there | `components` and `setup` in the descriptor, plus a status endpoint |
 
-Two properties make this composition honest:
+Four properties make this composition honest:
 
 - **The operator never prunes what it did not render.** The reconciler applies
   only its own objects; a workload you add to the namespace survives every
@@ -37,6 +38,12 @@ Two properties make this composition honest:
   manifest; the platform reads it when an admin adds the addon and creates
   the app, tile and slot rows itself, owned by the addon's key. The addon
   holds no credential and writes nothing.
+- **An addon is a group of containers that owns its configuration.** The
+  manifest declares the addon's components and where its setup state is
+  reported; the platform shows whether they run and whether the addon is
+  configured, and links to the addon's console where settings are edited. It
+  never stores a value, and it never deploys the containers — the installer's
+  deployment channel does.
 - **Uninstall is subtraction.** UI contributions live in registry rows keyed by
   `addon`; zero rows means zero UI. Remove the addon in settings and its
   workload, and the core looks as if it never existed.
@@ -54,6 +61,8 @@ ahead of the shipped platform, it is marked, not asserted:
 | Neutral catalog ingest | ✅ shipped |
 | Event bus with tenant-prefixed topics | ✅ shipped |
 | Install from settings by pulling the addon's manifest (app + tile + slot rows, removable by key) | ✅ shipped — see [installing](./installing.md) |
+| Component groups and the setup checklist in settings → addons | ✅ shipped — see [installing](./installing.md) and [configuration](./configuration.md) |
+| Platform-managed addon deploys (one custom resource per addon) | 🧭 conditional, not scheduled — see [ADR-0010](../adr/0010-addon-component-groups-and-setup.md) |
 | Addon service-account role in the bundled realm | ✅ defined; clients are created by hand — see [identity](./identity.md) |
 | Platform-provisioned addon identity | 🧭 roadmap |
 | Declarative install (`spec.addons[]` on the CR) | 🧭 roadmap — see [installing](./installing.md) |

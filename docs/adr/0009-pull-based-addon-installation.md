@@ -1,6 +1,6 @@
 # ADR-0009: Addons are installed by pulling their manifest
 
-**Status:** Accepted (2026-09-09)
+**Status:** Accepted (2026-09-09) · amended by [ADR-0010](./0010-addon-component-groups-and-setup.md) (an addon is a group of components)
 
 ## Context
 
