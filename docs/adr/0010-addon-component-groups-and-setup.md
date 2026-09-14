@@ -97,12 +97,17 @@ The consequences the design must hold:
 - **A workload is claimed once.** It belongs to at most one addon and never to
   the platform: install refuses a manifest that declares a Deployment the
   operator renders, or one another addon already declared, and refuses a
-  service name that collides with an app an admin registered by hand.
-  Ownership by construction extends from rows to workloads.
+  service name that collides with an app an admin registered by hand. It does
+  not move an installed addon to another address unless the admin confirms
+  the move. Ownership by construction extends from rows to workloads.
 - **Absent is valid.** A manifest without `components` is a group of one — its
   primary, at the install address. A manifest without `setup` shows no
   checklist. Every manifest that installed before this decision installs the
-  same way after it.
+  same way after it, provided its `service` is a DNS-1123 label and its
+  address names a Service, which the implicit primary needs for its name and
+  workload. An app an earlier install created is adopted when it is installed
+  again from the same address, even if no tile or slot row marks it as an
+  addon.
 
 ## Consequences
 

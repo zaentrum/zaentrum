@@ -153,24 +153,45 @@ curl -X POST https://<instance>/api/portal/addons \
 # {"key":"my-addon","app":{…},"space":null,"tiles":1,"slots":1,"commands":2,"checks":1}
 ```
 
-`space`, `publicBase` and `dryRun` are optional fields of that body;
-`publicBase` overrides the origin used for absolutising when the call is made
-from inside the cluster rather than through the public route.
+`space`, `publicBase`, `dryRun` and `replaceAddress` are optional fields of
+that body; `publicBase` overrides the origin used for absolutising when the
+call is made from inside the cluster rather than through the public route, and
+`replaceAddress` confirms moving an installed addon to a new address (see
+below). A check answers with `previousAddress` when the install would move the
+addon, and `adopt` when it records an app from an earlier install as the addon.
 
 The address is validated the same way the embed proxy validates its targets:
 in-cluster names only. portal-api will not fetch a manifest from the internet.
+Its host must also name the primary's Service — `http://my-addon`,
+`http://my-addon:8080` or `http://my-addon.<namespace>.svc.cluster.local` —
+because that name is the workload the portal matches; an IP address is
+refused with `422`.
 
 ### What install refuses
 
 Beyond a manifest that breaks the [component and setup
-rules](./cli.md#components-and-setup), install answers `409` — and **check**
-shows the same — when the addon would take something it does not own:
+rules](./cli.md#components-and-setup), install answers `409` when the addon
+would take something it does not own. **check** shows the same, except where a
+case below says otherwise:
 
 - **The service name is an app nobody installed.** An admin registered an app
   with that key by hand under settings → apps; installing would take it over.
-  Remove or rename that app first.
+  Remove or rename that app first. The one app that is not refused is what an
+  earlier install left behind: an app with the base URL
+  `/portal/app/<service>` whose proxy address is the address you install from.
+  Installing adopts it as the addon, and **check** says so.
+- **The addon moves to another address.** The addon is installed, but from a
+  different address than the one you typed. Installing would point its proxy,
+  and every token it forwards, at the new address, so it needs your
+  confirmation. **check** shows the old and new address, and its install button
+  confirms the move. A scripted install sends `"replaceAddress": true`.
+  **refresh** uses the recorded address and never moves anything.
 - **A component's workload is a platform service.** An addon cannot claim a
-  Deployment the operator renders.
+  Deployment the operator renders. The portal can only check this when it can
+  list the namespace's workloads. If the apiserver refuses that list, install
+  answers `503` and writes nothing. **check** still shows the plan, with every
+  component *unknown*. Outside a cluster there are no platform workloads, and
+  the check does not apply.
 - **A component's workload belongs to another addon.** One workload, one
   owner: two installed manifests cannot both declare it.
 
@@ -198,6 +219,10 @@ deployed), `setup`, and `refreshAvailable`.
 
 Addons installed before component groups existed are listed with one implicit
 primary at their address. **refresh** reads what their manifest declares now.
+The exception is an addon that created neither a tile nor a slot row. Nothing
+in the portal identifies such an app as an addon, so it is not listed after
+the upgrade. Install it again from the same address: install adopts the
+existing app instead of refusing it.
 
 ### Declaring a layout, not just a console
 
@@ -217,7 +242,8 @@ can place several tiles instead of one, in a section of its own:
 ```
 
 A tile `target` opens a view **inside the addon's own console** — a hash route
-or a path, never another origin. That keeps this a curated set of entry
+or a path, never another origin, and never a path that climbs out with `..`,
+whether spelled out or percent-encoded. That keeps this a curated set of entry
 points rather than a second navigation model competing with the addon's own:
 place the few views an operator starts from, not every tab the console has.
 Setup section targets follow the same rule.

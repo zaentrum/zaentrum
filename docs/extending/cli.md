@@ -139,13 +139,17 @@ anything else about it ([ADR-0010](../adr/0010-addon-component-groups-and-setup.
 
 A manifest without `components` is a group of one:
 `[{"name": <service>, "workload": <install host>, "role": "primary"}]`.
-Nothing changes for an addon that is a single container.
+Nothing changes for an addon that is a single container. That implicit
+component follows the same rules as a declared one, so `service` must then be
+a DNS-1123 label. Either way the install address names the primary's Service:
+its host is a DNS-1123 label (or starts with one, as in
+`example.ns.svc.cluster.local`), never an IP address.
 
 `setup` — optional; at most 16 sections:
 
 | Field | Rule |
 |---|---|
-| `path` | A GET route on the primary, relative: starts with `/`, no `//`, no `..`, no scheme or host |
+| `path` | A GET route on the primary, relative: starts with `/`, no `//`, no `..` — spelled out or percent-encoded (`%2e%2e`, `.%2e`) — no encoded `/` or `\`, no scheme or host |
 | `sections[].key` | A DNS-1123 label; the status document reports the section under this key |
 | `sections[].title` | At most 60 characters |
 | `sections[].description` | One line saying what the section covers |
