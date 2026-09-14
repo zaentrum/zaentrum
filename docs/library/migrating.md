@@ -53,7 +53,11 @@ python tools/library-migrate.py --inputs export/ --out staging/ \
 ```
 
 `--library-root` and `--packages-root` are the path prefixes the export's paths
-start with. The run writes:
+start with. `--items id,id` builds only those movies or series. `--originals leave`
+keeps originals in the source library (their `file.path` stays null), so the
+version folders hold only their packages — the end state once originals are
+deleted; the default `place` plans each original into its version folder. The run
+writes:
 
 | Output | Content |
 |---|---|
