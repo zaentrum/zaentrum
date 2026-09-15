@@ -1,10 +1,11 @@
 # The CLI capability contract — extending `zae`
 
 [`zae`](https://github.com/zaentrum/zae) is the zaentrum CLI. Its design rule:
-**the binary compiles in no service names.** A static core (doctor, preflight)
-works when the platform cannot speak for itself; everything else is a surface
-the instance *declares*. Installing an addon extends the CLI on that instance;
-uninstalling it leaves no trace.
+**the binary compiles in no service names.** A static core (doctor, preflight,
+[installing addons](#installing-addons-zae-addon)) works when the platform
+cannot speak for itself; everything else is a surface the instance
+*declares*. Installing an addon extends the CLI on that instance; uninstalling
+it leaves no trace.
 
 ## How discovery works
 
@@ -234,6 +235,59 @@ Authentication is a stated stopgap until `zae login` ships: a bearer in
 `ZAE_TOKEN` (for example an addon service account's client-credentials
 token) is sent as-is.
 
+## Installing addons: `zae addon`
+
+Installing is how an addon reaches an instance, so no addon can declare the
+command that does it: `zae addon` is part of the static core. It drives
+portal-api's [chart API](./charts.md#4-installing-from-settings) with the
+admin bearer in `ZAE_TOKEN`, and it prints the operator's plan before anything
+is installed ([addon charts](./charts.md)).
+
+```sh
+zae addon add oci://ghcr.io/example/charts/example --version 1.2.0 \
+  --url https://media.example.org --set worker.replicas=2 --set-secret database.url="$DATABASE_URL"
+```
+
+| Command | Does |
+|---|---|
+| `zae addon add <chart> --url …` | Creates the addon suspended, waits for the plan and prints it — chart, workloads with images and ports, objects, violations, values errors, and the inputs: secret ones only as *set* or *missing*, generated ones as *generated* — asks, installs |
+| `zae addon list --url …` | Every installed addon, from a chart or from an address: source, version, phase, ready components |
+| `zae addon status <name> --url …` | Phase, what runs, components and the current plan |
+| `zae addon upgrade <name> --version V --url …` | Plans the new version, prints its changes, asks, installs; `--chart` moves to another reference. A running addon that is not upgraded — refused, declined, no plan in time — is put back to the chart it runs |
+| `zae addon remove <name> --url …` | Deletes the addon and everything its chart applied; `--keep-values` keeps its values Secret |
+
+| Flag | Meaning |
+|---|---|
+| `<chart>` | `oci://registry/path/chart` with `--version` or a `:tag`, or an `https://` link to a chart archive |
+| `--name` | The addon's name (`add`); by default the reference's last segment without version or extension |
+| `--version`, `--digest` | The chart's tag; the `sha256:` the chart archive must match |
+| `--values FILE`, `--values -` | One JSON object of values, from a file or from stdin (`add`) |
+| `--set path=value` | One value at a dotted path (`add`). JSON when it parses as JSON — `2`, `true`, `["a"]` — and the text as a string otherwise; quoting forces a string: `--set 'image.tag="1.10"'` |
+| `--set-secret path=value` | One secret input, stored in the values Secret and never shown again (`add`) |
+| `--yes` | Do it without asking |
+| `--wait`, `--timeout` | Follow the install until the addon is Ready; each wait — for the plan, for Ready — lasts at most `--timeout`, default `5m` |
+| `--json` | Print the portal's answer as JSON (`list`, `status`) |
+
+What makes it safe to script:
+
+- **A blocked plan is never installed.** Violations or values errors exit `1`,
+  with `--yes` too, and the plan names the required inputs still missing.
+- **zae asks only a person.** `add`, `upgrade` and `remove` ask on stdin.
+  Without a terminal there — or with `--values -`, which reads the values from
+  stdin — they need `--yes`, and without it exit `2` before anything is
+  written.
+- **Values are JSON.** `zae` uses only the standard library and does not parse
+  YAML: a partial parser would disagree with Helm about what `yes`, `on` or
+  `0755` mean. JSON is valid YAML, so the same file works with Helm; convert a
+  YAML file first, for example with `yq -o=json values.yaml`.
+- **Secrets on the command line** are visible in the local process list while
+  `zae` runs. Pass them from a variable, not typed literally into shell
+  history.
+- **Exit codes** are the contract above: `0` done; `1` refused, failed,
+  declined, or not Ready within `--timeout`; `2` usage; `3` no such addon, or
+  a portal-api without the chart API; `4` the instance could not be reached;
+  `5` the bearer is missing or lacks the admin role.
+
 ## Rules for a good descriptor
 
 - **Declare only what is routed.** Put the drift-killer in your tests:
@@ -258,5 +312,6 @@ token) is sent as-is.
 | `components[]` and `setup` read on install; containers and setup checklist in settings → addons | ✅ shipped in portal-api — see [installing](./installing.md#what-settings--addons-shows) |
 | `zae discover` / doctor integration | ✅ shipped in zae v0.1 |
 | Executing discovered commands + the exit-code contract + `zae require` | ✅ zae v0.2 (`ZAE_TOKEN` for auth until login) |
+| `zae addon add`, `list`, `status`, `upgrade`, `remove` | 🔶 built in zae against the [addon chart](./charts.md) API; needs a portal-api and operator that ship it |
 | `zae login` (device flow) | 🧭 next |
 | Registered checks executed by doctor | 🧭 with login (the portal will not expose in-cluster check endpoints unauthenticated) |

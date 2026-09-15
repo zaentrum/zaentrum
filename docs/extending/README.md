@@ -27,6 +27,7 @@ everything on this page.
 | **[Identity](./identity.md)** | A service account for calling platform APIs (ingest, events) — not needed to install | OIDC client-credentials + the addon role |
 | **[CLI capability](./cli.md)** | Commands and checks in the [`zae`](https://github.com/zaentrum/zae) CLI on any instance running the addon | A descriptor at `/.well-known/zaentrum-capability.json` |
 | **[Configuration](./configuration.md)** | Settings the addon owns and edits in its console, with a setup checklist in settings → addons that links there | `components` and `setup` in the descriptor, plus a status endpoint |
+| **[Addon charts](./charts.md)** | The platform deploys the addon itself: a plan to confirm, an install form from the chart's schema, removal that deletes what it created | A Helm chart with `zaentrum.io` annotations and `values.schema.json`, installed through one `ZaentrumAddon` resource |
 
 Four properties make this composition honest:
 
@@ -42,11 +43,13 @@ Four properties make this composition honest:
   manifest declares the addon's components and where its setup state is
   reported; the platform shows whether they run and whether the addon is
   configured, and links to the addon's console where settings are edited. It
-  never stores a value, and it never deploys the containers — the installer's
-  deployment channel does.
+  never stores a configuration value. The containers are deployed by the
+  operator from the addon's Helm chart after an admin confirms the plan — or,
+  for an addon installed from an address, by the installer's own channel.
 - **Uninstall is subtraction.** UI contributions live in registry rows keyed by
-  `addon`; zero rows means zero UI. Remove the addon in settings and its
-  workload, and the core looks as if it never existed.
+  `addon`; zero rows means zero UI. Remove the addon in settings — a chart
+  addon takes its workloads with it; for one installed from an address, delete
+  them too — and the core looks as if it never existed.
 
 ## Honest status
 
@@ -62,15 +65,17 @@ ahead of the shipped platform, it is marked, not asserted:
 | Event bus with tenant-prefixed topics | ✅ shipped |
 | Install from settings by pulling the addon's manifest (app + tile + slot rows, removable by key) | ✅ shipped — see [installing](./installing.md) |
 | Component groups and the setup checklist in settings → addons | ✅ shipped — see [installing](./installing.md) and [configuration](./configuration.md) |
-| Platform-managed addon deploys (one custom resource per addon) | 🧭 conditional, not scheduled — see [ADR-0010](../adr/0010-addon-component-groups-and-setup.md) |
+| Addons installed from a Helm chart by the operator — one `ZaentrumAddon` per addon, plan before install, settings and `zae addon` | 🔶 decided in [ADR-0011](../adr/0011-addon-charts-installed-by-the-operator.md), being built — see [addon charts](./charts.md) |
 | Addon service-account role in the bundled realm | ✅ defined; clients are created by hand — see [identity](./identity.md) |
 | Platform-provisioned addon identity | 🧭 roadmap |
-| Declarative install (`spec.addons[]` on the CR) | 🧭 roadmap — see [installing](./installing.md) |
+| Declarative install: a committed `ZaentrumAddon` and its values Secret | 🔶 arrives with addon charts — see [GitOps](./charts.md#6-gitops-committing-the-resource) |
 | CLI capability discovery + a worked descriptor | ✅ shipped — see [the CLI contract](./cli.md) |
 
 ## Installing an addon
 
-Deploy the workload next to the platform, then add it in the portal's
-settings by its in-cluster address. [Installing addons](./installing.md)
-describes both steps, what the platform creates from the manifest, and how
-upgrade and uninstall work.
+An addon that ships a Helm chart is added in settings → addons → **+** or
+with `zae addon add`: the operator deploys it once you confirm its plan
+([addon charts](./charts.md)). Any other addon is deployed next to the
+platform through your own channel, then added in the portal's settings by its
+in-cluster address. [Installing addons](./installing.md) describes both, what
+the platform creates from the manifest, and how upgrade and uninstall work.

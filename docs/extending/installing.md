@@ -10,6 +10,21 @@ consists of, all owned by the addon's key. Removing the addon deletes
 everything by that key. The core learns nothing about the addon except what
 the manifest said.
 
+There are two ways to get an addon's containers running, and the install is
+the same once they run:
+
+| | From a chart | From an address |
+|---|---|---|
+| Who deploys the containers | The platform's operator, from the addon's Helm chart, after an admin confirms its plan | You, through your own deployment channel |
+| How | Settings → addons → **+**, or `zae addon add` — see [addon charts](./charts.md) | Step 1 below, then install by the primary's address — step 2 |
+| Remove | Deletes the containers too | Leaves them for you to delete |
+
+For a chart addon, portal-api runs the install below by itself once the addon
+is Ready ([ADR-0011](../adr/0011-addon-charts-installed-by-the-operator.md)).
+This page describes the install from an address and everything both ways
+share: what the platform creates from the manifest, what install refuses, and
+what settings → addons shows.
+
 ```mermaid
 sequenceDiagram
     participant Admin
@@ -29,8 +44,8 @@ Two steps, and the second one is a click. An addon is often several
 containers — one **primary** that serves the manifest and the console, plus
 the components it declares — and all of them are deployed in step 1 the way
 you deploy anything else. The portal shows them and whether the addon is
-configured ([ADR-0010](../adr/0010-addon-component-groups-and-setup.md)); it
-never deploys them.
+configured ([ADR-0010](../adr/0010-addon-component-groups-and-setup.md)); for
+an addon installed from an address, it never deploys them.
 
 ## 1. Deploy the components
 
@@ -220,6 +235,11 @@ e.g. *2/2 running*) and its **setup** state. Expanding the row shows:
 `phase`, `ready`, `desired`, `restarts` and `reason` (`null` when not
 deployed), `setup`, and `refreshAvailable`.
 
+A chart addon's row also shows its chart and version and the phase of its
+`ZaentrumAddon`, with **upgrade**, **values** and **remove**
+([addon charts](./charts.md#4-installing-from-settings)); the list adds
+`chart`, `phase` and `suspended` for it.
+
 Addons installed before component groups existed are listed with one implicit
 primary at their address. **refresh** reads what their manifest declares now.
 The exception is an addon that created neither a tile nor a slot row. Nothing
@@ -256,7 +276,13 @@ the space the admin picked at install.
 
 ## Upgrades
 
-Deploy the new version through your channel first, then refresh. The portal
+A chart addon is upgraded through its chart: a new version, planned with its
+changes, then installed ([addon charts](./charts.md#7-upgrades-and-removal)).
+The refresh below then runs by itself, because portal-api installs a Ready
+chart addon again whenever its manifest changes.
+
+For an addon installed from an address, deploy the new version through your
+channel first, then refresh. The portal
 keeps the manifest it installed from; when the descriptor CLI discovery last
 read from the addon differs — the normal state shortly after a deploy that
 changed it — the addon's row shows **refresh available**.
@@ -269,7 +295,11 @@ every discovery.
 
 ## Uninstall
 
-Subtraction, in order:
+A chart addon goes in one step: settings → addons → **remove**, or
+`zae addon remove`, deletes its `ZaentrumAddon`, everything the chart applied
+and the registry rows ([addon charts](./charts.md#7-upgrades-and-removal)).
+
+For an addon installed from an address, subtraction, in order:
 
 1. Settings → addons → **remove** (or `DELETE /api/portal/addons/<key>`):
    deletes the slot rows, every tile the addon owns, the addon record with its
@@ -289,16 +319,18 @@ Subtraction, in order:
 
 ## Where this is going
 
-> 🧭 Declarative install — an `addons` entry on the `Zaentrum` CR that the
-> operator reconciles like everything else — is roadmap. It will call the
-> same endpoint this page describes, so nothing an addon declares today
-> changes when it lands.
+> 🔶 Platform-managed deploys are decided and being built: the operator
+> installs an addon's Helm chart from one `ZaentrumAddon` resource per addon,
+> after an admin confirms the plan, and portal-api runs the install on this
+> page once the addon is Ready
+> ([ADR-0011](../adr/0011-addon-charts-installed-by-the-operator.md)).
+> [Addon charts](./charts.md) is the contract. Components and setup stay as
+> they are.
 
-> 🧭 Platform-managed deploys are conditional, not scheduled. If the platform
-> ever deploys addon workloads itself, it will be one namespaced custom
-> resource per addon, reconciled by the operator — not the portal creating
-> Deployments ([ADR-0010](../adr/0010-addon-component-groups-and-setup.md)).
-> Components and setup stay as they are.
+> 🔶 A declarative install is a committed `ZaentrumAddon` and its values
+> Secret ([addon charts](./charts.md#6-gitops-committing-the-resource)), one
+> resource per addon rather than a list on the `Zaentrum` CR. It arrives with
+> addon charts.
 
 The runtime write API on `/api/portal/extensions` remains for addons that
 change their contributions **while running** (see [identity](./identity.md)).
