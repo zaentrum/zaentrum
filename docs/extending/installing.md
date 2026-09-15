@@ -20,7 +20,11 @@ the same once they run:
 | Remove | Deletes the containers too | Leaves them for you to delete |
 
 For a chart addon, portal-api runs the install below by itself once the addon
-is Ready ([ADR-0011](../adr/0011-addon-charts-installed-by-the-operator.md)).
+is Ready ([ADR-0011](../adr/0011-addon-charts-installed-by-the-operator.md)),
+provided the chart's name — the addon's name — is the manifest's `service`.
+One key is one addon: a chart addon and an addon installed from an address
+cannot share it, and each install path answers `409` while the other holds it
+(see [moving an addon to its chart](#moving-an-addon-from-its-address-to-its-chart)).
 This page describes the install from an address and everything both ways
 share: what the platform creates from the manifest, what install refuses, and
 what settings → addons shows.
@@ -212,6 +216,8 @@ case below says otherwise:
   the check does not apply.
 - **A component's workload belongs to another addon.** One workload, one
   owner: two installed manifests cannot both declare it.
+- **The key belongs to a chart addon.** An addon the platform installs from a
+  chart is upgraded and reconfigured as a chart addon, never over by address.
 
 ### What settings → addons shows
 
@@ -296,8 +302,10 @@ every discovery.
 ## Uninstall
 
 A chart addon goes in one step: settings → addons → **remove**, or
-`zae addon remove`, deletes its `ZaentrumAddon`, everything the chart applied
-and the registry rows ([addon charts](./charts.md#7-upgrades-and-removal)).
+`zae addon remove`, deletes its `ZaentrumAddon`, everything the chart applied,
+its values Secrets and generated values, and the registry rows — or, with
+*keep values*, keeps both Secrets for a later install
+([addon charts](./charts.md#7-upgrades-and-removal)).
 
 For an addon installed from an address, subtraction, in order:
 
@@ -316,6 +324,36 @@ For an addon installed from an address, subtraction, in order:
    channel that deployed them; the `zaentrum.io/addon` label finds them.
 3. Drop its database if you are done with the data. The addon's configuration
    lives there, and nowhere else.
+
+## Moving an addon from its address to its chart
+
+An addon deployed through your channel and installed from its address can
+become a chart addon once it ships a chart. The two cannot hold the same key,
+and the operator never takes over a Deployment or Service it did not create,
+so the move is a removal and an install, with a gap while the chart's
+workloads start:
+
+1. **Collect the inputs.** What the running deployment gets from your channel —
+   a database address, the key that encrypts the addon's settings — becomes the
+   chart's inputs. Give an existing encryption key as a secret input rather
+   than letting the operator generate a new one: data encrypted with the old
+   key could not be read with a new one.
+2. **Check the name.** The chart's name must be the manifest's `service` —
+   the key the addon is registered under now.
+3. **Remove the address install** in settings → addons. Its registry rows go;
+   its workloads keep running.
+4. **Add the chart** under that name — settings → addons → **+**, or
+   `zae addon add` — with the inputs from step 1, and read the plan. It lists
+   every object the old workloads still hold as *already exists and is not
+   owned by this addon*.
+5. **Delete the old workloads** and the addon's other objects through the
+   channel that deployed them; the `zaentrum.io/addon` label finds them. The
+   next plan is clean.
+6. **Install.** The portal registers the addon again once it is Ready.
+
+The addon's database and the configuration in it stay where they are when the
+chart points at the same database; tiles, slot rows and the setup checklist
+come back from the same manifest.
 
 ## Where this is going
 
