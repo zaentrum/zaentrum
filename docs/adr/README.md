@@ -21,6 +21,7 @@ why), Consequences (what got better, what it costs, and **what it rules out**
 | [0008](./0008-single-origin-deployment-profiles.md) | Deployment profiles set routing and the OIDC issuer together; single-origin path routing is the LAN default |
 | [0009](./0009-pull-based-addon-installation.md) | Addons are installed by pulling their manifest; the platform creates their UI, owned by key — no addon identity needed to appear |
 | [0010](./0010-addon-component-groups-and-setup.md) | An addon is a group of components with one primary; it owns its configuration, the platform shows component and setup state and links to where it is edited |
+| [0011](./0011-addon-charts-installed-by-the-operator.md) | Addons are standard Helm charts the operator installs from one `ZaentrumAddon` per addon, planned and checked against guardrails before anything applies — no package format of our own, no GitOps controller required |
 
 ## Adding one
 

@@ -1,6 +1,6 @@
 # ADR-0009: Addons are installed by pulling their manifest
 
-**Status:** Accepted (2026-09-09) · amended by [ADR-0010](./0010-addon-component-groups-and-setup.md) (an addon is a group of components)
+**Status:** Accepted (2026-09-09) · amended by [ADR-0010](./0010-addon-component-groups-and-setup.md) (an addon is a group of components) · amended by [ADR-0011](./0011-addon-charts-installed-by-the-operator.md) (an addon can also be installed from a Helm chart; the address remains for addons deployed elsewhere)
 
 ## Context
 

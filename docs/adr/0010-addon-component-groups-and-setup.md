@@ -1,6 +1,6 @@
 # ADR-0010: Addons are component groups that own their configuration
 
-**Status:** Accepted (2026-09-14) · amends [ADR-0009](./0009-pull-based-addon-installation.md)
+**Status:** Accepted (2026-09-14) · amends [ADR-0009](./0009-pull-based-addon-installation.md) · amended by [ADR-0011](./0011-addon-charts-installed-by-the-operator.md) (the addon's chart, not the installer's deployment channel, deploys the components)
 
 ## Context
 
