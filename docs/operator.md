@@ -59,8 +59,9 @@ This creates, from [`deploy/operator-install.yaml`](https://github.com/zaentrum/
 |---|---|---|
 | `Namespace` | `zaentrum-operator-system` | Where the controller runs. |
 | `CustomResourceDefinition` | `zaentrums.zaentrum.io` | The `Zaentrum` CR type (shortName `stb`). |
+| `CustomResourceDefinition` | `zaentrumaddons.zaentrum.io` | The `ZaentrumAddon` type (shortName `zaddon`): one addon chart per resource — see [addon charts](extending/charts.md). |
 | `ServiceAccount` | `zaentrum-operator-controller-manager` | The controller identity. |
-| `ClusterRole` / `ClusterRoleBinding` | `zaentrum-operator-manager-role` | Manage namespaces, Deployments, Services, ConfigMaps, Secrets, PVCs, Jobs, Ingresses, OpenShift Routes, Roles/RoleBindings, and `zaentrums`. |
+| `ClusterRole` / `ClusterRoleBinding` | `zaentrum-operator-manager-role` | Manage namespaces, Deployments, Services, ConfigMaps, Secrets, ServiceAccounts, PVCs, Jobs, Ingresses, OpenShift Routes, Roles/RoleBindings, `zaentrums` and `zaentrumaddons`. |
 | `ClusterRole` / `ClusterRoleBinding` | `zaentrum-operator-leader-election-role` | Leader-election leases + events. |
 | `Deployment` | `zaentrum-operator-controller-manager` | The controller (`/manager --leader-elect`, image `ghcr.io/zaentrum/operator:<tag>`). |
 

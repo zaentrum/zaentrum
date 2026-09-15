@@ -1,6 +1,6 @@
 # ADR-0006: Operator-owned runtime on a polyrepo
 
-**Status:** Accepted · recorded retrospectively (decision from 2026-06)
+**Status:** Accepted · recorded retrospectively (decision from 2026-06) · amended by [ADR-0011](0011-addon-charts-installed-by-the-operator.md)
 
 ## Context
 
@@ -22,7 +22,7 @@ One rule, three repo shapes: **one repo = one container = one image = one releas
 
 **2. A front-door repo: [`zaentrum/zaentrum`](https://github.com/zaentrum/zaentrum).** This is the only repository that knows the *set*. It holds the install docs, `releases.json` (the release channel the operator's auto-update consumes), and the all-in-one appliance image `ghcr.io/zaentrum/zaentrum` — the `docker run` one-liner. The appliance **composes released image tags; it never builds service code.** A front door that built from source would be a second source of truth for every service and would drift from what the services actually released. Composing pins instead makes an appliance release a lockfile: reproducible, and rollback is the previous pin.
 
-**3. An operator repo: [`zaentrum/zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator).** The controller, the `Zaentrum` CRD, the deploy templates, and the OLM bundle. The operator is the runtime owner: a cluster declares one `Zaentrum` CR, and the operator reconciles the platform from **published image tags** — the same artifacts the appliance pins. Nothing else deploys anything the platform owns. The decision also reserves the CR as the future home of declarative addon installation (an `addons`/`plugins` list the operator reconciles like everything else) — **that part is not yet implemented**; the current, manual path is documented in [installing addons](../extending/installing.md). A stock platform is fully working with no addons at all.
+**3. An operator repo: [`zaentrum/zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator).** The controller, the `Zaentrum` CRD, the deploy templates, and the OLM bundle. The operator is the runtime owner: a cluster declares one `Zaentrum` CR, and the operator reconciles the platform from **published image tags** — the same artifacts the appliance pins. Nothing else deploys anything the platform owns. The decision also reserved the CR as the future home of declarative addon installation (an `addons`/`plugins` list). [ADR-0011](0011-addon-charts-installed-by-the-operator.md) replaced that reservation: each addon is a Helm chart declared by its own `ZaentrumAddon` resource, which the same operator reconciles — see [addon charts](../extending/charts.md). A stock platform is fully working with no addons at all.
 
 ```mermaid
 flowchart LR
@@ -37,7 +37,7 @@ flowchart LR
   svc -- "release → build → push" --> reg
   fd -- "pins tags (lockfile)" --> reg
   op -- "reconciles pinned tags\nfrom the Zaentrum CR" --> run
-  addon -. "declarative install via the CR (roadmap)" .-> op
+  addon -. "chart installed via a ZaentrumAddon (ADR-0011)" .-> op
 ```
 
 This isn't tidiness for its own sake. When one repo is one container is one image, a release tag answers "what is this, where did it come from, what is running" with the same string — and the seam between platform and addon is a repo boundary, which is the one boundary everyone can see.
@@ -50,11 +50,11 @@ This isn't tidiness for its own sake. When one repo is one container is one imag
 - **CI is meant to be shared, not duplicated.** The decision places reusable workflows (build-and-push, lint, the neutrality guard) in a shared `zaentrum/.github` repo — **not yet created**; today each repo carries its own copies, and the client repos plus the operator each run their own neutrality gate.
 - **Pins go stale by design**, so a bot (Renovate-style) proposes tag bumps to the front door. A stale pin is visible and reviewable; an in-tree build drifting was neither.
 - **The operator embeds its own copy of the deploy templates.** A change to the deploy contract must land both in `deploy/` and in the operator's embedded templates. Known cost, accepted: it keeps the operator image self-contained, so a cluster needs the operator and a CR — not a checkout.
-- **Addons are runtime composition, not source integration.** An installation adds capability by referencing a plugin image in the CR. The platform's repos never gain the code; the running system gains the pod.
+- **Addons are runtime composition, not source integration.** An installation adds capability by declaring an addon chart in a `ZaentrumAddon` resource. The platform's repos never gain the code; the running system gains the pod.
 
 ### What this rules out
 
 - **No monorepo.** No shared tree where release units blur and a visibility boundary would have to run through directories.
 - **No builds in the front door.** `zaentrum/zaentrum` pins released tags; it has no service source to build.
 - **No deploys from source or floating tags.** The operator reconciles named releases. "Whatever is on main" is not a deployable state.
-- **No content acquisition in the platform.** Nothing in the `zaentrum` org obtains content — no code that talks to indexers, trackers, usenet, or torrent sources. That capability exists only as addons loaded through the CR, maintained outside the platform, and a stock install ships with none.
+- **No content acquisition in the platform.** Nothing in the `zaentrum` org obtains content — no code that talks to indexers, trackers, usenet, or torrent sources. That capability exists only as addons installed from their own charts, maintained outside the platform, and a stock install ships with none.
