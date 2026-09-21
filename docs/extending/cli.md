@@ -547,35 +547,53 @@ actionable and *cannot pull the image* is.
 
 ### How a wait is exact
 
-A restart on the demo once reported *ready* eight seconds after it was asked
-for, while the pod that was ready was the one from **before** it. Nothing was
-lying: `readyReplicas`, `updatedReplicas` and `availableReplicas` describe
-whatever pods exist, and for the first seconds of a rollout those are the
-previous ones — every field true, the conclusion false. It is the same
-mechanism that hid a 36-hour outage behind a green *ready* badge, one layer
-down.
+A restart on the demo reported *ready* eight seconds after it was asked for,
+while the pod that was ready was the one from **before** it. Nothing was lying:
+`readyReplicas`, `updatedReplicas` and `availableReplicas` describe whatever
+pods exist, and during a rollout those include the previous ones — every field
+true, the conclusion false. It is the same mechanism that hid a 36-hour outage
+behind a green *ready* badge, one layer down.
 
-So the console reports, and every write returns, what Kubernetes itself uses
-to answer the question:
+Two things have to be knowable, and the counters answer neither on their own:
+**has my rollout started**, and **is it over**.
 
 | Field | On | Means |
 |---|---|---|
 | `generation` | each workload, and the operator's resource | how many times the spec has changed |
 | `observedGeneration` | the same two | which of those the controller has acted on |
 | `restartedAt` | each workload | the rollout-restart stamp, `""` when there is none |
+| `replicas` | each workload | `status.replicas`: the **total** pods across every ReplicaSet — not `desiredReplicas`, which is the count asked for |
 
 `POST …/instances/{name}/{scale,restart}` answers `200` with
 `{"name", "generation", "restartedAt"}`, and `PATCH /operator` and
 `POST /operator/apply-update` answer `200` with `{"version", "generation"}` —
-the generation *that write* produced. `zae platform … --wait` then waits until:
+the generation *that write* produced. `zae platform … --wait` then applies the
+rule `kubectl rollout status` uses:
 
-- **restart** — the workload's `observedGeneration` has reached that
-  generation, its `restartedAt` has moved off the one from before, and then
-  `updatedReplicas == desiredReplicas` with ready and available at or above it;
-- **scale** — the same gate, plus the replica count that was asked for;
+```
+observedGeneration >= the generation the write returned
+updatedReplicas    == desiredReplicas      every pod asked for is from the new revision
+replicas           == updatedReplicas      no pod from an older revision is left
+availableReplicas  == updatedReplicas      and the new ones are past their probes
+```
+
+- **restart** — that, plus `restartedAt` having moved off the stamp from
+  before, so it is *this* restart being waited on and not a rollout already
+  under way;
+- **scale** — that, plus the replica count that was asked for;
 - **update** — the operator has reconciled the resource generation the write
   made, reports the new version as `currentVersion`, and every workload it
-  manages has settled the same way.
+  manages has settled by the same rule.
+
+The third line is the one that had to be learned. With one replica the default
+strategy surges — `maxSurge 1`, `maxUnavailable 0` — so the new pod is created
+**before** the old one is retired, and throughout its startup the cluster
+reports `updatedReplicas 1`, `readyReplicas 1`, `availableReplicas 1`: every
+number the size asked for, every one of them counting the old pod beside a new
+one still in `ContainerCreating`. Only the total separates them — `2` during
+the surge, `1` when the old pod is gone. And it is `availableReplicas`, not
+`readyReplicas`, that closes the gate: ready counts across every revision, so
+mid-surge it is describing the old pod too.
 
 Two further contract points, both about telling states apart that used to look
 alike. A workload the namespace does not run answers `404`, not `400`: absent
@@ -585,10 +603,13 @@ accepts an optional `{"version": "…"}` — the update the caller decided on �
 answers `409` when the operator has discovered another one since, naming what
 is on the shelf now.
 
-Against a portal-api that predates these fields, `zae` keeps working: the wait
-falls back to the readiness gate it had before, and says so in one line. That
-line matters more than the fallback — a wait that quietly gets weaker is how
-the original bug stayed invisible.
+Against a portal-api that reports less than this, `zae` keeps working: the wait
+falls back to the readiness gate it had before, and says so in one line naming
+what it cannot see — *no rollout generation*, *no total replica count*, or
+both. That line matters more than the fallback: a wait that quietly gets weaker
+is how the original bug stayed invisible, and an instance reporting the
+generation but not the total is exactly the case that still looks exact and is
+not.
 
 ### What `zae platform` does not cover
 

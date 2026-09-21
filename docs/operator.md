@@ -307,11 +307,13 @@ It prints what will change, asks, and with `--wait` follows the rollout. The
 wait is about *that* write: the portal answers it with the CR's new
 `metadata.generation`, and `zae` waits until `status.observedGeneration` has
 reached it, `status.currentVersion` is the new version, and every
-operator-managed Deployment has rolled out — `observedGeneration` caught up and
-every replica updated and ready. Waiting on the replica counts alone would pass
-while the pods from before the write were still the ones running. Stateful
-services are protected and refused. The full reference, including what a
-restart and a scale wait for, is
+operator-managed Deployment has finished rolling — `observedGeneration` caught
+up, every pod from the new revision, **no pod from the old one left**, all of
+them available. Waiting on the replica counts alone passes mid-rollout: a
+one-replica service surges, so for the whole startup of the new pod the
+counters are the right size and are describing the old one. Stateful services
+are protected and refused. The full reference, including what a restart and a
+scale wait for, is
 [the CLI contract](extending/cli.md#how-a-wait-is-exact).
 
 **The controller itself is updated with its install bundle, not from the CLI.**
