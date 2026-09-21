@@ -6,6 +6,13 @@ it is, every text and image about it, what is playable, and what the original
 file contained. Storage is the source of truth. Databases are caches that can be
 thrown away and rebuilt by reading the folders.
 
+> **Direction — v2 turns the model around.** The pages below describe v1, where
+> storage is the source of truth. The proposal in
+> [Database first, storage as the record](./record.md) makes the database the
+> working copy and the tree a written-once record that rebuilds it, with no
+> crawler. Read that first; the pages below still describe what the v1 tooling
+> builds today.
+>
 > **Status — format ahead of the code.** Schema v1 is published, and a sample
 > library built by the reference migrator validates against it. No platform
 > service reads or writes the format yet: the catalog keeps its truth in a
@@ -150,3 +157,4 @@ whose episode exists in two versions — are in
 | [metadata.json](./metadata.md) | Texts, images and their naming, credits, video references, locks, and how a re-sync would work |
 | [Versions, audio, subtitles and quality](./versions.md) | Director's cuts, black-and-white and colour presentations, stereo and 5.1, SDH, forced and commentary tracks, quality ladders, and when an original may be deleted |
 | [Migrating a library](./migrating.md) | Building item folders from an existing catalog, applying them on storage safely, and what must change before a platform uses the format |
+| [Database first, storage as the record](./record.md) | The v2 design: what the database owns, what the tree records, who writes what, and how a rebuild works |

@@ -56,6 +56,7 @@ NAV = [
         ("library-metadata", "metadata.json"),
         ("library-versions", "Versions, audio, subtitles & quality"),
         ("library-migrating", "Migrating a library"),
+        ("library-record", "Database first, storage as the record"),
     ]),
     ("Understand it", [
         ("architecture", "Architecture"),
