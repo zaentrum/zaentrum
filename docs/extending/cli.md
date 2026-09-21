@@ -24,6 +24,31 @@ it leaves no trace.
 3. `zae discover --url https://…` renders the document; `zae doctor` reports
    how many services declare capabilities.
 
+The aggregate document also says **where a CLI signs in**, because a CLI
+cannot guess it:
+
+```json
+{
+  "capabilityVersion": 1,
+  "auth": {
+    "issuer": "https://media.example.org/auth/realms/zaentrum",
+    "clientId": "zae"
+  },
+  "services": [ … ]
+}
+```
+
+- `auth.issuer` — the issuer this instance validates bearers against.
+- `auth.clientId` — the OIDC client a CLI should sign in as. portal-api reads
+  it from `PORTAL_CLI_CLIENT_ID` (default `zae`), so an operator who registered
+  the client under another name points that at it.
+
+`auth` is absent when there is nothing to sign in to: no issuer configured, or
+auth disabled. That is also what an instance that predates the field looks
+like, and `zae login` says so and asks for `--issuer` and `--client-id`
+instead. `capabilityVersion` stays `1`: nothing a v1 client already reads
+changed shape, and a client that does not know `auth` ignores it.
+
 ## Descriptor schema (v1)
 
 ```json
@@ -207,6 +232,148 @@ descriptor may set `proxyKey` when they differ. So an addon that wants CLI
 commands needs to be [installed](./installing.md) — which registers its app
 with a `proxyUrl` — and nothing else: no route, no origin.
 
+## Signing in — `zae login`
+
+```sh
+zae login --url https://media.example.org
+```
+
+The grant is the **OAuth 2.0 Device Authorization Grant**
+([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)) with
+[PKCE](https://www.rfc-editor.org/rfc/rfc7636). A CLI is a public client: it
+cannot keep a secret, and it cannot receive a browser redirect. The device
+grant is the one flow designed for exactly that — the terminal prints a URL
+and a user code, and a browser, which need not be on the same machine, does
+the signing in. That is what makes it work over ssh, in a container and on a
+server with no desktop.
+
+What happens, in order:
+
+1. `zae` fetches `/api/portal/cli/discovery` and takes `auth.issuer` and
+   `auth.clientId` from it ([above](#how-discovery-works)). `--issuer` and
+   `--client-id` override them, and are required against an instance that
+   advertises neither.
+2. It reads the issuer's `/.well-known/openid-configuration` for
+   `device_authorization_endpoint` and `token_endpoint`. **Endpoints are read,
+   never built**: a realm may be served under a path prefix, and its endpoints
+   are wherever that document says. An issuer that advertises no device
+   endpoint fails with exit `3`, naming what an operator must enable.
+3. It posts `client_id`, `scope`, and a **PKCE** `code_challenge` with
+   `code_challenge_method=S256` to the device endpoint, prints the
+   verification URL and the user code — `verification_uri_complete` when the
+   provider offers one, since it already carries the code — and opens a
+   browser unless `--no-browser` is given. A missing opener never fails a
+   login; the URL is on the screen either way.
+4. It polls the token endpoint with `grant_type=urn:ietf:params:oauth:grant-type:device_code`,
+   the device code and the PKCE `code_verifier`, at the interval the provider
+   set, honouring `slow_down` (add five seconds and keep it),
+   `authorization_pending`, `expired_token` and `access_denied`. Ctrl-C stops
+   the poll where it stands and stores nothing.
+5. It stores the session and prints who you are — and whether your token
+   carries the admin role. A login that succeeds *without* the role says so
+   there, rather than three commands later.
+
+The PKCE challenge goes out on every device request. An identity provider
+whose client requires S256 refuses a request without it; one that does not
+require it is unharmed by receiving it.
+
+| command | does |
+|---|---|
+| `zae login --url …` | signs in and stores the session. `--no-browser`, `--issuer`, `--client-id`, `--scope` (default `openid`) |
+| `zae logout --url …` | forgets that instance's session; `--all` removes the file |
+| `zae whoami --url …` | subject, username, and whether the token carries the platform's admin role (`--role` names another) — never the token itself |
+
+### What is stored, and where
+
+`~/.config/zae/credentials.json` — `$XDG_CONFIG_HOME/zae/credentials.json`
+when that is set — mode `0600` inside a `0700` directory, written through a
+temporary file in the same directory so a crash mid-write cannot leave a
+half-parsed file where credentials were.
+
+It is keyed by **instance URL**: a session at one instance is worthless at
+another and must never travel there. Each entry holds the access token, the
+refresh token, the expiry, the issuer and the client id.
+
+Which bearer a command sends, in order:
+
+1. **`ZAE_TOKEN`**, when set — a bearer minted elsewhere (a service account's
+   client-credentials token, a CI secret). It wins on purpose: a script that
+   sets it is naming the identity it means, and a developer's own login must
+   not quietly override it.
+2. The **stored session** for that instance, renewed with its refresh token
+   when it has expired and written back — so one expiry costs one extra round
+   trip, not one per command.
+
+A renewal that fails is a session that ended: `zae` says *session expired —
+run: zae login --url …* and exits `5` rather than sending a token it knows is
+dead. A token that is real and still refused gets different words, because it
+needs a different fix — signing in again with the same account does nothing
+about a missing role.
+
+**Tokens are never printed** — not by `login`, not by `whoami`, not in an
+error message. It is the one rule that keeps them out of scrollback, CI logs
+and pasted bug reports.
+
+### What an operator must configure
+
+The platform does not create the CLI's client. One public client on the
+instance's realm, which every CLI user on that instance shares:
+
+```json
+{
+  "clientId": "zae",
+  "name": "zae CLI",
+  "description": "The zaentrum CLI — device grant, public client",
+  "protocol": "openid-connect",
+  "enabled": true,
+  "publicClient": true,
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "serviceAccountsEnabled": false,
+  "fullScopeAllowed": true,
+  "attributes": {
+    "oauth2.device.authorization.grant.enabled": "true",
+    "pkce.code.challenge.method": "S256"
+  },
+  "redirectUris": [
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+  "webOrigins": []
+}
+```
+
+Why each line is there:
+
+- **`publicClient: true`** — a CLI on someone's laptop cannot hold a secret.
+  A confidential client would put one in every user's shell history.
+- **`oauth2.device.authorization.grant.enabled`** — the flow itself. Without
+  it the realm advertises no `device_authorization_endpoint`, and `zae login`
+  exits `3` saying so.
+- **`pkce.code.challenge.method: "S256"`** — proof of possession for a client
+  with no secret. `zae` always sends the challenge, so requiring it costs
+  nothing and closes the gap for anything else using this client.
+- **`fullScopeAllowed: true`** — the point of the whole exercise: the access
+  token must carry the user's **realm roles** in `realm_access.roles`, or the
+  platform admin role never reaches portal-api and every admin command answers
+  `403`. (The `roles` client scope, assigned by default, is what puts them
+  there; full scope is what stops them being filtered out.)
+- **`standardFlowEnabled` with loopback `redirectUris`** — not used today:
+  `zae` speaks only the device grant. They are here so a browser-redirect
+  fallback can be added later without an operator touching the realm again.
+  Loopback addresses only, never a public origin.
+- **`serviceAccountsEnabled: false`** — this client is how *people* sign in.
+  An addon that needs to act on its own behalf gets a confidential client
+  instead; see [addon identity](./identity.md).
+
+Then, per person: the platform admin role — `zaentrum-admin` by default,
+`PORTAL_ADMIN_ROLE` on portal-api — assigned to the users who administer the
+instance. `zae whoami --url …` shows whether it reached the token.
+
+To use another client id, set `PORTAL_CLI_CLIENT_ID` on portal-api (it is what
+the discovery document advertises) or pass `--client-id` per command.
+
 ## Exit codes — the scripting contract
 
 A dynamic surface creates a failure mode static CLIs never had: a command can
@@ -231,20 +398,21 @@ prints nothing on stdout, so scripts assert prerequisites before doing work.
 A `404` during execution triggers one re-discovery and is reclassified as `3`
 if the command is now absent.
 
-Authentication is a stated stopgap until `zae login` ships: a bearer in
-`ZAE_TOKEN` (for example an addon service account's client-credentials
-token) is sent as-is.
+Authentication is [`zae login`](#signing-in--zae-login). A bearer in
+`ZAE_TOKEN` (for example an addon service account's client-credentials token)
+is still sent as-is, and still wins over a stored session.
 
 ## Installing addons: `zae addon`
 
 Installing is how an addon reaches an instance, so no addon can declare the
 command that does it: `zae addon` is part of the static core. It drives
 portal-api's [chart API](./charts.md#4-installing-from-settings) with the
-admin bearer in `ZAE_TOKEN`, waits for the plan the operator made for its own
-write, and prints that plan before anything is installed
-([addon charts](./charts.md)).
+caller's admin bearer — from [`zae login`](#signing-in--zae-login) or
+`ZAE_TOKEN` — waits for the plan the operator made for its own write, and
+prints that plan before anything is installed ([addon charts](./charts.md)).
 
 ```sh
+zae login --url https://media.example.org
 zae addon add oci://ghcr.io/example/charts/example --version 1.2.0 \
   --url https://media.example.org --set worker.replicas=2 --set-secret database.url
 ```
@@ -328,7 +496,8 @@ What makes it safe to script:
 | A worked descriptor | ✅ [acquire](https://github.com/laedeli/acquire) declares 10 commands, 1 check, 4 topics; the [sample addon](https://github.com/zaentrum/sample-addon) declares 2 commands, 1 check and a full `ui` section |
 | `components[]` and `setup` read on install; containers and setup checklist in settings → addons | ✅ shipped in portal-api — see [installing](./installing.md#what-settings--addons-shows) |
 | `zae discover` / doctor integration | ✅ shipped in zae v0.1 |
-| Executing discovered commands + the exit-code contract + `zae require` | ✅ zae v0.2 (`ZAE_TOKEN` for auth until login) |
+| Executing discovered commands + the exit-code contract + `zae require` | ✅ zae v0.2 |
 | `zae addon add`, `list`, `status`, `upgrade`, `remove` | 🔶 built in zae against the [addon chart](./charts.md) API; needs a portal-api and operator that ship it |
-| `zae login` (device flow) | 🧭 next |
-| Registered checks executed by doctor | 🧭 with login (the portal will not expose in-cluster check endpoints unauthenticated) |
+| `auth` in the discovery document (`PORTAL_CLI_CLIENT_ID`) | ✅ shipped in portal-api |
+| `zae login`, `logout`, `whoami` (device grant with PKCE, refresh, per-instance sessions) | 🔶 built in zae; needs a portal-api that advertises `auth` and the [operator-created client](#what-an-operator-must-configure) |
+| Registered checks executed by doctor | 🧭 next, now that login exists (the portal will not expose in-cluster check endpoints unauthenticated) |

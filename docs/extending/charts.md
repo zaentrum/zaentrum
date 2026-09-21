@@ -516,7 +516,7 @@ a terminal or a script, waits for the plan of its own write, and prints it
 before it installs:
 
 ```sh
-export ZAE_TOKEN=…   # an admin bearer
+zae login --url https://media.example.org   # or set ZAE_TOKEN to an admin bearer
 zae addon add oci://ghcr.io/example/charts/example --version 1.2.0 \
   --url https://media.example.org --set worker.replicas=2 --set-secret database.url
 zae addon status example --url https://media.example.org
