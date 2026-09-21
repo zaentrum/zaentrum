@@ -283,6 +283,41 @@ For the operator's own auto-update loop (`spec.update.mode: auto` /
 `spec.channel`), the reconciler tracks the channel and surfaces the next tag on
 `status.availableUpdate` before rolling it.
 
+### Updating from the command line
+
+A CR value change — the first case above, and the one you make most often —
+needs no cluster access. The [`zae`](https://github.com/zaentrum/zae) CLI
+drives it through the portal's operator console with an admin bearer:
+
+```sh
+zae login --url https://zaentrum.example.org
+zae platform status --url https://zaentrum.example.org     # version, channel, update mode, phase, workloads
+zae platform update --apply --wait --url https://zaentrum.example.org
+```
+
+| It can | Which CR field |
+|---|---|
+| Pin a version, or follow a channel again | `spec.version` |
+| Choose the release train | `spec.channel` |
+| Let the operator update itself, or not | `spec.update.mode` |
+| Apply the update the operator discovered | `spec.version` ← `status.availableUpdate` |
+| Scale or restart one workload | `spec.replicas[<name>]`, or the Deployment |
+
+It prints what will change, asks, and with `--wait` follows the rollout until
+`status.currentVersion` is the new one and every operator-managed workload is
+ready. Stateful services are protected and refused. The full flag reference is
+[the CLI contract](extending/cli.md#driving-the-platform-zae-platform).
+
+**The controller itself is updated with its install bundle, not from the CLI.**
+The controller-manager runs in `zaentrum-operator-system`, outside the platform
+namespace and outside the portal's permissions, so nothing that talks to the
+portal can see or change its image. That is the third case above — a chart or
+operator-code change: bump the image ref in
+[`deploy/operator-install.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/operator-install.yaml),
+`oc apply` it as cluster-admin (or let OLM roll it, on a cluster that installs
+the operator that way), and the embedded chart re-renders on the next
+reconcile. See [updating.md](./updating.md) for the full flow.
+
 See also: [prerequisites.md](./prerequisites.md) ·
 [self-hosting.md](./self-hosting.md) · [reference-demo.md](./reference-demo.md) ·
 [updating.md](./updating.md) · [troubleshooting.md](./troubleshooting.md)
