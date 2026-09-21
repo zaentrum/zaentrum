@@ -303,10 +303,16 @@ zae platform update --apply --wait --url https://zaentrum.example.org
 | Apply the update the operator discovered | `spec.version` ← `status.availableUpdate` |
 | Scale or restart one workload | `spec.replicas[<name>]`, or the Deployment |
 
-It prints what will change, asks, and with `--wait` follows the rollout until
-`status.currentVersion` is the new one and every operator-managed workload is
-ready. Stateful services are protected and refused. The full flag reference is
-[the CLI contract](extending/cli.md#driving-the-platform-zae-platform).
+It prints what will change, asks, and with `--wait` follows the rollout. The
+wait is about *that* write: the portal answers it with the CR's new
+`metadata.generation`, and `zae` waits until `status.observedGeneration` has
+reached it, `status.currentVersion` is the new version, and every
+operator-managed Deployment has rolled out — `observedGeneration` caught up and
+every replica updated and ready. Waiting on the replica counts alone would pass
+while the pods from before the write were still the ones running. Stateful
+services are protected and refused. The full reference, including what a
+restart and a scale wait for, is
+[the CLI contract](extending/cli.md#how-a-wait-is-exact).
 
 **The controller itself is updated with its install bundle, not from the CLI.**
 The controller-manager runs in `zaentrum-operator-system`, outside the platform

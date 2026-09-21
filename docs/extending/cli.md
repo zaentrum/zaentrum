@@ -515,7 +515,7 @@ https://media.example.org — the platform
   rolls        3 workloads the operator manages
 apply this to https://media.example.org? [y/N] y
 waiting for the platform to report 1.5.0, and every workload the operator manages to be ready (timeout 10m)
-  Reconciling  1.4.0 · 2/3 ready — waiting for 1.5.0; katalog-api 0/1 degraded: ImagePullBackOff
+  Reconciling  1.4.0 · 2/3 ready — the operator has not reconciled this change yet (at 7, waiting for 8); waiting for 1.5.0
   Reconciling  1.5.0 · 2/3 ready — katalog-api 0/1 progressing
   Ready        1.5.0 · 3/3 ready
 the platform reports 1.5.0, and every workload the operator manages is ready
@@ -545,6 +545,51 @@ the digest when the reference is pinned by digest; **REASON** is the cluster's
 own words for why a workload is not healthy, because "degraded" is not
 actionable and *cannot pull the image* is.
 
+### How a wait is exact
+
+A restart on the demo once reported *ready* eight seconds after it was asked
+for, while the pod that was ready was the one from **before** it. Nothing was
+lying: `readyReplicas`, `updatedReplicas` and `availableReplicas` describe
+whatever pods exist, and for the first seconds of a rollout those are the
+previous ones — every field true, the conclusion false. It is the same
+mechanism that hid a 36-hour outage behind a green *ready* badge, one layer
+down.
+
+So the console reports, and every write returns, what Kubernetes itself uses
+to answer the question:
+
+| Field | On | Means |
+|---|---|---|
+| `generation` | each workload, and the operator's resource | how many times the spec has changed |
+| `observedGeneration` | the same two | which of those the controller has acted on |
+| `restartedAt` | each workload | the rollout-restart stamp, `""` when there is none |
+
+`POST …/instances/{name}/{scale,restart}` answers `200` with
+`{"name", "generation", "restartedAt"}`, and `PATCH /operator` and
+`POST /operator/apply-update` answer `200` with `{"version", "generation"}` —
+the generation *that write* produced. `zae platform … --wait` then waits until:
+
+- **restart** — the workload's `observedGeneration` has reached that
+  generation, its `restartedAt` has moved off the one from before, and then
+  `updatedReplicas == desiredReplicas` with ready and available at or above it;
+- **scale** — the same gate, plus the replica count that was asked for;
+- **update** — the operator has reconciled the resource generation the write
+  made, reports the new version as `currentVersion`, and every workload it
+  manages has settled the same way.
+
+Two further contract points, both about telling states apart that used to look
+alike. A workload the namespace does not run answers `404`, not `400`: absent
+and refused need opposite reactions, and only one of them means *fix the name*
+(a protected workload keeps its `400` and its reason). And `apply-update`
+accepts an optional `{"version": "…"}` — the update the caller decided on — and
+answers `409` when the operator has discovered another one since, naming what
+is on the shelf now.
+
+Against a portal-api that predates these fields, `zae` keeps working: the wait
+falls back to the readiness gate it had before, and says so in one line. That
+line matters more than the fallback — a wait that quietly gets weaker is how
+the original bug stayed invisible.
+
 ### What `zae platform` does not cover
 
 **The operator's own controller image.** The controller runs in
@@ -565,16 +610,15 @@ What makes it safe to script:
   discovered on the channel the platform follows *now*, so `--apply --channel C`
   is a usage error, and so is `--apply --version V`: pinning what was found and
   pinning what you name are two different instructions. When nothing has been
-  discovered, `--apply` says so and writes nothing.
+  discovered, `--apply` says so and writes nothing. The request also carries
+  the version zae showed you, so an update that moved in between is refused by
+  the platform (`409` → exit `1`) rather than applied.
 - **Protected workloads are refused by the platform.** The stateful services it
   keeps out of reach are refused by the API, in the API's own words, and zae
   prints that reason and exits `1`. The rule lives on one side only.
-- **`--wait` waits for both halves** — the platform reporting the new version,
-  and every workload the operator manages being ready — and exits `1` on
-  timeout naming what was still not ready. After `restart` it is a readiness
-  gate rather than proof the new pods are the ones running: the console reports
-  no rollout revision, so zae waits one interval before its first reading and
-  then watches the counters.
+- **`--wait` follows the rollout the write produced,** and exits `1` on timeout
+  naming what was still not ready. See
+  [how a wait is exact](#how-a-wait-is-exact).
 - **Exit codes** are the contract above: `0` done; `1` the platform refused it,
   the change was declined, or it was not ready within `--timeout`; `2` usage;
   `3` this instance has no operator console — portal-api is not running where
