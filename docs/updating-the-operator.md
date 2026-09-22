@@ -64,6 +64,13 @@ field says so and `zae platform controller` exits `3` — *not offered by this
 instance* — so a check can branch on it. See
 [the CLI contract](./extending/cli.md#the-operators-own-controller).
 
+When `availableUpdate` is a **channel tag** rather than a version, both surfaces
+say the channel serves a different image instead of naming it — an install
+pinned to a commit image (`:sha-…`) reports this every time the channel moves
+ahead of it, which means *you are not on what the channel serves* rather than
+that anything is broken; tagged releases (`v0.5.0`) are what make the
+comparison precise.
+
 **2. The portal.** The operator console (`/portal/operator`, admin-only) shows
 an **operator controller** card with the same facts and the same one line
 naming the path. There is no button on it, for the reasons

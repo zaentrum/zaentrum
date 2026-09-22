@@ -636,7 +636,7 @@ passes it through:
 | `image` | what the controller pod runs, tag or digest |
 | `version` | the tag, else the short digest, else `unknown` |
 | `source` | `olm`, `manifest`, `appliance` or `unknown` |
-| `availableUpdate` | a newer version found on the channel; `""` when there is none, or nothing looks |
+| `availableUpdate` | what the channel serves, when it is not what runs; `""` when there is none, or nothing looks. A version (`v0.5.0`) is printed as `v0.5.0 available`; a moving channel tag (`latest`, `stable`, `edge`) as `the "latest" channel now serves a different image`, because the tag has not changed — what it points at has |
 | `observedAt` | when the operator last looked |
 
 The `source` is there because each one is a different thing to go and do, and
