@@ -97,6 +97,12 @@ so it only takes effect after the operator is rebuilt and rolled.
    > `operator-install.yaml` also carries the CRD, ClusterRoles/Bindings, and the
    > controller-manager Deployment — re-applying it is the whole operator install.
 
+   This is one of three channels the controller can be updated through — the
+   other two are an OLM subscription and the appliance's own update — and
+   nothing inside the product performs any of them. What each looks like, how
+   to see which one installed yours, and why the platform will not do it for
+   you: [updating the operator](./updating-the-operator.md).
+
 5. **Run a CI deploy** (flow’s tail below / [Running a CI deploy](#running-a-ci-deploy))
    so the operator re-renders the platform from the new chart and rolls the affected
    tiers. The operator reconciles via server-side apply; give it up to ~2 min to

@@ -507,7 +507,13 @@ postgres        platform       16                   1/1    ready     -
 example-worker  addon:example  2.0.0                1/1    ready     -
 leftover        other          latest               1/1    ready     -
 
-Not covered here: the operator's own controller image. …
+the operator's controller
+  version      v0.4.1
+  image        ghcr.io/zaentrum/operator:v0.4.1
+  installed    OLM — a subscription the cluster manages
+  update       v0.5.0 available
+  observed     2026-09-22T08:00:00Z
+Updated outside the platform: approve the update in its OLM subscription.
 
 $ zae platform update --apply --wait --url https://media.example.org
 https://media.example.org — the platform
@@ -523,7 +529,8 @@ the platform reports 1.5.0, and every workload the operator manages is ready
 
 | Command | Does |
 |---|---|
-| `zae platform status --url …` | The version the platform is pinned to — or that nothing is pinned and it follows a channel — the channel, the update mode, the phase, the version it reports running, and whether an update is offered; then every workload it can see, grouped: what the operator renders first, addons after them, and whatever neither claims last |
+| `zae platform status --url …` | The version the platform is pinned to — or that nothing is pinned and it follows a channel — the channel, the update mode, the phase, the version it reports running, and whether an update is offered; then every workload it can see, grouped: what the operator renders first, addons after them, and whatever neither claims last; then the operator's own controller |
+| `zae platform controller --url …` | That last section on its own, for scripts: the version in charge, its image, how it was installed, whether something newer was found — and one line naming what updates it. Never a command that does |
 | `zae platform update --url …` | Changes what the platform asks for: `--version V` pins an image tag (`--version latest` follows the channel again), `--channel C` picks the release train, `--mode auto\|manual` decides whether the operator applies in-channel updates by itself, `--apply` pins the update it has already discovered |
 | `zae platform restart <workload> --url …` | Rolls one workload |
 | `zae platform scale <workload> <replicas> --url …` | Sets one workload's replica count |
@@ -534,7 +541,7 @@ the platform reports 1.5.0, and every workload the operator manages is ready
 | `--apply` | Pin the platform to the update the operator discovered — `status.availableUpdate`. It takes no version of its own |
 | `--yes` | Do it without asking |
 | `--wait`, `--timeout` | Follow the rollout; each wait lasts at most `--timeout`, default `10m` |
-| `--json` | Print the portal's own answer, unchanged (`status`) |
+| `--json` | Print the portal's own answer, unchanged (`status`), or its `controller` sub-document, always an object (`controller`) |
 
 The three columns of the workload table that are not obvious: **GROUP** is how
 an administrator has to reason about the workload — `platform` (the operator
@@ -611,16 +618,61 @@ is how the original bug stayed invisible, and an instance reporting the
 generation but not the total is exactly the case that still looks exact and is
 not.
 
-### What `zae platform` does not cover
+### The operator's own controller
 
-**The operator's own controller image.** The controller runs in
+`zae` shows the controller and never changes it, and those are two different
+facts rather than one apology. The controller runs in
 `zaentrum-operator-system`, outside the namespace the portal administers and
-outside its permissions, so `zae` can neither read nor change the version of
-the controller itself. Updating the controller means applying its install
-bundle — or going through OLM, on a cluster that installs it that way; see
-[running with the operator](../operator.md#updating-from-the-command-line).
-`zae platform` updates the platform that controller *deploys*, which is the
-other half of the same job and the half that happens far more often.
+outside its permissions; it is installed and upgraded outside the product. What
+the CLI can do honestly is say **what is in charge**, whether something newer
+exists, and which path applies — which is what a reader of a status actually
+needs when a reconcile does something the CR does not explain.
+
+The operator reports itself on the CR as `status.controller`, and the portal
+passes it through:
+
+| Field | Is |
+|---|---|
+| `image` | what the controller pod runs, tag or digest |
+| `version` | the tag, else the short digest, else `unknown` |
+| `source` | `olm`, `manifest`, `appliance` or `unknown` |
+| `availableUpdate` | a newer version found on the channel; `""` when there is none, or nothing looks |
+| `observedAt` | when the operator last looked |
+
+The `source` is there because each one is a different thing to go and do, and
+the last line of the section is exactly that thing:
+
+| `source` | The line zae prints |
+|---|---|
+| `olm` | *Updated outside the platform: approve the update in its OLM subscription.* |
+| `manifest` | *…: apply the pinned install manifest, usually through the deployment repository that holds it.* |
+| `appliance` | *…: update the appliance — its own update carries the controller.* |
+| `unknown` | *…: update it where it was installed from — an OLM subscription, the install manifest, or the appliance.* |
+
+A source this `zae` has not heard of is printed as it came: not recognising a
+word is not the same as the word being untrue. The whole subject —  what each
+channel looks like, and why the product stops here — is
+[updating the operator](../updating-the-operator.md).
+
+`zae platform controller --url …` is that section alone, for scripts, and
+`--json` prints the portal's own `controller` document — always an object, so
+`.version` is addressed the same way whether or not there is one:
+
+```sh
+zae platform controller --url https://media.example.org --json | jq -r '.availableUpdate // ""'
+```
+
+An operator that reports no controller — every operator older than the field —
+is told apart from one reporting blanks: the key is absent, the CLI says *not
+reported by this operator*, and `zae platform controller` exits `3`, *not
+offered by this instance*, which a check can branch on. A `status` is
+unaffected and still exits `0`: the platform is what it was asked about.
+
+**There is no command that updates the controller**, and typing the likeliest
+one — `zae platform controller update` — is a usage error that answers the
+question behind it by naming the three paths. `zae platform` updates the
+platform that controller *deploys*, which is the other half of the same job and
+the half that happens far more often.
 
 What makes it safe to script:
 
@@ -643,9 +695,9 @@ What makes it safe to script:
 - **Exit codes** are the contract above: `0` done; `1` the platform refused it,
   the change was declined, or it was not ready within `--timeout`; `2` usage;
   `3` this instance has no operator console — portal-api is not running where
-  it can manage workloads, or there is no operator resource — or no workload
-  has that name; `4` the instance could not be reached; `5` the bearer is
-  missing or lacks the admin role.
+  it can manage workloads, or there is no operator resource — no workload has
+  that name, or (for `controller`) the operator reports none; `4` the instance
+  could not be reached; `5` the bearer is missing or lacks the admin role.
 
 ## Rules for a good descriptor
 

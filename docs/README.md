@@ -19,6 +19,7 @@ single `Zaentrum` custom resource. Chart values map 1:1 onto the CR spec.
 | **Understand / reference every `Zaentrum` CR field** | [Operator & CR reference](./operator.md) |
 | **Reproduce the public reference demo** (OKD + GitLab CI GitOps) | [Reference demo](./reference-demo.md) |
 | **Ship a change** to a running platform (day-2) | [Updating](./updating.md) |
+| **Update the operator's own controller** (OLM, install manifest, appliance) | [Updating the operator](./updating-the-operator.md) |
 | **Fix a broken deploy** | [Troubleshooting](./troubleshooting.md) |
 | **Extend it with an addon** (or write one) | [Extending zaentrum](./extending/README.md) |
 | **Understand how it fits together** | [Architecture](./architecture.md) · [Decision records](./adr/README.md) |

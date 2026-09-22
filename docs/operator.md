@@ -277,7 +277,9 @@ Jobs. See [reference-demo.md](./reference-demo.md).
   `ghcr.io/zaentrum/<app>:latest`; roll the app tier to pull it (the demo CI does
   a `rollout restart`, excluding postgres/valkey/kafka).
 - **A chart or operator-code change**: rebuild and roll the operator image — the
-  embedded chart re-renders only after that. See [updating.md](./updating.md).
+  embedded chart re-renders only after that. The controller itself is updated
+  outside the platform, by the channel that installed it: see
+  [updating the operator](./updating-the-operator.md).
 
 For the operator's own auto-update loop (`spec.update.mode: auto` /
 `spec.channel`), the reconciler tracks the channel and surfaces the next tag on
@@ -291,7 +293,8 @@ drives it through the portal's operator console with an admin bearer:
 
 ```sh
 zae login --url https://zaentrum.example.org
-zae platform status --url https://zaentrum.example.org     # version, channel, update mode, phase, workloads
+zae platform status --url https://zaentrum.example.org     # version, channel, update mode, phase, workloads, controller
+zae platform controller --url https://zaentrum.example.org # what controller is in charge, and what updates it
 zae platform update --apply --wait --url https://zaentrum.example.org
 ```
 
@@ -302,6 +305,7 @@ zae platform update --apply --wait --url https://zaentrum.example.org
 | Let the operator update itself, or not | `spec.update.mode` |
 | Apply the update the operator discovered | `spec.version` ← `status.availableUpdate` |
 | Scale or restart one workload | `spec.replicas[<name>]`, or the Deployment |
+| **Show** the controller in charge, and name what updates it (never do it) | `status.controller` (read-only) |
 
 It prints what will change, asks, and with `--wait` follows the rollout. The
 wait is about *that* write: the portal answers it with the CR's new
@@ -316,16 +320,22 @@ are protected and refused. The full reference, including what a restart and a
 scale wait for, is
 [the CLI contract](extending/cli.md#how-a-wait-is-exact).
 
-**The controller itself is updated with its install bundle, not from the CLI.**
-The controller-manager runs in `zaentrum-operator-system`, outside the platform
+**The controller itself is shown from the CLI, never updated by it.** The
+controller-manager runs in `zaentrum-operator-system`, outside the platform
 namespace and outside the portal's permissions, so nothing that talks to the
-portal can see or change its image. That is the third case above — a chart or
-operator-code change: bump the image ref in
-[`deploy/operator-install.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/operator-install.yaml),
-`oc apply` it as cluster-admin (or let OLM roll it, on a cluster that installs
-the operator that way), and the embedded chart re-renders on the next
-reconcile. See [updating.md](./updating.md) for the full flow.
+portal can *change* its image — but the operator reports itself on
+`status.controller`, so `zae platform controller` (and the portal's operator
+console) can say which build is in charge, whether something newer exists, and
+which of the three channels updates it: an OLM subscription, the pinned
+[`deploy/operator-install.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/operator-install.yaml)
+applied as cluster-admin (normally through your deployment repository), or the
+appliance's own update. That is the third case above — the embedded chart
+re-renders on the next reconcile once the new controller runs. The full page is
+[updating the operator](./updating-the-operator.md); the platform's own updates
+are [updating.md](./updating.md).
 
 See also: [prerequisites.md](./prerequisites.md) ·
 [self-hosting.md](./self-hosting.md) · [reference-demo.md](./reference-demo.md) ·
-[updating.md](./updating.md) · [troubleshooting.md](./troubleshooting.md)
+[updating.md](./updating.md) ·
+[updating-the-operator.md](./updating-the-operator.md) ·
+[troubleshooting.md](./troubleshooting.md)

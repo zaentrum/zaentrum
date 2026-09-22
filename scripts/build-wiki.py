@@ -36,6 +36,7 @@ NAV = [
         ("operator", "Operator & CR reference"),
         ("reference-demo", "Reference demo"),
         ("updating", "Updating"),
+        ("updating-the-operator", "Updating the operator"),
         ("troubleshooting", "Troubleshooting"),
     ]),
     ("Extend it", [
