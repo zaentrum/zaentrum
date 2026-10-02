@@ -24,8 +24,12 @@
 - **A record proves itself.** Every folder that is written once carries the
   checksums of what it holds, so a tree can be checked against its own hashes,
   with no database and no network.
+- **The catalog remembers what it deleted.** A deletion log in the database
+  tells a folder the catalog deleted from one it lost, so nothing on storage is
+  removed, or restored, on a guess.
 - **No crawler.** Nothing walks the tree on a schedule. The tree is read on two
-  occasions only: a deliberate rebuild, and a deliberate verification.
+  occasions only: a deliberate rebuild, and a deliberate verification, whose
+  report a sweep may act on.
 
 Why this way round: the database answers queries and playback fast and
 predictably, while the storage record survives it. A record that describes bytes
@@ -184,15 +188,20 @@ are replaced whole, so a checksums file beside them would be wrong after the nex
 projection. Images need none either: each is named by the hash of its bytes, so
 the name is the check.
 
-Deleting an item deletes its folder, so the tree always shows what exists.
-Deleting the original inside a version that is kept writes one event.
+Deleting an item records it in the catalog's deletion log, in the same
+transaction as the delete — its id, type and title, when, and by whom — and then
+deletes its folder. A folder that outlives its item, because the removal failed
+or the storage was away, is then known for what it is. Deleting the original
+inside a version that is kept writes one event.
 
 ## Rebuilding and verifying
 
 **Rebuild** reads a tree and restores the database: every item, its metadata as
 last projected, its sources, versions and packages, and every person as last
 projected. It needs no network, no TMDB and no other service, it can run against
-a copy, and running it twice gives the same result.
+a copy, and running it twice gives the same result. It cannot restore the
+deletion log: the tree holds what exists, not what was deleted, so a folder that
+outlived its delete comes back as an item.
 
 **Verify** compares a tree with the database and reports both directions: records
 on storage that the database does not know, and rows that point at files that are
@@ -201,6 +210,38 @@ image against its name: a folder whose files do not match is damaged, whatever
 the database says. Verify is the basis for self-healing, and it stays a
 deliberate job with a report — never a background scan that feeds the database
 on its own.
+
+A record the database does not know is one of two things, and the deletion log
+tells which:
+
+- **Orphan** — its id is in the log, and nothing in the record is newer than the
+  deletion. The catalog deleted the item and the folder outlived it: sweep it.
+- **Lost** — its id is not in the log, or the record was written or projected
+  after the deletion, because the item was re-created with the same id since.
+  The database lost what the record still knows: restore it.
+
+An id that is in the log and in the database again was re-created after its
+deletion: the item that exists wins, and the entry in the log describes an
+earlier life. The log holds items only, so a person the database does not know is
+restored, never swept.
+
+```mermaid
+flowchart TD
+  R["a record on storage"] --> K{"does the database know its id?"}
+  K -->|"yes"| CMP["compare, field by field"]
+  K -->|"no"| LOG{"is the id in the deletion log,<br/>and nothing in the record newer?"}
+  LOG -->|"yes"| ORPHAN["orphan: the catalog deleted it<br/>sweep, through quarantine"]
+  LOG -->|"no"| LOST["lost: the database forgot it<br/>restore it"]
+```
+
+**Sweep** removes what a verification proves is garbage, and nothing else: the
+folders of orphans, version folders that never finished, and images no
+projection lists. Each must be older than a grace period, because a write in
+flight looks the same — a record is written before its database row, and an image
+before the projection that lists it. A sweep moves what it removes into
+quarantine rather than deleting it, so a mistake can be put back until the
+quarantine is emptied, and it never touches anything a database row or another
+record still references.
 
 ## What belongs where
 
@@ -213,6 +254,7 @@ on its own.
 | What an original contained, what a package lost | copy | authoritative |
 | Checksums of package files | copy | authoritative |
 | Checksums of the records themselves | not stored | authoritative |
+| Which items the catalog deleted | authoritative | not stored |
 
 Behaviour stays out of the record, as it always has: the record describes data,
 not what a player should do with it.
@@ -225,8 +267,13 @@ not what a player should do with it.
 3. Teach ingest, the analyzer and the packager to write records and their
    checksums, next to what they write today, and the catalog service to project
    `metadata.json` and `person.json`.
-4. Build rebuild and verify, and prove a full round trip: a tree restores a
-   database that matches the one it came from.
-5. Move playback reads to the database, so no request touches the tree.
-6. Stop writing the v1 `manifest.json`, and migrate existing libraries by
+4. Keep the deletion log: every item delete records the item in the same
+   transaction. Folders that outlived a delete before the log existed are not in
+   it, and are decided once, by hand.
+5. Build rebuild, verify and sweep, and prove them: a tree restores a database
+   that matches the one it came from, a verification sorts every record the
+   database does not know into orphan or lost, and a sweep quarantines provable
+   garbage and nothing a row or a record references.
+6. Move playback reads to the database, so no request touches the tree.
+7. Stop writing the v1 `manifest.json`, and migrate existing libraries by
    rebuilding the records from the database.
