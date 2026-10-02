@@ -114,7 +114,7 @@ These changes against v1 carry the model:
 | `sources/<id>/`: `source.json`, probe, sidecars, `checksums.sha256` | analyzer | when an original is taken in | never |
 | `versions/<id>/version.json` | analyzer | when a version is established | never |
 | `versions/<id>/`: `checksums.sha256`, `package.json`, `.complete` | packager | when the package completes, in that order | never |
-| `events/<…>/`: `event.json`, `checksums.sha256` | whoever acts | when an original is deleted, a package superseded | never |
+| `events/<…>/`: `event.json`, `checksums.sha256` | whoever acts | when an original is deleted, a package superseded, an extra retired | never |
 | `extras/<id>/`: `extra.json`, the original, the package, `checksums.sha256` | ingest, and the packager for a package | once, whole: the checksums last, or the package's chain | never |
 | `people/<aa>/<id>/person.json` | the catalog service | after every database change to this person | replaced whole |
 | `people/<aa>/<id>/<hash>.jpg` | the catalog service | when an image is first stored | never |
@@ -164,13 +164,15 @@ of its own, so that its checksums file can be written once, with it.
 deleted scene, a trailer that is a file of its own. It is never an item and never
 an episode's: it sits in the folder of the movie or series it belongs to, and a
 series' extra may name its season. The record says what it is — kind, title,
-language, runtime — and what the probe found in its original; the folder holds
-that original, a package made from it, or both. It is written once and whole, so
-its checksums cover the original too and are written last: an extra kept only as
-its original is finished when they are there, a packaged one when its `.complete`
-is. How the extras are listed — the order, which are hidden, a label instead of
-the title — is a decision the database holds, projected into `metadata.json`. A
-video that is only published online stays a reference in `metadata.json`.
+language, runtime — the size and fixity of its original, what the probe found in
+it, and the link it was downloaded from when it was; the folder holds that
+original, a package made from it, or both. It is written once and whole, so its
+checksums cover the original too and are written last: an extra kept only as its
+original is finished when they are there, a packaged one when its `.complete` is.
+Packaging one later is a new extra folder, and an event retires the old one. How
+the extras are listed — the order, which are hidden, a label instead of the
+title — is a decision the database holds, projected into `metadata.json`. A video
+that is only published online stays a reference in `metadata.json`.
 
 **`person.json`** — what the database holds about a person, plus the moment it
 was projected: names, biography, dates and places, reference ids, and the images
@@ -217,10 +219,12 @@ inside a version that is kept writes one event.
 
 **Rebuild** reads a tree and restores the database: every item, its metadata as
 last projected, its sources, versions and packages, and every person as last
-projected. It needs no network, no TMDB and no other service, it can run against
-a copy, and running it twice gives the same result. It cannot restore the
-deletion log: the tree holds what exists, not what was deleted, so a folder that
-outlived its delete comes back as an item.
+projected. An item's extras come back with it — all but those an event retired —
+and a trailer link gets back the local copy an extra downloaded from it keeps. It
+needs no network, no TMDB and no other service, it can run against a copy, and
+running it twice gives the same result. It cannot restore the deletion log: the
+tree holds what exists, not what was deleted, so a folder that outlived its
+delete comes back as an item.
 
 **Verify** compares a tree with the database and reports both directions: records
 on storage that the database does not know, and rows that point at files that are
@@ -255,12 +259,14 @@ flowchart TD
 
 **Sweep** removes what a verification proves is garbage, and nothing else: the
 folders of orphans, version folders that never finished, and images no
-projection lists. Each must be older than a grace period, because a write in
-flight looks the same — a record is written before its database row, and an image
-before the projection that lists it. A sweep first moves what it removes into a
-quarantine folder, checks again that nothing references it, and only then deletes
-it — anything that became referenced in the meantime goes back. It never touches
-anything a database row or another record still references.
+projection lists. In an extra only two things ever are: a package that never
+finished, and the whole folder of an extra an event retired. Each must be older
+than a grace period, because a write in flight looks the same — a record is
+written before its database row, and an image before the projection that lists
+it. A sweep first moves what it removes into a quarantine folder, checks again
+that nothing references it, and only then deletes it — anything that became
+referenced in the meantime goes back. It never touches anything a database row
+or another record still references.
 
 ## What belongs where
 
