@@ -211,9 +211,10 @@ the name is the check.
 
 Deleting an item records it in the catalog's deletion log, in the same
 transaction as the delete — its id, type and title, when, and by whom — and then
-deletes its folder. A folder that outlives its item, because the removal failed
-or the storage was away, is then known for what it is. Deleting the original
-inside a version that is kept writes one event.
+deletes its folder. A person no title credits any more is deleted and logged the
+same way, with the type `person`. A folder that outlives its item or its person,
+because the removal failed or the storage was away, is then known for what it
+is. Deleting the original inside a version that is kept writes one event.
 
 ## Rebuilding and verifying
 
@@ -224,7 +225,7 @@ and a trailer link gets back the local copy an extra downloaded from it keeps. I
 needs no network, no TMDB and no other service, it can run against a copy, and
 running it twice gives the same result. It cannot restore the deletion log: the
 tree holds what exists, not what was deleted, so a folder that outlived its
-delete comes back as an item.
+delete comes back as an item, or a person.
 
 **Verify** compares a tree with the database and reports both directions: records
 on storage that the database does not know, and rows that point at files that are
@@ -237,16 +238,20 @@ on its own.
 A record the database does not know is one of two things, and the deletion log
 tells which:
 
-- **Orphan** — its id is in the log, and nothing in the record is newer than the
-  deletion. The catalog deleted the item and the folder outlived it: sweep it.
+- **Orphan** — its id is in the log, as an item's or as a person's, and nothing
+  in the folder is newer than the deletion. The catalog deleted the item or the
+  person and the folder outlived it: sweep it.
 - **Lost** — its id is not in the log, or the record was written or projected
-  after the deletion, because the item was re-created with the same id since.
-  The database lost what the record still knows: restore it.
+  after the deletion, because the item or the person was re-created with the
+  same id since. The database lost what the record still knows: restore it.
 
 An id that is in the log and in the database again was re-created after its
-deletion: the item that exists wins, and the entry in the log describes an
-earlier life. The log holds items only, so a person the database does not know is
-restored, never swept.
+deletion: what exists wins, and the entry in the log describes an earlier life.
+The log holds people as well as items, each entry saying which it deleted; an
+entry that does not say is an item's, as in a log from before people were
+logged. While an item record on storage still credits a deleted person, that
+record is a stale projection, and the person's folder stays until the item is
+projected again. A person the log does not name is restored, never swept.
 
 ```mermaid
 flowchart TD
@@ -270,9 +275,10 @@ people, movies and series, so it refreshes what changed without re-reading
 everything.
 
 **Sweep** removes what a verification proves is garbage, and nothing else: the
-folders of orphans, version folders that never finished, and images no
-projection lists. In an extra only two things ever are: a package that never
-finished, and the whole folder of an extra an event retired. Each must be older
+folders of orphans — an item's, and a person's once no item record credits them
+— version folders that never finished, and images no projection lists. In an
+extra only two things ever are: a package that never finished, and the whole
+folder of an extra an event retired. Each must be older
 than a grace period, because a write in flight looks the same — a record is
 written before its database row, and an image before the projection that lists
 it. A sweep first moves what it removes into a quarantine folder, checks again
@@ -291,7 +297,7 @@ or another record still references.
 | What an original contained, what a package lost | copy | authoritative |
 | Checksums of package files | copy | authoritative |
 | Checksums of the records themselves | not stored | authoritative |
-| Which items the catalog deleted | authoritative | not stored |
+| Which items and people the catalog deleted | authoritative | not stored |
 
 Behaviour stays out of the record, as it always has: the record describes data,
 not what a player should do with it.
@@ -305,7 +311,8 @@ not what a player should do with it.
    checksums, next to what they write today, and the catalog service to project
    `metadata.json` and `person.json`.
 4. Keep the deletion log: every item delete records the item in the same
-   transaction. Folders that outlived a delete before the log existed are not in
+   transaction, and so does the delete of a person no title credits any more,
+   as a person. Folders that outlived a delete before the log existed are not in
    it, and are decided once, by hand.
 5. Build rebuild, verify and sweep, and prove them: a tree restores a database
    that matches the one it came from, a verification sorts every record the
