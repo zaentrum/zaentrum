@@ -257,6 +257,18 @@ flowchart TD
   LOG -->|"no"| LOST["lost: the database forgot it<br/>restore it"]
 ```
 
+A record the database does know can still be out of date. Projections change —
+a biography gains a role, a portrait is replaced, a title's texts are corrected —
+so `metadata.json` and `person.json` say which database state they reflect
+(`databaseUpdatedAt`) and how fresh their reference data is (`sources`, for TMDB
+when it was fetched and when TMDB last reported a change). Verify compares that
+with the database row: a database newer than the projection is a **stale
+projection**, fixed by projecting again and never by editing the file; a
+projection newer than the database means the database was restored from an older
+state. The database learns about changes from TMDB's daily change lists for
+people, movies and series, so it refreshes what changed without re-reading
+everything.
+
 **Sweep** removes what a verification proves is garbage, and nothing else: the
 folders of orphans, version folders that never finished, and images no
 projection lists. In an extra only two things ever are: a package that never
