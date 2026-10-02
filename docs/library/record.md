@@ -21,6 +21,9 @@
   (`metadata.json`, and `person.json` for a person), and it is replaced whole by
   the service that owns it. There is no merging, so there is no conflict to
   resolve.
+- **A record proves itself.** Every folder that is written once carries the
+  checksums of what it holds, so a tree can be checked against its own hashes,
+  with no database and no network.
 - **No crawler.** Nothing walks the tree on a schedule. The tree is read on two
   occasions only: a deliberate rebuild, and a deliberate verification.
 
@@ -36,7 +39,7 @@ flowchart LR
   end
   API -->|"media bytes only"| M["version folders"]
   DB -->|"projections: metadata.json · person.json · images"| REC
-  W["ingest · analyzer · packager"] -->|"records written once"| REC["library tree"]
+  W["ingest · analyzer · packager"] -->|"records + checksums, written once"| REC["library tree"]
   W --> DB
   REC -.->|"rebuild / verify (on demand)"| DB
 ```
@@ -54,18 +57,24 @@ biography and portrait with it.
 ```
 movies/<aa>/<itemId>/
   item.json                       identity, written once
+  checksums.sha256                covers item.json, written with it
   metadata.json                   the database's texts, projected
-  metadata/<name>.jpg             images named by content hash, written once
-  sources/<sourceId>.json         one original as it was found, written once
-  sources/<sourceId>/ffprobe.json raw probe + copied sidecars, written once
+  metadata/<hash>.jpg             images named by content hash, written once
+  sources/<sourceId>/
+    source.json                   one original as it was found, written once
+    ffprobe.json                  the raw probe, written once
+    <sidecar files>               copied from beside the original, written once
+    checksums.sha256              covers the files above, written with them
   versions/<versionId>/
     version.json                  what this version is, written once
-    package.json                  what the package contains, written once
     <original file>               the original, when it lives here
     hls/  subs/  trickplay/       the package
-    checksums.sha256              every package file, sha256sum -c format
-    .complete                     the package is finished
-  events/<timestamp>-<kind>.json  facts that arise later, written once
+    checksums.sha256              version.json and every package file
+    package.json                  what the package contains, and the hash of checksums.sha256
+    .complete                     the hash of package.json: the version is finished
+  events/<timestamp>-<kind>/
+    event.json                    a fact that arose later, written once
+    checksums.sha256              covers event.json, written with it
 
 people/<aa>/<personId>/
   person.json                     the database's person, projected
@@ -79,6 +88,9 @@ These changes against v1 carry the model:
   are now separate records, each written when the thing it describes is made.
 - **Every version is a folder.** There is no longer a version that lives in the
   item folder itself. A re-package is a new version folder, never an edit of one.
+- **Every record carries its checksums.** v1 checked package files only. Now each
+  folder that is written once carries a checksums file of its own, so damage
+  shows anywhere in the tree, not only in a package.
 - **People have folders.** In v1 a person was a credit in an item's metadata: an
   id, a name, a role. Who they are lived only in the database.
 
@@ -86,13 +98,13 @@ These changes against v1 carry the model:
 
 | File | Written by | When | Changes later |
 |---|---|---|---|
-| `item.json` | ingest | once, when the item is created | never |
+| `item.json`, `checksums.sha256` | ingest | once, when the item is created | never |
 | `metadata.json` | the catalog service | after every database change to this item | replaced whole |
 | `metadata/<hash>.jpg` | the catalog service | when an image is first stored | never |
-| `sources/<id>.json` | analyzer | when an original is taken in | never |
+| `sources/<id>/`: `source.json`, probe, sidecars, `checksums.sha256` | analyzer | when an original is taken in | never |
 | `versions/<id>/version.json` | analyzer | when a version is established | never |
-| `versions/<id>/package.json` | packager | when the package completes | never |
-| `events/…json` | whoever acts | when an original is deleted, a package superseded | never |
+| `versions/<id>/`: `checksums.sha256`, `package.json`, `.complete` | packager | when the package completes, in that order | never |
+| `events/<…>/`: `event.json`, `checksums.sha256` | whoever acts | when an original is deleted, a package superseded | never |
 | `people/<aa>/<id>/person.json` | the catalog service | after every database change to this person | replaced whole |
 | `people/<aa>/<id>/<hash>.jpg` | the catalog service | when an image is first stored | never |
 
@@ -109,23 +121,33 @@ lists, which fields a human locked, and where each field came from. Credits name
 people by id; who a person is lives in their own folder. A rebuild restores these
 as they were at the last projection.
 
-**`sources/<id>.json`** — an original file as it was found: name, size, hashes,
-where it came from in the old library, its container, every stream it contained,
-what that means in terms of fidelity, and what it holds that a package cannot
-(the essence used for the deletion gate). Copied sidecars and the raw probe sit
-in the folder beside it, so they survive the original's deletion.
+**`sources/<id>/source.json`** — an original file as it was found: name, size,
+hashes, where it came from in the old library, its container, every stream it
+contained, what that means in terms of fidelity, and what it holds that a package
+cannot (the essence used for the deletion gate). The raw probe and the copied
+sidecars sit in the same folder, so they survive the original's deletion, and the
+folder's checksums cover all of them.
 
 **`versions/<id>/version.json`** — what this version is: edition and
 presentation, runtime, chapters and segments, and which sources it was made from.
 
 **`versions/<id>/package.json`** — what the packager produced: its renditions,
 subtitles, trickplay and trailers, its size and peak bandwidth, the recipe, what
-it lost against the source, the checksums file that covers it, and what would be
-lost if the original were deleted.
+it lost against the source, the hash of the checksums file that covers it, and
+what would be lost if the original were deleted.
 
-**`events/…`** — the few facts that appear after the record was written. The
-important one is the deletion of an original, which the loss record depends on:
-when, by whom, and what was accepted as lost.
+**`checksums.sha256`** — in `sha256sum -c` format, the hash of every file it
+covers, written in the same step as those files; a version's is written when its
+package completes. It covers `version.json` and every package file there; the
+original is not listed, because its source record holds its hashes, so deleting
+it later leaves the version's checksums true. `.complete` holds the hash of
+`package.json`, which holds the hash of the checksums file: one hash proves the
+whole version.
+
+**`events/…/event.json`** — the few facts that appear after the record was
+written. The important one is the deletion of an original, which the loss record
+depends on: when, by whom, and what was accepted as lost. Each event is a folder
+of its own, so that its checksums file can be written once, with it.
 
 **`person.json`** — what the database holds about a person, plus the moment it
 was projected: names, biography, dates and places, reference ids, and the images
@@ -138,8 +160,29 @@ Whoever creates something writes its record first and the database second. The
 record is the durable part; a failed database write is repaired by restoring that
 item, and a failed record write is retried. Records are written to a temporary
 file in their own folder and renamed into place, so a reader never sees half a
-file. A version folder is finished by its `.complete` marker: without it, the
-package is incomplete and neither the database nor a rebuild will use it.
+file.
+
+A folder that is written once gets its `checksums.sha256` in the same step. A
+version is the one folder written in two steps: `version.json` comes first, when
+the version is established, and the chain is closed when the package completes —
+the packager writes the checksums over `version.json` and every package file,
+then `package.json` with the hash of those checksums, then `.complete` with the
+hash of `package.json`.
+
+```mermaid
+flowchart LR
+  DONE[".complete"] -->|"sha256 of"| PKG["package.json"]
+  PKG -->|"sha256 of"| SUMS["checksums.sha256"]
+  SUMS -->|"sha256 of each"| FILES["version.json · hls/ · subs/ · trickplay/"]
+```
+
+A version folder is finished by its `.complete` marker: without it, the package
+is incomplete and neither the database nor a rebuild will use it.
+
+Projections carry no checksums, on purpose: `metadata.json` and `person.json`
+are replaced whole, so a checksums file beside them would be wrong after the next
+projection. Images need none either: each is named by the hash of its bytes, so
+the name is the check.
 
 Deleting an item deletes its folder, so the tree always shows what exists.
 Deleting the original inside a version that is kept writes one event.
@@ -153,8 +196,11 @@ a copy, and running it twice gives the same result.
 
 **Verify** compares a tree with the database and reports both directions: records
 on storage that the database does not know, and rows that point at files that are
-not there. It is the basis for self-healing, and it stays a deliberate job with a
-report — never a background scan that feeds the database on its own.
+not there. It first checks every record against its own checksums and every
+image against its name: a folder whose files do not match is damaged, whatever
+the database says. Verify is the basis for self-healing, and it stays a
+deliberate job with a report — never a background scan that feeds the database
+on its own.
 
 ## What belongs where
 
@@ -166,6 +212,7 @@ report — never a background scan that feeds the database on its own.
 | Behaviour: default audio, subtitle rules, quality selection | authoritative | not stored |
 | What an original contained, what a package lost | copy | authoritative |
 | Checksums of package files | copy | authoritative |
+| Checksums of the records themselves | not stored | authoritative |
 
 Behaviour stays out of the record, as it always has: the record describes data,
 not what a player should do with it.
@@ -175,8 +222,9 @@ not what a player should do with it.
 1. Freeze v1: keep the published schemas, stop extending them.
 2. Publish v2 schemas for the records above, `person.json` among them, and a
    reference example.
-3. Teach the analyzer and packager to write records, next to what they write
-   today, and the catalog service to project `metadata.json` and `person.json`.
+3. Teach ingest, the analyzer and the packager to write records and their
+   checksums, next to what they write today, and the catalog service to project
+   `metadata.json` and `person.json`.
 4. Build rebuild and verify, and prove a full round trip: a tree restores a
    database that matches the one it came from.
 5. Move playback reads to the database, so no request touches the tree.
