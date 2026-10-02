@@ -79,6 +79,12 @@ movies/<aa>/<itemId>/
   events/<timestamp>-<eventId>-<kind>/
     event.json                    a fact that arose later, written once
     checksums.sha256              covers event.json, written with it
+  extras/<extraId>/
+    extra.json                    a piece of bonus material, written once
+    <original file>               the extra itself, when it is kept
+    hls/  subs/  trickplay/       its package, when it has one
+    checksums.sha256              extra.json and every file beside it, the original included
+    package.json  .complete       as a version's, when it is packaged
 
 people/<aa>/<personId>/
   person.json                     the database's person, projected
@@ -109,6 +115,7 @@ These changes against v1 carry the model:
 | `versions/<id>/version.json` | analyzer | when a version is established | never |
 | `versions/<id>/`: `checksums.sha256`, `package.json`, `.complete` | packager | when the package completes, in that order | never |
 | `events/<…>/`: `event.json`, `checksums.sha256` | whoever acts | when an original is deleted, a package superseded | never |
+| `extras/<id>/`: `extra.json`, the original, the package, `checksums.sha256` | ingest, and the packager for a package | once, whole: the checksums last, or the package's chain | never |
 | `people/<aa>/<id>/person.json` | the catalog service | after every database change to this person | replaced whole |
 | `people/<aa>/<id>/<hash>.jpg` | the catalog service | when an image is first stored | never |
 
@@ -152,6 +159,18 @@ whole version.
 written. The important one is the deletion of an original, which the loss record
 depends on: when, by whom, and what was accepted as lost. Each event is a folder
 of its own, so that its checksums file can be written once, with it.
+
+**`extras/<id>/extra.json`** — bonus material: a featurette, a making-of, a
+deleted scene, a trailer that is a file of its own. It is never an item and never
+an episode's: it sits in the folder of the movie or series it belongs to, and a
+series' extra may name its season. The record says what it is — kind, title,
+language, runtime — and what the probe found in its original; the folder holds
+that original, a package made from it, or both. It is written once and whole, so
+its checksums cover the original too and are written last: an extra kept only as
+its original is finished when they are there, a packaged one when its `.complete`
+is. How the extras are listed — the order, which are hidden, a label instead of
+the title — is a decision the database holds, projected into `metadata.json`. A
+video that is only published online stays a reference in `metadata.json`.
 
 **`person.json`** — what the database holds about a person, plus the moment it
 was projected: names, biography, dates and places, reference ids, and the images
