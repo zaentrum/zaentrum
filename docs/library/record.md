@@ -13,12 +13,14 @@
 - **Storage is the record.** Every item folder holds the facts about itself as
   they were when they were made: the item's identity, each original that entered
   it, each version and package produced from it, and the texts and images the
-  database held. It is complete enough to rebuild the database, and nothing else.
+  database held. People, whom many items share, have folders of their own. The
+  record is complete enough to rebuild the database, and nothing else.
 - **Files are written by one writer, in one direction.** Either a file is a
   record of something that cannot change (a source, a version, a package), and it
   is written once and never touched again, or it is a projection of the database
-  (the metadata document), and it is replaced whole by the service that owns the
-  item. There is no merging, so there is no conflict to resolve.
+  (`metadata.json`, and `person.json` for a person), and it is replaced whole by
+  the service that owns it. There is no merging, so there is no conflict to
+  resolve.
 - **No crawler.** Nothing walks the tree on a schedule. The tree is read on two
   occasions only: a deliberate rebuild, and a deliberate verification.
 
@@ -33,7 +35,7 @@ flowchart LR
     C["clients"] --> API["catalog & streaming"] --> DB[("catalog database")]
   end
   API -->|"media bytes only"| M["version folders"]
-  DB -->|"projection: metadata.json + images"| REC
+  DB -->|"projections: metadata.json · person.json · images"| REC
   W["ingest · analyzer · packager"] -->|"records written once"| REC["library tree"]
   W --> DB
   REC -.->|"rebuild / verify (on demand)"| DB
@@ -44,7 +46,10 @@ flowchart LR
 The categories, the id-based folders and the shard stay as they are: an item is
 `movies/<aa>/<itemId>/`, a series is `series/<aa>/<seriesId>/` with
 `episodes/<episodeId>/` inside it, and `<aa>` is the first two characters of the
-id.
+id. People are a third category, `people/<aa>/<personId>/`, sharded the same way.
+A person is shared by every item that credits them, so no item folder can hold
+them, and without a folder of their own a lost database would take every
+biography and portrait with it.
 
 ```
 movies/<aa>/<itemId>/
@@ -61,15 +66,21 @@ movies/<aa>/<itemId>/
     checksums.sha256              every package file, sha256sum -c format
     .complete                     the package is finished
   events/<timestamp>-<kind>.json  facts that arise later, written once
+
+people/<aa>/<personId>/
+  person.json                     the database's person, projected
+  <hash>.jpg                      images named by content hash, written once
 ```
 
-Two changes against v1 carry the model:
+These changes against v1 carry the model:
 
 - **`manifest.json` is gone.** It was a living document: identity, playback and
   every version in one file that had to be rewritten on every change. Its parts
   are now separate records, each written when the thing it describes is made.
 - **Every version is a folder.** There is no longer a version that lives in the
   item folder itself. A re-package is a new version folder, never an edit of one.
+- **People have folders.** In v1 a person was a credit in an item's metadata: an
+  id, a name, a role. Who they are lived only in the database.
 
 ## The files
 
@@ -82,6 +93,8 @@ Two changes against v1 carry the model:
 | `versions/<id>/version.json` | analyzer | when a version is established | never |
 | `versions/<id>/package.json` | packager | when the package completes | never |
 | `events/…json` | whoever acts | when an original is deleted, a package superseded | never |
+| `people/<aa>/<id>/person.json` | the catalog service | after every database change to this person | replaced whole |
+| `people/<aa>/<id>/<hash>.jpg` | the catalog service | when an image is first stored | never |
 
 **`item.json`** — the id, the type (`movie`, `series`, `episode`), the series id
 and numbering for an episode, the reference ids (TMDB and friends) it was created
@@ -92,8 +105,9 @@ item.
 **`metadata.json`** — the texts and image list exactly as the database holds
 them, plus the moment it was projected. Titles and localized titles, release
 date, genres, ratings, credits, collection and season texts, the image and video
-lists, which fields a human locked, and where each field came from. A rebuild
-restores these as they were at the last projection.
+lists, which fields a human locked, and where each field came from. Credits name
+people by id; who a person is lives in their own folder. A rebuild restores these
+as they were at the last projection.
 
 **`sources/<id>.json`** — an original file as it was found: name, size, hashes,
 where it came from in the old library, its container, every stream it contained,
@@ -113,6 +127,11 @@ lost if the original were deleted.
 important one is the deletion of an original, which the loss record depends on:
 when, by whom, and what was accepted as lost.
 
+**`person.json`** — what the database holds about a person, plus the moment it
+was projected: names, biography, dates and places, reference ids, and the images
+that sit beside it. It is a projection like `metadata.json` and keeps no list of
+credits: which items credit a person is what those items' `metadata.json` says.
+
 ## Writing
 
 Whoever creates something writes its record first and the database second. The
@@ -128,9 +147,9 @@ Deleting the original inside a version that is kept writes one event.
 ## Rebuilding and verifying
 
 **Rebuild** reads a tree and restores the database: every item, its metadata as
-last projected, its sources, versions and packages. It needs no network, no TMDB
-and no other service, it can run against a copy, and running it twice gives the
-same result.
+last projected, its sources, versions and packages, and every person as last
+projected. It needs no network, no TMDB and no other service, it can run against
+a copy, and running it twice gives the same result.
 
 **Verify** compares a tree with the database and reports both directions: records
 on storage that the database does not know, and rows that point at files that are
@@ -142,6 +161,7 @@ report — never a background scan that feeds the database on its own.
 | | Database | Storage record |
 |---|---|---|
 | What exists, what to show, what to play | authoritative | restorable copy |
+| Who a person is: names, biography, portraits | authoritative | restorable copy |
 | Per-user state: progress, watchlists, settings | authoritative | not stored |
 | Behaviour: default audio, subtitle rules, quality selection | authoritative | not stored |
 | What an original contained, what a package lost | copy | authoritative |
@@ -153,9 +173,10 @@ not what a player should do with it.
 ## Getting there
 
 1. Freeze v1: keep the published schemas, stop extending them.
-2. Publish v2 schemas for the records above, and a reference example.
+2. Publish v2 schemas for the records above, `person.json` among them, and a
+   reference example.
 3. Teach the analyzer and packager to write records, next to what they write
-   today, and the catalog service to project `metadata.json`.
+   today, and the catalog service to project `metadata.json` and `person.json`.
 4. Build rebuild and verify, and prove a full round trip: a tree restores a
    database that matches the one it came from.
 5. Move playback reads to the database, so no request touches the tree.
