@@ -76,7 +76,7 @@ movies/<aa>/<itemId>/
     checksums.sha256              version.json and every package file
     package.json                  what the package contains, and the hash of checksums.sha256
     .complete                     the hash of package.json: the version is finished
-  events/<timestamp>-<kind>/
+  events/<timestamp>-<eventId>-<kind>/
     event.json                    a fact that arose later, written once
     checksums.sha256              covers event.json, written with it
 
@@ -238,10 +238,10 @@ flowchart TD
 folders of orphans, version folders that never finished, and images no
 projection lists. Each must be older than a grace period, because a write in
 flight looks the same — a record is written before its database row, and an image
-before the projection that lists it. A sweep moves what it removes into
-quarantine rather than deleting it, so a mistake can be put back until the
-quarantine is emptied, and it never touches anything a database row or another
-record still references.
+before the projection that lists it. A sweep first moves what it removes into a
+quarantine folder, checks again that nothing references it, and only then deletes
+it — anything that became referenced in the meantime goes back. It never touches
+anything a database row or another record still references.
 
 ## What belongs where
 
