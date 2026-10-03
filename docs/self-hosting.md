@@ -93,15 +93,24 @@ comes up already configured — for `http://zaentrum.localhost`, with the bundle
 
 ### Persistence
 
-Everything (Postgres, the Kafka log, the media library, the HLS cache) lives on PVCs backed
-by k3s's `local-path` StorageClass, i.e. inside the container's writable layer. To keep data
-across `docker rm`, mount a host directory at k3s's storage path:
+Only the library is on a volume: the `media` PVC — your files and, with the pipeline on, their
+packaged streams — which k3s's `local-path` StorageClass keeps under
+`/var/lib/rancher/k3s/storage`, inside the Docker volume the image declares for
+`/var/lib/rancher/k3s`. The bundled Postgres, which holds the catalog, Keycloak's accounts and
+the portal's settings, runs on an `emptyDir`, as do Kafka and the HLS cache: that data lasts
+exactly as long as its pod.
 
-```bash
-docker run -d --privileged --restart unless-stopped --name zaentrum -p 80:80 \
-  -v zaentrum-data:/var/lib/rancher/k3s/storage \
-  ghcr.io/zaentrum/appliance:latest
-```
+- **A restart keeps the cluster.** `docker stop` / `docker start`, a Docker restart, or a reboot
+  with `--restart unless-stopped` bring back the same cluster and the same pods, data included.
+- **Anything that recreates the Postgres pod empties its databases** — deleting the pod, or a
+  newer operator whose chart changes it. The appliance's operator runs
+  `ghcr.io/zaentrum/operator:latest` and pulls it again whenever its pod restarts, so a restart
+  can bring such an operator with it.
+- **Replacing the container starts a new, empty platform.** `docker rm` and a new `docker run`
+  start a new cluster whose claims get new directories — `local-path` names each one after its
+  claim's UID — so even a volume mounted at k3s's storage path keeps the old files without
+  attaching them. Carrying a platform's data into a new container, or a new appliance image, is
+  not supported yet.
 
 Inspect it like any cluster — the k3s image ships `kubectl` itself:
 
@@ -178,6 +187,13 @@ streaming backends, bundled Postgres/Valkey/Kafka, and (in `bundled` mode) Keycl
 [reference table](#e-values--cr-field-reference). When the CR's `PHASE` is `Ready`, the first run
 is the appliance's [three steps](#first-run) at your hostname; the library is the `media/`
 folder of the `media` PVC, or of the volume you bind to it (`storage.provisionMedia: false`).
+
+**The bundled Postgres is ephemeral.** It keeps its data in an `emptyDir`, so the catalog,
+Keycloak's accounts and the portal's settings last as long as its pod; whatever recreates the
+pod — a reschedule, a drain, a chart change — starts them empty. For databases that outlive the
+pod, use a Postgres of your own: `databases.mode: external` with `databases.external.host`, the
+databases created in advance (the chart then renders no Postgres; see the `databases` comments
+in [`values.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/platform/chart/values.yaml)).
 
 ### 3. Enable the media pipeline and GPU (optional)
 
@@ -335,7 +351,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 
 | Chart value | Default | Meaning |
 |---|---|---|
-| `mode` | `perApp` | `perApp` (a DB per service) or `single`. |
+| `mode` | `perApp` | `perApp` (a DB per service) or `single`, both on the bundled Postgres — an `emptyDir`, so its data lasts as long as its pod — or `external` (your own Postgres at `databases.external.host`; the chart renders none). |
 | `chino` | `chino` | Chino database name. |
 | `katalog` | `katalog` | Katalog database name. |
 | `keycloak` | `keycloak` | Keycloak database name. |

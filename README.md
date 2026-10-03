@@ -31,7 +31,9 @@ its consoles, streaming, and bundled **Keycloak**, **Postgres**, **Valkey** and 
 image, one port, nothing else to install; the first boot pulls the platform's images from
 `ghcr.io` and takes a few minutes. The image is **linux/amd64** only, and it needs host port
 **80**: the platform's ingress and its sign-in are bound to `http://zaentrum.localhost` — no
-other name, no other port.
+other name, no other port. Keep the container — replacing it starts an empty platform — and
+know that the bundled Postgres keeps its data only as long as its pod
+([persistence](docs/self-hosting.md#persistence)).
 
 There is **no setup wizard**. The first run is three steps
 ([self-hosting → first run](docs/self-hosting.md#first-run)): sign in as `admin` with the first

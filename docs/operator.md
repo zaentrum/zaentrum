@@ -170,7 +170,7 @@ them unset.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `databases.mode` | string `perApp` \| `single` | `perApp` | `perApp` gives each service its own database; `single` shares one. |
+| `databases.mode` | string `perApp` \| `single` \| `external` | `perApp` | `perApp` gives each service its own database; `single` shares one — both on the bundled Postgres, which keeps its data in an `emptyDir` (it lasts as long as the pod). `external` uses your own Postgres (`databases.external.host`, `.port`, `.sslmode`) and renders none. |
 | `databases.chino` | string | `chino` | chino database name. |
 | `databases.katalog` | string | `katalog` | katalog database name. |
 | `databases.keycloak` | string | `keycloak` | keycloak database name. |

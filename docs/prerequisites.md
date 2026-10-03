@@ -18,9 +18,9 @@ The three topologies:
 |---|:---:|:---:|:---:|
 | Container runtime (Docker/Podman) | required | — | — |
 | A Kubernetes / OKD cluster | bundled (k3s) | required | required (OKD) |
-| Media library storage (NFS or a StorageClass) | container disk | required | NFS (`<nfs-server>:/media-demo`) |
-| Node-local storage for the bundled Kafka PV (topic persistence) | optional | optional | required |
-| GPU node + matching Nvidia driver (`features.gpu`) | optional | optional (if pipeline) | required (pipeline) |
+| Media library storage (NFS or a StorageClass) | the container's volume (lost on replacement) | required | NFS (`<nfs-server>:/media-demo`) |
+| Node-local storage for the bundled Kafka PV (topic persistence) | — | optional | required |
+| GPU node + matching Nvidia driver (`features.gpu`) | not supported | optional (if pipeline) | required (pipeline) |
 | Public DNS + TLS for the hostname (sign-in needs https on any name but `localhost`) | none — `zaentrum.localhost`, this machine only | required | OKD edge TLS |
 | Split-horizon issuer resolution (in-cluster) | auto (CoreDNS rewrite) | required with HTTPS | `network.issuerHostAliasIP` |
 | Egress to `ghcr.io` | required | required | required |
@@ -60,10 +60,16 @@ Valkey, and Kafka.
 
 Optional:
 
-- **Storage** — media lives on the container's disk by default; mount a volume for a persistent library.
 - **Egress to TMDB, and a TMDB key of your own,** if you want metadata enrichment — the published
   images carry no key (see [Network egress](#network-egress)).
-- **A GPU** for hardware transcoding — the appliance runs software ffmpeg otherwise. See [GPU](#gpu-nvenc).
+
+Not used by the appliance:
+
+- **Storage of your own.** The library lives in the container's own volume, for as long as the
+  container does, and the bundled Postgres keeps its databases in an `emptyDir` — see
+  [persistence](./self-hosting.md#persistence).
+- **A GPU.** The appliance transcodes in software; hardware transcoding (`features.gpu`) needs a
+  cluster with a GPU node — see [GPU](#gpu-nvenc).
 
 Split-horizon issuer resolution is handled for you: the all-in-one wires a CoreDNS rewrite (driven by
 the `STUBE_ISSUER_HOST` env) so pods resolve the issuer host to the appliance's own ingress, as the

@@ -148,20 +148,18 @@ previous manifest. The reference demo does exactly this — see
 ### 3. The appliance
 
 The [appliance](./self-hosting.md#a-one-command-appliance) bakes the operator
-install into its image and k3s applies it on boot, so the controller version is
-a property of the appliance image. Its update *is* the controller's update:
+install — the CRDs, the cluster RBAC and the controller Deployment — into its
+image, and k3s applies it on boot. Two things follow, today:
 
-```sh
-docker pull ghcr.io/zaentrum/appliance:latest
-docker rm -f zaentrum
-docker run -d --privileged --restart unless-stopped --name zaentrum -p 80:80 \
-  -v zaentrum-data:/var/lib/rancher/k3s/storage \
-  ghcr.io/zaentrum/appliance:latest
-```
-
-Keep the storage volume across the replacement (as above) and the platform's
-data survives; the new container brings a new controller with it. There is
-nothing separate to update inside it.
+- **The controller runs the floating `ghcr.io/zaentrum/operator:latest`.** It
+  moves to a newer build whenever its pod restarts and pulls the tag again,
+  while the CRDs and RBAC stay the ones the appliance image was built with;
+  `status.controller` reports its version as `latest`.
+- **A new appliance image means a new container, and a new container is a new,
+  empty platform.** `docker rm` and `docker run` start a new cluster, and the
+  platform's data does not carry over — not even with a volume at k3s's
+  storage path (see [persistence](./self-hosting.md#persistence)). Moving an
+  appliance's data to a newer image is not supported yet.
 
 ## What a controller update carries with it
 
