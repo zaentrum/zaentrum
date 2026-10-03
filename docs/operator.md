@@ -111,8 +111,8 @@ them unset.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `identity.mode` | enum `bundled` \| `external` | `bundled` | `bundled` ships in-cluster Keycloak + the `zaentrum` realm import; `external` federates and does not render Keycloak. |
-| `identity.issuer` | string | — | Explicit public issuer URL. Empty in bundled mode → derived as `<scheme>://<hostname>/auth/realms/zaentrum`. |
+| `identity.mode` | enum `bundled` \| `external` | `bundled` | `bundled` ships in-cluster Keycloak + the `zaentrum` realm import; `external` uses your own OIDC provider — services validate its tokens directly — and does not render Keycloak. The CRD accepts no other value: `broker` ([ADR-0007](./adr/0007-identity-modes.md)) is not built. |
+| `identity.issuer` | string | — | Explicit public issuer URL. Empty → derived as `<scheme>://<hostname>/auth/realms/zaentrum`, in `external` mode too (it is not rejected), so set it there. |
 | `identity.issuerScheme` | enum `http` \| `https` | `http` | Scheme of the derived issuer + Keycloak `KC_HOSTNAME`. Use `https` when TLS is terminated at the edge. |
 | `identity.clientId` | string | `chino-web` | Public OIDC client id the web SPA authenticates as. |
 | `identity.audience` | string | `chino` | Expected token audience services validate against. |

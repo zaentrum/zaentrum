@@ -2,6 +2,13 @@
 
 **Status:** Accepted · recorded retrospectively (decision from 2026-06)
 
+> **Status — partly ahead of the code.** Built: the `bundled` and `external` modes, and the
+> CRD accepts no other value — **`broker` is not built**. Also not built: the platform's own
+> user management, directory and claim-to-role editor (accounts are managed in the bundled
+> Keycloak's admin console), the setup question, SCIM, and the emergency admin. And an empty
+> issuer in `external` mode is not yet an error: it is derived from `spec.hostname`, as in
+> `bundled` mode.
+
 ## Context
 
 Zaentrum deployments span two populations that want opposite things from identity.

@@ -144,7 +144,7 @@ spec:
   version: latest
   hostname: media.example.com
   identity:
-    mode: bundled          # ship Keycloak; use "external" to federate your IdP
+    mode: bundled          # ship Keycloak; "external" uses your own OIDC provider instead
     clientId: chino-web
     audience: chino
   storage:
@@ -279,7 +279,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 
 | Chart value | Default | Meaning |
 |---|---|---|
-| `mode` | `bundled` | `bundled` (ship Keycloak) or `external` (federate an existing IdP). |
+| `mode` | `bundled` | `bundled` (ship Keycloak) or `external` (services validate tokens from your own OIDC provider; no Keycloak). The only two values — `broker` ([ADR-0007](./adr/0007-identity-modes.md)) is not built. |
 | `issuer` | `""` | Explicit issuer URL; empty → derived from `issuerScheme` + `hostname` (`<scheme>://<hostname>/auth/realms/zaentrum`). |
 | `issuerScheme` | `http` | `http` \| `https`. Use `https` when TLS is terminated at the edge. |
 | `clientId` | `chino-web` | Public OIDC client id the web SPA authenticates as. |

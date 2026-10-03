@@ -55,9 +55,12 @@ Clients use **Add Server** — point them at the IP / `.local` / domain.
 
 ## Identity
 
-Out of the box Zaentrum runs its **own bundled Keycloak** and you manage users in the admin
-UI. You can instead **federate your existing identity provider** (broker) or **delegate
-directly** to an external OIDC provider — chosen in the setup wizard.
+Out of the box Zaentrum runs its **own bundled Keycloak** (realm `zaentrum`); you manage users
+in Keycloak's admin console for that realm, at `/auth/admin/zaentrum/console/`. On a cluster you
+can instead **use your own OIDC provider directly**: `identity.mode: external` on the `Zaentrum`
+CR, with your provider's issuer and client, and no Keycloak is rendered. Those are the two modes
+the CRD accepts. **Federating** your provider through the bundled Keycloak (`broker`,
+[ADR-0007](docs/adr/0007-identity-modes.md)) is designed, not built.
 
 ## Scale out / production
 

@@ -70,7 +70,7 @@ renders this ingress (single-origin profile — subdomain routing is a CR option
 | `/katalog` | `katalog-manager-ui` | catalog browse (admin) |
 | `/katalog-manage` | `katalog-manage-ui` | catalog management (admin) |
 | `/api/manage` | `katalog-manager-api` | the neutral management / write API — including [`/api/ingest`](./extending/ingest.md) in-cluster |
-| `/auth` | bundled Keycloak | identity (in bundled/broker modes) |
+| `/auth` | bundled Keycloak | identity (in `bundled` mode) |
 
 ## Scope — the neutral line {#scope}
 
