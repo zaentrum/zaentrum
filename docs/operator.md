@@ -30,7 +30,11 @@ control loop: it reconciles on CR changes and on a resync interval, keeps the
 declared replica counts (a raw `Deployment` edit is reverted on the next pass),
 and — with `spec.update.mode: auto` — tracks the configured release `channel`
 and rolls new in-channel image tags itself, surfacing the next version on
-`status.availableUpdate` before it applies it.
+`status.availableUpdate` before it applies it. **Both channels point at `latest`
+today**, so there is no other tag to move to yet. What does move an install on
+`spec.version: latest` is digest pinning: on every reconcile the operator
+resolves each `ghcr.io/zaentrum/*` image to the digest its tag points at, so a
+newly published image changes the rendered spec and rolls on its own.
 
 > **A chart change is not a live change.** The chart ships *inside* the operator
 > image. Editing `operator/platform/chart/**` has no effect until the operator
@@ -101,7 +105,7 @@ them unset.
 | Field | Type | Default | Meaning |
 |---|---|---|---|
 | `spec.version` | string | `latest` | Image tag applied to **every** `ghcr.io/zaentrum/*` image. |
-| `spec.channel` | enum `stable` \| `edge` | `stable` | Release train consulted by auto-update. |
+| `spec.channel` | enum `stable` \| `edge` | `stable` | Release train consulted by auto-update. Both point at `latest` today. |
 | `spec.hostname` | string | `zaentrum.localhost` | The single public host: OIDC issuer host + ingress/route host + Keycloak `KC_HOSTNAME`. |
 | `spec.partOf` | string | the namespace | `app.kubernetes.io/part-of` label value on all workloads. |
 | `spec.imagePullSecrets` | []string | `[]` | Pull secret names added to every workload (private registries; empty for public ghcr). |
@@ -182,7 +186,7 @@ them unset.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `update.mode` | enum `manual` \| `auto` | `manual` | `manual` never bumps `spec.version` on its own; `auto` lets the reconciler bump to the latest in-`channel` tag. |
+| `update.mode` | enum `manual` \| `auto` | `manual` | `manual` never bumps `spec.version` on its own; `auto` lets the reconciler bump to the latest in-`channel` tag — nothing to bump to while both channels are `latest`. |
 
 ### Status (read-only)
 
@@ -292,7 +296,8 @@ Jobs. See [reference-demo.md](./reference-demo.md).
 
 For the operator's own auto-update loop (`spec.update.mode: auto` /
 `spec.channel`), the reconciler tracks the channel and surfaces the next tag on
-`status.availableUpdate` before rolling it.
+`status.availableUpdate` before rolling it — a no-op while both channels point at
+`latest`.
 
 ### Updating from the command line
 

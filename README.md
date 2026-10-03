@@ -10,8 +10,10 @@ rest of the project.
 **Product page → [zaentrum.github.io/zaentrum](https://zaentrum.github.io/zaentrum/)** ·
 **Docs → [the wiki](https://github.com/zaentrum/zaentrum/wiki)**
 
-> **Status: pre-release.** Container images are published as releases are cut — see
-> [`releases.json`](./releases.json). The commands below describe the intended install flow.
+> **Status: pre-release.** No release has been tagged yet: every image is published from `main`
+> as `latest` (and `sha-<commit>`), and both release channels in
+> [`releases.json`](./releases.json) point at `latest`. The commands below are the ones that
+> work today.
 
 ---
 
@@ -92,8 +94,12 @@ by audience and covers every path:
 
 ## Releases
 
-Channels are tracked in [`releases.json`](./releases.json): `stable` and `edge`. The bundled
-operator auto-updates against the channel you pin.
+There are two release channels, `stable` and `edge` ([`releases.json`](./releases.json); by
+default the operator reads its own copy, in the operator repository). **Today both point at
+`latest`**: no tagged release has been cut, so choosing a channel, or `spec.update.mode: auto`,
+changes nothing yet. An install on `spec.version: latest` — the default — follows every newly
+published image anyway: the operator resolves each `ghcr.io/zaentrum/*` image to its current
+digest on every reconcile, and rolls the components whose image changed.
 
 ## Repository layout
 

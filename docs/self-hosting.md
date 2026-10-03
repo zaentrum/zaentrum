@@ -204,7 +204,8 @@ channels, see [updating.md](./updating.md).
 
 If you don't want the operator, install the same canonical chart directly, from a checkout of
 the operator repo. You lose the operator's day-2 logic (scaling from the portal's operator
-console, channel auto-update, CR reconciliation), but you get the identical platform objects.
+console, rolling each newly published image, CR reconciliation), but you get the identical
+platform objects.
 
 ```bash
 helm install zaentrum ./operator/platform/chart \
@@ -273,7 +274,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 | `global.hostname` | `spec.hostname` | `zaentrum.localhost` | Public host: OIDC issuer host + ingress host + `KC_HOSTNAME`. |
 | `global.partOf` | `spec.partOf` | `zaentrum` | `app.kubernetes.io/part-of` label value. |
 | `global.imagePullSecrets` | `spec.imagePullSecrets` | `[]` | Pull secrets added to every workload (empty for public ghcr). |
-| — | `spec.channel` | `stable` | **CR-only.** Release train consulted by auto-update (`stable`\|`edge`). |
+| — | `spec.channel` | `stable` | **CR-only.** Release train consulted by auto-update (`stable`\|`edge`). Both point at `latest` today. |
 
 ### Identity (`identity.*` → `spec.identity`)
 
@@ -329,7 +330,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 |---|---|---|---|
 | `keycloak.image` | `spec.keycloak.image` | `quay.io/keycloak/keycloak:26.0.7` | Bundled Keycloak container image. |
 | `services.<name>.replicas` | `spec.replicas.<name>` | `1` (chart ships `packager: 2`) | Per-service replica override by Deployment name. Stateful backers (postgres/valkey/kafka/keycloak) are **not** scalable this way. |
-| — | `spec.update.mode` | `manual` | **CR-only.** `manual` (never bump `version`) or `auto` (let the reconciler track the channel). |
+| — | `spec.update.mode` | `manual` | **CR-only.** `manual` (never bump `version`) or `auto` (let the reconciler track the channel) — no difference while both channels are `latest`. |
 
 > `jobs.seed` (chart value, default `false`) enables the demo's self-populate
 > scan/enqueue/topics Jobs. It is demo choreography, not part of the CR spec — leave it off

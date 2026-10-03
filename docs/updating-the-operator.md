@@ -58,6 +58,10 @@ https://media.example.org — the operator's controller
 Updated outside the platform: approve the update in its OLM subscription.
 ```
 
+The example shows tagged releases; none is published yet. Today a manifest
+install reports its `sha-<commit>` tag and the appliance `latest`, and both
+channels point at `latest`.
+
 `zae platform status` ends with the same section, and `--json` on either prints
 what the portal reported, for a script. An instance whose operator predates the
 field says so and `zae platform controller` exits `3` — *not offered by this
