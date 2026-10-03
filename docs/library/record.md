@@ -129,8 +129,15 @@ item.
 them, plus the moment it was projected. Titles and localized titles, release
 date, genres, ratings, credits, collection and season texts, the image and video
 lists, which fields a human locked, and where each field came from. Credits name
-people by id; who a person is lives in their own folder. A rebuild restores these
-as they were at the last projection.
+people by id; who a person is lives in their own folder. A credit is one person
+in one role, and the role is a token from an open vocabulary: actor, creator,
+director, writer, producer, composer, cinematographer and editor are the roles
+every reader knows, listed in that order, and any other is shown as it is, after
+them. Beside the role a credit keeps the job in the source's own words
+("Screenplay", or "Story, Teleplay" for two jobs in one role), the character an
+actor plays, the billing order within the role and, for a series, how many
+episodes credit the person. A rebuild restores these as they were at the last
+projection.
 
 **`sources/<id>/source.json`** — an original file as it was found: name, size,
 hashes, where it came from in the old library, its container, every stream it
