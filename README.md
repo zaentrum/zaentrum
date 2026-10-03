@@ -41,19 +41,20 @@ trigger a scan.
 
 ## Reaching it from your phone / TV
 
-`*.localhost` only resolves on the host machine. To reach Zaentrum from other devices on your
-LAN, pick a profile in the setup wizard (it wires the ingress **and** the login issuer
-together):
+Sign-in needs **https** everywhere except on the machine itself. Keycloak marks its login
+cookies `Secure`, and a browser keeps those over plain http for `localhost` names only — over
+`http://<lan-ip>` or `http://<name>.local`, Keycloak answers the login form with "Cookie not
+found" and nobody signs in. The Android phone and TV apps go further: they refuse plain http
+altogether, and trust public certificate authorities only.
 
-| Profile | How devices reach it | DNS |
-|---|---|---|
-| This machine only | `*.localhost` (host browser only) | none |
-| **LAN, single origin (recommended)** | the server's LAN IP, path-routed (`/`, `/api`, `/auth`) | none |
-| LAN, magic wildcard | `zaentrum.<lan-ip>.nip.io` | none (needs internet) |
-| mDNS | `zaentrum.local` | none |
-| Real domain | your domain + wildcard + TLS | yes |
-
-Clients use **Add Server** — point them at the IP / `.local` / domain.
+So the appliance, which serves plain http at `zaentrum.localhost`, is for the machine it runs
+on. To reach Zaentrum from other devices, run it under a real hostname with TLS: the operator on
+a cluster whose ingress terminates https with a certificate the devices trust (`spec.hostname`
+and `identity.issuerScheme: https` — see
+[self-hosting](docs/self-hosting.md#b-self-host-with-the-operator)). Clients use **Add Server**
+with that address. LAN deployment profiles — the server's IP, a wildcard DNS name, mDNS — are
+designed ([ADR-0008](docs/adr/0008-single-origin-deployment-profiles.md)) but not built, and as
+designed they serve plain http, which cannot sign in.
 
 ## Identity
 

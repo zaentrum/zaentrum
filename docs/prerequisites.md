@@ -21,8 +21,8 @@ The three topologies:
 | Media library storage (NFS or a StorageClass) | container disk | required | NFS (`<nfs-server>:/media-demo`) |
 | Node-local storage for the bundled Kafka PV (topic persistence) | optional | optional | required |
 | GPU node + matching Nvidia driver (`features.gpu`) | optional | optional (if pipeline) | required (pipeline) |
-| Public DNS + TLS for the hostname | LAN/`*.localhost` | required | OKD edge TLS |
-| Split-horizon issuer resolution (in-cluster) | auto (CoreDNS rewrite) | required if HTTPS | `network.issuerHostAliasIP` |
+| Public DNS + TLS for the hostname (sign-in needs https on any name but `localhost`) | none — `zaentrum.localhost`, this machine only | required | OKD edge TLS |
+| Split-horizon issuer resolution (in-cluster) | auto (CoreDNS rewrite) | required with HTTPS | `network.issuerHostAliasIP` |
 | Egress to `ghcr.io` | required | required | required |
 | Egress to TMDB (metadata enrichment) | if enriching | if enriching | required |
 | Egress to seed content hosts | — | — | required |
@@ -52,9 +52,11 @@ Valkey, and Kafka.
   ```
 
 - **Network egress to `ghcr.io`** to pull the appliance image, and on first boot every platform image.
-- **A host you can reach it by.** `http://zaentrum.localhost` resolves to `127.0.0.1` in modern
-  browsers with no `/etc/hosts` edit, and the issuer host matches the host you reach it at. To reach
-  it by another name, align the issuer host per [self-hosting.md](./self-hosting.md).
+- **The machine it runs on.** `http://zaentrum.localhost` resolves to `127.0.0.1` in modern
+  browsers with no `/etc/hosts` edit, and it is the one address the appliance answers and signs in
+  at. Phones, TVs and other computers need https, which the appliance does not serve: over plain
+  http only a `localhost` name can sign in (see
+  [self-hosting.md](./self-hosting.md#a-one-command-appliance)).
 
 Optional:
 
@@ -63,9 +65,9 @@ Optional:
   images carry no key (see [Network egress](#network-egress)).
 - **A GPU** for hardware transcoding — the appliance runs software ffmpeg otherwise. See [GPU](#gpu-nvenc).
 
-Split-horizon issuer resolution and DNS/TLS are handled for you: the all-in-one wires a CoreDNS rewrite
-(driven by the `STUBE_ISSUER_HOST` env) so the in-cluster validators resolve the issuer host to the
-bundled Keycloak.
+Split-horizon issuer resolution is handled for you: the all-in-one wires a CoreDNS rewrite (driven by
+the `STUBE_ISSUER_HOST` env) so pods resolve the issuer host to the appliance's own ingress, as the
+browser does. There is no TLS.
 
 ---
 
@@ -116,6 +118,12 @@ the ffmpeg-nvenc ↔ driver version coupling applies to you.
 
 - A **public hostname** (`hostname`) that both the browser and in-cluster validation use as the OIDC
   issuer host. Point DNS at your ingress/router and terminate TLS there.
+- **TLS is not optional** for any hostname but a `localhost` name. Keycloak marks its login cookies
+  `Secure` (`SameSite=None`), and a browser stores and sends those over https only, or to `localhost`
+  — over plain http, sign-in fails with "Cookie not found". The Android phone and TV apps refuse plain
+  http and trust public certificate authorities only, so give them a certificate from one. The
+  chart's `Ingress` has no TLS section: terminate TLS at your ingress controller (its default
+  certificate) or a proxy in front of it, and set `identity.issuerScheme: https`.
 - Set `routing.provisionIngress: true` for a plain-k8s `Ingress` (single-origin paths), or
   `routing.provisionRoutes: true` on OpenShift.
 - If you terminate TLS at the edge (`identity.issuerScheme: https`), you need **split-horizon issuer
@@ -260,7 +268,8 @@ has to resolve to the ingress/router **from inside the cluster**:
 - **Self-host / demo**: set `network.issuerHostAliasIP` to the ingress/router IP. The operator adds
   `hostAliases` (that IP → `hostname`) to the OIDC validators so in-cluster validation reaches the public
   issuer.
-- **Appliance**: handled automatically by a CoreDNS rewrite to the Keycloak Service.
+- **Appliance**: handled automatically — a CoreDNS rewrite resolves the issuer host to the
+  appliance's own ingress, which a browser on the machine reaches at `127.0.0.1`.
 
 ### Network egress
 

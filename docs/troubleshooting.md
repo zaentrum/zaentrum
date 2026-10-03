@@ -18,6 +18,7 @@ operations against a running install; the reference demo details are in
 | 5 | In-cluster login / OIDC issuer errors | Split-horizon DNS: public issuer host not resolvable from inside the cluster |
 | 6 | A fresh scan's first item never advances / topics gone after a Kafka restart | Bundled Kafka on `emptyDir` lost its topics |
 | 7 | Admin login demands a password change | Fresh Keycloak realm import forces `UPDATE_PASSWORD` |
+| 8 | Sign-in fails with "Cookie not found" from a phone, a TV or another computer | Plain http on a name other than `localhost`: Keycloak's login cookies are `Secure` |
 
 ---
 
@@ -256,3 +257,31 @@ install and kept in a Secret in the platform's namespace
 ([first run](./self-hosting.md#first-run)); on the demo it comes from the CI-created
 `zaentrum-keycloak-admin` secret (`DEMO_KC_ADMIN_PW` / `DEMO_REALM_ADMIN_PW` CI
 variables). Nothing needs to be "repaired" — it is expected first-login behavior.
+
+---
+
+## 8. Sign-in fails over plain http: "Cookie not found"
+
+**Symptom** — the platform's pages load, but signing in does not: Keycloak answers the
+login form with
+
+```
+Cookie not found. Please make sure cookies are enabled in your browser.
+```
+
+or the form keeps coming back. It happens from a phone, a TV or another computer — over
+`http://<lan-ip>`, `http://<name>.local` or any other plain-http name — and never on the
+machine that reaches the platform as `http://zaentrum.localhost`. The Android phone and TV
+apps fail earlier: they refuse to connect over plain http at all.
+
+**Cause** — Keycloak sets its login session's cookies (`AUTH_SESSION_ID`, `KC_RESTART`)
+`Secure; SameSite=None`, over plain http too. A browser stores and sends a `Secure` cookie
+only over https, or to a `localhost` name, which counts as a secure context. Anywhere else
+the cookie never comes back with the form, and Keycloak has lost the login session.
+
+**Fix** — serve the platform over https, with a certificate the devices trust (the Android
+apps accept public certificate authorities only): terminate TLS in front of the ingress, set
+`identity.issuerScheme: https`, and resolve the issuer in-cluster with
+`network.issuerHostAliasIP` ([trap 5](#5-in-cluster-login--oidc-issuer-errors)). See
+[self-hosting.md](./self-hosting.md#b-self-host-with-the-operator). The appliance serves plain
+http only, so sign in to it on the machine it runs on.

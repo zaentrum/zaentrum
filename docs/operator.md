@@ -117,7 +117,7 @@ them unset.
 |---|---|---|---|
 | `identity.mode` | enum `bundled` \| `external` | `bundled` | `bundled` ships in-cluster Keycloak + the `zaentrum` realm import; `external` uses your own OIDC provider — services validate its tokens directly — and does not render Keycloak. The CRD accepts no other value: `broker` ([ADR-0007](./adr/0007-identity-modes.md)) is not built. |
 | `identity.issuer` | string | — | Explicit public issuer URL. Empty → derived as `<scheme>://<hostname>/auth/realms/zaentrum`, in `external` mode too (it is not rejected), so set it there. |
-| `identity.issuerScheme` | enum `http` \| `https` | `http` | Scheme of the derived issuer + Keycloak `KC_HOSTNAME`. Use `https` when TLS is terminated at the edge. |
+| `identity.issuerScheme` | enum `http` \| `https` | `http` | Scheme of the derived issuer + Keycloak `KC_HOSTNAME`. Use `https` when TLS is terminated at the edge — needed for any host but a `localhost` name, where plain http cannot sign in. |
 | `identity.clientId` | string | `chino-web` | Public OIDC client id the web SPA authenticates as. |
 | `identity.audience` | string | `chino` | Expected token audience services validate against. |
 | `identity.loginTheme` | string | — (Keycloak default) | Bundled Keycloak login theme name (the demo uses `zaentrum`). |
@@ -214,6 +214,7 @@ spec:
   hostname: zaentrum.example.com      # the one public host — set to your real host
   identity:
     mode: bundled
+    issuerScheme: https             # TLS in front of the Ingress; plain http signs in on localhost only
     clientId: chino-web
     audience: chino
   features:
@@ -231,7 +232,12 @@ spec:
 
 Set `spec.hostname` to the public host you will reach Zaentrum at. In bundled
 mode the operator derives the OIDC issuer, the ingress/route host, and Keycloak's
-`KC_HOSTNAME` from that single name. When `status.phase` reaches `Ready`, open
+`KC_HOSTNAME` from that single name. Serve that host over https: Keycloak marks
+its login cookies `Secure`, so over plain http only a `localhost` name can sign
+in, and the Android phone and TV apps refuse http. The Ingress carries no TLS
+section — terminate TLS in front of it, and see
+[split-horizon issuer resolution](./prerequisites.md#split-horizon-issuer-resolution).
+When `status.phase` reaches `Ready`, open
 `https://<hostname>` and sign in as `admin` with the first admin password, which the
 platform generates at install. There is no setup wizard; the rest of the first run is a
 TMDB key and your library — see [self-hosting.md](./self-hosting.md#first-run).

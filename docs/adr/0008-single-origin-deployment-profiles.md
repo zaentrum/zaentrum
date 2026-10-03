@@ -2,6 +2,15 @@
 
 **Status:** Accepted · recorded retrospectively (decision from 2026-06)
 
+> **Status — ahead of the code, and its plain-http profiles cannot sign in.** There is no
+> first-run wizard and no profile switch: the appliance serves `http://zaentrum.localhost` on
+> the machine it runs on, and a cluster install takes its one host from `spec.hostname`. And
+> the premise that a phone or TV can sign in at a plain `http://SERVER-IP` does not hold:
+> Keycloak marks its login cookies `Secure`, which browsers keep over plain http for
+> `localhost` names only, and the Android phone and TV apps refuse plain http altogether. As
+> written, profiles B1, B2 and C cannot sign in from another device; today only an https
+> setup, the shape of profile D, does.
+
 ## Context
 
 A real self-hosted install is reached from a **phone and a TV on the LAN**, not just a browser on the machine running the containers. Those devices cannot edit a hosts file and cannot resolve `*.localhost`. Any scheme that starts with "first, set up DNS" has already lost most self-hosters.

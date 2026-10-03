@@ -49,6 +49,12 @@ answer 404, or the sign-in redirects to a port nothing listens on.
 
 **linux/amd64 only.** No arm64 image is published yet.
 
+**This machine only.** The appliance serves plain http, and sign-in works over plain http on
+`localhost` names alone: Keycloak marks its login cookies `Secure`, which a browser keeps over
+http only for `localhost`. A phone, a TV or another computer cannot sign in to it — and the
+Android phone and TV apps refuse plain http outright. For other devices, run the
+[operator](#b-self-host-with-the-operator) under a real hostname with https.
+
 **Why `--privileged`?** The container runs k3s, which needs to mount filesystems, manage
 cgroups, and run an embedded containerd for the app pods. `--privileged` is the supported
 default; hardened setups can pass the narrower capability/mount set k3s documents instead.
@@ -145,11 +151,20 @@ spec:
   hostname: media.example.com
   identity:
     mode: bundled          # ship Keycloak; "external" uses your own OIDC provider instead
+    issuerScheme: https    # TLS terminated in front of the Ingress — sign-in needs https
     clientId: chino-web
     audience: chino
   storage:
     mediaSize: 500Gi       # size the media PVC to your library
 ```
+
+**https is required** on any hostname but a `localhost` name: Keycloak marks its login cookies
+`Secure`, which browsers send only over https or to `localhost`, and the Android phone and TV
+apps refuse plain http and trust public certificate authorities only. The chart's Ingress
+carries no TLS section, so terminate TLS in front of it — your ingress controller's default
+certificate, or a proxy — with a certificate your devices trust, and set
+`network.issuerHostAliasIP` so in-cluster token validation reaches the https issuer (see
+[prerequisites.md](./prerequisites.md#split-horizon-issuer-resolution)).
 
 ```bash
 kubectl create namespace zaentrum
@@ -211,6 +226,7 @@ platform objects.
 helm install zaentrum ./operator/platform/chart \
   --namespace zaentrum --create-namespace \
   --set global.hostname=media.example.com \
+  --set identity.issuerScheme=https \
   --set features.pipeline=true \
   --set storage.mediaSize=500Gi
 ```
@@ -223,6 +239,7 @@ global:
   hostname: media.example.com
 identity:
   mode: bundled
+  issuerScheme: https      # TLS in front of the Ingress; plain http signs in on localhost only
 features:
   kafka: true
   pipeline: true
@@ -282,7 +299,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 |---|---|---|
 | `mode` | `bundled` | `bundled` (ship Keycloak) or `external` (services validate tokens from your own OIDC provider; no Keycloak). The only two values — `broker` ([ADR-0007](./adr/0007-identity-modes.md)) is not built. |
 | `issuer` | `""` | Explicit issuer URL; empty → derived from `issuerScheme` + `hostname` (`<scheme>://<hostname>/auth/realms/zaentrum`). |
-| `issuerScheme` | `http` | `http` \| `https`. Use `https` when TLS is terminated at the edge. |
+| `issuerScheme` | `http` | `http` \| `https`. Use `https` when TLS is terminated at the edge — and serve TLS for any hostname but a `localhost` name: over plain http, sign-in fails. |
 | `clientId` | `chino-web` | Public OIDC client id the web SPA authenticates as. |
 | `audience` | `chino` | Expected token audience services validate against. |
 | `loginTheme` | `""` | Bundled Keycloak login theme name (empty = Keycloak default). |
@@ -356,5 +373,5 @@ transcode/package pipeline for adaptive streaming.
 - [operator.md](./operator.md) — the full `Zaentrum` CR contract and the operator install.
 - [updating.md](./updating.md) — image tags, channels, and rollouts.
 - [troubleshooting.md](./troubleshooting.md) — known traps (Kafka volume switch, NVENC/driver
-  mismatch, split-horizon issuer, first-login password change).
+  mismatch, split-horizon issuer, first-login password change, sign-in over plain http).
 - [reference-demo.md](./reference-demo.md) — the public reference deployment.
