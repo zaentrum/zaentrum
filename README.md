@@ -106,8 +106,8 @@ digest on every reconcile, and rolls the components whose image changed.
 
 | Repo | What it is |
 |---|---|
-| **`zaentrum/zaentrum`** *(this)* | install, releases, instructions — the front door |
-| [`zaentrum/zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator) | the Kubernetes operator — controller + CRD + deploy templates + OLM bundle |
+| **`zaentrum/zaentrum`** *(this)* | install, releases, instructions, the product page and the end-to-end tests — the front door |
+| [`zaentrum/zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator) | the Kubernetes operator — controller + CRD + deploy templates + OLM bundle, and the appliance image |
 | `zaentrum/<service>` | per-service repos (catalog, playback, web/mobile/TV clients, …) |
 
 ## License

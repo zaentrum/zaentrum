@@ -2,6 +2,14 @@
 
 **Status:** Accepted · recorded retrospectively (decision from 2026-06) · amended by [ADR-0011](0011-addon-charts-installed-by-the-operator.md)
 
+> **Status — partly ahead of the code.** No release has been tagged, so nothing is pinned
+> yet: every install runs the floating `latest` images published from `main`, both channels
+> in `releases.json` point at `latest`, and by default the operator reads its channel document
+> from its own repository, not the front door's. The all-in-one appliance is built in
+> `zaentrum-operator` (`deploy/allinone`) and published as `ghcr.io/zaentrum/appliance` — not
+> by the front door, and not as `ghcr.io/zaentrum/zaentrum`, which does not exist — and it
+> runs `latest` too. The polyrepo and the operator as runtime owner are built as decided.
+
 ## Context
 
 Zaentrum began as a single orchestrator repository that contained everything: the operator, the deploy templates, and buildable source for nine services. "It includes everything" was true in three different senses, and conflating them hurt all three:
@@ -20,7 +28,7 @@ One rule, three repo shapes: **one repo = one container = one image = one releas
 
 **1. Polyrepo, with visibility as the only axis.** Every service gets its own repository in the `zaentrum` org and builds exactly one image, `ghcr.io/zaentrum/<service>`. Because a repository is wholly one visibility level, whether a component is part of the open platform is decided once — when its repo is created — and anyone can audit the boundary by reading the org page. No private path can hide inside a public tree, and CI can enforce the neutrality boundary with a grep instead of a policy document. Addons — the public example is [acquire](https://github.com/laedeli/acquire) — live in their own repos under their own owners and are never merged in.
 
-**2. A front-door repo: [`zaentrum/zaentrum`](https://github.com/zaentrum/zaentrum).** This is the only repository that knows the *set*. It holds the install docs, `releases.json` (the release channel the operator's auto-update consumes), and the all-in-one appliance image `ghcr.io/zaentrum/zaentrum` — the `docker run` one-liner. The appliance **composes released image tags; it never builds service code.** A front door that built from source would be a second source of truth for every service and would drift from what the services actually released. Composing pins instead makes an appliance release a lockfile: reproducible, and rollback is the previous pin.
+**2. A front-door repo: [`zaentrum/zaentrum`](https://github.com/zaentrum/zaentrum).** This is the only repository that knows the *set*. It holds the install docs, `releases.json` (the release channel the operator's auto-update consumes), and the all-in-one appliance image — the `docker run` one-liner. The appliance **composes released image tags; it never builds service code.** A front door that built from source would be a second source of truth for every service and would drift from what the services actually released. Composing pins instead makes an appliance release a lockfile: reproducible, and rollback is the previous pin.
 
 **3. An operator repo: [`zaentrum/zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator).** The controller, the `Zaentrum` CRD, the deploy templates, and the OLM bundle. The operator is the runtime owner: a cluster declares one `Zaentrum` CR, and the operator reconciles the platform from **published image tags** — the same artifacts the appliance pins. Nothing else deploys anything the platform owns. The decision also reserved the CR as the future home of declarative addon installation (an `addons`/`plugins` list). [ADR-0011](0011-addon-charts-installed-by-the-operator.md) replaced that reservation: each addon is a Helm chart declared by its own `ZaentrumAddon` resource, which the same operator reconciles — see [addon charts](../extending/charts.md). A stock platform is fully working with no addons at all.
 

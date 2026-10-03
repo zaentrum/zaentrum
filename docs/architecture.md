@@ -45,12 +45,14 @@ Zaentrum is a polyrepo: every service is its own repository in the
 `ghcr.io/zaentrum/<service>`. Two repos are special:
 
 - **[`zaentrum/zaentrum`](https://github.com/zaentrum/zaentrum)** (this repo) —
-  the front door: install docs, `releases.json`, and the all-in-one appliance
-  image. It **composes released image tags; it builds no service code.**
+  the front door: the install docs, the product page, `releases.json` and the
+  end-to-end tests. It **builds no service code** — and while no release is
+  tagged, it pins no image tags either.
 - **[`zaentrum/zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator)**
-  — the runtime owner: the `Zaentrum` CRD, the controller, and the platform
-  chart it renders. A cluster declares one CR; the operator reconciles the
-  platform from published images.
+  — the runtime owner: the `Zaentrum` CRD, the controller, the platform chart it
+  renders, and the all-in-one appliance image, `ghcr.io/zaentrum/appliance`. A
+  cluster declares one CR; the operator reconciles the platform from published
+  images.
 
 Addons live in their own repos under their own owners (the worked example is
 [laedeli/acquire](https://github.com/laedeli/acquire)) and are never merged in.
