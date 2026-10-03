@@ -126,3 +126,10 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
 });
 
 export { expect };
+
+/** A UI-change spec's mark: stop here (test.fixme) unless E2E_FIXME=run, as the
+ *  change it describes is not built yet. tests/ui-changes.spec.ts says how a
+ *  spec loses it. */
+export function notYet(what: string): void {
+  test.fixme(!env.runFixme, `not implemented yet: ${what}`);
+}

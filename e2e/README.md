@@ -72,7 +72,7 @@ for and stops, since completing it would change the account.
 | `chino` | viewer | The web client: home and the movies page with posters, a movie's and a series' detail page with their credits, seasons and episodes, the person page, search for titles and for people. |
 | `api` | viewer | chino-api as the pages call it: cast entries, episodes, people search and person pages, posters; the data set; that the viewer is no administrator. |
 | `console` | admin | The catalog console: find a title, open it, read its cast tab; the launchpad links the apps where the suite expects them; the operator console shows the platform's last check of itself, passed. |
-| `ui-changes` | viewer, admin | The UI changes to build, below. |
+| `ui-changes` | viewer, admin | One spec per UI change: built ones guard the change, planned ones stop at `notYet()` (below). |
 
 `npx playwright test --project=chino` runs one project, `npx playwright test
 tests/chino/search.spec.ts` one file, `--grep "person page"` the tests whose
@@ -115,9 +115,11 @@ that one first.
 
 [`tests/ui-changes.spec.ts`](tests/ui-changes.spec.ts) holds one spec per
 planned change, each titled with what it will check and holding the assertion
-already. Each opens its page, attaches a screenshot, and stops at `notYet(…)` —
-a runtime `test.fixme()` — so a default run reports it as skipped and still
-shows the page as it is today.
+already. Each opens its page, attaches a screenshot, and stops at `notYet(…)`
+(from [`support/fixtures.ts`](support/fixtures.ts)) — a runtime `test.fixme()` —
+so a default run reports it as skipped and still shows the page as it is today.
+The first fourteen, the web client's and the console's credits and people, are
+built and guard their changes now; a new planned change starts there again.
 
 1. Run the suite before the change and keep the report: the "before" pictures.
 2. Build the change and deploy it to the instance the usual way (nothing in

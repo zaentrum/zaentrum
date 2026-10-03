@@ -1,29 +1,25 @@
-// UI changes the team can implement against: one spec per change, each with
-// the assertion it will make once the change is live.
+// UI changes the team implements against: one spec per change, each with the
+// assertion it makes once the change is live.
 //
-// Every spec opens its page and attaches a screenshot first, then stops at
-// `notYet()` (a runtime test.fixme), so a default run reports these as
-// skipped and the report shows each page as it is today. To implement one:
-// build the change, run `npm run test:ui-changes` (E2E_FIXME=run executes
-// the assertions of all of them), and when its spec passes against the
-// instance, delete its notYet() line so it guards the change from then on.
+// A new spec opens its page and attaches a screenshot first, then stops at
+// `notYet()` (support/fixtures: a runtime test.fixme), so a default run
+// reports it as skipped and the report shows the page as it is today. To
+// implement one: build the change, run `npm run test:ui-changes` (E2E_FIXME=run
+// executes the assertions of every spec still marked), and when its spec
+// passes against the instance, delete its notYet() line so it guards the change
+// from then on.
 //
-// The data they show is live (tests/api/credits-people.spec.ts proves it):
-// creators and the rest of the crew, characters, billing order, episode
-// counts, portraits, biographies and birth data. What is missing is the UI.
+// The first fourteen — the credits and people of the web client and the
+// console — are built (chino-web e33ee4f, katalog-manager-ui 7b38b6a) and guard
+// their changes now; none is marked.
 import type { Page } from '@playwright/test';
 import { ACTOR, DIRECTOR, PIONEER_ONE, SINTEL, TEARS_OF_STEEL } from '../data/catalog';
 import { catalogConsole, chino, type App } from '../support/apps';
 import { findPerson, findTitle, titleDetail, type CastEntry } from '../support/catalog';
 import { openCastTab, openInConsole } from '../support/console';
-import { authFile, env } from '../support/env';
+import { authFile } from '../support/env';
 import { expect, test } from '../support/fixtures';
 import { creditBlock, escapeRegExp, expectImageLoaded, titleInfo } from '../support/pages';
-
-/** Stop here (test.fixme) unless E2E_FIXME=run: the change is not built yet. */
-function notYet(what: string) {
-  test.fixme(!env.runFixme, `not implemented yet: ${what}`);
-}
 
 /** Open a title's detail page in the web client and wait for its heading. */
 async function openDetail(page: Page, open: (app: App, path?: string) => Promise<void>, id: string, title: string) {
@@ -39,7 +35,6 @@ test.describe('web client — the detail page', () => {
     const series = await findTitle(api, PIONEER_ONE);
     const info = await openDetail(page, open, series.id, PIONEER_ONE.title);
     await snap('Pioneer One');
-    notYet('the creator of a series on its detail page');
 
     const creator = await findPerson(api, PIONEER_ONE.creator);
     const link = creditBlock(info, 'Created by').getByRole('link', { name: PIONEER_ONE.creator, exact: true });
@@ -52,7 +47,6 @@ test.describe('web client — the detail page', () => {
     const detail = await titleDetail(api, SINTEL);
     const info = await openDetail(page, open, detail.id, SINTEL.title);
     await snap('Sintel');
-    notYet('crew grouped by role on the detail page');
 
     const labels: [string, string][] = [
       ['Director', 'director'],
@@ -76,7 +70,6 @@ test.describe('web client — the detail page', () => {
     const detail = await titleDetail(api, PIONEER_ONE);
     const info = await openDetail(page, open, detail.id, PIONEER_ONE.title);
     await snap('Pioneer One');
-    notYet('billing order and characters on the detail page');
 
     const actors = sameRole(detail.cast, 'actor').slice(0, PIONEER_ONE.actors.length);
     expect(actors.map((a) => a.name), 'the API lists the lead actors first, in billing order').toEqual([
@@ -92,7 +85,6 @@ test.describe('web client — the detail page', () => {
     const detail = await titleDetail(api, TEARS_OF_STEEL);
     const info = await openDetail(page, open, detail.id, TEARS_OF_STEEL.title);
     await snap('Tears of Steel');
-    notYet('the full cast on the detail page');
 
     const actors = sameRole(detail.cast, 'actor').map((a) => a.name);
     expect(actors.length, 'actors the API credits').toBeGreaterThan(5);
@@ -111,7 +103,6 @@ test.describe('web client — the person page', () => {
     await open(chino, `/person/${actor.id}`);
     await expect(page.getByRole('heading', { level: 1, name: ACTOR.name })).toBeVisible();
     await snap(ACTOR.name);
-    notYet('portraits on the person page');
 
     await expectImageLoaded(page.getByRole('img', { name: ACTOR.name, exact: true }), `${ACTOR.name}'s portrait`);
   });
@@ -121,7 +112,6 @@ test.describe('web client — the person page', () => {
     await open(chino, `/person/${actor.id}`);
     await expect(page.getByRole('heading', { level: 1, name: ACTOR.name })).toBeVisible();
     await snap(ACTOR.name);
-    notYet('the biography on the person page');
 
     await expect(page.getByText(ACTOR.biographyExcerpt)).toBeVisible();
   });
@@ -131,7 +121,6 @@ test.describe('web client — the person page', () => {
     await open(chino, `/person/${actor.id}`);
     await expect(page.getByRole('heading', { level: 1, name: ACTOR.name })).toBeVisible();
     await snap(ACTOR.name);
-    notYet('birth date and birthplace on the person page');
 
     // 1957-03-03, in whichever of the common spellings the page settles on.
     await expect(page.getByText(/3 March 1957|March 3, 1957|1957-03-03|03\.03\.1957/)).toBeVisible();
@@ -143,7 +132,6 @@ test.describe('web client — the person page', () => {
     await open(chino, `/person/${director.id}`);
     await expect(page.getByRole('heading', { level: 1, name: DIRECTOR.name })).toBeVisible();
     await snap(DIRECTOR.name);
-    notYet('per-title roles on the person page');
 
     for (const title of DIRECTOR.titles) {
       const card = page.getByRole('heading', { level: 3, name: title.title, exact: true }).locator('xpath=../..');
@@ -156,7 +144,6 @@ test.describe('web client — the person page', () => {
     await open(chino, `/person/${actor.id}`);
     await expect(page.getByRole('heading', { level: 1, name: ACTOR.name })).toBeVisible();
     await snap(ACTOR.name);
-    notYet('"known for" on the person page');
 
     await expect(page.getByText(/Known for:?\s*Acting/i)).toBeVisible();
   });
@@ -174,7 +161,6 @@ test.describe('web client — search', () => {
   test('search does not say “No results” when only people match (“hoffman”)', async ({ page, open, snap }) => {
     await searchFor(page, open, ACTOR.search);
     await snap(`search ${ACTOR.search}`);
-    notYet('a search headline that counts people');
 
     await expect(page.getByRole('heading', { level: 1 })).not.toHaveText(/^No results/);
   });
@@ -182,7 +168,6 @@ test.describe('web client — search', () => {
   test('search’s “Cast & crew” cards show the portrait of people who have one', async ({ page, open, snap }) => {
     await searchFor(page, open, ACTOR.search);
     await snap(`search ${ACTOR.search}`);
-    notYet('portraits on the search page');
 
     const card = page.getByRole('main').getByRole('button', { name: new RegExp(escapeRegExp(ACTOR.name)) });
     await expectImageLoaded(card.getByRole('img', { name: ACTOR.name, exact: true }), `${ACTOR.name}'s portrait`);
