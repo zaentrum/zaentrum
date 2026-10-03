@@ -1,0 +1,22 @@
+{
+  "name": "zaentrum-e2e",
+  "private": true,
+  "version": "0.0.0",
+  "description": "End-to-end tests for a running zaentrum instance (the public demo by default).",
+  "license": "MPL-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:next": "E2E_NEXT=1 playwright test --grep @next",
+    "test:ui-changes": "E2E_FIXME=run playwright test --project=ui-changes",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.19.1",
+    "typescript": "5.9.3"
+  }
+}

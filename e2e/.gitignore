@@ -1,0 +1,11 @@
+# Signed-in browser state from the setup project: Keycloak session cookies and tokens.
+/.auth/
+# Credentials. The suite reads them from the environment; keep any env file out of git.
+.env
+*.env
+# Dependencies and run output.
+/node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
