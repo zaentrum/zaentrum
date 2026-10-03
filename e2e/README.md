@@ -71,7 +71,7 @@ for and stops, since completing it would change the account.
 | `setup` | both | Signs each account in once through the Keycloak login page and saves the signed-in browser state to `e2e/.auth/` (ignored by git, readable by you only). Every other project depends on it. |
 | `chino` | viewer | The web client: home and the movies page with posters, a movie's and a series' detail page with their credits, seasons and episodes, the person page, search for titles and for people. |
 | `api` | viewer | chino-api as the pages call it: cast entries, episodes, people search and person pages, posters; the data set; that the viewer is no administrator. |
-| `console` | admin | The catalog console: find a title, open it, read its cast tab; the launchpad links the apps where the suite expects them. |
+| `console` | admin | The catalog console: find a title, open it, read its cast tab; the launchpad links the apps where the suite expects them; the operator console shows the platform's last check of itself, passed. |
 | `ui-changes` | viewer, admin | The UI changes to build, below. |
 
 `npx playwright test --project=chino` runs one project, `npx playwright test
