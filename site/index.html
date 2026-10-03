@@ -69,8 +69,8 @@
 
     <div class="term hero-term" role="figure" aria-label="install command">
       <div class="term-bar"><span>bash</span></div>
-      <pre class="term-body"><span class="p">$</span> docker run -d --privileged -p 80:80 \
-    --name zaentrum ghcr.io/zaentrum/zaentrum:latest
+      <pre class="term-body"><span class="p">$</span> docker run -d --privileged --restart unless-stopped \
+    -p 80:80 --name zaentrum ghcr.io/zaentrum/appliance:latest
 <span class="p">$</span> open http://zaentrum.localhost<span class="cursor" aria-hidden="true"></span></pre>
     </div>
   </div>
@@ -170,12 +170,13 @@
     <div class="start-grid">
       <div class="start-col">
         <div class="start-head">one box</div>
-        <p class="start-cap">everything in a single container.</p>
+        <p class="start-cap">everything in a single container, on linux/amd64.</p>
         <div class="term">
           <div class="term-bar"><span>bash</span></div>
-          <pre class="term-body"><span class="p">$</span> docker run -d --privileged -p 80:80 \
+          <pre class="term-body"><span class="p">$</span> docker run -d --privileged \
+    --restart unless-stopped -p 80:80 \
     --name zaentrum \
-    ghcr.io/zaentrum/zaentrum:latest
+    ghcr.io/zaentrum/appliance:latest
 <span class="p">$</span> open http://zaentrum.localhost</pre>
         </div>
         <p class="start-note">
