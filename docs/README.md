@@ -62,7 +62,7 @@ flowchart TD
 
 | Topology | What it is | Deploy path |
 |---|---|---|
-| **Appliance** | One `--privileged` container = a single-node k3s that auto-applies the platform. Zero-clone. | [self-hosting.md#a-one-command-appliance](./self-hosting.md#a-one-command-appliance) |
+| **Appliance** | One `--privileged` container = a single-node k3s that installs the operator, which brings up the platform. linux/amd64, port 80. Zero-clone. | [self-hosting.md#a-one-command-appliance](./self-hosting.md#a-one-command-appliance) |
 | **Self-host on k8s** | Install the operator, apply a CR (or `helm install` the chart). Also k3s / Compose profiles. | [self-hosting.md](./self-hosting.md) |
 | **Reference demo** | The public demo at `zaentrum.demo.nalet.cloud` on OKD, deployed by GitLab CI. The worked example of a real GitOps deploy. | [reference-demo.md](./reference-demo.md) |
 

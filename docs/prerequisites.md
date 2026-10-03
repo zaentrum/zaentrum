@@ -8,7 +8,7 @@ The three topologies:
 
 | Topology | What it is | Guide |
 |---|---|---|
-| **Appliance** | One container — `docker run --privileged ghcr.io/zaentrum/appliance:latest` boots an in-process single-node k3s that auto-applies `deploy/base`. Zero-clone. | [self-hosting.md](./self-hosting.md#a-one-command-appliance) |
+| **Appliance** | One container — `docker run --privileged -p 80:80 ghcr.io/zaentrum/appliance:latest` boots an in-process single-node k3s that installs the operator, which brings up the platform from a baked-in `Zaentrum` resource. linux/amd64. Zero-clone. | [self-hosting.md](./self-hosting.md#a-one-command-appliance) |
 | **Self-host on k8s** | Install the operator once, then apply a `Zaentrum` CR; or `helm install` the chart (`operator/platform/chart`) directly. Non-k8s `deploy/k3s` (`up.sh`) and `deploy/compose` (docker-compose + Caddy) profiles also exist. | [self-hosting.md](./self-hosting.md), [operator.md](./operator.md) |
 | **Reference demo** | The public demo at `https://zaentrum.demo.nalet.cloud` on an OKD cluster, deployed by CI from a deploy-only repo. | [reference-demo.md](./reference-demo.md) |
 
@@ -37,17 +37,21 @@ map 1:1 onto the CR spec — the field names below are those shared keys.
 
 ## Appliance
 
-The appliance needs **almost nothing**. It ships a full single-node k3s in-process along with the web
-app, admin UI, catalog, streaming, and bundled Postgres, Valkey, and Kafka.
+The appliance needs **almost nothing**. It ships a full single-node k3s in-process and the operator,
+which brings up the portal, the web app, the catalog, streaming, and bundled Keycloak, Postgres,
+Valkey, and Kafka.
 
-- **A container runtime** that can run a privileged container — Docker or Podman.
+- **A container runtime** that can run a privileged container — Docker or Podman — on a
+  **linux/amd64** host (no arm64 image is published yet), with **host port 80** free: the platform's
+  ingress and sign-in are bound to `http://zaentrum.localhost` on port 80.
 
   ```bash
-  docker run -d --privileged -p 80:80 --name zaentrum ghcr.io/zaentrum/appliance:latest
+  docker run -d --privileged --restart unless-stopped -p 80:80 --name zaentrum \
+    ghcr.io/zaentrum/appliance:latest
   open http://zaentrum.localhost
   ```
 
-- **Network egress to `ghcr.io`** to pull the appliance image.
+- **Network egress to `ghcr.io`** to pull the appliance image, and on first boot every platform image.
 - **A host you can reach it by.** `http://zaentrum.localhost` resolves to `127.0.0.1` in modern
   browsers with no `/etc/hosts` edit, and the issuer host matches the host you reach it at. To reach
   it by another name, align the issuer host per [self-hosting.md](./self-hosting.md).

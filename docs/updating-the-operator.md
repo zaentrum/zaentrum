@@ -150,7 +150,7 @@ a property of the appliance image. Its update *is* the controller's update:
 ```sh
 docker pull ghcr.io/zaentrum/appliance:latest
 docker rm -f zaentrum
-docker run -d --privileged --name zaentrum -p 8080:80 \
+docker run -d --privileged --restart unless-stopped --name zaentrum -p 80:80 \
   -v zaentrum-data:/var/lib/rancher/k3s/storage \
   ghcr.io/zaentrum/appliance:latest
 ```

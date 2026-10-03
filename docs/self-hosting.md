@@ -26,16 +26,28 @@ reference deployment is documented in [reference-demo.md](./reference-demo.md).
 ## A. One-command appliance
 
 The whole platform in **one container**. The image bundles a single-node
-[k3s](https://k3s.io) and the rendered `deploy/base` manifests; k3s auto-applies them on
-boot. Zero-clone — nothing to check out.
+[k3s](https://k3s.io), the operator's install manifest and a `Zaentrum` resource; k3s applies
+them on boot, and the operator brings up the platform from that resource as it would on any
+cluster. Zero-clone — nothing to check out.
 
 ```bash
-docker run -d --privileged --name zaentrum -p 8080:80 ghcr.io/zaentrum/appliance:latest
+docker run -d --privileged --restart unless-stopped --name zaentrum -p 80:80 \
+  ghcr.io/zaentrum/appliance:latest
 ```
 
-Then open <http://localhost:8080> (or map `-p 80:80` and use <http://zaentrum.localhost> —
-modern browsers resolve `*.localhost` to `127.0.0.1` with no `/etc/hosts` edit). First boot
-pulls the application images and runs the database migrations, so give it a minute.
+Then open <http://zaentrum.localhost> — modern browsers resolve `*.localhost` to `127.0.0.1`
+with no `/etc/hosts` edit. First boot pulls the application images and runs the database
+migrations, so give it a few minutes; `--restart unless-stopped` brings the container back
+after a reboot or a Docker restart.
+
+**Port 80, and that one name.** The resource the appliance boots sets
+`hostname: zaentrum.localhost`, and the platform binds both its ingress and its sign-in to it:
+the ingress answers that host only, and Keycloak issues its tokens for, and redirects every
+sign-in to, `http://zaentrum.localhost` on port 80. Publish the container on another host port
+(`-p 8080:80`) or open it by another name (`http://localhost`, the machine's IP) and the pages
+answer 404, or the sign-in redirects to a port nothing listens on.
+
+**linux/amd64 only.** No arm64 image is published yet.
 
 **Why `--privileged`?** The container runs k3s, which needs to mount filesystems, manage
 cgroups, and run an embedded containerd for the app pods. `--privileged` is the supported
@@ -74,21 +86,22 @@ by k3s's `local-path` StorageClass, i.e. inside the container's writable layer. 
 across `docker rm`, mount a host directory at k3s's storage path:
 
 ```bash
-docker run -d --privileged --name zaentrum -p 8080:80 \
+docker run -d --privileged --restart unless-stopped --name zaentrum -p 80:80 \
   -v zaentrum-data:/var/lib/rancher/k3s/storage \
   ghcr.io/zaentrum/appliance:latest
 ```
 
-Inspect it like any cluster:
+Inspect it like any cluster — the k3s image ships `kubectl` itself:
 
 ```bash
-docker exec -it zaentrum k3s kubectl -n zaentrum get pods
-docker exec -it zaentrum k3s kubectl -n zaentrum logs deploy/katalog-manager-api
+docker exec zaentrum kubectl -n zaentrum get zaentrum      # PHASE Ready once it is up
+docker exec zaentrum kubectl -n zaentrum get pods
+docker exec zaentrum kubectl -n zaentrum logs deploy/katalog-manager-api
 ```
 
-For running under a non-localhost name, airgap, and build details see
-[`deploy/allinone/README.md`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/allinone/README.md). For split-horizon issuer
-resolution see [prerequisites.md](./prerequisites.md).
+How the image is built lives with it, in
+[`deploy/allinone`](https://github.com/zaentrum/zaentrum-operator/tree/main/deploy/allinone) in the
+operator repo. For split-horizon issuer resolution see [prerequisites.md](./prerequisites.md).
 
 ---
 

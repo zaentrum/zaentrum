@@ -18,13 +18,18 @@ rest of the project.
 ## Install in one command
 
 ```bash
-docker run -d --privileged -p 80:80 --name zaentrum ghcr.io/zaentrum/appliance:latest
+docker run -d --privileged --restart unless-stopped -p 80:80 --name zaentrum \
+  ghcr.io/zaentrum/appliance:latest
 open http://zaentrum.localhost
 ```
 
-That single container runs the **whole platform** — a full Kubernetes (k3s) in-process with
-the web app, admin UI, catalog, transcode/package and streaming, plus bundled **Postgres**,
-**Valkey** and **Kafka**. One image, one port, no external dependencies. The first-run wizard
+That single container runs the **whole platform**: a full Kubernetes (k3s) in-process, the
+**operator**, and everything the operator brings up — the portal, the web app, the catalog and
+its consoles, streaming, and bundled **Keycloak**, **Postgres**, **Valkey** and **Kafka**. One
+image, one port, nothing else to install; the first boot pulls the platform's images from
+`ghcr.io` and takes a few minutes. The image is **linux/amd64** only, and it needs host port
+**80**: the platform's ingress and its sign-in are bound to `http://zaentrum.localhost` — no
+other name, no other port. The first-run wizard
 at **`/manage/setup`** walks you through naming it, choosing identity, and pointing it at your
 library.
 
