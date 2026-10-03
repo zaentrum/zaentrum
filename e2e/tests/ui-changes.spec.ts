@@ -197,7 +197,6 @@ test.describe('catalog console — the cast tab', () => {
     await openInConsole(page, SINTEL);
     const table = await openCastTab(page);
     await snap('Sintel cast tab');
-    notYet('job, character and order in the console');
 
     for (const header of ['job', 'character', 'order']) {
       await expect(table.getByRole('columnheader', { name: header, exact: true })).toBeVisible();
@@ -216,7 +215,6 @@ test.describe('catalog console — the cast tab', () => {
     await openInConsole(page, PIONEER_ONE);
     const table = await openCastTab(page);
     await snap('Pioneer One cast tab');
-    notYet('episode counts in the console');
 
     await expect(table.getByRole('columnheader', { name: 'episodes', exact: true })).toBeVisible();
     for (const name of PIONEER_ONE.actors) {
@@ -230,7 +228,6 @@ test.describe('catalog console — the cast tab', () => {
     await openInConsole(page, SINTEL);
     const table = await openCastTab(page);
     await snap('Sintel cast tab');
-    notYet('a person record in the console');
 
     const link = table.getByRole('link', { name: ACTOR.name, exact: true });
     await expect(link, `${ACTOR.name}'s name is a link`).toBeVisible();
