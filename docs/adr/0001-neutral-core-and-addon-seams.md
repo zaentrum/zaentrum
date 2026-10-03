@@ -4,7 +4,7 @@
 
 ## Context
 
-The zaentrum core owns files, catalogs them, and plays them: the product apps (chino for video, musig for music, tv), the catalog services, and the enrich → analyze → transcode → package pipeline. Nothing in that set needs to know how a file came to exist.
+The zaentrum core owns files, catalogs them, and plays them: the product apps (chino for video; musig for music and tv for live TV, both planned), the catalog services, and the enrich → analyze → transcode → package pipeline. Nothing in that set needs to know how a file came to exist.
 
 Acquisition-shaped capability — searching for a title you don't have, requesting it, downloading it — is different in kind. It drags in integrations and vocabulary the core never needs, and its presence in a client is what makes media apps undistributable. This isn't cosmetic. A media client/server is distributable on app stores precisely because it is content-neutral. The same neutrality is what lets the core be published and carried under its own brand: the codebase itself must not associate the product with content-obtaining tooling.
 

@@ -2,6 +2,11 @@
 
 **Status:** Accepted · recorded retrospectively (decision from 2026-05)
 
+> **Status — partly ahead of the code.** Only chino ships: `chino-api` and `chino-stream` are
+> the one product API and streaming origin that exist. **tv** (live TV) and **musig** (music)
+> are planned products — no `tv-*` or `musig-*` service is built or published, and the
+> launchpad shows them as coming soon.
+
 ## Context
 
 The platform started with one streaming service: a Go HLS / byte-range origin
