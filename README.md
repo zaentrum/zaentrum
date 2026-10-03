@@ -80,7 +80,7 @@ by audience and covers every path:
 
 - **[docs/README.md](docs/README.md)** — index + the four-layer deploy model
 - **[Prerequisites](docs/prerequisites.md)** — cluster + external dependencies
-- **[Self-hosting](docs/self-hosting.md)** — appliance · your-own-k8s · helm · k3s/Compose (+ values reference)
+- **[Self-hosting](docs/self-hosting.md)** — appliance · your-own-k8s · helm (+ values reference; the old k3s/Compose profiles are unsupported)
 - **[Operator & CR reference](docs/operator.md)** — the operator + the complete `Zaentrum` CR spec
 - **[Reference demo](docs/reference-demo.md)** — a worked operator + CI GitOps deploy
 - **[Updating](docs/updating.md)** — day-2: app image · chart/operator roll · CR change

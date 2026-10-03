@@ -15,7 +15,7 @@ single `Zaentrum` custom resource. Chart values map 1:1 onto the CR spec.
 | You want to… | Start here |
 |---|---|
 | **Try it in one command** (a whole cluster in one container) | [Self-hosting → Appliance](./self-hosting.md#a-one-command-appliance) |
-| **Run your own instance** on Kubernetes / k3s / Compose | [Self-hosting](./self-hosting.md) |
+| **Run your own instance** on Kubernetes | [Self-hosting](./self-hosting.md) |
 | **Understand / reference every `Zaentrum` CR field** | [Operator & CR reference](./operator.md) |
 | **Reproduce the public reference demo** (OKD + GitLab CI GitOps) | [Reference demo](./reference-demo.md) |
 | **Ship a change** to a running platform (day-2) | [Updating](./updating.md) |
@@ -63,7 +63,7 @@ flowchart TD
 | Topology | What it is | Deploy path |
 |---|---|---|
 | **Appliance** | One `--privileged` container = a single-node k3s that installs the operator, which brings up the platform. linux/amd64, port 80. Zero-clone. | [self-hosting.md#a-one-command-appliance](./self-hosting.md#a-one-command-appliance) |
-| **Self-host on k8s** | Install the operator, apply a CR (or `helm install` the chart). Also k3s / Compose profiles. | [self-hosting.md](./self-hosting.md) |
+| **Self-host on k8s** | Install the operator, apply a CR (or `helm install` the chart). The older k3s / Compose profiles are not supported today. | [self-hosting.md](./self-hosting.md) |
 | **Reference demo** | The public demo at `zaentrum.demo.nalet.cloud` on OKD, deployed by GitLab CI. The worked example of a real GitOps deploy. | [reference-demo.md](./reference-demo.md) |
 
 ## The media pipeline is event-driven (Kafka)

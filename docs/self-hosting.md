@@ -7,15 +7,15 @@ content and no downloaders: you point it at files that are already on disk.
 The platform is one canonical Helm chart (`operator/platform/chart`) that is `go:embed`-ed
 into the operator image and driven by a single `Zaentrum` custom resource. Everything is a
 container at `ghcr.io/zaentrum/<service>` on the public GitHub Container Registry. This page
-covers the five ways to run it:
+covers the three supported ways to run it, and two profiles that are not supported today:
 
 | Path | Audience | Section |
 |---|---|---|
 | One-command appliance | Fastest start, single box | [A](#a-one-command-appliance) |
 | Operator on your own Kubernetes | You run k8s; want day-2 management | [B](#b-self-host-with-the-operator) |
 | `helm install` the chart directly | You run k8s; don't want the operator | [C](#c-helm-install-the-chart) |
-| k3s (`up.sh`) profile | Local single-node k8s, non-appliance | [D](#d-k3s-and-compose-profiles) |
-| Docker Compose profile | NAS / single box, no Kubernetes | [D](#d-k3s-and-compose-profiles) |
+| k3s (`up.sh`) profile | **Not supported today** | [D](#d-k3s-and-compose-profiles) |
+| Docker Compose profile | **Not supported today** | [D](#d-k3s-and-compose-profiles) |
 
 Before you start, read [prerequisites.md](./prerequisites.md) for identity (OIDC), DNS, and
 TLS. For the full `Zaentrum` CR contract see [operator.md](./operator.md); the public
@@ -245,51 +245,17 @@ the [reference table](#e-values--cr-field-reference). The demo profile
 
 ## D. k3s and Compose profiles
 
-Two profiles for people who don't want to install the operator or `helm install` a full
-cluster. Both use the same `ghcr.io/zaentrum/*` images.
+**Not supported today — use the [appliance](#a-one-command-appliance) for a single box, or the
+[operator](#b-self-host-with-the-operator) on a cluster.**
 
-### k3s (`deploy/k3s/up.sh`)
-
-A local single-node cluster via [k3d](https://k3d.io) (k3s in Docker) that applies
-`deploy/base`. This is for hacking on the manifests; for a turnkey box prefer the
-[appliance](#a-one-command-appliance).
-
-```bash
-./deploy/k3s/up.sh          # create k3d cluster + apply deploy/base
-./deploy/k3s/up.sh down     # tear the cluster down
-```
-
-Requires `docker`, `k3d`, and `kubectl`. It maps the cluster ingress to `localhost:8080`
-(`8080:80@loadbalancer`), so open <http://zaentrum.localhost:8080>. For a LAN name set the
-host consistently in `deploy/base/ingress.yaml`, `OIDC_ISSUER`, and `KC_HOSTNAME`.
-
-### Docker Compose (`deploy/compose`)
-
-A lighter front door for a NAS / single box — no Kubernetes. A single **Caddy** reverse proxy
-on `:8080` fronts everything, mirroring the k8s route map:
-
-| Path | Service |
-|---|---|
-| `/api/manage` | `katalog-manager-api` (neutral write API) |
-| `/manage` | `admin` (management UI, SPA; first run opens `/manage/setup`) |
-| `/api` | `chino-api` (product BFF) |
-| `/` | `chino-web` (the main app, static SPA) |
-
-```bash
-cd deploy/compose
-STUBE_MEDIA=/path/to/your/library docker compose up -d
-```
-
-Point `STUBE_MEDIA` at a directory of media you own; it is mounted read-only into
-`chino-stream` at `/media`. Software transcode by default (no GPU) — for hardware transcode
-use the appliance + GPU, or add an NVIDIA device reservation. The stack bundles
-`postgres:16-alpine`, `valkey/valkey:8-alpine`, and a single-node KRaft
-`apache/kafka:3.8.0` broker (`kafka:9092`). Set `OIDC_ISSUER` in the compose file to your
-provider, or leave it blank for first-run setup.
-
-> The Compose defaults use `-dev-change-me` passwords and a dev stream-signing key. Change
-> them (Postgres credentials, `STREAM_SIGNING_KEY` shared by `chino-api` and `chino-stream`)
-> before exposing the stack.
+The operator repo still carries two older profiles: `deploy/k3s/up.sh`, which creates a k3d
+cluster and applies `deploy/base`, and `deploy/compose`, a Docker Compose stack behind Caddy.
+Neither brings up a working platform. Both configure the catalog manager with variables the
+current, Go `katalog-manager` does not read — `PG_URL`, `ADDR`, `DB_USER` / `DB_PASSWORD`,
+where it reads `SPRING_DATASOURCE_*` (or `DATABASE_*`) and `SERVER_PORT` — so it gets no
+database. Neither runs the portal or the catalog consoles the platform is reached through, and
+the Compose stack has no identity provider at all: it leaves `OIDC_ISSUER` blank for a first-run
+setup that no longer exists. They are kept only until they are brought back in line or removed.
 
 ---
 

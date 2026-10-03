@@ -9,7 +9,7 @@ The three topologies:
 | Topology | What it is | Guide |
 |---|---|---|
 | **Appliance** | One container — `docker run --privileged -p 80:80 ghcr.io/zaentrum/appliance:latest` boots an in-process single-node k3s that installs the operator, which brings up the platform from a baked-in `Zaentrum` resource. linux/amd64. Zero-clone. | [self-hosting.md](./self-hosting.md#a-one-command-appliance) |
-| **Self-host on k8s** | Install the operator once, then apply a `Zaentrum` CR; or `helm install` the chart (`operator/platform/chart`) directly. Non-k8s `deploy/k3s` (`up.sh`) and `deploy/compose` (docker-compose + Caddy) profiles also exist. | [self-hosting.md](./self-hosting.md), [operator.md](./operator.md) |
+| **Self-host on k8s** | Install the operator once, then apply a `Zaentrum` CR; or `helm install` the chart (`operator/platform/chart`) directly. The `deploy/k3s` (`up.sh`) and `deploy/compose` profiles in the operator repo are **not supported today**. | [self-hosting.md](./self-hosting.md), [operator.md](./operator.md) |
 | **Reference demo** | The public demo at `https://zaentrum.demo.nalet.cloud` on an OKD cluster, deployed by CI from a deploy-only repo. | [reference-demo.md](./reference-demo.md) |
 
 ## At a glance
@@ -78,8 +78,9 @@ You bring the cluster and its supporting infrastructure; the operator renders th
 - A **Kubernetes or OKD cluster** you can create a namespace and a `Zaentrum` CR in, and a
   cluster-admin once, to install the operator from its pinned install manifest — no OLM needed (see
   [operator.md](./operator.md#install)). Where OLM runs (OpenShift), the operator's OLM bundle is the
-  alternative.
-  Non-k8s profiles (`deploy/k3s/up.sh`, `deploy/compose`) exist if you don't run k8s.
+  alternative. Without Kubernetes, run the [appliance](#appliance): the `deploy/k3s/up.sh` and
+  `deploy/compose` profiles are not supported today (see
+  [self-hosting.md](./self-hosting.md#d-k3s-and-compose-profiles)).
 
 ### Storage
 
