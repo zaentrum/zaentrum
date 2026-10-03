@@ -50,8 +50,14 @@ namespace. This is a one-time, **cluster-admin bootstrap** step (see
 [prerequisites.md](./prerequisites.md) for cluster requirements).
 
 ```bash
-oc apply -f deploy/operator-install.yaml
+oc apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
 ```
+
+(`kubectl apply -f` the same URL on a plain Kubernetes cluster.) The manifest pins the
+controller to an immutable `ghcr.io/zaentrum/operator:sha-<commit>` image, so an install is
+reproducible and rolling back is applying the previous manifest. On OpenShift or any OLM
+cluster, the OLM bundle is the alternative — see
+[the bundle](https://github.com/zaentrum/zaentrum-operator/tree/main/operator/bundle).
 
 This creates, from [`deploy/operator-install.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/operator-install.yaml):
 

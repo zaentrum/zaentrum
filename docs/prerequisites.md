@@ -74,8 +74,10 @@ You bring the cluster and its supporting infrastructure; the operator renders th
 
 ### A cluster
 
-- A **Kubernetes or OKD cluster** you can create a namespace and a `Zaentrum` CR in. For the operator
-  install path you also need OLM (the operator ships as an OLM bundle) — see [operator.md](./operator.md).
+- A **Kubernetes or OKD cluster** you can create a namespace and a `Zaentrum` CR in, and a
+  cluster-admin once, to install the operator from its pinned install manifest — no OLM needed (see
+  [operator.md](./operator.md#install)). Where OLM runs (OpenShift), the operator's OLM bundle is the
+  alternative.
   Non-k8s profiles (`deploy/k3s/up.sh`, `deploy/compose`) exist if you don't run k8s.
 
 ### Storage

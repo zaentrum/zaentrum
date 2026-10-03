@@ -115,12 +115,16 @@ server-side apply.
 ### 1. Install the operator (once, cluster-admin)
 
 ```bash
-kubectl apply -f deploy/operator-install.yaml
+kubectl apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
 ```
 
-This creates the `zaentrums.zaentrum.io` CRD, the operator's ClusterRoles, and the
-`controller-manager` Deployment in namespace `zaentrum-operator-system`. On OpenShift or any
-OLM cluster you can instead install the OLM bundle — see [operator.md](./operator.md).
+This is the supported cluster install: one pinned manifest that creates the
+`zaentrums.zaentrum.io` and `zaentrumaddons.zaentrum.io` CRDs, the operator's ClusterRoles, and
+the `controller-manager` Deployment in namespace `zaentrum-operator-system`, its image pinned to
+an immutable `ghcr.io/zaentrum/operator:sha-<commit>`. On OpenShift or any OLM cluster you can
+instead install the OLM bundle — see
+[the bundle](https://github.com/zaentrum/zaentrum-operator/tree/main/operator/bundle) in the
+operator repo. What is in the manifest, object by object: [operator.md](./operator.md#install).
 
 ### 2. Apply a minimal `Zaentrum` CR
 
@@ -371,7 +375,7 @@ adaptive streaming.
 ## Next steps
 
 - [prerequisites.md](./prerequisites.md) — identity (OIDC), DNS, and TLS setup.
-- [operator.md](./operator.md) — the full `Zaentrum` CR contract and OLM install.
+- [operator.md](./operator.md) — the full `Zaentrum` CR contract and the operator install.
 - [updating.md](./updating.md) — image tags, channels, and rollouts.
 - [troubleshooting.md](./troubleshooting.md) — known traps (Kafka volume switch, NVENC/driver
   mismatch, split-horizon issuer, first-login password change).

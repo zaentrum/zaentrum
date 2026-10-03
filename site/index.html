@@ -190,12 +190,15 @@
         <p class="start-cap">the same platform, operator-managed.</p>
         <div class="term">
           <div class="term-bar"><span>bash</span></div>
-          <pre class="term-body"><span class="p">$</span> kubectl apply -k \
-    github.com/zaentrum/zaentrum-operator/config
+          <pre class="term-body"><span class="p">$</span> base=https://raw.githubusercontent.com/zaentrum
+<span class="p">$</span> kubectl apply -f \
+    $base/zaentrum-operator/main/deploy/operator-install.yaml
+<span class="p">$</span> kubectl create namespace zaentrum
 <span class="p">$</span> kubectl apply -f zaentrum.yaml   <span class="c"># your Zaentrum CR</span></pre>
         </div>
         <p class="start-note">
-          one operator reconciles ~16 services from one custom resource.
+          the install manifest pins the operator to one build; applying it is a one-time
+          cluster-admin step. one operator reconciles ~16 services from one custom resource.
           <a href="https://github.com/zaentrum/zaentrum/wiki/operator">operator &amp; cr reference →</a>
         </p>
       </div>

@@ -58,11 +58,15 @@ directly** to an external OIDC provider — chosen in the setup wizard.
 ## Scale out / production
 
 The same platform runs on any Kubernetes cluster via the **operator**, which reconciles the
-whole stack from a single custom resource:
+whole stack from a single custom resource. Install it once, as cluster-admin, from its pinned
+install manifest — the CRDs, the cluster RBAC and the controller, pinned to one immutable
+`operator:sha-<commit>` image — then apply a `Zaentrum` CR:
 
 ```bash
-kubectl apply -k 'github.com/zaentrum/zaentrum-operator/config'
-# or install the OLM bundle on OpenShift — see the operator repo
+kubectl apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
+kubectl create namespace zaentrum
+kubectl apply -f zaentrum.yaml     # your Zaentrum CR — see docs/self-hosting.md
+# or install the OLM bundle on OpenShift — see the operator repo's operator/bundle
 ```
 
 ## Documentation
