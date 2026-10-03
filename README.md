@@ -29,9 +29,13 @@ its consoles, streaming, and bundled **Keycloak**, **Postgres**, **Valkey** and 
 image, one port, nothing else to install; the first boot pulls the platform's images from
 `ghcr.io` and takes a few minutes. The image is **linux/amd64** only, and it needs host port
 **80**: the platform's ingress and its sign-in are bound to `http://zaentrum.localhost` — no
-other name, no other port. The first-run wizard
-at **`/manage/setup`** walks you through naming it, choosing identity, and pointing it at your
-library.
+other name, no other port.
+
+There is **no setup wizard**. The first run is three steps
+([self-hosting → first run](docs/self-hosting.md#first-run)): sign in as `admin` with the first
+admin password, which the platform generates at install; add a TMDB key under **Catalog
+Management → settings** (the images carry none); then copy your files into the library and
+trigger a scan.
 
 ## Reaching it from your phone / TV
 

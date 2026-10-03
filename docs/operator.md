@@ -39,8 +39,9 @@ and rolls new in-channel image tags itself, surfacing the next version on
 The same CR is the unit of configuration in every deploy topology — the
 all-in-one appliance, self-host on your own cluster (see
 [self-hosting.md](./self-hosting.md)), and the reference demo (see
-[reference-demo.md](./reference-demo.md)). `/manage` reads and writes this CR
-through the operator.
+[reference-demo.md](./reference-demo.md)). The portal's operator console
+(`/portal/operator`) and the [`zae`](#updating-from-the-command-line) CLI read and
+write this CR.
 
 ## Install
 
@@ -159,7 +160,7 @@ them unset.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `secrets.external` | bool | `false` | `true` → platform secrets are pre-created (e.g. by CI); the chart does not render them. `false` → bundled dev-default secrets. |
+| `secrets.external` | bool | `false` | `true` → platform secrets are pre-created (e.g. by CI); the chart does not render them. `false` → the platform creates its own, the first admin password among them. |
 
 ### `spec.databases`
 
@@ -227,7 +228,9 @@ spec:
 Set `spec.hostname` to the public host you will reach Zaentrum at. In bundled
 mode the operator derives the OIDC issuer, the ingress/route host, and Keycloak's
 `KC_HOSTNAME` from that single name. When `status.phase` reaches `Ready`, open
-`https://<hostname>` and finish first-run setup at `/manage/setup`.
+`https://<hostname>` and sign in as `admin` with the first admin password, which the
+platform generates at install. There is no setup wizard; the rest of the first run is a
+TMDB key and your library — see [self-hosting.md](./self-hosting.md#first-run).
 
 ### Reference-demo profile
 

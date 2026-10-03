@@ -251,6 +251,8 @@ required action. Existing realms are **not** re-imported, so this only happens o
 a genuinely fresh identity store.
 
 **Fix** — complete the forced password change with the seeded credentials, then
-sign in normally. The initial admin password comes from the demo's
+sign in normally. On a self-host install the first admin password is generated at
+install and kept in a Secret in the platform's namespace
+([first run](./self-hosting.md#first-run)); on the demo it comes from the CI-created
 `zaentrum-keycloak-admin` secret (`DEMO_KC_ADMIN_PW` / `DEMO_REALM_ADMIN_PW` CI
 variables). Nothing needs to be "repaired" — it is expected first-login behavior.

@@ -59,7 +59,8 @@ Valkey, and Kafka.
 Optional:
 
 - **Storage** — media lives on the container's disk by default; mount a volume for a persistent library.
-- **Egress to TMDB** if you want metadata enrichment (see [Network egress](#network-egress)).
+- **Egress to TMDB, and a TMDB key of your own,** if you want metadata enrichment — the published
+  images carry no key (see [Network egress](#network-egress)).
 - **A GPU** for hardware transcoding — the appliance runs software ffmpeg otherwise. See [GPU](#gpu-nvenc).
 
 Split-horizon issuer resolution and DNS/TLS are handled for you: the all-in-one wires a CoreDNS rewrite
@@ -265,7 +266,7 @@ has to resolve to the ingress/router **from inside the cluster**:
 | Destination | Why | Who needs it |
 |---|---|---|
 | `ghcr.io` | Pull every `ghcr.io/zaentrum/*` image. | all topologies |
-| TMDB (`api.themoviedb.org`) | Metadata enrichment — `katalog-manager-api` reads `TMDB_API_KEY` from the `katalog-tmdb` secret. | any topology that enriches |
+| TMDB (`api.themoviedb.org`) | Metadata enrichment — with your own key: the **TMDB api key** setting in Catalog Management, or `TMDB_API_KEY` from the optional `katalog-tmdb` secret. The published images carry none. | any topology that enriches |
 | `download.blender.org`, `upload.wikimedia.org`, `archive.org` | The demo seed Job pulls Creative-Commons / public-domain movies. | reference demo |
 
 ---

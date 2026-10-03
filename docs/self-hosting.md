@@ -53,31 +53,37 @@ answer 404, or the sign-in redirects to a port nothing listens on.
 cgroups, and run an embedded containerd for the app pods. `--privileged` is the supported
 default; hardened setups can pass the narrower capability/mount set k3s documents instead.
 
-### First-run wizard
+### First run
 
-Sign-in uses the **bundled Keycloak** (realm `zaentrum`): log in with its admin account
-(`admin` / `dev` by default), which forces a password change on first login. On first boot
-nothing is configured, so the app routes you to the setup wizard at **`/manage/setup`**
-(served by the admin UI, backed by `katalog-manager-api`). The flow is driven by one status
-endpoint:
+There is **no setup wizard**. The wizard at `/manage/setup` and its `/api/manage/setup` API went
+away when the catalog manager was rewritten, and nothing replaces them yet. A fresh appliance
+comes up already configured — for `http://zaentrum.localhost`, with the bundled Keycloak (realm
+`zaentrum`) and an empty library — and three steps make it yours:
 
-```
-GET /api/manage/setup/status
-    -> { configured: false, checks: { database: true, kafka: true, library: false } }
-```
+1. **Sign in.** Open <http://zaentrum.localhost>: the portal, whose launchpad opens the video
+   app and, for an admin, the catalog consoles. Sign in as `admin` with the **first admin
+   password**, which the platform generates at install and keeps in a Secret in the platform's
+   namespace; Keycloak then has you choose a password of your own. Further accounts are made in
+   Keycloak's admin console for the realm,
+   <http://zaentrum.localhost/auth/admin/zaentrum/console/>, as that same `admin`.
+2. **Add a TMDB key — before the first scan.** Titles, posters and plots come from TMDB, and
+   the published images carry no key of their own. In **Catalog Management** on the launchpad
+   (`/katalog-manage/`), open **settings** and enter a TMDB v4 read access token as **TMDB api
+   key**; it applies from the next lookup, no restart. A file scanned without a key is listed by
+   its file name; its page in the **Catalog** can look it up again once there is one.
+3. **Fill the library, then scan.** The catalog reads `/var/lib/katalog/media` — the `media/`
+   folder of the platform's `media` volume. On the appliance that volume is a directory under
+   k3s's storage path inside the container. Copy your files there, then press **trigger scan**
+   in Catalog Management:
 
-While `configured` is `false`, visitors are routed to the wizard, which submits:
+   ```bash
+   lib=$(docker exec zaentrum sh -c 'echo /var/lib/rancher/k3s/storage/pvc-*_zaentrum_media')/media
+   docker exec zaentrum mkdir -p "$lib"
+   docker cp ./my-library/. zaentrum:"$lib/"
+   ```
 
-```
-POST /api/manage/setup
-     { "displayName": "My Library",
-       "oidcIssuer":  "https://auth.example.com/realms/zaentrum",
-       "oidcClientId":"chino",
-       "libraryPath": "/var/lib/zaentrum/media" }
-```
-
-If you don't supply a `streamSigningKey`, one is generated so playback works immediately.
-Revisit settings any time under `/manage` (`GET`/`PUT /api/manage/config`).
+   A file under a `series/`, `tv/` or `shows/` folder, or named with `S01E02`, becomes an
+   episode; every other video file becomes a movie.
 
 ### Persistence
 
@@ -108,7 +114,7 @@ operator repo. For split-horizon issuer resolution see [prerequisites.md](./prer
 ## B. Self-host with the operator
 
 Recommended for anyone who already runs Kubernetes and wants day-2 management (scaling,
-channel updates, `/manage`). Install the operator once (cluster-admin), then apply a
+updates, the portal's operator console). Install the operator once (cluster-admin), then apply a
 `Zaentrum` CR per instance. The operator renders the embedded chart and reconciles it via
 server-side apply.
 
@@ -154,7 +160,9 @@ kubectl -n zaentrum get zaentrum   # Phase / Version / Host columns
 The operator reconciles the whole platform into namespace `zaentrum`: catalog, per-product
 streaming backends, bundled Postgres/Valkey/Kafka, and (in `bundled` mode) Keycloak with the
 `zaentrum` realm. Chart values map 1:1 onto CR spec fields — see the
-[reference table](#e-values--cr-field-reference).
+[reference table](#e-values--cr-field-reference). When the CR's `PHASE` is `Ready`, the first run
+is the appliance's [three steps](#first-run) at your hostname; the library is the `media/`
+folder of the `media` PVC, or of the volume you bind to it (`storage.provisionMedia: false`).
 
 ### 3. Enable the media pipeline and GPU (optional)
 
@@ -194,9 +202,9 @@ channels, see [updating.md](./updating.md).
 
 ## C. `helm install` the chart
 
-If you don't want the operator, install the same canonical chart directly. You lose the
-operator's day-2 logic (`/manage`-driven scaling, channel auto-update, CR reconciliation),
-but you get the identical platform objects.
+If you don't want the operator, install the same canonical chart directly, from a checkout of
+the operator repo. You lose the operator's day-2 logic (scaling from the portal's operator
+console, channel auto-update, CR reconciliation), but you get the identical platform objects.
 
 ```bash
 helm install zaentrum ./operator/platform/chart \
@@ -365,9 +373,12 @@ CR but not surfaced in the chart's default `values.yaml`.
 
 ## Getting content in
 
-Point Zaentrum at a directory of media you own. `katalog-manager-api` registers and manages
-those entries; the catalog core enriches metadata and (optionally) transcodes/packages for
-adaptive streaming.
+Zaentrum catalogs the `media/` folder of the platform's `media` volume, which the catalog sees
+as `/var/lib/katalog/media`. Put files you own there and trigger a scan in Catalog Management
+([first run](#first-run)), or register a staged file through the neutral
+[ingest API](./extending/ingest.md). `katalog-manager-api` registers and manages those entries,
+enriches them from TMDB once a key is set, and — with `features.pipeline` on — hands them to the
+transcode/package pipeline for adaptive streaming.
 
 > Zaentrum intentionally has **no** built-in downloaders or indexer integrations. It catalogs
 > and streams files that are already on disk. How they got there is out of scope.
