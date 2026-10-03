@@ -1,0 +1,84 @@
+name: e2e
+
+# End-to-end tests (e2e/) against a running instance: the public demo, or the
+# instance the repository variable E2E_BASE_URL names. They sign in with two
+# test accounts from the repository secrets and never change the instance.
+# Started by hand; without the secrets the run says so and does nothing.
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "baseline (default run) · next (@next contract, fails until the next backend round) · ui-changes (run the UI-change specs' assertions)"
+        type: choice
+        options: [baseline, next, ui-changes]
+        default: baseline
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      E2E_BASE_URL: ${{ vars.E2E_BASE_URL }}
+      E2E_USER: ${{ secrets.E2E_USER }}
+      E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+      E2E_ADMIN_USER: ${{ secrets.E2E_ADMIN_USER }}
+      E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+      SUITE: ${{ inputs.suite }}
+    steps:
+      - name: Test accounts present?
+        id: accounts
+        run: |
+          missing=""
+          for name in E2E_USER E2E_PASSWORD E2E_ADMIN_USER E2E_ADMIN_PASSWORD; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::notice title=e2e skipped::No test accounts. Set the repository secrets$missing (Settings > Secrets and variables > Actions) to run the end-to-end tests."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.accounts.outputs.run == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.accounts.outputs.run == 'true'
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install the suite and Chromium
+        if: steps.accounts.outputs.run == 'true'
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run (${{ inputs.suite }})
+        if: steps.accounts.outputs.run == 'true'
+        working-directory: e2e
+        run: |
+          echo "instance: ${E2E_BASE_URL:-https://zaentrum.demo.nalet.cloud}"
+          case "$SUITE" in
+            next)       npm run test:next ;;
+            ui-changes) npm run test:ui-changes ;;
+            *)          npm test ;;
+          esac
+
+      - name: Upload the HTML report
+        if: always() && steps.accounts.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report-${{ inputs.suite }}
+          path: e2e/playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore
