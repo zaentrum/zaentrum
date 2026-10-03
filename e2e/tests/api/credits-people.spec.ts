@@ -1,12 +1,8 @@
-// The NEXT backend round's contract for credits and people, as the web client
-// will read it through chino-api. Tagged @next and left out of the default
-// run until that round is deployed; run it with `npm run test:next`.
-//
-// Today these fail: chino-api's cast entry carries only person_id, name and
-// role, and a person only id, name and items. katalog-api is gaining the
-// fields; chino-api has to pass them through as well — including its cut of a
-// title's credits to eight entries, which would drop a series' writer or a
-// film's composer once the crew is listed.
+// Credits and people as the web client reads them through chino-api: a credit
+// in any role with its job, character, billing order and episode count; a
+// series' creator and writers; a person's details, portrait and roles on each
+// title. Written as the contract of the backend round that built them (tagged
+// @next until it went live), and part of the default run since.
 import { ACTOR, DIRECTOR, PIONEER_ONE, SINTEL } from '../../data/catalog';
 import { findPerson, personDetail, titleDetail, type CastEntry, type PersonSummary } from '../../support/catalog';
 import { expect, test } from '../../support/fixtures';
@@ -14,7 +10,7 @@ import { attachJson } from '../../support/pages';
 
 const byRole = (cast: CastEntry[] | undefined, role: string) => (cast ?? []).filter((c) => c.role === role);
 
-test.describe('next round: credits and people', { tag: '@next' }, () => {
+test.describe('credits and people', () => {
   test('cast entries carry job, character, order and episode_count', async ({ api }, testInfo) => {
     const sintel = await titleDetail(api, SINTEL);
     await attachJson(testInfo, `GET items ${SINTEL.title}`, sintel);

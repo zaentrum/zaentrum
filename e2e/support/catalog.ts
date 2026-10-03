@@ -8,7 +8,7 @@ export interface CastEntry {
   person_id?: string;
   name: string;
   role: string;
-  // The next backend round (see tests/api/next-contract.spec.ts):
+  // Since the credits and people round (see tests/api/credits-people.spec.ts):
   job?: string;
   character?: string;
   order?: number;

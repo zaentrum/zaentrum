@@ -8,9 +8,9 @@
 // the assertions of all of them), and when its spec passes against the
 // instance, delete its notYet() line so it guards the change from then on.
 //
-// Most of them need the next backend round first (tests/api/next-contract.spec.ts):
+// The data they show is live (tests/api/credits-people.spec.ts proves it):
 // creators and the rest of the crew, characters, billing order, episode
-// counts, portraits, biographies and birth data.
+// counts, portraits, biographies and birth data. What is missing is the UI.
 import type { Page } from '@playwright/test';
 import { ACTOR, DIRECTOR, PIONEER_ONE, SINTEL, TEARS_OF_STEEL } from '../data/catalog';
 import { catalogConsole, chino, type App } from '../support/apps';

@@ -78,22 +78,18 @@ for and stops, since completing it would change the account.
 tests/chino/search.spec.ts` one file, `--grep "person page"` the tests whose
 title matches.
 
-**`@next`** marks the contract of the next backend round
-([`tests/api/next-contract.spec.ts`](tests/api/next-contract.spec.ts)): cast
-entries with `job`, `character`, `order` and `episode_count`; a series'
-creator and writers; the cast in billing order; a person's `biography`,
-`birth_date`, `has_profile`, `profile_url` and their roles on each title; a
-portrait that loads. The default run leaves them out; `npm run test:next` runs
-them (and the setup they depend on). They fail until that round is deployed —
-through chino-api as well, which today passes on only `person_id`, `name` and
-`role` of a credit and cuts a title's credits to eight.
+**`@next`** marks the contract of a backend round that is not deployed yet: the
+default run leaves such tests out, `npm run test:next` runs them (and the setup
+they depend on), and once the round is live they lose the tag and join the
+default run — as the credits and people contract did
+([`tests/api/credits-people.spec.ts`](tests/api/credits-people.spec.ts)).
+None is tagged today.
 
-**A known product bug** is kept in the baseline as an expected failure:
-*a cast name on a detail page links to that person's page* is marked
-`test.fail()`. The detail page links a name to `/person/<id>` without the app's
-mount path, so under `/chino/` the link leaves the app for a 404 (the search
-page builds the same link correctly). Once it is fixed the test passes
-unexpectedly, which fails the run until the marker is removed.
+**A known product bug** goes into the baseline as an expected failure,
+`test.fail()` with the reason, so the run stays green while the bug stands and
+turns red once it is fixed, until the marker is removed. None is marked today:
+the last one (a cast name on a detail page linked outside the app's mount
+path) was fixed in chino-web e153a47.
 
 ## The report as a gallery
 
