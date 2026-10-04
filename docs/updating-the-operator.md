@@ -58,9 +58,10 @@ https://media.example.org — the operator's controller
 Updated outside the platform: approve the update in its OLM subscription.
 ```
 
-The example shows tagged releases; none is published yet. Today a manifest
-install reports its `sha-<commit>` tag and the appliance `latest`, and both
-channels point at `latest`.
+A release's install reports its `vX.Y.Z`, as the example does; an install of
+main's pinned manifest reports its `sha-<commit>` tag, and an appliance built
+from `main` reports `latest`. Which release the channel serves:
+[releases](./releases.md).
 
 `zae platform status` ends with the same section, and `--json` on either prints
 what the portal reported, for a script. An instance whose operator predates the
@@ -120,14 +121,18 @@ level up, and also belongs to whoever owns the cluster's operators.
 
 ### 2. The pinned install manifest
 
-Without OLM the operator is installed by applying one manifest —
+Without OLM the operator is installed by applying one manifest, which carries
+the namespace, both CRDs, the cluster RBAC and the controller Deployment: a
+release's `operator-install.yaml`, attached to the operator's
+[GitHub release](https://github.com/zaentrum/zaentrum-operator/releases) with
+the controller on `:vX.Y.Z`, or main's
 [`deploy/operator-install.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/operator-install.yaml),
-which carries the namespace, both CRDs, the cluster RBAC and the controller
-Deployment, with the controller image pinned to an immutable `:sha-<gitsha>`.
+with the controller pinned to an immutable `:sha-<gitsha>`. Updating to a
+release is applying the next release's manifest
+([releases](./releases.md)); updating on main is moving the pin:
 
-Updating means bumping that pin and applying it again — **as cluster-admin, and
-normally through the deployment repository that holds the manifest**, so the
-record of what is installed stays the record:
+either way **as cluster-admin, and normally through the deployment repository
+that holds the manifest**, so the record of what is installed stays the record:
 
 ```sh
 # in the repository that holds your copy of the manifest
@@ -151,12 +156,14 @@ The [appliance](./self-hosting.md#a-one-command-appliance) bakes the operator
 install — the CRDs, the cluster RBAC and the controller Deployment — into its
 image, and k3s applies it on boot. Two things follow, today:
 
-- **The controller runs the floating `ghcr.io/zaentrum/operator:latest`.** It
-  moves to a newer build whenever its pod restarts and pulls the tag again,
-  while the CRDs and RBAC stay the ones the appliance image was built with —
-  so a CR field newer than the image, `spec.storage.postgres` on an appliance
-  from before the bundled Postgres had a claim, is not in its CRDs;
-  `status.controller` reports its version as `latest`.
+- **The appliance built from `main` runs the floating
+  `ghcr.io/zaentrum/operator:latest`.** It moves to a newer build whenever its
+  pod restarts and pulls the tag again, while the CRDs and RBAC stay the ones
+  the appliance image was built with — so a CR field newer than the image,
+  `spec.storage.postgres` on an appliance from before the bundled Postgres had
+  a claim, is not in its CRDs; `status.controller` reports its version as
+  `latest`. A release's appliance (`appliance:vX.Y.Z`) runs `operator:vX.Y.Z`
+  with the CRDs it was built with, and moves only to a newer appliance image.
 - **A new appliance image means a new container.** Started with the
   [front door's command](./self-hosting.md#a-one-command-appliance), a new
   container is a new, empty platform: `docker rm` and `docker run` start a new

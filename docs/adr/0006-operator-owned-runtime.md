@@ -2,13 +2,13 @@
 
 **Status:** Accepted · recorded retrospectively (decision from 2026-06) · amended by [ADR-0011](0011-addon-charts-installed-by-the-operator.md)
 
-> **Status — partly ahead of the code.** No release has been tagged, so nothing is pinned
-> yet: every install runs the floating `latest` images published from `main`, both channels
-> in `releases.json` point at `latest`, and by default the operator reads its channel document
-> from its own repository, not the front door's. The all-in-one appliance is built in
-> `zaentrum-operator` (`deploy/allinone`) and published as `ghcr.io/zaentrum/appliance` — not
-> by the front door, and not as `ghcr.io/zaentrum/zaentrum`, which does not exist — and it
-> runs `latest` too. The polyrepo and the operator as runtime owner are built as decided.
+> **Status — partly ahead of the code.** Releases are tagged in every repository at once
+> ([releases](../releases.md)), and the operator reads the front door's `releases.json`:
+> `stable` names the newest release, `edge` the floating `latest` images published from
+> `main`. The all-in-one appliance is built in `zaentrum-operator` (`deploy/allinone`) and
+> published as `ghcr.io/zaentrum/appliance` — not by the front door, and not as
+> `ghcr.io/zaentrum/zaentrum`, which does not exist; a release's appliance pins the release,
+> main's runs `latest`. The polyrepo and the operator as runtime owner are built as decided.
 
 ## Context
 

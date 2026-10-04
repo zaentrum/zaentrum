@@ -10,10 +10,10 @@ rest of the project.
 **Product page → [zaentrum.github.io/zaentrum](https://zaentrum.github.io/zaentrum/)** ·
 **Docs → [the wiki](https://github.com/zaentrum/zaentrum/wiki)**
 
-> **Status: pre-release.** No release has been tagged yet: every image is published from `main`
-> as `latest` (and `sha-<commit>`), and both release channels in
-> [`releases.json`](./releases.json) point at `latest`. The commands below are the ones that
-> work today.
+> **Status: 0.x.** Releases are tagged across every repository at once, and the `stable`
+> channel in [`releases.json`](./releases.json) names the newest; every image is also published
+> from `main` as `latest`, which `edge` serves. The commands below run the newest build of
+> `main`; [releases](docs/releases.md) has the same for a release.
 
 ---
 
@@ -81,12 +81,14 @@ the CRD accepts. **Federating** your provider through the bundled Keycloak (`bro
 ## Scale out / production
 
 The same platform runs on any Kubernetes cluster via the **operator**, which reconciles the
-whole stack from a single custom resource. Install it once, as cluster-admin, from its pinned
-install manifest — the CRDs, the cluster RBAC and the controller, pinned to one immutable
-`operator:sha-<commit>` image — then apply a `Zaentrum` CR:
+whole stack from a single custom resource. Install it once, as cluster-admin, from an install
+manifest — the CRDs, the cluster RBAC and the controller — then apply a `Zaentrum` CR:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
+# the newest release, for the stable channel (the default)
+kubectl apply -f https://github.com/zaentrum/zaentrum-operator/releases/latest/download/operator-install.yaml
+# …or the newest build of main, pinned to one operator:sha-<commit>, for edge:
+#   kubectl apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
 kubectl create namespace zaentrum
 kubectl apply -f zaentrum.yaml     # your Zaentrum CR — see docs/self-hosting.md
 # or install the OLM bundle on OpenShift — see the operator repo's operator/bundle
@@ -108,12 +110,20 @@ by audience and covers every path:
 
 ## Releases
 
-There are two release channels, `stable` and `edge` ([`releases.json`](./releases.json); by
-default the operator reads its own copy, in the operator repository). **Today both point at
-`latest`**: no tagged release has been cut, so choosing a channel, or `spec.update.mode: auto`,
-changes nothing yet. An install on `spec.version: latest` — the default — follows every newly
-published image anyway: the operator resolves each `ghcr.io/zaentrum/*` image to its current
-digest on every reconcile, and rolls the components whose image changed.
+A release is one tag, `vX.Y.Z`, in every repository of the platform: each image at `:vX.Y.Z`
+and `:X.Y`, the operator's install manifest, the appliance `ghcr.io/zaentrum/appliance:vX.Y.Z`,
+the OLM bundle and catalog, and the `zae` CLI. There are two release channels, in
+[`releases.json`](./releases.json), which every operator reads:
+
+- **`stable`** (the default) names the newest release. A new install starts on it; in manual
+  mode (the default) an install keeps the version it runs and reports the next release, in auto
+  mode it moves on its own. A push to `main` moves nothing in it.
+- **`edge`** is `latest`, the newest build of `main`: the operator resolves each
+  `ghcr.io/zaentrum/*` image to its current digest on every reconcile, and rolls the components
+  whose image changed.
+
+`spec.version: vX.Y.Z` pins an install to a release. What a release publishes, the channels in
+full, and how a release is cut: [docs/releases.md](docs/releases.md).
 
 ## Repository layout
 

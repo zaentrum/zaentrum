@@ -28,13 +28,14 @@ values file. On every reconcile the operator:
 Because the chart is embedded in the operator image, this is also the **day-2**
 control loop: it reconciles on CR changes and on a resync interval, keeps the
 declared replica counts (a raw `Deployment` edit is reverted on the next pass),
-and — with `spec.update.mode: auto` — tracks the configured release `channel`
-and rolls new in-channel image tags itself, surfacing the next version on
-`status.availableUpdate` before it applies it. **Both channels point at `latest`
-today**, so there is no other tag to move to yet. What does move an install on
-`spec.version: latest` is digest pinning: on every reconcile the operator
-resolves each `ghcr.io/zaentrum/*` image to the digest its tag points at, so a
-newly published image changes the rendered spec and rolls on its own.
+and follows the configured release `channel`: `stable` names the newest
+release, `edge` the moving `latest` ([releases](./releases.md#the-channels)). A
+new install starts on what its channel serves. With `spec.update.mode: manual`
+(the default) an install then keeps the version it runs and surfaces the next
+one on `status.availableUpdate`; with `auto` it rolls to it itself. On every
+reconcile the operator also resolves each `ghcr.io/zaentrum/*` image to the
+digest of the tag it renders, so a newly published image rolls on its own where
+that tag moves — `latest`, on `edge` — while a release's tag never does.
 
 > **A chart change is not a live change.** The chart ships *inside* the operator
 > image. Editing `operator/platform/chart/**` has no effect until the operator
@@ -55,13 +56,17 @@ namespace. This is a one-time, **cluster-admin bootstrap** step (see
 [prerequisites.md](./prerequisites.md) for cluster requirements).
 
 ```bash
-oc apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
+# a release's operator, for the stable channel (the default):
+oc apply -f https://github.com/zaentrum/zaentrum-operator/releases/latest/download/operator-install.yaml
+# or the newest build of main, for edge:
+#   oc apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
 ```
 
-(`kubectl apply -f` the same URL on a plain Kubernetes cluster.) The manifest pins the
-controller to an immutable `ghcr.io/zaentrum/operator:sha-<commit>` image, so an install is
-reproducible and rolling back is applying the previous manifest. On OpenShift or any OLM
-cluster, the OLM bundle is the alternative — see
+(`kubectl apply -f` the same URL on a plain Kubernetes cluster.) A release's manifest pins the
+controller to `ghcr.io/zaentrum/operator:vX.Y.Z` (`…/releases/download/vX.Y.Z/…` is that one
+release); main's pins an immutable `ghcr.io/zaentrum/operator:sha-<commit>`. Either way an
+install is reproducible and rolling back is applying the previous manifest. On OpenShift or
+any OLM cluster, the OLM bundle is the alternative — see
 [the bundle](https://github.com/zaentrum/zaentrum-operator/tree/main/operator/bundle).
 
 This creates, from [`deploy/operator-install.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/operator-install.yaml):
@@ -105,7 +110,7 @@ them unset.
 | Field | Type | Default | Meaning |
 |---|---|---|---|
 | `spec.version` | string | `latest` | Image tag applied to **every** `ghcr.io/zaentrum/*` image. |
-| `spec.channel` | enum `stable` \| `edge` | `stable` | Release train consulted by auto-update. Both point at `latest` today. |
+| `spec.channel` | enum `stable` \| `edge` | `stable` | Release train: `stable` serves the newest release, `edge` serves `latest` ([releases](./releases.md#the-channels)). |
 | `spec.hostname` | string | `zaentrum.localhost` | The single public host: OIDC issuer host + ingress/route host + Keycloak `KC_HOSTNAME`. |
 | `spec.partOf` | string | the namespace | `app.kubernetes.io/part-of` label value on all workloads. |
 | `spec.imagePullSecrets` | []string | `[]` | Pull secret names added to every workload (private registries; empty for public ghcr). |
@@ -227,7 +232,7 @@ validate (`identity.audience`).
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `update.mode` | enum `manual` \| `auto` | `manual` | `manual` never bumps `spec.version` on its own; `auto` lets the reconciler bump to the latest in-`channel` tag — nothing to bump to while both channels are `latest`. |
+| `update.mode` | enum `manual` \| `auto` | `manual` | `manual` never bumps `spec.version` on its own: an install keeps the version it runs and reports the channel's next one in `status.availableUpdate`; `auto` lets the reconciler move to the channel's tag. A channel on `latest` (`edge`) is followed in both. |
 
 ### Status (read-only)
 
@@ -364,10 +369,10 @@ Jobs. See [reference-demo.md](./reference-demo.md).
   outside the platform, by the channel that installed it: see
   [updating the operator](./updating-the-operator.md).
 
-For the operator's own auto-update loop (`spec.update.mode: auto` /
-`spec.channel`), the reconciler tracks the channel and surfaces the next tag on
-`status.availableUpdate` before rolling it — a no-op while both channels point at
-`latest`.
+For the operator's own update loop (`spec.update.mode` / `spec.channel`), the
+reconciler resolves the channel and surfaces its tag on `status.availableUpdate`
+when the install runs something else; `auto` rolls it, `manual` waits for it to
+be applied. How releases reach the channels: [releases](./releases.md).
 
 ### Updating from the command line
 

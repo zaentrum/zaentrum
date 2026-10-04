@@ -17,25 +17,36 @@ the operator is rolled (flow B). A CR-only change needs no new image at all (flo
 
 ## Image tag scheme
 
-Every image publishes two tags. The app polyrepos and this monorepo's
-`build-images` workflow both use the same scheme (see
+Every image publishes two tags from `main`, and two others from a release tag. The operator
+repository's images (see
 [`.github/workflows/build-images.yml`](https://github.com/zaentrum/zaentrum-operator/blob/main/.github/workflows/build-images.yml),
 `docker/metadata-action`):
 
 ```yaml
+flavor: |
+  latest=false
 tags: |
   type=raw,value=latest,enable={{is_default_branch}}
-  type=sha,format=long
+  type=sha,format=long,enable=${{ github.ref_type != 'tag' }}
+  type=semver,pattern={{raw}}
+  type=semver,pattern={{major}}.{{minor}},enable=${{ !contains(github.ref_name, '-') }}
 ```
+
+The service repositories compute the same tags in their `image` workflow, with the bare commit
+SHA in place of `sha-<gitsha>`.
 
 | Tag | When | Example |
 |---|---|---|
-| `:latest` | Pushes to the **default branch** (`main`) only. PRs build to validate but never push. | `ghcr.io/zaentrum/chino-web:latest` |
-| `:sha-<gitsha>` | Every pushed build (`type=sha,format=long` → the **full** commit SHA). | `ghcr.io/zaentrum/operator:sha-cb96f3dc3d592a42e0399c58d24f8cf0379b76d9` |
+| `:latest` | Pushes to the **default branch** (`main`) only. PRs build to validate but never push, and a release never moves it. | `ghcr.io/zaentrum/chino-web:latest` |
+| `:sha-<gitsha>` / `:<gitsha>` | Every pushed build of `main`: the **full** commit SHA, `sha-`-prefixed for the operator repository's images. | `ghcr.io/zaentrum/operator:sha-cb96f3dc3d592a42e0399c58d24f8cf0379b76d9` |
+| `:vX.Y.Z` | A release tag, in every repository at once ([releases](./releases.md)). It never moves. | `ghcr.io/zaentrum/chino-web:vX.Y.Z` |
+| `:X.Y` | A release tag that is not a pre-release: the newest patch of that minor version. | `ghcr.io/zaentrum/chino-web:X.Y` |
 
 The reference demo tracks `:latest` (CR `spec.version: latest`), so an app deploy just
 re-pulls `:latest`. The operator is pinned to an **immutable `:sha-<gitsha>`** in
-`deploy/operator-install.yaml` so a roll is deterministic and reversible.
+`deploy/operator-install.yaml` so a roll is deterministic and reversible. An install on the
+`stable` channel runs a release's `:vX.Y.Z` instead, and is not moved by any of the flows
+below until it takes the next release ([releases](./releases.md#the-channels)).
 
 ---
 

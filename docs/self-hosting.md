@@ -224,13 +224,18 @@ server-side apply.
 ### 1. Install the operator (once, cluster-admin)
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
+# the newest release, for the stable channel (the default):
+kubectl apply -f https://github.com/zaentrum/zaentrum-operator/releases/latest/download/operator-install.yaml
+# or the newest build of main, for edge:
+#   kubectl apply -f https://raw.githubusercontent.com/zaentrum/zaentrum-operator/main/deploy/operator-install.yaml
 ```
 
 This is the supported cluster install: one pinned manifest that creates the
 `zaentrums.zaentrum.io` and `zaentrumaddons.zaentrum.io` CRDs, the operator's ClusterRoles, and
 the `controller-manager` Deployment in namespace `zaentrum-operator-system`, its image pinned to
-an immutable `ghcr.io/zaentrum/operator:sha-<commit>`. On OpenShift or any OLM cluster you can
+the release's `ghcr.io/zaentrum/operator:vX.Y.Z` (main's: an immutable
+`ghcr.io/zaentrum/operator:sha-<commit>`). A release's operator goes with its images, which the
+`stable` channel serves ([releases](./releases.md)). On OpenShift or any OLM cluster you can
 instead install the OLM bundle — see
 [the bundle](https://github.com/zaentrum/zaentrum-operator/tree/main/operator/bundle) in the
 operator repo. What is in the manifest, object by object: [operator.md](./operator.md#install).
@@ -418,7 +423,7 @@ Postgres.
 | `global.hostname` | `spec.hostname` | `zaentrum.localhost` | Public host: OIDC issuer host + ingress host + `KC_HOSTNAME`. |
 | `global.partOf` | `spec.partOf` | `zaentrum` | `app.kubernetes.io/part-of` label value. |
 | `global.imagePullSecrets` | `spec.imagePullSecrets` | `[]` | Pull secrets added to every workload (empty for public ghcr). |
-| — | `spec.channel` | `stable` | **CR-only.** Release train consulted by auto-update (`stable`\|`edge`). Both point at `latest` today. |
+| — | `spec.channel` | `stable` | **CR-only.** Release train: `stable` serves the newest release, `edge` serves `latest` ([releases](./releases.md#the-channels)). |
 
 ### Identity (`identity.*` → `spec.identity`)
 
@@ -479,7 +484,7 @@ Postgres.
 |---|---|---|---|
 | `keycloak.image` | `spec.keycloak.image` | `quay.io/keycloak/keycloak:26.0.7` | Bundled Keycloak container image. |
 | `services.<name>.replicas` | `spec.replicas.<name>` | `1` (chart ships `packager: 2`) | Per-service replica override by Deployment name. Stateful backers (postgres/valkey/kafka/keycloak) are **not** scalable this way. |
-| — | `spec.update.mode` | `manual` | **CR-only.** `manual` (never bump `version`) or `auto` (let the reconciler track the channel) — no difference while both channels are `latest`. |
+| — | `spec.update.mode` | `manual` | **CR-only.** `manual` (keep the version an install runs; report the channel's next one) or `auto` (move with the channel). |
 
 > `jobs.seed` (chart value, default `false`) enables the demo's self-populate
 > scan/enqueue/topics Jobs. It is demo choreography, not part of the CR spec — leave it off
