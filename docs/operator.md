@@ -140,6 +140,10 @@ them unset.
 | `storage.provisionMedia` | \*bool | `true` | Whether the chart creates the `media` PVC. Set `false` when an external PV backs it (e.g. an NFS export). |
 | `storage.kafkaPvc` | string | `""` | Name of a **pre-created** PVC to back the bundled Kafka log dir so **topics survive a pod restart/reschedule**. Empty → ephemeral `emptyDir`. |
 | `storage.kafkaNode` | string | `""` | Pin the bundled Kafka broker to a node (`kubernetes.io/hostname`). Required when `kafkaPvc` is a node-local volume. Empty → unpinned. |
+| `storage.postgres.size` | quantity | `10Gi` | Size of the claim made for the bundled Postgres (`databases.mode` `perApp` or `single`), `postgres-data`, `ReadWriteOnce`. |
+| `storage.postgres.className` | string | `storage.className`, else cluster default | StorageClass of that claim. |
+| `storage.postgres.claimName` | string | `""` | An existing PersistentVolumeClaim to keep the data on instead; none is created then. |
+| `storage.postgres.migrate` | bool | `false` | Move a database that lives anywhere else — on the `emptyDir` an install from before the claim runs on, or on another claim — onto the claim: a Job copies every database into it from the running Postgres, and only once the copy has succeeded does the Postgres switch over. Without it the operator never moves the database, since a Postgres started on a new volume starts empty. |
 
 > Bundled Kafka defaults to `emptyDir`, so **topics are lost on a broker
 > restart** unless `storage.kafkaPvc` is set. Topics auto-create and
@@ -147,6 +151,20 @@ them unset.
 > setting `kafkaPvc` (+ `kafkaNode` for node-local volumes) makes it durable.
 > Switching an existing broker from `emptyDir` to a PVC is a known trap — see
 > [troubleshooting.md](./troubleshooting.md).
+
+> The bundled Postgres of a **new install** starts on its claim, so users, watch
+> state and the catalog outlive the pod. Where its data is, though, is read from
+> the running Postgres before every render, and one that already runs elsewhere —
+> on an `emptyDir`, as the chart had it before, or on another claim — stays there
+> until `storage.postgres.migrate` copies it over. The `DatabasePersistent`
+> condition says which: `OnClaim` (True) on its claim; `EmptyDir` or `OtherClaim`
+> (False) where it ran before; `Migrating` (False) while the copy runs; `Migrated`
+> (True) once the copy succeeded, as the Postgres switches; `MigrationFailed`
+> (False), with the reason, when the copy failed and the Postgres stays.
+> Writes made while it copies, until the switch, are not carried across — see
+> [the bundled Postgres](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#the-bundled-postgres-keeps-its-data-specstoragepostgres)
+> in the operator's README. With `databases.mode: external` there is no claim,
+> no copy and no condition.
 
 ### `spec.network`
 
@@ -171,7 +189,7 @@ them unset.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `databases.mode` | string `perApp` \| `single` \| `external` | `perApp` | `perApp` gives each service its own database; `single` shares one — both on the bundled Postgres, which keeps its data in an `emptyDir` (it lasts as long as the pod). `external` uses your own Postgres (`databases.external.host`, `.port`, `.sslmode`) and renders none. |
+| `databases.mode` | string `perApp` \| `single` \| `external` | `perApp` | `perApp` gives each service its own database; `single` shares one — both on the bundled Postgres, which keeps its data on the claim `storage.postgres` describes. `external` uses your own Postgres (`databases.external.host`, `.port`, `.sslmode`) and renders none. |
 | `databases.chino` | string | `chino` | chino database name. |
 | `databases.katalog` | string | `katalog` | katalog database name. |
 | `databases.keycloak` | string | `keycloak` | keycloak database name. |
@@ -195,7 +213,8 @@ them unset.
 `status.observedGeneration`, `status.conditions[]` (standard Kubernetes
 conditions — among them `SecretsGenerated`, which says where the first
 administrator's one-time password is, or which Secrets still hold an earlier
-chart's values), and `status.components[]` (`name`, `ready`, `image` per managed
+chart's values, and `DatabasePersistent`, which says where the bundled Postgres
+keeps its data), and `status.components[]` (`name`, `ready`, `image` per managed
 Deployment).
 
 ## Example CRs

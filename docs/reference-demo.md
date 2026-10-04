@@ -180,6 +180,11 @@ spec:
     mode: perApp
 ```
 
+The CR sets no `storage.postgres`. The demo's Postgres predates the claim the chart now gives
+the bundled Postgres and still runs on an `emptyDir`, where the operator keeps it until
+`storage.postgres.migrate` copies it over — `values-demo.yaml` says the same
+(`storage.postgres.current: emptyDir`). That is why the deploy never restarts it (step 8).
+
 ### What the operator does NOT render
 
 The demo deliberately keeps a few resources outside the operator; the CI overlay

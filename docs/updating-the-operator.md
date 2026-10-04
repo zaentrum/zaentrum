@@ -153,13 +153,22 @@ image, and k3s applies it on boot. Two things follow, today:
 
 - **The controller runs the floating `ghcr.io/zaentrum/operator:latest`.** It
   moves to a newer build whenever its pod restarts and pulls the tag again,
-  while the CRDs and RBAC stay the ones the appliance image was built with;
+  while the CRDs and RBAC stay the ones the appliance image was built with —
+  so a CR field newer than the image, `spec.storage.postgres` on an appliance
+  from before the bundled Postgres had a claim, is not in its CRDs;
   `status.controller` reports its version as `latest`.
-- **A new appliance image means a new container, and a new container is a new,
-  empty platform.** `docker rm` and `docker run` start a new cluster, and the
-  platform's data does not carry over — not even with a volume at k3s's
-  storage path (see [persistence](./self-hosting.md#persistence)). Moving an
-  appliance's data to a newer image is not supported yet.
+- **A new appliance image means a new container.** Started with the
+  [front door's command](./self-hosting.md#a-one-command-appliance), a new
+  container is a new, empty platform: `docker rm` and `docker run` start a new
+  cluster, and the platform's data does not carry over — not even with a
+  volume at k3s's storage path. Started with the whole k3s state on a named
+  volume and a fixed host name, a container re-created from a newer image finds
+  its cluster and data again ([persistence](./self-hosting.md#persistence)), but
+  the volume keeps the operator install the first container brought, its CRDs
+  included, until a newer one is copied into it before the re-creation — the
+  operator repo's
+  [appliance README](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/allinone/README.md#persistence)
+  shows the copy.
 
 ## What a controller update carries with it
 

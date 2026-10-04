@@ -151,24 +151,42 @@ open http://localhost:8080/auth/admin/
 
 ### Persistence
 
-Only the library is on a volume: the `media` PVC — your files and, with the pipeline on, their
-packaged streams — which k3s's `local-path` StorageClass keeps under
-`/var/lib/rancher/k3s/storage`, inside the Docker volume the image declares for
-`/var/lib/rancher/k3s`. The bundled Postgres, which holds the catalog, Keycloak's accounts and
-the portal's settings, runs on an `emptyDir`, as do Kafka and the HLS cache: that data lasts
-exactly as long as its pod.
+A fresh appliance keeps the platform's data on two claims, which k3s's `local-path`
+StorageClass keeps under `/var/lib/rancher/k3s/storage`, inside the Docker volume the image
+declares for `/var/lib/rancher/k3s`: `media`, the library — your files and, with the pipeline
+on, their packaged streams — and `postgres-data`, the bundled Postgres's: the catalog,
+Keycloak's accounts and the portal's settings. Both outlive their pods. Kafka and the HLS cache
+run on `emptyDir`s.
 
-- **A restart keeps the cluster.** `docker stop` / `docker start`, a Docker restart, or a reboot
-  with `--restart unless-stopped` bring back the same cluster and the same pods, data included.
-- **Anything that recreates the Postgres pod empties its databases** — deleting the pod, or a
-  newer operator whose chart changes it. The appliance's operator runs
-  `ghcr.io/zaentrum/operator:latest` and pulls it again whenever its pod restarts, so a restart
-  can bring such an operator with it.
+- **A restart keeps the platform.** `docker stop` / `docker start`, a Docker restart, or a reboot
+  with `--restart unless-stopped` bring back the same cluster, pods and claims, data included.
+- **An appliance from an older image keeps its Postgres on an `emptyDir`,** as the chart ran it
+  before it had a claim, and whatever recreates that pod — deleting it, say — empties its
+  databases. The operator keeps it there, as it never moves a running database by itself — a
+  Postgres started on a new volume starts empty — and the `DatabasePersistent` condition says
+  `EmptyDir`. The copy that moves it, `storage.postgres.migrate`
+  ([B](#b-self-host-with-the-operator)), is a field newer than the CRDs such an appliance was
+  built with ([updating the operator](./updating-the-operator.md#3-the-appliance)).
 - **Replacing the container starts a new, empty platform.** `docker rm` and a new `docker run`
-  start a new cluster whose claims get new directories — `local-path` names each one after its
-  claim's UID — so even a volume mounted at k3s's storage path keeps the old files without
-  attaching them. Carrying a platform's data into a new container, or a new appliance image, is
-  not supported yet.
+  of the command above start a new cluster whose claims get new directories — `local-path`
+  names each one after its claim's UID — so even a volume mounted at k3s's storage path keeps
+  the old files without attaching them.
+
+To be able to replace the container — for a newer appliance image, or to publish another
+port — start it with the whole k3s state on a named volume and a fixed host name. A container
+re-created on that volume, under that name, finds the same cluster and its node — k3s names the
+node after the host, and a `local-path` volume belongs to the node it was made on — so every
+claim keeps its directory
+([deploy/allinone](https://github.com/zaentrum/zaentrum-operator/blob/main/deploy/allinone/README.md#persistence)):
+
+```bash
+docker run -d --privileged --restart unless-stopped --name zaentrum -h zaentrum -p 80:80 \
+  -v zaentrum:/var/lib/rancher/k3s ghcr.io/zaentrum/appliance:latest
+```
+
+The volume also keeps the operator install that first container brought, its CRDs included,
+until a newer one is copied into it
+([updating the operator](./updating-the-operator.md#3-the-appliance)).
 
 Inspect it like any cluster — the k3s image ships `kubectl` itself:
 
@@ -246,12 +264,26 @@ streaming backends, bundled Postgres/Valkey/Kafka, and (in `bundled` mode) Keycl
 is the appliance's [three steps](#first-run) at your hostname; the library is the `media/`
 folder of the `media` PVC, or of the volume you bind to it (`storage.provisionMedia: false`).
 
-**The bundled Postgres is ephemeral.** It keeps its data in an `emptyDir`, so the catalog,
-Keycloak's accounts and the portal's settings last as long as its pod; whatever recreates the
-pod — a reschedule, a drain, a chart change — starts them empty. For databases that outlive the
-pod, use a Postgres of your own: `databases.mode: external` with `databases.external.host`, the
-databases created in advance (the chart then renders no Postgres; see the `databases` comments
-in [`values.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/platform/chart/values.yaml)).
+**The bundled Postgres keeps its data on a claim.** A new install puts the catalog, Keycloak's
+accounts and the portal's settings on `postgres-data`, a `ReadWriteOnce` claim of
+`storage.postgres.size` (default `10Gi`) from `storage.postgres.className`, else
+`storage.className`, else the cluster's default StorageClass, so they outlive the pod. Where
+nothing provisions such a claim, bind a PersistentVolume to a claim of your own and name it in
+`storage.postgres.claimName`; the chart then makes none.
+
+An install made before that, upgraded in place, keeps its Postgres where it runs — on an
+`emptyDir`, which a reschedule, a drain or a deleted pod empties — because a Postgres started
+on a new volume starts empty; the `DatabasePersistent` condition then says `EmptyDir`. Setting
+`storage.postgres.migrate: true` moves it: a Job copies every database onto the claim while
+Postgres keeps serving, and once the copy has succeeded the operator switches Postgres over
+(`DatabasePersistent`: `Migrating` → `Migrated` → `OnClaim`; a failed copy is
+`MigrationFailed`, and Postgres stays). Writes made while it copies, until the switch, are not
+carried across, so do it when the platform is quiet — see
+[the bundled Postgres](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#the-bundled-postgres-keeps-its-data-specstoragepostgres)
+in the operator's README. A Postgres of your own is the other way: `databases.mode: external`
+with `databases.external.host`, the databases created in advance (the chart then renders no
+Postgres; see the `databases` comments in
+[`values.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/platform/chart/values.yaml)).
 
 ### 3. Enable the media pipeline and GPU (optional)
 
@@ -333,6 +365,13 @@ the [reference table](#e-values--cr-field-reference). The demo profile
 ([`values-demo.yaml`](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/platform/chart/values-demo.yaml)) shows a real override set
 (HTTPS at the edge, OpenShift Routes, external secrets, external NFS media PV).
 
+A new release puts the bundled Postgres on its `postgres-data` claim, as the operator does. An
+upgrade looks at the running Postgres and keeps it where it is, so a release from before the
+chart gave it a claim stays on its `emptyDir` and moves in two upgrades: one with
+`storage.postgres.migrate=true`, whose post-upgrade hook copies the databases while Postgres
+stays, then, once that copy has succeeded, one with `storage.postgres.current=postgres-data`
+and `storage.postgres.migrate=false`, which switches it.
+
 ---
 
 ## D. k3s and Compose profiles
@@ -355,7 +394,9 @@ setup that no longer exists. They are kept only until they are brought back in l
 
 Every chart value maps 1:1 onto a `Zaentrum` CR spec field (the operator builds chart values
 from the CR). The table lists both. Fields marked **CR-only** are honored by the operator's
-CR but not surfaced in the chart's default `values.yaml`.
+CR but not surfaced in the chart's default `values.yaml`; the one marked **chart-only**,
+`storage.postgres.current`, has no CR field, as the operator decides it from the running
+Postgres.
 
 ### Global
 
@@ -395,6 +436,11 @@ CR but not surfaced in the chart's default `values.yaml`.
 | `provisionMedia` | `true` | `false` → an external PV backs the `media` PVC (chart skips the PVC). |
 | `kafkaPvc` | `""` | Name of a pre-created PVC for Kafka's log dir (topics survive restart); `""` → `emptyDir`. |
 | `kafkaNode` | `""` | `kubernetes.io/hostname` to pin Kafka to (needed for a node-local `kafkaPvc`); `""` → unpinned. |
+| `postgres.size` | `10Gi` | Size of the claim made for the bundled Postgres, `postgres-data` (`ReadWriteOnce`). |
+| `postgres.className` | `""` | StorageClass of that claim; `""` → `className`, else the cluster's default. |
+| `postgres.claimName` | `""` | An existing claim to keep the data on instead; the chart then makes none. |
+| `postgres.migrate` | `false` | Copy a database that runs elsewhere — an `emptyDir`, another claim — onto the claim; the Postgres stays where it is until it is switched. |
+| `postgres.current` | `""` | **Chart-only** (the operator sets it itself). Where the running Postgres's data is while it is not on the claim: `emptyDir` or a claim's name. `""` → Helm looks at the running Postgres and keeps it where it is; a new install starts on the claim. |
 
 ### Network / Routing / Secrets
 
@@ -409,7 +455,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 
 | Chart value | Default | Meaning |
 |---|---|---|
-| `mode` | `perApp` | `perApp` (a DB per service) or `single`, both on the bundled Postgres — an `emptyDir`, so its data lasts as long as its pod — or `external` (your own Postgres at `databases.external.host`; the chart renders none). |
+| `mode` | `perApp` | `perApp` (a DB per service) or `single`, both on the bundled Postgres — on its claim (`storage.postgres`) — or `external` (your own Postgres at `databases.external.host`; the chart renders none). |
 | `chino` | `chino` | Chino database name. |
 | `katalog` | `katalog` | Katalog database name. |
 | `keycloak` | `keycloak` | Keycloak database name. |

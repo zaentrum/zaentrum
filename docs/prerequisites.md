@@ -19,6 +19,7 @@ The three topologies:
 | Container runtime (Docker/Podman) | required | — | — |
 | A Kubernetes / OKD cluster | bundled (k3s) | required | required (OKD) |
 | Media library storage (NFS or a StorageClass) | the container's volume (lost on replacement) | required | NFS (`<nfs-server>:/media-demo`) |
+| A claim for the bundled Postgres (a StorageClass, or a pre-bound PV) | the container's volume (lost on replacement) | required, unless `databases.mode: external` | — (its Postgres still runs on an `emptyDir`) |
 | Node-local storage for the bundled Kafka PV (topic persistence) | — | optional | required |
 | GPU node + matching Nvidia driver (`features.gpu`) | not supported | optional (if pipeline) | required (pipeline) |
 | Public DNS + TLS for the hostname (sign-in needs https on any name but `localhost`) | none — `zaentrum.localhost`, this machine only | required | OKD edge TLS |
@@ -65,8 +66,8 @@ Optional:
 
 Not used by the appliance:
 
-- **Storage of your own.** The library lives in the container's own volume, for as long as the
-  container does, and the bundled Postgres keeps its databases in an `emptyDir` — see
+- **Storage of your own.** The library and the bundled Postgres's databases live on claims in
+  the container's own volume, for as long as the container does — see
   [persistence](./self-hosting.md#persistence).
 - **A GPU.** The appliance transcodes in software; hardware transcoding (`features.gpu`) needs a
   cluster with a GPU node — see [GPU](#gpu-nvenc).
@@ -100,6 +101,13 @@ You bring the cluster and its supporting infrastructure; the operator renders th
 
   > Trap: never mount the **same** NFS export twice in one pod — it hangs the kubelet. Use a single
   > parent-mount at `/var/lib/katalog`. See [troubleshooting.md](./troubleshooting.md).
+
+- **A claim for the bundled Postgres.** A new install keeps its databases on a `postgres-data`
+  claim: `ReadWriteOnce`, `storage.postgres.size` (default `10Gi`), from
+  `storage.postgres.className`, else `storage.className`, else the cluster's default
+  StorageClass. Where nothing provisions one, bind a PersistentVolume to a claim of your own and
+  name it in `storage.postgres.claimName`. With `databases.mode: external` there is none (see
+  [self-hosting.md](./self-hosting.md#b-self-host-with-the-operator)).
 
 - **Node-local storage for the bundled Kafka PV (optional but recommended).** The bundled broker's log
   dir is an `emptyDir` by default, so **topics and consumer offsets are lost on a broker restart**. To
