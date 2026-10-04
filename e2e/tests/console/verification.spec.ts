@@ -9,6 +9,14 @@ import { expect, test } from '../../support/fixtures';
 test('the operator console shows the platform’s last check of itself, and that it passed', async ({ page, open, snap }) => {
   await open(portal, '/operator');
   await expect(page.getByText('verification', { exact: true }), 'the verification card').toBeVisible();
+  // Every image update starts a run, so the suite can arrive while one is in
+  // flight: its badge says "running" until the verdict lands (under a minute).
+  // Read the verdict, not the run: reload until none is running.
+  await expect(async () => {
+    await page.reload();
+    await expect(page.getByText('verification', { exact: true })).toBeVisible();
+    await expect(page.getByText('running', { exact: true })).toHaveCount(0);
+  }, 'no verification run is still in flight').toPass({ timeout: 150_000, intervals: [5_000, 10_000] });
   // The verdict, and every check counted: a failed check would name itself below the counts.
   await expect(page.getByText('passed', { exact: true }), 'the result badge').toBeVisible();
   await expect(page.getByText(/^\d+ passed · 0 failed$/), 'the counts').toBeVisible();
