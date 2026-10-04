@@ -1,9 +1,12 @@
 {
-  "channels": { "stable": "latest", "edge": "latest" },
+  "channels": { "stable": "v0.4.0", "edge": "latest" },
   "versions": {
+    "v0.4.0": {
+      "released": "2026-10-04",
+      "notes": "Zaentrum v0.4.0: every image, the operator, its install, the appliance and the zae CLI, tagged together. https://github.com/zaentrum/zaentrum/releases/tag/v0.4.0"
+    },
     "latest": {
-      "released": "2026-06-19",
-      "notes": "Pre-release. No semver tags cut yet; both channels track the latest published images. Pin spec.version to a concrete tag once tagged releases begin."
+      "notes": "Rolling: the newest build of main, which edge serves. Every push to main moves it."
     }
   }
 }
