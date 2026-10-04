@@ -21,6 +21,7 @@ single `Zaentrum` custom resource. Chart values map 1:1 onto the CR spec.
 | **Ship a change** to a running platform (day-2) | [Updating](./updating.md) |
 | **Check a change on a running instance** (end-to-end tests against the demo, read-only) | [`e2e/`](https://github.com/zaentrum/zaentrum/tree/main/e2e) |
 | **Update the operator's own controller** (OLM, install manifest, appliance) | [Updating the operator](./updating-the-operator.md) |
+| **Pick a release channel, install a release, or cut one** | [Releases](./releases.md) |
 | **Fix a broken deploy** | [Troubleshooting](./troubleshooting.md) |
 | **Extend it with an addon** (or write one) | [Extending zaentrum](./extending/README.md) |
 | **Understand how it fits together** | [Architecture](./architecture.md) · [Decision records](./adr/README.md) |

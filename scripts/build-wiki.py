@@ -37,6 +37,7 @@ NAV = [
         ("reference-demo", "Reference demo"),
         ("updating", "Updating"),
         ("updating-the-operator", "Updating the operator"),
+        ("releases", "Releases"),
         ("troubleshooting", "Troubleshooting"),
     ]),
     ("Extend it", [
