@@ -36,10 +36,16 @@ know that the bundled Postgres keeps its data only as long as its pod
 ([persistence](docs/self-hosting.md#persistence)).
 
 There is **no setup wizard**. The first run is three steps
-([self-hosting → first run](docs/self-hosting.md#first-run)): sign in as `admin` with the first
-admin password, which the platform generates at install; add a TMDB key under **Catalog
-Management → settings** (the images carry none); then copy your files into the library and
-trigger a scan.
+([self-hosting → first run](docs/self-hosting.md#first-run)): sign in as `admin` with the
+one-time password the operator generated for this install, and choose your own when Keycloak
+asks; add a TMDB key under **Catalog Management → settings** (the images carry none); then copy
+your files into the library and trigger a scan. The password is in Secret
+`zaentrum-keycloak-admin`, key `realm-admin-password`:
+
+```bash
+docker exec zaentrum kubectl -n zaentrum get secret zaentrum-keycloak-admin \
+  -o jsonpath='{.data.realm-admin-password}' | base64 -d; echo
+```
 
 ## Reaching it from your phone / TV
 

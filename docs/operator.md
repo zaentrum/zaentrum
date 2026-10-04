@@ -164,7 +164,7 @@ them unset.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `secrets.external` | bool | `false` | `true` → platform secrets are pre-created (e.g. by CI); the chart does not render them. `false` → the platform creates its own, the first admin password among them. |
+| `secrets.external` | bool | `false` | `true` → the platform's Secrets are pre-created (e.g. by CI) and left alone: the operator makes, reads and reports none of them. `false` → the operator generates each Secret the platform needs once, from `crypto/rand`, owns it and never rotates it — `zaentrum-db`, `zaentrum-stream-signing` and, with bundled identity, `zaentrum-keycloak`, `zaentrum-keycloak-admin` (the first administrator's one-time password among them) and `zaentrum-demo-user`. |
 
 ### `spec.databases`
 
@@ -192,7 +192,9 @@ them unset.
 
 `status.phase`, `status.currentVersion`, `status.availableUpdate`,
 `status.observedGeneration`, `status.conditions[]` (standard Kubernetes
-conditions), and `status.components[]` (`name`, `ready`, `image` per managed
+conditions — among them `SecretsGenerated`, which says where the first
+administrator's one-time password is, or which Secrets still hold an earlier
+chart's values), and `status.components[]` (`name`, `ready`, `image` per managed
 Deployment).
 
 ## Example CRs
@@ -238,9 +240,24 @@ in, and the Android phone and TV apps refuse http. The Ingress carries no TLS
 section — terminate TLS in front of it, and see
 [split-horizon issuer resolution](./prerequisites.md#split-horizon-issuer-resolution).
 When `status.phase` reaches `Ready`, open
-`https://<hostname>` and sign in as `admin` with the first admin password, which the
-platform generates at install. There is no setup wizard; the rest of the first run is a
-TMDB key and your library — see [self-hosting.md](./self-hosting.md#first-run).
+`https://<hostname>` and sign in as `admin` with the one-time password the operator
+generated for this install; Keycloak has you choose a new one at that first sign-in. The
+`SecretsGenerated` condition says where the password is, never what it is:
+
+```bash
+kubectl -n zaentrum get zaentrum zaentrum \
+  -o jsonpath='{.status.conditions[?(@.type=="SecretsGenerated")].message}'; echo
+kubectl -n zaentrum get secret zaentrum-keycloak-admin \
+  -o jsonpath='{.data.realm-admin-password}' | base64 -d; echo
+```
+
+An install made from an earlier chart keeps the values that chart shipped to every
+install. `SecretsGenerated` is then `False`, reason `PublishedDefaults`, and names each
+Secret and key; the operator replaces none of them, as each has to change where it is used
+first — see
+[the platform's Secrets](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#the-platforms-secrets)
+in the operator's README. There is no setup wizard; the rest of the first run is a TMDB key
+and your library — see [self-hosting.md](./self-hosting.md#first-run).
 
 ### Reference-demo profile
 

@@ -242,21 +242,36 @@ the node, and the `<node>` the broker is pinned to).
 
 ## 7. Admin login demands a password change
 
-**Symptom** — logging into the bundled Keycloak admin (realm `zaentrum`) on a
-fresh deploy immediately forces a password change (`UPDATE_PASSWORD` required
-action) instead of signing you in.
+**Symptom** — signing in as `admin` (realm `zaentrum`) on a fresh install
+immediately asks for a new password (`UPDATE_PASSWORD` required action) instead
+of signing you in.
 
 **Cause** — this is a **fresh realm import**, not an error. On first import the
-realm seeds the admin with a temporary password and the `UPDATE_PASSWORD`
+realm seeds `admin` with a temporary, one-time password and the `UPDATE_PASSWORD`
 required action. Existing realms are **not** re-imported, so this only happens on
 a genuinely fresh identity store.
 
-**Fix** — complete the forced password change with the seeded credentials, then
-sign in normally. On a self-host install the first admin password is generated at
-install and kept in a Secret in the platform's namespace
-([first run](./self-hosting.md#first-run)); on the demo it comes from the CI-created
-`zaentrum-keycloak-admin` secret (`DEMO_KC_ADMIN_PW` / `DEMO_REALM_ADMIN_PW` CI
-variables). Nothing needs to be "repaired" — it is expected first-login behavior.
+**Fix** — sign in with the one-time password, choose your own, then sign in
+normally. Unless `secrets.external` is set, the operator generated the one-time
+password for this install and keeps it in Secret `zaentrum-keycloak-admin`, key
+`realm-admin-password` ([first run](./self-hosting.md#first-run)):
+
+```bash
+kubectl -n <namespace> get secret zaentrum-keycloak-admin \
+  -o jsonpath='{.data.realm-admin-password}' | base64 -d; echo
+# on the appliance:
+docker exec zaentrum kubectl -n zaentrum get secret zaentrum-keycloak-admin \
+  -o jsonpath='{.data.realm-admin-password}' | base64 -d; echo
+```
+
+The CR's `SecretsGenerated` condition names the same Secret. On an install made
+from an earlier chart it is `False`, reason `PublishedDefaults`: its Secrets still
+hold the values that chart shipped to every install, and each has to change where
+it is used first — see
+[the platform's Secrets](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#the-platforms-secrets)
+in the operator's README. On the demo the Secret is CI-created
+(`DEMO_KC_ADMIN_PW` / `DEMO_REALM_ADMIN_PW` CI variables). Nothing needs to be
+"repaired" — it is expected first-login behavior.
 
 ---
 

@@ -67,9 +67,19 @@ comes up already configured — for `http://zaentrum.localhost`, with the bundle
 `zaentrum`) and an empty library — and three steps make it yours:
 
 1. **Sign in.** Open <http://zaentrum.localhost>: the portal, whose launchpad opens the video
-   app and, for an admin, the catalog consoles. Sign in as `admin` with the **first admin
-   password**, which the platform generates at install and keeps in a Secret in the platform's
-   namespace; Keycloak then has you choose a password of your own. Further accounts are made in
+   app and, for an admin, the catalog consoles. Sign in as `admin` with the **one-time
+   password** the operator generated for this install, and Keycloak then has you choose a
+   password of your own. The one-time password is in Secret `zaentrum-keycloak-admin`, key
+   `realm-admin-password`:
+
+   ```bash
+   docker exec zaentrum kubectl -n zaentrum get secret zaentrum-keycloak-admin \
+     -o jsonpath='{.data.realm-admin-password}' | base64 -d; echo
+   ```
+
+   On a cluster it is the same command without `docker exec zaentrum`, in the platform's
+   namespace, and the CR's `SecretsGenerated` condition names the Secret too
+   ([operator.md](./operator.md#minimal-self-host)). Further accounts are made in
    Keycloak's admin console for the realm,
    <http://zaentrum.localhost/auth/admin/zaentrum/console/>, as that same `admin`.
 2. **Add a TMDB key — before the first scan.** Titles, posters and plots come from TMDB, and
@@ -345,7 +355,7 @@ CR but not surfaced in the chart's default `values.yaml`.
 | `network.issuerHostAliasIP` | `spec.network.issuerHostAliasIP` | `""` | Split-horizon: adds `hostAliases` (this IP → `hostname`) to OIDC validators so in-cluster token validation reaches an edge-terminated HTTPS issuer. |
 | `routing.provisionIngress` | `spec.routing.provisionIngress` | `true` | Render a plain-Kubernetes Ingress (single-origin paths). |
 | `routing.provisionRoutes` | `spec.routing.provisionRoutes` | `false` | Render OpenShift Routes. |
-| `secrets.external` | `spec.secrets.external` | `false` | `true` → secrets are pre-created (CI/demo); chart skips rendering them. |
+| `secrets.external` | `spec.secrets.external` | `false` | `true` → the platform's Secrets are pre-created (CI/demo) and left alone. `false` → the operator generates each one once, from `crypto/rand`, and never rotates it — the first administrator's one-time password among them; a plain `helm install` renders random ones and reads them back on every upgrade. |
 
 ### Databases (`databases.*` → `spec.databases`)
 
