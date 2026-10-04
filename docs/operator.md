@@ -121,6 +121,7 @@ them unset.
 | `identity.clientId` | string | `chino-web` | Public OIDC client id the web SPA authenticates as. |
 | `identity.audience` | string | `chino` | Expected token audience services validate against. |
 | `identity.loginTheme` | string | — (Keycloak default) | Bundled Keycloak login theme name (the demo uses `zaentrum`). |
+| `identity.exposeAdminConsole` | bool | `false` | Publish the bundled Keycloak's admin console and admin API on the public host, under `/auth/admin` (the Ingress or Routes then send `/auth` whole to Keycloak). Off: the public host routes only what people sign in through — `/auth/realms` (the login and account pages, the OIDC endpoints) and `/auth/resources` — and the console answers only through a port-forward, at `http://localhost:8080/auth/admin/` after `kubectl port-forward svc/keycloak 8080:80` ([the admin console](./self-hosting.md#the-admin-console)). |
 
 ### `spec.features`
 
@@ -257,7 +258,10 @@ Secret and key; the operator replaces none of them, as each has to change where 
 first — see
 [the platform's Secrets](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#the-platforms-secrets)
 in the operator's README. There is no setup wizard; the rest of the first run is a TMDB key
-and your library — see [self-hosting.md](./self-hosting.md#first-run).
+and your library — see [self-hosting.md](./self-hosting.md#first-run). Further accounts are
+made in Keycloak's admin console, which is not on the public host unless
+`identity.exposeAdminConsole` publishes it: a port-forward reaches it, as the master
+realm's bootstrap admin — see [the admin console](./self-hosting.md#the-admin-console).
 
 ### Reference-demo profile
 

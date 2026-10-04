@@ -66,9 +66,13 @@ designed they serve plain http, which cannot sign in.
 
 ## Identity
 
-Out of the box Zaentrum runs its **own bundled Keycloak** (realm `zaentrum`); you manage users
-in Keycloak's admin console for that realm, at `/auth/admin/zaentrum/console/`. On a cluster you
-can instead **use your own OIDC provider directly**: `identity.mode: external` on the `Zaentrum`
+Out of the box Zaentrum runs its **own bundled Keycloak** (realm `zaentrum`), and you manage
+users in Keycloak's admin console. The console is **not on the public host**, which routes only
+the sign-in paths (`/auth/realms`, `/auth/resources`) to Keycloak: reach it through a
+port-forward, at `http://localhost:8080/auth/admin/`, as the master realm's bootstrap admin, and
+switch to the realm `zaentrum` there ([the admin console](docs/self-hosting.md#the-admin-console)),
+or publish it with `identity.exposeAdminConsole: true`. On a cluster you can instead **use your
+own OIDC provider directly**: `identity.mode: external` on the `Zaentrum`
 CR, with your provider's issuer and client, and no Keycloak is rendered. Those are the two modes
 the CRD accepts. **Federating** your provider through the bundled Keycloak (`broker`,
 [ADR-0007](docs/adr/0007-identity-modes.md)) is designed, not built.

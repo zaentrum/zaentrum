@@ -72,7 +72,9 @@ renders this ingress (single-origin profile — subdomain routing is a CR option
 | `/katalog` | `katalog-manager-ui` | catalog browse (admin) |
 | `/katalog-manage` | `katalog-manage-ui` | catalog management (admin) |
 | `/api/manage` | `katalog-manager-api` | the neutral management / write API — including [`/api/ingest`](./extending/ingest.md) in-cluster |
-| `/auth` | bundled Keycloak | identity (in `bundled` mode) |
+| `/auth/realms`, `/auth/resources` | bundled Keycloak | sign-in — the login and account pages, the OIDC endpoints and their assets (in `bundled` mode) |
+| `/auth/callback` | `chino-web` | where a sign-in to the video product returns |
+| `/auth/admin` | bundled Keycloak | the admin console and admin API — only with `identity.exposeAdminConsole`, which routes `/auth` whole; otherwise reached through a port-forward |
 
 ## Scope — the neutral line {#scope}
 

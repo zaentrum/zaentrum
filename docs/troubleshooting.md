@@ -19,6 +19,7 @@ operations against a running install; the reference demo details are in
 | 6 | A fresh scan's first item never advances / topics gone after a Kafka restart | Bundled Kafka on `emptyDir` lost its topics |
 | 7 | Admin login demands a password change | Fresh Keycloak realm import forces `UPDATE_PASSWORD` |
 | 8 | Sign-in fails with "Cookie not found" from a phone, a TV or another computer | Plain http on a name other than `localhost`: Keycloak's login cookies are `Secure` |
+| 9 | Keycloak's admin console answers 404 on the public host | The admin console is not published there unless `identity.exposeAdminConsole` |
 
 ---
 
@@ -300,3 +301,31 @@ apps accept public certificate authorities only): terminate TLS in front of the 
 `network.issuerHostAliasIP` ([trap 5](#5-in-cluster-login--oidc-issuer-errors)). See
 [self-hosting.md](./self-hosting.md#b-self-host-with-the-operator). The appliance serves plain
 http only, so sign in to it on the machine it runs on.
+
+---
+
+## 9. Keycloak's admin console answers 404
+
+**Symptom** — `https://<hostname>/auth/admin/`, or the realm's console at
+`/auth/admin/zaentrum/console/`, answers 404 instead of Keycloak's admin console, while
+signing in to the platform works.
+
+**Cause** — the admin console and the admin API are not published on the public host by
+default. The Ingress and the Routes send Keycloak only what people sign in through,
+`/auth/realms` and `/auth/resources`; every other path falls to the portal, which has no
+such page.
+
+**Fix** — reach the console through a port-forward, on local port 8080, as the master
+realm's bootstrap admin (Secret `zaentrum-keycloak-admin`, keys `username` and `password`),
+then switch to the realm `zaentrum`:
+
+```bash
+kubectl -n <namespace> port-forward svc/keycloak 8080:80
+open http://localhost:8080/auth/admin/
+```
+
+On the appliance the port-forward runs inside the container, which needs
+`-p 127.0.0.1:8080:8080` when it starts — see
+[the admin console](./self-hosting.md#the-admin-console). Or publish the console with
+`identity.exposeAdminConsole: true` on the CR, knowing that it then answers anyone who can
+reach the public host.

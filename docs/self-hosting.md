@@ -80,8 +80,8 @@ comes up already configured — for `http://zaentrum.localhost`, with the bundle
    On a cluster it is the same command without `docker exec zaentrum`, in the platform's
    namespace, and the CR's `SecretsGenerated` condition names the Secret too
    ([operator.md](./operator.md#minimal-self-host)). Further accounts are made in
-   Keycloak's admin console for the realm,
-   <http://zaentrum.localhost/auth/admin/zaentrum/console/>, as that same `admin`.
+   Keycloak's admin console, which is not on the public host — see
+   [the admin console](#the-admin-console).
 2. **Add a TMDB key — before the first scan.** Titles, posters and plots come from TMDB, and
    the published images carry no key of their own. In **Catalog Management** on the launchpad
    (`/katalog-manage/`), open **settings** and enter a TMDB v4 read access token as **TMDB api
@@ -100,6 +100,54 @@ comes up already configured — for `http://zaentrum.localhost`, with the bundle
 
    A file under a `series/`, `tv/` or `shows/` folder, or named with `S01E02`, becomes an
    episode; every other video file becomes a movie.
+
+### The admin console
+
+Keycloak's admin console — where further accounts are made — and its admin API are **not on the
+public host**: the ingress sends Keycloak only `/auth/realms` (the login and account pages, the
+OIDC endpoints) and `/auth/resources`, so <http://zaentrum.localhost/auth/admin/> answers 404.
+The console answers through a port-forward on local port 8080, where its own links point
+(`http://localhost:8080/auth`), signed in as the master realm's bootstrap admin: `admin`, with
+the `password` of Secret `zaentrum-keycloak-admin` — a machine credential beside the first
+administrator's, which the operator's own Jobs sign in with too. In the master realm's console
+the realm `zaentrum`, its users and its clients, is one switch away in the realm list; the
+realm's own console, `/auth/admin/zaentrum/console/`, signs in on the public host and does not
+work through the port-forward.
+
+On the appliance the port-forward runs inside the container, which needs that port published
+when it starts:
+
+```bash
+docker run -d --privileged --restart unless-stopped --name zaentrum \
+  -p 80:80 -p 127.0.0.1:8080:8080 ghcr.io/zaentrum/appliance:latest
+docker exec -d zaentrum kubectl -n zaentrum port-forward --address 0.0.0.0 svc/keycloak 8080:80
+docker exec zaentrum kubectl -n zaentrum get secret zaentrum-keycloak-admin \
+  -o jsonpath='{.data.password}' | base64 -d; echo
+open http://localhost:8080/auth/admin/    # as admin, with that password
+```
+
+A running container gains no port, and replacing one started with the command above starts an
+empty platform ([persistence](#persistence)). Without the port, publish the console on the
+appliance's own port instead, knowing that it then answers anyone who can reach this machine's
+port 80 and asks for `zaentrum.localhost`:
+
+```bash
+docker exec zaentrum kubectl -n zaentrum patch zaentrum zaentrum --type merge \
+  -p '{"spec":{"identity":{"exposeAdminConsole":true}}}'
+```
+
+The console is then at <http://zaentrum.localhost/auth/admin/>, and the realm's own at
+`/auth/admin/zaentrum/console/`, where the first administrator signs in.
+
+On a cluster it is the same port-forward, from your machine — or `identity.exposeAdminConsole:
+true` on the CR, which publishes `/auth` whole on the public host:
+
+```bash
+kubectl -n zaentrum port-forward svc/keycloak 8080:80
+kubectl -n zaentrum get secret zaentrum-keycloak-admin -o jsonpath='{.data.username}' | base64 -d; echo
+kubectl -n zaentrum get secret zaentrum-keycloak-admin -o jsonpath='{.data.password}' | base64 -d; echo
+open http://localhost:8080/auth/admin/
+```
 
 ### Persistence
 
@@ -399,5 +447,6 @@ transcode/package pipeline for adaptive streaming.
 - [operator.md](./operator.md) — the full `Zaentrum` CR contract and the operator install.
 - [updating.md](./updating.md) — image tags, channels, and rollouts.
 - [troubleshooting.md](./troubleshooting.md) — known traps (Kafka volume switch, NVENC/driver
-  mismatch, split-horizon issuer, first-login password change, sign-in over plain http).
+  mismatch, split-horizon issuer, first-login password change, sign-in over plain http, the
+  admin console's 404).
 - [reference-demo.md](./reference-demo.md) — the public reference deployment.

@@ -33,7 +33,8 @@ create addon clients.** An addon that needs a service account gets one by
 hand today:
 
 1. Create a confidential client for the addon in the realm
-   (service accounts enabled).
+   (service accounts enabled), in Keycloak's admin console — not on the public
+   host by default; see [the admin console](../self-hosting.md#the-admin-console).
 2. Assign the realm role `zaentrum-addon` to that client's service account.
 3. Provide the client id + secret to the addon (a Secret its Deployment
    mounts).
