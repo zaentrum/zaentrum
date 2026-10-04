@@ -127,10 +127,11 @@ docker exec zaentrum kubectl -n zaentrum get secret zaentrum-keycloak-admin \
 open http://localhost:8080/auth/admin/    # as admin, with that password
 ```
 
-A running container gains no port, and replacing one started with the command above starts an
-empty platform ([persistence](#persistence)). Without the port, publish the console on the
-appliance's own port instead, knowing that it then answers anyone who can reach this machine's
-port 80 and asks for `zaentrum.localhost`:
+A running container gains no port, and replacing one started with the
+[install command](#a-one-command-appliance) starts an empty platform
+([persistence](#persistence)). Without the port, publish the console on the appliance's own
+port instead, knowing that it then answers anyone who can reach this machine's port 80 and asks
+for `zaentrum.localhost`:
 
 ```bash
 docker exec zaentrum kubectl -n zaentrum patch zaentrum zaentrum --type merge \
@@ -140,8 +141,8 @@ docker exec zaentrum kubectl -n zaentrum patch zaentrum zaentrum --type merge \
 The console is then at <http://zaentrum.localhost/auth/admin/>, and the realm's own at
 `/auth/admin/zaentrum/console/`, where the first administrator signs in.
 
-On a cluster it is the same port-forward, from your machine — or `identity.exposeAdminConsole:
-true` on the CR, which publishes `/auth` whole on the public host:
+On a cluster it is the same port-forward, from your machine — or
+`identity.exposeAdminConsole: true` on the CR, which publishes `/auth` whole on the public host:
 
 ```bash
 kubectl -n zaentrum port-forward svc/keycloak 8080:80
@@ -169,9 +170,9 @@ run on `emptyDir`s.
   ([B](#b-self-host-with-the-operator)), is a field newer than the CRDs such an appliance was
   built with ([updating the operator](./updating-the-operator.md#3-the-appliance)).
 - **Replacing the container starts a new, empty platform.** `docker rm` and a new `docker run`
-  of the command above start a new cluster whose claims get new directories — `local-path`
-  names each one after its claim's UID — so even a volume mounted at k3s's storage path keeps
-  the old files without attaching them.
+  of the [install command](#a-one-command-appliance) start a new cluster whose claims get new
+  directories — `local-path` names each one after its claim's UID — so even a volume mounted at
+  k3s's storage path keeps the old files without attaching them.
 
 To be able to replace the container — for a newer appliance image, or to publish another
 port — start it with the whole k3s state on a named volume and a fixed host name. A container
