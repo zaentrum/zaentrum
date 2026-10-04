@@ -317,8 +317,13 @@ and pasted bug reports.
 
 ### What an operator must configure
 
-The platform does not create the CLI's client. One public client on the
-instance's realm, which every CLI user on that instance shares:
+With bundled identity, nothing: the realm import makes the CLI's client, `zae`,
+in a new realm, and the operator's realm Job keeps its redirect URIs
+([sign-in redirects](../operator.md#sign-in-redirects)). A realm made before
+the import carried it lacks it — the `RealmConfigured` condition then names
+`zae` as not in the realm — and with external identity the client is yours to
+make at your provider. Either way it is one public client on the instance's
+realm, which every CLI user on that instance shares:
 
 ```json
 {

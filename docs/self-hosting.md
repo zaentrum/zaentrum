@@ -112,7 +112,8 @@ the `password` of Secret `zaentrum-keycloak-admin` — a machine credential besi
 administrator's, which the operator's own Jobs sign in with too. In the master realm's console
 the realm `zaentrum`, its users and its clients, is one switch away in the realm list; the
 realm's own console, `/auth/admin/zaentrum/console/`, signs in on the public host and does not
-work through the port-forward.
+work through the port-forward. Leave the redirect URIs of the platform's own clients as they
+are: the operator writes them back ([sign-in redirects](./operator.md#sign-in-redirects)).
 
 On the appliance the port-forward runs inside the container, which needs that port published
 when it starts:

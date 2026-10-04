@@ -123,6 +123,28 @@ them unset.
 | `identity.loginTheme` | string | — (Keycloak default) | Bundled Keycloak login theme name (the demo uses `zaentrum`). |
 | `identity.exposeAdminConsole` | bool | `false` | Publish the bundled Keycloak's admin console and admin API on the public host, under `/auth/admin` (the Ingress or Routes then send `/auth` whole to Keycloak). Off: the public host routes only what people sign in through — `/auth/realms` (the login and account pages, the OIDC endpoints) and `/auth/resources` — and the console answers only through a port-forward, at `http://localhost:8080/auth/admin/` after `kubectl port-forward svc/keycloak 8080:80` ([the admin console](./self-hosting.md#the-admin-console)). |
 
+#### Sign-in redirects
+
+With bundled identity, a sign-in returns only to the platform's own origins, derived
+from `hostname` and the routing: the public URL — with plain `http` beside it where
+OpenShift Routes serve the host, and `https://<routing.hosts.chino>` for `chino-web` in
+subdomains routing. `chino-web` returns to `<origin>/auth/callback`; the portal and the
+catalog consoles (`zaentrum-web`) to `<origin>/portal/`, `/katalog/` and
+`/katalog-manage/`, each followed by `auth/callback`; the phone and tablet app to its own
+scheme; the TV app signs in with the device grant, and `zae` keeps its loopback
+redirects. Web origins are those origins; signed out, `chino-web` returns to the bare
+origin, the portal and the consoles to their base paths.
+
+A new realm imports those lists. On a realm that exists the operator runs a realm Job
+(`zaentrum-realm-<suffix>`) that writes exactly those lists into these clients whenever
+they change, and once a day besides; it changes nothing else of a client and no other
+client, and the `RealmConfigured` condition reports its last run. So the wildcard (`*`)
+redirect URIs and web origins an earlier import gave `zaentrum-web`, `chino-web` and
+`chino-mobile` are replaced — and so is a redirect added to these clients by hand. A
+client served from any other address needs a client of its own in the realm, made in the
+[admin console](./self-hosting.md#the-admin-console), with the audience the services
+validate (`identity.audience`).
+
 ### `spec.features`
 
 | Field | Type | Default | Meaning |
@@ -213,9 +235,10 @@ them unset.
 `status.observedGeneration`, `status.conditions[]` (standard Kubernetes
 conditions — among them `SecretsGenerated`, which says where the first
 administrator's one-time password is, or which Secrets still hold an earlier
-chart's values, and `DatabasePersistent`, which says where the bundled Postgres
-keeps its data), and `status.components[]` (`name`, `ready`, `image` per managed
-Deployment).
+chart's values; `DatabasePersistent`, which says where the bundled Postgres
+keeps its data; and `RealmConfigured`, the last run of the realm Job that keeps
+the [sign-in redirects](#sign-in-redirects) in step), and `status.components[]`
+(`name`, `ready`, `image` per managed Deployment).
 
 ## Example CRs
 
