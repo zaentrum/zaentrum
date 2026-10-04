@@ -61,10 +61,20 @@ default; hardened setups can pass the narrower capability/mount set k3s document
 
 ### First run
 
-There is **no setup wizard**. The wizard at `/manage/setup` and its `/api/manage/setup` API went
-away when the catalog manager was rewritten, and nothing replaces them yet. A fresh appliance
-comes up already configured — for `http://zaentrum.localhost`, with the bundled Keycloak (realm
-`zaentrum`) and an empty library — and three steps make it yours:
+A fresh appliance comes up already configured — for `http://zaentrum.localhost`, with the
+bundled Keycloak (realm `zaentrum`) and an empty library. Once you sign in as an admin, the
+portal's launchpad shows a **Set Up Your Server** checklist above the tiles until you mark it
+done, each step with its state and one action:
+
+- **Metadata**: save a TMDB key (it is stored write-only and never shown again).
+- **Library**: where your files go, and **Scan Now**.
+- **Processing**: whether the media pipeline runs. Turning it on or off asks first, and the
+  card says why a worker can't start (today the transcoder needs an NVIDIA GPU).
+- **Devices**: whether phones and TVs can sign in, which needs https.
+- **People**: where further accounts are made.
+
+**Show Setup Again** in the portal's settings brings the checklist back. It walks through the
+same three steps as below, which also work by hand:
 
 1. **Sign in.** Open <http://zaentrum.localhost>: the portal, whose launchpad opens the video
    app and, for an admin, the catalog consoles. Sign in as `admin` with the **one-time

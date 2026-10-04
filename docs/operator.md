@@ -299,8 +299,9 @@ install. `SecretsGenerated` is then `False`, reason `PublishedDefaults`, and nam
 Secret and key; the operator replaces none of them, as each has to change where it is used
 first — see
 [the platform's Secrets](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#the-platforms-secrets)
-in the operator's README. There is no setup wizard; the rest of the first run is a TMDB key
-and your library — see [self-hosting.md](./self-hosting.md#first-run). Further accounts are
+in the operator's README. The rest of the first run is a TMDB key and your library, which the
+portal's **Set Up Your Server** checklist walks an admin through — see
+[self-hosting.md](./self-hosting.md#first-run). Further accounts are
 made in Keycloak's admin console, which is not on the public host unless
 `identity.exposeAdminConsole` publishes it: a port-forward reaches it, as the master
 realm's bootstrap admin — see [the admin console](./self-hosting.md#the-admin-console).

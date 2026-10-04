@@ -36,11 +36,11 @@ the settings — keep their data on volume claims inside the container, so a res
 replacing the container starts an empty platform
 ([persistence](docs/self-hosting.md#persistence)).
 
-There is **no setup wizard**. The first run is three steps
-([self-hosting → first run](docs/self-hosting.md#first-run)): sign in as `admin` with the
+The first run is three steps
+([self-hosting → first run](docs/self-hosting.md#first-run)), and after you sign in the
+portal's **Set Up Your Server** checklist walks you through them: sign in as `admin` with the
 one-time password the operator generated for this install, and choose your own when Keycloak
-asks; add a TMDB key under **Catalog Management → settings** (the images carry none); then copy
-your files into the library and trigger a scan. The password is in Secret
+asks; save a TMDB key (the images carry none); then copy your files into the library and scan. The password is in Secret
 `zaentrum-keycloak-admin`, key `realm-admin-password`:
 
 ```bash

@@ -180,9 +180,10 @@
 <span class="p">$</span> open http://zaentrum.localhost</pre>
         </div>
         <p class="start-note">
-          no setup wizard: sign in as admin with the one-time password the install generates
+          sign in as admin with the one-time password the install generates
           (<code class="nc-code nc-code--inline">docker exec zaentrum kubectl -n zaentrum get secret zaentrum-keycloak-admin -o jsonpath='{.data.realm-admin-password}' | base64 -d</code>),
-          add a tmdb key in catalog management, then copy your files into the library and scan.
+          and the setup checklist on the launchpad walks you through the rest: a tmdb key, your
+          files, a scan.
           it serves this machine only: other devices need https.
           <a href="https://github.com/zaentrum/zaentrum/wiki/self-hosting#first-run">first run →</a>
         </p>
