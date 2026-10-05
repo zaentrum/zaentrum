@@ -24,6 +24,7 @@ everything on this page.
 | **[Notices](./notices.md)** | Telling one person something — "your title is ready" — in every client they use | `notices` in portal-api, posted by the addon's service account |
 | **[Hosted console](./console.md)** | A full admin UI inside the portal shell — no own origin, route, or session | Module federation, attached at runtime |
 | **[Catalog ingest](./ingest.md)** | "This file on disk is now a library item" — the pipeline takes it from there | `POST /api/ingest` on katalog-manager |
+| **[Extras](./extras.md)** | "This file is a title's trailer" — or its teaser, featurette or deleted scene, packaged and played from the server beside the title | `POST /api/extras` on katalog-manager |
 | **[Event bus](./events.md)** | React to pipeline stages; publish your own domain events | Kafka topics under the tenant prefix |
 | **[Identity](./identity.md)** | A service account for calling platform APIs (ingest, events, notices) — not needed to install | OIDC client-credentials + the addon role |
 | **[CLI capability](./cli.md)** | Commands and checks in the [`zae`](https://github.com/zaentrum/zae) CLI on any instance running the addon | A descriptor at `/.well-known/zaentrum-capability.json` |
@@ -66,6 +67,7 @@ ahead of the shipped platform, it is marked, not asserted:
 | Notices shown in chino on the web, TVs and phones | 🔶 next — see [notices](./notices.md#reading-notices--what-a-client-does) |
 | Portal-hosted console via runtime federation | ✅ shipped |
 | Neutral catalog ingest | ✅ shipped |
+| A title's extras: taken in by the API or the scanner, packaged on their own chain, played beside the title | ✅ shipped — see [extras](./extras.md) |
 | Event bus with tenant-prefixed topics | ✅ shipped |
 | Install from settings by pulling the addon's manifest (app + tile + slot rows, removable by key) | ✅ shipped — see [installing](./installing.md) |
 | Component groups and the setup checklist in settings → addons | ✅ shipped — see [installing](./installing.md) and [configuration](./configuration.md) |
