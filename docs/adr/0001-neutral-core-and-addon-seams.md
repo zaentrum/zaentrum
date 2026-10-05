@@ -1,6 +1,6 @@
 # ADR-0001: Neutral core and addon seams
 
-**Status:** Accepted · recorded retrospectively (decision from 2026-07)
+**Status:** Accepted · recorded retrospectively (decision from 2026-07) · amended by the [addendum of 2026-10-05](#addendum-2026-10-05--notices-a-third-seam) (a third seam: notices)
 
 ## Context
 
@@ -64,3 +64,105 @@ The addon crosses into the core at exactly two points: a registry row and an ing
 - No forked or flag-stripped "full edition" of the core.
 - No acquisition tables in the core schema. Wanted-state and request history live in the addon's own database; the core catalog only ever learns about a file that already exists.
 - No addon emitting `catalog.item.discovered`. Files enter the catalog through the ingest seam or the scanner — the creator of the item owns that event.
+
+## Addendum (2026-10-05) — notices, a third seam
+
+### Context
+
+Requests live in an addon, as decided above: the core offers seams, on every
+client, and nothing more, and approving a request stays in the addon's own
+console. That leaves one thing the two seams cannot do. An addon that works
+for a person over time — a request fulfilled hours later is the case that
+prompted this — has to tell that person, in whichever client they use,
+without the core learning what was done.
+
+- A **slot row** is the same for everyone and appears only where a product
+  app renders its slot; it cannot say something to one person.
+- The **event bus** carries pipeline facts to services, not messages to
+  people, and no client reads it.
+- The addon's **console** is where a person goes to look. It cannot reach a
+  person watching on a TV.
+
+### Decision
+
+**Seam 3 — notices.** portal-api keeps `notices` (migration 015): one row is
+one notice for one person — the subject of their token, as the People page
+knows them — from one installed addon. A notice is plain text: a title of at
+most 80 characters and a body of at most 280; optionally a link, held to the
+rule a slot row's link is held to (one function decides both: a path on the
+instance or a URL on its own origin, never `javascript:` or another host);
+and optionally the id of a catalog item a client can open. The text is the
+addon's. The core's vocabulary is the seam's own — notice, read, from — and
+it never interprets what a notice says.
+
+- **An addon posts with its service account**, `POST /api/portal/notices`
+  with `{sub, title, body, link?, itemId?}`: the addon is the one its token
+  binds — the client named after it, the `zaentrum-addon` role, as for its
+  slot rows — never one the body names, and it must be installed.
+- **A person reads their own and nobody else's**: `GET`, mark read, read all
+  and delete under `/api/portal/me/notices`. Someone else's notice is as one
+  there is not. The portal shell shows them in a bell in its header; the
+  product apps read them through chino-api's `/api/v1/notices`, best effort
+  — when portal-api does not answer, an app's home shows no notices rather
+  than an error.
+- **A notice to oneself** needs no credential: `POST /api/portal/me/notices`
+  with a person's own bearer posts to that person only — the body names no
+  person — from an installed addon the body names. It is for an addon that
+  holds no credential, as the reference addon holds none: its console posts
+  with the bearer the shell hands it. Whoever holds a person's bearer can
+  already act as that person, and this reaches nobody else, so it grants
+  nothing new; it also proves nothing about which addon sent it. A notice
+  for someone else, or for later, takes the service account.
+- **Notices come and go with what they belong to.** A person keeps their
+  newest 100; every notice goes after 90 days (`PORTAL_NOTICE_RETENTION`);
+  deleting a person deletes theirs; removing an addon removes its notices
+  with its rows — the uninstall property above holds for notices too. Each
+  addon's posts and each person's posts to themselves are rate-limited, and
+  every write is logged without what the notice says. An admin sees each
+  addon's notices counted, never read.
+
+```mermaid
+flowchart LR
+    subgraph addon ["addon (out of tree)"]
+        work["its own work, database<br/>and console"]
+        sa["its service account"]
+    end
+    subgraph core ["Neutral core"]
+        notices["portal-api<br/>notices — one person's each"]
+        bell["portal shell<br/>the bell"]
+        bff["chino-api<br/>/api/v1/notices"]
+        apps["chino on the web,<br/>TVs and phones"]
+    end
+    work --> sa
+    sa -- "POST /api/portal/notices {sub, title, body}" --> notices
+    notices -- "the person's own bearer" --> bell
+    notices -- "the person's own bearer" --> bff
+    bff --> apps
+```
+
+### Consequences
+
+- The addon crosses into the core at three points now: a registry row, an
+  ingest call and a notice. A request's whole loop closes without the core
+  knowing it was one — the addon fulfils it with ingest, learns it is
+  playable from the pipeline's events, and tells the person with a notice.
+- Every client grows one surface, the same everywhere: an unread count, a
+  list, read, delete. The portal's bell ships with the seam; the product
+  apps follow.
+- The notices API and the notice's fields are public API the core must
+  keep stable, as the slot semantics are.
+- An addon that tells people things later needs a service account, which is
+  still made by hand ([identity](../extending/identity.md));
+  platform-provisioned addon identity matters more than it did.
+
+### What this rules out
+
+- **Notices for everyone.** A notice is one person's; a message to all is a
+  slot row, or the addon's own console.
+- **Markup, scripts or actions in a notice.** A notice is plain text with at
+  most one link, which leads somewhere on the instance; it never acts by
+  itself.
+- **Kinds of notices the core knows.** No categories, templates or states
+  beyond read; what a notice is about stays the addon's business.
+- **An addon reading or changing a person's notices**, or posting as
+  another addon.

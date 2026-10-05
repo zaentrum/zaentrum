@@ -102,9 +102,9 @@ vocabulary), not just by review.
 
 The neutral line does **not** mean Zaentrum can't grow capability. It means
 capability beyond the neutral core arrives as an **addon**: out-of-tree code
-that plugs into seams the core exposes — UI slots, portal-hosted consoles, the
-neutral ingest API, the event bus. The core never learns an addon's name;
-uninstalling one leaves no trace.
+that plugs into seams the core exposes — UI slots, notices to one person,
+portal-hosted consoles, the neutral ingest API, the event bus. The core never
+learns an addon's name; uninstalling one leaves no trace.
 
 **[Extending zaentrum](./extending/README.md)** documents every seam and its
 honest implementation status. The design rationale is

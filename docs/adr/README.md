@@ -11,7 +11,7 @@ why), Consequences (what got better, what it costs, and **what it rules out**
 
 | ADR | Decision |
 |---|---|
-| [0001](./0001-neutral-core-and-addon-seams.md) | The core stays content-neutral; capability beyond it plugs into two seams as out-of-tree addons |
+| [0001](./0001-neutral-core-and-addon-seams.md) | The core stays content-neutral; capability beyond it plugs into seams as out-of-tree addons — UI slots and ingest, and since 2026-10 notices |
 | [0002](./0002-prepackaged-playback.md) | Transcode once at ingest; serve pre-packaged HLS/CMAF — no per-session runtime transcoding |
 | [0003](./0003-catalog-cqrs-sole-writer.md) | One catalog writer (katalog-manager); scalable read side (katalog-api); nobody else touches the DB |
 | [0004](./0004-per-product-streaming-origins.md) | Streaming origins are per-product, not one shared streamer |
