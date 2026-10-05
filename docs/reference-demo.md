@@ -195,7 +195,7 @@ The demo deliberately keeps a few resources outside the operator; the CI overlay
 | The `media` PVC | `storage.provisionMedia: false` | The operator consumes the existing PVC bound to the NFS PV. |
 | The `zaentrum-*` secrets | `secrets.external: true` | CI creates them from the `DEMO_*` variables (the only secret path allowed from CI). |
 | The `kafka-data` PVC | `storage.kafkaPvc: kafka-data` | Binds the node-local Kafka PV from bootstrap. |
-| The seed / scan / enqueue / kafka-topics Jobs | operator forces `jobs.seed=false` | Demo choreography (populate + drive the pipeline), never rendered by the operator. |
+| The seed / scan / enqueue / kafka-topics / seed-extras Jobs | operator forces `jobs.seed=false` | Demo choreography (populate + drive the pipeline), never rendered by the operator. |
 
 ### Job steps
 
@@ -215,8 +215,8 @@ The deploy job script, in order:
    (if set) and add it to the `default` SA's `imagePullSecrets`. If unset, an
    existing in-namespace `ghcr-pull` from a prior deploy persists.
 5. **Delete the finished choreography Jobs** (`kafka-topics`, `seed-demo-content`,
-   `scan-catalog`, `enqueue-processing`) so `apply -k` recreates them fresh — Jobs
-   are immutable.
+   `scan-catalog`, `enqueue-processing`, `seed-extras`) so `apply -k` recreates them
+   fresh — Jobs are immutable.
 6. **`kubectl apply -k demo`** — applies the CR, the two external PVCs, and the
    choreography Jobs. The operator picks up the CR and reconciles the platform via
    server-side apply (async).
@@ -231,10 +231,22 @@ The choreography Jobs recreated by step 6 run once the platform is up:
 
 | Job | Does |
 |---|---|
-| `kafka-topics` | Creates the pipeline topics with deterministic partitions/retention: `stube.catalog.item.discovered/enriched/analyzed/transcoded` (idempotent, `--if-not-exists`). |
+| `kafka-topics` | Creates the pipeline topics with deterministic partitions/retention: `stube.catalog.item.discovered/enriched/analyzed/transcoded/packaged/removed` and the extras' `stube.catalog.extra.queued/transcoded/packaged` (idempotent, `--if-not-exists`). |
 | `seed-demo-content` | Downloads Creative-Commons / public-domain titles to `/var/lib/katalog/media` on the NFS export (skip-if-present, tolerant of dead links). |
 | `scan-catalog` | Mints a client-credentials token from bundled Keycloak and triggers the filesystem scan; the scan emits `stube.catalog.item.discovered` and the event-driven pipeline (enrich → analyze → transcode → package) takes over. |
 | `enqueue-processing` | Harmless backfill for items that predate the event flow. |
+| `seed-extras` | Fetches the films' own trailers into `/var/lib/katalog/extras` and registers each as its title's extra (below). |
+
+The demo carries the films' own trailers: the Big Buck Bunny and Sintel
+trailers and the Elephants Dream and Tears of Steel teasers, all from the
+Blender Foundation under CC BY, as the films are. `seed-extras` fetches each,
+pinned by its SHA-256, into `extras/` beside `media/` on the export, outside
+the scan root, then registers it as its title's [extra](./extending/extras.md)
+with `POST /api/extras` and the service account the scan uses. It names the
+title by the path of its file (`itemPath`), because a reset changes item ids
+but not the seed's file names; a title the scan has not created yet answers
+`404` and is asked again. The other titles keep their links to online videos,
+where they have any.
 
 ### Trigger the deploy
 
