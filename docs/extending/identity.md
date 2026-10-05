@@ -7,9 +7,12 @@ credential.
 
 Identity enters when the addon **calls** platform APIs on its own behalf:
 [`POST /api/ingest`](./ingest.md), publishing on the [event bus](./events.md),
-or changing its slot rows while running. For those it acts as a **service
-account**: an OIDC confidential client on the instance's realm, using the
-client-credentials grant.
+changing its slot rows while running, or telling a person something with a
+[notice](./notices.md). For those it acts as a **service account**: an OIDC
+confidential client on the instance's realm, using the client-credentials
+grant. (An addon's console can tell the person in front of it something
+without one, with the bearer the shell hands it — to that person only; see
+[notices](./notices.md#to-yourself-without-a-credential).)
 
 Users never authenticate *to* an addon — the portal proxy forwards the
 signed-in user's bearer to the addon's own API, and the addon validates it
@@ -22,7 +25,11 @@ against the same issuer as every other service.
 - The realm role **`zaentrum-addon`** marks addon service accounts. portal-api
   reads the role name from `PORTAL_ADDON_ROLE` (default `zaentrum-addon`) and
   accepts it, alongside the admin role, on the
-  [`/api/portal/extensions` write API](./slots.md#the-api).
+  [`/api/portal/extensions` write API](./slots.md#the-api), and alone on
+  [`POST /api/portal/notices`](./notices.md#with-the-addons-service-account).
+  The role counts on a client's own token only, and the addon it speaks for
+  is its client id — or the `zaentrum_addon` claim where a shared realm names
+  clients per instance.
 - The addon mints a token with `grant_type=client_credentials` and uses it for
   platform calls.
 

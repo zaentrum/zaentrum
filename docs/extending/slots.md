@@ -34,6 +34,25 @@ Product apps don't call portal-api directly from the browser in every case:
 `chino-api` proxies the read (`GET /api/v1/extensions?slot=…`) best-effort, so
 an unreachable portal yields an empty slot rather than an error.
 
+## Where a row may lead
+
+A product app renders a row as a link, or POSTs to it with the signed-in
+user's bearer, so portal-api checks where a row leads when it is written — on
+install from a manifest, and in the write API — by one rule. A
+[notice's link](./notices.md) is held to the same rule; one function decides
+both.
+
+- `kind` is `link` or `action`; an action is sent as a POST.
+- `url`, and `status_url` when set, is a path on this instance
+  (`/portal/app/<addon>?q={q}`) or an absolute http(s) URL on the instance's
+  own origin — never another host, never `javascript:`, `data:` or any other
+  scheme, never `//host`, credentials, or `.` and `..` segments, spelled out
+  or percent-encoded.
+- An action an addon contributes leads to its own API through the portal's
+  proxy, `/api/portal/apps/<addon>/…`: it carries the user's token.
+
+A row written before these rules that breaks them is not served.
+
 ## Slot catalog
 
 The catalog is deliberately explicit: a slot exists when a product app renders
