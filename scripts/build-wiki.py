@@ -46,6 +46,7 @@ NAV = [
         ("extending-notices", "Notices"),
         ("extending-console", "Hosted consoles"),
         ("extending-ingest", "Catalog ingest"),
+        ("extending-extras", "Extras"),
         ("extending-events", "Event bus"),
         ("extending-identity", "Addon identity"),
         ("extending-installing", "Installing addons"),

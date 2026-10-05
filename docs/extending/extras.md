@@ -101,7 +101,7 @@ Content-Type: application/json
 | `path` | Required: the extra's file, as above |
 | `kind` | Required: one of the ten kinds |
 | `title` | What it is called; the kind's name when left out |
-| `language` | The language spoken in it, BCP 47 (`en`, `pt-BR`) or an ISO 639-2 code (`eng`); unknown when left out |
+| `language` | The language spoken in it, BCP 47 (`en`, `pt-BR`) or an ISO 639-2 code (`eng`); `zxx` when it has no dialogue. It names the extra's sound in its package, over the file's own tag (a trailer's file often says nothing, or the wrong thing); left out, the file's tag stands |
 | `seasonNumber` | A series' only, for a season it has episodes of; 0 is the specials |
 
 An admin, the platform's service account and an addon's service account (the
