@@ -1,9 +1,11 @@
 # Database first, storage as the record (v2 design)
 
-> **Status — proposal.** This supersedes the v1 idea that storage is the source
-> of truth and databases are caches. Nothing implements it yet; v1 schemas stay
-> published until this lands. [Migrating a library](./migrating.md) describes the
-> v1 tooling.
+> **Status — being built.** This supersedes the v1 idea that storage is the source
+> of truth and databases are caches. The platform's services are being changed to
+> write and read this layout, and an environment moves to it by a migration, after
+> which its catalog's setting `library.layout` is `v2`; until then it keeps the
+> layout it has. The v1 schemas stay published. [Migrating a library](./migrating.md)
+> describes the migration.
 
 ## The model
 
@@ -24,6 +26,12 @@
 - **A record proves itself.** Every folder that is written once carries the
   checksums of what it holds, so a tree can be checked against its own hashes,
   with no database and no network.
+- **Originals never enter the library.** An original waits outside the record
+  until a version made from it is packaged, verified and recorded, and is
+  deleted then. The record keeps what describes it — its source record, the
+  probe, copies of the files beside it — and an event that says it was deleted
+  and what the package does not carry of it. The package is the record of the
+  title from the start.
 - **The catalog remembers what it deleted.** A deletion log in the database
   tells a folder the catalog deleted from one it lost, so nothing on storage is
   removed, or restored, on a guess.
@@ -43,7 +51,7 @@ flowchart LR
   end
   API -->|"media bytes only"| M["version folders"]
   DB -->|"projections: metadata.json · person.json · images"| REC
-  W["ingest · analyzer · packager"] -->|"records + checksums, written once"| REC["library tree"]
+  W["catalog service · packager"] -->|"records + checksums, written once"| REC["library tree"]
   W --> DB
   REC -.->|"rebuild / verify (on demand)"| DB
 ```
@@ -53,10 +61,15 @@ flowchart LR
 The categories, the id-based folders and the shard stay as they are: an item is
 `movies/<aa>/<itemId>/`, a series is `series/<aa>/<seriesId>/` with
 `episodes/<episodeId>/` inside it, and `<aa>` is the first two characters of the
-id. People are a third category, `people/<aa>/<personId>/`, sharded the same way.
-A person is shared by every item that credits them, so no item folder can hold
-them, and without a folder of their own a lost database would take every
+id — an episode's folder is in its series' shard, the series of a season it is
+under. People are a third category, `people/<aa>/<personId>/`, sharded the same
+way. A person is shared by every item that credits them, so no item folder can
+hold them, and without a folder of their own a lost database would take every
 biography and portrait with it.
+
+The share's root is the library's: `movies/`, `series/` and `people/`, and one
+hidden folder beside them, `.work/`, for everything that is not the record —
+the arrivals, the workers' handoffs, the trash. Every tool reads past it.
 
 ```
 movies/<aa>/<itemId>/
@@ -71,7 +84,6 @@ movies/<aa>/<itemId>/
     checksums.sha256              covers the files above, written with them
   versions/<versionId>/
     version.json                  what this version is, written once
-    <original file>               the original, when it lives here
     hls/  subs/  trickplay/       the package
     checksums.sha256              version.json and every package file
     package.json                  what the package contains, and the hash of checksums.sha256
@@ -81,15 +93,27 @@ movies/<aa>/<itemId>/
     checksums.sha256              covers event.json, written with it
   extras/<extraId>/
     extra.json                    a piece of bonus material, written once
-    <original file>               the extra itself, when it is kept
-    hls/  subs/  trickplay/       its package, when it has one
-    checksums.sha256              extra.json and every file beside it, the original included
-    package.json  .complete       as a version's, when it is packaged
+    hls/  subs/  trickplay/       its package
+    checksums.sha256              extra.json and every package file
+    package.json  .complete       as a version's
 
 people/<aa>/<personId>/
   person.json                     the database's person, projected
   <hash>.jpg                      images named by content hash, written once
+
+.work/                            not the record
+  incoming/                       arrivals: originals waiting to be packaged
+  extras/                         extras' originals taken in, waiting the same way
+  inbox/  staging/                the transcoder's handoff, the packager's folders under construction
+  trash/                          deleted originals during a grace period
+  quarantine/  migration/         a sweep's quarantine; a migration's staged records and plans
 ```
+
+The format can also hold an original inside its version or extra folder — a
+library built by its tools from a copy may keep one — but the platform never
+does: a version it writes keeps none (`originalFiles` is empty) and its package
+is canonical, and an extra it writes keeps only its package and says, in
+`packagedFrom`, what it was made from.
 
 These changes against v1 carry the model:
 
@@ -108,16 +132,22 @@ These changes against v1 carry the model:
 
 | File | Written by | When | Changes later |
 |---|---|---|---|
-| `item.json`, `checksums.sha256` | ingest | once, when the item is created | never |
-| `metadata.json` | the catalog service | after every database change to this item | replaced whole |
-| `metadata/<hash>.jpg` | the catalog service | when an image is first stored | never |
-| `sources/<id>/`: `source.json`, probe, sidecars, `checksums.sha256` | analyzer | when an original is taken in | never |
-| `versions/<id>/version.json` | analyzer | when a version is established | never |
-| `versions/<id>/`: `checksums.sha256`, `package.json`, `.complete` | packager | when the package completes, in that order | never |
-| `events/<…>/`: `event.json`, `checksums.sha256` | whoever acts | when an original is deleted, a package superseded, an extra retired | never |
-| `extras/<id>/`: `extra.json`, the original, the package, `checksums.sha256` | ingest, and the packager for a package | once, whole: the checksums last, or the package's chain | never |
-| `people/<aa>/<id>/person.json` | the catalog service | after every database change to this person | replaced whole |
-| `people/<aa>/<id>/<hash>.jpg` | the catalog service | when an image is first stored | never |
+| `item.json`, `checksums.sha256` | the catalog service | once, when the item's identity is settled after enrichment — a series before its first episode | never |
+| `metadata.json` | the catalog service's projector | after every database change to this item | replaced whole |
+| `metadata/<hash>.jpg` | the catalog service's projector | when an image is first stored | never |
+| `sources/<id>/`: `source.json`, probe, sidecar copies, `checksums.sha256` | packager | the first time it packages that original | never |
+| `versions/<id>/`: `version.json`, the package, `checksums.sha256`, `package.json`, `.complete` | packager | every package run: built aside, in that order, and renamed into place in one step | never |
+| `events/<…>/`: `event.json`, `checksums.sha256` | the catalog service | when a package is superseded, a version removed, an original deleted, an extra retired | never |
+| `extras/<id>/`: `extra.json`, the package, its chain | packager | the extra's package run: built aside and renamed into place | never |
+| `people/<aa>/<id>/person.json` | the catalog service's projector | after every database change to this person | replaced whole |
+| `people/<aa>/<id>/<hash>.jpg` | the catalog service's projector | when an image is first stored | never |
+
+The analyzer and the transcoder write nothing into the library. The catalog
+service decides every path in it and hands the workers absolute paths in their
+work records, so no worker computes a library path itself. A library that
+existed before the platform wrote this layout is recorded once by
+`library-v2-from-catalog.py --platform`, and the catalog adopts what it staged
+([Migrating a library](./migrating.md)).
 
 **`item.json`** — the id, the type (`movie`, `series`, `episode`), the series id
 and numbering for an episode, the reference ids (TMDB and friends) it was created
@@ -173,10 +203,12 @@ an episode's: it sits in the folder of the movie or series it belongs to, and a
 series' extra may name its season. The record says what it is — kind, title,
 language, runtime — the size and fixity of its original, what the probe found in
 it, and the link it was downloaded from when it was; the folder holds that
-original, a package made from it, or both. It is written once and whole, so its
-checksums cover the original too and are written last: an extra kept only as its
-original is finished when they are there, a packaged one when its `.complete` is.
-Packaging one later is a new extra folder, and an event retires the old one. How
+original, a package made from it, or both — and, as the platform writes one, the
+package alone, the record saying what it was made from. It is written once and
+whole, so its checksums cover a kept original too and are written last: an extra
+kept only as its original is finished when they are there, a packaged one when
+its `.complete` is. Packaging one later is a new extra folder, and an event
+retires the old one. How
 the extras are listed — the order, which are hidden, a label instead of the
 title — is a decision the database holds, projected into `metadata.json`. A video
 that is only published online stays a reference in `metadata.json`.
@@ -188,18 +220,22 @@ credits: which items credit a person is what those items' `metadata.json` says.
 
 ## Writing
 
-Whoever creates something writes its record first and the database second. The
-record is the durable part; a failed database write is repaired by restoring that
-item, and a failed record write is retried. Records are written to a temporary
-file in their own folder and renamed into place, so a reader never sees half a
-file.
+Whoever creates something writes its record first and the database second — but
+an item: it gets its database row when an arrival is found, as a candidate, and
+its `item.json` once its identity is settled. The record is the durable part; a
+failed database write is repaired by restoring that item, and a failed record
+write is retried. Records are written to a temporary file in their own folder and
+renamed into place, so a reader never sees half a file.
 
-A folder that is written once gets its `checksums.sha256` in the same step. A
-version is the one folder written in two steps: `version.json` comes first, when
-the version is established, and the chain is closed when the package completes —
-the packager writes the checksums over `version.json` and every package file,
+A folder that is written once gets its `checksums.sha256` in the same step. The
+packager builds a version whole in `.work/staging/` — the package, then
+`version.json`, then the checksums over `version.json` and every package file,
 then `package.json` with the hash of those checksums, then `.complete` with the
-hash of `package.json`.
+hash of `package.json` — checks the chain, and renames the folder into place in
+one step, beside a source folder it builds the same way the first time it
+packages an original. A re-package is a new version folder; the version it
+replaces is marked superseded by an event at once and removed, with another
+event, a day later.
 
 ```mermaid
 flowchart LR
@@ -221,7 +257,10 @@ transaction as the delete — its id, type and title, when, and by whom — and 
 deletes its folder. A person no title credits any more is deleted and logged the
 same way, with the type `person`. A folder that outlives its item or its person,
 because the removal failed or the storage was away, is then known for what it
-is. Deleting the original inside a version that is kept writes one event.
+is. Deleting an original — which the platform does once its version is packaged,
+verified against its own checksums by a reader independent of the packager, and
+recorded — writes one event first, naming the source and what the package does
+not carry of it, and moves the file to the trash for a grace period.
 
 ## Rebuilding and verifying
 
@@ -311,20 +350,23 @@ not what a player should do with it.
 
 ## Getting there
 
-1. Freeze v1: keep the published schemas, stop extending them.
+1. Freeze v1: keep the published schemas, stop extending them. Done.
 2. Publish v2 schemas for the records above, `person.json` among them, and a
-   reference example.
-3. Teach ingest, the analyzer and the packager to write records and their
-   checksums, next to what they write today, and the catalog service to project
-   `metadata.json` and `person.json`.
-4. Keep the deletion log: every item delete records the item in the same
+   reference example. Done.
+3. Keep the deletion log: every item delete records the item in the same
    transaction, and so does the delete of a person no title credits any more,
    as a person. Folders that outlived a delete before the log existed are not in
    it, and are decided once, by hand.
-5. Build rebuild, verify and sweep, and prove them: a tree restores a database
+4. Build rebuild, verify and sweep, and prove them: a tree restores a database
    that matches the one it came from, a verification sorts every record the
    database does not know into orphan or lost, and a sweep quarantines provable
-   garbage and nothing a row or a record references.
-6. Move playback reads to the database, so no request touches the tree.
-7. Stop writing the v1 `manifest.json`, and migrate existing libraries by
-   rebuilding the records from the database.
+   garbage and nothing a row or a record references. Done, as tools.
+5. Teach the catalog service and the packager to write the records — the
+   catalog service decides every path, writes `item.json` and the events and
+   projects `metadata.json` and `person.json`; the packager writes the sources,
+   versions and extras — and the streaming service to find every package through
+   the catalog, so no request walks the tree. Behind the setting
+   `library.layout`, so the code ships before an environment moves.
+6. Migrate an environment: stage its records from the store it has, let the
+   catalog adopt them, verify, switch its layout to `v2`, and let it delete the
+   originals ([Migrating a library](./migrating.md)).
