@@ -13,14 +13,15 @@ thrown away and rebuilt by reading the folders.
 > crawler. Read that first; the pages below still describe what the v1 tooling
 > builds today.
 >
-> **Status — format ahead of the code.** Schema v1 is published, and a sample
-> library built by the reference migrator validates against it. No platform
-> service reads or writes the format yet: the catalog keeps its truth in a
-> database, the packager writes version 2 package folders, and the streaming
-> origin finds episode packages in today's store at `shows/<aa>/<episodeId>/` rather than inside
-> a series folder. This section documents the format so tools and services can
-> adopt it; [Migrating a library](./migrating.md#before-a-platform-uses-the-format)
-> lists what has to change first.
+> **Status — v2 being built.** The platform's services are being changed to
+> write and read the v2 layout, behind a setting, and an environment moves to it
+> by a migration: [Moving a platform to the library](./migrating.md#moving-a-platform-to-the-library).
+> Until then the catalog keeps its truth in a database, the packager writes
+> version 2 package folders, and the streaming origin finds them in today's store.
+> Schema v1 is published, and a sample library built by the reference migrator
+> validates against it; no platform service reads or writes v1, and
+> [Migrating a library](./migrating.md#before-a-platform-uses-the-format) lists
+> what it would need.
 
 ## Why storage, not a database
 
@@ -156,5 +157,5 @@ whose episode exists in two versions — are in
 | [manifest.json](./manifest.md) | Every field of the entry point, and how it stays readable by version 2 readers |
 | [metadata.json](./metadata.md) | Texts, images and their naming, credits, video references, locks, and how a re-sync would work |
 | [Versions, audio, subtitles and quality](./versions.md) | Director's cuts, black-and-white and colour presentations, stereo and 5.1, SDH, forced and commentary tracks, quality ladders, and when an original may be deleted |
-| [Migrating a library](./migrating.md) | Building item folders from an existing catalog, applying them on storage safely, and what must change before a platform uses the format |
+| [Migrating a library](./migrating.md) | Moving a platform's catalog and store to the v2 library — stage, adopt, verify, switch, retire — and, for v1, building item folders from an existing catalog |
 | [Database first, storage as the record](./record.md) | The v2 design: what the database owns, what the tree records, who writes what, and how a rebuild works |

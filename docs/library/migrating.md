@@ -1,14 +1,122 @@
 # Migrating a library
 
-How to turn an existing catalog and package store into item folders, write them
-to storage without risking what is already there, and what has to change before
-a running platform can use the result.
+How a platform's catalog and the store it kept before become the library of
+[Database first, storage as the record](./record.md), and — further down — the
+reference tooling that builds v1 item folders from an export.
 
-> **Status — reference tooling.** The migrator below builds and validates
-> sample libraries from an export of the legacy catalog. There is no
-> in-platform migration job.
+> **Status — being built.** The staging tool is published in the
+> [schemas repository](https://github.com/zaentrum/schemas); the catalog's adopt,
+> its layout switch and its retire job are being built. No environment has been
+> migrated yet.
 
-## The tools
+## Moving a platform to the library
+
+Before the move, a platform keeps its originals under `media/`, its packages
+under `packages/` and the extras it took in under `extras/`, all at the share's
+root. After it, the root holds the library — `movies/`, `series/`, `people/` —
+and `.work/`, where an original waits among the arrivals (`.work/incoming/`,
+laid out as `media/` was) until it is deleted. Nothing is copied but small
+files: every package folder and every original is renamed, on the same
+filesystem.
+
+```mermaid
+flowchart LR
+  I["inventory<br/>--dry-run: report.json"] --> S["stage<br/>records under .work/migration/run/"]
+  S --> A["adopt<br/>renames + one transaction per item"]
+  A --> V["verify<br/>validator · media check · compare · play"]
+  V --> L["library.layout = v2"]
+  L --> R["library.originals = delete-after-package<br/>originals retired"]
+  R --> C["cleanup<br/>the old folders aside"]
+```
+
+### 1. Inventory
+
+Export the catalog (`db/export/library-export.sql` of the catalog service) and
+run the staging tool with `--dry-run` where the share is mounted and `ffprobe` is
+on the path — the packager's image has both:
+
+```sh
+cat tools/libv2_records.py tools/library-v2-from-catalog.py | \
+  python3 - --platform --export catalog.json --root /var/lib/katalog --run 2026-10-07a --dry-run
+```
+
+It probes every original and hashes nothing, and writes only
+`.work/migration/<run>/report.json`: what is ready, every problem by its class —
+an original that is missing, a package that never finished, an episode no series
+holds, music (which the library does not record), a sidecar no subtitle of the
+package was made from — and what deleting every original would cost: how many
+titles would lose surround sound, image subtitles, a subtitle language. Review
+that before anything is deleted.
+
+### 2. Stage
+
+The same command without `--dry-run` stages the records under
+`.work/migration/<run>/`, online, reading the store and writing nothing outside
+the run's folder: every item's folder as the library will hold it, its version
+records with the checksums of the package files hashed where they are, copies
+of the sidecars, the people the items credit, and per item a plan,
+`units/<itemId>.json`, of what moves where and what the database changes. A
+version keeps no original — the original goes to the arrivals and is deleted
+later — and a package whose original is already gone gets a source record that
+says so. Staging again writes the same records. A large catalog is staged by
+shard: an export of one shard (`psql -v shard=f0 -f library-export.sql`) and
+`--shard f0`, every shard of a run with the same `--as-of`.
+
+### 3. Adopt
+
+With the transcoder and the packager paused, the catalog service adopts the
+run, item by item — series before episodes, items before people — under a lock on
+the item: it checks the plan's guards (the old package unchanged since it was
+staged), renames the package folders into the staged records, the item folder
+into place and the original and its sidecars to the arrivals, moves what is left
+of the old package folder aside, and changes the database in one transaction. A
+journal records every step, so an item's adopt is undone in reverse, and a run
+can be reverted while its originals have not been purged.
+
+### 4. Verify
+
+```sh
+python tools/library-v2-media-check.py /var/lib/katalog
+python tools/validate-library-v2.py --check-media /var/lib/katalog
+python tools/library-v2-rebuild.py /var/lib/katalog --compare catalog-after.json \
+  --arrivals-root /var/lib/katalog/.work --ignore-fields id,path,hash
+```
+
+The media check prints `OK`; the validator finds no error — it reads past
+`.work/`, and the folders of the old store are a note until the cleanup; the
+compare against an export taken after the adopt exits 0 — the rows of the files
+waiting at the arrivals are no part of the record. Then every title and every
+extra plays, and the count of packaged rows is the count of `.complete` markers.
+
+### 5. Switch the layout
+
+Set `library.layout` to `v2`: the scan finds new arrivals in `.work/incoming/`,
+the workers get the library's paths in their work records, and the catalog
+projects `metadata.json` and `person.json` as the database changes.
+
+### 6. Retire the originals
+
+Set `library.originals` to `delete-after-package`. The retire job takes each
+original once its version is recorded and the steps that read it are done:
+verifies the package — the chain, or every byte, read by the catalog service
+itself, not by the packager that wrote it — checks the original is still the
+file that was recorded, writes the `original-deleted` event and moves the
+original to `.work/trash/`, at a limited rate. The trash is emptied after its
+grace period, the window in which a retirement can still be undone.
+
+### 7. Clean up
+
+`media/`, `packages/`, `extras/` and `incoming/` hold nothing the catalog knows
+any more: what is left is moved to `.work/legacy/` and reported, and the
+migration's folder is deleted once the last retired original has left the trash.
+
+## Building v1 item folders from an export
+
+The rest of this page is the reference tooling of v1, where storage is the source
+of truth: it builds and validates sample libraries from an export of a legacy
+catalog. There is no in-platform job for it.
+
+### The tools
 
 | Tool | Does |
 |---|---|
@@ -18,7 +126,7 @@ a running platform can use the result.
 | [`tools/package-checksums.py`](https://github.com/zaentrum/schemas/blob/main/tools/package-checksums.py) | Writes each package's `checksums.sha256` and records it in the manifest, or verifies them with `--verify`. Runs where the package files are readable. |
 | [`tools/make-library-examples.py`](https://github.com/zaentrum/schemas/blob/main/tools/make-library-examples.py) | Regenerates the published examples. |
 
-## Steps
+### Steps
 
 ```mermaid
 flowchart LR
@@ -29,7 +137,7 @@ flowchart LR
   V --> S["swap into place<br/>one rename"]
 ```
 
-### 1. Export
+#### 1. Export
 
 The migrator reads one folder of inputs. The export that produces them is
 specific to the legacy catalog and is not published; the migrator's docstring
@@ -45,7 +153,7 @@ defines each file.
 | `colour.tsv` | Per item: peak chroma at sampled times (`sec:satmax,…`). Without it every `presentation.colour` is `unknown`. |
 | `tmdb.json`, `tmdb_images.json` + `images/` | Optional: reference-database data the catalog never stored — release dates, season details, season posters, episode stills, logos, person ids. |
 
-### 2. Build
+#### 2. Build
 
 ```sh
 python tools/library-migrate.py --inputs export/ --out staging/ \
@@ -96,7 +204,7 @@ A staging tree is always `rev` 1. The migration time is recorded as such
 so keep file times when copying an export (`cp -p`, `rsync -t`). Catalog times
 without a time zone are taken as UTC.
 
-### 3–6. Validate, apply, check, swap
+#### 3–6. Validate, apply, check, swap
 
 Validate `staging/library`, apply it on storage into a new folder next to the
 live one, compute the package checksums there with `tools/package-checksums.py`
@@ -104,7 +212,7 @@ live one, compute the package checksums there with `tools/package-checksums.py`
 that folder with `--check-checksums`, then swap it into place with one rename and
 keep the old folder until the new one has been read back.
 
-## Applying on storage
+### Applying on storage
 
 The library is read by machines. It holds nothing but `<category>/<aa>/<id>` item
 folders — no browsing views, no symbolic links, no hard links — so it can be
@@ -122,7 +230,7 @@ When applying over an existing library rather than into a new folder, carry each
 document's `rev` forward and increment it, so a cache that keys on `rev` sees the
 change.
 
-### Writing safely
+#### Writing safely
 
 - **Build next to the live tree, then rename.** A half-applied tree is never
   visible to readers.
@@ -137,7 +245,7 @@ change.
   changes both, and a copy of the tree duplicates the data. `--check-media`
   rejects any package or original file that is a hard link.
 
-## Before a platform uses the format
+### Before a platform uses the format
 
 The migrated tree can be built, validated and inspected today. Serving from it,
 or deleting the old package folders or any original, needs these changes first:
@@ -155,7 +263,7 @@ Do not delete an original while the version's `lostIfOriginalDeleted` is not
 empty, while its match is `disputed` or `unmatched`, or before the readers above
 can find its package.
 
-## Building a cache
+### Building a cache
 
 A catalog database becomes a cache of the library: walk
 `movies/*/*/manifest.json` and `series/*/*/manifest.json` (and each series'
