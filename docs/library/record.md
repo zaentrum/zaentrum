@@ -271,7 +271,9 @@ and a trailer link gets back the local copy an extra downloaded from it keeps. I
 needs no network, no TMDB and no other service, it can run against a copy, and
 running it twice gives the same result. It cannot restore the deletion log: the
 tree holds what exists, not what was deleted, so a folder that outlived its
-delete comes back as an item, or a person.
+delete comes back as an item, or a person. Nor does it restore behaviour: a
+subtitle default someone chose comes back as no default, because no record
+holds it.
 
 **Verify** compares a tree with the database and reports both directions: records
 on storage that the database does not know, and rows that point at files that are

@@ -69,9 +69,10 @@ run, item by item — series before episodes, items before people — under a lo
 the item: it checks the plan's guards (the old package unchanged since it was
 staged), renames the package folders into the staged records, the item folder
 into place and the original and its sidecars to the arrivals, moves what is left
-of the old package folder aside, and changes the database in one transaction. A
-journal records every step, so an item's adopt is undone in reverse, and a run
-can be reverted while its originals have not been purged.
+of the old package folder aside, and changes the database in one transaction —
+keeping every subtitle default someone chose, which no record holds. A journal
+records every step, so an item's adopt is undone in reverse, and a run can be
+reverted while its originals have not been purged.
 
 ### 4. Verify
 
@@ -85,8 +86,9 @@ python tools/library-v2-rebuild.py /var/lib/katalog --compare catalog-after.json
 The media check prints `OK`; the validator finds no error — it reads past
 `.work/`, and the folders of the old store are a note until the cleanup; the
 compare against an export taken after the adopt exits 0 — the rows of the files
-waiting at the arrivals are no part of the record. Then every title and every
-extra plays, and the count of packaged rows is the count of `.complete` markers.
+waiting at the arrivals are no part of the record, and a subtitle's default is
+behaviour it never compares. Then every title and every extra plays, and the
+count of packaged rows is the count of `.complete` markers.
 
 ### 5. Switch the layout
 
