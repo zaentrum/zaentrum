@@ -112,6 +112,48 @@ grace period, the window in which a retirement can still be undone.
 any more: what is left is moved to `.work/legacy/` and reported, and the
 migration's folder is deleted once the last retired original has left the trash.
 
+### A store too large to move in one step
+
+Two options of the staging tool adopt a large store beside itself, in a short
+pause and without a copy:
+
+```sh
+… --platform --export catalog.json --root /var/lib/katalog --run 2026-10-13a \
+  --originals link --checksums pending
+```
+
+`--originals link` leaves every original, and the subtitle files beside it,
+where it is: the plan gives each a second name — a hard link — where a move
+would have put it, the original in its version folder, the subtitle file among
+the arrivals. Whatever played the originals before keeps playing them, the
+library holds them too, and its records name no file as it arrived. The package
+folders are still renamed: a package has one copy, and it is the library's from
+the adopt on. A hard link needs both names on one filesystem as the adopting
+service mounts them — one mount that holds the old originals and the library's
+root; two exports of one disk are two filesystems to a client. No space is
+freed while a file has two names: remove the old names once nothing reads them,
+and the retire job's rules decide about the originals from then on. The cleanup
+leaves `media/` alone for such a run.
+
+`--checksums pending` stages each package without reading its files. Its
+`package.json` counts the files and their bytes and says `"pending": true` in
+place of the checksums file's hash, and no `checksums.sha256` is written. Such
+a version plays as any other, is not verified, and its original is never
+retired on it. Afterwards the fill tool hashes the pending packages, folder by
+folder, and closes each chain — in the hours it is given, night after night:
+
+```sh
+python tools/library-v2-fill-checksums.py /var/lib/katalog --run 2026-10-13a \
+  --apply --until 05:00 --max-bytes 500000000000
+```
+
+Its journal, `.work/migration/<run>/checksums.jsonl`, lists every version it
+closed, and the catalog service notes them verified in full (`POST
+/api/library/migrations/<run>/checksums`). Until the old names are gone the
+checks take `--shared-originals` — a version's original, and nothing else, may
+be a hard link shared with another path — and `--no-pending` makes a pending
+package a problem once every one is said to be filled.
+
 ## Building v1 item folders from an export
 
 The rest of this page is the reference tooling of v1, where storage is the source
