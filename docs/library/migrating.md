@@ -135,6 +135,24 @@ freed while a file has two names: remove the old names once nothing reads them,
 and the retire job's rules decide about the originals from then on. The cleanup
 leaves `media/` alone for such a run.
 
+Where the old originals and the library are two exports of one disk, the
+storage host sees one filesystem and the adopting service two. `--originals
+prelinked` is for that: no plan holds a link. The stage writes
+`.work/migration/<run>/links.tsv` — a line per second name, the file relative
+to the old media folder, a tab, and its second name relative to the library's
+root, among the arrivals — and the links are made on the storage host before
+the adopt, a hard link a line:
+
+```sh
+while IFS="$(printf '\t')" read -r a b; do
+  mkdir -p "$(dirname "$LIBRARY/$b")" && ln "$OLD_MEDIA/$a" "$LIBRARY/$b"
+done < "$LIBRARY/.work/migration/2026-10-13a/links.tsv"
+```
+
+Folders made this way need the owner and mode the services write with. The
+adopt then moves each original from the arrivals into its version folder, a
+rename within the library's share, and leaves what `--originals link` leaves.
+
 `--checksums pending` stages each package without reading its files. Its
 `package.json` counts the files and their bytes and says `"pending": true` in
 place of the checksums file's hash, and no `checksums.sha256` is written. Such
