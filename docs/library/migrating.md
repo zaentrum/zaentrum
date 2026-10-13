@@ -153,6 +153,18 @@ Folders made this way need the owner and mode the services write with. The
 adopt then moves each original from the arrivals into its version folder, a
 rename within the library's share, and leaves what `--originals link` leaves.
 
+An old store is often written by another user than the one the library's
+services run as. Reading it needs little; moving a package out of its folder
+needs write on that folder, on the one above it and on each folder that
+moves. The inventory reports a package it could read and the adopt could not
+move as the problem *package folder not writable*: give the store's folders
+that user's write first — group write, where the two share a group — and the
+inventory is clean.
+
+A catalog that never probed its originals holds no codec, size or duration in
+an original's row. The stage puts what its record probed into the plan, and the
+adopt writes it, so the compare after the adopt agrees without a second pass.
+
 `--checksums pending` stages each package without reading its files. Its
 `package.json` counts the files and their bytes and says `"pending": true` in
 place of the checksums file's hash, and no `checksums.sha256` is written. Such
@@ -162,8 +174,13 @@ folder, and closes each chain — in the hours it is given, night after night:
 
 ```sh
 python tools/library-v2-fill-checksums.py /var/lib/katalog --run 2026-10-13a \
-  --apply --until 05:00 --max-bytes 500000000000
+  --apply --jobs 8 --until 05:00 --max-bytes 500000000000
 ```
+
+`--jobs` reads that many files at a time. A package is thousands of small
+files, and on a share it is the wait for each, not the bytes, that the reading
+costs: several at once fill a library many times faster, and ask as much more
+of the storage meanwhile.
 
 Its journal, `.work/migration/<run>/checksums.jsonl`, lists every version it
 closed, and the catalog service notes them verified in full (`POST
