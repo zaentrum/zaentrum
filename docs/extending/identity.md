@@ -6,7 +6,8 @@ addon that only contributes UI, a console and CLI commands never holds a
 credential.
 
 Identity enters when the addon **calls** platform APIs on its own behalf:
-[`POST /api/ingest`](./ingest.md), publishing on the [event bus](./events.md),
+[`POST /api/ingest`](./ingest.md), asking for the [holdings](./holdings.md),
+publishing on the [event bus](./events.md),
 changing its slot rows while running, or telling a person something with a
 [notice](./notices.md). For those it acts as a **service account**: an OIDC
 confidential client on the instance's realm, using the client-credentials
@@ -43,7 +44,10 @@ hand today:
    (service accounts enabled), in Keycloak's admin console — not on the public
    host by default; see [the admin console](../self-hosting.md#the-admin-console).
 2. Assign the realm role `zaentrum-addon` to that client's service account.
-3. Provide the client id + secret to the addon (a Secret its Deployment
+3. For the [holdings](./holdings.md), give the client's tokens the
+   instance's audience (the CR's `identity.audience`, `chino` by default) with
+   an audience mapper: katalog-api takes a token for that audience only.
+4. Provide the client id + secret to the addon (a Secret its Deployment
    mounts).
 
 🧭 Platform-provisioned addon identity (a client per installed addon, issued

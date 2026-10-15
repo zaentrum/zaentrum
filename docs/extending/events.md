@@ -20,10 +20,39 @@ added). The catalog contract:
 | `catalog.item.packaged` | The item is packaged and **playable** — the event an addon usually waits for |
 | `catalog.item.removed` | The item was deleted |
 
-Events are keyed by `item_id` and carry a minimal envelope (identity, the step
-the event unblocks, provenance) — consumers that need more read it from the
-APIs. Schemas are published contracts in
-[zaentrum/schemas](https://github.com/zaentrum/schemas) (Avro).
+Events are keyed by the item's id and carry a minimal JSON envelope (the
+item, the step the event unblocks, provenance) — consumers that need more read
+it from the APIs:
+
+```json
+{"eventId": "9f2b…", "itemId": "8c1cee73-…", "type": "episode", "step": "tmdb",
+ "occurredAt": "2026-10-15T08:00:00Z", "source": "ingest",
+ "externalIds": {"tmdb-episode": "937631"}, "seriesExternalIds": {"tmdb": "97546", "tvdb": "362392"},
+ "seasonNumber": 4, "episodeNumber": 7}
+```
+
+`discovered`, `packaged` and `removed` also name the item's **identities**
+beside its catalog id
+([ADR-0012](../adr/0012-catalog-identity-for-addons.md)), so a consumer
+reconciles what it knows of a title without a lookup:
+
+- `externalIds` — the item's own ids, by source as the catalog keeps them:
+  `tmdb`, `tvdb`, `imdb`, and an episode's TMDB id under `tmdb-episode`;
+- of an episode, `seriesExternalIds` — its series' ids — and `seasonNumber`
+  and `episodeNumber`.
+
+Each is optional, left out when the catalog knows none. `removed` names the
+item as it was, read before its rows go. `packaged` is sent for the episode
+that holds a file; an episode another's file covers plays with it — the
+[holdings](./holdings.md) say which.
+
+🔶 No schema of the item events is published yet.
+[ADR-0005](../adr/0005-kafka-event-bus-and-schema-contracts.md) decides that
+events are Avro contracts in [zaentrum/schemas](https://github.com/zaentrum/schemas);
+the item events are JSON today, and the Avro records under `stube/library/`
+there describe an earlier design that no service emits. Until a schema is
+published, the envelope above is the contract, and it changes only by
+additions.
 
 ### A title's extras
 
@@ -87,6 +116,12 @@ rules keep this composable:
   share one broker without crosstalk.
 - **Own your domain segment.** Addon topics live under a segment the addon
   owns; the `catalog.*` namespace belongs to the platform.
+
+🔶 An addon's topics must exist before its work on them runs: on a broker
+that does not create topics on first use, provision them under the prefix.
+[ADR-0012](../adr/0012-catalog-identity-for-addons.md) decides that the
+manifest declares them and the operator creates and removes them with the
+addon; that is not built yet.
 
 ## Connecting
 

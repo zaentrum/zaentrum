@@ -23,7 +23,8 @@ everything on this page.
 | **[UI slots](./slots.md)** | A native button inside a product app (e.g. "Request this" on an empty search) | `ui_extensions` registry in portal-api |
 | **[Notices](./notices.md)** | Telling one person something — "your title is ready" — in every client they use | `notices` in portal-api, posted by the addon's service account |
 | **[Hosted console](./console.md)** | A full admin UI inside the portal shell — no own origin, route, or session | Module federation, attached at runtime |
-| **[Catalog ingest](./ingest.md)** | "This file on disk is now a library item" — the pipeline takes it from there | `POST /api/ingest` on katalog-manager |
+| **[Catalog ingest](./ingest.md)** | "This file on disk is now a library item" — a title handed over by its identity (TMDB, TVDB, IMDb), the pipeline takes it from there | `POST /api/ingest` on katalog-manager |
+| **[Holdings](./holdings.md)** | "What does the library hold of this title?" — by identity, episode by episode, without a copy of the catalog | `GET /api/v1/holdings` on katalog-api |
 | **[Extras](./extras.md)** | "This file is a title's trailer" — or its teaser, featurette or deleted scene, packaged and played from the server beside the title | `POST /api/extras` on katalog-manager |
 | **[Event bus](./events.md)** | React to pipeline stages; publish your own domain events | Kafka topics under the tenant prefix |
 | **[Identity](./identity.md)** | A service account for calling platform APIs (ingest, events, notices) — not needed to install | OIDC client-credentials + the addon role |
@@ -67,6 +68,9 @@ ahead of the shipped platform, it is marked, not asserted:
 | Notices shown in chino on the web, TVs and phones | 🔶 next — see [notices](./notices.md#reading-notices--what-a-client-does) |
 | Portal-hosted console via runtime federation | ✅ shipped |
 | Neutral catalog ingest | ✅ shipped |
+| Ingest by identity, holdings by identity, identities on items and item events ([ADR-0012](../adr/0012-catalog-identity-for-addons.md)) | 🔶 on `edge`, in the next release — see [ingest](./ingest.md#by-identity) and [holdings](./holdings.md) |
+| An addon's topics created and removed with it, from its manifest | 🔶 decided in [ADR-0012](../adr/0012-catalog-identity-for-addons.md), not built — see [events](./events.md#addon-topics) |
+| Published schemas of the catalog's item events | 🔶 decided in [ADR-0005](../adr/0005-kafka-event-bus-and-schema-contracts.md), not published — see [events](./events.md#platform-topics) |
 | A title's extras: taken in by the API or the scanner, packaged on their own chain, played beside the title | ✅ shipped — see [extras](./extras.md) |
 | Event bus with tenant-prefixed topics | ✅ shipped |
 | Install from settings by pulling the addon's manifest (app + tile + slot rows, removable by key) | ✅ shipped — see [installing](./installing.md) |

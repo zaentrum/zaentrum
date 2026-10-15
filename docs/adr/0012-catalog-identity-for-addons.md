@@ -1,6 +1,6 @@
 # ADR-0012: Addons hand over and look up by identity
 
-**Status:** Proposed · 2026-10-15 · extends the ingest seam of [ADR-0001](./0001-neutral-core-and-addon-seams.md) and the event contracts of [ADR-0005](./0005-kafka-event-bus-and-schema-contracts.md). Design ahead of the code: none of it is built yet.
+**Status:** Proposed · 2026-10-15 · extends the ingest seam of [ADR-0001](./0001-neutral-core-and-addon-seams.md) and the event contracts of [ADR-0005](./0005-kafka-event-bus-and-schema-contracts.md). §1 and §2 are built, on `main` since 2026-10-15 ([ingest](../extending/ingest.md#by-identity), [holdings](../extending/holdings.md)); §3 is not built yet.
 
 ## Context
 
@@ -18,7 +18,7 @@ Three contracts, each in the core's own vocabulary: titles, series, seasons, epi
 
 **1. Ingest by identity.** `POST /api/ingest` takes a title by its identity instead of a catalog id.
 
-- For an episode: `series: {tmdb | tvdb | imdb}` (one is enough), `seasonNumber`, `episodeNumber`, and, for one file that covers several episodes in a row, `episodeEnd`. The catalog finds the series by that identity, or creates it from the identity and the title given, as the scanner creates one it finds on disk. It then links the episode, and the covered ones, to it.
+- For an episode: `series: {tmdb | tvdb | imdb}` (one is enough), `seasonNumber`, `episodeNumber`, and, for one file that covers several episodes in a row, `episodeEnd`. The catalog finds the series by that identity (the first source that finds one decides; of a show it holds twice, the series made first), or creates it from the identity and the title given, as the scanner creates one it finds on disk. It then links the episode, and the covered ones, to it.
 - For a movie: `identity: {tmdb | imdb}`, so it arrives matched rather than by title alone.
 - The answer is the catalog's ids: `{itemId, created, seriesId?, covered?: [itemId…]}`. Identity goes in, catalog ids come out.
 - `parentId` stays accepted for the scanner and for callers that already hold one. No addon needs a catalog id to hand a file over.
@@ -30,8 +30,8 @@ Three contracts, each in the core's own vocabulary: titles, series, seasons, epi
 - `type=movie` likewise, for one movie.
 - `GET /api/v1/holdings?type=series` or `type=movie`, paged: every title with its identities, so an addon can follow the whole library without copying it.
 - Items' external ids become part of the item JSON the read side already serves: `externalIds: {tmdb, tvdb, imdb, …}`.
-- The pipeline events an addon may already consume (`catalog.item.discovered`, `catalog.item.packaged`, `catalog.item.removed`) carry the item's identities next to its catalog id, as optional fields of their published schemas, so a consumer can reconcile without a lookup.
-- Read access is the read side's usual: a signed-in person, or a service account with the `zaentrum-addon` role.
+- The pipeline events an addon may already consume (`catalog.item.discovered`, `catalog.item.packaged`, `catalog.item.removed`) carry the item's identities next to its catalog id, as optional fields of their envelope, so a consumer can reconcile without a lookup. (ADR-0005 makes that envelope a published schema; none is published for these events yet.)
+- Read access is the read side's usual: a signed-in person, or an addon's service account whose tokens carry the instance's audience. The holdings are the library's, not a viewer's: no rating cap filters them, so a request capped at an age is refused them.
 
 **3. Topics from the manifest.** An addon's manifest declares the topics it produces and consumes, named as ADR-0005 names them under the instance's tenant prefix. The operator creates them when it installs the addon ([ADR-0011](./0011-addon-charts-installed-by-the-operator.md)) and removes them with it. An addon's topics are never made by hand.
 
