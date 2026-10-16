@@ -135,6 +135,18 @@ The CR declares everything a client needs:
   This is a declared CRD field, not an internal convention — an addon may
   mount the same secret and connect the same way the platform services do.
 - `eventStreaming.topicPrefix` — the tenant prefix above.
+- `eventStreaming.groupPrefix` — the prefix of the instance's consumer groups:
+  the pipeline workers' (`analyzer-workers`, `transcoder-workers`,
+  `packager-workers`, `transcoder-extras`, `packager-extras`) and the catalog
+  enricher's (`katalog-enricher`). Empty (the default), they keep those names.
+
+**Two instances on one broker need a `groupPrefix` each** (one may keep the
+empty one). A group two instances share is led by one of them; where the
+broker's ACLs let each instance see only its own topics, the leader cannot
+assign the other instance's partitions, and that instance's workers read
+nothing, without an error. A group a prefix newly names starts at the
+earliest message its topics retain, so setting it re-reads what they hold:
+set it on an instance whose topics hold only work it still has to do.
 
 In bundled mode the broker is plaintext in-cluster and topics for the platform
 contract are pre-created; in external mode topic provisioning follows whatever
@@ -142,7 +154,7 @@ governs your cluster.
 
 A broker that does not create topics on first use, as a shared one often
 does not, needs the three [extras topics](#a-titles-extras) provisioned under
-the instance's prefix, and must let the groups `transcoder-extras`,
-`packager-extras` and `chino-events-extras-<pod>` read them. Until then extras
-wait, `pending`, and are sent again a backoff later; chino-api asks every
-minute whether its topic exists; the item pipeline is unaffected.
+the instance's prefix, and must let the groups `<groupPrefix>transcoder-extras`,
+`<groupPrefix>packager-extras` and `chino-events-extras-<pod>` read them. Until
+then extras wait, `pending`, and are sent again a backoff later; chino-api asks
+every minute whether its topic exists; the item pipeline is unaffected.
