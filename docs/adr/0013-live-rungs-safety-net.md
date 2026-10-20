@@ -1,6 +1,6 @@
 # ADR-0013: Live rungs beside the package, as a supervised safety net
 
-**Status:** Proposed · 2026-10-17 · amends the fallback of [ADR-0002](./0002-prepackaged-playback.md). Design ahead of the code: a spike validates it first (see [Validation](#validation)).
+**Status:** Accepted · 2026-10-20 (proposed 2026-10-17) · amends the fallback of [ADR-0002](./0002-prepackaged-playback.md). A spike validated the worker first ([Validation](#validation), [what it found](#what-the-spike-found)).
 
 ## Context
 
@@ -47,6 +47,24 @@ Before any of this is built, a spike compares a minimal warm worker on the media
 - behaviour when a worker is killed mid-segment or runs out of memory.
 
 The design holds if a title that cannot start today starts within about 3 seconds over that link and does not stall, and a worker killed mid-play goes unnoticed by the player.
+
+### What the spike found
+
+On one slice of a consumer GPU (24 GB, eight hardware encode sessions), ten library titles (SDR, HDR10, Dolby Vision 7 and 8 up to 2160p at 80 Mbit/s), three rungs each, the warm worker against one encoder command per segment, the same 1,960 segments for both, every one checked frame by frame against the package's boundaries:
+
+| | warm worker | command per segment |
+|---|---:|---:|
+| HDR source, one 10-s segment of a rung (tone-mapped on the GPU) | 0.7–1.7 s | 2.7–3.8 s |
+| SDR source, one 10-s segment of a rung | 0.3–1.6 s | 0.8–1.8 s |
+| a title's first segment, cold | 0.8–2.4 s | 1.4–4.2 s |
+| HDR throughput of the slice, eight in flight | 14× real time | 3.9× real time |
+| SDR throughput of the slice, eight in flight | 22.6× real time | 17.7× real time |
+
+- The worker keeps the frames in GPU memory from decode to encode; the command line cannot hand GPU frames to the tone mapper in this media-library release and sends them through system memory, which is most of the difference.
+- A crash in the library, a `kill -9`, a kill at the memory limit and two kinds of stall were recovered 25 times out of 25, each with the same fragment byte for byte, the segment back about 1.7 s after a crash: inside the play time of one segment, which is what keeps a killed worker unnoticed.
+- A corrupt source is refused in under a second and its circuit opens after three; the command line returned a fragment of 133 of 259 frames as a success.
+- Packages start their presentation with an edit list; rungs must keep it, or their segments are two frames short of the package's.
+- Not measured yet: the emulated long link and a real player switching rungs. Both come with the virtual ladder (phase 2).
 
 ## Consequences
 
