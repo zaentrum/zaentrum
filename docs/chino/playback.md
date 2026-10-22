@@ -36,11 +36,13 @@ like a 16:9 film of 1920 × 1080, because both are full HD.
 | below 480p | “Lowest (360p)” |
 | the original, played as it is | “Original” |
 
-A step within 10% of a height in the table counts as that height, so frames cut
-a little wider or narrower keep their name: 1916 × 800 and 2048 × 858 are
-“High (1080p)”. Any other step between two heights takes the lower one's name
-with its own number: 1600 × 900 is “Medium (900p)”, and 1666 × 900 is “Medium
-(937p)”. A
+A step up to 10% above a standard height, in a frame no taller than it, or up
+to 3% below it, counts as that height. The standard heights are 240, 360, 480,
+540, 576, 720, 1080, 1440, 2160 and 4320. So frames cut a little wider or
+narrower keep their name: 1916 × 800 and 2048 × 858 are “High (1080p)”. Any
+other step takes the name of the table's next lower height, with its own number:
+1024 × 576 is “Low (576p)”, 2560 × 1072 is “High (1440p)”, 1666 × 900 is “Medium
+(937p)”, and a scope film's 720-line encode, 1728 × 720, is “Medium (972p)”. A
 re-encode at the original's size is named by its step like any other.
 
 ## The player's menus
