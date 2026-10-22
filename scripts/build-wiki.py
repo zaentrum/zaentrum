@@ -62,6 +62,15 @@ NAV = [
         ("library-migrating", "Migrating a library"),
         ("library-record", "Database first, storage as the record"),
     ]),
+    ("The chino apps", [
+        ("chino", "Overview"),
+        ("chino-title-actions", "Title actions"),
+        ("chino-playback", "Playback"),
+        ("chino-subtitles", "Subtitles"),
+        ("chino-downloads", "Downloads and offline"),
+        ("chino-casting", "Casting"),
+        ("chino-words", "Words"),
+    ]),
     ("Understand it", [
         ("architecture", "Architecture"),
         ("adr", "Decision records (ADRs)"),

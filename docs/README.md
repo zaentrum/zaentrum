@@ -26,6 +26,7 @@ single `Zaentrum` custom resource. Chart values map 1:1 onto the CR spec.
 | **Extend it with an addon** (or write one) | [Extending zaentrum](./extending/README.md) |
 | **Understand how it fits together** | [Architecture](./architecture.md) · [Decision records](./adr/README.md) |
 | **Understand how the library is kept on storage** (manifest, metadata, versions) | [The library format](./library/README.md) |
+| **See how the chino apps behave** (title actions, playback, subtitles, downloads, casting, words) | [The chino apps](./chino/README.md) |
 
 Start with [Prerequisites](./prerequisites.md) regardless of path.
 
