@@ -68,6 +68,15 @@ is the quality's name from the table above: “Medium (720p)”, “Low (480p)�
 It keeps the position. Status codes go into the playback report, never into
 the line.
 
+## The audio setting
+
+Settings has one audio language, “Original” or a language, with this text under
+it, the same in every app:
+
+> Titles play with audio in the language you pick here, where they have it.
+> With Original, each title plays in the language it was made in. A choice in
+> the player applies only to what's playing now.
+
 ## When a page couldn't load
 
 The apps follow the design system's [cases by
@@ -77,6 +86,5 @@ For chino:
 - A removed title or person: “this title isn't in the library anymore” or “this
   person isn't in the library anymore”, with **back**.
 - A list screen that gets “not found” means the app and the server don't match:
-  “The server didn't accept the request. Check for an app update, then try
-  again.”
+  “The server didn't accept the request. Check for an app update.”
 - A sign-in that expired renews itself; only a refused one leads to sign-in.

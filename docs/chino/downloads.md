@@ -75,7 +75,9 @@ button repeats it and is the danger button, and the body names what goes:
 | Remove an account | “remove account” | “The 23 downloads of Anna, 12.4 GB, are deleted from this phone.” |
 | Change the server | “change server” | “Your 23 downloads, 12.4 GB, are deleted from this phone.” |
 
-With one download: “Your download, 281 MB, is deleted from this phone.” and “The
+The number and the size count the same titles, those with something on the
+phone, as “delete all” does. With one download: “Your download, 281 MB, is
+deleted from this phone.” and “The
 download of Anna, 281 MB, is deleted from this phone.” With none, the action
 works as it always does, unless something is casting: while it is, the
 question is asked anyway and adds “Casting on Living Room TV stops.”
@@ -102,8 +104,10 @@ the questions compute one total, from the bytes, rounded once.
 - **Delete one** from the title's menu or its control. It asks nothing.
 - **Delete all** at the end of the list asks once, in a dialog titled “delete
   all downloads”: “This removes 23 downloads, 12.4 GB, from this phone.”, with
-  “cancel” and “delete all”. It counts only what is on the phone; with only failed entries left, it
-  says “This clears the list of downloads.”
+  “cancel” and “delete all”. Both “delete all” buttons are the design system's
+  danger button. It counts only what is on the phone: a title partly
+  downloaded counts, a queued one doesn't. With only failed or queued entries
+  left, it says “This clears the list of downloads.”
 - **Empty**: “nothing downloaded yet”, and “Titles you download show up here,
   ready to watch without a connection.”
 

@@ -34,7 +34,8 @@ The menu is headed “subtitles”. It is a menu of one choice, like the player'
 1. **off**
 2. **the person's preferred subtitle language**, when the title has it
 3. **the server's other subtitle languages**, read from its configuration
-4. **more languages**, when the file brings others; it opens the rest
+4. **more languages**, when the file brings others; it opens the rest, in
+   alphabetical order of their names
 
 When the server names no subtitle languages, all of the title's tracks are
 listed directly, without “more languages”: the preferred language first, then
@@ -71,7 +72,9 @@ follows the setting again.
 ## The setting
 
 Settings has one subtitle language, “Off” or a language, with this text under
-it, the same in every app:
+it, the same in every app. The languages offered are the server's subtitle
+languages, read from its configuration like the menu's, never a list fixed in
+the app; a server that names none offers every language by name.
 
 > Subtitles in the language you pick here come on when a title's audio is in
 > another language. Otherwise, only the foreign-language parts get subtitles,
