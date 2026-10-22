@@ -15,11 +15,16 @@ the phone apps show them the same way.
   most two lines where the text allows, within 80% of the picture's width. On a
   TV, it stays inside the safe area.
 - **One look for every title.** Colours, sizes, boxes, fonts and positions that
-  come inside a file are ignored.
+  come inside a file are ignored. Italics stay, because they mean something: a
+  voice from off screen, a song, a thought. Ruby, the small readings above
+  Japanese and Chinese characters, stays too.
 - **One subtitle at a time.**
+- **Out of the controls' way**: while the player's controls show, the line moves
+  up above them, and back down when they hide, at the controls' own pace.
 
 When someone has set caption preferences on the device, under accessibility,
-those win over this look: for example a box behind the text.
+those win over this look: for example a box behind the text. The TV and the
+phone apps read them; a web page can't, so the web app always shows this look.
 
 ## The menu
 
@@ -33,7 +38,10 @@ checkboxes. In this order:
 4. **more languages**, when the file brings others; it opens the rest
 
 When the server names no subtitle languages, all of the title's tracks are
-listed directly, the preferred language first, without “more languages”.
+listed directly, without “more languages”: the preferred language first, then
+the others in the file's order. A language's tracks stay together, AI ones
+included, and a language with its region or script counts as that language:
+“Chinese (Simplified) · AI” follows “Chinese”.
 
 Within a language: the plain track first, then “for deaf and hard of hearing”,
 then “foreign-language parts only”, then “AI”. Names follow the [word
@@ -43,8 +51,9 @@ list](./words.md):
 - “German · foreign-language parts only”
 - “Chinese (Simplified) · AI”
 
-Two tracks of the same language and kind show once, the file's own first. Words
-in a file's label that only name the language again (“Deutsch”, “中文”) are
+Tracks that would read the same show once: one inside the file before one the
+server adds, otherwise the first in the file. They are never numbered, as in
+“English (2)”. Words in a file's label that only name the language again (“Deutsch”, “中文”) are
 dropped; words that add something stay (“English · Commentary”). Subtitles
 stored as pictures inside a file aren't offered.
 
@@ -56,6 +65,20 @@ stored as pictures inside a file aren't offered.
 - **Nothing else.** Subtitles in the audio's own language are the person's
   choice, made in the menu.
 
+The rule compares with the audio that is playing, never with the preferred audio
+language. A choice in the menu lasts for what is playing now; the next title
+follows the setting again.
+
+## The setting
+
+Settings has one subtitle language, “Off” or a language, with this text under
+it, the same in every app:
+
+> Subtitles in the language you pick here come on when a title's audio is in
+> another language. Otherwise, only the foreign-language parts get subtitles,
+> where a title has them. A choice in the player applies only to what's playing
+> now.
+
 ## For the builders
 
 - Android (Media3): a subtitle view with embedded styles and embedded font sizes
@@ -64,5 +87,11 @@ stored as pictures inside a file aren't offered.
   system's caption settings are switched on, it takes the user's style and text
   size instead. The safe area comes from a bottom margin and the 80% width, not
   from padding the view.
-- Web: the same through `::cue` (white, no background, an outline drawn with text
-  shadows, a font size relative to the video's height), one active track.
+- Web: an overlay the app draws instead of the browser's own captions, one track
+  at a time: white, no background, an outline drawn with text shadows in eight
+  directions, a font size relative to the picture's height. It keeps `<i>` and
+  `<ruby>` from the cue and drops every other style.
+- Language names come from the platform in their standard form, the language
+  first and the region or script in brackets: “Portuguese (Brazil)”, “English
+  (Guam)”, “Chinese (Simplified)”. On the web that is `Intl.DisplayNames` with
+  `languageDisplay: 'standard'`; its default gives “Brazilian Portuguese”.

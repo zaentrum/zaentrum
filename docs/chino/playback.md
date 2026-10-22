@@ -41,7 +41,8 @@ any other step.
 - Subtitles, audio, quality and speed are menus of one choice each. They show
   no checkboxes: the picked row is in the accent blue, with a small filled dot
   before it.
-- Their headers are lowercase: “subtitles”, “audio”, “quality”, “speed”.
+- Their headers are lowercase: “subtitles”, “audio”, “quality”, “speed”, and
+  “timing” for the subtitles' timing, whose button is “reset”.
 - Controls over the picture, such as a chip, sit on a solid surface, never on a
   see-through one.
 
