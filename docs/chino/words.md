@@ -12,7 +12,8 @@ text](https://nalet.github.io/design-system/foundations/meaningful-text/) and
 | “AI” | Subtitles made by the platform, after the language: “German · AI” | “auto”, “generated” |
 | “Portuguese (Brazil)” | A language with its region or script in brackets: “Chinese (Simplified)” | “Brazilian Portuguese”, “pt-BR” |
 | “movies” | Films, as the app's tab says | “films” |
+| “account” | Who is watching, as the account picker says | “profile”, “user” |
 | “downloads”, “on this phone” | What is stored on the device (“on this tablet” on a tablet) | “offline mode”, “sync”, “cache” |
 | “finished” | Watched to the end, or into its last minutes ([playback](./playback.md)) | “completed” |
-| “Medium”, “720p” | A quality, by the name the player's quality menu shows | “adaptive streaming”, bitrates |
+| “Medium (720p)” | A quality: its name and its height, as the player's quality menu shows it | “adaptive streaming”, a height or a bitrate alone |
 | “the people who run this server” | Who receives a bug report | “the dev backlog” |

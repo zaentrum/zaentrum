@@ -27,14 +27,14 @@ Google Cast's own widgets, in chino's colours.
 - **Handing over**: when casting starts, the title continues on the TV from
   where it was, and the phone's player closes. When people stop casting, the
   phone keeps the TV's position.
-- **Changing accounts**: signing out, removing the account or switching to
-  another one saves the position and stops casting, so a title never keeps
-  playing under the next person. The question before signing out says “Casting
-  on Living Room TV stops.”; a switch says “Stopped casting on Living Room TV.”
-  afterwards.
+- **Changing accounts**: signing out, removing the account, changing the server
+  or switching to another account saves the position and stops casting, so a
+  title never keeps playing under the next person. The question before signing
+  out, removing the account or changing the server says “Casting on Living Room
+  TV stops.”; after a switch, a toast says “Stopped casting on Living Room TV.”
 - **Downloads without the server**: a downloaded title plays on the phone, even
-  while a TV is connected, and says why: “Playing on this phone: the server
-  can't be reached.”
+  while a TV is connected, and a toast says why: “Playing on this phone: the
+  server can't be reached.”
 
 ## When the TV can't play a title
 

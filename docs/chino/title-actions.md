@@ -9,7 +9,7 @@ button does something else.
 
 On a title's page, in this order:
 
-**play** (or **resume 1:43**) · **start over** · **trailer** · **add to list** ·
+**play**, or **resume 1:43** and **start over** · **trailer** · **add to list** ·
 **watched** · **liked** · **download**
 
 - Every control in the row has one height: 48 dp on a phone or a tablet. Icon
@@ -22,8 +22,8 @@ On a title's page, in this order:
 
 One control in two parts, in one frame and at one height:
 
-- **The main part** shows and toggles the Watchlist: “+” when the title isn't
-  in it, “✓” when it is. It never touches other lists.
+- **The main part** shows and toggles the Watchlist: an outlined bookmark when
+  the title isn't in it, a filled one when it is. It never touches other lists.
 - **“⌄”** opens the list picker, with a check against each list that holds the
   title. That's where a title leaves other lists.
 - The two parts touch, with a 1 dp divider and the same fill. The “⌄” part is
@@ -36,12 +36,13 @@ Labels and icons on a filled colour are dark.
 
 | Control | Off | On |
 |---|---|---|
-| Add to list | “+” on the plain surface | “✓” on blue: in the Watchlist |
-| Watched | an outlined eye on the plain surface | a dark eye on green |
-| Liked | an outlined heart on the plain surface | a dark heart on red |
+| Add to list | an outlined bookmark on the plain surface | a dark bookmark on blue: in the Watchlist |
+| Watched | an outlined check on the plain surface | a dark check on green |
+| Liked | an outlined heart on the plain surface | a dark heart on the design system's red |
 
-Each meaning has its own colour: blue for the Watchlist, green for watched,
-red for liked.
+Each meaning has one icon and one colour, on buttons and on cards alike: the
+bookmark on blue for the Watchlist, the check on green for watched, the heart
+on red for liked.
 
 The names screen readers announce say the state: “add to Watchlist” and “in
 your Watchlist”, “choose lists”, “mark as watched” and “watched”, “like” and
@@ -55,6 +56,6 @@ button.
 
 - **Episode rows** carry their actions in the row's own actions line, with the
   download control, at the same 48 dp: watched and add to list.
-- **Cards** in a grid show only status marks: the saved bookmark, the watched
-  check, the progress bar. Actions live on the title's page, or in a card's
-  menu where it has one.
+- **Cards** in a grid show only status marks, drawn as in the states table:
+  the Watchlist bookmark on blue, the watched check on green, and the progress
+  bar. Actions live on the title's page, or in a card's menu where it has one.

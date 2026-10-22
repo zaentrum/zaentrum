@@ -1,25 +1,34 @@
 # Playback
 
+What a title offers when people come back to it, when it counts as finished,
+what the player says when it changes the quality by itself, and what a page
+says when it couldn't load. Every app follows the same rules, so a title
+resumes and finishes the same way everywhere.
+
 ## Play, resume and a finished title
 
 - A title people stopped part way shows **resume 1:43**, with **start over**
   beside it.
-- A title stopped within its last 5 % or its last 2 minutes, whichever is
+- A title stopped within its last 5% or its last 2 minutes, whichever is
   longer, counts as **finished**: it shows **play**, from the start, and the
   watched mark. For a short title, finished never starts before its second
   half.
 - The server decides finished, once, so every app agrees. Continue watching
-  drops a finished film and moves a finished episode on to the next one.
+  drops a finished movie and moves a finished episode on to the next one.
 - Removing a title from continue watching doesn't mark it as watched.
 
 ## When the quality changes by itself
 
-When playback has to step down, the player says what it did and why, with the
-quality's name as the quality menu shows it:
+When playback has to step down, the player says what it did and why. {label}
+is the quality's name as the quality menu shows it, a name and its height:
+“Medium (720p)”, “Low (480p)”.
 
-- “Switched to Medium quality: the connection can't keep up with the original.”
-- “Switched to Medium quality: the original couldn't be streamed.”
-- “Switched to Low (480p) quality: the connection can't keep up.”
+- From the original, when the connection is too slow: “Switched to {label}
+  quality: the connection can't keep up with the original.”
+- When the original can't be streamed: “Switched to {label} quality: the
+  original couldn't be streamed.”
+- One step down between qualities: “Switched to {label} quality: the
+  connection can't keep up.”
 
 It keeps the position. Status codes go into the playback report, never into
 the line.

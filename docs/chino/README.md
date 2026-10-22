@@ -22,7 +22,7 @@ and this spec doesn't repeat them:
 | Page | What it covers |
 |---|---|
 | [Title actions](./title-actions.md) | Play, add to list, watched and liked: one size and one look everywhere |
-| [Playback](./playback.md) | Resume and play, a finished title, and the quality notices |
+| [Playback](./playback.md) | Resume and play, a finished title, the quality notices, and what a page says when it couldn't load |
 | [Subtitles](./subtitles.md) | How subtitles look, the menu, and what switches on by itself |
 | [Downloads and offline](./downloads.md) | Taking titles along on a phone or a tablet |
 | [Casting](./casting.md) | Watching on a TV from the phone |

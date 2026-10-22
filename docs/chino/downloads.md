@@ -23,7 +23,7 @@ it.
 | On its way | “downloading 42% · 1.4 GB”, with a thin bar | Cancel |
 | On the phone | “downloaded · 1.4 GB” | Play it, delete it |
 | Needs a check | “downloaded · check needed”, and “Downloads are checked with the server every 30 days. This one plays again once the server can be reached.” | Nothing until the server can be reached |
-| Failed | “couldn't download”, and the reason in a sentence | “try again”, or delete what was started |
+| Failed | “couldn't download”, and the reason in a sentence | “try again”, or remove it from the list |
 | Can't come along | “can't be downloaded”, and “This title can only be streamed.” | Nothing |
 
 - The size is the size of exactly what will be downloaded at the chosen quality,
@@ -58,8 +58,8 @@ this phone”, with no check mark while one of them needs a check.
 
 ## Whose downloads they are
 
-A download belongs to the account that made it. Another profile on the same
-phone doesn't see it, so a child's profile never plays a film meant for a
+A download belongs to the account that made it. Another account on the same
+phone doesn't see it, so a child's account never plays a movie meant for a
 parent. When a sign-in expires, nothing is hidden: signing in again as the same
 account brings everything back. With several accounts on the phone and no server
 to ask, the app opens on the account picker first, then on that account's
@@ -77,11 +77,11 @@ button repeats it and is the danger button, and the body names what goes:
 
 With one download: “Your download, 281 MB, is deleted from this phone.” and “The
 download of Anna, 281 MB, is deleted from this phone.” With none, the action
-works as it always does. While something is casting, signing out also says
-“Casting on Living Room TV stops.”
+works as it always does, unless something is casting: while it is, the
+question is asked anyway and adds “Casting on Living Room TV stops.”
 
 A download also goes when the server says the account may no longer watch the
-title, because it left the library or a profile's limit changed, after two such
+title, because it left the library or the account's limit changed, after two such
 answers at least an hour apart. The app says so once: “This title isn't
 available to this account anymore, so it was deleted from this phone.” For
 several at once, a banner on the downloads screen: “3 downloads were deleted
@@ -100,9 +100,9 @@ With nothing downloaded, only “18 GB free on this phone”. The storage line a
 the questions compute one total, from the bytes, rounded once.
 
 - **Delete one** from the title's menu or its control. It asks nothing.
-- **Delete all** at the end of the list asks once: “delete all downloads”, then
-  “This removes 23 titles, 12.4 GB, from this phone.”, with “cancel” and “delete
-  all”. It counts only what is on the phone; with only failed entries left, it
+- **Delete all** at the end of the list asks once, in a dialog titled “delete
+  all downloads”: “This removes 23 downloads, 12.4 GB, from this phone.”, with
+  “cancel” and “delete all”. It counts only what is on the phone; with only failed entries left, it
   says “This clears the list of downloads.”
 - **Empty**: “nothing downloaded yet”, and “Titles you download show up here,
   ready to watch without a connection.”
@@ -116,7 +116,8 @@ reached, and the bell is hidden.
 
 - **A downloaded title's page** is built from what is on the phone, with the
   banner on top, under the top bar. What needs the server is left out: the
-  watchlist, lists, the watched mark, the trailer and the people. A title that
+  Watchlist and other lists, the watched and liked marks, the trailer and the
+  people. A title that
   needs its check shows play or resume dimmed, with the sentence that says why.
 - **The player** offers the subtitles that came with the download, named as
   online. A title without subtitles offers only “off”.
@@ -127,7 +128,7 @@ reached, and the bell is hidden.
 ## Settings
 
 - **Download quality**: named as in the player's quality menu, with the size
-  of an hour of video as the server reports it: “720p · about 932 MB an hour”.
+  of an hour of video as the server reports it: “Medium (720p) · about 932 MB an hour”.
   Where too few titles have a quality to tell its size reliably, the size is
   left out.
 - **Download over Wi-Fi only**: on by default.

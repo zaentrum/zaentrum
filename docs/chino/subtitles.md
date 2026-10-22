@@ -8,14 +8,14 @@ the phone apps show them the same way.
 ## The look
 
 - **White text with a black outline**, with no box behind it.
-- **Its size follows the picture**: 5.33 % of the picture's height.
+- **Its size follows the picture**: 5.33% of the picture's height.
 - **The device's own sans-serif font**, so every language has its letters,
   Chinese, Japanese and Korean included.
-- **Centred at the bottom**, inside the picture, 8 % above its bottom edge; at
-  most two lines where the text allows, within 80 % of the picture's width. On a
+- **Centred at the bottom**, inside the picture, 8% above its bottom edge; at
+  most two lines where the text allows, within 80% of the picture's width. On a
   TV, it stays inside the safe area.
-- **One look for every title.** Colours, boxes, fonts and positions that come
-  inside a file are ignored.
+- **One look for every title.** Colours, sizes, boxes, fonts and positions that
+  come inside a file are ignored.
 - **One subtitle at a time.**
 
 When someone has set caption preferences on the device, under accessibility,
@@ -60,7 +60,7 @@ stored as pictures inside a file aren't offered.
   switched off, a fractional text size of 0.0533, and a caption style of white
   text, a black outline, and a transparent background and window. When the
   system's caption settings are switched on, it takes the user's style and text
-  size instead. The safe area comes from a bottom margin and the 80 % width, not
+  size instead. The safe area comes from a bottom margin and the 80% width, not
   from padding the view.
 - Web: the same through `::cue` (white, no background, an outline drawn with text
   shadows, a font size relative to the video's height), one active track.
