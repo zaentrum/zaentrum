@@ -15,5 +15,5 @@ text](https://nalet.github.io/design-system/foundations/meaningful-text/) and
 | “account” | Who is watching, as the account picker says | “profile”, “user” |
 | “downloads”, “on this phone” | What is stored on the device (“on this tablet” on a tablet) | “offline mode”, “sync”, “cache” |
 | “finished” | Watched to the end, or into its last minutes ([playback](./playback.md)) | “completed” |
-| “Medium (720p)” | A quality: its name and its height, as the player's quality menu shows it | “adaptive streaming”, a height or a bitrate alone |
+| “Medium (720p)” | A quality: its name and its height, from the [table](./playback.md#quality-names) | “adaptive streaming”, a height or a bitrate alone, “High (source)” |
 | “the people who run this server” | Who receives a bug report | “the dev backlog” |
