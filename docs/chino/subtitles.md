@@ -28,9 +28,8 @@ phone apps read them; a web page can't, so the web app always shows this look.
 
 ## The menu
 
-The menu is headed “subtitles”. It is a menu of one choice: the picked row is in
-the accent blue, with a small filled dot before it, and there are no
-checkboxes. In this order:
+The menu is headed “subtitles”. It is a menu of one choice, like the player's
+[other menus](./playback.md#the-players-menus). In this order:
 
 1. **off**
 2. **the person's preferred subtitle language**, when the title has it

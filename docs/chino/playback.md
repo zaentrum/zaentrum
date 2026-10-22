@@ -39,8 +39,12 @@ any other step.
 ## The player's menus
 
 - Subtitles, audio, quality and speed are menus of one choice each. They show
-  no checkboxes: the picked row is in the accent blue, with a small filled dot
-  before it.
+  no checkboxes and no check marks: the picked row is in the accent blue, with a
+  small filled square before it, square like every shape in the design system.
+  Every row keeps the square's column, so the names line up whether picked or
+  not.
+- An audio track names its channels in words: “Stereo”, “5.1”, “7.1”, “Mono”,
+  never “2ch”.
 - Their headers are lowercase: “subtitles”, “audio”, “quality”, “speed”, and
   “timing” for the subtitles' timing, whose button is “reset”.
 - Controls over the picture, such as a chip, sit on a solid surface, never on a
