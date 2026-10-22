@@ -18,6 +18,22 @@ On a title's page, in this order:
   with the same controls in the same order.
 - When the row wraps, a control wraps as a whole.
 
+### On a series
+
+A series' page plays an episode, and the first button names it by its code,
+which keeps its capitals:
+
+| The series | The first button |
+|---|---|
+| Nothing watched yet | **play S01E01** |
+| An episode partly watched | **resume S01E03** and **start over**, which plays S01E03 from its beginning |
+| The last episode watched was finished | **play S01E02**, the next one |
+| Every episode finished | **play S01E01** |
+
+The episode's position shows in its row below, not in the button. The rest of
+the row is the same as on a movie, without download: episodes download from
+their rows and their season.
+
 ## Add to list
 
 One control in two parts, in one frame and at one height:
