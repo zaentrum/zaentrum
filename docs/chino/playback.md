@@ -20,8 +20,12 @@ resumes and finishes the same way everywhere.
 ## Quality names
 
 The server names every quality, by one fixed table of heights, so a name means
-the same height on every title and every installation. The apps show the name as
-the server gives it.
+the same picture size on every title and every installation. The apps show the
+name as the server gives it.
+
+A frame's height for naming is its step: its own height, or the height its width
+stands for at 16:9, whichever is larger. A scope film of 1920 × 818 is 1080p,
+like a 16:9 film of 1920 × 1080, because both are full HD.
 
 | Height | Name |
 |---|---|
@@ -32,9 +36,9 @@ the server gives it.
 | below 480p | “Lowest (360p)” |
 | the original, played as it is | “Original” |
 
-A height between two steps takes the lower step's name with its own height:
-“Medium (900p)”. A re-encode at the original's size is named by its height like
-any other step.
+A step between two heights in the table takes the lower one's name with its
+own number: 1600 × 900 is “Medium (900p)”, and 1666 × 900 is “Medium (937p)”. A
+re-encode at the original's size is named by its step like any other.
 
 ## The player's menus
 
