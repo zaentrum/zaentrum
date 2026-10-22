@@ -28,7 +28,8 @@ One control in two parts, in one frame and at one height:
   title. That's where a title leaves other lists.
 - The two parts touch, with a 1 dp divider and the same fill. The “⌄” part is
   drawn 40 dp wide at the full height; its touch target is 48 × 48 dp. On a TV
-  they are two focus stops, each with its own ring.
+  they are two focus stops, each with its own ring, drawn inside the part as on a
+  row, so the other part stays whole and the divider stays visible.
 
 ## States
 

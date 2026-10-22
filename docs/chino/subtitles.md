@@ -44,8 +44,10 @@ included, and a language with its region or script counts as that language:
 “Chinese (Simplified) · AI” follows “Chinese”.
 
 Within a language: the plain track first, then “for deaf and hard of hearing”,
-then “foreign-language parts only”, then “AI”. Names follow the [word
-list](./words.md):
+then “foreign-language parts only”, then “AI”. A language with regions or
+scripts gives each of them a run of its own, the bare name first and the others
+in alphabetical order: “Chinese”, “Chinese (Simplified)”, “Chinese (Simplified)
+· AI”, “Chinese (Traditional)”. Names follow the [word list](./words.md):
 
 - “English · for deaf and hard of hearing”
 - “German · foreign-language parts only”
