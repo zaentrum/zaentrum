@@ -61,6 +61,9 @@ is the quality's name from the table above: “Medium (720p)”, “Low (480p)�
   original couldn't be streamed.”
 - One step down between qualities: “Switched to {label} quality: the
   connection can't keep up.”
+- When a quality between can't be streamed: “Switched to {label} quality:
+  {previous} couldn't be streamed.”, {previous} named from the same table:
+  “Switched to Low (480p) quality: Medium (720p) couldn't be streamed.”
 
 It keeps the position. Status codes go into the playback report, never into
 the line.
