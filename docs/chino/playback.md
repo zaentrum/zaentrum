@@ -36,8 +36,11 @@ like a 16:9 film of 1920 × 1080, because both are full HD.
 | below 480p | “Lowest (360p)” |
 | the original, played as it is | “Original” |
 
-A step between two heights in the table takes the lower one's name with its
-own number: 1600 × 900 is “Medium (900p)”, and 1666 × 900 is “Medium (937p)”. A
+A step within 10% of a height in the table counts as that height, so frames cut
+a little wider or narrower keep their name: 1916 × 800 and 2048 × 858 are
+“High (1080p)”. Any other step between two heights takes the lower one's name
+with its own number: 1600 × 900 is “Medium (900p)”, and 1666 × 900 is “Medium
+(937p)”. A
 re-encode at the original's size is named by its step like any other.
 
 ## The player's menus
