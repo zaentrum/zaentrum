@@ -86,7 +86,8 @@ it, the same in every app:
   text, a black outline, and a transparent background and window. When the
   system's caption settings are switched on, it takes the user's style and text
   size instead. The safe area comes from a bottom margin and the 80% width, not
-  from padding the view.
+  from padding the view. Switching embedded styles off also drops italics, so
+  the apps keep italic spans themselves; ruby survives the switch.
 - Web: an overlay the app draws instead of the browser's own captions, one track
   at a time: white, no background, an outline drawn with text shadows in eight
   directions, a font size relative to the picture's height. It keeps `<i>` and
