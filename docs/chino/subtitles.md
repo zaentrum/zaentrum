@@ -48,7 +48,10 @@ else is under “more languages”, as when the server names its languages.
 
 A language's tracks stay together, AI ones included, and a language with its
 region or script counts as that language: “Chinese (Simplified) · AI” follows
-“Chinese”.
+“Chinese”. So a language on top, named by the server or by the person with or
+without a region or script, brings all of its tracks there: a server that names
+Chinese (Simplified) shows “Chinese (Traditional)” in the Chinese block too, not
+under “more languages”.
 
 Within a language: the plain track first, then “for deaf and hard of hearing”,
 then “foreign-language parts only”, then “AI”. A language with regions or
@@ -80,7 +83,7 @@ follows the setting again.
 
 ## The setting
 
-Settings has one subtitle language, “Off” or a language, with this text under
+Settings has one subtitle language, “off” or a language, with this text under
 it, the same in every app. The languages offered are the server's subtitle
 languages, read from its configuration like the menu's, never a list fixed in
 the app; a server that names none offers every language by name.
