@@ -27,7 +27,8 @@ test.describe('home and browse', () => {
     await page.getByRole('navigation').getByRole('button', { name: 'Movies', exact: true }).click();
     const main = page.getByRole('main');
     await expect(main.getByRole('heading', { level: 1, name: 'Movies' })).toBeVisible();
-    await expect(main.getByText(/You've reached the end of the catalogue — \d+ movies/)).toBeVisible();
+    // The grid ends with its count in the screen's own word: "12 movies in all." ("1 movie in all.").
+    await expect(main.getByText(/^\d+ movies? in all\.$/)).toBeVisible();
     for (const movie of BROWSE_MOVIES) {
       await expect(main.getByRole('heading', { level: 3, name: movie.title, exact: true })).toBeVisible();
       await expectImageLoaded(poster(main, movie.title), `the poster of "${movie.title}"`);

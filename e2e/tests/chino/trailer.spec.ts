@@ -34,7 +34,8 @@ test.describe('trailers', () => {
 
     await open(chino, `/i/${sintel.id}`);
     await expect(titleInfo(page, SINTEL.title)).toBeVisible();
-    const button = page.getByRole('link', { name: 'Trailer', exact: true });
+    // The title row's words in lowercase, as title-actions.md writes them.
+    const button = page.getByRole('link', { name: 'trailer', exact: true });
     await expect(button).toBeVisible();
     onTrailer = true;
     await button.click();
