@@ -37,11 +37,18 @@ The menu is headed “subtitles”. It is a menu of one choice, like the player'
 4. **more languages**, when the file brings others; it opens the rest, in
    alphabetical order of their names
 
-When the server names no subtitle languages, all of the title's tracks are
-listed directly, without “more languages”: the preferred language first, then
-the others in the file's order. A language's tracks stay together, AI ones
-included, and a language with its region or script counts as that language:
-“Chinese (Simplified) · AI” follows “Chinese”.
+The menu never lists every track a file brings. A title can carry a hundred;
+the menu shows the languages that matter to the person, and “more languages”
+opens the rest.
+
+When the server names no subtitle languages, the languages that matter are the
+person's own: the subtitle setting's language, the audio setting's language when
+it isn't “Original”, and the language of the device or the browser. Everything
+else is under “more languages”, as when the server names its languages.
+
+A language's tracks stay together, AI ones included, and a language with its
+region or script counts as that language: “Chinese (Simplified) · AI” follows
+“Chinese”.
 
 Within a language: the plain track first, then “for deaf and hard of hearing”,
 then “foreign-language parts only”, then “AI”. A language with regions or
