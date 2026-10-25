@@ -45,7 +45,9 @@ test.describe('title detail pages', () => {
     await open(chino, `/i/${series.id}`);
     const info = titleInfo(page, PIONEER_ONE.title);
     await expect(info).toBeVisible();
-    await expect(info.getByText('series', { exact: true })).toBeVisible();
+    // Its kind in the grid's and the nav's word: a show, never "series".
+    await expect(info.getByText('show', { exact: true })).toBeVisible();
+    await expect(info.getByText(/^series$/i)).toHaveCount(0);
 
     const starring = creditBlock(info, 'Starring');
     for (const actor of PIONEER_ONE.actors) {
