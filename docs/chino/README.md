@@ -20,7 +20,7 @@ and this spec doesn't repeat them:
 The pictures are mockups of this spec, drawn with the design system's colours,
 type and icons. They show the spec, not one app: the TV keeps its own sizes and
 its focus style. Their source is [img/mockups.html](./img/mockups.html), and
-`scripts/render-chino-mockups.mjs` draws them again after a change.
+`node scripts/render-mockups.mjs chino` draws them again after a change.
 
 ## Pages
 

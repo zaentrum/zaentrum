@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// Renders the chino spec's mockups: every <figure class="shot" id="…"> in
-// docs/chino/img/mockups.html becomes docs/chino/img/<id>.png, at twice the size.
+// Renders a spec section's mockups: every <figure class="shot" id="…"> in
+// docs/<section>/img/mockups.html becomes docs/<section>/img/<id>.png, at
+// twice the size.
 //
-//   npx -p playwright@1.63.0 node scripts/render-chino-mockups.mjs
-//   (or PLAYWRIGHT=/path/to/node_modules/playwright node scripts/render-chino-mockups.mjs)
+//   npx -p playwright@1.63.0 node scripts/render-mockups.mjs chino [id …]
+//   (or PLAYWRIGHT=/path/to/node_modules/playwright node scripts/render-mockups.mjs portal)
 //
 // Edit the mockups in the HTML, never the PNGs. The page loads its fonts from
 // Google Fonts, so it needs the network.
@@ -15,8 +16,9 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const dir = path.join(root, 'docs', 'chino', 'img');
-const only = process.argv.slice(2);
+const [section, ...only] = process.argv.slice(2);
+if (!section) throw new Error('usage: render-mockups.mjs <section> [id …], e.g. chino or portal');
+const dir = path.join(root, 'docs', section, 'img');
 
 const browser = await chromium.launch();
 try {

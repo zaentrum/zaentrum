@@ -1,0 +1,154 @@
+<!doctype html>
+<!--
+  The portal spec's mockups. Each <figure class="shot" id="…"> becomes docs/portal/img/<id>.png:
+    node scripts/render-mockups.mjs portal
+  Colours, type and icons are the nalet design system's (tokens copied below, icons in icons.js);
+  the tiles follow its home & tiles pattern. The mockups show the spec, not today's portal.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>portal mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="icons.js"></script>
+<style>
+  /* nalet design system tokens */
+  :root {
+    --bg: #0B0F19; --bg-2: #0D1117; --surface: #11161F; --surface-2: #161B26;
+    --border: #1F2633; --border-2: #2A3142; --border-control: #646C7A;
+    --fg: #E6E6E6; --fg-2: #C9D1D9; --fg-muted: #AEB8C2; --fg-dim: #7B8597;
+    --cloud-blue: #58A6FF; --signal-green: #2EA043; --signal-amber: #F2B233; --signal-red: #F85149;
+    --ff-ui: Inter, system-ui, sans-serif; --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --note: #7B8597;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #05070C; color: var(--fg); font: 14px/1.45 var(--ff-ui); display: flex; flex-direction: column; align-items: flex-start; gap: 32px; }
+  figure { margin: 0; }
+  .shot { background: var(--bg); padding: 28px; display: inline-flex; flex-direction: column; gap: 22px; }
+  .note { margin: 0; font: 500 12px/1.5 var(--ff-mono); color: var(--note); max-width: 980px; }
+  svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  svg.i.s14 { width: 14px; height: 14px; }
+  svg.i.s16 { width: 16px; height: 16px; }
+  svg.i.t22 { width: 22px; height: 22px; stroke-width: 1.75; }
+
+  /* the screen */
+  .screen { width: 1000px; background: var(--bg); border: 1px solid var(--border); }
+  .topbar { height: 52px; display: flex; align-items: center; gap: 16px; padding: 0 20px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+  .brand { font: 700 15px/1 var(--ff-mono); color: var(--fg); display: inline-flex; gap: 2px; }
+  .brand b { color: var(--cloud-blue); }
+  .search { margin-left: auto; width: 300px; height: 32px; border: 1px solid var(--border-2); background: var(--surface); display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--fg-dim); font: 500 13px var(--ff-mono); }
+  .avatar { width: 30px; height: 30px; background: var(--cloud-blue); color: var(--bg); font: 700 12px/30px var(--ff-mono); text-align: center; }
+  .page { padding: 28px 32px 36px; display: flex; flex-direction: column; gap: 32px; }
+  .h1 { margin: 0; font: 700 22px/1 var(--ff-mono); letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+  .chev { color: var(--cloud-blue); font: 700 18px/1 var(--ff-mono); }
+  .group h2 { margin: 0 0 12px; font: 600 13px/1 var(--ff-mono); letter-spacing: .04em; color: var(--fg-muted); display: flex; align-items: center; gap: 6px; }
+  .group h2 .chev { font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .tile { min-height: 112px; border: 1px solid var(--border); background: var(--surface); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .tile .ic { width: 28px; height: 28px; display: flex; align-items: center; color: var(--cloud-blue); }
+  .tile .ic .glyph { font: 700 17px/1 var(--ff-mono); color: var(--cloud-blue); }
+  .tile .nm { font: 600 14px/1 var(--ff-mono); color: var(--fg); }
+  .tile .ds { font: 400 13px/1.45 var(--ff-ui); color: var(--fg-muted); margin-top: -6px; }
+
+  /* the settings console */
+  .tabs { display: flex; gap: 22px; border-bottom: 1px solid var(--border); font: 600 13px/1 var(--ff-mono); color: var(--fg-dim); }
+  .tabs span { padding: 0 0 12px; }
+  .tabs span.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--cloud-blue); }
+  .addon { border: 1px solid var(--border); background: var(--surface); }
+  .addon-hd { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .addon-hd .nm { font: 600 15px/1 var(--ff-mono); }
+  .addon-hd .meta { font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); }
+  .sec { display: grid; grid-template-columns: 200px 130px 1fr auto; align-items: center; gap: 16px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .sec:first-of-type { border-top: 0; }
+  .sec .t { font: 600 13px/1.2 var(--ff-mono); color: var(--fg); }
+  .sec .s { font: 400 13px/1.4 var(--ff-ui); color: var(--fg-muted); }
+  .badge { justify-self: start; height: 20px; display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; font: 500 11px/1 var(--ff-mono); border: 1px solid; }
+  .badge.ok { color: var(--signal-green); border-color: #2a5a35; background: #102016; }
+  .badge.warn { color: var(--signal-amber); border-color: #846B3B; background: #24211A; }
+  .badge.err { color: var(--signal-red); border-color: #7a3431; background: #2a1414; }
+  .ghost { height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; font: 600 12px/1 var(--ff-mono); color: var(--fg-2); }
+  .sub { padding: 10px 16px 4px; font: 600 12px/1 var(--ff-mono); color: var(--fg-dim); }
+</style>
+</head>
+<body>
+
+<!-- 1 · the home page -->
+<figure class="shot" id="home">
+  <div class="screen">
+    <div class="topbar">
+      <span class="brand"><b>&gt;</b>zaentrum</span>
+      <span class="search"><i data-i="search" class="s14"></i>search apps…</span>
+      <i data-i="bell" style="color:var(--fg-2)"></i>
+      <span class="avatar">AN</span>
+    </div>
+    <div class="page">
+      <p class="h1"><span class="chev">›</span>home</p>
+      <div class="group">
+        <h2><span class="chev">›</span>apps</h2>
+        <div class="grid">
+          <div class="tile"><span class="ic"><span class="glyph">&gt;c</span></span><span class="nm">chino</span><span class="ds">Movies and shows</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <h2><span class="chev">›</span>manage</h2>
+        <div class="grid">
+          <div class="tile"><span class="ic"><i data-i="library" class="t22"></i></span><span class="nm">catalog</span><span class="ds">Every title and its files</span></div>
+          <div class="tile"><span class="ic"><i data-i="wrench" class="t22"></i></span><span class="nm">catalog management</span><span class="ds">Scans and settings</span></div>
+          <div class="tile"><span class="ic"><i data-i="download" class="t22"></i></span><span class="nm">acquire</span><span class="ds">Requests and downloads</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <h2><span class="chev">›</span>settings</h2>
+        <div class="grid">
+          <div class="tile"><span class="ic"><i data-i="settings" class="t22"></i></span><span class="nm">registry</span><span class="ds">Apps, spaces, tiles and addons</span></div>
+          <div class="tile"><span class="ic"><i data-i="users" class="t22"></i></span><span class="nm">people</span><span class="ds">Accounts, invites and rating caps</span></div>
+          <div class="tile"><span class="ic"><i data-i="boxes" class="t22"></i></span><span class="nm">operator</span><span class="ds">Instances, scaling and updates</span></div>
+          <div class="tile"><span class="ic"><i data-i="scroll-text" class="t22"></i></span><span class="nm">logs</span><span class="ds">Every container's logs, redacted</span></div>
+          <div class="tile"><span class="ic"><i data-i="radio" class="t22"></i></span><span class="nm">events</span><span class="ds">The event bus and a live tail</span></div>
+          <div class="tile"><span class="ic"><i data-i="database" class="t22"></i></span><span class="nm">database</span><span class="ds">Chosen tables, read-only</span></div>
+          <div class="tile"><span class="ic"><i data-i="life-buoy" class="t22"></i></span><span class="nm">export</span><span class="ds">A support bundle, redacted</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">an admin's home page · three groups, always in this order · someone who isn't an admin sees only apps<br>acquire, an addon, joins manage with one tile · no badge says who a tile is for · the search in the top bar is planned</p>
+</figure>
+
+<!-- 2 · settings → registry → addons -->
+<figure class="shot" id="addons">
+  <div class="screen">
+    <div class="topbar">
+      <span class="brand"><b>&gt;</b>zaentrum</span>
+      <span class="search"><i data-i="search" class="s14"></i>search apps…</span>
+      <i data-i="bell" style="color:var(--fg-2)"></i>
+      <span class="avatar">AN</span>
+    </div>
+    <div class="page" style="gap:22px;">
+      <p class="h1"><span class="chev">›</span>registry</p>
+      <div class="tabs"><span class="on">addons</span><span>apps</span><span>spaces</span><span>tiles</span><span>extensions</span></div>
+      <div class="addon">
+        <div class="addon-hd"><span class="nm">acquire</span><span class="meta">0.6.2</span><span class="meta">containers 2/2 ready</span></div>
+        <div class="sub">setup</div>
+        <div class="sec"><span class="t">search sources</span><span class="badge warn">needs setup</span><span class="s">No search source yet</span><span class="ghost"><i data-i="external-link" class="s14"></i>configure</span></div>
+        <div class="sec"><span class="t">download clients</span><span class="badge err">degraded</span><span class="s">2 download clients, 1 unreachable</span><span class="ghost"><i data-i="external-link" class="s14"></i>configure</span></div>
+        <div class="sec"><span class="t">search and grab</span><span class="badge ok">ready</span><span class="s">3 at a time, 50 GB kept free</span><span class="ghost"><i data-i="external-link" class="s14"></i>configure</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="note">one row per section the addon declares, in its own words: ready, needs setup or degraded · the summary counts and names, never a value<br>configure opens that section in the addon's console · the portal stores none of it<br>whether it runs is the platform's view (containers), whether it is set up is the addon's</p>
+</figure>
+
+<script>
+  for (const el of document.querySelectorAll('i[data-i]')) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('class', 'i ' + el.className);
+    if (el.getAttribute('style')) svg.setAttribute('style', el.getAttribute('style'));
+    svg.innerHTML = window.ICONS[el.dataset.i] || '';
+    el.replaceWith(svg);
+  }
+</script>
+</body>
+</html>

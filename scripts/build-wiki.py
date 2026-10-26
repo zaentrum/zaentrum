@@ -67,6 +67,11 @@ NAV = [
         ("library-migrating", "Migrating a library"),
         ("library-record", "Database first, storage as the record"),
     ]),
+    ("The portal", [
+        ("portal", "Overview"),
+        ("portal-home", "Home page"),
+        ("portal-settings", "Settings and setup"),
+    ]),
     ("The chino apps", [
         ("chino", "Overview"),
         ("chino-title-actions", "Title actions"),
