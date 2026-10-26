@@ -17,6 +17,9 @@ Google Cast's own widgets, in chino's colours.
 - **The bar**, above the bottom navigation, never over it: the title, “playing
   on Living Room TV” with the device's own name, and play or pause. Tapping it
   opens the full controls.
+
+  ![The casting bar above the bottom navigation](./img/cast-bar.png)
+
 - **The full controls**: the artwork, the title, the position with a seek bar,
   play or pause, back and forward 10 seconds, subtitles and audio when the TV
   offers them, and “stop casting”.

@@ -42,6 +42,37 @@ it.
   - “The download stopped before it was done.”
 - When the server has turned downloads off, a title's page offers no download.
 
+![The download control in each status](./img/download-control.png)
+
+How a download moves between them:
+
+```mermaid
+stateDiagram-v2
+  direction LR
+  state "not on the phone" as off
+  state "queued" as queued
+  state "waiting for Wi-Fi or a connection" as waiting
+  state "downloading" as downloading
+  state "downloaded" as done
+  state "check needed" as check
+  state "couldn't download" as failed
+  [*] --> off
+  off --> queued: download
+  queued --> downloading: its turn
+  queued --> waiting: no Wi-Fi, or offline
+  downloading --> waiting: the network goes
+  waiting --> downloading: back on Wi-Fi, or online
+  downloading --> done
+  downloading --> failed
+  failed --> queued: try again
+  done --> check: 30 days without the server
+  check --> done: the server answers
+  done --> off: delete
+```
+
+Cancelling a queued, waiting or downloading title, or removing a failed one,
+takes it back to not on the phone.
+
 ### Series
 
 Each episode has its own control. A season offers its episodes at once:
@@ -82,6 +113,8 @@ download of Anna, 281 MB, is deleted from this phone.” With none, the action
 works as it always does, unless something is casting: while it is, the
 question is asked anyway and adds “Casting on Living Room TV stops.”
 
+![The questions before deleting all downloads and before signing out](./img/download-questions.png)
+
 A download also goes when the server says the account may no longer watch the
 title, because it left the library or the account's limit changed, after two such
 answers at least an hour apart. The app says so once: “This title isn't
@@ -96,6 +129,8 @@ Everything on the phone, newest first, grouped by series and season, with
 movies in a group of their own. Each title shows its status and size and plays
 from there. A failed title shows its reason and no size: a failed download
 frees what it had downloaded so far.
+
+![The downloads screen on a phone: a series, its season, movies, a failed title and delete all](./img/downloads-screen.png)
 
 At the top, one line: “12.4 GB used by downloads · 18 GB free on this phone”.
 With nothing downloaded, only “18 GB free on this phone”. The storage line and
@@ -117,6 +152,8 @@ The app opens on the downloads screen with an information banner, “Can't reach
 the server. Your downloads still play.”, or only “Can't reach the server.” when
 nothing is downloaded. It has no close button while the server can't be
 reached, and the bell is hidden.
+
+![The downloads screen while the server can't be reached, with its banner on top](./img/downloads-offline.png)
 
 - **A downloaded title's page** is built from what is on the phone, with the
   banner on top, under the top bar. What needs the server is left out: the

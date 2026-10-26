@@ -18,6 +18,8 @@ On a title's page, in this order:
   with the same controls in the same order.
 - When the row wraps, a control wraps as a whole.
 
+![The row on a movie: not started; partly watched and downloaded; in the Watchlist, watched and liked](./img/title-row.png)
+
 ### On a series
 
 A series' page plays an episode, and the first button names it by its code,
@@ -34,6 +36,8 @@ The episode's position shows in its row below, not in the button. The rest of
 the row is the same as on a movie, without download: episodes download from
 their rows and their season.
 
+![The row on a series: nothing watched yet; an episode partly watched; the last episode watched finished](./img/title-row-series.png)
+
 ## Add to list
 
 One control in two parts, in one frame and at one height:
@@ -46,6 +50,8 @@ One control in two parts, in one frame and at one height:
   drawn 40 dp wide at the full height; its touch target is 48 × 48 dp. On a TV
   they are two focus stops, each with its own ring, drawn inside the part as on a
   row, so the other part stays whole and the divider stays visible.
+
+![The add-to-list control off and on, and the list picker the arrow opens](./img/add-to-list.png)
 
 ## States
 
@@ -71,8 +77,10 @@ No button is drawn over a poster or a still. Over a picture, a button's contrast
 depends on the picture, and a smaller variant would look like a different
 button.
 
-- **Episode rows** carry their actions in the row's own actions line, with the
-  download control, at the same 48 dp: watched and add to list.
+- **Episode rows** carry their actions in the row's own actions line, at the
+  same 48 dp and in the title row's order: add to list, watched, download.
 - **Cards** in a grid show only status marks, drawn as in the states table:
   the Watchlist bookmark on blue, the watched check on green, and the progress
   bar. Actions live on the title's page, or in a card's menu where it has one.
+
+![Cards with their status marks, and an episode row with its own actions line](./img/cards-and-episodes.png)

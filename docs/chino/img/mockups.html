@@ -1,0 +1,533 @@
+<!doctype html>
+<!--
+  The chino spec's mockups. Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-chino-mockups.mjs
+  Colours, type and icons are the nalet design system's (tokens copied below, icons in icons.js).
+  The mockups show the spec, not any one app: the TV keeps its own sizes and focus style.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="icons.js"></script>
+<style>
+  /* nalet design system tokens */
+  :root {
+    --bg: #0B0F19; --bg-2: #0D1117; --surface: #11161F; --surface-2: #161B26;
+    --border: #1F2633; --border-2: #2A3142; --border-control: #646C7A;
+    --fg: #E6E6E6; --fg-2: #C9D1D9; --fg-muted: #AEB8C2; --fg-dim: #7B8597;
+    --cloud-blue: #58A6FF; --signal-green: #2EA043; --signal-amber: #F2B233; --signal-red: #F85149;
+    --state-information-bg: #15202E; --state-information-border: #3F6697;
+    --ff-ui: Inter, system-ui, sans-serif; --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+    /* annotations: not part of any screen */
+    --note: #7B8597;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #05070C; color: var(--fg); font: 14px/1.45 var(--ff-ui); display: flex; flex-direction: column; align-items: flex-start; gap: 32px; }
+  figure { margin: 0; }
+  .shot { background: var(--bg); padding: 28px; display: inline-flex; flex-direction: column; gap: 22px; }
+
+  /* annotations */
+  .cap { margin: 0 0 10px; font: 500 12px/1.4 var(--ff-mono); color: var(--note); }
+  .note.narrow { max-width: 360px; }
+  .st { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-2); white-space: nowrap; }
+  .note { margin: 0; font: 500 12px/1.5 var(--ff-mono); color: var(--note); }
+  .note b { color: var(--fg-muted); font-weight: 500; }
+
+  /* icons */
+  svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  svg.i.fill { fill: currentColor; }
+  svg.i.s16 { width: 16px; height: 16px; }
+  svg.i.s14 { width: 14px; height: 14px; }
+
+  /* controls: 48 dp, square, mono lowercase labels */
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .b { height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 16px;
+       border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); font: 600 14px/1 var(--ff-mono); white-space: nowrap; }
+  .b.icon { width: 48px; padding: 0; }
+  .b.primary { background: var(--cloud-blue); border-color: var(--cloud-blue); color: var(--bg); }
+  .b.ghost { background: transparent; border-color: transparent; color: var(--fg-2); }
+  .b.danger { background: transparent; border-color: var(--signal-amber); color: var(--signal-amber); }
+  .b.green { background: var(--signal-green); border-color: var(--signal-green); color: var(--bg); }
+  .b.red { background: var(--signal-red); border-color: var(--signal-red); color: var(--bg); }
+  .b.status { color: var(--fg-2); }
+  .b .dim { color: var(--fg-dim); }
+  .split { display: inline-flex; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
+  .split > span { display: inline-flex; align-items: center; justify-content: center; }
+  .split .main { width: 47px; }
+  .split .more { width: 40px; border-left: 1px solid var(--border-2); }
+  .split.on { background: var(--cloud-blue); border-color: var(--cloud-blue); color: var(--bg); }
+  .split.on .more { border-left-color: #4a96f0; }
+  .bar { height: 3px; background: var(--border-2); position: relative; }
+  .bar > i { position: absolute; inset: 0 auto 0 0; background: var(--cloud-blue); }
+
+  /* type */
+  .mono { font-family: var(--ff-mono); }
+  .h1 { font: 600 22px/1.2 var(--ff-mono); margin: 0; }
+  .h2 { font: 600 16px/1.2 var(--ff-mono); margin: 0; }
+  .h3 { font: 500 13px/1.2 var(--ff-mono); color: var(--fg-muted); margin: 0; }
+  .muted { color: var(--fg-dim); }
+  .small { font-size: 13px; }
+
+  /* artwork stand-ins */
+  .art1 { background: linear-gradient(160deg, #2f5b4a 0%, #18332b 55%, #0f1d1a 100%); }
+  .art2 { background: linear-gradient(160deg, #6b4a2a 0%, #3a2516 60%, #1c120b 100%); }
+  .art3 { background: linear-gradient(160deg, #3c3f6e 0%, #222448 55%, #12132a 100%); }
+  .art4 { background: linear-gradient(160deg, #5a2f45 0%, #351b29 60%, #1b0e15 100%); }
+  .art5 { background: linear-gradient(160deg, #2c4f6b 0%, #183044 60%, #0c1822 100%); }
+
+  /* phone frame: 360 dp wide */
+  .phone { width: 360px; background: var(--bg); border: 1px solid var(--border); display: flex; flex-direction: column; }
+  .pad { padding: 16px; }
+
+  /* menus */
+  .menu { width: 252px; background: var(--surface); border: 1px solid var(--border-2); padding: 8px 0; }
+  .menu .hd { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); padding: 8px 16px 10px; }
+  .menu .it { height: 40px; display: flex; align-items: center; gap: 0; padding: 0 16px 0 12px; color: var(--fg-2); font: 400 14px/1 var(--ff-ui); }
+  .menu .it .mk { width: 20px; flex: none; display: inline-flex; align-items: center; }
+  .menu .it .mk::before { content: ""; width: 8px; height: 8px; }
+  .menu .it.on { color: var(--cloud-blue); }
+  .menu .it.on .mk::before { background: var(--cloud-blue); }
+  .menu .it .tail { margin-left: auto; color: var(--fg-dim); display: inline-flex; }
+  .menu .sep { height: 1px; background: var(--border); margin: 6px 0; }
+
+  /* dialogs */
+  .dlg { width: 328px; background: var(--surface); border: 1px solid var(--border-2); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .dlg p { margin: 0; color: var(--fg-2); }
+  .dlg .ft { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+
+  /* the picture */
+  .pic { position: relative; width: 576px; height: 324px; overflow: hidden;
+         background: radial-gradient(120% 90% at 30% 35%, #3d5a63 0%, #1d2e35 45%, #0c1418 100%); }
+  .pic::after { content: ""; position: absolute; left: 58%; top: 18%; width: 120px; height: 190px; background: linear-gradient(180deg, #5b4636, #2a1f18); opacity: .8; }
+  .sub { position: absolute; left: 10%; right: 10%; text-align: center; color: #fff; z-index: 2;
+         font: 500 17.3px/1.25 var(--ff-ui);
+         text-shadow: -1.5px -1.5px 0 #000, 0 -1.5px 0 #000, 1.5px -1.5px 0 #000, 1.5px 0 0 #000, 1.5px 1.5px 0 #000, 0 1.5px 0 #000, -1.5px 1.5px 0 #000, -1.5px 0 0 #000; }
+  .controls { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: var(--bg); z-index: 3; padding: 8px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .controls .seek { display: flex; align-items: center; gap: 10px; font: 500 11px var(--ff-mono); color: var(--fg-2); }
+  .controls .seek .bar { flex: 1; }
+  .controls .btns { display: flex; gap: 6px; color: var(--fg); }
+  .controls .btns span { width: 28px; height: 24px; display: inline-flex; align-items: center; justify-content: center; background: var(--surface-2); }
+  .guide { position: absolute; z-index: 4; border-color: #F2B233; border-style: dashed; border-width: 0; }
+</style>
+</head>
+<body>
+
+<!-- 1 · title-actions: the row on a movie -->
+<figure class="shot" id="title-row">
+  <div>
+    <p class="cap">not started</p>
+    <div class="row">
+      <span class="b primary"><i data-i="play" class="fill"></i>play</span>
+      <span class="b"><i data-i="clapperboard"></i>trailer</span>
+      <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      <span class="b icon"><i data-i="check"></i></span>
+      <span class="b icon"><i data-i="heart"></i></span>
+      <span class="b"><i data-i="download"></i>download · 1.4 GB</span>
+    </div>
+  </div>
+  <div>
+    <p class="cap">partly watched, and downloaded</p>
+    <div class="row">
+      <span class="b primary"><i data-i="play" class="fill"></i>resume 1:43</span>
+      <span class="b">start over</span>
+      <span class="b"><i data-i="clapperboard"></i>trailer</span>
+      <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      <span class="b icon"><i data-i="check"></i></span>
+      <span class="b icon"><i data-i="heart"></i></span>
+      <span class="b status"><i data-i="check" style="color:var(--signal-green)"></i>downloaded · 1.4 GB</span>
+      <span class="b icon"><i data-i="trash"></i></span>
+    </div>
+  </div>
+  <div>
+    <p class="cap">in the Watchlist, watched and liked</p>
+    <div class="row">
+      <span class="b primary"><i data-i="play" class="fill"></i>play</span>
+      <span class="b"><i data-i="clapperboard"></i>trailer</span>
+      <span class="split on"><span class="main"><i data-i="bookmark" class="fill"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      <span class="b icon green"><i data-i="check"></i></span>
+      <span class="b icon red"><i data-i="heart" class="fill"></i></span>
+      <span class="b"><i data-i="download"></i>download · 1.4 GB</span>
+    </div>
+  </div>
+  <p class="note">every control 48 dp high, 8 dp apart · labels and icons on a fill are dark · a narrow screen wraps whole controls</p>
+</figure>
+
+<!-- 2 · title-actions: the row on a series -->
+<figure class="shot" id="title-row-series">
+  <div>
+    <p class="cap">nothing watched yet (and every episode finished)</p>
+    <div class="row">
+      <span class="b primary"><i data-i="play" class="fill"></i>play S01E01</span>
+      <span class="b"><i data-i="clapperboard"></i>trailer</span>
+      <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      <span class="b icon"><i data-i="check"></i></span>
+      <span class="b icon"><i data-i="heart"></i></span>
+    </div>
+  </div>
+  <div>
+    <p class="cap">an episode partly watched: start over plays S01E03 from its beginning</p>
+    <div class="row">
+      <span class="b primary"><i data-i="play" class="fill"></i>resume S01E03</span>
+      <span class="b">start over</span>
+      <span class="b"><i data-i="clapperboard"></i>trailer</span>
+      <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      <span class="b icon"><i data-i="check"></i></span>
+      <span class="b icon"><i data-i="heart"></i></span>
+    </div>
+  </div>
+  <div>
+    <p class="cap">the last episode watched was finished</p>
+    <div class="row">
+      <span class="b primary"><i data-i="play" class="fill"></i>play S01E02</span>
+      <span class="b"><i data-i="clapperboard"></i>trailer</span>
+      <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      <span class="b icon"><i data-i="check"></i></span>
+      <span class="b icon"><i data-i="heart"></i></span>
+    </div>
+  </div>
+  <p class="note">the episode's code keeps its capitals · no download here: episodes download from their rows and their season</p>
+</figure>
+
+<!-- 3 · title-actions: add to list -->
+<figure class="shot" id="add-to-list">
+  <div style="display:flex; gap:56px; align-items:flex-start;">
+    <div>
+      <p class="cap">not in the Watchlist</p>
+      <div style="position:relative; padding-top:26px;">
+        <div class="note" style="position:absolute; top:0; left:0; width:48px; text-align:center;">48</div>
+        <div class="note" style="position:absolute; top:0; left:49px; width:40px; text-align:center;">40</div>
+        <div style="position:absolute; top:16px; left:0; width:48px; border-top:1px dashed var(--note);"></div>
+        <div style="position:absolute; top:16px; left:49px; width:40px; border-top:1px dashed var(--note);"></div>
+        <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      </div>
+      <p class="note" style="margin-top:12px;">one frame, one height (48 dp)<br>a 1 dp divider, the same fill</p>
+    </div>
+    <div>
+      <p class="cap">in the Watchlist</p>
+      <div style="padding-top:26px;">
+        <span class="split on"><span class="main"><i data-i="bookmark" class="fill"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+      </div>
+      <p class="note" style="margin-top:12px;"><b>bookmark</b>: puts the title in the<br>Watchlist or takes it out, nothing else</p>
+    </div>
+    <div>
+      <p class="cap">the arrow opens the list picker</p>
+      <div style="padding-top:26px; display:flex; flex-direction:column; gap:6px;">
+        <span class="split on" style="align-self:flex-start;"><span class="main"><i data-i="bookmark" class="fill"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+        <div class="menu" style="width:220px;">
+          <div class="it" style="gap:12px; padding-left:16px; color:var(--fg);"><span style="width:16px;height:16px;background:var(--cloud-blue);display:inline-flex;align-items:center;justify-content:center;color:var(--bg);"><i data-i="check" class="s14"></i></span>Watchlist</div>
+          <div class="it" style="gap:12px; padding-left:16px; color:var(--fg);"><span style="width:16px;height:16px;background:var(--cloud-blue);display:inline-flex;align-items:center;justify-content:center;color:var(--bg);"><i data-i="check" class="s14"></i></span>Sunday nights</div>
+          <div class="it" style="gap:12px; padding-left:16px; color:var(--fg);"><span style="width:16px;height:16px;border:1px solid var(--border-control);"></span>For the kids</div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:12px;">a check against each list that holds the title<br>this is where a title leaves other lists</p>
+    </div>
+  </div>
+</figure>
+
+<!-- 4 · title-actions: nothing on artwork -->
+<figure class="shot" id="cards-and-episodes">
+  <div style="display:flex; gap:48px; align-items:flex-start;">
+    <div>
+      <p class="cap">cards: status marks only</p>
+      <div style="display:flex; gap:12px;">
+        <div style="width:132px;">
+          <div class="art1" style="position:relative; height:198px;">
+            <span style="position:absolute; top:8px; left:8px; width:28px; height:28px; background:var(--cloud-blue); color:var(--bg); display:flex; align-items:center; justify-content:center;"><i data-i="bookmark" class="fill s16"></i></span>
+          </div>
+          <div style="padding:8px 0 0;" class="small">Sprite Fright<div class="muted">2021</div></div>
+        </div>
+        <div style="width:132px;">
+          <div class="art2" style="position:relative; height:198px;">
+            <span style="position:absolute; top:8px; right:8px; width:28px; height:28px; background:var(--signal-green); color:var(--bg); display:flex; align-items:center; justify-content:center;"><i data-i="check" class="s16"></i></span>
+          </div>
+          <div style="padding:8px 0 0;" class="small">Agent 327<div class="muted">2017</div></div>
+        </div>
+        <div style="width:132px;">
+          <div class="art3" style="position:relative; height:198px;">
+            <span style="position:absolute; top:8px; left:8px; width:28px; height:28px; background:var(--cloud-blue); color:var(--bg); display:flex; align-items:center; justify-content:center;"><i data-i="bookmark" class="fill s16"></i></span>
+            <div class="bar" style="position:absolute; left:0; right:0; bottom:0; height:4px;"><i style="width:38%"></i></div>
+          </div>
+          <div style="padding:8px 0 0;" class="small">Elephants Dream<div class="muted">2006</div></div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:12px;">bookmark on blue: in the Watchlist · check on green: watched<br>bar: how far · no buttons on a poster or a still</p>
+    </div>
+    <div style="width:430px;">
+      <p class="cap">an episode row: its own actions line</p>
+      <div style="display:flex; gap:14px;">
+        <div class="art5" style="position:relative; width:160px; height:90px; flex:none;">
+          <div class="bar" style="position:absolute; left:0; right:0; bottom:0; height:4px;"><i style="width:62%"></i></div>
+        </div>
+        <div>
+          <div style="font-weight:500;">S01E03 · Alone in the Night</div>
+          <div class="muted small" style="margin-top:4px;">The crew loses contact with the ground for the first time.</div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <span class="split"><span class="main"><i data-i="bookmark"></i></span><span class="more"><i data-i="chevron-down" class="s16"></i></span></span>
+        <span class="b icon"><i data-i="check"></i></span>
+        <span class="b"><i data-i="download"></i>download · 271 MB</span>
+      </div>
+      <p class="note" style="margin-top:12px;">add to list · watched · download, at 48 dp, in the title row's order</p>
+    </div>
+  </div>
+</figure>
+
+<!-- 5 · playback: the player's menus -->
+<figure class="shot" id="player-menus">
+  <div style="display:flex; gap:20px; align-items:flex-start;">
+    <div class="menu">
+      <div class="hd">quality</div>
+      <div class="it"><span class="mk"></span>Original</div>
+      <div class="it on"><span class="mk"></span>High (1080p)</div>
+      <div class="it"><span class="mk"></span>Medium (720p)</div>
+      <div class="it"><span class="mk"></span>Low (480p)</div>
+    </div>
+    <div class="menu">
+      <div class="hd">audio</div>
+      <div class="it on"><span class="mk"></span>English · 5.1</div>
+      <div class="it"><span class="mk"></span>English · Stereo</div>
+      <div class="it"><span class="mk"></span>German · Stereo</div>
+    </div>
+    <div class="menu">
+      <div class="hd">speed</div>
+      <div class="it"><span class="mk"></span>0.5x</div>
+      <div class="it"><span class="mk"></span>0.75x</div>
+      <div class="it on"><span class="mk"></span>normal</div>
+      <div class="it"><span class="mk"></span>1.25x</div>
+      <div class="it"><span class="mk"></span>1.5x</div>
+      <div class="it"><span class="mk"></span>1.75x</div>
+      <div class="it"><span class="mk"></span>2x</div>
+    </div>
+  </div>
+  <p class="note">one choice each: the picked row is blue, with a small filled square before it · every row keeps the square's column<br>headers lowercase, in mono · rows are names, in the body face · no checkboxes, no check marks · a solid surface</p>
+</figure>
+
+<!-- 6 · subtitles: the look -->
+<figure class="shot" id="subtitle-look">
+  <div style="display:flex; flex-direction:column; gap:28px; align-items:flex-start;">
+    <div>
+      <p class="cap">controls hidden</p>
+      <div style="position:relative;">
+        <div class="pic">
+          <div class="sub" style="bottom:8%;">The bridge held, didn't it?<br>You owe me a coffee.</div>
+          <div class="guide" style="left:10%; top:0; bottom:0; border-left-width:1px;"></div>
+          <div class="guide" style="right:10%; top:0; bottom:0; border-right-width:1px;"></div>
+          <div class="guide" style="left:0; right:0; bottom:8%; border-top-width:1px;"></div>
+        </div>
+        <p class="note" style="margin-top:10px;">white with a black outline, no box · 5.33% of the picture's height<br>centred, 8% above the picture's bottom edge · at most two lines, within <b>80%</b> of its width</p>
+      </div>
+    </div>
+    <div>
+      <p class="cap">controls showing: the line moves above them</p>
+      <div class="pic">
+        <div class="sub" style="bottom:calc(64px + 10px);">The bridge held, didn't it?<br>You owe me a coffee.</div>
+        <div class="controls">
+          <div class="seek"><span>1:52</span><div class="bar"><i style="width:34%"></i></div><span>14:47</span></div>
+          <div class="btns"><span><i data-i="pause" class="s14"></i></span><span><i data-i="volume-2" class="s14"></i></span><span style="margin-left:auto;"><i data-i="captions" class="s14"></i></span><span><i data-i="gauge" class="s14"></i></span><span><i data-i="info" class="s14"></i></span><span><i data-i="maximize" class="s14"></i></span></div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:10px;">the controls sit on a solid surface · the line rises with them<br>and comes back down when they hide, at the controls' own pace</p>
+    </div>
+  </div>
+</figure>
+
+<!-- 7 · subtitles: the menu -->
+<figure class="shot" id="subtitles-menu">
+  <div style="display:flex; gap:40px; align-items:flex-start;">
+    <div>
+      <p class="cap">the server names English, German and Chinese (Simplified)<br>you prefer English</p>
+      <div class="menu" style="width:330px;">
+        <div class="hd">subtitles</div>
+        <div class="it"><span class="mk"></span>off</div>
+        <div class="it on"><span class="mk"></span>English</div>
+        <div class="it"><span class="mk"></span>English · for deaf and hard of hearing</div>
+        <div class="it"><span class="mk"></span>German</div>
+        <div class="it"><span class="mk"></span>German · foreign-language parts only</div>
+        <div class="it"><span class="mk"></span>German · AI</div>
+        <div class="it"><span class="mk"></span>Chinese (Simplified)</div>
+        <div class="it"><span class="mk"></span>Chinese (Simplified) · AI</div>
+        <div class="it"><span class="mk"></span>Chinese (Traditional)</div>
+        <div class="sep"></div>
+        <div class="it"><span class="mk"></span>more languages<span class="tail"><i data-i="chevron-right" class="s16"></i></span></div>
+      </div>
+    </div>
+    <div>
+      <p class="cap">more languages, opened<br>the rest, in alphabetical order of their names</p>
+      <div class="menu" style="width:330px;">
+        <div class="hd">subtitles</div>
+        <div class="it" style="color:var(--fg-dim);"><span class="mk"></span>…</div>
+        <div class="it"><span class="mk"></span>more languages<span class="tail"><i data-i="chevron-down" class="s16"></i></span></div>
+        <div class="it"><span class="mk"></span>Danish</div>
+        <div class="it"><span class="mk"></span>Dutch</div>
+        <div class="it"><span class="mk"></span>French</div>
+        <div class="it"><span class="mk"></span>French (Canada)</div>
+        <div class="it"><span class="mk"></span>Italian</div>
+        <div class="it"><span class="mk"></span>Japanese</div>
+        <div class="it"><span class="mk"></span>Portuguese (Brazil)</div>
+        <div class="it"><span class="mk"></span>Spanish</div>
+      </div>
+    </div>
+  </div>
+  <p class="note">a language on top brings all its regions and scripts · within a language: plain, for deaf and hard of hearing,<br>foreign-language parts only, AI · each region or script in a run of its own, the bare name first</p>
+</figure>
+
+<!-- 8 · downloads: one status per title -->
+<figure class="shot" id="download-control">
+  <div style="display:grid; grid-template-columns: 200px auto; gap:14px 20px; align-items:start;">
+    <p class="cap" style="margin:16px 0 0;">not on the phone</p>
+    <div class="row"><span class="b"><i data-i="download"></i>download · 1.4 GB</span></div>
+
+    <p class="cap" style="margin:16px 0 0;">waiting its turn</p>
+    <div class="row"><span class="b status">queued · 1.4 GB</span><span class="b icon"><i data-i="x"></i></span></div>
+
+    <p class="cap" style="margin:16px 0 0;">waiting for Wi-Fi</p>
+    <div class="row"><span class="b status">waiting for Wi-Fi · 1.4 GB</span><span class="b icon"><i data-i="x"></i></span></div>
+
+    <p class="cap" style="margin:16px 0 0;">waiting for a connection</p>
+    <div class="row"><span class="b status">waiting for a connection · 1.4 GB</span><span class="b icon"><i data-i="x"></i></span></div>
+
+    <p class="cap" style="margin:16px 0 0;">on its way</p>
+    <div class="row"><span class="b status" style="flex-direction:column; align-items:stretch; justify-content:center; gap:7px; padding-top:4px;"><span>downloading 42% · 1.4 GB</span><span class="bar"><i style="width:42%"></i></span></span><span class="b icon"><i data-i="x"></i></span></div>
+
+    <p class="cap" style="margin:16px 0 0;">on the phone</p>
+    <div class="row"><span class="b status"><i data-i="check" style="color:var(--signal-green)"></i>downloaded · 1.4 GB</span><span class="b icon"><i data-i="trash"></i></span></div>
+
+    <p class="cap" style="margin:16px 0 0;">needs a check</p>
+    <div><div class="row"><span class="b status">downloaded · check needed</span></div><p class="small muted" style="margin:8px 0 0; max-width:440px;">Downloads are checked with the server every 30 days. This one plays again once the server can be reached.</p></div>
+
+    <p class="cap" style="margin:16px 0 0;">failed</p>
+    <div><div class="row"><span class="b status">couldn't download</span><span class="b">try again</span></div><p class="small muted" style="margin:8px 0 0;">Not enough space on this phone.</p></div>
+
+    <p class="cap" style="margin:16px 0 0;">can't come along</p>
+    <div><div class="row"><span class="b status">can't be downloaded</span></div><p class="small muted" style="margin:8px 0 0;">This title can only be streamed.</p></div>
+  </div>
+  <p class="note">status and size are one text and wrap as one · a failure gives the reason, not an instruction</p>
+</figure>
+
+<!-- 9 · downloads: the screen -->
+<figure class="shot" id="downloads-screen">
+  <div class="phone">
+    <div class="pad" style="display:flex; flex-direction:column; gap:6px;">
+      <p class="h1">downloads</p>
+      <p class="small muted" style="margin:0;">547 MB used by downloads · 18 GB free on this phone</p>
+    </div>
+    <div class="pad" style="padding-top:4px; display:flex; flex-direction:column; gap:12px;">
+      <p class="h2">Pioneer One</p>
+      <p class="h3">season 1</p>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="art5" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1; min-width:0;"><div class="small" style="color:var(--fg);">S01E01 · Earthfall</div><div class="st" style="margin-top:4px;">downloaded · 281 MB</div></div>
+        <span class="b icon" style="width:40px;height:40px;"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="art3" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1; min-width:0;"><div class="small" style="color:var(--fg);">S01E02 · The Man From Mars</div><div class="st" style="margin:4px 0 6px;">downloading 42% · 347 MB</div><div class="bar"><i style="width:42%"></i></div></div>
+        <span class="b icon" style="width:40px;height:40px;"><i data-i="x" class="s16"></i></span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="art1" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1; min-width:0;"><div class="small" style="color:var(--fg);">S01E03 · Alone in the Night</div><div class="st" style="margin-top:4px;">queued · 271 MB</div></div>
+        <span class="b icon" style="width:40px;height:40px;"><i data-i="x" class="s16"></i></span>
+      </div>
+      <p class="h2" style="margin-top:10px;">movies</p>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="art4" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1; min-width:0;"><div class="small" style="color:var(--fg);">Sprite Fright</div><div class="st" style="margin-top:4px;">downloaded · 120 MB</div></div>
+        <span class="b icon" style="width:40px;height:40px;"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <div class="art2" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1; min-width:0;"><div class="small" style="color:var(--fg);">Spring</div><div class="st" style="margin-top:4px;">couldn't download</div><div class="small muted" style="margin:2px 0 8px;">The server ran into a problem.</div>
+          <div class="row"><span class="b" style="height:40px;">try again</span><span class="b ghost" style="height:40px;">remove</span></div></div>
+      </div>
+      <div style="margin-top:8px;"><span class="b danger">delete all</span></div>
+    </div>
+  </div>
+  <p class="note narrow">newest first, grouped by series and season, movies in a group of their own · the storage line counts what is on the phone: 281 + 120 + 42% of 347 MB</p>
+</figure>
+
+<!-- 10 · downloads: the questions -->
+<figure class="shot" id="download-questions">
+  <div style="display:flex; gap:24px; align-items:flex-start;">
+    <div class="dlg">
+      <p class="h2">delete all downloads</p>
+      <p>This removes 3 downloads, 547 MB, from this phone.</p>
+      <div class="ft"><span class="b ghost">cancel</span><span class="b danger">delete all</span></div>
+    </div>
+    <div class="dlg">
+      <p class="h2">sign out</p>
+      <p>Your 3 downloads, 547 MB, are deleted from this phone. Casting on Living Room TV stops.</p>
+      <div class="ft"><span class="b ghost">cancel</span><span class="b danger">sign out</span></div>
+    </div>
+  </div>
+  <p class="note">the title is the action, the confirming button repeats it as the danger button · the body names what goes<br>the count and the size are the same titles: those with something on the phone (a queued one isn't)</p>
+</figure>
+
+<!-- 11 · downloads: when the server can't be reached -->
+<figure class="shot" id="downloads-offline">
+  <div class="phone">
+    <div style="margin:12px 16px 0; padding:12px 14px; background:var(--state-information-bg); border:1px solid var(--state-information-border); display:flex; gap:10px; align-items:flex-start;">
+      <i data-i="wifi-off" class="s16" style="color:var(--cloud-blue); margin-top:2px;"></i>
+      <span class="small" style="color:var(--fg);">Can't reach the server. Your downloads still play.</span>
+    </div>
+    <div class="pad" style="display:flex; flex-direction:column; gap:6px;">
+      <p class="h1">downloads</p>
+      <p class="small muted" style="margin:0;">401 MB used by downloads · 18 GB free on this phone</p>
+    </div>
+    <div class="pad" style="padding-top:4px; display:flex; flex-direction:column; gap:12px;">
+      <p class="h2">Pioneer One</p>
+      <p class="h3">season 1</p>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="art5" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1;"><div class="small" style="color:var(--fg);">S01E01 · Earthfall</div><div class="st" style="margin-top:4px;">downloaded · 281 MB</div></div>
+        <span class="b icon" style="width:40px;height:40px;"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <p class="h2" style="margin-top:10px;">movies</p>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="art4" style="width:80px; height:45px; flex:none;"></div>
+        <div style="flex:1;"><div class="small" style="color:var(--fg);">Sprite Fright</div><div class="st" style="margin-top:4px;">downloaded · 120 MB</div></div>
+        <span class="b icon" style="width:40px;height:40px;"><i data-i="trash" class="s16"></i></span>
+      </div>
+    </div>
+  </div>
+  <p class="note narrow">the app opens here · the banner has no close button while the server can't be reached · the bell is hidden · everything that needs the server shows its couldn't-load screen</p>
+</figure>
+
+<!-- 12 · casting: the bar -->
+<figure class="shot" id="cast-bar">
+  <div class="phone">
+    <div class="pad" style="display:flex; flex-direction:column; gap:12px; padding-bottom:20px;">
+      <p class="h2">continue watching</p>
+      <div style="display:flex; gap:10px;"><div class="art3" style="width:150px; height:84px;"></div><div class="art1" style="width:150px; height:84px;"></div></div>
+      <p class="h2" style="margin-top:6px;">movies</p>
+      <div style="display:flex; gap:10px;"><div class="art2" style="width:96px; height:144px;"></div><div class="art4" style="width:96px; height:144px;"></div><div class="art5" style="width:96px; height:144px;"></div></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px; padding:8px 8px 8px 16px; background:var(--surface-2); border-top:1px solid var(--border-2);">
+      <div class="art4" style="width:40px; height:40px; flex:none;"></div>
+      <div style="flex:1; min-width:0;"><div class="small" style="color:var(--fg);">Sprite Fright</div><div class="small muted">playing on Living Room TV</div></div>
+      <span class="b icon ghost"><i data-i="pause"></i></span>
+    </div>
+    <div style="display:flex; justify-content:space-around; padding:12px 0 14px; background:var(--bg-2); border-top:1px solid var(--border); color:var(--fg-dim);">
+      <i data-i="house" style="color:var(--cloud-blue)"></i><i data-i="film"></i><i data-i="tv"></i><i data-i="download"></i><i data-i="settings"></i>
+    </div>
+  </div>
+  <p class="note narrow">the bar sits above the bottom navigation, never over it · tapping it opens the full controls · the device's own name, as people named it</p>
+</figure>
+
+<script>
+  for (const el of document.querySelectorAll('i[data-i]')) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('class', 'i ' + el.className);
+    if (el.getAttribute('style')) svg.setAttribute('style', el.getAttribute('style'));
+    svg.innerHTML = window.ICONS[el.dataset.i] || '';
+    el.replaceWith(svg);
+  }
+</script>
+</body>
+</html>

@@ -59,6 +59,8 @@ re-encode at the original's size is named by its step like any other.
 - Controls over the picture, such as a chip, sit on a solid surface, never on a
   see-through one.
 
+![The quality, audio and speed menus, each with its picked row in blue](./img/player-menus.png)
+
 ## When the quality changes by itself
 
 When playback has to step down, the player says what it did and why. {label}

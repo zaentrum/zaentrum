@@ -18,11 +18,16 @@ Transform rules
     -> ](slug#anchor), resolved against the *linking file's* directory, with
     README -> the section slug; http(s)/mailto/pure-#anchor links are left
     as-is; links inside fenced code blocks are never rewritten.
+  - images (png, svg, jpg, gif, webp) anywhere under docs/ are copied into the
+    wiki at the same docs-relative path, and a relative image link
+    ](img/x.png) from docs/chino/ becomes ](chino/img/x.png), which a wiki
+    page resolves against /wiki/.
   - a curated _Sidebar.md nav and a _Footer.md "generated" note are written.
 """
 import os
 import posixpath
 import re
+import shutil
 import sys
 
 # Reading order for the sidebar: (section, [(page-slug, label), ...]).
@@ -79,6 +84,7 @@ NAV = [
 
 SOURCE_TREE = "https://github.com/zaentrum/zaentrum/tree/main/docs"
 LINK_RE = re.compile(r"\]\(([^)]+)\)")
+ASSET_EXTS = (".png", ".svg", ".jpg", ".jpeg", ".gif", ".webp")
 
 
 def slug_for(rel_path):
@@ -96,8 +102,12 @@ def transform_target(target, src_rel_dir):
     if target.startswith(("http://", "https://", "mailto:", "#")):
         return target
     path, sep, anchor = target.partition("#")
+    if path.lower().endswith(ASSET_EXTS):
+        resolved = posixpath.normpath(posixpath.join(src_rel_dir, path))
+        # the image is copied to the same docs-relative path in the wiki
+        return target if resolved.startswith("..") else resolved
     if not path.endswith(".md"):
-        return target  # not a doc link (an asset, or a bare anchor)
+        return target  # not a doc link (another asset, or a bare anchor)
     # Resolve against the linking file's directory so ../ and dir/ links from
     # nested pages land on the right flat slug.
     resolved = posixpath.normpath(posixpath.join(src_rel_dir, path))
@@ -156,6 +166,15 @@ def walk_docs(src):
                     yield f"{name}/{sub}"
 
 
+def assets(root):
+    """Yield root-relative paths of every image under root, skipping .git."""
+    for dirpath, dirnames, names in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d != ".git"]
+        for n in sorted(names):
+            if n.lower().endswith(ASSET_EXTS):
+                yield os.path.relpath(os.path.join(dirpath, n), root)
+
+
 def main():
     if len(sys.argv) != 3:
         sys.exit("usage: build-wiki.py <src-docs-dir> <dst-wiki-dir>")
@@ -183,6 +202,16 @@ def main():
     missing = [s for _, pages in NAV for s, _ in pages if s not in slugs]
     if missing:
         sys.exit(f"sidebar links pages that do not exist: {missing}")
+
+    # Images: drop the ones copied last time (a removed image must not linger),
+    # then copy every image from docs/ to the same path in the wiki.
+    for rel in list(assets(dst)):
+        os.remove(os.path.join(dst, rel))
+    for rel in assets(src):
+        out = os.path.join(dst, rel)
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        shutil.copyfile(os.path.join(src, rel), out)
+        print(f"  {rel} (image)")
 
     with open(os.path.join(dst, "_Sidebar.md"), "w", encoding="utf-8") as fh:
         fh.write(build_sidebar())

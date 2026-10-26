@@ -26,6 +26,8 @@ When someone has set caption preferences on the device, under accessibility,
 those win over this look: for example a box behind the text. The TV and the
 phone apps read them; a web page can't, so the web app always shows this look.
 
+![A subtitle with the controls hidden, with its guides, and the same line above the controls](./img/subtitle-look.png)
+
 ## The menu
 
 The menu is headed “subtitles”. It is a menu of one choice, like the player's
@@ -69,6 +71,8 @@ server adds, otherwise the first in the file. They are never numbered, as in
 dropped; words that add something stay (“English · Commentary”). Subtitles
 stored as pictures inside a file aren't offered.
 
+![The subtitles menu with the server's languages on top, and with more languages opened](./img/subtitles-menu.png)
+
 ## What switches on by itself
 
 - **The preferred subtitle language**, when the audio is in another language.
@@ -80,6 +84,17 @@ stored as pictures inside a file aren't offered.
 The rule compares with the audio that is playing, never with the preferred audio
 language. A choice in the menu lasts for what is playing now; the next title
 follows the setting again.
+
+```mermaid
+flowchart TD
+  start([a title starts]) --> setting{"the subtitle setting is a language,<br/>and the audio is in another one?"}
+  setting -- yes --> has{"the title has subtitles<br/>in that language?"}
+  has -- yes --> on["those subtitles come on"]
+  has -- no --> parts
+  setting -- no --> parts{"the title has subtitles for the foreign-language<br/>parts only, in the audio's language?"}
+  parts -- yes --> partson["they come on"]
+  parts -- no --> off["subtitles stay off"]
+```
 
 ## The setting
 

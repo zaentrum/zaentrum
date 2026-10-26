@@ -17,6 +17,11 @@ and this spec doesn't repeat them:
 - [Colour](https://nalet.github.io/design-system/styles/colour/#contrast): a
   label or an icon on a filled colour is dark.
 
+The pictures are mockups of this spec, drawn with the design system's colours,
+type and icons. They show the spec, not one app: the TV keeps its own sizes and
+its focus style. Their source is [img/mockups.html](./img/mockups.html), and
+`scripts/render-chino-mockups.mjs` draws them again after a change.
+
 ## Pages
 
 | Page | What it covers |
