@@ -21,6 +21,15 @@ the phone apps show them the same way.
 - **One subtitle at a time.**
 - **Out of the controls' way**: while the player's controls show, the line moves
   up above them, and back down when they hide, at the controls' own pace.
+- **The picture is what shows of it.** Where the player crops a file's black
+  bars or fills the screen ([the picture](./playback.md#the-picture)), the
+  size, the margin and the width go by the frame as it shows on the screen.
+- **Subtitles made as pictures (PGS) stay on the picture**, where the file
+  puts them, scaled with it. One in a bar that is cropped moves up onto the
+  picture (or down, from a top bar), keeping the gap it had to the frame's
+  edge, at most a text line's 8%; one wider than what shows is made smaller in
+  its own shape. None is ever cut off the screen, and where nothing is
+  cropped, none moves.
 
 When someone has set caption preferences on the device, under accessibility,
 those win over this look: for example a box behind the text. The TV and the
@@ -117,11 +126,16 @@ the app; a server that names none offers every language by name.
   size instead. The safe area comes from a bottom margin and the 80% width, not
   from padding the view. Switching embedded styles off also drops italics, so
   the apps keep italic spans themselves. Ruby survives the switch, but Media3's
-  own drawing leaves the readings out, so the apps draw them themselves.
+  own drawing leaves the readings out, so the apps draw them themselves. The
+  view sits over the player's frame, not inside it: the frame is drawn scaled
+  and moved to fit its picture, the subtitle view is laid out at what shows of
+  it, and a PGS picture is placed there by the same rule as the web's.
 - Web: an overlay the app draws instead of the browser's own captions, one track
   at a time: white, no background, an outline drawn with text shadows in eight
   directions, a font size relative to the picture's height. It keeps `<i>` and
-  `<ruby>` from the cue and drops every other style.
+  `<ruby>` from the cue and drops every other style. PGS pictures are drawn one
+  by one onto a canvas over the player, each where the picture's transform and
+  the rule above put it.
 - Language names come from the platform in their standard form, the language
   first and the region or script in brackets: “Portuguese (Brazil)”, “English
   (Guam)”, “Chinese (Simplified)”. On the web that is `Intl.DisplayNames` with

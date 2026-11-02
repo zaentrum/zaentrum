@@ -61,6 +61,35 @@ re-encode at the original's size is named by its step like any other.
 
 ![The quality, audio and speed menus, each with its picked row in blue](./img/player-menus.png)
 
+## The picture
+
+The player shows a title's picture, not its frame. Many files keep a whole 16:9
+frame with the picture inside it and black bars baked in: above and below a
+2.39:1 film, at the sides of a 4:3 show. On a screen of another shape the
+picture would float in black on all four sides. The server says where the
+picture is: the play info's `pictureArea`, the part of the frame the picture
+takes over the whole title, as fractions of the frame's width and height, so
+the same for every quality. It leaves it out where it doesn't know, or where
+the picture is the whole frame.
+
+- **Fit**, unless the person zooms: the picture as large as the screen allows,
+  in its middle. The bars are cropped where they would show; the picture
+  never is. On a phone held sideways it keeps out of the camera's cutout.
+  Without a `pictureArea`, the whole frame fits, as before.
+- **Fill**: the picture covers the whole screen, its edges cropped. Only on a
+  screen wider than tall, and only where it is larger than fit; upright, the
+  picture always fits.
+- **Zooming**: on a phone or a tablet, two fingers spread apart fill the
+  screen and brought together fit it again; the picture follows them and
+  settles at one or the other when they lift. On the web, the button “Zoom to
+  fill” beside fullscreen, shown only where fill changes the picture. A TV
+  fits, and offers no fill.
+- **Remembered** on the device: the next title plays the way the person left
+  the last one.
+
+Subtitles go with the picture ([the look](./subtitles.md#the-look)): nothing of
+them is ever cropped.
+
 ## When the quality changes by itself
 
 When playback has to step down, the player says what it did and why. {label}
