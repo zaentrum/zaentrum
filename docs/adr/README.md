@@ -25,6 +25,7 @@ why), Consequences (what got better, what it costs, and **what it rules out**
 | [0012](./0012-catalog-identity-for-addons.md) | Addons hand over and look up by identity: ingest takes a series' or movie's identity, the read side answers what the library holds by identity, and an addon's topics come from its manifest — proposed, not built |
 | [0013](./0013-live-rungs-safety-net.md) | Live rungs beside the package: lower SDR renditions made segment by segment by a supervised pool of warm GPU workers, offered in the same master playlist so the player switches without a reload — the encoder leaves the stream origin; accepted after a spike (the warm worker 2–4× faster than a command per segment for HDR, every crash recovered within one segment) |
 | [0014](./0014-subtitles-in-every-language.md) | Subtitles in the instance's languages for every title: where the source brings none in a language, the platform converts the script, translates the best subtitle the title has, or transcribes the audio first — marked as made, never replacing the source's own; proposed, measured by a spike first |
+| [0015](./0015-the-package-is-the-master.md) | The package is the master for every title, made to the pipeline's rules (HEVC within a cap, bit depth and HDR10 kept, AAC stereo, every subtitle as it is); an original is deleted once its package lacks nothing but what the spec drops (surround, lossless audio, Dolby Vision kept as HDR10, 3D) — the players draw every subtitle format, ASS copies and VobSub everywhere, PGS on iOS and Cast ahead of the code |
 
 ## Adding one
 
