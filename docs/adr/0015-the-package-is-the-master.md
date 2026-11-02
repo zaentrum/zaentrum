@@ -1,6 +1,6 @@
 # ADR-0015: The package is the master; the original is deleted once its package meets the spec
 
-**Status:** Accepted · 2026-11-02. The spec is what the pipeline makes today, except where it says *ahead of the code*.
+**Status:** Accepted · 2026-11-02, the caps with no target bit rate confirmed the same day. The spec is what the pipeline makes today, except where it says *ahead of the code*.
 
 ## Context
 
@@ -31,6 +31,7 @@ flowchart LR
    |---|---|
    | Video | HEVC at the source's size, never upscaled, 4:2:0. A source that every HEVC device decodes, and that is within its cap, is copied as it is. Any other source is encoded once, with the cap as its maxrate |
    | Caps, Mbit/s of video | Movies: 8 up to 1080p, 14 up to 2160p. Episodes: 6 and 8. A movie file above 15 GiB is encoded |
+   | Rate | No target bit rate. An encode runs at constant quality (CQ 23 on NVENC) with the cap as its maxrate, so a package's size follows its source under one ceiling for the whole library |
    | Bit depth | The source's: Main 10 above 8 bits |
    | HDR | HDR10 and HLG as they are. Dolby Vision as HDR10: profile 8 keeps its base layer, profile 7 its HDR10 base layer, profile 5 is reshaped to HDR10 |
    | 3D, interlacing | 2D (the base view), progressive |
@@ -39,6 +40,17 @@ flowchart LR
    | Subtitles | Every track as it is. Text as WebVTT. Pictures (PGS, VobSub) as pictures. Forced and SDH flags as the source's. *Ahead of the code:* styled subtitles (ASS/SSA) as ASS with their fonts, and a WebVTT copy for clients that can't draw ASS |
    | Chapters | In the catalog, read from the original when it is analysed, not in the package |
    | Made subtitles | Beside the source's own (ADR-0014) |
+
+   What a master weighs, with one stereo track (each further audio language adds about 0.09 GB an hour). The measured medians come from one library's first 219 packages made under the caps:
+
+   | | At the cap, per hour | A 2 h film or a 45 min episode at the cap | Measured median |
+   |---|---|---|---|
+   | Movie 1080p | 3.6 GB | 7.4 GB | 5.3 GB for 2 h 10 min; most sources are copied, at 4.2 Mbit/s |
+   | Movie 2160p | 6.3 GB | 12.8 GB | 6.6 GB copied; 13.7 GB encoded, at 12.6 Mbit/s: at 2160p the cap, not the quality, sets an encode's size |
+   | Episode 1080p | 2.7 GB | 2.1 GB | 0.3 GB copied, 1.0 GB encoded, for about 24 min |
+   | Episode 2160p | 3.6 GB | 2.8 GB | 3.0 GB for 49 min |
+
+   The whole library is made to the one spec: a title whose package was made under older rules is processed again, so every package ends up within the same caps.
 
 2. **The deletion gate.** For each title, the catalog compares what the original carries with what its package carries:
    - its tracks and their languages, channels and kinds (commentary, audio description);
