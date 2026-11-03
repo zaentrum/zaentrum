@@ -74,18 +74,30 @@ the picture is the whole frame.
 
 - **Fit**, unless the person zooms: the picture as large as the screen allows,
   in its middle. The bars are cropped where they would show; the picture
-  never is. On a phone held sideways it keeps out of the camera's cutout.
-  Without a `pictureArea`, the whole frame fits, as before.
+  never is. Without a `pictureArea`, the whole frame fits, as before.
+- **The camera's cutout**: held sideways, a phone's cutout or notch takes a
+  band at one side. The fitted picture keeps out of a band as wide on both
+  sides, so it stays in the middle; only the sides count, so upright, with the
+  cutout over the bars at the top, the picture keeps its place. Fill covers
+  the band where the app draws there (Android 15 and later; the web where the
+  page reaches under the notch). The subtitles keep out of it either way.
 - **Fill**: the picture covers the whole screen, its edges cropped. Only on a
   screen wider than tall, and only where it is larger than fit; upright, the
-  picture always fits.
-- **Zooming**: on a phone or a tablet, two fingers spread apart fill the
-  screen and brought together fit it again; the picture follows them and
-  settles at one or the other when they lift. On the web, the button “Zoom to
-  fill” beside fullscreen, shown only where fill changes the picture. A TV
-  fits, and offers no fill.
-- **Remembered** on the device: the next title plays the way the person left
-  the last one.
+  picture always fits. The web offers it only for a title with a
+  `pictureArea`; on Android a pinch fills any title.
+- **Zooming**: in the Android app, two fingers spread apart fill the screen
+  and brought together fit it again; the picture follows them and settles at
+  one or the other when they lift, and TalkBack has the same as an action on
+  the picture, “zoom to fill” or “zoom to fit”. On the web, the button “Zoom
+  to fill” beside fullscreen, shown only where fill changes the picture of a
+  title with a `pictureArea`. The iOS app and the TV fit the whole frame, as
+  before: on a 16:9 TV that is the same picture for a letterboxed or a
+  pillarboxed title, and a windowboxed one keeps its bars there.
+- **Remembered** on the device, for the titles it suits: a fill chosen on one
+  title starts the next one filled only where that title has a `pictureArea`
+  and fill crops at most a tenth of its picture's width and of its height - a
+  scope film on a phone held sideways or on a 21:9 screen. Any other title
+  starts fitted, and a fill chosen on it is for that title alone.
 
 Subtitles go with the picture ([the look](./subtitles.md#the-look)): nothing of
 them is ever cropped.
