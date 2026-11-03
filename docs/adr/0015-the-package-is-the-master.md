@@ -37,7 +37,7 @@ flowchart LR
    | 3D, interlacing | 2D (the base view), progressive |
    | Closed captions | In the video, as they are |
    | Audio | Every track, commentaries and audio descriptions included, as AAC stereo at 192 kbit/s, quiet mixes lifted and surround folded down. A 5.1 companion is made only where an instance turns it on (`pipeline.surroundAudio`, off by default) |
-   | Subtitles | Every track as it is. Text as WebVTT. Pictures (PGS, VobSub) as pictures. Forced and SDH flags as the source's. *Ahead of the code:* styled subtitles (ASS/SSA) as ASS with their fonts, and a WebVTT copy for clients that can't draw ASS |
+   | Subtitles | Every track as it is. Text as WebVTT. Pictures (PGS, VobSub) as pictures. Forced and SDH flags as the source's. Styled subtitles (ASS/SSA) as their ASS script with the fonts the original carries, and a WebVTT copy for clients that can't draw ASS (since 2026-11-03) |
    | Chapters | In the catalog, read from the original when it is analysed, not in the package |
    | Made subtitles | Beside the source's own (ADR-0014) |
 
