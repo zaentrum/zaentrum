@@ -92,8 +92,9 @@ nothing between them but the heading. Rename and delete stay where they are.
   gives only its items' ids, so each row asks the server for its own:
   `GET /v1/me/watchlists/{id}?kind=movie` or `?kind=series`, the latter with
   episodes and any other kind. Each list's counts come from
-  `GET /v1/me/watchlists` as `counts: {"movie": 4, "series": 3}`, counted the
-  same way, so they always add up to the list's count. A whole list's grid
-  loads all its items, as today, and sorts them itself.
+  `GET /v1/me/watchlists?include=counts` as `counts: {"movie": 4, "series": 3}`,
+  counted the same way. The heading's count is their sum, as a saved title the
+  library no longer holds is in neither row. A whole list's grid loads all its
+  items, as today, and sorts them itself.
 - **Offline**, on a phone, the watchlist screen says it couldn't load, as
   today; the setting doesn't change that.
