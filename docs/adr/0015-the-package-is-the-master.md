@@ -33,7 +33,7 @@ flowchart LR
    | Caps, Mbit/s of video | Movies: 8 up to 1080p, 14 up to 2160p. Episodes: 6 and 8. A movie file above 15 GiB is encoded |
    | Rate | No target bit rate. An encode runs at constant quality (CQ 23 on NVENC) with the cap as its maxrate, so a package's size follows its source under one ceiling for the whole library |
    | Bit depth | The source's: Main 10 above 8 bits |
-   | HDR | HDR10 and HLG as they are. Dolby Vision as HDR10: profile 8 keeps its base layer, profile 7 its HDR10 base layer, profile 5 is reshaped to HDR10 |
+   | HDR | HDR10 and HLG as they are. Dolby Vision as the HDR it carries: profile 7 and 8 keep an HDR10 or HLG base layer, profile 5 is reshaped to HDR10. *Ahead of the code:* a profile 7 or 8 source on an SDR base is mapped to HDR10 with its Dolby Vision metadata, so no master of an HDR title is SDR |
    | 3D, interlacing | 2D (the base view), progressive |
    | Closed captions | In the video, as they are |
    | Audio | Every track, commentaries and audio descriptions included, as AAC stereo at 192 kbit/s, quiet mixes lifted and surround folded down. A 5.1 companion is made only where an instance turns it on (`pipeline.surroundAudio`, off by default) |
@@ -61,10 +61,16 @@ flowchart LR
    It names what the package lacks. A retire run deletes an original only when that list holds nothing but what the spec drops by design:
    - surround, and channels above the package's;
    - lossless and object-based audio;
-   - Dolby Vision, where the package keeps HDR10;
+   - Dolby Vision, where the package keeps the HDR: HDR10, or HLG for an HLG base;
    - 3D.
 
-   Any other difference keeps the original until the title is packaged again. That includes a missing language, subtitle track or flag, a lost style or font, or a lower bit depth. So does an original whose chapters the catalog lacks.
+   Any other difference keeps the original until the title is packaged again. That includes a missing language, subtitle track or flag, a lost style or font, or a lower bit depth.
+
+   Two things a package can't show keep the original too, until they are known:
+   - **Chapters.** An original whose chapters the catalog lacks stays until they are read again.
+   - **The picture area.** An original whose frame could hold black bars stays until its picture area is measured from the original itself (a full 16:9 or 4:3 frame, or a standard-definition one). The players fit that area to the screen. A package's keyframes alone, an IDR every few seconds and none at the cuts, can't tell a letterbox from picture.
+
+   Nothing is kept for ever. A source that can't meet the spec (an audio track whose channel layout can't be known, say) is acquired again into the same title, which keeps its id, history and ratings.
 3. **The players play everything the master carries.** The subtitles stay as they are, so each client draws pictures and styled subtitles itself. A subtitle is never turned into text to suit a client: no text recognition.
 
    | Client | WebVTT | PGS | VobSub | ASS |
