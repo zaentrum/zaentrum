@@ -31,4 +31,5 @@ its focus style. Their source is [img/mockups.html](./img/mockups.html), and
 | [Subtitles](./subtitles.md) | How subtitles look, the menu, and what switches on by itself |
 | [Downloads and offline](./downloads.md) | Taking titles along on a phone or a tablet |
 | [Casting](./casting.md) | Watching on a TV from the phone |
+| [Watchlist](./watchlist.md) | Every list on one page, and the setting that splits each into movies and shows |
 | [Words](./words.md) | The words chino uses for its own things |

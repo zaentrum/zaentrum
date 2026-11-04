@@ -519,6 +519,46 @@
   <p class="note narrow">the bar sits above the bottom navigation, never over it · tapping it opens the full controls · the device's own name, as people named it</p>
 </figure>
 
+<!-- watchlist: the setting off and on -->
+<figure class="shot" id="watchlist-by-kind">
+  <div style="display:flex; gap:40px; align-items:flex-start;">
+    <div>
+      <p class="cap">off: one row a list</p>
+      <div class="phone"><div class="pad" style="display:flex; flex-direction:column; gap:14px;">
+        <p class="h1">Watchlist</p>
+        <div style="display:flex; align-items:center;"><p class="h2">Watchlist · 5</p><span class="small muted" style="margin-left:auto;">see all</span></div>
+        <div style="display:flex; gap:10px; overflow:hidden;"><div style="width:96px; flex:none;"><div class="art1" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Sprite Fright<div class="muted">2021</div></div></div><div style="width:96px; flex:none;"><div class="art5" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Pioneer One<div class="muted">2010</div></div></div><div style="width:96px; flex:none;"><div class="art2" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Agent 327<div class="muted">2017</div></div></div></div>
+        <div style="display:flex; align-items:center; margin-top:6px;"><p class="h2">Weekend · 0</p></div>
+        <p class="small muted" style="margin:0;">Save titles with the + button on any movie or show.</p>
+        <span class="b" style="align-self:flex-start; margin-top:6px;">+ new list</span>
+      </div></div>
+    </div>
+    <div>
+      <p class="cap">on: movies on top, shows below</p>
+      <div class="phone"><div class="pad" style="display:flex; flex-direction:column; gap:14px;">
+        <p class="h1">Watchlist</p>
+        <p class="h2">Watchlist · 5</p>
+        <div style="display:flex; align-items:center;"><p class="h3">movies · 3</p><span class="small muted" style="margin-left:auto;">see all</span></div>
+        <div style="display:flex; gap:10px; overflow:hidden;"><div style="width:96px; flex:none;"><div class="art1" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Sprite Fright<div class="muted">2021</div></div></div><div style="width:96px; flex:none;"><div class="art2" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Agent 327<div class="muted">2017</div></div></div><div style="width:96px; flex:none;"><div class="art3" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Sintel<div class="muted">2010</div></div></div></div>
+        <div style="display:flex; align-items:center;"><p class="h3">shows · 2</p><span class="small muted" style="margin-left:auto;">see all</span></div>
+        <div style="display:flex; gap:10px; overflow:hidden;"><div style="width:96px; flex:none;"><div class="art5" style="position:relative; height:144px;"></div><div style="padding:6px 0 0;" class="small">Pioneer One<div class="muted">2010</div></div></div><div style="width:96px; flex:none;"><div class="art4" style="position:relative; height:144px;"><span style="position:absolute; left:6px; bottom:6px; padding:2px 5px; background:var(--bg); color:var(--fg-2); font:500 11px/1.2 var(--ff-mono);">S01E03</span></div><div style="padding:6px 0 0;" class="small">Pioneer One<div class="muted">S01E03</div></div></div></div>
+        <div style="display:flex; align-items:center; margin-top:6px;"><p class="h2">Weekend · 0</p></div>
+        <p class="small muted" style="margin:0;">Save titles with the + button on any movie or show.</p>
+        <span class="b" style="align-self:flex-start; margin-top:6px;">+ new list</span>
+      </div></div>
+    </div>
+    <div style="width:340px;">
+      <p class="cap">settings: the watchlist section</p>
+      <div style="background:var(--surface); border:1px solid var(--border-2); padding:16px; display:flex; gap:16px; align-items:flex-start;">
+        <div style="flex:1;"><div style="color:var(--fg);">Separate movies and shows</div>
+          <div class="small muted" style="margin-top:4px;">Each list shows its movies in one row and its shows in another.</div></div>
+        <span style="width:44px; height:24px; background:var(--cloud-blue); position:relative; flex:none;"><span style="position:absolute; right:3px; top:3px; width:18px; height:18px; background:var(--bg);"></span></span>
+      </div>
+      <p class="note" style="margin-top:12px;">off by default · kept per account, so the TV follows the phone<br>a row with nothing in it is left out<br>an episode sits in the shows row with its code</p>
+    </div>
+  </div>
+</figure>
+
 <script>
   for (const el of document.querySelectorAll('i[data-i]')) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

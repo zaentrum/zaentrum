@@ -79,6 +79,7 @@ NAV = [
         ("chino-subtitles", "Subtitles"),
         ("chino-downloads", "Downloads and offline"),
         ("chino-casting", "Casting"),
+        ("chino-watchlist", "Watchlist"),
         ("chino-words", "Words"),
     ]),
     ("Understand it", [
