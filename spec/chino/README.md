@@ -3,8 +3,13 @@
 chino is how people watch the library: on the web, on a phone or a tablet, on
 Android TV and on Samsung TVs. This specification describes every chino screen:
 what it shows, how it behaves, what it says in each state, and how it looks on a
-computer, a phone and a TV. Every chino app follows it, so a title, a download or
-a subtitle behaves the same everywhere.
+computer, a phone and a TV.
+
+> **This is the target, not what is deployed.** The drawings and rules show how
+> the screens are meant to be, on the design system 0.4.0. Today's apps differ
+> from it, as each chapter's “Today's apps” section says, and the decisions under
+> “Open” haven't been made. So nothing in this specification is to be built on
+> its own: what is deployed stays as it is until a change to it is approved.
 
 ## 1.1 Scope
 

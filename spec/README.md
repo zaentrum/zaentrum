@@ -5,6 +5,10 @@ shows, what it says in every state, how it fits a computer, a phone and a TV,
 and where today's apps still differ from it. It is written for the people who
 build the apps, and for the review of every release.
 
+> **This is the target, not what is deployed.** Where today's apps differ, each
+> chapter says so under “Today's apps”. Nothing here is to be built on its own:
+> what is deployed stays as it is until a change to it is approved.
+
 The [documentation](../docs/README.md) is the other half: it is for the people
 who run zaentrum, extend it with addons, or build on its library format, and it
 holds the decision records behind the platform.
