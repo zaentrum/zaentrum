@@ -8,8 +8,8 @@ pattern: every setting has exactly one place where it is changed.
 |---|---|---|
 | A person's preferences, such as language | Each app's own settings today; one place in the account menu is planned | Each person |
 | The platform: apps, spaces, tiles, people | Settings: **registry** and **people** | Admins |
-| How an addon is installed | Settings → registry → **addons**: the values of its chart. The operator applies them and may restart the addon ([ADR-0011](../adr/0011-addon-charts-installed-by-the-operator.md)) | Admins |
-| An addon's own setup | Inside the addon, reached from its setup checklist ([ADR-0010](../adr/0010-addon-component-groups-and-setup.md)) | Admins |
+| How an addon is installed | Settings → registry → **addons**: the values of its chart. The operator applies them and may restart the addon ([ADR-0011](../../docs/adr/0011-addon-charts-installed-by-the-operator.md)) | Admins |
+| An addon's own setup | Inside the addon, reached from its setup checklist ([ADR-0010](../../docs/adr/0010-addon-component-groups-and-setup.md)) | Admins |
 
 ## An addon's setup checklist
 
@@ -22,7 +22,7 @@ pattern: every setting has exactly one place where it is changed.
 - “configure” opens that section inside the addon's own console, the only
   place it is changed.
 - The portal stores none of it: the checklist asks the addon each time it is
-  shown, with the admin's own sign-in ([ADR-0010](../adr/0010-addon-component-groups-and-setup.md)).
+  shown, with the admin's own sign-in ([ADR-0010](../../docs/adr/0010-addon-component-groups-and-setup.md)).
 - Whether the addon runs is the platform's view, its containers; whether it is
   set up is the addon's. A section isn't “ready” while the part it needs is
   down.

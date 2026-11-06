@@ -95,7 +95,7 @@ TV reads the caption preferences set on the TV itself.
   Ruby, the small readings above Japanese and Chinese characters, stays too.
 - **Styled subtitles keep their own look.** A subtitle made with its own styles
   and fonts (ASS) is drawn as it was made, with the fonts the title carries, as
-  [ADR-0015](../adr/0015-the-package-is-the-master.md) decides: the package keeps
+  [ADR-0015](../../docs/adr/0015-the-package-is-the-master.md) decides: the package keeps
   every subtitle as it is. An app that can't draw styled subtitles yet shows
   the plain copy the package keeps beside them, in the look above.
 - **One subtitle at a time.**

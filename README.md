@@ -8,7 +8,8 @@ This repo is the **front door**: how to install, the release channels, and point
 rest of the project.
 
 **Product page → [zaentrum.github.io](https://zaentrum.github.io/)** ·
-**Docs → [zaentrum.github.io/docs](https://zaentrum.github.io/docs/)**
+**Docs → [zaentrum.github.io/docs](https://zaentrum.github.io/docs/)** ·
+**Specification → [zaentrum.github.io/spec](https://zaentrum.github.io/spec/)**
 
 > **Status: 0.x.** Releases are tagged across every repository at once, and the `stable`
 > channel in [`releases.json`](./releases.json) names the newest; every image is also published
