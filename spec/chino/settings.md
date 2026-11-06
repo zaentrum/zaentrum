@@ -144,9 +144,9 @@ block; when they couldn't load, the reason and **try again** take its place
 
 | Setting | The line under it | At first |
 |---|---|---|
-| Auto-skip intros | Skips the intro on every episode after the first one you watch in a row. | on |
+| Auto-skip intros | Skips the intro and the recap on every episode after the first one you watch in a row. | on |
 | Auto-play next episode | Starts the next episode when the credits roll. Off, the up next card waits until you play it. | on |
-| Countdown | Seconds the player counts down before it skips the intro or starts the next episode. | 3 seconds, from 1 to 15 |
+| Countdown | Seconds the player counts down before it skips the intro or the recap, or starts the next episode. An episode that starts with its intro and was opened from the one before starts past it at once ([chapter 11](./playback.md)). | 3 seconds, from 1 to 15 |
 
 What the player skips, its countdown and its up next card are specified in
 [chapter 11](./playback.md).

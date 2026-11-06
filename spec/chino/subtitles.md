@@ -256,9 +256,10 @@ Subtitles have no screens of their own; the player's states are in
 ### 12.10.1 Open
 
 - **A title without subtitles.** The web dims the subtitles button, the phone
-  app keeps it with a menu of **off** alone, and the TV apps leave it out.
-  Recommendation: leave it out, as the TVs do, because a dimmed button can't
-  say why and a menu with nothing to pick costs a press.
+  app and Android TV keep it with a menu of **off** alone, and the Samsung TV
+  app leaves it out. Recommendation: leave it out, as the Samsung TV app does,
+  because a dimmed button can't say why and a menu with nothing to pick costs a
+  press ([chapter 11](./playback.md), change 11.C4).
 
 ## 12.11 Words
 
@@ -279,4 +280,4 @@ Subtitles have no screens of their own; the player's states are in
 | Web | A title without subtitles dims the subtitles button. **more languages**' arrow points down, and up once it is open. |
 | Phone app | The menu has no timing. A title without subtitles keeps the button, with a menu of **off** alone. |
 | Android TV | The menu has no timing. **more languages**' arrow points down, and up once it is open. A pick says so at the top for a moment: “Subtitles: English”, “Subtitles off”. |
-| Samsung TV | The line sits in a dark box at one fixed size, a fixed distance above the foot of the screen, higher while the controls show. The menu is headed “Subtitles”, starts with “Off”, and lists every track by its label in the file, without **more languages**; it has no timing. |
+| Samsung TV | The line sits in a dark box at one fixed size, a fixed distance above the foot of the screen, higher while the controls show. The menu is headed “Subtitles”, starts with “Off”, and names every track by its language and what its label in the file adds, numbering repeats (“English 2”), without **more languages**; it has no timing. |

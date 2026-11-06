@@ -55,15 +55,22 @@ A chapter specifies one screen, or a few that belong together, in the same
 order:
 
 1. **Purpose**: what the screen is for, and how people get to it.
-2. **The screen at each size**: a figure for the computer, then the phone and
-   the TV, each explaining what differs from the computer.
-3. **Behaviour**: the rules behind what the screen shows and does.
-4. **States**: loading, empty, couldn't load and offline, with figures for the
+2. **As deployed**: what each app shows and does today, with screenshots of
+   the deployed apps, taken on the demo, which runs the same build.
+3. **The target**: the screen at each size, a figure for the computer, then the
+   phone held upright and sideways, and the TV, with the rules behind what it
+   shows and does.
+4. **Changes**: every difference between the two, one numbered change per row
+   (11.C1, 11.C2 …), with the apps it's built in and its status: proposed,
+   approved, built, verified. Only an approved change is built, one at a time;
+   anything no change names stays as it is deployed.
+5. **States**: loading, empty, couldn't load and offline, with figures for the
    ones that matter.
-5. **Words**: every text the screen shows, exactly.
-6. **Today's apps**: where each app differs from the chapter today. Together,
-   these sections are the work still to do.
-7. **Open**: decisions that haven't been made, each with a recommendation.
+6. **Words**: every text the screen shows, exactly.
+
+Chapter 11 is the first in this form. The others still end with **Today's
+apps**, a shorter list of where each app differs, and **Open**, the decisions
+not yet made; they move to the new form one by one.
 
 ## 1.4 The chapters
 

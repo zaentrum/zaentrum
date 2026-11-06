@@ -1,12 +1,13 @@
 <!doctype html>
 <!--
-  Chapter 11, the player: the figures of docs/chino/playback.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 11, the player: the figures of spec/chino/playback.md.
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame is frame.js (the player has no top bar,
   no tabs and no rail), the icons are icons.js. Pink numbers mark the parts
   the chapter's text explains. The player's menus are drawn in mockups.html
-  (player-menus).
+  (player-menus, figure 11.9). Figures 11.1 to 11.3 are screenshots of the
+  deployed web player, not drawings.
 -->
 <html lang="en">
 <head>
@@ -20,6 +21,15 @@
 <style>
   /* a phone held sideways */
   .phone.land { width: 780px; height: 360px; }
+
+  /* a phone held upright: the title under back, home and cast, on up to two
+     lines; the buttons on two rows */
+  .up .top { flex-wrap: wrap; row-gap: 10px; }
+  .up .top .sp { flex: 1; }
+  .up .top .name { flex: 0 0 100%; margin: 0; white-space: normal; line-height: 1.35;
+                   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .up .bottom { gap: 8px; }
+  .up .bottom .seek { margin-bottom: 4px; }
 
   /* the player: the picture fitted in the middle, the controls over it */
   .pl { position: absolute; inset: 0; background: #000; overflow: hidden; }
@@ -70,11 +80,14 @@
   .nextcard .ep { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); }
   .nextcard .row { margin-top: 8px; }
   .details { display: inline-flex; align-items: center; gap: 4px; font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); margin-top: 4px; }
+  /* on a TV the details show without being opened (chapter 17) */
+  .tvdetails { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 6px; font: 500 12px/1.4 var(--ff-mono); color: var(--fg-dim); }
+  .tvdetails .hd { color: var(--fg-muted); }
 </style>
 </head>
 <body>
 
-<!-- Figure 11.1 · the player on a computer -->
+<!-- Figure 11.4 · the player on a computer -->
 <figure class="shot" id="player-computer">
   <div class="computer" data-bar="none">
     <div class="pl">
@@ -116,7 +129,54 @@
   </div>
 </figure>
 
-<!-- Figure 11.2 · the player on a phone held sideways -->
+<!-- Figure 11.5 · the player on a phone held upright -->
+<figure class="shot" id="player-upright-phone">
+  <div class="phone up" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:50%;width:60px;height:20px" data-co="2" data-co-side="right"></span></div>
+      <div class="top">
+        <span class="b icon"><i data-i="arrow-left"></i></span>
+        <span class="b icon"><i data-i="house"></i></span>
+        <span class="sp"></span>
+        <span class="b icon"><i data-i="cast"></i></span>
+        <span class="name" data-co="1">Pioneer One — S01E03 · Alone in the Night</span>
+      </div>
+      <div class="bottom">
+        <div class="seek">
+          <span class="t1">17:23</span>
+          <div class="track">
+            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
+            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
+            <i class="head" style="left:42%"></i>
+          </div>
+          <span class="t2">41:23</span>
+        </div>
+        <div class="btns">
+          <span data-co="3" style="display:flex;align-items:center;gap:8px">
+            <span class="b icon"><i data-i="pause" class="fill"></i></span>
+            <span class="b icon"><i data-i="volume-2"></i></span>
+          </span>
+          <span class="sp"></span>
+          <span class="b icon"><i data-i="chevron-left"></i></span>
+          <span class="b icon"><i data-i="chevron-right"></i></span>
+          <span class="b icon" data-co="5" data-co-side="right"><i data-i="maximize"></i></span>
+        </div>
+        <div class="btns">
+          <span class="sp"></span>
+          <span data-co="4" style="display:flex;align-items:center;gap:8px">
+            <span class="b icon"><i data-i="audio-lines"></i></span>
+            <span class="b icon"><i data-i="captions"></i></span>
+            <span class="b icon"><i data-i="gauge"></i></span>
+            <span class="b icon"><i data-i="settings-2"></i></span>
+            <span class="b icon"><i data-i="info"></i></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.6 · the player on a phone held sideways -->
 <figure class="shot" id="player-phone">
   <div class="phone land" data-bar="none" data-tabs="none">
     <div class="pl">
@@ -148,14 +208,14 @@
           <span class="b icon"><i data-i="chevron-left"></i></span>
           <span class="b icon"><i data-i="chevron-right"></i></span>
           <span class="b icon"><i data-i="info"></i></span>
-          <span class="b icon"><i data-i="maximize"></i></span>
+          <span class="b icon" data-co="4" data-co-side="right"><i data-i="minimize"></i></span>
         </div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 11.3 · the player on a TV -->
+<!-- Figure 11.7 · the player on a TV -->
 <figure class="shot" id="player-tv">
   <div class="tv full" data-rail="none" data-view="none">
     <div class="pl">
@@ -193,7 +253,7 @@
   </div>
 </figure>
 
-<!-- Figure 11.4 · up next, on a computer -->
+<!-- Figure 11.8 · up next, on a computer -->
 <figure class="shot" id="player-next-computer">
   <div class="computer" data-bar="none">
     <div class="pl">
@@ -208,7 +268,7 @@
   </div>
 </figure>
 
-<!-- Figure 11.6 · the quality changed by itself, on a computer -->
+<!-- Figure 11.10 · the quality changed by itself, on a computer -->
 <figure class="shot" id="player-notice-computer">
   <div class="computer" data-bar="none">
     <div class="pl">
@@ -218,7 +278,7 @@
   </div>
 </figure>
 
-<!-- Figure 11.7 · a title starting, on a phone -->
+<!-- Figure 11.11 · a title starting, on a phone -->
 <figure class="shot" id="player-loading-phone">
   <div class="phone land" data-bar="none" data-tabs="none">
     <div class="pl">
@@ -232,16 +292,18 @@
   </div>
 </figure>
 
-<!-- Figure 11.8 · couldn't play, on a TV -->
+<!-- Figure 11.12 · couldn't play, on a TV -->
 <figure class="shot" id="player-failed-tv">
   <div class="tv full" data-rail="none" data-view="none">
     <div class="page">
-      <div class="empty" style="margin-top:132px">
+      <div class="empty" style="margin-top:84px">
         <i data-i="circle-alert" class="s48"></i>
         <h2 class="h2" data-co="1">couldn't play this title</h2>
         <p class="text">The stream stopped before it was done.</p>
-        <div class="row" style="gap:12px;margin-top:8px"><span class="b primary focus" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span><span class="b">back</span></div>
-        <span class="details" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
+        <p class="text small muted" data-co="2">Reported automatically as #12.</p>
+        <div class="row" style="gap:12px;margin-top:8px"><span class="b primary focus" data-co="3"><i data-i="refresh-cw" class="s16"></i>try again</span><span class="b">back</span></div>
+        <div class="tvdetails" data-co="4"><span class="hd">details</span><span>the stream ended at 17:23 of 41:23 · packaged · High (1080p)</span></div>
+        <span class="b">report a bug</span>
       </div>
     </div>
   </div>
