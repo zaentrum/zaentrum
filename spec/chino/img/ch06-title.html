@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
-  Chapter 6, the title page: the figures of docs/chino/title-actions.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 6, the title page: the target's figures of spec/chino/title-actions.md
+  (its as-deployed figures are screenshots). Each <figure class="shot" id="…">
+  becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
   icons are icons.js. Pink numbers mark the parts the chapter's text explains.
@@ -151,11 +152,30 @@
 
   /* loading: grey blocks in the shape of what is coming */
   .skrow { display: flex; gap: 12px; }
+
+  /* a phone held sideways (780 × 360, the tabs a rail on the left): the
+     computer's layout at the phone's size - the still a band at the top, the
+     poster beside the name, the row on one line under them */
+  /* screens.css's ".phone > .tabs" (the upright tabs: 64 px high, a line on top)
+     also matches the rail; the rail takes the frame's height */
+  .phone.side .bd { top: 0; height: 132px; }
+  .phone.side .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 18%, rgba(11,15,25,.6) 50%, rgba(11,15,25,0) 80%); }
+  .phone.side .hd { top: 36px; align-items: flex-end; gap: 16px; }
+  .phone.side .hd .nm { padding: 0 0 6px; gap: 6px; }
+  .phone.side .body { top: 192px; gap: 14px; }
+  .phone.side .desc { font-size: 14px; }
+  .phone.side .eps { top: 0; }
+  .phone.side .season .sh { height: 48px; }
+  .phone.side .season .offer { padding: 0 16px 10px; }
+  .phone.side .ep .top { gap: 16px; }
+  .phone.side .ep .txt { gap: 3px; }
+  .phone.side .ep .l1 { padding-right: 12px; }
+  .phone.side .ep .acts { margin-top: 8px; flex-wrap: nowrap; }
 </style>
 </head>
 <body>
 
-<!-- Figure 6.1 · a movie's page on a computer -->
+<!-- Figure 6.7 · a movie's page on a computer -->
 <figure class="shot" id="title-computer">
   <div class="computer" data-view="none">
     <div class="bd"><div class="art steel"></div><div class="fade"></div><i data-co="1" style="position:absolute;left:0;top:48px;width:40px;height:20px"></i></div>
@@ -206,7 +226,7 @@
   </div>
 </figure>
 
-<!-- Figure 6.2 · a movie's page on a phone -->
+<!-- Figure 6.8 · a movie's page on a phone held upright -->
 <figure class="shot" id="title-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Tears of Steel" data-co-parts="back:1">
     <div class="bd"><div class="art steel"></div><div class="fade"></div></div>
@@ -240,7 +260,32 @@
   </div>
 </figure>
 
-<!-- Figure 6.3 · a movie's page on a TV, as it opens -->
+<!-- Figure 6.9 · a movie's page on a phone held sideways -->
+<figure class="shot" id="title-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="Tears of Steel" data-co-parts="tabs:1:bottom">
+    <div class="bd"><div class="art steel"></div><div class="fade"></div><i data-co="2" data-co-side="right" style="position:absolute;right:0;top:20px;width:40px;height:20px"></i></div>
+    <div class="hd">
+      <div class="pos"><div class="art steel"></div></div>
+      <div class="nm" data-co="3" data-co-side="right">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+      </div>
+    </div>
+    <div class="body">
+      <div class="row acts" data-co="4" data-co-side="right">
+        <span class="b primary"><i data-i="play" class="fill"></i>play</span>
+        <span class="b"><i data-i="clapperboard"></i>trailer</span>
+        <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+        <span class="b icon"><i data-i="check"></i></span>
+        <span class="b icon"><i data-i="heart"></i></span>
+        <span class="b"><i data-i="download"></i>download · 152 MB</span>
+      </div>
+      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.10 · a movie's page on a TV, as it opens -->
 <figure class="shot" id="title-tv">
   <div class="tv" data-view="none">
     <div class="bd"><div class="art steel"></div><div class="fade"></div></div>
@@ -274,7 +319,7 @@
   </div>
 </figure>
 
-<!-- Figure 6.4 · a show's page on a computer, scrolled to its episodes -->
+<!-- Figure 6.11 · a show's page on a computer, scrolled to its episodes -->
 <figure class="shot" id="title-show-computer">
   <div class="computer" data-view="none">
     <section class="eps">
@@ -348,7 +393,7 @@
   </div>
 </figure>
 
-<!-- Figure 6.5 · a show's page on a phone, scrolled to its episodes -->
+<!-- Figure 6.12 · a show's page on a phone held upright, scrolled to its episodes -->
 <figure class="shot" id="title-show-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Pioneer One">
     <section class="eps">
@@ -409,7 +454,44 @@
   </div>
 </figure>
 
-<!-- Figure 6.6 · a show's page on a TV, the focus on an episode -->
+<!-- Figure 6.13 · a show's page on a phone held sideways, scrolled to its episodes -->
+<figure class="shot" id="title-show-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="Pioneer One" data-co-parts="tabs:4:bottom">
+    <section class="eps">
+      <div class="season">
+        <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="offer"><span class="b" data-co="1" data-co-side="right"><i data-i="download"></i>download 3 more episodes · 940 MB</span></div>
+        <div class="ep seen">
+          <div class="top">
+            <div class="still"><div class="art a3"></div></div>
+            <div class="txt">
+              <div class="l1" data-co="2" data-co-side="right"><span class="nm">S01E02 · The Man From Mars</span><span class="len">38 min</span></div>
+              <p class="ds">The man found in the wreck says he was born on Mars.</p>
+              <div class="row acts" data-co="3" data-co-side="right">
+                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+                <span class="b icon green"><i data-i="check"></i></span>
+                <span class="b st2 dl"><span>downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></span>
+                <span class="b icon"><i data-i="x"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ep">
+          <div class="top">
+            <div class="still"><div class="art a5"></div><div class="bar"><i style="width:42%"></i></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E03 · Alone in the Night</span><span class="len">41 min</span></div>
+              <span class="left">24 min left</span>
+              <p class="ds">The crew loses contact with the ground for the first time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 6.14 · a show's page on a TV, the focus on an episode -->
 <figure class="shot" id="title-show-tv">
   <div class="tv" data-view="none">
     <div class="page">
@@ -476,7 +558,7 @@
   </div>
 </figure>
 
-<!-- Figure 6.11 · the title page loading, on a TV -->
+<!-- Figure 6.19 · the title page loading, on a TV -->
 <figure class="shot" id="title-loading-tv">
   <div class="tv" data-view="none">
     <div class="sk" style="position:absolute;left:0;right:0;top:0;height:96px"></div>
@@ -493,7 +575,7 @@
   </div>
 </figure>
 
-<!-- Figure 6.12 · the title page when it couldn't load, on a phone -->
+<!-- Figure 6.20 · the title page when it couldn't load, on a phone -->
 <figure class="shot" id="title-couldnt-load-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="">
     <div class="empty" style="margin-top:220px;padding:0 24px">
@@ -506,7 +588,20 @@
   </div>
 </figure>
 
-<!-- Figure 6.13 · a title that was removed, on a computer -->
+<!-- Figure 6.21 · the title page when it couldn't load, on a phone held sideways -->
+<figure class="shot" id="title-couldnt-load-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="">
+    <div class="empty" style="margin-top:44px;padding:0 24px">
+      <i data-i="cloud-off" class="s48"></i>
+      <h2 class="h2">couldn't load this title</h2>
+      <p class="text">Can't reach the server.</p>
+      <span class="b" style="margin-top:6px"><i data-i="refresh-cw" class="s16"></i>try again</span>
+      <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px">details<i data-i="chevron-down" class="s14"></i></span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.22 · a title that was removed, on a computer -->
 <figure class="shot" id="title-removed-computer">
   <div class="computer" data-view="none">
     <div class="empty" style="margin-top:230px">

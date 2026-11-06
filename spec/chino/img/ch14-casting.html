@@ -1,14 +1,16 @@
 <!doctype html>
 <!--
-  Chapter 14, casting: the figures of docs/chino/casting.md that mockups.html
-  doesn't draw (it has the bar above the bottom navigation, cast-bar).
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 14, casting: the figures of spec/chino/casting.md. Every phone screen
+  is drawn held upright (<div class="phone">, 360 × 780) and sideways
+  (<div class="phone side">, 780 × 360, the tabs as a rail on the left).
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (tabs) is frame.js, the icons are
   icons.js. A title's page follows chapter 6's drawings (ch06-title.html); its
   bar is drawn here, because it holds the cast button. Google's widgets (the
-  button, the full controls) are drawn in chino's colours, as the chapter
-  specifies; they haven't been checked on a real Cast device yet.
+  button, the bar, the full controls) are drawn in chino's colours, as the
+  chapter specifies; their layouts are Google's and haven't been checked on a
+  real Cast device yet.
   Pink numbers mark the parts the chapter's text explains.
 -->
 <html lang="en">
@@ -21,12 +23,18 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* a title's page's bar: the back arrow, the title's name, the cast button (frame.js's back bar, with the button) */
+  /* the sideways frame's rail runs the frame's height: screens.css gives
+     every .phone > .tabs 64 px and a top border, the rail too */
+
+  /* a title's page's bar: the back arrow, the title's name, the cast button in a 48 dp square */
   .xbar { position: absolute; left: 0; right: 0; top: 0; height: 56px; z-index: 10; display: flex; align-items: center; gap: 10px;
-          padding: 0 8px 0 6px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+          padding: 0 4px 0 6px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .side .xbar { height: 48px; }
   .xbar .title { font: 600 16px/1 var(--ff-mono); margin-right: auto; white-space: nowrap; }
   .xbar .icon-b { color: var(--fg); }
+  .xbar .icon-b.cast { width: 48px; height: 48px; }
   .under { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; overflow: hidden; }
+  .side .under { top: 48px; }
 
   /* the title row's parts, as chapter 6 draws them */
   .split { display: inline-flex; flex: none; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
@@ -50,6 +58,31 @@
   .acts .b { padding: 0 14px; }
   .acts .b.icon { padding: 0; }
 
+  /* held sideways: the poster at the left, the name, the row and the words beside it */
+  .side .bd { height: 140px; }
+  .side .hd2 { position: absolute; left: 24px; right: 24px; top: 22px; display: flex; gap: 24px; align-items: flex-start; }
+  .side .hd2 .pos { width: 120px; height: 180px; box-shadow: 0 0 0 1px var(--border-2); }
+  .side .hd2 .info { padding-top: 30px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
+  .side .hd2 .info .acts { margin-top: 8px; width: fit-content; }
+  .side .hd2 .info .desc { margin-top: 4px; font-size: 14px; max-width: 460px; }
+
+  /* home on a phone, as chapter 4 draws it, under the bar */
+  .shelf { padding: 16px 0 0 16px; }
+  .shelf .h2 { margin-bottom: 12px; }
+  .phone .card { width: 200px; } .phone .card .img { height: 112px; }
+  .phone .card.poster { width: 104px; } .phone .card.poster .img { height: 156px; }
+  .side .shelf { padding: 16px 0 0 24px; }
+  .side .card { width: 176px; } .side .card .img { height: 99px; }
+
+  /* the bar while casting: Google's mini controller on the surface, the poster 43 × 64 */
+  .castbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 9; height: 64px; display: flex; align-items: center; gap: 12px;
+             padding-right: 8px; background: var(--surface); border-top: 1px solid var(--border); }
+  .castbar .pst { position: relative; width: 43px; height: 64px; flex: none; overflow: hidden; }
+  .castbar .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .castbar .tx .nm { font: 500 13px/1.3 var(--ff-ui); color: var(--fg); }
+  .castbar .tx .dev { font: 400 12px/1.3 var(--ff-ui); color: var(--fg-muted); }
+  .castbar .icon-b { width: 48px; height: 48px; color: var(--fg); }
+
   /* the full controls: Google's expanded controller in chino's colours, on the background colour */
   .fc { position: absolute; inset: 0; background: var(--bg); }
   .fc .tool { height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
@@ -66,26 +99,39 @@
   .fc .ctl .pp { width: 64px; height: 64px; background: var(--cloud-blue); color: var(--bg); display: inline-flex; align-items: center; justify-content: center; }
   .skip { position: relative; }
   .skip b { position: absolute; left: 0; right: 0; top: 50%; margin-top: -4px; text-align: center; font: 700 8px/8px var(--ff-mono); }
+  /* held sideways: the artwork at the left, the title, the device, the seek bar and the buttons beside it */
+  .side .fc .tool { height: 48px; }
+  .side .fc .poster { left: 40px; top: 56px; width: 160px; height: 240px; }
+  .side .fc .right { position: absolute; left: 240px; right: 40px; top: 72px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .side .fc .right .tx { position: static; align-items: center; }
+  .side .fc .right .seek { position: static; width: 100%; }
+  .side .fc .right .ctl { position: static; width: fit-content; }
 
-  /* the warning in the bar's place, above the bottom navigation */
+  /* the warning in the bar's place, above the tabs */
   .castwarn { position: absolute; left: 0; right: 0; bottom: 0; z-index: 9; padding: 10px 12px; background: var(--bg); border-top: 1px solid var(--border); }
-  .castwarn .banner { align-items: flex-start; padding: 12px 6px 12px 14px; }
+  .castwarn .banner { align-items: flex-start; padding: 12px 4px 12px 14px; }
   .castwarn .banner > div { flex: 1; min-width: 0; }
   .det { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
   .det-b { margin: 6px 0 0; font: 500 12px/1.45 var(--ff-mono); color: var(--fg-2); }
-  .castwarn .x { width: 40px; height: 40px; margin-top: -10px; }
+  .castwarn .x { width: 48px; height: 48px; margin-top: -14px; margin-bottom: -14px; }
   .castwarn .banner .x svg.i, .castwarn .banner .det svg.i { color: var(--fg-muted); margin-top: 0; }
+  /* held sideways: the line and details on one row */
+  .side .castwarn { padding: 8px 24px; }
+  .side .castwarn .banner { align-items: center; padding: 6px 4px 6px 14px; }
+  .side .castwarn .row1 { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .side .castwarn .det { margin-top: 0; }
+  .side .castwarn .x { margin: 0; }
 </style>
 </head>
 <body>
 
-<!-- Figure 14.1 · the cast button on a title's page, on a phone -->
+<!-- Figure 14.1 · the cast button on a title's page, on a phone held upright -->
 <figure class="shot" id="casting-button-phone">
   <div class="phone" data-view="none" data-bar="none">
     <header class="xbar">
       <span class="icon-b"><i data-i="arrow-left"></i></span>
       <span class="title">Sprite Fright</span>
-      <span class="icon-b" data-co="1" data-co-side="right"><i data-i="cast"></i></span>
+      <span class="icon-b cast" data-co="1" data-co-side="right"><i data-i="cast"></i></span>
     </header>
     <div class="under">
       <div class="bd"><div class="art a4"></div><div class="fade"></div></div>
@@ -112,7 +158,88 @@
   </div>
 </figure>
 
-<!-- Figure 14.3 · the full controls while casting, on a phone -->
+<!-- Figure 14.2 · the cast button on a title's page, on a phone held sideways -->
+<figure class="shot" id="casting-button-side-phone">
+  <div class="phone side" data-view="none" data-bar="none">
+    <header class="xbar">
+      <span class="icon-b"><i data-i="arrow-left"></i></span>
+      <span class="title">Sprite Fright</span>
+      <span class="icon-b cast" data-co="1" data-co-side="right"><i data-i="cast"></i></span>
+    </header>
+    <div class="under">
+      <div class="bd"><div class="art a4"></div><div class="fade"></div></div>
+      <div class="hd2">
+        <div class="pos"><div class="art a4"></div></div>
+        <div class="info">
+          <h1 class="t">Sprite Fright</h1>
+          <p class="meta">2021 · 10 min<span class="kind" style="margin-left:10px">movie</span></p>
+          <div class="acts" data-co="2" data-co-side="right">
+            <span class="b primary"><i data-i="play" class="fill"></i>play</span>
+            <span class="b"><i data-i="clapperboard"></i>trailer</span>
+            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+            <span class="b icon"><i data-i="check"></i></span>
+            <span class="b icon"><i data-i="heart"></i></span>
+          </div>
+          <p class="desc">Teenagers on a trip into the woods meet the small folk who live there, and the small folk don't want them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 14.3 · the bar while casting, above the tabs, on a phone held upright -->
+<figure class="shot" id="casting-bar-phone">
+  <div class="phone" data-view="home" data-co-parts="tabs:3">
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar" style="height:4px"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2 class="h2">recently added movies</h2>
+      <div class="cards">
+        <div class="card poster"><div class="img"><div class="art a4"></div></div><div class="tt">Sprite Fright</div></div>
+        <div class="card poster"><div class="img"><div class="art a6"></div></div><div class="tt">Charge</div></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div></div><div class="tt">Coffee Run</div></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2 class="h2">recently added shows</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div></div><div class="tt">Pioneer One</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div></div><div class="tt">Caminandes</div></div>
+      </div>
+    </section>
+    <div class="castbar">
+      <div class="pst"><div class="art a4"></div></div>
+      <div class="tx" data-co="1"><span class="nm">Sprite Fright</span><span class="dev">playing on Living Room TV</span></div>
+      <span class="icon-b" data-co="2" data-co-side="right"><i data-i="pause" class="fill"></i></span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 14.4 · the bar while casting, on a phone held sideways -->
+<figure class="shot" id="casting-bar-side-phone">
+  <div class="phone side" data-view="home">
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar" style="height:4px"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div></div>
+        <div class="card"><div class="img"><div class="art a3"></div></div><div class="tt">Cosmos Laundromat</div></div>
+      </div>
+    </section>
+    <div class="castbar" data-co="1" data-co-side="right">
+      <div class="pst"><div class="art a4"></div></div>
+      <div class="tx"><span class="nm">Sprite Fright</span><span class="dev">playing on Living Room TV</span></div>
+      <span class="icon-b"><i data-i="pause" class="fill"></i></span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 14.5 · the full controls while casting, on a phone held upright -->
 <figure class="shot" id="casting-controls-phone">
   <div class="phone" data-view="none" data-bar="none" data-tabs="none">
     <div class="fc">
@@ -131,19 +258,46 @@
         <span class="icon-b skip" data-co="5" data-co-side="bottom"><i data-i="rotate-ccw" class="s24"></i><b>10</b></span>
         <span class="pp"><i data-i="pause" class="fill s24"></i></span>
         <span class="icon-b skip"><i data-i="rotate-cw" class="s24"></i><b>10</b></span>
-        <span class="icon-b" data-co="6" data-co-side="bottom"><i data-i="square" class="s24"></i></span>
+        <span class="icon-b" data-co="6" data-co-side="bottom"><i data-i="x" class="s24"></i></span>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 14.4 · when the TV can't play a title, on a phone -->
+<!-- Figure 14.6 · the full controls while casting, on a phone held sideways -->
+<figure class="shot" id="casting-controls-side-phone">
+  <div class="phone side" data-view="none" data-bar="none" data-tabs="none">
+    <div class="fc">
+      <div class="tool">
+        <span class="icon-b"><i data-i="chevron-down"></i></span>
+        <span class="icon-b"><svg class="i" viewBox="0 0 24 24"><path d="M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><path d="M2 12a9 9 0 0 1 8 8"/><path d="M2 16a5 5 0 0 1 4 4"/><line x1="2" x2="2.01" y1="20" y2="20"/><path d="M6 7.5H18V16.5H12.95A11.5 11.5 0 0 0 6 9.22Z" fill="currentColor" stroke="none"/></svg></span>
+      </div>
+      <div class="poster"><div class="art a4"></div></div>
+      <div class="right">
+        <div class="tx" data-co="1" data-co-side="right">
+          <div class="nm">Sprite Fright</div>
+          <div class="dev">playing on Living Room TV</div>
+        </div>
+        <div class="seek"><span>3:12</span><div class="bar"><i style="width:32%"></i><span class="knob"></span></div><span>10:00</span></div>
+        <div class="ctl" data-co="2" data-co-side="right">
+          <span class="icon-b"><i data-i="captions" class="s24"></i></span>
+          <span class="icon-b skip"><i data-i="rotate-ccw" class="s24"></i><b>10</b></span>
+          <span class="pp"><i data-i="pause" class="fill s24"></i></span>
+          <span class="icon-b skip"><i data-i="rotate-cw" class="s24"></i><b>10</b></span>
+          <span class="icon-b"><i data-i="x" class="s24"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 14.7 · when the TV can't play a title, on a phone held upright -->
 <figure class="shot" id="casting-failed-phone">
   <div class="phone" data-view="none" data-bar="none">
     <header class="xbar">
       <span class="icon-b"><i data-i="arrow-left"></i></span>
       <span class="title">Sprite Fright</span>
-      <span class="icon-b"><i data-i="cast"></i></span>
+      <span class="icon-b cast"><i data-i="cast"></i></span>
     </header>
     <div class="under" style="bottom:148px">
       <div class="bd"><div class="art a4"></div><div class="fade"></div></div>
@@ -175,6 +329,39 @@
           <p class="det-b">the server doesn't let this account play it (HTTP 403)</p>
         </div>
         <span class="icon-b x" data-co="4" data-co-side="right"><i data-i="x" class="s16"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 14.8 · when the TV can't play a title, on a phone held sideways -->
+<figure class="shot" id="casting-failed-side-phone">
+  <div class="phone side" data-view="none" data-bar="none">
+    <header class="xbar">
+      <span class="icon-b"><i data-i="arrow-left"></i></span>
+      <span class="title">Sprite Fright</span>
+      <span class="icon-b cast"><i data-i="cast"></i></span>
+    </header>
+    <div class="under">
+      <div class="bd"><div class="art a4"></div><div class="fade"></div></div>
+      <div class="hd2">
+        <div class="pos"><div class="art a4"></div></div>
+        <div class="info">
+          <h1 class="t">Sprite Fright</h1>
+          <p class="meta">2021 · 10 min<span class="kind" style="margin-left:10px">movie</span></p>
+          <div class="acts">
+            <span class="b primary"><i data-i="play" class="fill"></i>resume 3:12</span>
+            <span class="b">start over</span>
+            <span class="b"><i data-i="clapperboard"></i>trailer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="castwarn">
+      <div class="banner warn">
+        <i data-i="triangle-alert" class="s16"></i>
+        <div class="row1"><span data-co="1" data-co-side="bottom">Living Room TV can't play this title.</span><span class="det">details<i data-i="chevron-down" class="s14"></i></span></div>
+        <span class="icon-b x" data-co="2" data-co-side="right"><i data-i="x" class="s16"></i></span>
       </div>
     </div>
   </div>

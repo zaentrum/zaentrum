@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Chapter 5, movies and shows: the figures of docs/chino/browse.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 5, movies and shows: the figures of spec/chino/browse.md.
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
   icons are icons.js. Pink numbers mark the parts the chapter's text explains.
@@ -50,6 +50,20 @@
   .fcol .facet .lb { width: 52px; }
   .fcol .facet .sel { flex: 1; }
   .fcol .b { align-self: flex-start; padding: 0 4px; }
+  /* a card's menu: its button at the right of the card's lines, under the poster (chapter 6) */
+  .card { position: relative; }
+  .card:has(> .mn) .tt, .card:has(> .mn) .st { padding-right: 28px; }
+  .card .mn { position: absolute; right: -6px; bottom: -2px; width: 30px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--fg-dim); }
+  .phone .grid .card:has(> .mn) .tt { padding-right: 0; }
+  .phone .grid .card .mn { height: 22px; bottom: -2px; }
+  /* a phone held sideways: the bar is wide enough to show its facets in a row; seven smaller posters a line. */
+  .phone.side .pg { padding: 12px 16px; }
+  .phone.side .head { margin-bottom: 8px; }
+  .phone.side .fbar { gap: 12px; margin-bottom: 12px; }
+  .phone.side .sel { min-width: 104px; }
+  .phone.side .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px 12px; }
+  .phone.side .grid .card.poster .img { height: 129px; }
+  .phone.side .endline { margin-top: 18px; }
   /* a TV: the page keeps to the safe area; six posters a row */
   .tv .inner { width: 768px; padding-top: 8px; }     /* a focused control's ring and growth stay inside the safe area */
   .tv .facet { gap: 14px; }
@@ -68,7 +82,7 @@
 </head>
 <body>
 
-<!-- Figure 5.1 · movies on a computer -->
+<!-- Figure 5.6 · movies on a computer -->
 <figure class="shot" id="browse-movies-computer">
   <div class="computer" data-view="movies">
     <div class="pg">
@@ -83,22 +97,22 @@
         <span class="b ghost off" style="margin-left:auto" data-co="2" data-co-side="right">clear all</span>
       </div>
       <div class="grid">
-        <div class="card poster"><div class="img" data-co="4"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div></div>
-        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div></div>
-        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
-        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div></div>
-        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
-        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
-        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
-        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl" data-co="5"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
-        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
-        <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+        <div class="card poster"><div class="img" data-co="4"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><span class="mn" data-co="6" data-co-side="right"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl" data-co="5"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.2 · movies on a phone -->
+<!-- Figure 5.7 · movies on a phone held upright -->
 <figure class="shot" id="browse-movies-phone">
   <div class="phone" data-view="movies">
     <div class="pg">
@@ -108,21 +122,48 @@
       </div>
       <div class="fbar"><span class="b" data-co="2"><i data-i="list-filter" class="s16"></i>filters<i data-i="chevron-down" class="s16"></i></span></div>
       <div class="grid">
-        <div class="card poster"><div class="img" data-co="3"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div></div>
-        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div></div>
-        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
-        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div></div>
-        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
-        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
-        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
-        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
-        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
+        <div class="card poster"><div class="img" data-co="3"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.3 · movies on a TV -->
+<!-- Figure 5.8 · movies on a phone held sideways -->
+<figure class="shot" id="browse-movies-sideways-phone">
+  <div class="phone side" data-view="movies">
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">movies</h1>
+        <span class="facet" data-co="2" data-co-side="right"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
+      </div>
+      <div class="fbar" data-co="1">
+        <span class="facet"><span class="lb">genre</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
+        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
+        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
+        <span class="b ghost off" style="margin-left:auto">clear all</span>
+      </div>
+      <div class="grid" data-co="3">
+        <div class="card poster"><div class="img"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 5.9 · movies on a TV -->
 <figure class="shot" id="browse-movies-tv">
   <div class="tv" data-view="movies">
     <div class="page"><div class="inner">
@@ -152,7 +193,7 @@
   </div>
 </figure>
 
-<!-- Figure 5.4 · shows on a phone, filtered by genre -->
+<!-- Figure 5.10 · shows on a phone held upright, filtered by genre -->
 <figure class="shot" id="browse-shows-phone">
   <div class="phone" data-view="shows">
     <div class="pg">
@@ -168,14 +209,36 @@
         <span class="b ghost" data-co="3">clear all</span>
       </div>
       <div class="grid">
-        <div class="card poster"><div class="img" data-co="4"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div></div>
+        <div class="card poster"><div class="img" data-co="4"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
       </div>
       <p class="endline"><span data-co="5">1 show in all.</span></p>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.5 · movies loading, on a TV -->
+<!-- Figure 5.11 · shows on a phone held sideways, filtered by genre -->
+<figure class="shot" id="browse-shows-sideways-phone">
+  <div class="phone side" data-view="shows">
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">shows</h1>
+        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
+      </div>
+      <div class="fbar">
+        <span class="facet" data-co="1"><span class="lb">genre</span><span class="sel set">drama<i data-i="chevron-down"></i></span></span>
+        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
+        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
+        <span class="b ghost" style="margin-left:auto" data-co="2" data-co-side="right">clear all</span>
+      </div>
+      <div class="grid">
+        <div class="card poster"><div class="img"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+      </div>
+      <p class="endline">1 show in all.</p>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 5.12 · movies loading, on a TV -->
 <figure class="shot" id="browse-loading-tv">
   <div class="tv" data-view="movies">
     <div class="page"><div class="inner">
@@ -207,7 +270,7 @@
   </div>
 </figure>
 
-<!-- Figure 5.6 · filters that match nothing, on a computer -->
+<!-- Figure 5.13 · filters that match nothing, on a computer -->
 <figure class="shot" id="browse-no-match-computer">
   <div class="computer" data-view="movies">
     <div class="pg">
@@ -231,7 +294,7 @@
   </div>
 </figure>
 
-<!-- Figure 5.7 · movies couldn't load, on a phone -->
+<!-- Figure 5.14 · movies couldn't load, on a phone -->
 <figure class="shot" id="browse-couldnt-load-phone">
   <div class="phone" data-view="movies">
     <div class="pg">
@@ -245,6 +308,7 @@
         <h2 class="h2" data-co="1">couldn't load the movies</h2>
         <p class="text">The server ran into a problem.</p>
         <span class="b" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
+        <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
       </div>
     </div>
   </div>

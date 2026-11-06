@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
-  Chapter 7, people: the figures of docs/chino/person.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 7, people: the target's figures of spec/chino/person.md (its
+  as-deployed figures are screenshots). Each <figure class="shot" id="…">
+  becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
   icons are icons.js. Pink numbers mark the parts the chapter's text explains.
@@ -57,11 +58,23 @@
   .tv .lib { position: absolute; left: 0; top: 245px; }
   .tv .lib .h2 { display: inline-block; margin-bottom: 12px; }
   .tv .card.poster { width: 96px; } .tv .card.poster .img { height: 144px; }
+
+  /* a phone held sideways (780 × 360, the tabs a rail on the left): the
+     computer's layout at the phone's size. screens.css's ".phone > .tabs" (the
+     upright tabs: 64 px high, a line on top) also matches the rail; the rail
+     takes the frame's height. */
+  .phone.side .hd { align-items: flex-start; gap: 16px; }
+  .phone.side .about { position: static; flex: 1; min-width: 0; gap: 12px; }
+  .phone.side .facts { gap: 40px; width: auto; }
+  .phone.side .facts > div + div { flex: none; }
+  .phone.side .bio { font-size: 14px; line-height: 1.5; }
+  .phone.side .lib { top: 256px; }
+  .phone.side .lib .h2 { padding-right: 10px; }
 </style>
 </head>
 <body>
 
-<!-- Figure 7.1 · a person's page on a computer -->
+<!-- Figure 7.4 · a person's page on a computer -->
 <figure class="shot" id="person-computer">
   <div class="computer" data-view="none">
     <div class="hd">
@@ -87,7 +100,7 @@
   </div>
 </figure>
 
-<!-- Figure 7.2 · a person's page on a phone -->
+<!-- Figure 7.5 · a person's page on a phone held upright -->
 <figure class="shot" id="person-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Derek de Lint" data-co-parts="back:1">
     <div class="hd">
@@ -114,7 +127,33 @@
   </div>
 </figure>
 
-<!-- Figure 7.3 · a person's page on a TV -->
+<!-- Figure 7.6 · a person's page on a phone held sideways -->
+<figure class="shot" id="person-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="Derek de Lint" data-co-parts="tabs:4:bottom">
+    <div class="hd">
+      <div class="portrait face"></div>
+      <div class="about" data-co="1" data-co-side="right">
+        <div class="fit">
+          <h1 class="t">Derek de Lint</h1>
+          <p class="tcount">1 title</p>
+        </div>
+        <div class="facts">
+          <div><div class="k">Known for</div><div class="v">Acting</div></div>
+          <div><div class="k">Born</div><div class="v">17 July 1950 <span class="muted">(age 76)</span><br>The Hague, Netherlands</div></div>
+        </div>
+        <p class="bio" data-co="2" data-co-side="right">Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</p>
+      </div>
+    </div>
+    <section class="lib">
+      <h2 class="h2" data-co="3" data-co-side="right">in the library</h2>
+      <div class="cards" style="gap:16px">
+        <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012 · actor</div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 7.7 · a person's page on a TV -->
 <figure class="shot" id="person-tv">
   <div class="tv" data-view="none">
     <div class="page">
@@ -142,7 +181,7 @@
   </div>
 </figure>
 
-<!-- Figure 7.4 · a person's page loading, on a computer -->
+<!-- Figure 7.8 · a person's page loading, on a computer -->
 <figure class="shot" id="person-loading-computer">
   <div class="computer" data-view="none">
     <div class="sk" style="position:absolute;left:48px;top:88px;width:192px;height:288px"></div>
@@ -161,7 +200,7 @@
   </div>
 </figure>
 
-<!-- Figure 7.5 · a person's page when it couldn't load, on a TV -->
+<!-- Figure 7.9 · a person's page when it couldn't load, on a TV -->
 <figure class="shot" id="person-couldnt-load-tv">
   <div class="tv" data-view="none">
     <div class="page">
@@ -176,13 +215,24 @@
   </div>
 </figure>
 
-<!-- Figure 7.6 · a person who was removed, on a phone -->
+<!-- Figure 7.10 · a person who was removed, on a phone -->
 <figure class="shot" id="person-removed-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="">
     <div class="empty" style="margin-top:230px;padding:0 24px">
       <i data-i="user-x" class="s48"></i>
       <h2 class="h2" data-co="1" style="max-width:250px">this person isn't in the library anymore</h2>
       <span class="b" style="margin-top:6px" data-co="2"><i data-i="arrow-left" class="s16"></i>back</span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 7.11 · a person who was removed, on a phone held sideways -->
+<figure class="shot" id="person-removed-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="">
+    <div class="empty" style="margin-top:74px;padding:0 24px">
+      <i data-i="user-x" class="s48"></i>
+      <h2 class="h2">this person isn't in the library anymore</h2>
+      <span class="b" style="margin-top:6px"><i data-i="arrow-left" class="s16"></i>back</span>
     </div>
   </div>
 </figure>

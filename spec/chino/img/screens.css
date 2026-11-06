@@ -187,6 +187,20 @@ svg.i.s24 { width: 24px; height: 24px; } svg.i.s32 { width: 32px; height: 32px; 
 .phone > .tabs .on { color: var(--cloud-blue); }
 .phone .pg { padding: 16px; }
 
+/* the phone held sideways: 780 × 360 dp, the tabs as a rail on the left */
+.phone.side { width: 780px; height: 360px; flex-direction: row; }
+.phone.side > .side-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.phone.side > .side-col > .scroll { flex: 1; position: relative; overflow: hidden; }
+.phone.side > .side-col > .tb { height: 48px; flex: none; display: flex; align-items: center; gap: 2px; padding: 0 12px 0 16px; background: var(--bg-2); border-bottom: 1px solid var(--border); position: relative; z-index: 10; }
+.phone.side > .side-col > .tb .logo { margin-right: auto; }
+.phone.side > .side-col > .tb .av { width: 28px; height: 28px; line-height: 28px; font-size: 12px; margin-left: 6px; }
+.phone.side > .side-col > .tb.back { gap: 10px; padding: 0 12px 0 6px; }
+.phone.side > .side-col > .tb.back .title { font: 600 16px/1 var(--ff-mono); margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.phone.side > .siderail { width: 72px; height: auto; flex: none; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+                          grid-template-columns: none; border-top: 0; background: var(--bg-2); border-right: 1px solid var(--border); position: relative; z-index: 10; }
+.phone.side > .siderail span { height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font: 500 10px/1 var(--ff-mono); color: var(--fg-dim); }
+.phone.side > .siderail .on { color: var(--cloud-blue); box-shadow: inset 3px 0 0 var(--cloud-blue); }
+
 /* the TV's rail */
 .tv > .rail { position: absolute; left: 0; top: 0; bottom: 0; width: 104px; background: rgba(11,15,25,.9); z-index: 10;
               display: flex; flex-direction: column; align-items: flex-start; padding: 27px 0 27px 48px; gap: 6px; }

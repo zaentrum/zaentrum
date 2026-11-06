@@ -1,12 +1,13 @@
 <!doctype html>
 <!--
-  Chapter 12, subtitles: the figures of docs/chino/subtitles.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 12, subtitles: the figures of spec/chino/subtitles.md.
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame is frame.js (the player has no top bar,
   no tabs and no rail), the icons are icons.js. Pink numbers mark the parts
-  the chapter's text explains. The look's guides and the menu's order are
-  drawn in mockups.html (subtitle-look, subtitles-menu).
+  the chapter's text explains. The look's guides are drawn in mockups.html
+  (subtitle-look). Figures 12.1 to 12.6 are screenshots of the deployed web
+  player, not drawings.
 -->
 <html lang="en">
 <head>
@@ -18,161 +19,182 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  .phone.land { width: 780px; height: 360px; }
-
   /* the player, as chapter 11 draws it */
   .pl { position: absolute; inset: 0; background: #000; overflow: hidden; }
   .pl .pic { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); aspect-ratio: 16 / 9; overflow: hidden; }
-  .phone.land .pl .pic { left: 50%; right: auto; top: 0; bottom: 0; height: 100%; transform: translateX(-50%); }
+  .phone.side .pl .pic { left: 50%; right: auto; top: 0; bottom: 0; height: 100%; transform: translateX(-50%); }
   .tv .pl .pic { inset: 0; transform: none; aspect-ratio: auto; }
-  .top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 8px; padding: 16px 16px 40px;
-         background: linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%); }
-  .top .name { flex: 1; min-width: 0; margin-left: 8px; font: 500 16px/1.2 var(--ff-mono); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .bottom { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 12px; padding: 40px 16px 16px;
-            background: linear-gradient(0deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.6) 60%, rgba(0,0,0,0) 100%); }
-  .seek { display: flex; align-items: center; gap: 12px; font: 500 13px/1 var(--ff-mono); color: var(--fg-2); }
-  .seek .t1 { width: 52px; text-align: right; } .seek .t2 { width: 52px; }
-  .track { position: relative; flex: 1; height: 6px; background: rgba(255,255,255,.15); }
-  .track > i { position: absolute; top: 0; bottom: 0; }
-  .track .buf { left: 0; background: rgba(255,255,255,.3); }
-  .track .played { left: 0; background: var(--cloud-blue); }
-  .track .seg.past { background: #A9CDFF; } .track .seg.ahead { background: #8E96A4; }
-  .track .head { top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); background: var(--fg); }
-  .btns { display: flex; align-items: center; gap: 8px; }
-  .btns .sp { flex: 1; }
-  .vol { width: 96px; height: 4px; background: var(--border-2); position: relative; margin: 0 6px; flex: none; }
-  .vol > i { position: absolute; left: 0; top: 0; bottom: 0; width: 80%; background: var(--cloud-blue); }
+  /* a phone held upright with the panel open: the picture moves to the top */
+  .pl .pic.at-top { top: 0; transform: none; }
 
   /* a subtitle: white, a black outline, no box; 5.33 % of the picture's height */
-  .sub { position: absolute; left: 10%; right: 10%; text-align: center; color: #fff; z-index: 2; font-family: var(--ff-ui); font-weight: 500; line-height: 1.25;
+  .sub { position: absolute; left: 10%; right: 10%; text-align: center; color: #fff; z-index: 8; font-family: var(--ff-ui); font-weight: 500; line-height: 1.25;
          text-shadow: -1.5px -1.5px 0 #000, 0 -1.5px 0 #000, 1.5px -1.5px 0 #000, 1.5px 0 0 #000, 1.5px 1.5px 0 #000, 0 1.5px 0 #000, -1.5px 1.5px 0 #000, -1.5px 0 0 #000; }
   .sub i { font-style: italic; }
-  /* a mark's target under a button, so its line runs under the row, not across it */
-  .under { position: absolute; left: 0; right: 0; top: 100%; margin-top: 5px; height: 4px; }
   .sub > span { display: inline-block; }
 
-  /* the subtitles menu, above the whole control bar at its right end */
-  .smenu { position: absolute; right: 16px; width: 384px; background: var(--surface); border: 1px solid var(--border-2); padding: 4px 0; z-index: 6; }
-  .smenu .hd { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); padding: 10px 16px 8px; }
-  .smenu .it { height: 40px; display: flex; align-items: center; padding: 0 16px 0 12px; color: var(--fg-2); font: 400 14px/1 var(--ff-ui); }
-  .smenu .it .mk { width: 20px; flex: none; display: inline-flex; align-items: center; }
-  .smenu .it .mk::before { content: ""; width: 8px; height: 8px; }
-  .smenu .it.on { color: var(--cloud-blue); } .smenu .it.on .mk::before { background: var(--cloud-blue); }
-  .smenu .it .tail { margin-left: auto; color: var(--fg-dim); display: inline-flex; }
-  .smenu .list { border-top: 1px solid transparent; }
-  .smenu .timing { border-top: 1px solid var(--border); margin-top: 4px; padding: 10px 16px 8px; }
-  .smenu .timing .hd { padding: 0 0 8px; }
-  .smenu .timing .row { gap: 8px; }
-  .smenu .timing .v { flex: 1; text-align: center; font: 500 13px/1 var(--ff-mono); color: var(--fg-2); }
-  .smenu .timing .b { height: 32px; padding: 0 10px; font-size: 13px; }
-  .smenu .timing .b.icon { width: 32px; padding: 0; }
+  /* the picture dimmed under the panel; the subtitle line stays above it */
+  .dim { position: absolute; inset: 0; background: rgba(5,7,12,.62); z-index: 4; }
+
+  /* the audio and subtitles panel: two columns, square, on the solid surface */
+  .panel { position: absolute; z-index: 6; display: flex; background: var(--surface); border: 1px solid var(--border-2); }
+  .panel .c { flex: 1 1 0; min-width: 0; position: relative; display: flex; flex-direction: column; }
+  .panel .c + .c { border-left: 1px solid var(--border); }
+  .panel .hd { height: 44px; flex: none; display: flex; align-items: center; padding: 0 16px; font: 500 13px/1 var(--ff-mono); color: var(--fg-muted); }
+  .panel .hd .x { margin-left: auto; margin-right: -12px; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .panel .it { height: 48px; flex: none; display: flex; align-items: center; padding: 0 16px 0 14px; font: 400 15px/1.25 var(--ff-ui); color: var(--fg-muted); white-space: nowrap; }
+  .panel .it .ck { width: 28px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
+  .panel .it.on { color: var(--fg); font-weight: 600; }
+  /* where a column is longer than the panel, it scrolls within itself */
+  .panel .thumb { position: absolute; right: 3px; width: 3px; background: var(--border-control); }
+
+  /* on a phone held upright the panel is the screen under the picture, the lists one under the other */
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--border-2); }
+  .sheet .hd { height: 44px; display: flex; align-items: center; padding: 0 16px; font: 500 13px/1 var(--ff-mono); color: var(--fg-muted); }
+  .sheet .hd .x { margin-left: auto; margin-right: -10px; width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .sheet .hd.next { border-top: 1px solid var(--border); margin-top: 4px; }
+  .sheet .it { height: 48px; display: flex; align-items: center; padding: 0 16px 0 14px; font: 400 15px/1.25 var(--ff-ui); color: var(--fg-muted); }
+  .sheet .it .ck { width: 28px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
+  .sheet .it.on { color: var(--fg); font-weight: 600; }
+  .sheet .thumb { position: absolute; right: 3px; width: 3px; background: var(--border-control); }
+
+  /* the TV: rows 40 dp, the focused one in the focus style */
+  .tv .panel .hd { height: 38px; font-size: 12px; }
+  .tv .panel .it { height: 40px; font-size: 15px; margin: 0 6px; padding-left: 8px; }
+  .tv .panel .hd { padding-left: 20px; }
+  .tv .panel .it.focus-row { color: var(--fg); position: relative; z-index: 2; }
 </style>
 </head>
 <body>
 
-<!-- Figure 12.1 · subtitles and their menu, on a computer -->
-<figure class="shot" id="subtitles-computer">
+<!-- Figure 12.7 · the audio and subtitles panel, on a computer -->
+<figure class="shot" id="subtitles-panel-computer">
   <div class="computer" data-bar="none">
     <div class="pl">
       <div class="pic"><div class="art a1"></div></div>
-      <div class="top">
-        <span class="b icon"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
-        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
-      </div>
-      <div class="sub" style="bottom:136px;font-size:38px" data-co="6"><span>It held, didn't it?<br>You owe me a coffee.</span></div>
-      <div class="smenu" style="bottom:128px">
-        <div data-co="1" data-co-side="right">
-          <div class="hd">subtitles</div>
-          <div class="it"><span class="mk"></span>off</div>
+      <div class="dim"></div>
+      <div class="sub" style="bottom:98px;font-size:38.4px"><span data-co="5">It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="panel" style="left:300px;top:128px;width:680px;height:430px">
+        <div class="c" data-co="1">
+          <div class="hd">audio</div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English (original)</div>
+          <div class="it"><span class="ck"></span>English (audio description)</div>
+          <div class="it"><span class="ck"></span>German</div>
         </div>
-        <div class="list" data-co="2" data-co-side="right">
-          <div class="it on"><span class="mk"></span>English</div>
-          <div class="it"><span class="mk"></span>English · for deaf and hard of hearing</div>
-          <div class="it"><span class="mk"></span>German</div>
-          <div class="it"><span class="mk"></span>German · foreign-language parts only</div>
-          <div class="it"><span class="mk"></span>German · AI</div>
-        </div>
-        <div class="it" data-co="3" data-co-side="right"><span class="mk"></span>more languages<span class="tail"><i data-i="chevron-right" class="s16"></i></span></div>
-        <div class="timing" data-co="4" data-co-side="right">
-          <div class="hd">timing</div>
-          <div class="row"><span class="b icon"><i data-i="minus" class="s16"></i></span><span class="v">0.00s</span><span class="b icon"><i data-i="plus" class="s16"></i></span><span class="b">reset</span></div>
-        </div>
-      </div>
-      <div class="bottom">
-        <div class="seek">
-          <span class="t1">17:23</span>
-          <div class="track">
-            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
-            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
-            <i class="head" style="left:42%"></i>
+        <div class="c">
+          <div class="hd">subtitles<span class="x" data-co="4" data-co-side="right"><i data-i="x"></i></span></div>
+          <div data-co="2" data-co-side="right">
+            <div class="it"><span class="ck"></span>off</div>
+            <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English</div>
           </div>
-          <span class="t2">41:23</span>
-        </div>
-        <div class="btns">
-          <span class="b icon"><i data-i="pause" class="fill"></i></span>
-          <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
-          <span class="sp"></span>
-          <span class="b icon"><i data-i="audio-lines"></i></span>
-          <span style="position:relative;display:inline-flex"><span class="b icon primary"><i data-i="captions"></i></span><span class="under" data-co="5"></span></span>
-          <span class="b icon"><i data-i="gauge"></i></span>
-          <span class="b icon"><i data-i="settings-2"></i></span>
-          <span class="b icon"><i data-i="chevron-left"></i></span>
-          <span class="b icon"><i data-i="chevron-right"></i></span>
-          <span class="b icon"><i data-i="info"></i></span>
-          <span class="b icon"><i data-i="maximize"></i></span>
+          <div class="it"><span class="ck"></span>English (CC)</div>
+          <div class="it" data-co="3" data-co-side="right"><span class="ck"></span>Chinese (Simplified) (AI)</div>
+          <div class="it"><span class="ck"></span>Croatian</div>
+          <div class="it"><span class="ck"></span>Czech</div>
+          <div class="it"><span class="ck"></span>Danish</div>
+          <div class="it"><span class="ck"></span>Dutch</div>
+          <i class="thumb" style="top:48px;height:150px"></i>
         </div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 12.2 · subtitles over the controls, on a phone held sideways -->
-<figure class="shot" id="subtitles-phone">
-  <div class="phone land" data-bar="none" data-tabs="none">
+<!-- Figure 12.8 · the panel on a phone held upright: the lists one under the other -->
+<figure class="shot" id="subtitles-panel-upright-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="pic at-top" data-co="1"><div class="art a1"></div></div>
+      <div class="sub" style="top:159px;font-size:10.8px"><span>It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="sheet" style="top:202px">
+        <div data-co="2">
+          <div class="hd">audio<span class="x" data-co="4" data-co-side="right"><i data-i="x"></i></span></div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English (original)</div>
+          <div class="it"><span class="ck"></span>English (audio description)</div>
+          <div class="it"><span class="ck"></span>German</div>
+        </div>
+        <div data-co="3">
+          <div class="hd next">subtitles</div>
+          <div class="it"><span class="ck"></span>off</div>
+        </div>
+        <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English</div>
+        <div class="it"><span class="ck"></span>English (CC)</div>
+        <div class="it"><span class="ck"></span>Chinese (Simplified) (AI)</div>
+        <div class="it"><span class="ck"></span>Croatian</div>
+        <div class="it"><span class="ck"></span>Czech</div>
+        <div class="it"><span class="ck"></span>Danish</div>
+        <div class="it"><span class="ck"></span>Dutch</div>
+        <i class="thumb" style="top:6px;height:190px"></i>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 12.9 · the panel on a phone held sideways: two columns over the dimmed picture -->
+<figure class="shot" id="subtitles-panel-phone">
+  <div class="phone side" data-bar="none" data-tabs="none">
     <div class="pl">
       <div class="pic"><div class="art a1"></div></div>
-      <div class="top">
-        <span class="b icon"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
-        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
-        <span class="b icon"><i data-i="cast"></i></span>
-      </div>
-      <div class="sub" style="bottom:136px;font-size:19px" data-co="1"><span>The bridge held, didn't it?<br>You owe me a coffee.</span></div>
-      <div class="bottom">
-        <div class="seek">
-          <span class="t1">17:23</span>
-          <div class="track">
-            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
-            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
-            <i class="head" style="left:42%"></i>
-          </div>
-          <span class="t2">41:23</span>
+      <div class="dim"></div>
+      <div class="sub" style="bottom:29px;font-size:19.2px;left:17%;right:17%"><span data-co="4">It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="panel" style="left:90px;top:16px;width:600px;height:236px">
+        <div class="c" data-co="1">
+          <div class="hd">audio</div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English (original)</div>
+          <div class="it"><span class="ck"></span>English (audio description)</div>
+          <div class="it"><span class="ck"></span>German</div>
         </div>
-        <div class="btns">
-          <span class="b icon"><i data-i="pause" class="fill"></i></span>
-          <span class="b icon"><i data-i="volume-2"></i></span>
-          <span class="sp"></span>
-          <span class="b icon"><i data-i="audio-lines"></i></span>
-          <span style="position:relative;display:inline-flex"><span class="b icon primary"><i data-i="captions"></i></span><span class="under" data-co="2"></span></span>
-          <span class="b icon"><i data-i="gauge"></i></span>
-          <span class="b icon"><i data-i="settings-2"></i></span>
-          <span class="b icon"><i data-i="chevron-left"></i></span>
-          <span class="b icon"><i data-i="chevron-right"></i></span>
-          <span class="b icon"><i data-i="info"></i></span>
-          <span class="b icon"><i data-i="maximize"></i></span>
+        <div class="c">
+          <div class="hd">subtitles<span class="x" data-co="2" data-co-side="right"><i data-i="x"></i></span></div>
+          <div class="it"><span class="ck"></span>off</div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English</div>
+          <div class="it"><span class="ck"></span>English (CC)</div>
+          <div class="it" data-co="3" data-co-side="right"><span class="ck"></span>Chinese (Simplified) (AI)</div>
+          <i class="thumb" style="top:48px;height:64px"></i>
         </div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 12.3 · subtitles on a TV, the controls hidden -->
+<!-- Figure 12.10 · the panel on a TV, the focus on a row of the subtitles column -->
+<figure class="shot" id="subtitles-panel-tv">
+  <div class="tv full" data-rail="none" data-view="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div></div>
+      <div class="dim"></div>
+      <div class="sub" style="bottom:43px;font-size:28.8px"><span data-co="3">It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="panel" style="left:180px;top:42px;width:600px;height:360px">
+        <div class="c">
+          <div class="hd">audio</div>
+          <div class="it on" data-co="2"><span class="ck"><i data-i="check" class="s16"></i></span>English (original)</div>
+          <div class="it"><span class="ck"></span>English (audio description)</div>
+          <div class="it"><span class="ck"></span>German</div>
+        </div>
+        <div class="c">
+          <div class="hd">subtitles</div>
+          <div class="it"><span class="ck"></span>off</div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English</div>
+          <div class="it focus-row" data-co="1" data-co-side="right"><span class="ck"></span>English (CC)</div>
+          <div class="it"><span class="ck"></span>Chinese (Simplified) (AI)</div>
+          <div class="it"><span class="ck"></span>Croatian</div>
+          <div class="it"><span class="ck"></span>Czech</div>
+          <div class="it"><span class="ck"></span>Danish</div>
+          <div class="it"><span class="ck"></span>Dutch</div>
+          <i class="thumb" style="top:42px;height:130px"></i>
+        </div>
+      </div>
+      <span style="position:absolute;right:48px;bottom:27px;width:40px;height:20px" data-co="4" data-co-side="right"></span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 12.11 · subtitles on a TV, the controls hidden -->
 <figure class="shot" id="subtitles-tv">
   <div class="tv full" data-rail="none" data-view="none">
     <div class="pl">
       <div class="pic"><div class="art a1"></div></div>
-      <div class="sub" style="bottom:43px;font-size:28.8px" data-co="1"><span><i>Where were you last night?</i><br>Out by the old bridge.</span></div>
+      <div class="sub" style="bottom:43px;font-size:28.8px"><span data-co="1"><i>Where were you last night?</i><br>Out by the old bridge.</span></div>
       <span style="position:absolute;right:48px;bottom:17px;width:40px;height:20px" data-co="2" data-co-side="right"></span>
     </div>
   </div>

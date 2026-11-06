@@ -5,11 +5,12 @@ Android TV and on Samsung TVs. This specification describes every chino screen:
 what it shows, how it behaves, what it says in each state, and how it looks on a
 computer, a phone and a TV.
 
-> **This is the target, not what is deployed.** The drawings and rules show how
-> the screens are meant to be, on the design system 0.4.0. Today's apps differ
-> from it, as each chapter's “Today's apps” section says, and the decisions under
-> “Open” haven't been made. So nothing in this specification is to be built on
-> its own: what is deployed stays as it is until a change to it is approved.
+> **What is deployed, and what is the target.** Each chapter shows first what
+> the apps do today, under “As deployed”, with screenshots of the deployed web;
+> then the target, the drawings and rules of how the screens are meant to be, on
+> the design system 0.4.0; then, under “Changes”, every difference between the
+> two as a numbered change with its status. Only a change the owner approved is
+> built, one at a time, and anything no change names stays as it is deployed.
 
 ## 1.1 Scope
 
@@ -46,8 +47,9 @@ the part of the screen that every TV shows in full.
 
 The drawings show how the screens should be, on the
 [nalet design system](https://nalet.github.io/design-system/) 0.4.0, and not how
-any one app looks today. Their films and shows are those the reference demo
-carries.
+any one app looks today. How the apps look today is in each chapter's section
+“As deployed”, in screenshots of the web taken on the demo. The drawings' films
+and shows are those the reference demo carries.
 
 ## 1.3 How a chapter is built
 
@@ -68,9 +70,10 @@ order:
    ones that matter.
 6. **Words**: every text the screen shows, exactly.
 
-Chapter 11 is the first in this form. The others still end with **Today's
-apps**, a shorter list of where each app differs, and **Open**, the decisions
-not yet made; they move to the new form one by one.
+Chapters 2 to 17 have this form; chapter 18 holds the words they share. A
+change the owner approves is named by its number, as in “approve 11.C2”; its
+status then moves to approved, built once it is in the apps, and verified once
+the deployed apps show it.
 
 ## 1.4 The chapters
 
@@ -87,7 +90,7 @@ not yet made; they move to the new form one by one.
 | 9 | [Search](./search.md) | the one search, and its results |
 | 10 | [Zap](./zap.md) | zapping through scenes of the library |
 | 11 | [The player](./playback.md) | watching, and the player's controls and menus |
-| 12 | [Subtitles](./subtitles.md) | how subtitles look, their menu, and what switches on by itself |
+| 12 | [Subtitles](./subtitles.md) | the audio and subtitles panel, how subtitles look, and what switches on by itself |
 | 13 | [Downloads and offline](./downloads.md) | taking titles along on a phone or a tablet |
 | 14 | [Casting](./casting.md) | watching on a TV from the phone |
 | 15 | [Notifications](./notifications.md) | the bell and what it holds |

@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
-  Chapter 16, settings and account: the figures of docs/chino/settings.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 16, settings and account: the figures of spec/chino/settings.md (the
+  target; the as-deployed figures are screenshots, *-asis-web-*.png).
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
   icons are icons.js. Pink numbers mark the parts the chapter's text explains.
@@ -100,6 +101,16 @@
   .tv .banner { font-size: 14px; }
   .cl { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border: 1px solid var(--border); background: var(--surface); }
   .cl .h3x { font: 600 14px/1.3 var(--ff-mono); color: var(--fg); }
+  /* a phone held sideways: the sideways rail also matches screens.css's ".phone > .tabs" (64 px high, a top border), undone here */
+  /* settings in two columns, the account beside its history */
+  .sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; padding: 0 8px; }
+  .sgrid .sec { padding: 9px 16px 6px; }
+  .sgrid .li { min-height: 52px; }
+  .agrid { position: absolute; inset: 0; display: grid; grid-template-columns: 240px 1fr; gap: 24px; padding: 16px 16px 0 24px; align-items: start; }
+  .agrid .acol { display: flex; flex-direction: column; gap: 10px; }
+  .agrid .hcol .sec { padding: 0 0 8px; }
+  .agrid .hcol .hist { padding: 6px 0; }
+  .agrid .hcol .hist .th { height: 45px; } .agrid .hcol .hist .th.ep { width: 80px; } .agrid .hcol .hist .th.mv { width: 30px; }
 </style>
 </head>
 <body>
@@ -131,7 +142,7 @@
           <h2 class="h2">binge watching</h2>
           <div class="card-box">
             <div class="srow mid">
-              <div class="lab"><span class="ttl">Auto-skip intros</span><span class="hint">Skips the intro on every episode after the first one you watch in a row.</span></div>
+              <div class="lab"><span class="ttl">Auto-skip intros</span><span class="hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div>
               <span class="switch on" data-co="4" data-co-side="right"></span>
             </div>
             <div class="srow mid">
@@ -139,7 +150,7 @@
               <span class="switch on"></span>
             </div>
             <div class="srow mid">
-              <div class="lab"><span class="ttl">Countdown</span><span class="hint">Seconds the player counts down before it skips the intro or starts the next episode.</span></div>
+              <div class="lab"><span class="ttl">Countdown</span><span class="hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></div>
               <span class="step" data-co="5" data-co-side="right"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span>
             </div>
           </div>
@@ -179,9 +190,9 @@
       <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
     </div>
     <div class="sec">binge watching</div>
-    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on" data-co="4" data-co-side="right"></span></span></div>
+    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on" data-co="4" data-co-side="right"></span></span></div>
     <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
-    <div class="li"><div class="main"><span class="ttl">Countdown</span><span class="sub">Seconds the player counts down before it skips the intro or starts the next episode.</span><span class="step" style="margin-top:8px"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span></div></div>
+    <div class="li"><div class="main"><span class="ttl">Countdown</span><span class="sub">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span><span class="step" style="margin-top:8px"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span></div></div>
   </div>
 </figure>
 
@@ -210,6 +221,33 @@
     </div>
     <div class="sec t">about</div>
     <div class="li vrow" style="min-height:48px"><span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Version</span><span class="v">0.2.1</span></div>
+  </div>
+</figure>
+
+<!-- settings on a phone held sideways: the groups in two columns -->
+<figure class="shot" id="settings-sideways-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="settings">
+    <div class="sgrid">
+      <div>
+        <div class="sec">language</div>
+        <div class="pf">
+          <span class="lbl" data-co="1">Audio</span>
+          <span class="field filled"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
+          <span class="hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+        </div>
+        <div class="pf">
+          <span class="lbl">Subtitles</span>
+          <span class="field filled"><span style="flex:1">English</span><i data-i="chevron-down" class="s16"></i></span>
+          <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
+        </div>
+      </div>
+      <div data-co="2" data-co-side="right">
+        <div class="sec">binge watching</div>
+        <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on"></span></span></div>
+        <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
+        <div class="li"><div class="main"><span class="ttl">Countdown</span><span class="sub">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></div><span class="end"><span class="step"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span></span></div>
+      </div>
+    </div>
   </div>
 </figure>
 
@@ -310,6 +348,27 @@
     <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
     <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
     <div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+  </div>
+</figure>
+
+<!-- the account, on a phone held sideways: the account and its buttons beside the history -->
+<figure class="shot" id="settings-account-sideways-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="account">
+    <div class="agrid">
+      <div class="acol" data-co="1">
+        <div class="row" style="gap:14px; margin-bottom:4px"><span class="av" style="width:56px;height:56px;line-height:56px;font-size:20px">au</span><div class="col" style="gap:2px; min-width:0"><span style="font:500 16px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
+        <span class="b wide"><i data-i="users" class="s16"></i>switch account</span>
+        <span class="b wide"><i data-i="log-out" class="s16"></i>sign out</span>
+        <span class="b danger wide"><i data-i="trash-2" class="s16"></i>delete account</span>
+      </div>
+      <div class="hcol" data-co="2" data-co-side="right">
+        <div class="sec">watch history</div>
+        <div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+        <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+        <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+        <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+      </div>
+    </div>
   </div>
 </figure>
 
@@ -459,7 +518,7 @@
       <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
     </div>
     <div class="sec">binge watching</div>
-    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on"></span></span></div>
+    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on"></span></span></div>
     <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
   </div>
 </figure>

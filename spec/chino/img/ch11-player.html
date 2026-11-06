@@ -5,9 +5,9 @@
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame is frame.js (the player has no top bar,
   no tabs and no rail), the icons are icons.js. Pink numbers mark the parts
-  the chapter's text explains. The player's menus are drawn in mockups.html
-  (player-menus, figure 11.9). Figures 11.1 to 11.3 are screenshots of the
-  deployed web player, not drawings.
+  the chapter's text explains. The settings menu is figure 11.9 here; the
+  audio and subtitles panel is drawn in ch12-subtitles.html. Figures 11.1 to
+  11.3 are screenshots of the deployed web player, not drawings.
 -->
 <html lang="en">
 <head>
@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* a phone held sideways */
-  .phone.land { width: 780px; height: 360px; }
-
   /* a phone held upright: the title under back, home and cast, on up to two
      lines; the buttons on two rows */
   .up .top { flex-wrap: wrap; row-gap: 10px; }
@@ -34,7 +31,7 @@
   /* the player: the picture fitted in the middle, the controls over it */
   .pl { position: absolute; inset: 0; background: #000; overflow: hidden; }
   .pl .pic { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); aspect-ratio: 16 / 9; overflow: hidden; }
-  .phone.land .pl .pic { left: 50%; right: auto; top: 0; bottom: 0; height: 100%; transform: translateX(-50%); }
+  .phone.side .pl .pic { left: 50%; right: auto; top: 0; bottom: 0; height: 100%; transform: translateX(-50%); }
   .tv .pl .pic { inset: 0; transform: none; aspect-ratio: auto; }
   .pl .credits .art::after { display: none; }
   .pl .credits { filter: brightness(.55); }
@@ -66,6 +63,25 @@
   .tv .btns { gap: 12px; }
   .tv .vol { width: 72px; }
   .tv .seek { font-size: 12px; }
+
+  /* the settings menu: above the whole bar at its button's end; the picked row
+     with a check and the brighter text, as in the audio and subtitles panel */
+  .smenu { position: absolute; right: 16px; width: 304px; background: var(--surface); border: 1px solid var(--border-2); padding: 4px 0; z-index: 6; }
+  .smenu .hd { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); padding: 12px 16px 8px; }
+  .smenu .it { height: 44px; display: flex; align-items: center; padding: 0 16px 0 12px; font: 400 14px/1 var(--ff-ui); color: var(--fg-muted); }
+  .smenu .it .ck { width: 26px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
+  .smenu .it.on { color: var(--fg); font-weight: 600; }
+  .smenu .it .tail { font-weight: 400; color: var(--fg-2); white-space: pre; }
+  .smenu .timing { border-top: 1px solid var(--border); margin-top: 4px; padding-bottom: 12px; }
+  .smenu .timing .row { gap: 8px; padding: 0 16px; }
+  .smenu .timing .v { flex: 1; text-align: center; font: 500 14px/1 var(--ff-mono); color: var(--fg); }
+  .smenu .timing .b { height: 40px; padding: 0 12px; font-size: 13px; }
+  .smenu .timing .b.icon { width: 40px; padding: 0; }
+  .sub { position: absolute; text-align: center; color: #fff; z-index: 2; font-family: var(--ff-ui); font-weight: 500; line-height: 1.25;
+         text-shadow: -1.5px -1.5px 0 #000, 0 -1.5px 0 #000, 1.5px -1.5px 0 #000, 1.5px 0 0 #000, 1.5px 1.5px 0 #000, 0 1.5px 0 #000, -1.5px 1.5px 0 #000, -1.5px 0 0 #000; }
+  .sub > span { display: inline-block; }
+  /* a mark's target under a button, so its line runs under the row, not across it */
+  .under { position: absolute; left: 0; right: 0; top: 100%; margin-top: 5px; height: 4px; }
 
   /* the states */
   .wait { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 14px;
@@ -114,7 +130,6 @@
           </span>
           <span class="sp"></span>
           <span data-co="4" data-co-side="right" style="display:flex;align-items:center;gap:8px">
-            <span class="b icon"><i data-i="audio-lines"></i></span>
             <span class="b icon"><i data-i="captions"></i></span>
             <span class="b icon"><i data-i="gauge"></i></span>
             <span class="b icon"><i data-i="settings-2"></i></span>
@@ -164,7 +179,6 @@
         <div class="btns">
           <span class="sp"></span>
           <span data-co="4" style="display:flex;align-items:center;gap:8px">
-            <span class="b icon"><i data-i="audio-lines"></i></span>
             <span class="b icon"><i data-i="captions"></i></span>
             <span class="b icon"><i data-i="gauge"></i></span>
             <span class="b icon"><i data-i="settings-2"></i></span>
@@ -178,7 +192,7 @@
 
 <!-- Figure 11.6 · the player on a phone held sideways -->
 <figure class="shot" id="player-phone">
-  <div class="phone land" data-bar="none" data-tabs="none">
+  <div class="phone side" data-bar="none" data-tabs="none">
     <div class="pl">
       <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:45%;width:60px;height:20px" data-co="3" data-co-side="right"></span></div>
       <div class="top">
@@ -201,7 +215,6 @@
           <span class="b icon"><i data-i="pause" class="fill"></i></span>
           <span class="b icon" data-co="2"><i data-i="volume-2"></i></span>
           <span class="sp"></span>
-          <span class="b icon"><i data-i="audio-lines"></i></span>
           <span class="b icon"><i data-i="captions"></i></span>
           <span class="b icon"><i data-i="gauge"></i></span>
           <span class="b icon"><i data-i="settings-2"></i></span>
@@ -240,7 +253,6 @@
           <span class="b icon primary focus" data-co="3"><i data-i="pause" class="fill"></i></span>
           <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
           <span class="sp"></span>
-          <span class="b icon"><i data-i="audio-lines"></i></span>
           <span class="b icon"><i data-i="captions"></i></span>
           <span class="b icon"><i data-i="gauge"></i></span>
           <span class="b icon"><i data-i="settings-2"></i></span>
@@ -268,6 +280,57 @@
   </div>
 </figure>
 
+<!-- Figure 11.9 · the settings menu, on a computer -->
+<figure class="shot" id="player-settings-computer">
+  <div class="computer" data-bar="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div></div>
+      <div class="top">
+        <span class="b icon"><i data-i="arrow-left"></i></span>
+        <span class="b icon"><i data-i="house"></i></span>
+        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
+      </div>
+      <div class="sub" style="left:96px;right:412px;bottom:140px;font-size:38px"><span data-co="4">It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="smenu" style="bottom:128px">
+        <div data-co="1" data-co-side="right">
+          <div class="hd">quality</div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>Auto<span class="tail"> · Medium (720p)</span></div>
+        </div>
+        <div class="it"><span class="ck"></span>High (1080p)</div>
+        <div class="it"><span class="ck"></span>Medium (720p)</div>
+        <div class="it"><span class="ck"></span>Low (480p)</div>
+        <div class="timing" data-co="2" data-co-side="right">
+          <div class="hd">subtitle timing</div>
+          <div class="row"><span class="b icon"><i data-i="minus" class="s16"></i></span><span class="v">+0.25s</span><span class="b icon"><i data-i="plus" class="s16"></i></span><span class="b">reset</span></div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="seek">
+          <span class="t1">17:23</span>
+          <div class="track">
+            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
+            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
+            <i class="head" style="left:42%"></i>
+          </div>
+          <span class="t2">41:23</span>
+        </div>
+        <div class="btns">
+          <span class="b icon"><i data-i="pause" class="fill"></i></span>
+          <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
+          <span class="sp"></span>
+          <span class="b icon primary"><i data-i="captions"></i></span>
+          <span class="b icon"><i data-i="gauge"></i></span>
+          <span style="position:relative;display:inline-flex"><span class="b icon"><i data-i="settings-2"></i></span><span class="under" data-co="3" data-co-side="right"></span></span>
+          <span class="b icon"><i data-i="chevron-left"></i></span>
+          <span class="b icon"><i data-i="chevron-right"></i></span>
+          <span class="b icon"><i data-i="info"></i></span>
+          <span class="b icon"><i data-i="maximize"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
 <!-- Figure 11.10 · the quality changed by itself, on a computer -->
 <figure class="shot" id="player-notice-computer">
   <div class="computer" data-bar="none">
@@ -280,7 +343,7 @@
 
 <!-- Figure 11.11 · a title starting, on a phone -->
 <figure class="shot" id="player-loading-phone">
-  <div class="phone land" data-bar="none" data-tabs="none">
+  <div class="phone side" data-bar="none" data-tabs="none">
     <div class="pl">
       <div class="top">
         <span class="b icon"><i data-i="arrow-left"></i></span>

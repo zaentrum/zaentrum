@@ -2,12 +2,15 @@
 
 The specification says how zaentrum's screens look and behave: what each one
 shows, what it says in every state, how it fits a computer, a phone and a TV,
-and where today's apps still differ from it. It is written for the people who
-build the apps, and for the review of every release.
+and how today's apps differ from it. It is written for the people who build the
+apps, and for the review of every release.
 
-> **This is the target, not what is deployed.** Where today's apps differ, each
-> chapter says so under “Today's apps”. Nothing here is to be built on its own:
-> what is deployed stays as it is until a change to it is approved.
+> **What is deployed, and what is the target.** Each chino chapter shows first
+> what the apps do today, in screenshots of the deployed web; then the target;
+> then every difference between the two as a numbered change with its status.
+> Only a change the owner approved is built, one at a time, and anything no
+> change names stays as it is deployed. The portal's pages show the target
+> only: nothing in them is built until a change to it is approved.
 
 The [documentation](../docs/README.md) is the other half: it is for the people
 who run zaentrum, extend it with addons, or build on its library format, and it

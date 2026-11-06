@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
-  Chapter 3, getting started: the figures of docs/chino/start.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 3, getting started: the figures of spec/chino/start.md (the target;
+  the as-deployed figure is a screenshot, sign-in-asis-web-computer.png).
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
   icons are icons.js. These screens come before the frame, so most leave it
@@ -70,6 +71,12 @@
   .tv .tile.focus .nm { color: var(--fg); }
   .tv .tile.focus { transform: none; outline: none; }
   .tv .tile.focus .box { outline: 3px solid var(--focus-ring); outline-offset: 2px; transform: scale(1.05); }
+  /* a phone held sideways: two columns side by side, the mark and the heading on the left */
+  .onb2 { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 0 48px; }
+  .onb2 .lft { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .onb2 .rgt { display: flex; flex-direction: column; gap: 18px; }
+  .onb2 .h1, .onb2 .text { text-align: left; }
+  .phone.side .tiles { grid-template-columns: repeat(4, 96px); justify-content: center; gap: 20px 28px; }
 </style>
 </head>
 <body>
@@ -86,6 +93,26 @@
         <span class="hint">The app adds https:// when you leave it out.</span>
       </div>
       <span class="b primary wide" data-co="2">connect</span>
+    </div>
+  </div>
+</figure>
+
+<!-- connect to a server, on a phone held sideways -->
+<figure class="shot" id="start-server-sideways-phone">
+  <div class="phone side" data-bar="none" data-tabs="none">
+    <div class="onb2">
+      <div class="lft" data-co="1">
+        <span class="mark"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+        <h1 class="h1">connect to a server</h1>
+      </div>
+      <div class="rgt">
+        <div class="fld" data-co="2" data-co-side="right">
+          <span class="lbl">Server address</span>
+          <span class="field filled focus">media.example.com<span class="caret" style="margin-left:1px"></span></span>
+          <span class="hint">The app adds https:// when you leave it out.</span>
+        </div>
+        <span class="b primary wide">connect</span>
+      </div>
     </div>
   </div>
 </figure>
@@ -117,6 +144,23 @@
       <p class="text">The server's sign-in page opens in your browser.</p>
       <span class="b primary wide" style="margin-top:8px" data-co="2"><i data-i="log-in" class="s16"></i>sign in</span>
       <span class="b ghost" style="margin-top:-10px; align-self:center" data-co="3">change server</span>
+    </div>
+  </div>
+</figure>
+
+<!-- sign in, on a phone held sideways -->
+<figure class="shot" id="start-sign-in-sideways-phone">
+  <div class="phone side" data-bar="none" data-tabs="none">
+    <div class="onb2">
+      <div class="lft" data-co="1">
+        <span class="mark"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+        <h1 class="h1">sign in to<br>media.example.com</h1>
+        <p class="text">The server's sign-in page opens in your browser.</p>
+      </div>
+      <div class="rgt" data-co="2" data-co-side="right">
+        <span class="b primary wide"><i data-i="log-in" class="s16"></i>sign in</span>
+        <span class="b ghost" style="margin-top:-8px; align-self:center">change server</span>
+      </div>
     </div>
   </div>
 </figure>
@@ -153,6 +197,21 @@
         <div class="tile"><div class="box"><span class="av c2">a</span><span class="x"><i data-i="x" class="s14"></i></span></div><span class="nm">Anna</span></div>
         <div class="tile"><div class="box"><span class="av c3">sk</span><span class="x" data-co="2" data-co-side="right"><i data-i="x" class="s14"></i></span></div><span class="nm">Sam Keller</span></div>
         <div class="tile" data-co="3"><div class="box"><span class="plus"><i data-i="plus" class="s32"></i></span></div><span class="nm">add account</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- who's watching, on a phone held sideways -->
+<figure class="shot" id="start-whos-watching-sideways-phone">
+  <div class="phone side" data-bar="none" data-tabs="none">
+    <div class="pg" style="padding:44px 48px 0; display:flex; flex-direction:column; align-items:center">
+      <h1 class="h1" style="margin-bottom:36px">who's watching?</h1>
+      <div class="tiles" data-co="1">
+        <div class="tile"><div class="box cur"><span class="av">au</span><span class="x"><i data-i="x" class="s14"></i></span></div><span class="nm cur">Alex Urban</span></div>
+        <div class="tile"><div class="box"><span class="av c2">a</span><span class="x"><i data-i="x" class="s14"></i></span></div><span class="nm">Anna</span></div>
+        <div class="tile"><div class="box"><span class="av c3">sk</span><span class="x"><i data-i="x" class="s14"></i></span></div><span class="nm">Sam Keller</span></div>
+        <div class="tile" data-co="2" data-co-side="right"><div class="box"><span class="plus"><i data-i="plus" class="s32"></i></span></div><span class="nm">add account</span></div>
       </div>
     </div>
   </div>

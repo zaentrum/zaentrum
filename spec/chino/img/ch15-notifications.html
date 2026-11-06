@@ -1,7 +1,9 @@
 <!doctype html>
 <!--
-  Chapter 15, notifications: the figures of docs/chino/notifications.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 15, notifications: the target figures of spec/chino/notifications.md.
+  The as-deployed figures (notifications-asis-web-*.png) are screenshots, not
+  drawn here.
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
   icons are icons.js. Home under the panel is chapter 4's (ch04-home.html).
@@ -59,6 +61,14 @@
   .phone .nr { padding: 14px 8px 14px 16px; }
   .phone .nr .ttl { font-size: 15px; }
   .phone .nr .b.icon { margin-top: -4px; }
+  /* held sideways: the bar as slim as frame.js draws it there (48), the rows
+     across the width beside the rail */
+  /* screens.css's ".phone > .tabs" (the upright tabs: 64 high, a line on top)
+     matches the sideways rail too; the rail is the phone's height */
+  .phone.side .xbar { height: 48px; }
+  .phone.side .under { top: 48px; }
+  .phone.side .nr { padding: 10px 12px 10px 24px; }
+  .phone.side .nr .main { gap: 4px; }
 
   /* the screen on a TV */
   .tv .head { display: flex; align-items: center; gap: 16px; width: 712px; margin-top: 14px; }
@@ -79,7 +89,7 @@
 </head>
 <body>
 
-<!-- Figure 15.1 · the notifications on a computer -->
+<!-- Figure 15.4 · the notifications on a computer -->
 <figure class="shot" id="notifications-computer">
   <div class="computer" data-view="home" data-co-parts="bell:1:top">
     <section class="hero">
@@ -142,7 +152,7 @@
   </div>
 </figure>
 
-<!-- Figure 15.2 · the notifications on a phone -->
+<!-- Figure 15.5 · the notifications on a phone held upright -->
 <figure class="shot" id="notifications-phone">
   <div class="phone" data-view="home" data-bar="none">
     <header class="xbar">
@@ -190,7 +200,48 @@
   </div>
 </figure>
 
-<!-- Figure 15.3 · the notifications on a TV -->
+<!-- Figure 15.6 · the notifications on a phone held sideways -->
+<figure class="shot" id="notifications-sideways-phone">
+  <div class="phone side" data-view="home" data-bar="none" data-co-parts="tabs:2">
+    <header class="xbar">
+      <span class="icon-b"><i data-i="arrow-left"></i></span>
+      <span class="title">notifications</span>
+      <span class="b ghost" data-co="1" data-co-side="right"><i data-i="check-check" class="s16"></i>mark all read</span>
+    </header>
+    <div class="under">
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 5m</span>
+          <div class="ttl"><i class="sq"></i>German subtitles for Sintel</div>
+          <div class="bd">In the player's subtitles menu as German · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+      </div>
+      <div class="nr unread" style="position:relative">
+        <!-- the mark's anchor: the row's left edge, level with the gap between the rail's shows and watchlist -->
+        <span style="position:absolute;left:0;top:60px;width:24px;height:2px" data-co="3"></span>
+        <div class="main">
+          <span class="fr">subtitles · 3h</span>
+          <div class="ttl"><i class="sq"></i>Chinese (Simplified) subtitles for Tears of Steel</div>
+          <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+      </div>
+      <div class="nr">
+        <div class="main">
+          <span class="fr">library · 2d</span>
+          <div class="ttl">Elephants Dream has 5.1 sound now</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 15.7 · the notifications on a TV -->
 <figure class="shot" id="notifications-tv">
   <div class="tv" data-view="notifications" data-co-parts="bell:1">
     <div class="page">
@@ -246,7 +297,7 @@
   </div>
 </figure>
 
-<!-- Figure 15.4 · no notifications yet, on a phone -->
+<!-- Figure 15.8 · no notifications yet, on a phone -->
 <figure class="shot" id="notifications-empty-phone">
   <div class="phone" data-view="home" data-bar="none">
     <header class="xbar">
@@ -262,7 +313,7 @@
   </div>
 </figure>
 
-<!-- Figure 15.5 · the notifications couldn't be refreshed, on a computer -->
+<!-- Figure 15.9 · the notifications couldn't be refreshed, on a computer -->
 <figure class="shot" id="notifications-couldnt-refresh-computer">
   <div class="computer" data-view="home">
     <section class="hero">
@@ -324,7 +375,7 @@
   </div>
 </figure>
 
-<!-- Figure 15.6 · a server without notifications, on a TV -->
+<!-- Figure 15.10 · a server without notifications, on a TV -->
 <figure class="shot" id="notifications-none-tv">
   <div class="tv nobell" data-view="home">
     <div class="backdrop"><div class="art steel"></div><div class="scrim"></div></div>

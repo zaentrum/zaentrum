@@ -9,9 +9,9 @@ it is deployed.
 The chapter covers what the player shows and how its controls work, how a
 title resumes and when it counts as finished, the qualities and their names,
 the player's menus, the picture, and what the player says when it changes the
-quality by itself. Subtitles have [chapter 12](./subtitles.md), and what a
-screen says when something couldn't load, by cause, is in
-[chapter 17](./errors.md).
+quality by itself. Subtitles, and the panel in which people pick the audio and
+the subtitles, have [chapter 12](./subtitles.md), and what a screen says when
+something couldn't load, by cause, is in [chapter 17](./errors.md).
 
 ## 11.1 Purpose
 
@@ -41,7 +41,7 @@ decode the original and the server was still converting it; the controls are
 the ones that show while a title plays. Figure 11.1 shows a movie on a
 computer.
 
-![Figure 11.1: The web's player as deployed on 6 November 2026, on a computer, at 1280 × 800](./img/player-asis-web-computer.png)
+![Figure 11.1: The web's player as deployed on 6 November 2026, on a computer, at 1280 × 800](./img/player-asis-web-computer.webp)
 
 Figure 11.1: The web's player as deployed on 6 November 2026, on a computer, at
 1280 × 800.
@@ -66,7 +66,7 @@ name what is set: “Back”, “Home”, “Pause”, “Mute”, “Subtitles�
 
 Figure 11.2 shows the same movie on a phone held upright.
 
-![Figure 11.2: The web's player as deployed on 6 November 2026, on a phone held upright, at 360 × 780](./img/player-asis-web-phone.png)
+![Figure 11.2: The web's player as deployed on 6 November 2026, on a phone held upright, at 360 × 780](./img/player-asis-web-phone.webp)
 
 Figure 11.2: The web's player as deployed on 6 November 2026, on a phone held
 upright, at 360 × 780.
@@ -82,7 +82,7 @@ upright, at 360 × 780.
 
 Figure 11.3 shows another movie on a phone held sideways.
 
-![Figure 11.3: The web's player as deployed on 6 November 2026, on a phone held sideways, at 780 × 360](./img/player-asis-web-phone-landscape.png)
+![Figure 11.3: The web's player as deployed on 6 November 2026, on a phone held sideways, at 780 × 360](./img/player-asis-web-phone-landscape.webp)
 
 Figure 11.3: The web's player as deployed on 6 November 2026, on a phone held
 sideways, at 780 × 360.
@@ -212,7 +212,7 @@ qualities.
 | After a movie | nothing starts | nothing starts | the first unwatched title of “more like this” starts | nothing starts; the player goes back |
 | The next episode | warmed from the credits on; no rule before going on | warmed 30 s before the credits or the end; no rule before going on | warmed 30 s before the credits or the end; started by itself only after a picture and 10 s | not warmed; no rule before going on |
 | The menus | audio, quality and speed right above their buttons, over the seek bar; subtitles above the whole bar | above the seek bar under their button; round corners | at the bottom right, above the bar | at one fixed place; a check mark; headers in capitals |
-| Audio rows | “English” with “AAC · Stereo” beside it | “E-AC-3 · 5.1” under the name; a track it can't play greyed | “E-AC-3 · 5.1” under the name; only tracks it can play | “English”, “English 5.1” |
+| Audio rows | “English” with “AAC · Stereo” beside it, for a ready-made title “MP4A.40.2 · Stereo” | “E-AC-3 · 5.1” under the name; a track it can't play greyed | “E-AC-3 · 5.1” under the name; only tracks it can play | “English”, “English 5.1” |
 | Quality rows | ready-made: “Auto · Medium (720p)” first | the qualities, no Auto | ready-made: “Auto · Medium (720p)” first | ready-made: “Auto” first |
 | A quality picked | the last picture stays under “Switching to Medium (720p)…” | loaded again where it was | loaded again where it was; the speed back to normal | loaded again where it was |
 | The picture | the picture area fitted, its bars cropped; zoom to fill | Android: the picture area fitted, a pinch fills; iOS: the whole frame | the whole frame | the whole frame |
@@ -253,31 +253,34 @@ showing.
 3. **play or pause, and the volume.** The first button pauses while the title
    plays and plays while it doesn't. The speaker turns the sound off and on
    again, and the slider beside it sets how loud.
-4. **The other buttons**, in this order: **audio**, where the title has more
-   than one audio track; **subtitles** ([chapter 12](./subtitles.md)), blue
-   while subtitles are on; **speed**; **quality**, where there are two or more
-   qualities to choose from; **previous episode** and **next episode**, for an
-   episode with one before or after it; **playback info**, what plays and how it
-   reaches the screen (section 11.15); and **fullscreen**. Section 11.10 sets
-   out the menus.
+4. **The other buttons**, in this order: **audio and subtitles**, where the
+   title has two audio tracks or more, or a subtitle to pick, blue while a
+   subtitle is on, which opens the audio and subtitles panel
+   ([chapter 12](./subtitles.md)); **speed**; **settings**, where its menu has
+   something to set, a choice of quality or the timing of a subtitle that is
+   on; **previous episode** and **next episode**, for an episode with one
+   before or after it; **playback info**, what plays and how it reaches the
+   screen (section 11.15); and **fullscreen**. Section 11.10 sets out the
+   menus.
 5. **The picture**, as large as the window allows, in its middle
    (section 11.11). Where the title has a picture area and filling the window
    would change the picture, **zoom to fill** comes before **fullscreen**.
 
 The buttons are 48 × 48 squares on a solid surface, their icons alone. Each
 one's name shows over it as a tooltip and is what a screen reader says; a
-button with something set adds it after a comma: “subtitles, English”,
-“quality, Auto · Medium (720p)”, “next episode, S01E04 · Triangular
-Diplomacy”. Section 11.18 lists them. Behind the top and the bottom, the
-picture darkens towards the edge, so no time and no title stands on the bare
-picture.
+button with something set adds it after a comma: “audio and subtitles,
+English (original), subtitles English”, “settings, Auto · Medium (720p)”,
+“next episode, S01E04 · Triangular Diplomacy”. Section 11.18 lists them.
+Behind the top and the bottom, the picture darkens towards the edge, so no time
+and no title stands on the bare picture.
 
 The keyboard works without the controls: space or k plays and pauses, ← and →
 go back and forward 10 seconds, ↑ and ↓ set the volume, m turns the sound off
 and on, and f is fullscreen. Every key the player answers to shows the
-controls, wherever the focus is. Esc closes an open menu, and with no menu open
-it leaves a trailer. With a mouse, a click on the picture plays or pauses; on a
-touch screen a tap only shows the controls (section 11.6).
+controls, wherever the focus is. Esc closes an open menu or the audio and
+subtitles panel, and with neither open it leaves a trailer. With a mouse, a
+click on the picture plays or pauses; on a touch screen a tap only shows the
+controls (section 11.6).
 
 ## 11.4 The player on a phone
 
@@ -301,9 +304,9 @@ Figure 11.5: The player on a phone held upright, at 360 × 780 dp.
    next episode and fullscreen on the right. While the volume's slider is open,
    it takes the place of previous and next episode, and they come back when it
    closes.
-4. **The second row**, at the right: audio, subtitles, speed, quality and
-   playback info, those the title has, in the order of figure 11.4. On iOS,
-   picture in picture comes after quality.
+4. **The second row**, at the right: audio and subtitles, speed, settings
+   and playback info, those the title has, in the order of figure 11.4. On
+   iOS, picture in picture comes after settings.
 5. **fullscreen** turns the player sideways and full screen (section 11.4.3).
 
 The buttons go on two rows on a screen less than 600 dp wide, as a phone held
@@ -346,7 +349,8 @@ phone's own buttons set the volume.
 
 The player turns with the phone, and turning it never interrupts the title: it
 plays on, or stays paused, where it was, with its audio, subtitles, quality and
-speed, and an open menu stays open at its button.
+speed; an open menu stays open at its button, and the audio and subtitles panel
+stays open too ([chapter 12](./subtitles.md)).
 
 - **Turned sideways**, the player goes full screen by itself. The phone app
   hides the status and navigation bars. The web asks the browser for full
@@ -383,7 +387,8 @@ Figure 11.7: The player on a TV, at 960 × 540 dp, with its controls showing.
    title goes on from there.
 3. **The focus.** Whenever the controls come back, the focus is on play or
    pause. Left and right move along the row, up and down between the row and
-   the seek bar. A menu that closes gives the focus back to its button.
+   the seek bar. A menu or the audio and subtitles panel that closes gives
+   the focus back to its button.
 4. **The band**: one solid surface under the seek bar and the buttons, out to
    the screen's edges. The controls stay inside the safe area, with room for
    the focus ring. The TV has no fullscreen button: it is always full screen.
@@ -401,10 +406,10 @@ some keys do more:
 | OK | Pauses or plays | Presses the focused button |
 | ← → | Back or forward 10 seconds | Moves the focus; on the seek bar, 10 seconds |
 | ↑ ↓ | Only shows the controls | Moves between the seek bar and the row; on the volume, sets how loud |
-| back | Leaves the player | Closes an open menu first; then leaves the player |
+| back | Leaves the player | Closes an open menu or the panel first; then leaves the player |
 | play, pause | Plays or pauses | The same |
 | fast forward, rewind | Forward or back 10 seconds | The same |
-| The remote's subtitles key, its audio key | Opens the subtitles menu, the audio menu | The same |
+| The remote's subtitles key, its audio key | Opens the audio and subtitles panel, with the focus in its subtitles column or in its audio column; the controls stay hidden | Opens the panel the same way |
 
 While a card of section 11.8 shows, back is that card's way out first: **watch
 the intro** on the auto-skip card, **watch from the start** on the skipped
@@ -417,10 +422,11 @@ mouse, touches the screen or presses a key. They hide again after 3 seconds
 while the title plays and after 8 seconds while it is paused. They stay while
 a menu is open, while the person drags the seek bar or the volume, and while a
 screen reader's focus is on one of them, so it never loses the control it is
-on. A tap on the picture while they show hides them; a tap on the bars, between
-their buttons too, keeps them. They come and go with a short fade; the
-subtitles rise above them while they show and come back down when they hide
-([chapter 12](./subtitles.md)).
+on. While the audio and subtitles panel is open they step back, and they come
+back when it closes. A tap on the picture while they show hides them; a tap on
+the bars, between their buttons too, keeps them. They come and go with a short
+fade; the subtitles rise above them while they show and come back down when
+they hide ([chapter 12](./subtitles.md)).
 
 ## 11.7 Play, resume and a finished title
 
@@ -558,34 +564,51 @@ re-encode at the original's size is named by its step like any other.
 
 ## 11.10 The player's menus
 
-Figure 11.9 shows three of the player's menus; the subtitles menu is in
-[chapter 12](./subtitles.md).
+People pick a title's audio and its subtitles in one panel, and the player has
+two menus for the rest. **audio and subtitles** opens the panel, the title's
+audio on the left and its subtitles on the right, over the dimmed picture;
+[chapter 12](./subtitles.md) sets it out, both of its columns included.
+**settings** opens the settings menu, figure 11.9, and **speed** the speed
+menu.
 
-- Subtitles, audio, quality and speed are menus of one choice each. They show
-  no checkboxes and no check marks: the picked row is in the accent blue, with a
-  small filled square before it, square like every shape in the design system.
-  Every row keeps the square's column, so the names line up whether picked or
-  not.
-- An audio track names its language and its channels, on one line: “English ·
-  5.1”, “German · Stereo”; the channels in words, “Stereo”, “5.1”, “7.1”,
-  “Mono”, never “2ch”. A track this device can't play isn't offered.
-- Their headers are lowercase: “subtitles”, “audio”, “quality”, “speed”, and
-  “timing” for the subtitles' timing, whose button is “reset”.
-- Controls over the picture, such as a chip, sit on a solid surface, never on a
-  see-through one.
+![Figure 11.9: The settings menu, on a computer, with its quality and its subtitle timing](./img/player-settings-computer.png)
 
-![Figure 11.9: The quality, audio and speed menus, each with its picked row in blue](./img/player-menus.png)
+Figure 11.9: The settings menu, on a computer, with its quality and its subtitle
+timing.
 
-Figure 11.9: The quality, audio and speed menus, each with its picked row in
-blue.
+1. **quality**, where the title has two qualities or more. A title that plays
+   from the server's ready-made qualities starts with **Auto**, which picks the
+   quality by the connection and names the one playing: “Auto · Medium
+   (720p)”. The other rows are the names of section 11.9.
+2. **subtitle timing**, while a subtitle made as text is on: **−** and **+**
+   move the subtitles a quarter of a second earlier or later with each press,
+   up to 10 seconds either way, the value between them says where they are,
+   “+0.25s”, and **reset** goes back to the subtitles' own timing.
+3. **settings**, the sliders, which opened the menu. Without a choice of
+   quality and without a subtitle made as text on, the bar has no settings
+   button.
+4. **The subtitle line**, moved left of the menu, so the menu never hides the
+   line it times.
 
-A title that plays from the server's ready-made qualities starts its quality
-menu with **Auto**, which picks the quality by the connection and names the
-one playing: “Auto · Medium (720p)”. The speed menu offers 0.5x, 0.75x,
-**normal**, 1.25x, 1.5x, 1.75x and 2x. One menu is open at a time. It opens
-above the whole control bar, at the end where its button is, so it never covers
-the seek bar, and a pick, a press outside it or Esc closes it. On a TV the focus
-goes into the open menu, and back closes it.
+- **One choice each.** **quality** and **speed** are lists of one choice, like
+  the panel's columns: the picked row has a check before its name and the
+  brighter text, and every row keeps the check's room, so the names line up. A
+  pick closes the menu. The speed menu, headed **speed**, offers 0.5x, 0.75x,
+  **normal**, 1.25x, 1.5x, 1.75x and 2x.
+- **The timing** holds while the title plays, for any subtitle made as text
+  that is on, and the next title starts at “0.00s”. A press on **−**, **+** or
+  **reset** keeps the menu open, so the line can be watched as it moves. For
+  subtitles made as pictures, and while subtitles are off, the menu has no
+  timing.
+- **The look.** The headers are lowercase, in the monospace face:
+  “quality”, “subtitle timing”, “speed”. The rows are names, in the body face.
+  Controls over the picture, such as a chip, sit on a solid surface, never on a
+  see-through one, and every menu is square.
+- **Where they open.** One menu, or the panel, is open at a time. A menu opens
+  above the whole control bar, at the end where its button is, so it never
+  covers the seek bar, and a press outside it or Esc closes it. On a TV the
+  focus goes into the open menu, left and right move between the timing's
+  buttons, and back closes it.
 
 A quality picked in the menu keeps the last picture on the screen, under
 “Switching to Medium (720p)…”, until the new quality's first one, so the screen
@@ -594,7 +617,8 @@ never goes black between two qualities; the position and the speed stay.
 An open menu never covers the subtitle line. Where it would, the line is
 centred in the part of the picture left of the menu, within 80% of that part,
 or, where that part is narrower than ten times the text's size, it goes above
-the menu, so a menu never hides the line it changes.
+the menu, so a menu never hides the line it changes. The audio and subtitles
+panel ends above the line's place instead ([chapter 12](./subtitles.md)).
 
 ## 11.11 The picture
 
@@ -641,7 +665,7 @@ is ever cropped.
 
 A title can play on when the person leaves the player.
 
-- **The iOS app** has **picture in picture** in the bar, after quality, blue
+- **The iOS app** has **picture in picture** in the bar, after settings, blue
   while the title plays in its window, and leaving the app while a title plays
   carries it on in picture in picture by itself. **AirPlay** sits at the right
   of the top, where cast is on Android, and opens the phone's own list of
@@ -748,24 +772,24 @@ says, and nothing else changes with it. Each change starts as proposed; once the
 owner approves it, it is built, one change at a time. A target that starts with
 “Recommended” was an open decision, or takes away something an app has today.
 The settings' own rows, such as the countdown's first value, belong to
-[chapter 16](./settings.md), and the look and the menu of subtitles to
-[chapter 12](./subtitles.md).
+[chapter 16](./settings.md), and the audio and subtitles panel and the look of
+subtitles to [chapter 12](./subtitles.md).
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 11.C1 | The buttons' look and names | Web, Phone app, Android TV, Samsung TV | Web: 36 × 36 px, tooltips capitalised, “Quality (High (1080p))”. Phone app: 36 dp circles, back, home and cast too. Android TV: names capitalised, “Pause”, “Audio track”. Samsung TV: 56 px, names capitalised | 48 × 48 squares, 40 dp on a TV, icons alone; lowercase names with what is set after a comma, “subtitles, English” (section 11.3, words in section 11.18) | proposed |
-| 11.C2 | Web: the audio button and the order | Web | audio is a chip with the language's code, “ENG”; quality, a gear, comes before speed | audio the audio-lines icon; then subtitles, speed and quality, the sliders icon (figure 11.4) | proposed |
-| 11.C3 | Phone app: the audio button | Phone app | a chip with the language's code, for a title with one track too | the audio-lines icon, only for two tracks or more (figure 11.4) | proposed |
-| 11.C4 | subtitles only for a title with subtitles | Web, Phone app, Android TV | Web: dimmed. Phone app: there, its menu “off” alone. Android TV: there, its menu “off” and “No subtitles available” | no subtitles button for a title without subtitles ([chapter 12](./subtitles.md)) | proposed |
+| 11.C1 | The buttons' look and names | Web, Phone app, Android TV, Samsung TV | Web: 36 × 36 px, tooltips capitalised, “Quality (High (1080p))”. Phone app: 36 dp circles, back, home and cast too. Android TV: names capitalised, “Pause”, “Audio track”. Samsung TV: 56 px, names capitalised | 48 × 48 squares, 40 dp on a TV, icons alone; lowercase names with what is set after a comma, “speed, normal” (section 11.3, words in section 11.18) | proposed |
+| 11.C2 | One audio and subtitles button | Web, Phone app, Android TV, Samsung TV | an audio button and a subtitles button, each with its menu: Web: audio a chip with the language's code, “ENG”, and subtitles a caption box. Phone app: the chip, for a title with one track too, and subtitles. Android TV, Samsung TV: an icon each | one button, **audio and subtitles**, the caption box, in their place, blue while a subtitle is on, opening the audio and subtitles panel of [chapter 12](./subtitles.md) (figure 11.4, part 4) | proposed |
+| 11.C3 | settings in place of quality, with the subtitles' timing | Web, Phone app, Android TV, Samsung TV | quality, a menu of its own, for two qualities or more: Web: a gear, before speed. Samsung TV: a gauge. The subtitles' timing only on the web, in its subtitles menu; the apps have none | **settings**, the sliders, after speed, where it has something to set: its menu with quality and subtitle timing (figure 11.9) | proposed |
+| 11.C4 | audio and subtitles only where there is something to pick | Web, Phone app, Android TV, Samsung TV | Web: subtitles dimmed for a title without subtitles, audio for two tracks or more. Phone app: audio for one track too, subtitles with “off” alone. Android TV: subtitles with “off” and “No subtitles available”. Samsung TV: subtitles only with subtitles, audio for two tracks or more | the button only for a title with two audio tracks or more that the device plays, or a subtitle the panel lists ([chapter 12](./subtitles.md)) | proposed |
 | 11.C5 | Android TV: previous and next only where there is one | Android TV | both on every episode; at a season's ends they do nothing | previous episode only for an episode with one before it, next episode only for one with one after it (figure 11.4, part 4) | proposed |
 | 11.C6 | Web on a phone: no volume slider | Web | the slider shows from 768 px wide, so a phone held sideways mostly has it (figure 11.3) | on a phone, a screen whose short side is 600 px or less, no slider, held either way: the speaker turns the sound off and on (section 11.4.2) | proposed |
 | 11.C7 | Upright: two rows and the title on a line of its own | Web, Phone app (Android) | one row, which an episode's buttons make wider than a 360-wide phone; the title on one line, cut. iOS has the two rows already | figure 11.5; while the volume's slider is open, it takes the place of previous and next episode | proposed |
 | 11.C8 | The phone app's fullscreen turns the player | Phone app | Android: fullscreen hides the system bars and doesn't turn the player, and held sideways the button still offers fullscreen. iOS: fullscreen turns the player sideways and exit fullscreen upright, but a phone turned sideways by hand still offers fullscreen | upright, fullscreen turns the player sideways, and then it turns with the phone again; held sideways, however it got there, the button is exit fullscreen and turns it upright (section 11.4.3) | proposed |
 | 11.C9 | Web: turning a phone back upright leaves full screen | Web | turned sideways, a phone asks for full screen and holds the page sideways, so where the browser holds it, turning back upright doesn't leave full screen | ask for full screen without holding the page sideways; turned back upright, leave only the full screen it went into when the phone was turned, never one asked for with fullscreen (section 11.4.3) | proposed |
-| 11.C10 | iOS: AirPlay at the top | Phone app (iOS) | AirPlay and picture in picture sit in the bar after quality; held sideways, playback info comes before previous and next episode | AirPlay at the right of the top, in cast's place; picture in picture after quality; previous, next, playback info and fullscreen as in figure 11.4 (section 11.12) | proposed |
-| 11.C11 | Samsung TV: the top and the row | Samsung TV | no top: the code and the episode's name above the seek bar, back the first button of the row; no home, volume, speed, previous episode or playback info; quality with a gauge; the seek bar takes no focus | figure 11.7: back, home and the title with its show at the top; play, the volume, audio, subtitles, speed, quality, previous and next episode and playback info in the row; the seek bar a focus stop | proposed |
+| 11.C10 | iOS: AirPlay at the top | Phone app (iOS) | AirPlay and picture in picture sit in the bar after quality; held sideways, playback info comes before previous and next episode | AirPlay at the right of the top, in cast's place; picture in picture after settings; previous, next, playback info and fullscreen as in figure 11.4 (section 11.12) | proposed |
+| 11.C11 | Samsung TV: the top and the row | Samsung TV | no top: the code and the episode's name above the seek bar, back the first button of the row; no home, volume, speed, previous episode or playback info; quality with a gauge; the seek bar takes no focus | figure 11.7: back, home and the title with its show at the top; play, the volume, audio and subtitles, speed, settings, previous and next episode and playback info in the row; the seek bar a focus stop | proposed |
 | 11.C12 | Samsung TV: no buttons for 10 seconds back and forward | Samsung TV | “Rewind 10 seconds” and “Forward 10 seconds” beside play | Recommended: left out; ← → on the focused seek bar go back and forward 10 seconds, as on Android TV (section 11.5) | proposed |
-| 11.C13 | Samsung TV: the remote's keys | Samsung TV | fast forward and rewind 30 seconds; the subtitles and audio keys unused; ↓ with the controls hidden does nothing; back during a countdown leaves the player | the table in section 11.5: 10 seconds, the keys open their menus, ↓ shows the controls, back closes a card first | proposed |
+| 11.C13 | Samsung TV: the remote's keys | Samsung TV | fast forward and rewind 30 seconds; the subtitles and audio keys unused; ↓ with the controls hidden does nothing; back during a countdown leaves the player | the table in section 11.5: 10 seconds, the subtitles and audio keys open the audio and subtitles panel, ↓ shows the controls, back closes a card first | proposed |
 | 11.C14 | Showing and hiding the controls | Web, Phone app, Android TV, Samsung TV | Web: a drag and a screen reader's focus don't hold them, and a key shows them only while the focus is in the player. Phone app: 4 s, and a tap never hides them. Android TV: 4 s. Samsung TV: 3.5 s, never while paused | 3 s playing, 8 s paused; held by a menu, a drag and a screen reader's focus; a tap on the picture hides them; any key shows them (sections 11.3, 11.6) | proposed |
 | 11.C15 | The seek bar's look | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a round handle. The parts in colours: Web intro blue, credits amber, recap green, a sponsor red; Phone app intro yellow, credits orange, recap purple; Android TV intro amber, recap grey, credits red; Samsung TV intro and recap blue, credits amber, nothing loaded shown. Chapters a band, on Android TV green; on the web, ticks | a square handle; what is loaded in a lighter grey; the parts in a lighter tone of the bar under them; chapters as thin ticks, a click on one starting its chapter (figure 11.4, part 2) | proposed |
 | 11.C16 | The still over the seek bar | Web, Phone app, Android TV, Samsung TV | Phone app, Android TV, Samsung TV: for ready-made titles only. Samsung TV: always above the handle, without a time. Web, Phone app: “Intro · 1:30” | a still for every title, while the bar is pointed at, touched or focused, with its time and the part in lowercase, “intro · 1:30” (figure 11.4, part 2) | proposed |
@@ -781,9 +805,9 @@ The settings' own rows, such as the countdown's first value, belong to
 | 11.C26 | The next episode warmed 30 seconds ahead | Web, Samsung TV | Web: from the credits on. Samsung TV: not warmed | from 30 seconds before the credits, or before the end without them (section 11.8.4) | proposed |
 | 11.C27 | No auto-skip of the credits | Android TV, Samsung TV | Android TV: with Auto-play next episode off, “Skipping credits in 5s”. Samsung TV: on at first, “Skipping credits in 10…”, then the next episode | Recommended: the credits are never skipped by themselves; up next takes their place, and a movie's credits play (section 11.8.2). The phone app's unused “Auto-skip credits” switch is chapter 16's | proposed |
 | 11.C28 | Nothing starts after a movie | Android TV | the first unwatched title of “more like this” starts, after “Up next in 5s” | Recommended: nothing starts by itself after a movie (section 11.8.4) | proposed |
-| 11.C29 | Where the menus open, and their look | Web, Phone app, Samsung TV | Web: audio, quality and speed open right above their buttons, over the seek bar. Phone app: above the seek bar under their button, round corners. Samsung TV: at one fixed place, a check mark, headers in capitals | above the whole bar at their button's end, square, the picked row blue with the square, lowercase headers (section 11.10) | proposed |
-| 11.C30 | The audio rows | Web, Phone app, Android TV, Samsung TV | Web: “English” with “AAC · Stereo” beside it. Phone app: “E-AC-3 · 5.1” under the name, a track it can't play greyed with “Not available on this device”. Android TV: “E-AC-3 · 5.1” under the name. Samsung TV: “English 5.1” | “English · 5.1” on one line; a track the device can't play left out (section 11.10) | proposed |
-| 11.C31 | The quality menu's Auto | Phone app, Samsung TV | Phone app: the qualities only, no Auto. Samsung TV: “Auto”, without the quality playing | for a ready-made title, Auto first, “Auto · Medium (720p)” (section 11.10) | proposed |
+| 11.C29 | Where the menus open, and their look | Web, Phone app, Android TV, Samsung TV | Web: quality and speed open right above their buttons, over the seek bar, round corners, the picked row blue with a small square. Phone app: above the seek bar under their button, round corners, the same mark. Android TV: at the bottom right, the same mark. Samsung TV: at one fixed place, round corners, a check at the row's end, headers in capitals | settings and speed above the whole bar at their button's end, square, lowercase headers; the picked row with a check before it and the brighter text, as in the audio and subtitles panel (section 11.10) | proposed |
+| 11.C30 | The audio rows | Web, Phone app, Android TV, Samsung TV | Web: “English” with “AAC · Stereo” beside it, for a ready-made title “MP4A.40.2 · Stereo”, “English 5.1”, “English (2)”. Phone app: “E-AC-3 · 5.1” under the name, a track it can't play greyed with “Not available on this device”. Android TV: “E-AC-3 · 5.1” under the name. Samsung TV: “English 5.1”. No app marks the original or a described track | the audio column of [chapter 12](./subtitles.md): the language alone, “English (original)” where the title has audio in more than one language, “English (audio description)”, the channels only where two tracks of one language would read the same, “English (5.1)”, “English (stereo)”; a track the device can't play left out. The server's play info passes on the file's mark of a described track | proposed |
+| 11.C31 | The quality menu's Auto | Phone app, Samsung TV | Phone app: the qualities only, no Auto. Samsung TV: “Auto”, without the quality playing | for a ready-made title, Auto first in the settings menu's quality, “Auto · Medium (720p)” (figure 11.9) | proposed |
 | 11.C32 | A quality picked keeps the picture and the speed | Phone app, Android TV, Samsung TV | the stream is loaded again where it was, without the last picture held; Android TV also goes back to normal speed | the last picture stays under “Switching to Medium (720p)…” until the new quality's first, and the speed stays (section 11.10) | proposed |
 | 11.C33 | The subtitle line keeps clear of an open menu | Web, Phone app, Samsung TV | nothing moves the line for an open menu | section 11.10 | proposed |
 | 11.C34 | The quality notices at the top | Phone app, Samsung TV | Phone app: at the bottom. Samsung TV: none | figure 11.10, with the four lines of section 11.13 | proposed |
@@ -874,10 +898,10 @@ a tab opened in the background isn't taken for a start that hangs.
 | Where | Text |
 |---|---|
 | The top | the buttons back · home; the title “Tears of Steel”, an episode “Pioneer One — S01E03 · Alone in the Night” |
-| The buttons' names, over them and for a screen reader | play · pause · volume · audio · subtitles · speed · quality · previous episode · next episode · playback info · zoom to fill · zoom to fit · fullscreen · exit fullscreen · picture in picture (iOS); with what is set after a comma: “volume, 80%”, “audio, English · 5.1”, “subtitles, English”, “speed, normal”, “quality, Auto · Medium (720p)”, “next episode, S01E04 · Triangular Diplomacy”; the cast button's are Google's ([chapter 14](./casting.md)), and AirPlay's are Apple's |
+| The buttons' names, over them and for a screen reader | play · pause · volume · audio and subtitles · speed · settings · previous episode · next episode · playback info · zoom to fill · zoom to fit · fullscreen · exit fullscreen · picture in picture (iOS); with what is set after a comma: “volume, 80%”, “audio and subtitles, English (original), subtitles English”, “speed, normal”, “settings, Auto · Medium (720p)”, “next episode, S01E04 · Triangular Diplomacy”; the cast button's and AirPlay's are the platform's own ([chapter 14](./casting.md)) |
 | The seek bar | “17:23” and “41:23”; over the still “intro · 1:30”, “recap · 0:40”, “credits · 39:50”, or the chapter's name; for a screen reader “seek”, “17:23 of 41:23” |
-| The menus' headers | subtitles · audio · quality · speed · timing |
-| The menus' rows | Original · Auto · “Auto · Medium (720p)” · the names of section 11.9 · “English · 5.1”, “English · Stereo” · 0.5x · 0.75x · normal · 1.25x · 1.5x · 1.75x · 2x · reset |
+| The menus' headers | quality · subtitle timing · speed; the panel's are in [chapter 12](./subtitles.md) |
+| The menus' rows | Original · Auto · “Auto · Medium (720p)” · the names of section 11.9 · − · + · “0.00s”, “+0.25s”, “−0.50s” · reset · 0.5x · 0.75x · normal · 1.25x · 1.5x · 1.75x · 2x |
 | Skip | skip intro · skip recap · skip credits |
 | Auto-skip | Skipping the intro in 3 seconds. · Skipping the recap in 3 seconds. · skip now · watch the intro · watch the recap · Skipped the intro. · Skipped the intro and the recap. · watch from the start |
 | Up next | up next · “S01E04 · Triangular Diplomacy” · Starts in 3 seconds. · play now · cancel |

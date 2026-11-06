@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
-  Chapter 2, the frame: the figures of docs/chino/frame.md.
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 2, the frame: the figures of spec/chino/frame.md (the target; the
+  as-deployed figures are screenshots, *-asis-web-*.png).
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame is frame.js (this chapter specifies what
   frame.js draws), the icons are icons.js.
@@ -21,6 +22,8 @@
         font: 500 13px/1 var(--ff-mono); color: var(--fg-dim); }
   .computer .ph { position: absolute; left: 48px; right: 48px; top: 88px; bottom: 32px; }
   .phone .ph { position: absolute; left: 16px; right: 16px; top: 16px; bottom: 16px; }
+  .phone.side .ph { left: 24px; right: 24px; }
+  /* the sideways rail also matches screens.css's ".phone > .tabs" (64 px high, a top border): undone here */
   .tv .ph { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; }
   .usermenu { position: absolute; right: 24px; top: 60px; z-index: 30; width: 260px; }
   .usermenu .who { padding: 12px 16px 12px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
@@ -68,6 +71,13 @@
 <figure class="shot" id="frame-web-phone">
   <div class="phone" data-view="movies" data-tabs="web" data-co-parts="tabs:1">
     <div class="ph">the page</div>
+  </div>
+</figure>
+
+<!-- Figure 2.x · the frame on a phone held sideways: the tabs as a rail at the left, the bar slimmer -->
+<figure class="shot" id="frame-sideways-phone">
+  <div class="phone side" data-view="movies" data-co-parts="tabs:1,current:2,logo:3:top">
+    <div class="ph" data-co="4" data-co-side="right">the page</div>
   </div>
 </figure>
 

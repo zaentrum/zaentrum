@@ -82,7 +82,7 @@ for no, base in enumerate(ORDER, 1):
         others = text.replace(caption, '').replace(line, '')
         if not re.search(rf'[Ff]igures? {no}\.{m_no}\b|{no}\.\d+ (to|and) {no}\.{m_no}\b|[Ff]igures {no}\.\d+(, {no}\.\d+)* and {no}\.{m_no}\b', others):
             problems.append((no, f'{label} is never named in the text'))
-        fid = file[:-4]
+        fid = os.path.splitext(file)[0]
         if marks.get(fid):
             while k < len(lines) and not lines[k].strip():
                 k += 1

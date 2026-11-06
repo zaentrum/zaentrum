@@ -9,6 +9,8 @@
 //       (zap in place of downloads), data-tabs="none" for no tabs.
 //       data-bar="back" data-title="settings" for a back arrow and a title;
 //       data-bar="none" for no top bar (the player, zap).
+//   <div class="phone side" …> the phone held sideways, 780 × 360: the same bar,
+//       slimmer, and the five tabs as a rail down the left edge.
 //   <div class="tv" data-view="movies">…</div>
 //       the rail, with that view current (the bell with its count, as on the
 //       other sizes), and the safe area's outline.
@@ -47,20 +49,25 @@
 
   for (const f of document.querySelectorAll('.phone')) {
     const view = f.dataset.view || 'home';
+    const side = f.classList.contains('side'); // held sideways: 780 × 360, the tabs become a rail on the left
     const scroll = document.createElement('div');
     scroll.className = 'scroll';
     while (f.firstChild) scroll.appendChild(f.firstChild);
-    f.appendChild(scroll);
+    const col = side ? document.createElement('div') : f;
+    if (side) { col.className = 'side-col'; f.appendChild(col); }
+    col.appendChild(scroll);
     if (f.dataset.bar === 'back') {
-      f.prepend(make(`<header class="tb back"><span class="icon-b">${icon('arrow-left')}</span><span class="title">${f.dataset.title || ''}</span></header>`));
+      col.prepend(make(`<header class="tb back"><span class="icon-b">${icon('arrow-left')}</span><span class="title">${f.dataset.title || ''}</span></header>`));
     } else if (f.dataset.bar !== 'none') {
-      f.prepend(make(`<header class="tb">${logo}<span class="icon-b search">${icon('search')}</span>${bell(f.dataset.count)}<span class="av">au</span></header>`));
+      col.prepend(make(`<header class="tb">${logo}<span class="icon-b search">${icon('search')}</span>${bell(f.dataset.count)}<span class="av">au</span></header>`));
     }
     if (f.dataset.tabs !== 'none') {
       const tabs = f.dataset.tabs === 'web'
         ? [['home', 'house'], ['movies', 'film'], ['shows', 'tv'], ['watchlist', 'bookmark'], ['zap', 'zap']]
         : [['home', 'house'], ['movies', 'film'], ['shows', 'tv'], ['watchlist', 'bookmark'], ['downloads', 'download']];
-      f.appendChild(make(`<nav class="tabs">${tabs.map(([v, i]) => `<span class="${v === view ? 'on' : ''}">${icon(i)}${v}</span>`).join('')}</nav>`));
+      const items = tabs.map(([v, i]) => `<span class="${v === view ? 'on' : ''}">${icon(i)}${v}</span>`).join('');
+      if (side) f.prepend(make(`<nav class="siderail tabs">${items}</nav>`));
+      else f.appendChild(make(`<nav class="tabs">${items}</nav>`));
     }
     lift(f);
   }

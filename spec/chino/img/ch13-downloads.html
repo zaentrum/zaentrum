@@ -1,9 +1,11 @@
 <!doctype html>
 <!--
-  Chapter 13, downloads and offline: the figures of docs/chino/downloads.md that
-  mockups.html doesn't draw (it has the control in each status, the downloads
-  screen, the questions and the downloads screen offline).
-  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+  Chapter 13, downloads and offline: the figures of spec/chino/downloads.md that
+  mockups.html doesn't draw (it has the control in each status, download-control,
+  and the questions, download-questions). Every phone screen is drawn held
+  upright (<div class="phone">, 360 × 780) and sideways (<div class="phone side">,
+  780 × 360, the tabs as a rail on the left); the states once each.
+  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs) is frame.js, the icons are
   icons.js. A title's page follows chapter 6's drawings (ch06-title.html).
@@ -19,6 +21,9 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
+  /* the sideways frame's rail runs the frame's height: screens.css gives
+     every .phone > .tabs 64 px and a top border, the rail too */
+
   /* the title row's parts, as chapter 6 draws them */
   .split { display: inline-flex; flex: none; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
   .split > span { display: inline-flex; align-items: center; justify-content: center; }
@@ -53,6 +58,16 @@
   .offline > .banner { position: relative; z-index: 3; margin: 12px 16px 0; }
   .offline > .pagebox { position: absolute; left: 0; right: 0; top: 94px; bottom: 0; overflow: hidden; }
 
+  /* held sideways: the poster at the left, the name, the row and the words beside it */
+  .side .offline > .pagebox { top: 70px; }
+  .side .bd { height: 150px; }
+  .side .hd2 { position: absolute; left: 24px; right: 24px; top: 26px; display: flex; gap: 24px; align-items: flex-start; }
+  .side .hd2 .pos { width: 120px; height: 180px; box-shadow: 0 0 0 1px var(--border-2); }
+  .side .hd2 .info { padding-top: 34px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
+  .side .hd2 .info .acts { margin-top: 8px; }
+  .side .hd2 .info .howfar { margin-top: 6px; }
+  .side .hd2 .info .desc { margin-top: 4px; font-size: 14px; max-width: 460px; }
+
   /* a show's episodes: one box per season (chapter 6) */
   .eps > .h2 { margin-bottom: 12px; }
   .season { border: 1px solid var(--border-2); }
@@ -71,27 +86,38 @@
   .ep .nm { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); }
   .ep .ds { margin: 0; font: 400 12px/1.4 var(--ff-ui); color: var(--fg-2); }
   .ep .acts { margin-top: 10px; row-gap: 8px; }
+  /* held sideways: the actions under the words, beside the still */
+  .side .ep .txt .acts { margin-top: 6px; width: fit-content; }
 
-  /* the downloads screen (the figure in mockups.html, inside the frame) */
+  /* the downloads screen, inside the frame */
   .dl { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .dl .line { margin: -4px 0 0; font: 400 13px/1.4 var(--ff-ui); color: var(--fg-dim); }
   .dl .grp { margin-top: 4px; }
   .dl-row { display: flex; gap: 12px; align-items: center; }
+  .dl-row.top { align-items: flex-start; }
   .dl-row .th { position: relative; width: 80px; height: 45px; flex: none; overflow: hidden; }
   .dl-row .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
   .dl-row .nm { font: 400 13px/1.35 var(--ff-ui); color: var(--fg); }
   .dl-row .st { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-2); white-space: nowrap; }
+  .dl-row .bar { margin-top: 2px; height: 3px; }
+  .dl-row .rsn { font: 400 12px/1.4 var(--ff-ui); color: var(--fg-dim); }
+  .dl-row .tx .row { margin-top: 4px; }
+  .dl-row .tx .row .b { height: 40px; padding: 0 12px; font-size: 13px; }
   .dl-row .b.icon { width: 40px; height: 40px; }
   .det { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font: 500 12px/1 var(--ff-mono); color: var(--cloud-blue); }
   .titles { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; font: 400 13px/1.4 var(--ff-ui); color: var(--fg-2); }
   .dl .empty { margin-top: 96px; }
+  /* held sideways: the heading and the storage line on one line */
+  .side .dl .hl { display: flex; align-items: baseline; gap: 16px; }
+  .side .dl .hl .line { margin: 0; }
+  .side .dl .empty { margin-top: 20px; }
   /* the bell is hidden while the server can't be reached */
-  .nobell > .tb .bell { display: none; }
+  .nobell .tb .bell { display: none; }
 </style>
 </head>
 <body>
 
-<!-- Figure 13.3 · a season's downloads, on a phone: nothing of it on the phone yet -->
+<!-- Figure 13.3 · a season's downloads, on a phone held upright: nothing of it on the phone yet -->
 <figure class="shot" id="downloads-season-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Pioneer One">
     <section class="eps" style="padding:16px">
@@ -134,7 +160,108 @@
   </div>
 </figure>
 
-<!-- Figure 13.6 · downloads the server took off the phone, on a phone -->
+<!-- Figure 13.4 · the same season, on a phone held sideways -->
+<figure class="shot" id="downloads-season-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="Pioneer One">
+    <section class="eps" style="padding:16px 24px">
+      <h2 class="h2">episodes</h2>
+      <div class="season">
+        <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="offer"><span class="b" data-co="1" data-co-side="right"><i data-i="download"></i>download season&nbsp;1 · 6&nbsp;episodes · 1.8&nbsp;GB</span></div>
+        <div class="ep">
+          <div class="top">
+            <div class="still"><div class="art a1"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="code">S01E01</span><span class="nm">Earthfall</span><span class="len">35 min</span></div>
+              <p class="ds">Something falls from the sky over Montana.</p>
+              <div class="acts" data-co="2" data-co-side="right">
+                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+                <span class="b icon"><i data-i="check"></i></span>
+                <span class="b"><i data-i="download"></i>download · 281 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ep">
+          <div class="top">
+            <div class="still"><div class="art a3"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="code">S01E02</span><span class="nm">The Man From Mars</span><span class="len">38 min</span></div>
+              <p class="ds">The man found in the wreck says he was born on Mars.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 13.5 · the downloads screen, on a phone held upright -->
+<figure class="shot" id="downloads-phone">
+  <div class="phone" data-view="downloads">
+    <div class="dl">
+      <h1 class="h1">downloads</h1>
+      <p class="line" data-co="1">547 MB used by downloads · 18 GB free on this phone</p>
+      <h2 class="h2 grp" data-co="2">Pioneer One</h2>
+      <p class="h3">season 1</p>
+      <div class="dl-row">
+        <div class="th"><div class="art a5"></div></div>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <div class="dl-row" data-co="3">
+        <div class="th"><div class="art a3"></div></div>
+        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="st">downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></div>
+        <span class="b icon"><i data-i="x" class="s16"></i></span>
+      </div>
+      <div class="dl-row">
+        <div class="th"><div class="art a1"></div></div>
+        <div class="tx"><span class="nm">S01E03 · Alone in the Night</span><span class="st">queued · 271 MB</span></div>
+        <span class="b icon"><i data-i="x" class="s16"></i></span>
+      </div>
+      <h2 class="h2 grp">movies</h2>
+      <div class="dl-row">
+        <div class="th"><div class="art a4"></div></div>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <div class="dl-row top" data-co="4">
+        <div class="th"><div class="art a2"></div></div>
+        <div class="tx"><span class="nm">Spring</span><span class="st">couldn't download</span><span class="rsn">The server ran into a problem.</span>
+          <div class="row"><span class="b">try again</span><span class="b ghost">remove</span></div></div>
+      </div>
+      <div style="margin-top:4px"><span class="b danger" data-co="5">delete all</span></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 13.6 · the downloads screen, on a phone held sideways -->
+<figure class="shot" id="downloads-side-phone">
+  <div class="phone side" data-view="downloads" data-co-parts="current:1">
+    <div class="dl" style="padding:16px 24px">
+      <div class="hl"><h1 class="h1">downloads</h1><p class="line">547 MB used by downloads · 18 GB free on this phone</p></div>
+      <h2 class="h2 grp">Pioneer One</h2>
+      <p class="h3">season 1</p>
+      <div class="dl-row">
+        <div class="th"><div class="art a5"></div></div>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <div class="dl-row" data-co="2" data-co-side="right">
+        <div class="th"><div class="art a3"></div></div>
+        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="st">downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></div>
+        <span class="b icon"><i data-i="x" class="s16"></i></span>
+      </div>
+      <div class="dl-row">
+        <div class="th"><div class="art a1"></div></div>
+        <div class="tx"><span class="nm">S01E03 · Alone in the Night</span><span class="st">queued · 271 MB</span></div>
+        <span class="b icon"><i data-i="x" class="s16"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 13.8 · downloads the server took off the phone, on a phone -->
 <figure class="shot" id="downloads-deleted-phone">
   <div class="phone" data-view="downloads">
     <div class="dl">
@@ -150,7 +277,7 @@
       <h2 class="h2 grp">Pioneer One</h2>
       <p class="h3">season 1</p>
       <div class="dl-row">
-        <div class="th"><div class="art a1"></div></div>
+        <div class="th"><div class="art a5"></div></div>
         <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
         <span class="b icon"><i data-i="trash" class="s16"></i></span>
       </div>
@@ -165,11 +292,59 @@
   </div>
 </figure>
 
-<!-- Figure 13.8 · a show's page from the phone, while the server can't be reached -->
+<!-- Figure 13.9 · the downloads screen while the server can't be reached, on a phone held upright -->
+<figure class="shot" id="downloads-offline-phone">
+  <div class="phone nobell" data-view="downloads" data-co-parts="search:2:top">
+    <div class="dl">
+      <div class="banner" data-co="1"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
+      <h1 class="h1">downloads</h1>
+      <p class="line">401 MB used by downloads · 18 GB free on this phone</p>
+      <h2 class="h2 grp">Pioneer One</h2>
+      <p class="h3">season 1</p>
+      <div class="dl-row" data-co="3">
+        <div class="th"><div class="art a5"></div></div>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <h2 class="h2 grp">movies</h2>
+      <div class="dl-row">
+        <div class="th"><div class="art a4"></div></div>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <div style="margin-top:4px"><span class="b danger">delete all</span></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 13.10 · the downloads screen while the server can't be reached, on a phone held sideways -->
+<figure class="shot" id="downloads-offline-side-phone">
+  <div class="phone side nobell" data-view="downloads" data-co-parts="current:2">
+    <div class="dl" style="padding:16px 24px">
+      <div class="banner" data-co="1" data-co-side="right"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
+      <div class="hl"><h1 class="h1">downloads</h1><p class="line">401 MB used by downloads · 18 GB free on this phone</p></div>
+      <h2 class="h2 grp">Pioneer One</h2>
+      <p class="h3">season 1</p>
+      <div class="dl-row">
+        <div class="th"><div class="art a5"></div></div>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+      <h2 class="h2 grp">movies</h2>
+      <div class="dl-row">
+        <div class="th"><div class="art a4"></div></div>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
+        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 13.11 · a show's page from the phone while the server can't be reached, on a phone held upright -->
 <figure class="shot" id="downloads-title-offline-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Pioneer One">
     <div class="offline">
-      <div class="banner" data-co="1"><i data-i="wifi-off" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
+      <div class="banner" data-co="1"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
       <div class="pagebox">
         <div class="bd"><div class="art a1"></div><div class="fade"></div></div>
         <div class="hd">
@@ -190,11 +365,33 @@
   </div>
 </figure>
 
-<!-- Figure 13.9 · a movie whose download waits for its check, on a phone -->
+<!-- Figure 13.12 · a show's page from the phone while the server can't be reached, on a phone held sideways -->
+<figure class="shot" id="downloads-title-offline-side-phone">
+  <div class="phone side" data-view="none" data-bar="back" data-title="Pioneer One">
+    <div class="offline">
+      <div class="banner" data-co="1" data-co-side="right"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
+      <div class="pagebox">
+        <div class="bd"><div class="art a1"></div><div class="fade"></div></div>
+        <div class="hd2">
+          <div class="pos"><div class="art a1"></div></div>
+          <div class="info">
+            <h1 class="t" data-co="2" data-co-side="right">Pioneer One</h1>
+            <p class="meta">2010 · 1 season · drama<span class="kind" style="margin-left:10px">show</span></p>
+            <div class="acts"><span class="b primary"><i data-i="play" class="fill"></i>play S01E01</span></div>
+            <span class="howfar" data-co="3" data-co-side="right"><i data-i="check" class="s16" style="color:var(--signal-green)"></i>1 episode on this phone</span>
+            <p class="desc">An object falls from the sky over Montana, and two federal agents are sent to find out what it is.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 13.13 · a movie whose download waits for its check, on a phone -->
 <figure class="shot" id="downloads-check-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Sprite Fright">
     <div class="offline">
-      <div class="banner" data-co="1"><i data-i="wifi-off" class="s16"></i><span>Can't reach the server.</span></div>
+      <div class="banner" data-co="1"><i data-i="info" class="s16"></i><span>Can't reach the server.</span></div>
       <div class="pagebox" style="top:70px">
         <div class="bd"><div class="art a4"></div><div class="fade"></div></div>
         <div class="hd">
@@ -218,7 +415,7 @@
   </div>
 </figure>
 
-<!-- Figure 13.10 · nothing downloaded yet, on a phone -->
+<!-- Figure 13.14 · nothing downloaded yet, on a phone held upright -->
 <figure class="shot" id="downloads-empty-phone">
   <div class="phone" data-view="downloads">
     <div class="dl">
@@ -233,16 +430,15 @@
   </div>
 </figure>
 
-<!-- Figure 13.11 · the server can't be reached and nothing is downloaded, on a phone -->
-<figure class="shot" id="downloads-offline-empty-phone">
-  <div class="phone nobell" data-view="downloads" data-co-parts="search:2:top">
-    <div class="dl">
-      <div class="banner" data-co="1"><i data-i="wifi-off" class="s16"></i><span>Can't reach the server.</span></div>
-      <h1 class="h1">downloads</h1>
-      <p class="line">18 GB free on this phone</p>
-      <div class="empty" style="margin-top:72px">
+<!-- Figure 13.15 · the server can't be reached and nothing is downloaded, on a phone held sideways -->
+<figure class="shot" id="downloads-offline-empty-side-phone">
+  <div class="phone side nobell" data-view="downloads" data-co-parts="search:2:top">
+    <div class="dl" style="padding:16px 24px">
+      <div class="banner" data-co="1" data-co-side="right"><i data-i="info" class="s16"></i><span>Can't reach the server.</span></div>
+      <div class="hl"><h1 class="h1">downloads</h1><p class="line">18 GB free on this phone</p></div>
+      <div class="empty">
         <i data-i="download" class="s48"></i>
-        <h2 class="h2" data-co="3">nothing downloaded yet</h2>
+        <h2 class="h2" data-co="3" data-co-side="right">nothing downloaded yet</h2>
         <p class="text">Titles you download show up here, ready to watch without a connection.</p>
       </div>
     </div>
