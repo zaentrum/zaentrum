@@ -2,7 +2,12 @@ name: docs-check
 
 # The docs have lied before — a section described a setup API no service
 # implements. Structure we can check, we check: every relative link resolves,
-# every anchor exists, and the wiki build (slugs, sidebar) succeeds.
+# every anchor exists, and the docs site builds from this docs/.
+#
+# The site is https://zaentrum.github.io/docs/, built by zaentrum/zaentrum.github.io
+# from main's docs/. Its build fails on any link or #heading that leads nowhere,
+# and then the live site stays as it was. The site job here runs that same build,
+# so a break shows on the commit that made it.
 on:
   push:
     branches: [main]
@@ -17,7 +22,27 @@ jobs:
       - uses: actions/checkout@v4
       - name: link + anchor check
         run: python3 scripts/check-docs.py
-      - name: wiki build dry-run (slugs + sidebar)
+
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: zaentrum
+      - uses: actions/checkout@v4
+        with:
+          repository: zaentrum/zaentrum.github.io
+          path: site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: the docs site, built from this docs/
+        working-directory: site
+        env:
+          DOCS_SOURCE: ${{ github.workspace }}/zaentrum
+          ASTRO_TELEMETRY_DISABLED: 1
         run: |
-          mkdir -p /tmp/wiki
-          python3 scripts/build-wiki.py docs /tmp/wiki
+          npm ci --no-audit --no-fund
+          npm run build
