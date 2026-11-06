@@ -1,5 +1,10 @@
 # 14 Casting
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies casting: sending a title from the phone app to a TV or a
 speaker on the same network. The title page and the player, where casting
 starts, are specified in [chapter 6](./title-actions.md) and

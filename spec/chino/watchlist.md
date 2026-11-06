@@ -1,5 +1,10 @@
 # 8 Watchlist and lists
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies the watchlist: the Watchlist, the list every account
 has, and the lists people make of their own, with how a list is created,
 renamed and deleted. A title goes into a list on its page, with the add-to-list

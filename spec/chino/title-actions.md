@@ -1,5 +1,10 @@
 # 6 The title page
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies a title's page: what it shows of a movie and of a show,
 and what people can do there. The frame around it is specified in
 [chapter 2](./frame.md), and the player it starts in [chapter 11](./playback.md).

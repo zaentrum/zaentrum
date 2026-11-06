@@ -1,5 +1,10 @@
 # 2 The frame
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies the frame around every chino screen: the top bar on a
 computer and a phone, the phone's tabs, the TV's rail, and the avatar's menu.
 The screens in the chapters after this one are drawn inside it. A few screens

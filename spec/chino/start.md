@@ -1,5 +1,10 @@
 # 3 Getting started
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies the screens before the first title: connecting to a
 server, signing in, and choosing who's watching. They come before the frame of
 [chapter 2](./frame.md), so they have no top bar, no tabs and no rail.

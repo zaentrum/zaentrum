@@ -1,5 +1,10 @@
 # 16 Settings and account
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies settings and the account: what can be set, who is signed
 in, signing out, removing an account from a device, deleting it, and reporting
 a bug. The frame around these screens is in [chapter 2](./frame.md); connecting

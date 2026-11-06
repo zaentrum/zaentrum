@@ -1,5 +1,10 @@
 # 5 Movies and shows
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies movies and shows, the two views that hold the whole
 library, one kind each. They are built alike, so the chapter draws movies at
 all three sizes and shows once; what it says about movies holds for shows. The

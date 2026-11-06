@@ -1,5 +1,10 @@
 # 15 Notifications
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies the notifications: the bell in the frame, and the list
 it opens. The frame itself, with the bell in the top bar and in the TV's rail,
 is specified in [chapter 2](./frame.md).

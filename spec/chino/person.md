@@ -1,5 +1,10 @@
 # 7 People
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies a person's page: someone who acted in or made the
 library's titles, and what of theirs the library has. The frame around it is
 specified in [chapter 2](./frame.md).

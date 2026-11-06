@@ -1,5 +1,10 @@
 # 17 When something goes wrong
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies what a screen says when it can't show what it is for:
 what couldn't load, why, and the one way on. Every chapter's couldn't-load
 state follows it. Playback that fails is specified in

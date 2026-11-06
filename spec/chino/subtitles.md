@@ -1,5 +1,10 @@
 # 12 Subtitles
 
+> **Not in the new form yet.** This chapter's figures show the target, not
+> what is deployed today. Where today's apps differ, its “Today's apps”
+> section says so. The screens as deployed and the numbered changes follow,
+> as [chapter 11](./playback.md) already has them.
+
 This chapter specifies subtitles: how they look over the picture, the
 subtitles menu in the player, what switches on by itself, and the setting. The
 player around them is specified in [chapter 11](./playback.md).
