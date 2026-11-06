@@ -1,0 +1,166 @@
+<!doctype html>
+<!--
+  Chapter 4, home: the figures of docs/chino/home.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 4 home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  .computer .hero { position: relative; height: 384px; }
+  .computer .hero .txt { position: relative; padding: 60px 48px 0; width: 600px; display: flex; flex-direction: column; gap: 14px; }
+  .computer .hero .row { margin-top: 6px; }
+  .computer .shelf { padding: 0 48px; margin-bottom: 28px; }
+  .shelf .h2 { margin-bottom: 12px; }
+  .phone .hero { position: relative; height: 392px; }
+  .phone .hero .txt { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .phone .t { font-size: 26px; } .phone .meta { font-size: 12px; }
+  .phone .hero .row > .b { flex: 1; padding: 0 12px; }
+  .phone .entry { margin: 16px 16px 0; height: 48px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 14px;
+                  border: 1px solid var(--border-2); background: var(--surface); font: 600 14px/1 var(--ff-mono); }
+  .phone .entry .chev { margin-left: auto; color: var(--fg-dim); }
+  .phone .shelf { padding: 20px 0 0 16px; }
+  .phone .card { width: 200px; } .phone .card .img { height: 112px; }
+  .tv .backdrop { position: absolute; left: 0; right: 0; top: 0; height: 372px; }
+  .tv .backdrop .scrim { position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--bg) 0%, rgba(11,15,25,.95) 24%, rgba(11,15,25,.5) 52%, rgba(11,15,25,0) 74%), linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,0) 40%); }
+  .tv .txt { position: absolute; left: 132px; top: 52px; width: 460px; display: flex; flex-direction: column; gap: 10px; }
+  .tv .txt .row { margin-top: 6px; gap: 12px; }
+  .tv .shelf { position: absolute; left: 132px; top: 330px; }
+  .tv .shelf .h2 { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- Figure 4.1 · home on a computer -->
+<figure class="shot" id="home-computer">
+  <div class="computer" data-view="home">
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim-l"></div>
+      <div class="txt">
+        <h1 class="t" data-co="1">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
+        <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        <div class="row" data-co="2"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard"></i>trailer</span></div>
+        <div class="dots" data-co="3"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2 class="h2" data-co="4">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+        <div class="card"><div class="img"><div class="art a6"></div><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">5 min left</div></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2 class="h2" data-co="5">next up</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a3"></div></div><div class="tt">Caminandes</div><div class="st">S01E02 · Gran Dillama</div></div>
+        <div class="card"><div class="img"><div class="art a1"></div></div></div>
+        <div class="card"><div class="img"><div class="art a5"></div></div></div>
+        <div class="card"><div class="img"><div class="art a2"></div></div></div>
+        <div class="card"><div class="img"><div class="art a4"></div></div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 4.2 · home on a phone -->
+<figure class="shot" id="home-phone">
+  <div class="phone" data-view="home">
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim-b"></div>
+      <div class="txt">
+        <h1 class="t" data-co="1">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
+        <div class="row" data-co="2"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b icon" style="flex:none"><i data-i="clapperboard"></i></span></div>
+        <div class="dots" data-co="3"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+    <div class="entry" data-co="4"><i data-i="zap"></i>zap<i data-i="chevron-right" class="chev"></i></div>
+    <section class="shelf">
+      <h2 class="h2" data-co="5">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 4.3 · home on a TV -->
+<figure class="shot" id="home-tv">
+  <div class="tv" data-view="home">
+    <div class="backdrop"><div class="art steel"></div><div class="scrim"></div></div>
+    <div class="txt">
+      <h1 class="t" data-co="1">Tears of Steel</h1>
+      <p class="meta">2012 · 12 min · science fiction</p>
+      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+      <div class="row"><span class="b primary focus" data-co="2"><i data-i="play" class="fill s16"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard" class="s16"></i>trailer</span></div>
+      <div class="dots" style="margin-top:6px" data-co="3"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+        <div class="card" data-co="4" data-co-side="right"><div class="img"><div class="art a6"></div><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">5 min left</div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 4.4 · home loading, on a phone -->
+<figure class="shot" id="home-loading-phone">
+  <div class="phone" data-view="home">
+    <div class="sk" style="height:392px"></div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="sk" style="height:48px"></div>
+      <div class="sk" style="height:18px;width:170px;margin-top:10px"></div>
+      <div class="row" style="gap:16px"><div class="sk" style="height:112px;width:200px;flex:none"></div><div class="sk" style="height:112px;width:200px;flex:none"></div></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 4.5 · nothing could load, on a computer -->
+<figure class="shot" id="home-couldnt-load-computer">
+  <div class="computer" data-view="home">
+    <div class="empty" style="margin-top:220px">
+      <i data-i="cloud-off" class="s48"></i>
+      <h2 class="h2" data-co="1">couldn't load the library</h2>
+      <p class="text">Can't reach the server.</p>
+      <span class="b" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
+      <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 4.6 · an empty library, on a TV -->
+<figure class="shot" id="home-empty-tv">
+  <div class="tv" data-view="home">
+    <div class="page">
+      <div class="empty" style="margin-top:170px">
+        <i data-i="film" class="s48"></i>
+        <h2 class="h2">no movies or shows yet</h2>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

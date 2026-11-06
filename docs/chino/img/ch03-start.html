@@ -1,0 +1,234 @@
+<!doctype html>
+<!--
+  Chapter 3, getting started: the figures of docs/chino/start.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. These screens come before the frame, so most leave it
+  out. Pink numbers mark the parts the chapter's text explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 3 getting started</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* a screen before the frame: one column in the middle */
+  .onb { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-start; gap: 18px; padding: 170px 24px 0; }
+  .onb .c { align-self: center; text-align: center; }
+  .onb .h1 { text-align: center; }
+  .onb .text { text-align: center; }
+  .mark { display: inline-flex; align-items: center; gap: 9px; font: 600 28px/1 var(--ff-mono); color: var(--fg); }
+  .mark svg { width: 20px; height: 26px; }
+  .tv .onb { padding: 0; align-items: center; justify-content: center; }
+  .tv .onb > * { width: 480px; }
+  .tv .onb > .c { width: auto; }
+  /* a field with its label and its hint or error (the design system's field) */
+  .fld { display: flex; flex-direction: column; gap: 8px; }
+  .fld .lbl { font: 500 13px/1.4 var(--ff-ui); color: var(--fg-2); }
+  .fld .hint { font: 400 12px/1.4 var(--ff-ui); color: var(--fg-dim); }
+  .fld .err { font: 400 12px/1.4 var(--ff-ui); color: var(--signal-red); display: flex; align-items: center; gap: 6px; }
+  .fld .field { height: 48px; font-size: 16px; }
+  .tv .fld .field { height: 40px; font-size: 15px; }
+  .field.bad { border-color: var(--signal-red); box-shadow: inset 0 0 0 1px var(--signal-red); }
+  .tv .field.bad.focus-row { border: 2px solid var(--signal-red); box-shadow: inset 0 0 0 3px var(--focus-ring); }
+  .field.wait { color: var(--fg-muted); }
+  /* the design system's loader: a square frame, three quarters lit */
+  .ldr { width: 16px; height: 16px; flex: none; display: block; }
+  .ldr .track { stroke: currentColor; stroke-opacity: .16; }
+  .ldr .lit { stroke: currentColor; }
+  .ldr.blue { color: var(--cloud-blue); }
+  .b.busy { pointer-events: none; }
+  /* the TV's code: a picture code and the code to type */
+  .qr { background: #fff; padding: 12px; width: 172px; height: 172px; flex: none; }
+  .qrsvg { display: block; width: 148px; height: 148px; }
+  .codes { display: flex; gap: 6px; }
+  .codes span { width: 34px; height: 46px; display: inline-flex; align-items: center; justify-content: center; background: var(--surface-2);
+                border: 1px solid var(--border-2); font: 700 24px/1 var(--ff-mono); color: var(--fg); }
+  .codes .dash { width: 14px; background: none; border: none; color: var(--fg-dim); }
+  .addr { font: 600 17px/1.2 var(--ff-mono); color: var(--cloud-blue); }
+  /* who's watching: a tile per account */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px 14px; }
+  .tile { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .tile .box { position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; }
+  .tile .box.cur { box-shadow: inset 0 0 0 3px var(--cloud-blue); }
+  .tile .av { width: 88px; height: 88px; font-size: 30px; line-height: 88px; }
+  .tile .nm { font: 500 14px/1.3 var(--ff-ui); color: var(--fg-2); text-align: center; }
+  .tile .nm.cur { color: var(--fg); }
+  .tile .x { position: absolute; top: -6px; right: -6px; width: 28px; height: 28px; background: var(--bg-2); border: 1px solid var(--border-2);
+             display: flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .tile .plus { width: 88px; height: 88px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; color: var(--fg); }
+  .tv .tiles { display: flex; gap: 28px; justify-content: center; }
+  .tv .tile { width: 132px; }
+  .tv .tile .box { width: 112px; height: 112px; }
+  .tv .tile .av, .tv .tile .plus { width: 112px; height: 112px; font-size: 38px; line-height: 112px; }
+  .tv .tile .nm { font-size: 15px; }
+  .tv .tile.focus .nm { color: var(--fg); }
+  .tv .tile.focus { transform: none; outline: none; }
+  .tv .tile.focus .box { outline: 3px solid var(--focus-ring); outline-offset: 2px; transform: scale(1.05); }
+</style>
+</head>
+<body>
+
+<!-- Figure 3.1 · connect to a server, on a phone -->
+<figure class="shot" id="start-server-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div class="onb">
+      <span class="mark c"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <h1 class="h1" style="margin-top:6px">connect to a server</h1>
+      <div class="fld" style="margin-top:10px" data-co="1">
+        <span class="lbl">Server address</span>
+        <span class="field filled focus">media.example.com<span class="caret" style="margin-left:1px"></span></span>
+        <span class="hint">The app adds https:// when you leave it out.</span>
+      </div>
+      <span class="b primary wide" data-co="2">connect</span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.2 · connect to a server, on a TV -->
+<figure class="shot" id="start-server-tv">
+  <div class="tv full" data-rail="none">
+    <div class="page">
+      <div class="onb">
+        <span class="mark c"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+        <h1 class="h1 c" style="margin-top:4px">connect to a server</h1>
+        <div class="fld" style="margin-top:8px">
+          <span class="lbl">Server address</span>
+          <span class="field focus-row" data-co="1">media.example.com</span>
+          <span class="hint">The app adds https:// when you leave it out.</span>
+        </div>
+        <span class="b primary wide" data-co="2">connect</span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.3 · sign in, on a phone -->
+<figure class="shot" id="start-sign-in-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div class="onb">
+      <span class="mark c"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <h1 class="h1" style="margin-top:6px; align-self:center" data-co="1">sign in to<br>media.example.com</h1>
+      <p class="text">The server's sign-in page opens in your browser.</p>
+      <span class="b primary wide" style="margin-top:8px" data-co="2"><i data-i="log-in" class="s16"></i>sign in</span>
+      <span class="b ghost" style="margin-top:-10px; align-self:center" data-co="3">change server</span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.4 · sign in with a code, on a TV -->
+<figure class="shot" id="start-sign-in-tv">
+  <div class="tv full" data-rail="none">
+    <div class="page">
+      <div style="position:absolute; left:0; right:0; top:40px; display:flex; flex-direction:column; align-items:center; gap:26px">
+        <h1 class="h1">sign in to media.example.com</h1>
+        <div class="row" style="gap:40px; align-items:center">
+          <div class="qr" data-co="1"><svg class="qrsvg" viewBox="0 0 25 25" shape-rendering="crispEdges"><path d="M0 0h7v1h-7zM9 0h2v1h-2zM12 0h1v1h-1zM15 0h2v1h-2zM18 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h5v1h-5zM14 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h1v1h-1zM12 2h1v1h-1zM18 2h1v1h-1zM20 2h3v1h-3zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM11 3h1v1h-1zM13 3h4v1h-4zM18 3h1v1h-1zM20 3h3v1h-3zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h5v1h-5zM16 4h1v1h-1zM18 4h1v1h-1zM20 4h3v1h-3zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h2v1h-2zM12 5h5v1h-5zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h7v1h-7zM8 7h3v1h-3zM12 7h2v1h-2zM15 7h2v1h-2zM0 8h1v1h-1zM2 8h1v1h-1zM6 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM14 8h1v1h-1zM16 8h2v1h-2zM19 8h5v1h-5zM1 9h3v1h-3zM5 9h1v1h-1zM7 9h1v1h-1zM11 9h3v1h-3zM17 9h1v1h-1zM19 9h1v1h-1zM21 9h1v1h-1zM4 10h1v1h-1zM6 10h3v1h-3zM13 10h2v1h-2zM17 10h1v1h-1zM19 10h2v1h-2zM22 10h2v1h-2zM0 11h4v1h-4zM10 11h5v1h-5zM16 11h1v1h-1zM20 11h2v1h-2zM0 12h3v1h-3zM4 12h1v1h-1zM6 12h2v1h-2zM9 12h2v1h-2zM13 12h2v1h-2zM16 12h2v1h-2zM19 12h3v1h-3zM24 12h1v1h-1zM2 13h3v1h-3zM9 13h3v1h-3zM13 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM21 13h1v1h-1zM24 13h1v1h-1zM0 14h1v1h-1zM3 14h2v1h-2zM6 14h2v1h-2zM10 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM17 14h3v1h-3zM22 14h2v1h-2zM0 15h1v1h-1zM2 15h3v1h-3zM7 15h3v1h-3zM11 15h1v1h-1zM13 15h1v1h-1zM15 15h2v1h-2zM19 15h1v1h-1zM21 15h1v1h-1zM23 15h2v1h-2zM0 16h8v1h-8zM10 16h1v1h-1zM14 16h7v1h-7zM22 16h1v1h-1zM24 16h1v1h-1zM8 17h1v1h-1zM13 17h1v1h-1zM15 17h2v1h-2zM20 17h1v1h-1zM22 17h2v1h-2zM0 18h7v1h-7zM8 18h3v1h-3zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM20 18h5v1h-5zM0 19h1v1h-1zM6 19h1v1h-1zM8 19h2v1h-2zM12 19h3v1h-3zM16 19h1v1h-1zM20 19h2v1h-2zM23 19h2v1h-2zM0 20h1v1h-1zM2 20h3v1h-3zM6 20h1v1h-1zM10 20h1v1h-1zM14 20h9v1h-9zM0 21h1v1h-1zM2 21h3v1h-3zM6 21h1v1h-1zM8 21h1v1h-1zM11 21h4v1h-4zM17 21h1v1h-1zM22 21h1v1h-1zM24 21h1v1h-1zM0 22h1v1h-1zM2 22h3v1h-3zM6 22h1v1h-1zM8 22h3v1h-3zM12 22h1v1h-1zM14 22h1v1h-1zM16 22h2v1h-2zM22 22h2v1h-2zM0 23h1v1h-1zM6 23h1v1h-1zM11 23h1v1h-1zM13 23h1v1h-1zM15 23h4v1h-4zM21 23h1v1h-1zM24 23h1v1h-1zM0 24h7v1h-7zM8 24h2v1h-2zM13 24h3v1h-3zM18 24h3v1h-3zM22 24h3v1h-3z" fill="#0B0F19"/></svg></div>
+          <div class="col" style="gap:10px; width:390px">
+            <p class="text">Scan this with your phone's camera, or open</p>
+            <span class="addr" style="align-self:flex-start" data-co="2" data-co-side="right">auth.example.com/device</span>
+            <p class="text">on a phone or a computer and enter</p>
+            <div class="codes" style="align-self:flex-start" data-co="3" data-co-side="right"><span>W</span><span>D</span><span>J</span><span>B</span><span class="dash">-</span><span>M</span><span>J</span><span>H</span><span>T</span></div>
+          </div>
+        </div>
+        <div class="row" style="gap:10px; color:var(--fg-muted)" data-co="4"><svg class="ldr blue" viewBox="0 0 16 16"><rect class="track" x="1" y="1" width="14" height="14" fill="none" stroke-width="2"/><rect class="lit" x="1" y="1" width="14" height="14" fill="none" stroke-width="2" stroke-dasharray="42 14" stroke-dashoffset="-10"/></svg><span class="text" style="color:var(--fg-muted)">Waiting for you to sign in…</span></div>
+        <span class="b focus" data-co="5" data-co-side="right">change server</span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.5 · who's watching, on a phone -->
+<figure class="shot" id="start-whos-watching-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div class="pg" style="padding-top:56px">
+      <h1 class="h1" style="margin-bottom:28px">who's watching?</h1>
+      <div class="tiles">
+        <div class="tile" data-co="1"><div class="box cur"><span class="av">au</span><span class="x"><i data-i="x" class="s14"></i></span></div><span class="nm cur">Alex Urban</span></div>
+        <div class="tile"><div class="box"><span class="av c2">a</span><span class="x"><i data-i="x" class="s14"></i></span></div><span class="nm">Anna</span></div>
+        <div class="tile"><div class="box"><span class="av c3">sk</span><span class="x" data-co="2" data-co-side="right"><i data-i="x" class="s14"></i></span></div><span class="nm">Sam Keller</span></div>
+        <div class="tile" data-co="3"><div class="box"><span class="plus"><i data-i="plus" class="s32"></i></span></div><span class="nm">add account</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.6 · who's watching, on a TV -->
+<figure class="shot" id="start-whos-watching-tv">
+  <div class="tv full" data-rail="none">
+    <div class="page">
+      <div style="position:absolute; left:0; right:0; top:70px; display:flex; flex-direction:column; align-items:center; gap:14px">
+        <h1 class="h1" style="font-size:30px">who's watching?</h1>
+        <p class="text" style="color:var(--fg-muted)" data-co="3" data-co-side="right">Hold OK on an account to remove it from this TV.</p>
+        <div class="tiles" style="margin-top:44px">
+          <div class="tile focus" data-co="1"><div class="box"><span class="av">au</span></div><span class="nm">Alex Urban</span></div>
+          <div class="tile"><div class="box"><span class="av c2">a</span></div><span class="nm">Anna</span></div>
+          <div class="tile"><div class="box"><span class="av c3">sk</span></div><span class="nm">Sam Keller</span></div>
+          <div class="tile" data-co="2" data-co-side="right"><div class="box"><span class="plus"><i data-i="plus" class="s48"></i></span></div><span class="nm">add account</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.7 · checking the address, on a phone -->
+<figure class="shot" id="start-checking-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div class="onb">
+      <span class="mark c"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <h1 class="h1" style="margin-top:6px">connect to a server</h1>
+      <div class="fld" style="margin-top:10px" data-co="1">
+        <span class="lbl">Server address</span>
+        <span class="field filled wait">media.example.com</span>
+        <span class="hint">The app adds https:// when you leave it out.</span>
+      </div>
+      <span class="b primary wide busy" data-co="2"><svg class="ldr" viewBox="0 0 16 16"><rect class="track" x="1" y="1" width="14" height="14" fill="none" stroke-width="2"/><rect class="lit" x="1" y="1" width="14" height="14" fill="none" stroke-width="2" stroke-dasharray="42 14" stroke-dashoffset="-10"/></svg>connect</span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.8 · no server answers, on a TV -->
+<figure class="shot" id="start-no-answer-tv">
+  <div class="tv full" data-rail="none">
+    <div class="page">
+      <div class="onb">
+        <span class="mark c"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+        <h1 class="h1 c" style="margin-top:4px">connect to a server</h1>
+        <div class="fld" style="margin-top:8px">
+          <span class="lbl">Server address</span>
+          <span class="field filled bad focus-row" data-co="1">media.exmaple.com</span>
+          <span class="err" data-co="2"><i data-i="circle-alert" class="s14"></i>No server answers at this address.</span>
+        </div>
+        <span class="b primary wide">connect</span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 3.9 · the sign-in was refused, on a phone -->
+<figure class="shot" id="start-refused-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div class="onb">
+      <span class="mark c"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <h1 class="h1" style="margin-top:6px">sign in to<br>media.example.com</h1>
+      <div class="banner error" data-co="1">
+        <i data-i="circle-alert" class="s16"></i>
+        <div class="col" style="gap:6px">
+          <span>Couldn't sign you in. The sign-in service didn't accept the request.</span>
+          <span class="row" style="gap:4px; font:500 12px/1 var(--ff-mono); color:var(--fg-muted)">details<i data-i="chevron-down" class="s14" style="color:var(--fg-muted)"></i></span>
+        </div>
+      </div>
+      <span class="b primary wide" style="margin-top:4px" data-co="2"><i data-i="log-in" class="s16"></i>sign in</span>
+      <span class="b ghost" style="margin-top:-10px; align-self:center">change server</span>
+    </div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

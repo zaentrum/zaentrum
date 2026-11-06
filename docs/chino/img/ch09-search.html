@@ -1,0 +1,262 @@
+<!doctype html>
+<!--
+  Chapter 9, search: the figures of docs/chino/search.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 9 search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* artwork for the films home doesn't draw (as in chapter 5) */
+  .x1 { background: linear-gradient(160deg, #1f5e60 0%, #11332f 55%, #0a1a19 100%); }
+  .x2 { background: linear-gradient(160deg, #557232 0%, #2e3d1a 58%, #151c0c 100%); }
+  .x3 { background: linear-gradient(160deg, #723030 0%, #3e1a1a 58%, #1c0c0c 100%); }
+  .x4 { background: linear-gradient(160deg, #5e3f6a 0%, #33223b 58%, #18101c 100%); }
+  .x5 { background: linear-gradient(160deg, #7a4a5f 0%, #432836 58%, #1f1219 100%); }
+  .card .mk.wl { left: 6px; right: auto; background: var(--cloud-blue); }
+  /* the field in the top bar has the focus while the person types */
+  .computer > .tb .field.focus { border-color: var(--cloud-blue); }
+  /* the results: cast & crew, then titles */
+  .grp { margin-bottom: 32px; }
+  .grp .h2 { margin-bottom: 12px; }
+  .people { display: flex; gap: 16px; }
+  .person { flex: none; width: 260px; display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface); border: 1px solid var(--border); }
+  .person .ph { width: 48px; height: 48px; flex: none; }
+  .person .who { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .person .nm { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .person .sb { font: 500 12px/1.4 var(--ff-mono); color: var(--fg-dim); }
+  .computer .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .computer .grid .card.poster { width: auto; } .computer .grid .card.poster .img { height: 233px; }
+  /* a phone: the field across the width, in place of the bar */
+  .sbar { height: 56px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 12px 0 4px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .sbar .icon-b { width: 44px; height: 44px; }
+  .sbar .field { flex: 1; min-width: 0; padding-right: 4px; }
+  .sbar .field .xb { margin-left: auto; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .phone .pg { padding: 16px; }
+  .phone .h1 { font-size: 22px; }
+  .phone .person { width: 248px; }
+  .phone .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
+  .phone .grid .card.poster { width: auto; } .phone .grid .card.poster .img { height: 152px; }
+  .phone .grid .card .tt { font-size: 13px; }
+  .phone .grp { margin-bottom: 24px; }
+  /* the page under the open field: the movies view, as chapter 5 draws it */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .facet { display: inline-flex; align-items: center; gap: 8px; }
+  .facet .lb { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
+  .sel { height: 48px; min-width: 112px; display: inline-flex; align-items: center; gap: 12px; padding: 0 12px 0 14px;
+         border: 1px solid var(--border-control); background: var(--bg-2); color: var(--fg); font: 500 14px/1 var(--ff-mono); white-space: nowrap; }
+  .sel svg.i { margin-left: auto; width: 16px; height: 16px; color: var(--cloud-blue); }
+  /* the phone's own keyboard */
+  .oskb { position: absolute; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 4px 14px; background: #1B202A; border-top: 1px solid var(--border);
+          display: flex; flex-direction: column; gap: 10px; }
+  .oskb .r { display: flex; justify-content: center; gap: 4px; }
+  .oskb .k { width: 31px; height: 42px; display: inline-flex; align-items: center; justify-content: center; background: #2B3140; color: var(--fg-2); font: 400 17px/1 var(--ff-ui); }
+  .oskb .k.m { width: 44px; background: #222836; font-size: 13px; }
+  .oskb .k.sp { width: 158px; }
+  .oskb .k.go { width: 58px; background: #3A4256; }
+  /* a TV: the field, the keyboard on the left, what it found on the right */
+  .tv .inner { width: 768px; padding-top: 8px; }
+  .tfield { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 12px; border: 1px solid var(--border-control); background: var(--bg-2);
+            font: 400 15px/1 var(--ff-ui); color: var(--fg); }
+  .tfield .caret { margin-left: -9px; }
+  .tvs { display: flex; gap: 32px; margin-top: 20px; }
+  .keys { flex: none; display: grid; grid-template-columns: repeat(6, 40px); gap: 12px; }
+  .key { height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--surface); border: 1px solid var(--border-2);
+         font: 500 15px/1 var(--ff-mono); color: var(--fg-2); }
+  .key.w { grid-column: span 3; font-size: 13px; }
+  .tv .key.focus { background: var(--surface-focus); color: var(--fg); }
+  .tv .res { flex: 1; min-width: 0; }
+  .tv .res .h2 { margin-bottom: 10px; }
+  .tv .res .card.poster { width: 136px; } .tv .res .card.poster .img { height: 204px; }
+  .tv .res .empty { margin-top: 96px; }
+  .tv .b.focus { background: var(--surface-focus); }
+  /* grey blocks in the shape of the results */
+  .card .ln { height: 12px; margin-top: 10px; width: 80%; }
+  .card .ln2 { height: 10px; margin-top: 6px; width: 40px; }
+</style>
+</head>
+<body>
+
+<!-- Figure 9.1 · search on a computer -->
+<figure class="shot" id="search-computer">
+  <div class="computer typing" data-view="none" data-query="s" data-co-parts="search:1:top">
+    <div class="pg">
+      <section class="grp">
+        <h2 class="h2">cast &amp; crew</h2>
+        <div class="people" data-co="2">
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sacha Goedegebure</span><span class="sb">1 title</span></div></div>
+        </div>
+      </section>
+      <section class="grp">
+        <h2 class="h2">titles</h2>
+        <div class="grid">
+          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
+          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 9.2 · the search opened on a phone -->
+<figure class="shot" id="search-open-phone">
+  <div class="phone" data-view="none" data-bar="none" data-tabs="none">
+    <header class="sbar">
+      <span class="icon-b" data-co="1"><i data-i="arrow-left"></i></span>
+      <span class="field focus" data-co="2" data-co-side="right"><span class="caret" style="margin:0 -7px 0 0"></span>Search</span>
+    </header>
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">movies</h1>
+        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
+      </div>
+      <div style="margin-bottom:16px"><span class="b"><i data-i="list-filter" class="s16"></i>filters<i data-i="chevron-down" class="s16"></i></span></div>
+      <div class="grid">
+        <div class="card poster"><div class="img"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+      </div>
+    </div>
+    <div class="oskb" data-co="3">
+      <div class="r"><span class="k">q</span><span class="k">w</span><span class="k">e</span><span class="k">r</span><span class="k">t</span><span class="k">y</span><span class="k">u</span><span class="k">i</span><span class="k">o</span><span class="k">p</span></div>
+      <div class="r"><span class="k">a</span><span class="k">s</span><span class="k">d</span><span class="k">f</span><span class="k">g</span><span class="k">h</span><span class="k">j</span><span class="k">k</span><span class="k">l</span></div>
+      <div class="r"><span class="k m"><i data-i="arrow-up" class="s16"></i></span><span class="k">z</span><span class="k">x</span><span class="k">c</span><span class="k">v</span><span class="k">b</span><span class="k">n</span><span class="k">m</span><span class="k m"><i data-i="delete" class="s16"></i></span></div>
+      <div class="r"><span class="k m">123</span><span class="k">,</span><span class="k sp"></span><span class="k">.</span><span class="k go"><i data-i="search" class="s16"></i></span></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 9.3 · search on a phone -->
+<figure class="shot" id="search-phone">
+  <div class="phone" data-view="none" data-bar="none">
+    <header class="sbar">
+      <span class="icon-b"><i data-i="arrow-left"></i></span>
+      <span class="field filled">s<span class="xb" data-co="1" data-co-side="right"><i data-i="x" class="s16"></i></span></span>
+    </header>
+    <div class="pg">
+      <section class="grp">
+        <h2 class="h2">cast &amp; crew</h2>
+        <div class="people">
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
+          <div class="person" data-co="2" data-co-side="right"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
+        </div>
+      </section>
+      <section class="grp">
+        <h2 class="h2">titles</h2>
+        <div class="grid">
+          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
+          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 9.4 · search on a TV -->
+<figure class="shot" id="search-tv">
+  <div class="tv" data-view="search">
+    <div class="page"><div class="inner">
+      <div class="tfield" data-co="1"><i data-i="search" class="s16"></i>llam<span class="caret"></span></div>
+      <div class="tvs">
+        <div class="keys" data-co="2">
+          <span class="key">a</span><span class="key">b</span><span class="key">c</span><span class="key">d</span><span class="key">e</span><span class="key">f</span>
+          <span class="key">g</span><span class="key">h</span><span class="key">i</span><span class="key">j</span><span class="key">k</span><span class="key">l</span>
+          <span class="key focus">m</span><span class="key">n</span><span class="key">o</span><span class="key">p</span><span class="key">q</span><span class="key">r</span>
+          <span class="key">s</span><span class="key">t</span><span class="key">u</span><span class="key">v</span><span class="key">w</span><span class="key">x</span>
+          <span class="key">y</span><span class="key">z</span><span class="key">1</span><span class="key">2</span><span class="key">3</span><span class="key">4</span>
+          <span class="key">5</span><span class="key">6</span><span class="key">7</span><span class="key">8</span><span class="key">9</span><span class="key">0</span>
+          <span class="key w">space</span><span class="key w"><i data-i="delete" class="s16"></i>delete</span>
+        </div>
+        <div class="res">
+          <h2 class="h2">titles</h2>
+          <div class="cards">
+            <div class="card poster"><div class="img"><div class="art a3"></div></div><div class="tt">Caminandes</div><div class="st">S01E01 · Llama Drama</div></div>
+            <div class="card poster"><div class="img" data-co="3" data-co-side="right"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</figure>
+
+<!-- Figure 9.5 · search loading, on a computer -->
+<figure class="shot" id="search-loading-computer">
+  <div class="computer typing" data-view="none" data-query="s">
+    <div class="pg">
+      <section class="grp">
+        <div class="sk" style="width:120px;height:16px;margin-bottom:12px"></div>
+        <div class="people">
+          <div class="sk" style="width:260px;height:74px"></div>
+          <div class="sk" style="width:260px;height:74px"></div>
+          <div class="sk" style="width:260px;height:74px"></div>
+        </div>
+      </section>
+      <section class="grp">
+        <div class="sk" style="width:64px;height:16px;margin-bottom:12px"></div>
+        <div class="grid">
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+          <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 9.6 · a search that matches nothing, on a TV -->
+<figure class="shot" id="search-no-match-tv">
+  <div class="tv" data-view="search">
+    <div class="page"><div class="inner">
+      <div class="tfield"><i data-i="search" class="s16"></i>lighthouse<span class="caret"></span></div>
+      <div class="tvs">
+        <div class="keys">
+          <span class="key">a</span><span class="key">b</span><span class="key">c</span><span class="key">d</span><span class="key focus">e</span><span class="key">f</span>
+          <span class="key">g</span><span class="key">h</span><span class="key">i</span><span class="key">j</span><span class="key">k</span><span class="key">l</span>
+          <span class="key">m</span><span class="key">n</span><span class="key">o</span><span class="key">p</span><span class="key">q</span><span class="key">r</span>
+          <span class="key">s</span><span class="key">t</span><span class="key">u</span><span class="key">v</span><span class="key">w</span><span class="key">x</span>
+          <span class="key">y</span><span class="key">z</span><span class="key">1</span><span class="key">2</span><span class="key">3</span><span class="key">4</span>
+          <span class="key">5</span><span class="key">6</span><span class="key">7</span><span class="key">8</span><span class="key">9</span><span class="key">0</span>
+          <span class="key w">space</span><span class="key w"><i data-i="delete" class="s16"></i>delete</span>
+        </div>
+        <div class="res">
+          <div class="empty">
+            <i data-i="search-x" class="s48"></i>
+            <h2 class="h2" data-co="1" data-co-side="right">no matches</h2>
+            <p class="text">Nothing in the library fits this search.</p>
+            <span class="b" style="margin-top:6px" data-co="2" data-co-side="right">clear search</span>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+<script>
+  // frame.js draws the bar; while the person types, its field has the focus
+  for (const f of document.querySelectorAll('.computer.typing > .tb .field')) f.classList.add('focus');
+</script>
+</body>
+</html>

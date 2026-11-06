@@ -1,0 +1,352 @@
+<!doctype html>
+<!--
+  Chapter 15, notifications: the figures of docs/chino/notifications.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. Home under the panel is chapter 4's (ch04-home.html).
+  Pink numbers mark the parts the chapter's text explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 15 notifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* home under the panel, as chapter 4 draws it */
+  .computer .hero { position: relative; height: 384px; }
+  .computer .hero .txt { position: relative; padding: 60px 48px 0; width: 600px; display: flex; flex-direction: column; gap: 14px; }
+  .computer .hero .row { margin-top: 6px; }
+  .computer .shelf { padding: 0 48px; margin-bottom: 28px; }
+  .shelf .h2 { margin-bottom: 12px; }
+  .tv .backdrop { position: absolute; left: 0; right: 0; top: 0; height: 372px; }
+  .tv .backdrop .scrim { position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--bg) 0%, rgba(11,15,25,.95) 24%, rgba(11,15,25,.5) 52%, rgba(11,15,25,0) 74%), linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,0) 40%); }
+  .tv .txt { position: absolute; left: 132px; top: 52px; width: 460px; display: flex; flex-direction: column; gap: 10px; }
+  .tv .txt .row { margin-top: 6px; gap: 12px; }
+  .tv .shelf { position: absolute; left: 132px; top: 330px; }
+  .tv .shelf .h2 { margin-bottom: 10px; }
+
+  /* the panel under the bell, on a computer */
+  .np { position: absolute; top: 60px; right: 56px; width: 380px; z-index: 30; background: var(--surface); border: 1px solid var(--border-2); }
+  .np .hd { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 8px 0 16px; border-bottom: 1px solid var(--border); }
+  .np .hd .h2 { font-size: 15px; }
+
+  /* one notification: whom from and how old, its title, its text, where it leads; delete beside it */
+  .nr { display: flex; gap: 8px; align-items: flex-start; padding: 12px 8px 12px 16px; border-bottom: 1px solid var(--border); }
+  .nr:last-child { border-bottom: 0; }
+  .nr .main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .nr .fr { align-self: flex-start; font: 500 12px/1.3 var(--ff-mono); color: var(--fg-dim); }
+  .nr .ttl { align-self: flex-start; font: 500 14px/1.4 var(--ff-ui); color: var(--fg-2); }
+  .nr.unread .ttl { color: var(--fg); font-weight: 600; }
+  .nr .sq { display: inline-block; width: 8px; height: 8px; margin-right: 8px; background: var(--cloud-blue); vertical-align: 1px; }
+  .nr .bd { font: 400 13px/1.45 var(--ff-ui); color: var(--fg-muted); }
+  .nr .go { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; font: 500 12px/1 var(--ff-mono); color: var(--cloud-blue); }
+  .nr .b.icon { flex: none; }
+  .np .nr .b.icon { margin-top: -6px; }
+
+  /* a screen of its own on a phone: frame.js's back bar, with mark all read at its right */
+  .xbar { position: absolute; left: 0; right: 0; top: 0; height: 56px; z-index: 10; display: flex; align-items: center; gap: 10px;
+          padding: 0 8px 0 6px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .xbar .title { font: 600 16px/1 var(--ff-mono); margin-right: auto; white-space: nowrap; }
+  .xbar .icon-b { color: var(--fg); }
+  .xbar .b { padding: 0 10px; font-size: 13px; }
+  .under { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; overflow: hidden; }
+  .phone .nr { padding: 14px 8px 14px 16px; }
+  .phone .nr .ttl { font-size: 15px; }
+  .phone .nr .b.icon { margin-top: -4px; }
+
+  /* the screen on a TV */
+  .tv .head { display: flex; align-items: center; gap: 16px; width: 712px; margin-top: 14px; }
+  .tv .head .h1 { margin-right: auto; font-size: 22px; }
+  .tv .list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .tv .tn { display: flex; align-items: center; gap: 16px; width: 712px; }
+  .tv .tn .nr { flex: 1; padding: 10px 16px; background: var(--surface); border: 0; }
+  .tv .tn .nr .main { gap: 4px; }
+  .tv .tn .nr .ttl { font-size: 15px; }
+  .tv .tn .nr .bd { font-size: 13px; }
+  /* the rail's bell counts the unread, as the top bar's does */
+  .tv > .rail .it-notifications { position: relative; }
+  /* the server has no notifications: no bell */
+  .tv.nobell > .rail .it-notifications { display: none; }
+
+  .banner .b.sm { margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<!-- Figure 15.1 · the notifications on a computer -->
+<figure class="shot" id="notifications-computer">
+  <div class="computer" data-view="home" data-co-parts="bell:1:top">
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim-l"></div>
+      <div class="txt">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
+        <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard"></i>trailer</span></div>
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+      </div>
+    </section>
+    <div class="np">
+      <div class="hd" data-co="2" data-co-side="right"><h2 class="h2">notifications</h2><span class="b sm ghost"><i data-i="check-check" class="s16"></i>mark all read</span></div>
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 5m</span>
+          <div class="ttl" data-co="3" data-co-side="right"><i class="sq"></i>German subtitles for Sintel</div>
+          <div class="bd">In the player's subtitles menu as German · AI.</div>
+          <span class="go" data-co="4" data-co-side="right">open title</span>
+        </div>
+        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 3h</span>
+          <div class="ttl"><i class="sq"></i>Chinese (Simplified) subtitles for Tears of Steel</div>
+          <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b sm icon ghost" data-co="5" data-co-side="right"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+      <div class="nr">
+        <div class="main">
+          <span class="fr">library · 2d</span>
+          <div class="ttl">Elephants Dream has 5.1 sound now</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+      <div class="nr">
+        <div class="main">
+          <span class="fr">subtitles · 28 Oct</span>
+          <div class="ttl">English subtitles for 12 titles</div>
+          <div class="bd">The titles that had none have them now.</div>
+          <span class="go" data-co="6" data-co-side="right">open link</span>
+        </div>
+        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 15.2 · the notifications on a phone -->
+<figure class="shot" id="notifications-phone">
+  <div class="phone" data-view="home" data-bar="none">
+    <header class="xbar">
+      <span class="icon-b" data-co="1"><i data-i="arrow-left"></i></span>
+      <span class="title">notifications</span>
+      <span class="b ghost" data-co="2" data-co-side="right"><i data-i="check-check" class="s16"></i>mark all read</span>
+    </header>
+    <div class="under">
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 5m</span>
+          <div class="ttl"><i class="sq"></i>German subtitles for Sintel</div>
+          <div class="bd">In the player's subtitles menu as German · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b icon ghost" data-co="3" data-co-side="right"><i data-i="trash-2"></i></span>
+      </div>
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 3h</span>
+          <div class="ttl"><i class="sq"></i>Chinese (Simplified) subtitles for Tears of Steel</div>
+          <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+      </div>
+      <div class="nr">
+        <div class="main">
+          <span class="fr">library · 2d</span>
+          <div class="ttl">Elephants Dream has 5.1 sound now</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+      </div>
+      <div class="nr">
+        <div class="main">
+          <span class="fr">subtitles · 28 Oct</span>
+          <div class="ttl">English subtitles for 12 titles</div>
+          <div class="bd">The titles that had none have them now.</div>
+          <span class="go" data-co="4">open link<i data-i="external-link" class="s14"></i></span>
+        </div>
+        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 15.3 · the notifications on a TV -->
+<figure class="shot" id="notifications-tv">
+  <div class="tv" data-view="notifications" data-co-parts="bell:1">
+    <div class="page">
+      <div class="head">
+        <h1 class="h1">notifications</h1>
+        <span class="b" data-co="2" data-co-side="right"><i data-i="check-check" class="s16"></i>mark all read</span>
+      </div>
+      <div class="list">
+        <div class="tn">
+          <div class="nr unread focus-row" data-co="3">
+            <div class="main">
+              <span class="fr">subtitles · 5m</span>
+              <div class="ttl"><i class="sq"></i>German subtitles for Sintel</div>
+              <div class="bd">In the player's subtitles menu as German · AI.</div>
+              <span class="go">open title</span>
+            </div>
+          </div>
+          <span class="b icon" data-co="4" data-co-side="right"><i data-i="trash-2" class="s16"></i></span>
+        </div>
+        <div class="tn">
+          <div class="nr unread">
+            <div class="main">
+              <span class="fr">subtitles · 3h</span>
+              <div class="ttl"><i class="sq"></i>Chinese (Simplified) subtitles for Tears of Steel</div>
+              <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
+              <span class="go">open title</span>
+            </div>
+          </div>
+          <span class="b icon"><i data-i="trash-2" class="s16"></i></span>
+        </div>
+        <div class="tn">
+          <div class="nr">
+            <div class="main">
+              <span class="fr">library · 2d</span>
+              <div class="ttl">Elephants Dream has 5.1 sound now</div>
+              <span class="go">open title</span>
+            </div>
+          </div>
+          <span class="b icon"><i data-i="trash-2" class="s16"></i></span>
+        </div>
+        <div class="tn">
+          <div class="nr" data-co="5" data-co-side="right">
+            <div class="main">
+              <span class="fr">subtitles · 28 Oct</span>
+              <div class="ttl">English subtitles for 12 titles</div>
+              <div class="bd">The titles that had none have them now.</div>
+            </div>
+          </div>
+          <span class="b icon"><i data-i="trash-2" class="s16"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 15.4 · no notifications yet, on a phone -->
+<figure class="shot" id="notifications-empty-phone">
+  <div class="phone" data-view="home" data-bar="none">
+    <header class="xbar">
+      <span class="icon-b"><i data-i="arrow-left"></i></span>
+      <span class="title" data-co="1" data-co-side="right">notifications</span>
+    </header>
+    <div class="under">
+      <div class="empty" style="margin-top:210px">
+        <i data-i="bell" class="s48"></i>
+        <h2 class="h2" data-co="2">no notifications yet</h2>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 15.5 · the notifications couldn't be refreshed, on a computer -->
+<figure class="shot" id="notifications-couldnt-refresh-computer">
+  <div class="computer" data-view="home">
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim-l"></div>
+      <div class="txt">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
+        <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard"></i>trailer</span></div>
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+      </div>
+    </section>
+    <div class="np">
+      <div class="hd"><h2 class="h2">notifications</h2><span class="b sm ghost"><i data-i="check-check" class="s16"></i>mark all read</span></div>
+      <div style="padding:12px 12px 0">
+        <div class="banner warn" data-co="1" data-co-side="right"><i data-i="triangle-alert" class="s16"></i>
+          <div>
+            <div>Couldn't refresh the notifications; the list shows what was loaded 4 minutes ago.</div>
+            <span class="b sm" data-co="2" data-co-side="right"><i data-i="refresh-cw" class="s14"></i>try again</span>
+          </div>
+        </div>
+      </div>
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 5m</span>
+          <div class="ttl"><i class="sq"></i>German subtitles for Sintel</div>
+          <div class="bd">In the player's subtitles menu as German · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+      <div class="nr unread">
+        <div class="main">
+          <span class="fr">subtitles · 3h</span>
+          <div class="ttl"><i class="sq"></i>Chinese (Simplified) subtitles for Tears of Steel</div>
+          <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+      <div class="nr">
+        <div class="main">
+          <span class="fr">library · 2d</span>
+          <div class="ttl">Elephants Dream has 5.1 sound now</div>
+          <span class="go">open title</span>
+        </div>
+        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 15.6 · a server without notifications, on a TV -->
+<figure class="shot" id="notifications-none-tv">
+  <div class="tv nobell" data-view="home">
+    <div class="backdrop"><div class="art steel"></div><div class="scrim"></div></div>
+    <div class="txt">
+      <h1 class="t">Tears of Steel</h1>
+      <p class="meta">2012 · 12 min · science fiction</p>
+      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+      <div class="row"><span class="b primary focus"><i data-i="play" class="fill s16"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard" class="s16"></i>trailer</span></div>
+      <div class="dots" style="margin-top:6px"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

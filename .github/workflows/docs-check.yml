@@ -2,18 +2,19 @@ name: docs-check
 
 # The docs have lied before — a section described a setup API no service
 # implements. Structure we can check, we check: every relative link resolves,
-# every anchor exists, and the docs site builds from this docs/.
+# every anchor exists, and the site builds from this docs/ and spec/.
 #
-# The site is https://zaentrum.github.io/docs/, built by zaentrum/zaentrum.github.io
-# from main's docs/. Its build fails on any link or #heading that leads nowhere,
-# and then the live site stays as it was. The site job here runs that same build,
-# so a break shows on the commit that made it.
+# The site is https://zaentrum.github.io/ (docs at /docs/, the specification at
+# /spec/), built by zaentrum/zaentrum.github.io from main's docs/ and spec/. Its
+# build fails on any link or #heading that leads nowhere, and then the live site
+# stays as it was. The site job here runs that same build, so a break shows on the
+# commit that made it.
 on:
   push:
     branches: [main]
-    paths: ["docs/**", "scripts/**", ".github/workflows/docs-check.yml"]
+    paths: ["docs/**", "spec/**", "scripts/**", ".github/workflows/docs-check.yml"]
   pull_request:
-    paths: ["docs/**", "scripts/**"]
+    paths: ["docs/**", "spec/**", "scripts/**"]
 
 jobs:
   check:
@@ -38,7 +39,7 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: site/package-lock.json
-      - name: the docs site, built from this docs/
+      - name: the site, built from this docs/ and spec/
         working-directory: site
         env:
           DOCS_SOURCE: ${{ github.workspace }}/zaentrum

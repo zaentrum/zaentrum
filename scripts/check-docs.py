@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Validate docs/ before it ships: every relative link must point at a file
-that exists, and every #anchor into a doc must match a heading there.
+"""Validate docs/ and spec/ before they ship: every relative link must point at a
+file that exists, and every #anchor into a page must match a heading there.
 
 This exists because the docs have already lied twice in ways a reader paid
 for: a section described a setup API that no service implements, and a schema
@@ -16,7 +16,9 @@ import re
 import sys
 import unicodedata
 
-ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "docs"))
+REPO = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+# the documentation and the specification; spec/ is checked once it exists
+TREES = [t for t in (os.path.join(REPO, "docs"), os.path.join(REPO, "spec")) if os.path.isdir(t)]
 LINK_RE = re.compile(r"\]\(([^)\s]+)\)")
 HEADING_RE = re.compile(r"^#{1,6}\s+(.*?)\s*(?:\{#([^}]+)\})?\s*$")
 
@@ -52,7 +54,7 @@ def anchors_of(path):
 
 
 def md_files():
-    for dirpath, _, names in os.walk(ROOT):
+    for dirpath, _, names in (w for tree in TREES for w in os.walk(tree)):
         for n in names:
             if n.endswith(".md"):
                 yield os.path.join(dirpath, n)
@@ -62,7 +64,7 @@ def main():
     fail = 0
     anchor_cache = {}
     for f in md_files():
-        rel_dir = os.path.dirname(os.path.relpath(f, ROOT))
+        here = os.path.dirname(f)
         in_fence = False
         for lineno, line in enumerate(open(f, encoding="utf-8"), 1):
             if line.lstrip().startswith(("```", "~~~")):
@@ -76,16 +78,16 @@ def main():
                 path, _, anchor = target.partition("#")
                 if not path:  # pure in-page anchor
                     continue
-                resolved = os.path.normpath(os.path.join(ROOT, rel_dir, path))
+                resolved = os.path.normpath(os.path.join(here, path))
                 if not os.path.exists(resolved):
-                    print(f"BROKEN {os.path.relpath(f, ROOT)}:{lineno} -> {target}")
+                    print(f"BROKEN {os.path.relpath(f, REPO)}:{lineno} -> {target}")
                     fail = 1
                     continue
                 if anchor and resolved.endswith(".md"):
                     if resolved not in anchor_cache:
                         anchor_cache[resolved] = anchors_of(resolved)
                     if anchor not in anchor_cache[resolved]:
-                        print(f"BAD ANCHOR {os.path.relpath(f, ROOT)}:{lineno} -> {target}")
+                        print(f"BAD ANCHOR {os.path.relpath(f, REPO)}:{lineno} -> {target}")
                         fail = 1
     print("docs links: " + ("FAILED" if fail else "clean"))
     sys.exit(fail)

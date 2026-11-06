@@ -1,0 +1,511 @@
+<!doctype html>
+<!--
+  Chapter 16, settings and account: the figures of docs/chino/settings.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 16 settings and account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* settings on a computer: one column of groups, each a heading and a card */
+  .set { padding: 32px 48px; width: 816px; display: flex; flex-direction: column; gap: 26px; }
+  .set2 { padding: 28px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
+  .set2 > .h1 { grid-column: 1 / -1; margin-bottom: 22px; }
+  .set2 .colg { display: flex; flex-direction: column; gap: 24px; }
+  .srow.stack { flex-direction: column; align-items: stretch; gap: 8px; }
+  .srow.stack .field { width: auto; }
+  .grp { display: flex; flex-direction: column; gap: 10px; }
+  .srow { display: flex; align-items: flex-start; gap: 24px; padding: 14px 18px; border-top: 1px solid var(--border); }
+  .srow:first-child { border-top: none; }
+  .srow.mid { align-items: center; }
+  .lab { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .lab .ttl { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); }
+  .lab .hint { font: 400 13px/1.5 var(--ff-ui); color: var(--fg-dim); }
+  .sel { width: 260px; justify-content: flex-start; }
+  .sel .v { flex: 1; }
+  .step { display: inline-flex; align-items: center; gap: 8px; }
+  .step .val { min-width: 52px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border-2);
+               background: var(--bg-2); font: 600 14px/1 var(--ff-mono); color: var(--fg); }
+  /* a phone: sections of rows and fields */
+  .phone .sec { padding: 14px 16px 6px; }
+  .pf { padding: 4px 16px 8px; display: flex; flex-direction: column; gap: 6px; }
+  .pf .lbl { font: 500 13px/1.4 var(--ff-ui); color: var(--fg-2); }
+  .pf .hint { font: 400 12px/1.45 var(--ff-ui); color: var(--fg-dim); }
+  .pf .field { height: 44px; }
+  .phone .li .sub { font-size: 12px; }
+  .sec.t { padding: 12px 16px 6px; }
+  .pf.t { padding-bottom: 8px; }
+  .rrow { height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-top: 1px solid var(--border); font: 400 14px/1.3 var(--ff-ui); color: var(--fg); }
+  .rrow:first-child { border-top: none; }
+  .rgrp { border: 1px solid var(--border); background: var(--surface); }
+  .vrow { display: flex; align-items: center; justify-content: space-between; }
+  .vrow .v { font: 500 14px/1 var(--ff-mono); color: var(--fg-2); }
+  /* a TV: rows that take the focus */
+  .tset { position: absolute; left: 0; top: 18px; width: 620px; display: flex; flex-direction: column; gap: 18px; }
+  .tset .grp { gap: 8px; }
+  .trow { height: 48px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: var(--surface); }
+  .trow .n { flex: 1; font: 500 14px/1.2 var(--ff-ui); color: var(--fg-2); }
+  .trow .v { font: 400 14px/1.2 var(--ff-ui); color: var(--fg-2); }
+  .trow.focus-row .n, .trow.focus-row .v { color: var(--fg); }
+  .tset .hint { font: 400 13px/1.5 var(--ff-ui); color: var(--fg-dim); margin: 2px 0 4px; }
+  .trow.who { height: 64px; }
+  .trow.who .av { width: 40px; height: 40px; line-height: 40px; font-size: 15px; }
+  /* the account */
+  .idc { display: flex; align-items: center; gap: 20px; padding: 20px; }
+  .idc .nm { font: 500 18px/1.3 var(--ff-ui); color: var(--fg); }
+  .idc .em { font: 400 14px/1.4 var(--ff-ui); color: var(--fg-dim); }
+  .hist { display: flex; align-items: center; gap: 14px; padding: 8px 18px; border-top: 1px solid var(--border); }
+  .hist:first-child { border-top: none; }
+  .hist .th { position: relative; height: 56px; flex: none; overflow: hidden; }
+  .hist .th.ep { width: 100px; } .hist .th.mv { width: 37px; }
+  .hist .m { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .hist .m .t1 { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hist .m .t2 { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hist .d { font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); white-space: nowrap; }
+  .wmk { width: 36px; height: 36px; flex: none; display: inline-flex; align-items: center; justify-content: center; background: var(--signal-green); color: var(--bg); }
+  .phone .hist { padding: 8px 16px; gap: 12px; }
+  .phone .hist .th { height: 45px; } .phone .hist .th.ep { width: 80px; } .phone .hist .th.mv { width: 30px; }
+  .tv .hist { padding: 6px 16px; background: var(--surface); border-top: none; margin-bottom: 6px; }
+  .tv .hist .th { height: 45px; } .tv .hist .th.ep { width: 80px; } .tv .hist .th.mv { width: 30px; }
+  /* dialogs over the dimmed screen */
+  .dlgwrap { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; }
+  .phone .scrim-all { top: -56px; bottom: -64px; }
+  .phone .dlgwrap { top: -56px; bottom: -64px; }
+  .dlg { position: relative; }
+  .dlg p:not(.h2) { margin: 0; font: 400 14px/1.5 var(--ff-ui); color: var(--fg-2); }
+  .dlg .h2 { padding-right: 36px; }
+  .tv .dlg .ft { gap: 16px; }
+  .dlg .xb { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--fg-muted); }
+  .dlg.w480 { width: 480px; }
+  .phone .dlg { width: 312px; }
+  .tv .dlg { width: 440px; }
+  .goes { margin: 0; padding: 0 0 0 4px; list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .goes li { display: flex; align-items: center; gap: 10px; font: 400 14px/1.4 var(--ff-ui); color: var(--fg-2); }
+  .goes li::before { content: ""; width: 5px; height: 5px; background: var(--fg-dim); flex: none; }
+  .ta { height: 112px; align-items: flex-start; padding-top: 11px; white-space: normal; font-size: 14px; line-height: 1.5; }
+  .chk { display: flex; align-items: center; gap: 10px; font: 400 14px/1.3 var(--ff-ui); color: var(--fg-2); }
+  .fl { display: flex; flex-direction: column; gap: 8px; }
+  .fl .lbl { font: 500 13px/1.4 var(--ff-ui); color: var(--fg-2); }
+  .fl .hint { font: 400 12px/1.4 var(--ff-ui); color: var(--fg-dim); }
+  .dim { opacity: .55; }
+  .tv .banner { font-size: 14px; }
+  .cl { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border: 1px solid var(--border); background: var(--surface); }
+  .cl .h3x { font: 600 14px/1.3 var(--ff-mono); color: var(--fg); }
+</style>
+</head>
+<body>
+
+<!-- Figure 16.1 · settings on a computer -->
+<figure class="shot" id="settings-computer">
+  <div class="computer" data-view="none">
+    <div class="set2">
+      <h1 class="h1">settings</h1>
+      <div class="colg">
+        <section class="grp">
+          <h2 class="h2">language</h2>
+          <div class="card-box">
+            <div class="srow stack">
+              <span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Audio</span>
+              <span class="field filled" data-co="1"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
+              <span class="hint" style="font:400 13px/1.5 var(--ff-ui); color:var(--fg-dim)">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+            </div>
+            <div class="srow stack">
+              <span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Subtitles</span>
+              <span class="field filled" data-co="2"><span style="flex:1">English</span><i data-i="chevron-down" class="s16"></i></span>
+              <span class="hint" style="font:400 13px/1.5 var(--ff-ui); color:var(--fg-dim)" data-co="3">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="colg">
+        <section class="grp">
+          <h2 class="h2">binge watching</h2>
+          <div class="card-box">
+            <div class="srow mid">
+              <div class="lab"><span class="ttl">Auto-skip intros</span><span class="hint">Skips the intro on every episode after the first one you watch in a row.</span></div>
+              <span class="switch on" data-co="4" data-co-side="right"></span>
+            </div>
+            <div class="srow mid">
+              <div class="lab"><span class="ttl">Auto-play next episode</span><span class="hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div>
+              <span class="switch on"></span>
+            </div>
+            <div class="srow mid">
+              <div class="lab"><span class="ttl">Countdown</span><span class="hint">Seconds the player counts down before it skips the intro or starts the next episode.</span></div>
+              <span class="step" data-co="5" data-co-side="right"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span>
+            </div>
+          </div>
+        </section>
+        <section class="grp">
+          <h2 class="h2">feedback</h2>
+          <div class="card-box">
+            <div class="srow stack" style="gap:12px">
+              <span class="hint" style="font:400 14px/1.5 var(--ff-ui); color:var(--fg-2)">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span>
+              <span class="b" style="align-self:flex-start" data-co="6" data-co-side="right"><i data-i="bug" class="s16"></i>report a bug</span>
+            </div>
+          </div>
+        </section>
+        <section class="grp">
+          <h2 class="h2">about</h2>
+          <div class="card-box">
+            <div class="srow mid vrow" data-co="7" data-co-side="right"><span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Version</span><span class="v">0.1.0</span></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.2 · settings on a phone -->
+<figure class="shot" id="settings-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="settings" data-co-parts="back:1">
+    <div class="sec">language</div>
+    <div class="pf">
+      <span class="lbl">Audio</span>
+      <span class="field filled" data-co="2"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
+      <span class="hint" data-co="3">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+    </div>
+    <div class="pf">
+      <span class="lbl">Subtitles</span>
+      <span class="field filled"><span style="flex:1">English</span><i data-i="chevron-down" class="s16"></i></span>
+      <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
+    </div>
+    <div class="sec">binge watching</div>
+    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on" data-co="4" data-co-side="right"></span></span></div>
+    <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
+    <div class="li"><div class="main"><span class="ttl">Countdown</span><span class="sub">Seconds the player counts down before it skips the intro or starts the next episode.</span><span class="step" style="margin-top:8px"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span></div></div>
+  </div>
+</figure>
+
+<!-- Figure 16.3 · settings on a phone, further down -->
+<figure class="shot" id="settings-end-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="settings">
+    <div class="sec t">downloads</div>
+    <div class="pf t">
+      <span class="lbl">Download quality</span>
+      <div class="rgrp" data-co="1">
+        <div class="rrow"><span class="radio"></span>High (1080p) · about 2.1 GB an hour</div>
+        <div class="rrow"><span class="radio on"></span>Medium (720p) · about 932 MB an hour</div>
+        <div class="rrow"><span class="radio"></span>Low (480p) · about 412 MB an hour</div>
+      </div>
+    </div>
+    <div class="li"><div class="main"><span class="ttl">Download over Wi-Fi only</span></div><span class="end"><span class="switch on" data-co="2" data-co-side="right"></span></span></div>
+    <div class="sec t">server</div>
+    <div class="pf t" style="gap:10px">
+      <span class="text">Connected to media.example.com.</span>
+      <span class="b" style="align-self:flex-start" data-co="3">change server</span>
+    </div>
+    <div class="sec t">feedback</div>
+    <div class="pf t" style="gap:10px">
+      <span class="text">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span>
+      <span class="b" style="align-self:flex-start"><i data-i="bug" class="s16"></i>report a bug</span>
+    </div>
+    <div class="sec t">about</div>
+    <div class="li vrow" style="min-height:48px"><span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Version</span><span class="v">0.2.1</span></div>
+  </div>
+</figure>
+
+<!-- Figure 16.4 · settings on a TV -->
+<figure class="shot" id="settings-tv">
+  <div class="tv" data-view="settings">
+    <div class="page">
+      <div class="tset">
+        <h1 class="h1">settings</h1>
+        <section class="grp">
+          <h2 class="h2">account</h2>
+          <div class="trow who" data-co="1"><span class="av">au</span><span class="col" style="gap:2px; flex:1"><span class="n">Alex Urban</span><span class="v" style="color:var(--fg-dim); font-size:13px">alex@example.com</span></span><i data-i="chevron-right" class="s16" style="color:var(--fg-muted)"></i></div>
+        </section>
+        <section class="grp">
+          <h2 class="h2">language</h2>
+          <div class="trow"><span class="n">Audio</span><span class="v">Original</span><i data-i="chevron-down" class="s16" style="color:var(--fg-muted)"></i></div>
+          <span class="hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+          <div class="trow focus-row" data-co="2" data-co-side="right"><span class="n">Subtitles</span><span class="v">English</span><i data-i="chevron-down" class="s16" style="color:var(--fg-2)"></i></div>
+          <span class="hint" data-co="3">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
+        </section>
+        <section class="grp">
+          <h2 class="h2" style="align-self:flex-start" data-co="4" data-co-side="right">binge watching</h2>
+          <div class="trow"><span class="n">Auto-skip intros</span><span class="switch on"></span></div>
+          <div class="trow"><span class="n">Auto-play next episode</span><span class="switch on"></span></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.5 · report a bug, on a computer -->
+<figure class="shot" id="settings-report-computer">
+  <div class="computer" data-view="none">
+    <div class="set">
+      <h1 class="h1">settings</h1>
+      <section class="grp"><h2 class="h2">language</h2><div class="card-box" style="height:250px"></div></section>
+      <section class="grp"><h2 class="h2">binge watching</h2><div class="card-box" style="height:220px"></div></section>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlgwrap">
+      <div class="dlg w480">
+        <p class="h2">report a bug</p>
+        <span class="xb"><i data-i="x" class="s16"></i></span>
+        <div class="fl" style="margin-top:4px" data-co="1">
+          <span class="lbl">What happened?</span>
+          <span class="field ta">What were you doing, what did you expect, what happened instead?</span>
+        </div>
+        <span class="chk" data-co="2"><span class="tick"></span>Attach a screenshot of the page</span>
+        <p data-co="3">The report goes to the people who run this server, with details of the app and the device.</p>
+        <div class="ft"><span class="b ghost">cancel</span><span class="b primary" data-co="4" data-co-side="right"><i data-i="send" class="s16"></i>send report</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.6 · the account, on a computer -->
+<figure class="shot" id="settings-account-computer">
+  <div class="computer" data-view="none">
+    <div class="set" style="width:900px">
+      <h1 class="h1">account</h1>
+      <div class="card-box idc">
+        <span class="av lg" data-co="1">au</span>
+        <div class="col" style="gap:3px; flex:1"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div>
+        <div class="row" style="gap:10px">
+          <span class="b" data-co="2" data-co-side="top"><i data-i="log-out" class="s16"></i>sign out</span>
+          <span class="b danger" data-co="3" data-co-side="right"><i data-i="trash-2" class="s16"></i>delete account</span>
+        </div>
+      </div>
+      <section class="grp">
+        <h2 class="h2">watch history</h2>
+        <div class="card-box">
+          <div class="hist" data-co="4"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk" data-co="5" data-co-side="right"><i data-i="check" class="s16"></i></span></div>
+          <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+          <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+          <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+          <div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+          <div class="hist"><span class="th mv"><span class="art a4"></span></span><span class="m"><span class="t1">Charge</span><span class="t2">2022</span></span><span class="d">28 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.7 · the account, on a phone -->
+<figure class="shot" id="settings-account-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="account">
+    <div class="pg" style="display:flex; flex-direction:column; gap:12px">
+      <div class="row" style="gap:16px"><span class="av" style="width:64px;height:64px;line-height:64px;font-size:22px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
+      <div class="row" style="gap:8px; margin-top:4px">
+        <span class="b" style="flex:1" data-co="1"><i data-i="users" class="s16"></i>switch account</span>
+        <span class="b" style="flex:1" data-co="2" data-co-side="right"><i data-i="log-out" class="s16"></i>sign out</span>
+      </div>
+      <span class="b danger wide" data-co="3"><i data-i="trash-2" class="s16"></i>delete account</span>
+    </div>
+    <div class="sec" style="padding-top:8px">watch history</div>
+    <div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+    <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+    <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+    <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+    <div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
+  </div>
+</figure>
+
+<!-- Figure 16.8 · the account, on a TV -->
+<figure class="shot" id="settings-account-tv">
+  <div class="tv" data-view="settings">
+    <div class="page">
+      <div class="tset">
+        <h1 class="h1">account</h1>
+        <div class="row" style="gap:16px"><span class="av" style="width:56px;height:56px;line-height:56px;font-size:20px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
+        <div class="row" style="gap:14px">
+          <span class="b focus" data-co="1"><i data-i="log-out" class="s16"></i>sign out</span>
+          <span class="b danger" data-co="2" data-co-side="right"><i data-i="trash-2" class="s16"></i>delete account</span>
+        </div>
+        <section class="grp" style="margin-top:6px">
+          <h2 class="h2">watch history</h2>
+          <div>
+            <div class="hist" data-co="3"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span></div>
+            <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span></div>
+            <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span></div>
+            <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.9 · sign out, on a phone -->
+<figure class="shot" id="settings-sign-out-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="account">
+    <div class="pg" style="display:flex; flex-direction:column; gap:12px">
+      <div class="row" style="gap:16px"><span class="av" style="width:64px;height:64px;line-height:64px;font-size:22px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
+      <div class="row" style="gap:8px; margin-top:4px">
+        <span class="b" style="flex:1"><i data-i="users" class="s16"></i>switch account</span>
+        <span class="b" style="flex:1"><i data-i="log-out" class="s16"></i>sign out</span>
+      </div>
+      <span class="b danger wide"><i data-i="trash-2" class="s16"></i>delete account</span>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlgwrap">
+      <div class="dlg">
+        <p class="h2">sign out</p>
+        <span class="xb"><i data-i="x" class="s16"></i></span>
+        <p data-co="1">Your 23 downloads, 12.4 GB, are deleted from this phone.</p>
+        <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="2" data-co-side="right">sign out</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.10 · remove account, on a TV -->
+<figure class="shot" id="settings-remove-account-tv">
+  <div class="tv full" data-rail="none">
+    <div class="page">
+      <div style="position:absolute; left:0; right:0; top:70px; display:flex; flex-direction:column; align-items:center; gap:14px">
+        <h1 class="h1" style="font-size:30px">who's watching?</h1>
+        <p class="text" style="color:var(--fg-muted)">Hold OK on an account to remove it from this TV.</p>
+        <div class="row" style="gap:28px; margin-top:44px">
+          <div class="col" style="align-items:center; gap:10px; width:132px"><span class="av" style="width:112px;height:112px;line-height:112px;font-size:38px">au</span><span class="text">Alex Urban</span></div>
+          <div class="col" style="align-items:center; gap:10px; width:132px"><span class="av c2" style="width:112px;height:112px;line-height:112px;font-size:38px">a</span><span class="text">Anna</span></div>
+          <div class="col" style="align-items:center; gap:10px; width:132px"><span class="av c3" style="width:112px;height:112px;line-height:112px;font-size:38px">sk</span><span class="text">Sam Keller</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlgwrap">
+      <div class="dlg">
+        <p class="h2">remove account</p>
+        <p>This removes Anna from this TV. Signing in again brings the account back.</p>
+        <div class="ft"><span class="b focus" data-co="1">cancel</span><span class="b danger" data-co="2" data-co-side="right">remove account</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.11 · change server, on a phone -->
+<figure class="shot" id="settings-change-server-phone">
+  <div class="phone" data-bar="none" data-tabs="none">
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column; gap:18px; padding:170px 24px 0">
+      <span class="logo" style="align-self:center; font-size:28px; gap:9px"><svg viewBox="0 0 14 18" style="width:20px;height:26px"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <h1 class="h1" style="text-align:center; margin-top:6px">change server</h1>
+      <div class="fl" style="margin-top:10px"><span class="lbl">Server address</span><span class="field filled" style="height:48px; font-size:16px">media.example.org</span><span class="hint">The app adds https:// when you leave it out.</span></div>
+      <span class="b primary wide">connect</span>
+      <span class="b ghost wide" style="margin-top:-10px">cancel</span>
+    </div>
+    <div class="scrim-all" style="top:0; bottom:0"></div>
+    <div class="dlgwrap" style="top:0; bottom:0">
+      <div class="dlg">
+        <p class="h2">change server</p>
+        <span class="xb"><i data-i="x" class="s16"></i></span>
+        <p data-co="1">All 3 accounts on this phone are signed out, and their 31 downloads, 15 GB, are deleted.</p>
+        <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="2" data-co-side="right">change server</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.12 · delete account, on a computer -->
+<figure class="shot" id="settings-delete-account-computer">
+  <div class="computer" data-view="none">
+    <div class="set" style="width:900px">
+      <h1 class="h1">account</h1>
+      <div class="card-box idc">
+        <span class="av lg">au</span>
+        <div class="col" style="gap:3px; flex:1"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div>
+        <div class="row" style="gap:10px"><span class="b"><i data-i="log-out" class="s16"></i>sign out</span><span class="b danger"><i data-i="trash-2" class="s16"></i>delete account</span></div>
+      </div>
+      <section class="grp"><h2 class="h2">watch history</h2><div class="card-box" style="height:300px"></div></section>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlgwrap">
+      <div class="dlg w480">
+        <p class="h2">delete account</p>
+        <span class="xb"><i data-i="x" class="s16"></i></span>
+        <p data-co="1">This deletes the account alex@example.com on media.example.com, and with it:</p>
+        <ul class="goes" data-co="2">
+          <li>your watch progress</li>
+          <li>your lists</li>
+          <li>your likes</li>
+          <li>your watch history</li>
+          <li>your sign-in: you can't sign in with this account again</li>
+        </ul>
+        <p>This can't be undone.</p>
+        <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="3" data-co-side="right">delete account</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.13 · the subtitle languages couldn't load, on a phone -->
+<figure class="shot" id="settings-languages-couldnt-load-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="settings">
+    <div class="sec">language</div>
+    <div class="pf">
+      <span class="lbl">Audio</span>
+      <span class="field filled"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
+      <span class="hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+    </div>
+    <div class="pf">
+      <span class="lbl">Subtitles</span>
+      <div class="cl" data-co="1">
+        <span class="h3x">couldn't load the subtitle languages</span>
+        <span class="text">Can't reach the server.</span>
+        <span class="b sm" style="align-self:flex-start; margin-top:4px" data-co="2"><i data-i="refresh-cw" class="s14"></i>try again</span>
+      </div>
+      <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
+    </div>
+    <div class="sec">binge watching</div>
+    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on"></span></span></div>
+    <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
+  </div>
+</figure>
+
+<!-- Figure 16.14 · the server doesn't delete accounts, on a TV -->
+<figure class="shot" id="settings-delete-unavailable-tv">
+  <div class="tv" data-view="settings">
+    <div class="page">
+      <div class="tset">
+        <h1 class="h1">account</h1>
+        <div class="row" style="gap:16px"><span class="av" style="width:56px;height:56px;line-height:56px;font-size:20px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
+        <div class="row" style="gap:14px"><span class="b"><i data-i="log-out" class="s16"></i>sign out</span><span class="b danger"><i data-i="trash-2" class="s16"></i>delete account</span></div>
+      </div>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlgwrap">
+      <div class="dlg">
+        <p class="h2">delete account</p>
+        <div class="banner error" data-co="1"><i data-i="circle-alert" class="s16"></i><span>This server doesn't delete accounts from the apps. Ask the people who run it.</span></div>
+        <div class="ft"><span class="b focus" data-co="2" data-co-side="right">close</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 16.15 · the report was sent, on a computer -->
+<figure class="shot" id="settings-report-sent-computer">
+  <div class="computer" data-view="none">
+    <div class="set">
+      <h1 class="h1">settings</h1>
+      <section class="grp"><h2 class="h2">language</h2><div class="card-box" style="height:250px"></div></section>
+      <section class="grp"><h2 class="h2">binge watching</h2><div class="card-box" style="height:220px"></div></section>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlgwrap">
+      <div class="dlg w480">
+        <p class="h2">report a bug</p>
+        <span class="xb"><i data-i="x" class="s16"></i></span>
+        <p style="color:var(--fg); font-weight:500">Thanks for the report.</p>
+        <p data-co="1">It went to the people who run this server as #482.</p>
+        <div class="ft"><span class="b" data-co="2" data-co-side="right">close</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

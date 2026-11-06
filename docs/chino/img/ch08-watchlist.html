@@ -1,0 +1,272 @@
+<!doctype html>
+<!--
+  Chapter 8, watchlist and lists: the figures of docs/chino/watchlist.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 8 watchlist and lists</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* artwork for the films home doesn't draw (as in chapter 5) */
+  .x2 { background: linear-gradient(160deg, #557232 0%, #2e3d1a 58%, #151c0c 100%); }
+  .x3 { background: linear-gradient(160deg, #723030 0%, #3e1a1a 58%, #1c0c0c 100%); }
+  .x5 { background: linear-gradient(160deg, #7a4a5f 0%, #432836 58%, #1f1219 100%); }
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  /* a list's row: its name and count, its newest titles, and see all at its end */
+  .shelf { margin-bottom: 28px; }
+  .shelf .h2 { margin-bottom: 12px; }
+  .h2 .n { color: var(--fg-dim); font-weight: 500; }
+  .card .mk.wl { left: 6px; right: auto; background: var(--cloud-blue); }
+  .seeall { flex: none; width: 150px; height: 225px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            background: var(--surface); border: 1px solid var(--border); color: var(--cloud-blue); font: 600 14px/1 var(--ff-mono); }
+  /* a list's own view */
+  .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .grid .card.poster { width: auto; } .grid .card.poster .img { height: 233px; }
+  .titlerow { display: flex; align-items: center; gap: 16px; }
+  .listcount { margin: -14px 0 24px 64px; }
+  /* the dialogs, over the dimmed page */
+  .dlg.on { position: absolute; left: 50%; top: 230px; transform: translateX(-50%); z-index: 30; width: 440px; }
+  .field.err { border-color: var(--signal-red); box-shadow: inset 0 0 0 1px var(--signal-red); color: var(--fg); }
+  .errtext { margin: -4px 0 0; font: 400 12px/1.4 var(--ff-ui); color: var(--signal-red); }
+  /* a phone: two cards and a part of the next */
+  .phone .h1 { font-size: 22px; }
+  .phone .head { margin-bottom: 16px; }
+  .phone .shelf { margin-bottom: 24px; }
+  .phone .shelf .h2 { margin-bottom: 10px; }
+  .phone .card.poster { width: 128px; } .phone .card.poster .img { height: 192px; }
+  .phone .card .tt { font-size: 13px; }
+  /* a TV: the page keeps to the safe area; rows run on to the screen's edge */
+  .tv .inner { width: 768px; padding-top: 8px; }
+  .tv .head { margin-bottom: 16px; }
+  .tv .shelf { margin-bottom: 20px; }
+  .tv .shelf .h2 { margin-bottom: 10px; }
+  .tv .seeall { width: 120px; height: 180px; font-size: 13px; }
+  .tv .card .img.focus + .tt { color: var(--fg); }
+  .tv .b.focus { background: var(--surface-focus); }
+</style>
+</head>
+<body>
+
+<!-- Figure 8.1 · the watchlist on a computer -->
+<figure class="shot" id="watchlist-computer">
+  <div class="computer" data-view="watchlist">
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">watchlist</h1>
+        <span class="b" data-co="1" data-co-side="right"><i data-i="plus" class="s16"></i>create list</span>
+      </div>
+      <section class="shelf">
+        <h2 class="h2" data-co="2">Watchlist<span class="n"> · 5</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img" data-co="3"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div></div>
+          <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div></div>
+          <div class="seeall" data-co="4" data-co-side="right"><i data-i="chevron-right" class="s32"></i>see all</div>
+        </div>
+      </section>
+      <section class="shelf">
+        <h2 class="h2" data-co="5">Sunday nights<span class="n"> · 4</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+          <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
+          <div class="seeall"><i data-i="chevron-right" class="s32"></i>see all</div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8.2 · the watchlist on a phone -->
+<figure class="shot" id="watchlist-phone">
+  <div class="phone" data-view="watchlist">
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">watchlist</h1>
+        <span class="b" data-co="1" data-co-side="right"><i data-i="plus" class="s16"></i>create list</span>
+      </div>
+      <section class="shelf">
+        <h2 class="h2" data-co="2">Watchlist<span class="n"> · 5</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div></div>
+          <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
+          <div class="card poster"><div class="img" data-co="3" data-co-side="right"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
+        </div>
+      </section>
+      <section class="shelf">
+        <h2 class="h2">Sunday nights<span class="n"> · 4</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8.3 · the watchlist on a TV -->
+<figure class="shot" id="watchlist-tv">
+  <div class="tv" data-view="watchlist">
+    <div class="page"><div class="inner">
+      <div class="head">
+        <h1 class="h1">watchlist</h1>
+        <span class="b" data-co="3" data-co-side="right"><i data-i="plus" class="s16"></i>create list</span>
+      </div>
+      <section class="shelf">
+        <h2 class="h2">Watchlist<span class="n"> · 5</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img focus" data-co="1"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div></div>
+          <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div></div>
+          <div class="seeall" data-co="2" data-co-side="right"><i data-i="chevron-right" class="s32"></i>see all</div>
+        </div>
+      </section>
+      <section class="shelf">
+        <h2 class="h2">Sunday nights<span class="n"> · 4</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+          <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
+          <div class="seeall"><i data-i="chevron-right" class="s32"></i>see all</div>
+        </div>
+      </section>
+    </div></div>
+  </div>
+</figure>
+
+<!-- Figure 8.4 · a list on a computer -->
+<figure class="shot" id="watchlist-list-computer">
+  <div class="computer" data-view="watchlist">
+    <div class="pg">
+      <div class="head">
+        <div class="titlerow"><span class="b icon" data-co="1"><i data-i="arrow-left"></i></span><h1 class="h1">Sunday nights</h1></div>
+        <div class="row" data-co="2" data-co-side="right"><span class="b"><i data-i="pencil" class="s16"></i>rename list</span><span class="b danger"><i data-i="trash-2" class="s16"></i>delete list</span></div>
+      </div>
+      <p class="meta listcount">4 titles</p>
+      <div class="grid">
+        <div class="card poster"><div class="img" data-co="3"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8.5 · creating a list, with a name already taken, on a computer -->
+<figure class="shot" id="watchlist-create-computer">
+  <div class="computer" data-view="watchlist">
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">watchlist</h1>
+        <span class="b"><i data-i="plus" class="s16"></i>create list</span>
+      </div>
+      <section class="shelf">
+        <h2 class="h2">Watchlist<span class="n"> · 5</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div></div>
+          <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div></div>
+          <div class="seeall"><i data-i="chevron-right" class="s32"></i>see all</div>
+        </div>
+      </section>
+      <section class="shelf">
+        <h2 class="h2">Sunday nights<span class="n"> · 4</span></h2>
+        <div class="cards">
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+          <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
+          <div class="seeall"><i data-i="chevron-right" class="s32"></i>see all</div>
+        </div>
+      </section>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlg on">
+      <h2 class="h2">create list</h2>
+      <span class="label">Name</span>
+      <div class="field filled err" data-co="1">sunday nights<span class="caret" style="margin-left:1px"></span></div>
+      <p class="errtext">You already have a list called Sunday nights.</p>
+      <div class="ft"><span class="b ghost">cancel</span><span class="b primary" data-co="2" data-co-side="right">create list</span></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8.6 · deleting a list, on a computer -->
+<figure class="shot" id="watchlist-delete-computer">
+  <div class="computer" data-view="watchlist">
+    <div class="pg">
+      <div class="head">
+        <div class="titlerow"><span class="b icon"><i data-i="arrow-left"></i></span><h1 class="h1">Sunday nights</h1></div>
+        <div class="row"><span class="b"><i data-i="pencil" class="s16"></i>rename list</span><span class="b danger"><i data-i="trash-2" class="s16"></i>delete list</span></div>
+      </div>
+      <p class="meta listcount">4 titles</p>
+      <div class="grid">
+        <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
+      </div>
+    </div>
+    <div class="scrim-all"></div>
+    <div class="dlg on">
+      <h2 class="h2">delete list</h2>
+      <p class="text" data-co="1">This deletes Sunday nights and can't be undone. Its 4&nbsp;titles stay in the library and in your other lists.</p>
+      <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="2" data-co-side="right">delete list</span></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8.7 · an empty watchlist, on a phone -->
+<figure class="shot" id="watchlist-empty-phone">
+  <div class="phone" data-view="watchlist">
+    <div class="pg">
+      <div class="head">
+        <h1 class="h1">watchlist</h1>
+        <span class="b"><i data-i="plus" class="s16"></i>create list</span>
+      </div>
+      <div class="empty" style="margin-top:150px">
+        <i data-i="bookmark" class="s48"></i>
+        <h2 class="h2" data-co="1">nothing in your Watchlist yet</h2>
+        <p class="text"><span data-co="2">Titles you add with the bookmark on a title's page show up here.</span></p>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8.8 · the lists couldn't load, on a TV -->
+<figure class="shot" id="watchlist-couldnt-load-tv">
+  <div class="tv" data-view="watchlist">
+    <div class="page"><div class="inner">
+      <div class="head"><h1 class="h1">watchlist</h1></div>
+      <div class="empty" style="margin-top:110px">
+        <i data-i="cloud-off" class="s48"></i>
+        <h2 class="h2" data-co="1">couldn't load your watchlists</h2>
+        <p class="text">Can't reach the server.</p>
+        <span class="b focus" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
+      </div>
+    </div></div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

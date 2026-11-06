@@ -1,0 +1,522 @@
+<!doctype html>
+<!--
+  Chapter 6, the title page: the figures of docs/chino/title-actions.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
+  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+  The title row's own figures (title-row, title-row-series, add-to-list,
+  cards-and-episodes) are drawn in mockups.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 6 the title page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* the title row's parts (section 6.4): add to list in two parts, the on looks */
+  .split { display: inline-flex; flex: none; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
+  .split > span { display: inline-flex; align-items: center; justify-content: center; }
+  .split .m { width: 46px; }
+  .split .c { width: 40px; border-left: 1px solid var(--border-2); }
+  .split.on { background: var(--cloud-blue); border-color: var(--cloud-blue); color: var(--bg); }
+  .split.on .c { border-left-color: rgba(11,15,25,.4); }
+  .tv .split { height: 40px; } .tv .split .m { width: 38px; } .tv .split .c { width: 34px; }
+  .b.green { background: var(--signal-green); border-color: var(--signal-green); color: var(--bg); }
+  .b.st2 { color: var(--fg-2); }
+  .b .bar { width: 100%; height: 3px; }
+  .kind { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; margin-left: 8px; border: 1px solid var(--border-2);
+          background: var(--surface-2); color: var(--fg-muted); font: 500 11px/1 var(--ff-mono); vertical-align: 1px; }
+  .meta svg.i { vertical-align: -2px; color: var(--fg-muted); }
+
+  /* the page's still, fading into the page's colour before any words */
+  .bd { position: absolute; left: 0; right: 0; overflow: hidden; }
+  .bd .fade { position: absolute; inset: 0; }
+  .pos { position: relative; flex: none; overflow: hidden; }
+
+  /* labelled facts: the label in the body face, as a field's label */
+  .facts { display: flex; gap: 48px; }
+  .facts .k { font: 500 13px/1.3 var(--ff-ui); color: var(--fg-muted); }
+  .facts .v { margin-top: 3px; font: 400 14px/1.45 var(--ff-ui); color: var(--fg); }
+  .cast { display: flex; gap: 36px; }
+  .cast .n { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; }
+  .cast .ch { margin-top: 2px; font: 400 13px/1.3 var(--ff-ui); color: var(--fg-dim); white-space: nowrap; }
+
+  /* a movie's page on a computer */
+  .computer .bd { top: 56px; height: 320px; }
+  .computer .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 24%, rgba(11,15,25,.6) 50%, rgba(11,15,25,0) 64%); }
+  .computer .head { position: absolute; left: 48px; right: 48px; top: 200px; display: flex; gap: 32px; }
+  .computer .head .pos { width: 200px; height: 300px; }
+  .computer .info { padding-top: 100px; display: flex; flex-direction: column; align-items: flex-start; }
+  .computer .info .meta { margin-top: 10px; }
+  .computer .info .acts { margin-top: 18px; }
+  .computer .info .desc { margin-top: 18px; max-width: 720px; }
+  .computer .ppl { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .computer .ppl .facts { margin-top: 10px; }
+  .computer .more { position: absolute; left: 48px; top: 690px; }
+  .computer .more .h2 { margin-bottom: 12px; }
+  .fit { display: flex; flex-direction: column; align-items: flex-start; }
+
+  /* a movie's page on a phone */
+  .phone .bd { top: 0; height: 200px; }
+  .phone .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,.6) 30%, rgba(11,15,25,0) 60%); }
+  .phone .hd { position: absolute; left: 16px; right: 16px; top: 140px; display: flex; gap: 14px; align-items: flex-start; }
+  .phone .hd .pos { width: 96px; height: 144px; }
+  .phone .hd .nm { padding-top: 50px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .phone .t { font-size: 22px; }
+  .phone .meta { font-size: 12px; }
+  .phone .body { position: absolute; left: 16px; right: 16px; top: 306px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+  .phone .acts { flex-wrap: wrap; row-gap: 8px; }
+  .phone .acts .b { padding: 0 14px; }
+  .phone .acts .b.icon { padding: 0; }
+  .phone .cast2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; width: 100%; }
+  .phone .cast2 .n { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); }
+  .phone .cast2 .ch { margin-top: 2px; font: 400 13px/1.3 var(--ff-ui); color: var(--fg-dim); }
+
+  /* a movie's page on a TV, as it opens */
+  .tv .bd { top: 0; height: 250px; }
+  .tv .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 20%, rgba(11,15,25,.55) 50%, rgba(11,15,25,0) 72%),
+                              linear-gradient(90deg, rgba(11,15,25,.85) 0%, rgba(11,15,25,0) 22%); }
+  .tv .head { position: absolute; left: 0; right: 48px; top: 103px; display: flex; gap: 24px; }
+  .tv .head .pos { width: 120px; height: 180px; }
+  .tv .info { padding-top: 92px; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+  .tv .info .meta { margin-top: 8px; }
+  .tv .info .acts { margin-top: 14px; gap: 12px; }
+  .tv .info .desc { margin-top: 14px; max-width: 600px; }
+  .tv .tvp { position: absolute; left: 0; top: 444px; }
+  .tv .tvp .h2 { display: inline-block; margin-bottom: 10px; }
+  .pcs { display: flex; gap: 12px; }
+  .pc { width: 112px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .pc .ph { width: 72px; height: 72px; flex: none; }
+  .pc .ini { width: 72px; height: 72px; flex: none; background: var(--surface-2); color: var(--fg-muted); font: 600 22px/72px var(--ff-mono); text-align: center; }
+
+  /* a show's episodes: one box per season, its header on the surface, its rows on the page */
+  .season { border: 1px solid var(--border-2); }
+  .season .sh { display: flex; align-items: center; gap: 14px; background: var(--surface); }
+  .season .sh .h2 { font-size: 15px; }
+  .season .sh .cnt { font: 500 13px/1 var(--ff-mono); color: var(--fg-dim); }
+  .season .sh .chev { margin-left: auto; color: var(--fg-muted); }
+  .ep { border-top: 1px solid var(--border); }
+  .ep .top { display: flex; gap: 16px; }
+  .ep .still { position: relative; flex: none; overflow: hidden; }
+  .ep .still .bar { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(42,49,66,.9); }
+  .ep .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .ep .l1 { display: flex; align-items: baseline; gap: 12px; }
+  .ep .nm { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); }
+  .ep.seen .nm { color: var(--fg-muted); }
+  .ep .len { margin-left: auto; flex: none; font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); }
+  .ep .left { font: 500 12px/1.3 var(--ff-mono); color: var(--cloud-blue); }
+  .ep .ds { margin: 0; font: 400 13px/1.45 var(--ff-ui); color: var(--fg-2); }
+  .ep .acts { margin-top: 12px; width: fit-content; }
+
+  .computer .eps { position: absolute; left: 48px; right: 48px; top: 88px; }
+  .computer .eps > .h2 { margin-bottom: 14px; }
+  .computer .season .sh { height: 56px; padding: 0 16px 0 20px; }
+  .computer .ep { padding: 16px 20px; }
+  .computer .ep .still { width: 160px; height: 90px; }
+  .computer .ep .acts { margin-top: 10px; }
+
+  .phone .eps { position: absolute; left: 0; right: 0; top: 16px; }
+  .phone .eps > .h2 { margin: 0 16px 12px; }
+  .phone .season { border-left: 0; border-right: 0; }
+  .phone .season .sh { height: 52px; padding: 0 14px 0 16px; }
+  .phone .season .offer { padding: 0 16px 12px; background: var(--surface); }
+  .phone .season .offer .b { padding: 0 12px; }
+  .phone .ep { padding: 12px 16px; }
+  .phone .ep .top { gap: 12px; }
+  .phone .ep .still { width: 128px; height: 72px; }
+  .phone .ep .l1 { gap: 8px; }
+  .phone .ep .code { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-muted); }
+  .phone .ep .nm { font-size: 14px; }
+  .phone .ep .ds { font-size: 12px; line-height: 1.4; }
+  .phone .ep .acts { margin-top: 10px; flex-wrap: wrap; row-gap: 8px; }
+  .phone .ep .acts .b { padding: 0 14px; }
+  .phone .ep .acts .b.icon { padding: 0; }
+  .phone .ep .dl { flex-direction: column; align-items: stretch; justify-content: center; gap: 6px; width: 222px; }
+
+  .tv .eps { position: absolute; left: 0; top: 0; width: 764px; }
+  .tv .eps > .h2 { margin: 4px 0 10px; }
+  .tv .season { border-bottom: 0; }
+  .tv .season .sh { height: 44px; padding: 0 14px 0 16px; }
+  .tv .ep { display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 16px; }
+  .tv .ep .top { flex: 1; min-width: 0; }
+  .tv .ep .still { width: 128px; height: 72px; }
+  .tv .ep .nm { font-size: 14px; }
+  .tv .ep .ds { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tv .ep .side { display: flex; gap: 12px; flex: none; }
+
+  /* loading: grey blocks in the shape of what is coming */
+  .skrow { display: flex; gap: 12px; }
+</style>
+</head>
+<body>
+
+<!-- Figure 6.1 · a movie's page on a computer -->
+<figure class="shot" id="title-computer">
+  <div class="computer" data-view="none">
+    <div class="bd"><div class="art steel"></div><div class="fade"></div><i data-co="1" style="position:absolute;left:0;top:48px;width:40px;height:20px"></i></div>
+    <div class="head">
+      <div class="pos" data-co="2"><div class="art steel"></div></div>
+      <div class="info">
+        <div class="fit" data-co="3" data-co-side="right">
+          <h1 class="t">Tears of Steel</h1>
+          <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+        </div>
+        <div class="row acts" data-co="4" data-co-side="right">
+          <span class="b primary"><i data-i="play" class="fill"></i>play</span>
+          <span class="b"><i data-i="clapperboard"></i>trailer</span>
+          <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+          <span class="b icon"><i data-i="check"></i></span>
+          <span class="b icon"><i data-i="heart"></i></span>
+        </div>
+        <p class="desc" data-co="5" data-co-side="right">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        <div class="ppl">
+          <h2 class="h2" data-co="6" data-co-side="right">starring</h2>
+          <div class="cast">
+            <div><div class="n">Derek de Lint</div><div class="ch">Old Thom</div></div>
+            <div><div class="n">Sergio Hasselbaink</div><div class="ch">Barley</div></div>
+            <div><div class="n">Rogier Schippers</div><div class="ch">Captain</div></div>
+            <div><div class="n">Vanja Rukavina</div><div class="ch">Thom</div></div>
+            <div><div class="n">Denise Rebergen</div><div class="ch">Celia</div></div>
+          </div>
+          <div class="facts">
+            <div><div class="k">Director</div><div class="v">Ian Hubert</div></div>
+            <div><div class="k">Writer</div><div class="v">Ian Hubert</div></div>
+            <div><div class="k">Subtitles</div><div class="v">Chinese (Simplified), English, German</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="more">
+      <h2 class="h2" data-co="7">more like this</h2>
+      <div class="cards">
+        <div class="card poster"><div class="img"><div class="art a4"></div></div></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div></div></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div></div></div>
+        <div class="card poster"><div class="img"><div class="art a6"></div></div></div>
+        <div class="card poster"><div class="img"><div class="art a1"></div></div></div>
+        <div class="card poster"><div class="img"><div class="art a3"></div></div></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div></div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 6.2 · a movie's page on a phone -->
+<figure class="shot" id="title-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="Tears of Steel" data-co-parts="back:1">
+    <div class="bd"><div class="art steel"></div><div class="fade"></div></div>
+    <div class="hd">
+      <div class="pos" data-co="2"><div class="art steel"></div></div>
+      <div class="nm">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min</p>
+        <p class="meta">science fiction</p>
+        <p class="meta"><i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+      </div>
+    </div>
+    <div class="body">
+      <div class="row acts" data-co="3">
+        <span class="b primary"><i data-i="play" class="fill"></i>play</span>
+        <span class="b"><i data-i="clapperboard"></i>trailer</span>
+        <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+        <span class="b icon"><i data-i="check"></i></span>
+        <span class="b icon"><i data-i="heart"></i></span>
+        <span class="b" data-co="4" data-co-side="right"><i data-i="download"></i>download · 152 MB</span>
+      </div>
+      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+      <h2 class="h2" data-co="5">starring</h2>
+      <div class="cast2" style="margin-top:-4px">
+        <div><div class="n">Derek de Lint</div><div class="ch">Old Thom</div></div>
+        <div><div class="n">Sergio Hasselbaink</div><div class="ch">Barley</div></div>
+        <div><div class="n">Rogier Schippers</div><div class="ch">Captain</div></div>
+        <div><div class="n">Vanja Rukavina</div><div class="ch">Thom</div></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.3 · a movie's page on a TV, as it opens -->
+<figure class="shot" id="title-tv">
+  <div class="tv" data-view="none">
+    <div class="bd"><div class="art steel"></div><div class="fade"></div></div>
+    <div class="page">
+      <div class="head">
+        <div class="pos" data-co="1" data-co-side="top"><div class="art steel"></div></div>
+        <div class="info">
+          <h1 class="t">Tears of Steel</h1>
+          <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+          <div class="row acts">
+            <span class="b primary focus" data-co="2"><i data-i="play" class="fill s16"></i>play</span>
+            <span class="b"><i data-i="clapperboard" class="s16"></i>trailer</span>
+            <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
+            <span class="b icon"><i data-i="check" class="s16"></i></span>
+            <span class="b icon"><i data-i="heart" class="s16"></i></span>
+          </div>
+          <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        </div>
+      </div>
+      <section class="tvp">
+        <h2 class="h2" data-co="3" data-co-side="right">starring</h2>
+        <div class="pcs">
+          <div class="pc"><div class="ph face"></div></div>
+          <div class="pc"><div class="ph face"></div></div>
+          <div class="pc"><div class="ph face"></div></div>
+          <div class="pc"><div class="ph face"></div></div>
+          <div class="pc"><div class="ph face"></div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.4 · a show's page on a computer, scrolled to its episodes -->
+<figure class="shot" id="title-show-computer">
+  <div class="computer" data-view="none">
+    <section class="eps">
+      <h2 class="h2">episodes</h2>
+      <div class="season">
+        <div class="sh" data-co="1"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="ep seen">
+          <div class="top">
+            <div class="still"><div class="art a1"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E01 · Earthfall</span><span class="len">35 min</span></div>
+              <p class="ds">Something falls from the sky over Montana, and two federal agents are sent to find out what it is.</p>
+              <div class="row acts">
+                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+                <span class="b icon green" data-co="2" data-co-side="right"><i data-i="check"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ep seen">
+          <div class="top">
+            <div class="still"><div class="art a3"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E02 · The Man From Mars</span><span class="len">38 min</span></div>
+              <p class="ds">The man found in the wreck says he was born on Mars.</p>
+              <div class="row acts">
+                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+                <span class="b icon green"><i data-i="check"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ep">
+          <div class="top">
+            <div class="still" data-co="3"><div class="art a5"></div><div class="bar"><i style="width:42%"></i></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E03 · Alone in the Night</span><span class="len">41 min</span></div>
+              <span class="left">24 min left</span>
+              <p class="ds">The crew loses contact with the ground for the first time.</p>
+              <div class="row acts" data-co="4" data-co-side="right">
+                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+                <span class="b icon"><i data-i="check"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ep">
+          <div class="top">
+            <div class="still"><div class="art a2"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E04 · Triangular Diplomacy</span><span class="len">36 min</span></div>
+              <p class="ds">Three governments want a say in what happens next.</p>
+              <div class="row acts">
+                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+                <span class="b icon"><i data-i="check"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ep">
+          <div class="top">
+            <div class="still"><div class="art a4"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E05 · Sea Change</span><span class="len">34 min</span></div>
+              <p class="ds">A visitor from Washington takes over the case.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 6.5 · a show's page on a phone, scrolled to its episodes -->
+<figure class="shot" id="title-show-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="Pioneer One">
+    <section class="eps">
+      <h2 class="h2">episodes</h2>
+      <div class="season">
+        <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="offer"><span class="b" data-co="1"><i data-i="download"></i>download 3 more episodes · 940 MB</span></div>
+        <div class="ep seen">
+          <div class="top" data-co="2">
+            <div class="still"><div class="art a1"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="code">S01E01</span><span class="len">35 min</span></div>
+              <span class="nm">Earthfall</span>
+              <p class="ds">Something falls from the sky over Montana.</p>
+            </div>
+          </div>
+          <div class="row acts" data-co="3">
+            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+            <span class="b icon green"><i data-i="check"></i></span>
+            <span class="b st2"><i data-i="check" style="color:var(--signal-green)"></i>downloaded · 281 MB</span>
+            <span class="b icon"><i data-i="trash"></i></span>
+          </div>
+        </div>
+        <div class="ep seen">
+          <div class="top">
+            <div class="still"><div class="art a3"></div></div>
+            <div class="txt">
+              <div class="l1"><span class="code">S01E02</span><span class="len">38 min</span></div>
+              <span class="nm">The Man From Mars</span>
+              <p class="ds">The man found in the wreck says he was born on Mars.</p>
+            </div>
+          </div>
+          <div class="row acts">
+            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+            <span class="b icon green"><i data-i="check"></i></span>
+            <span class="b st2 dl" data-co="4"><span>downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></span>
+            <span class="b icon"><i data-i="x"></i></span>
+          </div>
+        </div>
+        <div class="ep">
+          <div class="top">
+            <div class="still"><div class="art a5"></div><div class="bar"><i style="width:42%"></i></div></div>
+            <div class="txt">
+              <div class="l1"><span class="code">S01E03</span><span class="len">41 min</span></div>
+              <span class="nm">Alone in the Night</span>
+              <span class="left">24 min left</span>
+            </div>
+          </div>
+          <div class="row acts">
+            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
+            <span class="b icon"><i data-i="check"></i></span>
+            <span class="b st2">queued · 271 MB</span>
+            <span class="b icon"><i data-i="x"></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- Figure 6.6 · a show's page on a TV, the focus on an episode -->
+<figure class="shot" id="title-show-tv">
+  <div class="tv" data-view="none">
+    <div class="page">
+      <section class="eps">
+        <h2 class="h2">episodes</h2>
+        <div class="season">
+          <div class="sh" data-co="1" data-co-side="right"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+          <div class="ep seen">
+            <div class="top">
+              <div class="still"><div class="art a1"></div></div>
+              <div class="txt">
+                <div class="l1"><span class="nm">S01E01 · Earthfall</span><span class="len">35 min</span></div>
+                <p class="ds">Something falls from the sky over Montana, and two federal agents are sent to find out what it is.</p>
+              </div>
+            </div>
+            <div class="side">
+              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
+              <span class="b icon green"><i data-i="check" class="s16"></i></span>
+            </div>
+          </div>
+          <div class="ep seen">
+            <div class="top">
+              <div class="still"><div class="art a3"></div></div>
+              <div class="txt">
+                <div class="l1"><span class="nm">S01E02 · The Man From Mars</span><span class="len">38 min</span></div>
+                <p class="ds">The man found in the wreck says he was born on Mars.</p>
+              </div>
+            </div>
+            <div class="side">
+              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
+              <span class="b icon green"><i data-i="check" class="s16"></i></span>
+            </div>
+          </div>
+          <div class="ep">
+            <div class="top focus-row" data-co="2" style="padding:6px 8px;margin:-6px -8px">
+              <div class="still"><div class="art a5"></div><div class="bar"><i style="width:42%"></i></div></div>
+              <div class="txt">
+                <div class="l1"><span class="nm">S01E03 · Alone in the Night</span><span class="len">41 min</span></div>
+                <span class="left">24 min left</span>
+                <p class="ds">The crew loses contact with the ground for the first time.</p>
+              </div>
+            </div>
+            <div class="side" data-co="3" data-co-side="right">
+              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
+              <span class="b icon"><i data-i="check" class="s16"></i></span>
+            </div>
+          </div>
+          <div class="ep">
+            <div class="top">
+              <div class="still"><div class="art a2"></div></div>
+              <div class="txt">
+                <div class="l1"><span class="nm">S01E04 · Triangular Diplomacy</span><span class="len">36 min</span></div>
+                <p class="ds">Three governments want a say in what happens next.</p>
+              </div>
+            </div>
+            <div class="side">
+              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
+              <span class="b icon"><i data-i="check" class="s16"></i></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.11 · the title page loading, on a TV -->
+<figure class="shot" id="title-loading-tv">
+  <div class="tv" data-view="none">
+    <div class="sk" style="position:absolute;left:0;right:0;top:0;height:96px"></div>
+    <div class="page">
+      <div class="sk" style="position:absolute;left:0;top:84px;width:120px;height:180px"></div>
+      <div style="position:absolute;left:144px;top:168px;display:flex;flex-direction:column;gap:10px">
+        <div class="sk" style="width:300px;height:32px"></div>
+        <div class="sk" style="width:220px;height:14px"></div>
+        <div class="skrow" style="margin-top:8px"><div class="sk" style="width:84px;height:40px"></div><div class="sk" style="width:110px;height:40px"></div><div class="sk" style="width:74px;height:40px"></div><div class="sk" style="width:40px;height:40px"></div><div class="sk" style="width:40px;height:40px"></div></div>
+        <div class="sk" style="width:560px;height:14px;margin-top:10px"></div>
+        <div class="sk" style="width:420px;height:14px"></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.12 · the title page when it couldn't load, on a phone -->
+<figure class="shot" id="title-couldnt-load-phone">
+  <div class="phone" data-view="none" data-bar="back" data-title="">
+    <div class="empty" style="margin-top:220px;padding:0 24px">
+      <i data-i="cloud-off" class="s48"></i>
+      <h2 class="h2" data-co="1">couldn't load this title</h2>
+      <p class="text">Can't reach the server.</p>
+      <span class="b" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
+      <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.13 · a title that was removed, on a computer -->
+<figure class="shot" id="title-removed-computer">
+  <div class="computer" data-view="none">
+    <div class="empty" style="margin-top:230px">
+      <i data-i="circle-slash" class="s48"></i>
+      <h2 class="h2" data-co="1">this title isn't in the library anymore</h2>
+      <span class="b" style="margin-top:6px" data-co="2"><i data-i="arrow-left" class="s16"></i>back</span>
+    </div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

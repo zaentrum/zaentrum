@@ -1,0 +1,252 @@
+<!doctype html>
+<!--
+  Chapter 11, the player: the figures of docs/chino/playback.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame is frame.js (the player has no top bar,
+  no tabs and no rail), the icons are icons.js. Pink numbers mark the parts
+  the chapter's text explains. The player's menus are drawn in mockups.html
+  (player-menus).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 11 the player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* a phone held sideways */
+  .phone.land { width: 780px; height: 360px; }
+
+  /* the player: the picture fitted in the middle, the controls over it */
+  .pl { position: absolute; inset: 0; background: #000; overflow: hidden; }
+  .pl .pic { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); aspect-ratio: 16 / 9; overflow: hidden; }
+  .phone.land .pl .pic { left: 50%; right: auto; top: 0; bottom: 0; height: 100%; transform: translateX(-50%); }
+  .tv .pl .pic { inset: 0; transform: none; aspect-ratio: auto; }
+  .pl .credits .art::after { display: none; }
+  .pl .credits { filter: brightness(.55); }
+
+  .top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 8px; padding: 16px 16px 40px;
+         background: linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%); }
+  .top .name { flex: 1; min-width: 0; margin-left: 8px; font: 500 16px/1.2 var(--ff-mono); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bottom { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 12px; padding: 40px 16px 16px;
+            background: linear-gradient(0deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.6) 60%, rgba(0,0,0,0) 100%); }
+  .seek { display: flex; align-items: center; gap: 12px; font: 500 13px/1 var(--ff-mono); color: var(--fg-2); }
+  .seek .t1 { width: 52px; text-align: right; } .seek .t2 { width: 52px; }
+  .track { position: relative; flex: 1; height: 6px; background: rgba(255,255,255,.15); }
+  .track > i { position: absolute; top: 0; bottom: 0; }
+  .track .buf { left: 0; background: rgba(255,255,255,.3); }
+  .track .played { left: 0; background: var(--cloud-blue); }
+  .track .seg.past { background: #A9CDFF; }      /* a marked part already played: a lighter blue */
+  .track .seg.ahead { background: #8E96A4; }     /* a marked part ahead: a lighter grey */
+  .track .head { top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); background: var(--fg); }
+  .btns { display: flex; align-items: center; gap: 8px; }
+  .btns .sp { flex: 1; }
+  .vol { width: 96px; height: 4px; background: var(--border-2); position: relative; margin: 0 6px; flex: none; }
+  .vol > i { position: absolute; left: 0; top: 0; bottom: 0; width: 80%; background: var(--cloud-blue); }
+
+  /* the TV: the controls inside the safe area; the bottom band solid, out to the edges */
+  /* inside the safe area with room for a focused control's ring (8 dp) */
+  .tv .top { padding: 35px 56px 48px; gap: 12px; }
+  .tv .top .name { font-size: 17px; margin-left: 4px; }
+  .tv .bottom { padding: 16px 56px 35px; background: var(--bg); gap: 14px; }
+  .tv .btns { gap: 12px; }
+  .tv .vol { width: 72px; }
+  .tv .seek { font-size: 12px; }
+
+  /* the states */
+  .wait { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 14px;
+          padding: 18px 22px; background: var(--surface); border: 1px solid var(--border-2); }
+  .loader { width: 36px; height: 36px; border: 3px solid var(--cloud-blue); border-top-color: var(--border-2); }
+  .wait .line { font: 400 14px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; }
+  .notice { position: absolute; left: 50%; top: 80px; transform: translateX(-50%); padding: 10px 16px; white-space: nowrap;
+            background: var(--surface); border: 1px solid var(--border-2); font: 400 14px/1.3 var(--ff-ui); color: var(--fg); }
+  .nextcard { position: absolute; right: 24px; bottom: 112px; width: 340px; padding: 16px; display: flex; flex-direction: column; gap: 6px;
+              background: var(--surface); border: 1px solid var(--border-2); }
+  .nextcard .hd { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
+  .nextcard .ep { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); }
+  .nextcard .row { margin-top: 8px; }
+  .details { display: inline-flex; align-items: center; gap: 4px; font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Figure 11.1 · the player on a computer -->
+<figure class="shot" id="player-computer">
+  <div class="computer" data-bar="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:50%;width:60px;height:20px" data-co="5" data-co-side="right"></span></div>
+      <div class="top">
+        <span class="b icon" data-co="1"><i data-i="arrow-left"></i></span>
+        <span class="b icon"><i data-i="house"></i></span>
+        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
+      </div>
+      <div class="bottom">
+        <div class="seek" data-co="2">
+          <span class="t1">17:23</span>
+          <div class="track">
+            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
+            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
+            <i class="head" style="left:42%"></i>
+          </div>
+          <span class="t2">41:23</span>
+        </div>
+        <div class="btns">
+          <span data-co="3" style="display:flex;align-items:center;gap:8px">
+            <span class="b icon"><i data-i="pause" class="fill"></i></span>
+            <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
+          </span>
+          <span class="sp"></span>
+          <span data-co="4" data-co-side="right" style="display:flex;align-items:center;gap:8px">
+            <span class="b icon"><i data-i="audio-lines"></i></span>
+            <span class="b icon"><i data-i="captions"></i></span>
+            <span class="b icon"><i data-i="gauge"></i></span>
+            <span class="b icon"><i data-i="settings-2"></i></span>
+            <span class="b icon"><i data-i="chevron-left"></i></span>
+            <span class="b icon"><i data-i="chevron-right"></i></span>
+            <span class="b icon"><i data-i="info"></i></span>
+            <span class="b icon"><i data-i="maximize"></i></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.2 · the player on a phone held sideways -->
+<figure class="shot" id="player-phone">
+  <div class="phone land" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:45%;width:60px;height:20px" data-co="3" data-co-side="right"></span></div>
+      <div class="top">
+        <span class="b icon"><i data-i="arrow-left"></i></span>
+        <span class="b icon"><i data-i="house"></i></span>
+        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
+        <span class="b icon" data-co="1" data-co-side="right"><i data-i="cast"></i></span>
+      </div>
+      <div class="bottom">
+        <div class="seek">
+          <span class="t1">17:23</span>
+          <div class="track">
+            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
+            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
+            <i class="head" style="left:42%"></i>
+          </div>
+          <span class="t2">41:23</span>
+        </div>
+        <div class="btns">
+          <span class="b icon"><i data-i="pause" class="fill"></i></span>
+          <span class="b icon" data-co="2"><i data-i="volume-2"></i></span>
+          <span class="sp"></span>
+          <span class="b icon"><i data-i="audio-lines"></i></span>
+          <span class="b icon"><i data-i="captions"></i></span>
+          <span class="b icon"><i data-i="gauge"></i></span>
+          <span class="b icon"><i data-i="settings-2"></i></span>
+          <span class="b icon"><i data-i="chevron-left"></i></span>
+          <span class="b icon"><i data-i="chevron-right"></i></span>
+          <span class="b icon"><i data-i="info"></i></span>
+          <span class="b icon"><i data-i="maximize"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.3 · the player on a TV -->
+<figure class="shot" id="player-tv">
+  <div class="tv full" data-rail="none" data-view="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div></div>
+      <div class="top">
+        <span class="b icon" data-co="1"><i data-i="arrow-left"></i></span>
+        <span class="b icon"><i data-i="house"></i></span>
+        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
+      </div>
+      <div class="bottom">
+        <span style="position:absolute;right:0;bottom:0;width:40px;height:22px" data-co="4" data-co-side="right"></span>
+        <div class="seek" data-co="2">
+          <span class="t1" style="width:40px;text-align:left">17:23</span>
+          <div class="track">
+            <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
+            <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
+            <i class="head" style="left:42%"></i>
+          </div>
+          <span class="t2" style="width:40px;text-align:right">41:23</span>
+        </div>
+        <div class="btns">
+          <span class="b icon primary focus" data-co="3"><i data-i="pause" class="fill"></i></span>
+          <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
+          <span class="sp"></span>
+          <span class="b icon"><i data-i="audio-lines"></i></span>
+          <span class="b icon"><i data-i="captions"></i></span>
+          <span class="b icon"><i data-i="gauge"></i></span>
+          <span class="b icon"><i data-i="settings-2"></i></span>
+          <span class="b icon"><i data-i="chevron-left"></i></span>
+          <span class="b icon"><i data-i="chevron-right"></i></span>
+          <span class="b icon"><i data-i="info"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.4 · up next, on a computer -->
+<figure class="shot" id="player-next-computer">
+  <div class="computer" data-bar="none">
+    <div class="pl">
+      <div class="pic credits"><div class="art a1"></div></div>
+      <div class="nextcard">
+        <span class="hd" data-co="1" data-co-side="right">up next</span>
+        <span class="ep">S01E04 · Triangular Diplomacy</span>
+        <span class="text">Starts in 3 seconds.</span>
+        <div class="row" data-co="2" data-co-side="right"><span class="b primary"><i data-i="play" class="fill s16"></i>play now</span><span class="b">cancel</span></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.6 · the quality changed by itself, on a computer -->
+<figure class="shot" id="player-notice-computer">
+  <div class="computer" data-bar="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div></div>
+      <div class="notice">Switched to Medium (720p) quality: the connection can't keep up.</div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.7 · a title starting, on a phone -->
+<figure class="shot" id="player-loading-phone">
+  <div class="phone land" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="top">
+        <span class="b icon"><i data-i="arrow-left"></i></span>
+        <span class="b icon"><i data-i="house"></i></span>
+        <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
+      </div>
+      <div class="wait"><span class="loader"></span><span class="line">Loading the episode…</span></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.8 · couldn't play, on a TV -->
+<figure class="shot" id="player-failed-tv">
+  <div class="tv full" data-rail="none" data-view="none">
+    <div class="page">
+      <div class="empty" style="margin-top:132px">
+        <i data-i="circle-alert" class="s48"></i>
+        <h2 class="h2" data-co="1">couldn't play this title</h2>
+        <p class="text">The stream stopped before it was done.</p>
+        <div class="row" style="gap:12px;margin-top:8px"><span class="b primary focus" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span><span class="b">back</span></div>
+        <span class="details" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>

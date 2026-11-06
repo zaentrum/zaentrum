@@ -1,0 +1,102 @@
+<!doctype html>
+<!--
+  Chapter 2, the frame: the figures of docs/chino/frame.md.
+  Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino [id …]
+  The look is screens.css, the frame is frame.js (this chapter specifies what
+  frame.js draws), the icons are icons.js.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino · 2 the frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screens.css">
+<script src="icons.js"></script>
+<style>
+  /* a page's place, shown as quiet blocks: this chapter is about the frame */
+  .ph { background: var(--surface); border: 1px dashed var(--border-2); display: flex; align-items: center; justify-content: center;
+        font: 500 13px/1 var(--ff-mono); color: var(--fg-dim); }
+  .computer .ph { position: absolute; left: 48px; right: 48px; top: 88px; bottom: 32px; }
+  .phone .ph { position: absolute; left: 16px; right: 16px; top: 16px; bottom: 16px; }
+  .tv .ph { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; }
+  .usermenu { position: absolute; right: 24px; top: 60px; z-index: 30; width: 260px; }
+  .usermenu .who { padding: 12px 16px 12px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+  .usermenu .who .n { font: 500 15px/1.2 var(--ff-ui); color: var(--fg); }
+  .usermenu .who .e { font: 400 13px/1.2 var(--ff-ui); color: var(--fg-dim); }
+  .tv .railopen { position: absolute; left: 0; top: 0; bottom: 0; width: 248px; z-index: 12; background: var(--bg-2); border-right: 1px solid var(--border);
+                  display: flex; flex-direction: column; padding: 27px 0 27px 48px; gap: 6px; }
+  .tv .railopen .it { height: 40px; display: flex; align-items: center; gap: 14px; padding: 0 14px 0 10px; color: var(--fg-muted); font: 500 14px/1 var(--ff-mono); width: 184px; }
+  .tv .railopen .it.cur { color: var(--fg); box-shadow: inset 4px 0 0 var(--cloud-blue); }
+  .tv .railopen .who { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font: 500 14px/1 var(--ff-ui); color: var(--fg); }
+  .tv .railopen .gap { flex: 1; }
+</style>
+</head>
+<body>
+
+<!-- Figure 2.1 · the frame on a computer -->
+<figure class="shot" id="frame-computer">
+  <div class="computer" data-view="movies" data-co-parts="logo:1:top,views:2:top,search:3:top,bell:4:top,avatar:5:top">
+    <div class="ph" data-co="6">the page</div>
+  </div>
+</figure>
+
+<!-- Figure 2.2 · the avatar's menu, on a computer -->
+<figure class="shot" id="frame-menu-computer">
+  <div class="computer" data-view="movies">
+    <div class="ph">the page</div>
+    <div class="menu usermenu" data-co="1" data-co-side="right">
+      <div class="who"><span class="n">Alex Urban</span><span class="e">alex@example.com</span></div>
+      <div class="it"><i data-i="user"></i>account</div>
+      <div class="it"><i data-i="settings"></i>settings</div>
+      <div class="sep"></div>
+      <div class="it"><i data-i="log-out"></i>sign out</div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 2.3 · the frame on a phone -->
+<figure class="shot" id="frame-phone">
+  <div class="phone" data-view="movies" data-co-parts="logo:1:top,search:2:top,bell:3:top,avatar:4:top,tabs:5">
+    <div class="ph">the page</div>
+  </div>
+</figure>
+
+<!-- Figure 2.4 · the web on a phone -->
+<figure class="shot" id="frame-web-phone">
+  <div class="phone" data-view="movies" data-tabs="web" data-co-parts="tabs:1">
+    <div class="ph">the page</div>
+  </div>
+</figure>
+
+<!-- Figure 2.5 · the frame on a TV -->
+<figure class="shot" id="frame-tv">
+  <div class="tv" data-view="movies" data-co-parts="avatar:1,current:2,bell:3,settings:4">
+    <div class="page"><div class="ph" data-co="5" data-co-side="right">the page</div></div>
+  </div>
+</figure>
+
+<!-- Figure 2.6 · the rail opened, on a TV -->
+<figure class="shot" id="frame-rail-tv">
+  <div class="tv" data-view="none" data-rail="none">
+    <div class="page"><div class="ph">the page</div></div>
+    <nav class="railopen">
+      <div class="who"><span class="av">au</span>Alex Urban</div>
+      <span class="it"><i data-i="search"></i>search</span>
+      <span class="it"><i data-i="house"></i>home</span>
+      <span class="it cur focus-row" data-co="1"><i data-i="film"></i>movies</span>
+      <span class="it"><i data-i="tv"></i>shows</span>
+      <span class="it"><i data-i="bookmark"></i>watchlist</span>
+      <span class="it"><i data-i="zap"></i>zap</span>
+      <span class="gap"></span>
+      <span class="it"><i data-i="bell"></i>notifications</span>
+      <span class="it" data-co="2"><i data-i="settings"></i>settings</span>
+    </nav>
+  </div>
+</figure>
+
+<script src="frame.js"></script>
+</body>
+</html>
