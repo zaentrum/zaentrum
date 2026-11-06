@@ -119,7 +119,7 @@ so it only takes effect after the operator is rebuilt and rolled.
    tiers. The operator reconciles via server-side apply; give it up to ~2 min to
    converge (`kubectl -n <deploy-namespace> get zaentrum,pods`).
 
-### Adding a new CR spec field ⚠️
+### Adding a new CR spec field
 
 The CRD (the OpenAPI schema the API server validates against) is stored in **three
 copies**. If you add a field to `api/v1alpha1/zaentrum_types.go`, it must be present

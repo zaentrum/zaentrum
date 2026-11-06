@@ -14,10 +14,22 @@ import os
 import posixpath
 import re
 import sys
+import unicodedata
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "docs"))
 LINK_RE = re.compile(r"\]\(([^)\s]+)\)")
 HEADING_RE = re.compile(r"^#{1,6}\s+(.*?)\s*(?:\{#([^}]+)\})?\s*$")
+
+
+def slug(text):
+    """A heading's anchor as GitHub and the docs site make it: lowercase, keep
+    letters, numbers, marks, "_", "-" and spaces, then each space becomes "-".
+    Nothing is trimmed, so "Field ⚠️" is "field-" plus the emoji's variation
+    selector, and a link to "#field" is broken on both."""
+    kept = "".join(ch for ch in text.lower()
+                   if ch in " -" or unicodedata.category(ch)[0] in "LMN"
+                   or unicodedata.category(ch) == "Pc")
+    return kept.replace(" ", "-")
 
 
 def anchors_of(path):
@@ -35,9 +47,7 @@ def anchors_of(path):
             continue
         if m.group(2):  # explicit {#anchor}
             out.add(m.group(2))
-        text = m.group(1)
-        slug = re.sub(r"[^\w\- ]", "", text.lower()).strip().replace(" ", "-")
-        out.add(slug)
+        out.add(slug(m.group(1)))
     return out
 
 
