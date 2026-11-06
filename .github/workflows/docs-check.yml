@@ -23,6 +23,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: link + anchor check
         run: python3 scripts/check-docs.py
+      - name: the specification's structure (numbers, captions, legends)
+        run: python3 scripts/check-spec.py
 
   site:
     runs-on: ubuntu-latest
