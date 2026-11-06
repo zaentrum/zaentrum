@@ -1,0 +1,286 @@
+<!doctype html>
+<!--
+  The chino screens, each drawn whole at three sizes: a computer (the web at 1280 × 800),
+  a phone (360 dp: the phone app, and the web at phone width) and a TV (960 × 540 dp, the
+  grid Android TV lays out on). mockups.html beside this file draws the parts: controls,
+  menus, dialogs. Each <figure class="shot" id="…"> becomes docs/chino/img/<id>.png:
+    node scripts/render-mockups.mjs chino
+  Colours, type and icons are the nalet design system's, 0.4.0 (tokens copied below,
+  icons in icons.js). The titles are films and shows the reference demo carries.
+  A whole screen carries no notes: the page beside its picture says what it shows.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chino screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="icons.js"></script>
+<style>
+  /* nalet design system tokens (0.4.0) */
+  :root {
+    --bg: #0B0F19; --bg-2: #0D1117; --surface: #11161F; --surface-2: #161B26;
+    --border: #1F2633; --border-2: #2A3142;
+    --fg: #E6E6E6; --fg-2: #C9D1D9; --fg-muted: #AEB8C2; --fg-dim: #7B8597;
+    --cloud-blue: #58A6FF; --focus-ring: #00A4DC; --surface-focus: #2A3142;
+    --signal-green: #2EA043; --signal-amber: #F2B233; --signal-red: #F85149;
+    --ff-ui: Inter, system-ui, sans-serif; --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+    /* annotations: not part of any screen */
+    --note: #7B8597; --guide: #F2B233;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #05070C; color: var(--fg); font: 14px/1.45 var(--ff-ui);
+         display: flex; flex-direction: column; align-items: flex-start; gap: 32px; }
+  figure { margin: 0; }
+  .shot { background: #05070C; padding: 28px; display: inline-flex; flex-direction: column; gap: 16px; }
+  .note { margin: 0; font: 500 12px/1.6 var(--ff-mono); color: var(--note); }
+  .note b { color: var(--fg-muted); font-weight: 500; }
+
+  svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  svg.i.fill { fill: currentColor; }
+  svg.i.s16 { width: 16px; height: 16px; }
+  svg.i.s24 { width: 24px; height: 24px; }
+
+  /* shared pieces */
+  .logo { display: inline-flex; align-items: center; gap: 6px; font: 600 18px/1 var(--ff-mono); color: var(--fg); white-space: nowrap; }
+  .logo svg { width: 14px; height: 18px; }
+  .b { height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 18px;
+       border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); font: 600 14px/1 var(--ff-mono); white-space: nowrap; }
+  .b.primary { background: var(--cloud-blue); border-color: var(--cloud-blue); color: var(--bg); }
+  .row { display: flex; align-items: center; gap: 8px; }
+  .icon-b { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); position: relative; }
+  .count { position: absolute; top: 4px; right: 2px; min-width: 16px; height: 16px; padding: 0 3px; background: var(--cloud-blue); color: var(--bg);
+           font: 600 10px/16px var(--ff-mono); text-align: center; }
+  .av { width: 32px; height: 32px; flex: none; background: var(--signal-amber); color: var(--bg); font: 600 13px/32px var(--ff-mono); text-align: center; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 8px; height: 8px; background: var(--border-2); }
+  .dots i.on { background: var(--cloud-blue); }
+  .meta { margin: 0; font: 500 13px/1.3 var(--ff-mono); color: var(--fg-2); }
+  .desc { margin: 0; font: 400 15px/1.5 var(--ff-ui); color: var(--fg-2); }
+  .t { margin: 0; font: 600 40px/1.1 var(--ff-mono); }
+  .shelf h2 { margin: 0 0 12px; font: 600 16px/1 var(--ff-mono); display: flex; align-items: baseline; gap: 12px; }
+  .cards { display: flex; gap: 16px; }
+  .card { flex: none; }
+  .card .img { position: relative; }
+  .card .img .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(42,49,66,.9); }
+  .card .img .bar > i { position: absolute; inset: 0 auto 0 0; background: var(--cloud-blue); }
+  .card .tt { margin-top: 8px; font: 500 14px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .st { font: 500 12px/1.4 var(--ff-mono); color: var(--fg-dim); white-space: nowrap; }
+
+  /* artwork stand-ins: a sky, a horizon and a figure, so a drawing reads as a picture */
+  .art { position: absolute; inset: 0; overflow: hidden; }
+  .art::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; background: rgba(0,0,0,.28); }
+  .art::after { content: ""; position: absolute; left: 66%; bottom: 30%; width: 7%; height: 42%; background: rgba(10,12,20,.55); }
+  .steel { background: radial-gradient(70% 90% at 72% 30%, #6f86a8 0%, #34445f 42%, #141b2b 100%); }
+  .a1 { background: linear-gradient(160deg, #2f5b4a 0%, #18332b 55%, #0f1d1a 100%); }
+  .a2 { background: linear-gradient(160deg, #6b4a2a 0%, #3a2516 60%, #1c120b 100%); }
+  .a3 { background: linear-gradient(160deg, #3c3f6e 0%, #222448 55%, #12132a 100%); }
+  .a4 { background: linear-gradient(160deg, #5a2f45 0%, #351b29 60%, #1b0e15 100%); }
+  .a5 { background: linear-gradient(160deg, #2c4f6b 0%, #183044 60%, #0c1822 100%); }
+  .a6 { background: linear-gradient(160deg, #5c5a2c 0%, #33321a 60%, #17170c 100%); }
+
+  /* computer: the web at 1280 × 800 */
+  .computer { width: 1280px; height: 800px; position: relative; overflow: hidden; background: var(--bg); border: 1px solid var(--border); }
+  .computer .tb { height: 56px; display: flex; align-items: center; gap: 32px; padding: 0 24px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .computer .views { display: flex; gap: 24px; height: 56px; }
+  .computer .views span { display: inline-flex; align-items: center; font: 500 14px/1 var(--ff-mono); color: var(--fg-muted); }
+  .computer .views .on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--cloud-blue); }
+  .computer .end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .field { height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--border-2); background: var(--surface);
+           color: var(--fg-dim); font: 400 14px/1 var(--ff-ui); white-space: nowrap; }
+  .computer .field { width: 340px; margin-right: 8px; }
+  .computer .hero { position: relative; height: 384px; }
+  .computer .scrim { position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--bg) 0%, rgba(11,15,25,.94) 30%, rgba(11,15,25,.45) 58%, rgba(11,15,25,0) 78%),
+                linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,0) 34%); }
+  .computer .txt { position: relative; padding: 60px 48px 0; width: 600px; display: flex; flex-direction: column; gap: 14px; }
+  .computer .txt .row { margin-top: 6px; }
+  .computer .shelf { padding: 0 48px; margin-bottom: 28px; }
+  .computer .card { width: 232px; }
+  .computer .card .img { height: 131px; }
+
+  /* phone: 360 dp */
+  .phone { width: 360px; height: 780px; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); border: 1px solid var(--border); }
+  .phone .tb { height: 56px; flex: none; display: flex; align-items: center; gap: 2px; padding: 0 12px 0 16px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .phone .tb .logo { margin-right: auto; }
+  .phone .tb .av { width: 28px; height: 28px; line-height: 28px; font-size: 12px; margin-left: 6px; }
+  .phone .scroll { flex: 1; overflow: hidden; }
+  .phone .hero { position: relative; height: 392px; }
+  .phone .scrim { position: absolute; inset: 0; background: linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,.9) 34%, rgba(11,15,25,0) 70%); }
+  .phone .txt { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .phone .t { font-size: 26px; }
+  .phone .meta { font-size: 12px; }
+  .phone .txt .row > .b { flex: 1; padding: 0 12px; }
+  .phone .entry { margin: 16px 16px 0; height: 48px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 14px;
+                  border: 1px solid var(--border-2); background: var(--surface); font: 600 14px/1 var(--ff-mono); }
+  .phone .entry .chev { margin-left: auto; color: var(--fg-dim); }
+  .phone .shelf { padding: 20px 0 0 16px; }
+  .phone .card { width: 200px; }
+  .phone .card .img { height: 112px; }
+  .phone .tabs { height: 64px; flex: none; display: grid; grid-template-columns: repeat(5, 1fr); background: var(--bg-2); border-top: 1px solid var(--border); }
+  .phone .tabs span { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font: 500 11px/1 var(--ff-mono); color: var(--fg-dim); }
+  .phone .tabs .on { color: var(--cloud-blue); }
+
+  /* TV: 960 × 540 dp */
+  .tv { width: 960px; height: 540px; position: relative; overflow: hidden; background: var(--bg); border: 1px solid var(--border); }
+  .tv .backdrop { position: absolute; left: 0; right: 0; top: 0; height: 372px; }
+  .tv .scrim { position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--bg) 0%, rgba(11,15,25,.95) 24%, rgba(11,15,25,.5) 52%, rgba(11,15,25,0) 74%),
+                linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,0) 40%); }
+  .tv .rail { position: absolute; left: 0; top: 0; bottom: 0; width: 104px; background: rgba(11,15,25,.88);
+              display: flex; flex-direction: column; align-items: flex-start; padding: 27px 0 27px 48px; gap: 6px; }
+  .tv .rail .it { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-muted); }
+  .tv .rail .it.cur { color: var(--fg); box-shadow: inset 4px 0 0 var(--cloud-blue); }
+  .tv .rail .av { margin: 0 4px 14px 0; }
+  .tv .rail .gap { flex: 1; }
+  .tv .txt { position: absolute; left: 132px; top: 52px; width: 460px; display: flex; flex-direction: column; gap: 10px; }
+  .tv .t { font-size: 32px; }
+  .tv .meta { font-size: 12px; }
+  .tv .desc { font-size: 14px; }
+  .tv .b { height: 40px; padding: 0 16px; font-size: 13px; }
+  .tv .txt .row { margin-top: 6px; gap: 12px; }
+  .tv .focus { outline: 3px solid var(--focus-ring); outline-offset: 2px; transform: scale(1.05); }
+  .tv .shelf { position: absolute; left: 132px; top: 330px; }
+  .tv .shelf h2 { font-size: 15px; }
+  .tv .card { width: 176px; }
+  .tv .card .img { height: 99px; }
+  .tv .card .tt { font-size: 13px; }
+  .tv .card .st { font-size: 11px; }
+  .tv .safe { position: absolute; left: 48px; right: 48px; top: 27px; bottom: 27px; border: 1px dashed var(--guide); opacity: .6; }
+</style>
+</head>
+<body>
+
+<!-- home · computer -->
+<figure class="shot" id="home-computer">
+  <div class="computer">
+    <header class="tb">
+      <span class="logo"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <nav class="views"><span class="on">home</span><span>movies</span><span>shows</span><span>watchlist</span><span>zap</span></nav>
+      <div class="end">
+        <span class="field"><i data-i="search" class="s16"></i>Search movies, shows and people</span>
+        <span class="icon-b"><i data-i="bell"></i><span class="count">2</span></span>
+        <span class="av">au</span>
+      </div>
+    </header>
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim"></div>
+      <div class="txt">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
+        <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span></div>
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2>continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+        <div class="card"><div class="img"><div class="art a6"></div><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">5 min left</div></div>
+      </div>
+    </section>
+    <section class="shelf">
+      <h2>next up</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div></div><div class="tt">Pioneer One</div><div class="st">S01E04</div></div>
+        <div class="card"><div class="img"><div class="art a3"></div></div><div class="tt">Caminandes</div><div class="st">E02 · Gran Dillama</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div></div><div class="tt">Pioneer One</div><div class="st">S01E05</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div></div><div class="tt">Caminandes</div><div class="st">E03 · Llamigos</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div></div><div class="tt">Pioneer One</div><div class="st">S01E06</div></div>
+      </div>
+    </section>
+  </div>
+</figure>
+
+<!-- home · phone -->
+<figure class="shot" id="home-phone">
+  <div class="phone">
+    <header class="tb">
+      <span class="logo"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
+      <span class="icon-b"><i data-i="search"></i></span>
+      <span class="icon-b"><i data-i="bell"></i><span class="count">2</span></span>
+      <span class="av">au</span>
+    </header>
+    <div class="scroll">
+      <section class="hero">
+        <div class="art steel"></div><div class="scrim"></div>
+        <div class="txt">
+          <h1 class="t">Tears of Steel</h1>
+          <p class="meta">2012 · 12 min · science fiction</p>
+          <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span></div>
+          <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </section>
+      <div class="entry"><i data-i="zap"></i>zap<i data-i="chevron-right" class="chev"></i></div>
+      <section class="shelf">
+        <h2>continue watching</h2>
+        <div class="cards">
+          <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+          <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        </div>
+      </section>
+    </div>
+    <nav class="tabs">
+      <span class="on"><i data-i="house"></i>home</span>
+      <span><i data-i="film"></i>movies</span>
+      <span><i data-i="tv"></i>shows</span>
+      <span><i data-i="bookmark"></i>watchlist</span>
+      <span><i data-i="download"></i>downloads</span>
+    </nav>
+  </div>
+</figure>
+
+<!-- home · TV -->
+<figure class="shot" id="home-tv">
+  <div class="tv">
+    <div class="backdrop"><div class="art steel"></div><div class="scrim"></div></div>
+    <nav class="rail">
+      <span class="av">au</span>
+      <span class="it"><i data-i="search"></i></span>
+      <span class="it cur"><i data-i="house"></i></span>
+      <span class="it"><i data-i="film"></i></span>
+      <span class="it"><i data-i="tv"></i></span>
+      <span class="it"><i data-i="bookmark"></i></span>
+      <span class="it"><i data-i="zap"></i></span>
+      <span class="gap"></span>
+      <span class="it"><i data-i="bell"></i></span>
+      <span class="it"><i data-i="settings"></i></span>
+    </nav>
+    <div class="txt">
+      <h1 class="t">Tears of Steel</h1>
+      <p class="meta">2012 · 12 min · science fiction</p>
+      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+      <div class="row"><span class="b primary focus"><i data-i="play" class="fill s16"></i>play</span><span class="b">see details</span></div>
+      <div class="dots" style="margin-top:6px"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <section class="shelf">
+      <h2>continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div></div>
+        <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div></div>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div></div>
+        <div class="card"><div class="img"><div class="art a6"></div><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">5 min left</div></div>
+      </div>
+    </section>
+    <div class="safe"></div>
+  </div>
+</figure>
+
+<script>
+  for (const el of document.querySelectorAll('i[data-i]')) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('class', 'i ' + el.className);
+    if (el.getAttribute('style')) svg.setAttribute('style', el.getAttribute('style'));
+    svg.innerHTML = window.ICONS[el.dataset.i] || '';
+    el.replaceWith(svg);
+  }
+</script>
+</body>
+</html>

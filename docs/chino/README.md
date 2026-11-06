@@ -17,15 +17,20 @@ and this spec doesn't repeat them:
 - [Colour](https://nalet.github.io/design-system/styles/colour/#contrast): a
   label or an icon on a filled colour is dark.
 
-The pictures are mockups of this spec, drawn with the design system's colours,
-type and icons. They show the spec, not one app: the TV keeps its own sizes and
-its focus style. Their source is [img/mockups.html](./img/mockups.html), and
+The pictures are drawings of this spec, made with the design system's colours,
+type and icons. They show the spec, not one app. A whole screen is drawn at
+three sizes, computer, phone and TV, and [screens](./screens.md) maps every
+screen to its drawings and to what each app has today. The sources are
+[img/screens.html](./img/screens.html) for whole screens and
+[img/mockups.html](./img/mockups.html) for parts, and
 `node scripts/render-mockups.mjs chino` draws them again after a change.
 
 ## Pages
 
 | Page | What it covers |
 |---|---|
+| [Screens](./screens.md) | Every screen, the sizes it's drawn at, and what each app has today |
+| [Home](./home.md) | The first screen after signing in, at all three sizes, with the frame around every screen |
 | [Title actions](./title-actions.md) | Play, add to list, watched and liked: one size and one look everywhere |
 | [Playback](./playback.md) | Resume and play, a finished title, the quality notices, the picture fitted and filled, and what a page says when it couldn't load |
 | [Subtitles](./subtitles.md) | How subtitles look, the menu, and what switches on by itself |
