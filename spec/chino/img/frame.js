@@ -74,7 +74,8 @@
       const tabs = f.dataset.tabs === 'web'
         ? [['home', 'house'], ['movies', 'film'], ['shows', 'tv'], ['watchlist', 'bookmark'], ['zap', 'zap']]
         : [['home', 'house'], ['movies', 'film'], ['shows', 'tv'], ['watchlist', 'bookmark'], ['downloads', 'download']];
-      const items = tabs.map(([v, i]) => `<span class="${v === view ? 'on' : ''}">${icon(i)}${v}</span>`).join('');
+      // the tabs are icons alone, as the apps have them; the name is for a screen reader
+      const items = tabs.map(([v, i]) => `<span class="${v === view ? 'on' : ''}" aria-label="${v}">${icon(i)}</span>`).join('');
       if (side) f.prepend(make(`<nav class="siderail tabs">${items}</nav>`));
       else f.appendChild(make(`<nav class="tabs">${items}</nav>`));
     }

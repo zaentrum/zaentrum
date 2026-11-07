@@ -302,8 +302,10 @@ Figure 2.8: The frame on a phone held upright, at 360 × 780 dp.
 3. **The bell**, as on a computer. On a phone it opens a screen of its own.
 4. **The avatar**, as on a computer. Its menu is the one of figure 2.7 and
    opens under it in the same way, within the screen's width.
-5. **The tabs**: home, movies, shows, watchlist and downloads, each an icon
-   with its name. The current tab is blue. Zap, the computer's fifth view,
+5. **The tabs**: home, movies, shows, watchlist and downloads, each its icon
+   alone, as the apps have them today; a tab's name is what a screen reader
+   says. The current tab is blue, with a blue bar on its top edge, so it
+   doesn't show by colour alone. Zap, the computer's fifth view,
    starts from home on a phone ([chapter 4](./home.md)), and downloads take its
    place, because the phone keeps titles to watch offline
    ([chapter 13](./downloads.md)).
@@ -334,7 +336,7 @@ numbers mark what differs from figure 2.8.
 Figure 2.10: The frame on a phone held sideways, at 780 × 360 dp.
 
 1. **The tabs**, as a rail down the left edge, 72 dp wide: the same tabs in the
-   same order, each its icon over its name.
+   same order, each its icon alone.
 2. **The current tab** is blue, with a blue bar on its edge.
 3. **The bar**, 48 dp high instead of 56, with the product's name, the search
    icon, the bell and the avatar, as upright.
@@ -416,8 +418,8 @@ words to [chapter 9](./search.md), the avatar's look to
 |---|---|---|---|---|---|
 | 2.C1 | The avatar's menu, with settings in it | Web, Phone app | Web: **account** and **sign out**, without the name or the email address and without settings; it closes only with a click outside it or on the avatar, and on a phone it drops down under the avatar. Phone app: no menu; the avatar opens the account page | figure 2.7: one sheet under the avatar, its right edge on the avatar's: the name and, quieter, the email address, then account and settings, items of the design system's menu, and sign out set apart under a rule; the design system's user menu is planned and its menu has no rule yet, so the header and the rule are built on its tokens around its menu's items; Esc, a click outside it or on the avatar closes it, the focus back on the avatar; the arrow keys move between its items; on a phone the same menu opens under the avatar (section 2.4.1). Built before 2.C2 and 2.C3, which take settings out of the views | proposed |
 | 2.C2 | The computer's frame: the views in the top bar | Web | the views as icons alone in a side navigation down the left edge, the logo “>c” at its top and settings, a gear, at its foot; their names only tooltips and for screen readers, capitalised | figure 2.6: chino led by the design system's chevron at the left of the bar, then home, movies, shows, watchlist and zap as words, the current one brighter with a blue line under it; no side navigation; settings only in the avatar's menu (2.C1) | proposed |
-| 2.C3 | The phone's frame held upright: the bar and five named tabs | Web, Phone app | Web: the bar a search field, the bell and the avatar, without the product's name; six tabs, icons alone, zap fifth and settings sixth. Phone app: the same bar; seven tabs on Android and six on iOS, icons alone, zap and settings among them; on Android downloads is left out where the server offers none and nothing is on the phone | figures 2.8 and 2.9: chino led by the design system's chevron, the search icon, the bell and the avatar in the bar; each tab its icon over its name: home, movies, shows, watchlist and downloads, four without downloads, and on the web zap in place of downloads; settings in the avatar's menu (2.C1); zap from home in the phone app ([chapter 4](./home.md)) | proposed |
-| 2.C4 | The phone's frame held sideways | Web, Phone app | by the width: the web from 768 px wide has the computer's frame, its views scrolling in their column on a phone held sideways (figure 2.3); the phone app from 600 dp wide, measured on the window, has an 80 dp rail with the logo, the tabs' icons and settings at its foot, under the upright bar | by the short side: a screen or a window less than 600 dp on its short side has the phone's frame held either way, sideways the tabs as a 72 dp rail at the left with their names and the bar 48 dp high (figure 2.10); 600 dp and more, the computer's frame (section 2.3) | proposed |
+| 2.C3 | The phone's frame held upright: the bar and five tabs | Web, Phone app | Web: the bar a search field, the bell and the avatar, without the product's name; six tabs, icons alone, zap fifth and settings sixth. Phone app: the same bar; seven tabs on Android and six on iOS, icons alone, zap and settings among them; on Android downloads is left out where the server offers none and nothing is on the phone | figures 2.8 and 2.9: chino led by the design system's chevron, the search icon, the bell and the avatar in the bar; each tab its icon alone, as today, and named for a screen reader: home, movies, shows, watchlist and downloads, the current one blue with a blue bar on its top edge, four without downloads, and on the web zap in place of downloads; settings in the avatar's menu (2.C1); zap from home in the phone app ([chapter 4](./home.md)) | proposed |
+| 2.C4 | The phone's frame held sideways | Web, Phone app | by the width: the web from 768 px wide has the computer's frame, its views scrolling in their column on a phone held sideways (figure 2.3); the phone app from 600 dp wide, measured on the window, has an 80 dp rail with the logo, the tabs' icons and settings at its foot, under the upright bar | by the short side: a screen or a window less than 600 dp on its short side has the phone's frame held either way, sideways the tabs as a 72 dp rail at the left, icons alone, and the bar 48 dp high (figure 2.10); 600 dp and more, the computer's frame (section 2.3) | proposed |
 | 2.C5 | Every screen in the frame, but the player and zap | Web, Phone app, Android TV, Samsung TV | Web: a title's page, a person's page and the account page without the frame. Phone app: every screen opened from a tab covers the frame, tabs included, with its own top; zap keeps the top bar and the tabs. Android TV, Samsung TV: a title's page has no rail and no bar | every screen inside the frame except the player, and except zap in the phone app and on a TV; on a phone, a screen opened from a view has a back arrow and its name in place of the bar, and the tabs stay (section 2.4.1). This change builds the frame's part and the account page; the screens with a change of their own follow it: a title's page 6.C1, a person's page 7.C1, the phone app's notifications 15.C5 and zap in the phone app 10.C1 | proposed |
 | 2.C6 | Web: an address for every view | Web | only the watchlist and the search have an address of their own; a reload on movies, shows, zap or settings opens home | each view and settings with its own address, so a reload, a link or back brings the person to it (section 2.3) | proposed |
 | 2.C7 | The TV's rail holds the frame, and opens | Android TV, Samsung TV | a rail of icons alone, with the logo at its top, the five views and settings at its foot, which never opens, and a top bar with the search field, the bell and the avatar; shows named “Series” for a screen reader. Android TV: a focused item has the ring outside it, 5 % larger. Samsung TV: the arrow keys move to the nearest item, and the avatar opens settings | figures 2.11 and 2.12: one rail and no top bar, with the avatar at its top, then search, home, movies, shows, watchlist and zap, the bell and settings at its foot; moving the focus into it opens it with the names, the focused row filled in the focus colour with the ring inside, 2 % larger; up and down move, OK opens, right or back closes it; the current view keeps a blue bar; the avatar opens who's watching (3.C11) | proposed |
@@ -432,8 +434,8 @@ words to [chapter 9](./search.md), the avatar's look to
 |---|---|
 | The product's name | chino |
 | The views | home · movies · shows · watchlist · zap |
-| The phone's tabs | home · movies · shows · watchlist · downloads |
-| The web's tabs on a phone | home · movies · shows · watchlist · zap |
+| The phone's tabs, as a screen reader names them (on screen, icons alone) | home · movies · shows · watchlist · downloads |
+| The web's tabs on a phone, as a screen reader names them | home · movies · shows · watchlist · zap |
 | The search's placeholder on a computer | search movies, shows and people… ([chapter 9](./search.md), as the design system's top bar words a search) |
 | The search on a phone | the icon, named “search” for screen readers; the field it opens says “Search” |
 | The bell, for screen readers | notifications, 2 unread |
