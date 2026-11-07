@@ -1,14 +1,20 @@
 <!doctype html>
 <!--
-  Chapter 13, downloads and offline: the figures of spec/chino/downloads.md that
-  mockups.html doesn't draw (it has the control in each status, download-control,
-  and the questions, download-questions). Every phone screen is drawn held
-  upright (<div class="phone">, 360 × 780) and sideways (<div class="phone side">,
+  Chapter 13, downloads and offline: every figure of spec/chino/downloads.md,
+  the control in each status (download-control) and the questions
+  (download-questions) included, drawn on the design system's components
+  (<ds-*> tags, ds.js). Every phone screen is drawn held upright
+  (<div class="phone">, 360 × 780) and sideways (<div class="phone side">,
   780 × 360, the tabs as a rail on the left); the states once each.
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs) is frame.js, the icons are
-  icons.js. A title's page follows chapter 6's drawings (ch06-title.html).
+  The look is screens.css with the design system's stylesheet, the frame (top
+  bar, tabs) is frame.js, the icons are icons.js. A title's page follows
+  chapter 6's drawings (ch06-title.html).
+  chino's own here: the download control (the offer button or the design
+  system's status, the size after it in the quiet monospace, its one action,
+  and the progress bar, which the design system plans but doesn't have yet),
+  a title's page, the episode rows, the season's box, the downloads rows.
   Pink numbers mark the parts the chapter's text explains.
 -->
 <html lang="en">
@@ -21,49 +27,51 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* the sideways frame's rail runs the frame's height: screens.css gives
-     every .phone > .tabs 64 px and a top border, the rail too */
+  /* the download control: the offer button or the design system's status, the
+     size after it, and its one action; a control wraps as a whole */
+  .dlc { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: none; }
+  .size { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); white-space: nowrap; }
+  .stack { display: inline-flex; flex-direction: column; gap: 6px; }
+  .stline { display: inline-flex; align-items: center; gap: 8px; }
+  .bar.dl-bar { height: 3px; }   /* chino's own: the design system's progress bar is planned */
+  .why { margin: 0; font: 400 13px/1.5 var(--ff-ui); color: var(--fg-muted); max-width: 328px; }
 
-  /* the title row's parts, as chapter 6 draws them */
-  .split { display: inline-flex; flex: none; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
+  /* figure 13.1: the control in each status, at a phone's width */
+  .sheet { background: var(--bg); border: 1px solid var(--border); padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 22px; }
+  .states { display: grid; grid-template-columns: 196px 328px; gap: 18px 24px; align-items: start; }
+  .states .cap { margin: 0; height: 42px; display: flex; align-items: center; font: 500 12px/1.4 var(--ff-mono); color: var(--fg-dim); }
+  .states .cap.top { height: 20px; }
+  .states .col1 { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .sheet .note { margin: 0; font: 500 12px/1.5 var(--ff-mono); color: var(--fg-dim); }
+
+  /* the title row's parts, as chapter 6 draws them: add to list is chino's own, two parts in one frame */
+  .split { display: inline-flex; flex: none; height: 42px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
   .split > span { display: inline-flex; align-items: center; justify-content: center; }
-  .split .m { width: 46px; }
-  .split .c { width: 40px; border-left: 1px solid var(--border-2); }
-  .b.st2 { color: var(--fg-2); }
-  .b.wide { width: 100%; }
-  /* a label too long for one line wraps as one text, the button growing with it */
-  .b.wrap { white-space: normal; height: auto; min-height: 48px; padding: 9px 14px; justify-content: flex-start; text-align: left; line-height: 1.4; }
-  .off { opacity: .4; }
+  .split .m { width: 40px; }
+  .split .c { width: 34px; border-left: 1px solid var(--border-2); }
 
   /* a title's page on a phone (chapter 6): the still fading into the page, the poster, the name */
   .bd { position: absolute; left: 0; right: 0; top: 0; height: 200px; overflow: hidden; }
   .bd .fade { position: absolute; inset: 0; background: linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,.6) 30%, rgba(11,15,25,0) 60%); }
   .pos { position: relative; flex: none; overflow: hidden; }
-  .hd { position: absolute; left: 16px; right: 16px; top: 140px; display: flex; gap: 14px; align-items: flex-start; }
+  .hd { position: absolute; left: 16px; right: 16px; top: 120px; display: flex; gap: 14px; align-items: flex-start; }
   .hd .pos { width: 96px; height: 144px; }
   .hd .nm { padding-top: 68px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .phone .t { font-size: 22px; }
   .phone .meta { font-size: 12px; }
-  .kind { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; margin-left: 4px; border: 1px solid var(--border-2);
-          background: var(--surface-2); color: var(--fg-muted); font: 500 11px/1 var(--ff-mono); vertical-align: 1px; }
-  .body { position: absolute; left: 16px; right: 16px; top: 300px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
-  .acts { display: flex; flex-wrap: wrap; gap: 8px; }
-  .acts .b { padding: 0 14px; }
-  .acts .b.icon { padding: 0; }
-  .why { margin: -6px 0 0; font: 400 13px/1.45 var(--ff-ui); color: var(--fg-dim); max-width: 320px; }
-  .howfar { display: inline-flex; align-items: center; gap: 6px; font: 500 13px/1 var(--ff-mono); color: var(--fg-2); }
+  .body { position: absolute; left: 16px; right: 16px; top: 282px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 
-  /* the page from the phone: everything sits under the banner, which doesn't scroll */
-  .offline { position: relative; flex: none; height: 100%; }
-  .offline > .banner { position: relative; z-index: 3; margin: 12px 16px 0; }
-  .offline > .pagebox { position: absolute; left: 0; right: 0; top: 94px; bottom: 0; overflow: hidden; }
+  /* the page from the phone: the banner under the bar, which doesn't scroll, and the page under it */
+  .offline { display: flex; flex-direction: column; height: 100%; }
+  .offline > .nc-strip { flex: none; margin: 12px 16px 0; position: relative; z-index: 3; }
+  .offline > .pagebox { flex: 1; position: relative; overflow: hidden; margin-top: 12px; }
 
   /* held sideways: the poster at the left, the name, the row and the words beside it */
-  .side .offline > .pagebox { top: 70px; }
   .side .bd { height: 150px; }
-  .side .hd2 { position: absolute; left: 24px; right: 24px; top: 26px; display: flex; gap: 24px; align-items: flex-start; }
+  .side .hd2 { position: absolute; left: 24px; right: 24px; top: 14px; display: flex; gap: 24px; align-items: flex-start; }
   .side .hd2 .pos { width: 120px; height: 180px; box-shadow: 0 0 0 1px var(--border-2); }
-  .side .hd2 .info { padding-top: 34px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
+  .side .hd2 .info { padding-top: 26px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
   .side .hd2 .info .acts { margin-top: 8px; }
   .side .hd2 .info .howfar { margin-top: 6px; }
   .side .hd2 .info .desc { margin-top: 4px; font-size: 14px; max-width: 460px; }
@@ -85,7 +93,7 @@
   .ep .len { margin-left: auto; flex: none; font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); }
   .ep .nm { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); }
   .ep .ds { margin: 0; font: 400 12px/1.4 var(--ff-ui); color: var(--fg-2); }
-  .ep .acts { margin-top: 10px; row-gap: 8px; }
+  .ep .acts { margin-top: 10px; }
   /* held sideways: the actions under the words, beside the still */
   .side .ep .txt .acts { margin-top: 6px; width: fit-content; }
 
@@ -93,29 +101,59 @@
   .dl { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .dl .line { margin: -4px 0 0; font: 400 13px/1.4 var(--ff-ui); color: var(--fg-dim); }
   .dl .grp { margin-top: 4px; }
-  .dl-row { display: flex; gap: 12px; align-items: center; }
+  .dl-row { display: flex; gap: 10px; align-items: center; }
   .dl-row.top { align-items: flex-start; }
   .dl-row .th { position: relative; width: 80px; height: 45px; flex: none; overflow: hidden; }
-  .dl-row .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .dl-row .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
   .dl-row .nm { font: 400 13px/1.35 var(--ff-ui); color: var(--fg); }
-  .dl-row .st { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-2); white-space: nowrap; }
-  .dl-row .bar { margin-top: 2px; height: 3px; }
-  .dl-row .rsn { font: 400 12px/1.4 var(--ff-ui); color: var(--fg-dim); }
-  .dl-row .tx .row { margin-top: 4px; }
-  .dl-row .tx .row .b { height: 40px; padding: 0 12px; font-size: 13px; }
-  .dl-row .b.icon { width: 40px; height: 40px; }
-  .det { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font: 500 12px/1 var(--ff-mono); color: var(--cloud-blue); }
-  .titles { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; font: 400 13px/1.4 var(--ff-ui); color: var(--fg-2); }
-  .dl .empty { margin-top: 96px; }
+  .dl-row .tx .bar { align-self: stretch; }
+  .dl-row .why { font-size: 12px; margin-top: -2px; }
+  .dl-row .tx .acts { margin-top: 2px; }
+  .dl .nc-illu { margin-top: 64px; }
   /* held sideways: the heading and the storage line on one line */
   .side .dl .hl { display: flex; align-items: baseline; gap: 16px; }
   .side .dl .hl .line { margin: 0; }
-  .side .dl .empty { margin-top: 20px; }
+  .side .dl .nc-illu { margin-top: 0; }
   /* the bell is hidden while the server can't be reached */
   .nobell .tb .bell { display: none; }
 </style>
 </head>
 <body>
+
+<!-- Figure 13.1 · the download control in each status, at the width of a phone's page -->
+<figure class="shot" id="download-control">
+  <div class="sheet">
+    <div class="states">
+      <p class="cap">not on the phone</p>
+      <div class="dlc"><ds-button size="lg" icon="download">download</ds-button><span class="size">1.4 GB</span></div>
+
+      <p class="cap">waiting its turn</p>
+      <div class="dlc"><ds-status state="neutral">queued</ds-status><span class="size">1.4 GB</span><ds-iconbutton size="lg" icon="x" label="cancel download"></ds-iconbutton></div>
+
+      <p class="cap">waiting for Wi-Fi</p>
+      <div class="dlc"><ds-status state="neutral">waiting for <span class="nc-keep-case">Wi-Fi</span></ds-status><span class="size">1.4 GB</span><ds-iconbutton size="lg" icon="x" label="cancel download"></ds-iconbutton></div>
+
+      <p class="cap">waiting for a connection</p>
+      <div class="dlc"><ds-status state="neutral">waiting for a connection</ds-status><span class="size">1.4 GB</span><ds-iconbutton size="lg" icon="x" label="cancel download"></ds-iconbutton></div>
+
+      <p class="cap">on its way</p>
+      <div class="dlc"><span class="stack"><span class="stline"><ds-status state="information">downloading 42%</ds-status><span class="size">1.4 GB</span></span><span class="bar dl-bar"><i style="width:42%"></i></span></span><ds-iconbutton size="lg" icon="x" label="cancel download"></ds-iconbutton></div>
+
+      <p class="cap">on the phone</p>
+      <div class="dlc"><ds-status state="success">downloaded</ds-status><span class="size">1.4 GB</span><ds-iconbutton size="lg" icon="trash-2" label="delete download"></ds-iconbutton></div>
+
+      <p class="cap top">needs a check</p>
+      <div class="col1"><div class="dlc"><ds-status state="warning">check needed</ds-status><span class="size">1.4 GB</span></div><p class="why">Downloads are checked with the server every 30 days. This one plays again once the server can be reached.</p></div>
+
+      <p class="cap top">failed</p>
+      <div class="col1"><ds-status state="error">couldn't download</ds-status><p class="why">Not enough space on this phone.</p><div class="dlc"><ds-button size="lg">try again</ds-button><ds-button size="lg" variant="ghost">remove</ds-button></div></div>
+
+      <p class="cap top">can't come along</p>
+      <div class="col1"><ds-status state="neutral">can't be downloaded</ds-status><p class="why">This title can only be streamed.</p></div>
+    </div>
+    <p class="note">the status is the design system's; the size follows it, the same number before and after<br>a failure gives the reason, not an instruction · drawn at the width of a phone's page, 328 dp</p>
+  </div>
+</figure>
 
 <!-- Figure 13.3 · a season's downloads, on a phone held upright: nothing of it on the phone yet -->
 <figure class="shot" id="downloads-season-phone">
@@ -124,7 +162,7 @@
       <h2 class="h2">episodes</h2>
       <div class="season">
         <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
-        <div class="offer"><span class="b wide wrap" data-co="1"><i data-i="download"></i><span>download season&nbsp;1 · 6&nbsp;episodes · 1.8&nbsp;GB</span></span></div>
+        <div class="offer"><span class="dlc" data-co="1"><ds-button size="lg" icon="download">download season 1</ds-button><span class="size">1.8 GB</span></span></div>
         <div class="ep">
           <div class="top">
             <div class="still"><div class="art a1"></div></div>
@@ -136,8 +174,8 @@
           </div>
           <div class="acts">
             <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-            <span class="b icon"><i data-i="check"></i></span>
-            <span class="b" data-co="2"><i data-i="download"></i>download · 281 MB</span>
+            <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+            <span class="dlc" data-co="2"><ds-button size="lg" icon="download">download</ds-button><span class="size">281 MB</span></span>
           </div>
         </div>
         <div class="ep">
@@ -151,8 +189,8 @@
           </div>
           <div class="acts">
             <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-            <span class="b icon"><i data-i="check"></i></span>
-            <span class="b"><i data-i="download"></i>download · 347 MB</span>
+            <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+            <span class="dlc"><ds-button size="lg" icon="download">download</ds-button><span class="size">347 MB</span></span>
           </div>
         </div>
       </div>
@@ -167,7 +205,7 @@
       <h2 class="h2">episodes</h2>
       <div class="season">
         <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
-        <div class="offer"><span class="b" data-co="1" data-co-side="right"><i data-i="download"></i>download season&nbsp;1 · 6&nbsp;episodes · 1.8&nbsp;GB</span></div>
+        <div class="offer"><span class="dlc" data-co="1" data-co-side="right"><ds-button size="lg" icon="download">download season 1</ds-button><span class="size">1.8 GB</span></span></div>
         <div class="ep">
           <div class="top">
             <div class="still"><div class="art a1"></div></div>
@@ -176,8 +214,8 @@
               <p class="ds">Something falls from the sky over Montana.</p>
               <div class="acts" data-co="2" data-co-side="right">
                 <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-                <span class="b icon"><i data-i="check"></i></span>
-                <span class="b"><i data-i="download"></i>download · 281 MB</span>
+                <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+                <span class="dlc"><ds-button size="lg" icon="download">download</ds-button><span class="size">281 MB</span></span>
               </div>
             </div>
           </div>
@@ -200,37 +238,37 @@
 <figure class="shot" id="downloads-phone">
   <div class="phone" data-view="downloads">
     <div class="dl">
-      <h1 class="h1">downloads</h1>
+      <ds-heading level="2">downloads</ds-heading>
       <p class="line" data-co="1">547 MB used by downloads · 18 GB free on this phone</p>
       <h2 class="h2 grp" data-co="2">Pioneer One</h2>
       <p class="h3">season 1</p>
       <div class="dl-row">
         <div class="th"><div class="art a5"></div></div>
-        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">281 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
       <div class="dl-row" data-co="3">
         <div class="th"><div class="art a3"></div></div>
-        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="st">downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></div>
-        <span class="b icon"><i data-i="x" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="stline"><ds-status state="information">downloading 42%</ds-status><span class="size">347 MB</span></span><span class="bar dl-bar"><i style="width:42%"></i></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="x" label="cancel download"></ds-iconbutton>
       </div>
       <div class="dl-row">
         <div class="th"><div class="art a1"></div></div>
-        <div class="tx"><span class="nm">S01E03 · Alone in the Night</span><span class="st">queued · 271 MB</span></div>
-        <span class="b icon"><i data-i="x" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E03 · Alone in the Night</span><span class="stline"><ds-status state="neutral">queued</ds-status><span class="size">271 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="x" label="cancel download"></ds-iconbutton>
       </div>
       <h2 class="h2 grp">movies</h2>
       <div class="dl-row">
         <div class="th"><div class="art a4"></div></div>
-        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">120 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
       <div class="dl-row top" data-co="4">
         <div class="th"><div class="art a2"></div></div>
-        <div class="tx"><span class="nm">Spring</span><span class="st">couldn't download</span><span class="rsn">The server ran into a problem.</span>
-          <div class="row"><span class="b">try again</span><span class="b ghost">remove</span></div></div>
+        <div class="tx"><span class="nm">Spring</span><ds-status state="error">couldn't download</ds-status><p class="why">The server ran into a problem.</p>
+          <div class="acts"><ds-button size="lg">try again</ds-button><ds-button size="lg" variant="ghost">remove</ds-button></div></div>
       </div>
-      <div style="margin-top:4px"><span class="b danger" data-co="5">delete all</span></div>
+      <div style="margin-top:4px"><ds-button size="lg" variant="danger" data-co="5">delete all</ds-button></div>
     </div>
   </div>
 </figure>
@@ -239,25 +277,72 @@
 <figure class="shot" id="downloads-side-phone">
   <div class="phone side" data-view="downloads" data-co-parts="current:1">
     <div class="dl" style="padding:16px 24px">
-      <div class="hl"><h1 class="h1">downloads</h1><p class="line">547 MB used by downloads · 18 GB free on this phone</p></div>
+      <div class="hl"><ds-heading level="2">downloads</ds-heading><p class="line">547 MB used by downloads · 18 GB free on this phone</p></div>
       <h2 class="h2 grp">Pioneer One</h2>
       <p class="h3">season 1</p>
       <div class="dl-row">
         <div class="th"><div class="art a5"></div></div>
-        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">281 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
       <div class="dl-row" data-co="2" data-co-side="right">
         <div class="th"><div class="art a3"></div></div>
-        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="st">downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></div>
-        <span class="b icon"><i data-i="x" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="stline"><ds-status state="information">downloading 42%</ds-status><span class="size">347 MB</span></span><span class="bar dl-bar"><i style="width:42%"></i></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="x" label="cancel download"></ds-iconbutton>
       </div>
       <div class="dl-row">
         <div class="th"><div class="art a1"></div></div>
-        <div class="tx"><span class="nm">S01E03 · Alone in the Night</span><span class="st">queued · 271 MB</span></div>
-        <span class="b icon"><i data-i="x" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E03 · Alone in the Night</span><span class="stline"><ds-status state="neutral">queued</ds-status><span class="size">271 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="x" label="cancel download"></ds-iconbutton>
       </div>
     </div>
+  </div>
+</figure>
+
+<!-- Figure 13.7 · the questions before deleting all downloads and before signing out, on a phone held upright -->
+<figure class="shot" id="download-questions">
+  <div class="phone" data-view="downloads">
+    <div class="dl">
+      <ds-heading level="2">downloads</ds-heading>
+      <p class="line">547 MB used by downloads · 18 GB free on this phone</p>
+      <h2 class="h2 grp">Pioneer One</h2>
+      <p class="h3">season 1</p>
+      <div class="dl-row">
+        <div class="th"><div class="art a5"></div></div>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">281 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
+      </div>
+      <div class="dl-row">
+        <div class="th"><div class="art a3"></div></div>
+        <div class="tx"><span class="nm">S01E02 · The Man From Mars</span><span class="stline"><ds-status state="information">downloading 42%</ds-status><span class="size">347 MB</span></span><span class="bar dl-bar"><i style="width:42%"></i></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="x" label="cancel download"></ds-iconbutton>
+      </div>
+      <h2 class="h2 grp">movies</h2>
+      <div class="dl-row">
+        <div class="th"><div class="art a4"></div></div>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">120 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
+      </div>
+      <div style="margin-top:4px"><ds-button size="lg" variant="danger">delete all</ds-button></div>
+    </div>
+    <ds-modal title="delete all downloads" data-co="1">
+      <ds-body><p style="margin:0">This removes 3 downloads, 547 MB, from this phone.</p></ds-body>
+      <ds-footer><ds-button size="lg" variant="ghost">cancel</ds-button><ds-button size="lg" variant="danger">delete all</ds-button></ds-footer>
+    </ds-modal>
+  </div>
+  <div class="phone" data-view="none" data-bar="back" data-title="account">
+    <div class="pg" style="display:flex; flex-direction:column; gap:12px">
+      <div class="row" style="gap:16px"><span class="av" style="width:64px;height:64px;line-height:64px;font-size:22px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
+      <div class="row" style="gap:8px; margin-top:4px">
+        <ds-button size="lg" style="flex:1">switch account</ds-button>
+        <ds-button size="lg" style="flex:1">sign out</ds-button>
+      </div>
+      <ds-button size="lg" variant="danger" block>delete account</ds-button>
+    </div>
+    <ds-modal title="sign out" data-co="2" data-co-side="right">
+      <ds-body><p style="margin:0">Your 3 downloads, 547 MB, are deleted from this phone. Casting on Living Room TV stops.</p></ds-body>
+      <ds-footer><ds-button size="lg" variant="ghost">cancel</ds-button><ds-button size="lg" variant="danger">sign out</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
@@ -265,29 +350,25 @@
 <figure class="shot" id="downloads-deleted-phone">
   <div class="phone" data-view="downloads">
     <div class="dl">
-      <div class="banner" data-co="1"><i data-i="info" class="s16"></i>
-        <div>
-          <div>3 downloads were deleted from this phone: they aren't available to this account anymore.</div>
-          <span class="det" data-co="2">details<i data-i="chevron-up" class="s14"></i></span>
-          <ul class="titles"><li>Cosmos Laundromat</li><li>Charge</li><li>Coffee Run</li></ul>
-        </div>
-      </div>
-      <h1 class="h1">downloads</h1>
+      <ds-banner state="information" data-co="1" details='<span data-co="2">Cosmos Laundromat</span>
+Charge
+Coffee Run' details-open>3 downloads were deleted from this phone: they aren't available to this account anymore.</ds-banner>
+      <ds-heading level="2">downloads</ds-heading>
       <p class="line">401 MB used by downloads · 18 GB free on this phone</p>
       <h2 class="h2 grp">Pioneer One</h2>
       <p class="h3">season 1</p>
       <div class="dl-row">
         <div class="th"><div class="art a5"></div></div>
-        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">281 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
       <h2 class="h2 grp">movies</h2>
       <div class="dl-row">
         <div class="th"><div class="art a4"></div></div>
-        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">120 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
-      <div style="margin-top:4px"><span class="b danger">delete all</span></div>
+      <div style="margin-top:4px"><ds-button size="lg" variant="danger">delete all</ds-button></div>
     </div>
   </div>
 </figure>
@@ -296,23 +377,23 @@
 <figure class="shot" id="downloads-offline-phone">
   <div class="phone nobell" data-view="downloads" data-co-parts="search:2:top">
     <div class="dl">
-      <div class="banner" data-co="1"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
-      <h1 class="h1">downloads</h1>
+      <ds-banner state="information" data-co="1">Can't reach the server. Your downloads still play.</ds-banner>
+      <ds-heading level="2">downloads</ds-heading>
       <p class="line">401 MB used by downloads · 18 GB free on this phone</p>
       <h2 class="h2 grp">Pioneer One</h2>
       <p class="h3">season 1</p>
       <div class="dl-row" data-co="3">
         <div class="th"><div class="art a5"></div></div>
-        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">281 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
       <h2 class="h2 grp">movies</h2>
       <div class="dl-row">
         <div class="th"><div class="art a4"></div></div>
-        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">120 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
-      <div style="margin-top:4px"><span class="b danger">delete all</span></div>
+      <div style="margin-top:4px"><ds-button size="lg" variant="danger">delete all</ds-button></div>
     </div>
   </div>
 </figure>
@@ -321,20 +402,20 @@
 <figure class="shot" id="downloads-offline-side-phone">
   <div class="phone side nobell" data-view="downloads" data-co-parts="current:2">
     <div class="dl" style="padding:16px 24px">
-      <div class="banner" data-co="1" data-co-side="right"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
-      <div class="hl"><h1 class="h1">downloads</h1><p class="line">401 MB used by downloads · 18 GB free on this phone</p></div>
+      <ds-banner state="information" data-co="1" data-co-side="right">Can't reach the server. Your downloads still play.</ds-banner>
+      <div class="hl"><ds-heading level="2">downloads</ds-heading><p class="line">401 MB used by downloads · 18 GB free on this phone</p></div>
       <h2 class="h2 grp">Pioneer One</h2>
       <p class="h3">season 1</p>
       <div class="dl-row">
         <div class="th"><div class="art a5"></div></div>
-        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="st">downloaded · 281 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">S01E01 · Earthfall</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">281 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
       <h2 class="h2 grp">movies</h2>
       <div class="dl-row">
         <div class="th"><div class="art a4"></div></div>
-        <div class="tx"><span class="nm">Sprite Fright</span><span class="st">downloaded · 120 MB</span></div>
-        <span class="b icon"><i data-i="trash" class="s16"></i></span>
+        <div class="tx"><span class="nm">Sprite Fright</span><span class="stline"><ds-status state="success">downloaded</ds-status><span class="size">120 MB</span></span></div>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete download"></ds-iconbutton>
       </div>
     </div>
   </div>
@@ -344,7 +425,7 @@
 <figure class="shot" id="downloads-title-offline-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Pioneer One">
     <div class="offline">
-      <div class="banner" data-co="1"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
+      <ds-banner state="information" data-co="1">Can't reach the server. Your downloads still play.</ds-banner>
       <div class="pagebox">
         <div class="bd"><div class="art a1"></div><div class="fade"></div></div>
         <div class="hd">
@@ -352,12 +433,12 @@
           <div class="nm">
             <h1 class="t">Pioneer One</h1>
             <p class="meta">2010 · 1 season · drama</p>
-            <p class="meta"><span class="kind" style="margin-left:0">show</span></p>
+            <p class="meta"><ds-badge>show</ds-badge></p>
           </div>
         </div>
         <div class="body">
-          <span class="b primary" data-co="2"><i data-i="play" class="fill"></i>play S01E01</span>
-          <span class="howfar" data-co="3"><i data-i="check" class="s16" style="color:var(--signal-green)"></i>1 episode on this phone</span>
+          <ds-button size="lg" variant="primary" icon="play" data-co="2">play <span class="nc-keep-case">S01E01</span></ds-button>
+          <ds-status state="success" appearance="text" class="howfar" data-co="3">1 episode on this phone</ds-status>
           <p class="desc" data-co="4">An object falls from the sky over Montana, and two federal agents are sent to find out what it is.</p>
         </div>
       </div>
@@ -369,16 +450,16 @@
 <figure class="shot" id="downloads-title-offline-side-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="Pioneer One">
     <div class="offline">
-      <div class="banner" data-co="1" data-co-side="right"><i data-i="info" class="s16"></i><span>Can't reach the server. Your downloads still play.</span></div>
+      <ds-banner state="information" data-co="1" data-co-side="right">Can't reach the server. Your downloads still play.</ds-banner>
       <div class="pagebox">
         <div class="bd"><div class="art a1"></div><div class="fade"></div></div>
         <div class="hd2">
           <div class="pos"><div class="art a1"></div></div>
           <div class="info">
             <h1 class="t" data-co="2" data-co-side="right">Pioneer One</h1>
-            <p class="meta">2010 · 1 season · drama<span class="kind" style="margin-left:10px">show</span></p>
-            <div class="acts"><span class="b primary"><i data-i="play" class="fill"></i>play S01E01</span></div>
-            <span class="howfar" data-co="3" data-co-side="right"><i data-i="check" class="s16" style="color:var(--signal-green)"></i>1 episode on this phone</span>
+            <p class="meta">2010 · 1 season · drama <ds-badge style="margin-left:6px">show</ds-badge></p>
+            <div class="acts"><ds-button size="lg" variant="primary" icon="play">play <span class="nc-keep-case">S01E01</span></ds-button></div>
+            <ds-status state="success" appearance="text" class="howfar" data-co="3" data-co-side="right">1 episode on this phone</ds-status>
             <p class="desc">An object falls from the sky over Montana, and two federal agents are sent to find out what it is.</p>
           </div>
         </div>
@@ -391,23 +472,23 @@
 <figure class="shot" id="downloads-check-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="Sprite Fright">
     <div class="offline">
-      <div class="banner" data-co="1"><i data-i="info" class="s16"></i><span>Can't reach the server.</span></div>
-      <div class="pagebox" style="top:70px">
+      <ds-banner state="information" data-co="1">Can't reach the server.</ds-banner>
+      <div class="pagebox">
         <div class="bd"><div class="art a4"></div><div class="fade"></div></div>
         <div class="hd">
           <div class="pos"><div class="art a4"></div></div>
           <div class="nm">
             <h1 class="t">Sprite Fright</h1>
             <p class="meta">2021 · 10 min</p>
-            <p class="meta"><span class="kind" style="margin-left:0">movie</span></p>
+            <p class="meta"><ds-badge>movie</ds-badge></p>
           </div>
         </div>
         <div class="body">
           <div class="acts">
-            <span class="b primary off" data-co="2"><i data-i="play" class="fill"></i>play</span>
-            <span class="b st2" data-co="3" data-co-side="right">downloaded · check needed</span>
+            <ds-button size="lg" variant="primary" icon="play" disabled data-co="2">play</ds-button>
+            <span class="dlc" data-co="3" data-co-side="right"><ds-status state="warning">check needed</ds-status><span class="size">120 MB</span></span>
           </div>
-          <p class="why">Downloads are checked with the server every 30 days. This one plays again once the server can be reached.</p>
+          <p class="why" style="margin-top:-4px">Downloads are checked with the server every 30 days. This one plays again once the server can be reached.</p>
           <p class="desc">Teenagers on a trip into the woods meet the small folk who live there, and the small folk don't want them.</p>
         </div>
       </div>
@@ -419,13 +500,9 @@
 <figure class="shot" id="downloads-empty-phone">
   <div class="phone" data-view="downloads">
     <div class="dl">
-      <h1 class="h1">downloads</h1>
+      <ds-heading level="2">downloads</ds-heading>
       <p class="line" data-co="1">18 GB free on this phone</p>
-      <div class="empty">
-        <i data-i="download" class="s48"></i>
-        <h2 class="h2" data-co="2">nothing downloaded yet</h2>
-        <p class="text">Titles you download show up here, ready to watch without a connection.</p>
-      </div>
+      <ds-empty illustration="empty" title='<span data-co="2">nothing downloaded yet</span>' description="Titles you download show up here, ready to watch without a connection."></ds-empty>
     </div>
   </div>
 </figure>
@@ -434,16 +511,14 @@
 <figure class="shot" id="downloads-offline-empty-side-phone">
   <div class="phone side nobell" data-view="downloads" data-co-parts="search:2:top">
     <div class="dl" style="padding:16px 24px">
-      <div class="banner" data-co="1" data-co-side="right"><i data-i="info" class="s16"></i><span>Can't reach the server.</span></div>
-      <div class="hl"><h1 class="h1">downloads</h1><p class="line">18 GB free on this phone</p></div>
-      <div class="empty">
-        <i data-i="download" class="s48"></i>
-        <h2 class="h2" data-co="3" data-co-side="right">nothing downloaded yet</h2>
-        <p class="text">Titles you download show up here, ready to watch without a connection.</p>
-      </div>
+      <ds-banner state="information" data-co="1" data-co-side="right">Can't reach the server.</ds-banner>
+      <div class="hl"><ds-heading level="2">downloads</ds-heading><p class="line">18 GB free on this phone</p></div>
+      <ds-empty illustration="empty" size="sm" title='<span data-co="3" data-co-side="right">nothing downloaded yet</span>' description="Titles you download show up here, ready to watch without a connection."></ds-empty>
     </div>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

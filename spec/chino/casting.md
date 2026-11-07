@@ -30,7 +30,10 @@ Google's Cast library draws the cast button, the device chooser, the bar, the
 full controls and the notification, themed with the app's colours: the full
 controls on the background colour, the bar on the surface colour, the seek bar
 and the active controls in the accent blue. Labels and icons on blue are dark.
-The layouts are Google's; the figures show their parts in chino's colours.
+The layouts are Google's; the figures show their parts in chino's colours. What
+chino draws itself around them is the design system's: the buttons of a
+title's page, the error banner when the TV can't play a title (section 14.5)
+and the toasts.
 
 ## 14.2 As deployed
 
@@ -142,9 +145,9 @@ doesn't have; only the phone app casts.
 ## 14.3 The cast button
 
 The cast button appears only when a device that can play is on the network. It
-sits in the bar of a title's page and of the player, on the right, in a 48 dp
-square like every control. Figure 14.1 shows it on a title's page, on a phone
-held upright.
+sits in the bar of a title's page and of the player, on the right: Google's
+button, without a surface of its own, with a 48 dp touch area. Figure 14.1
+shows it on a title's page, on a phone held upright.
 
 ![Figure 14.1: The cast button on a title's page, on a phone held upright, at 360 × 780 dp](./img/casting-button-phone.png)
 
@@ -154,10 +157,11 @@ Figure 14.1: The cast button on a title's page, on a phone held upright, at
 1. **The cast button**, Google's icon: outlined while nothing is connected,
    moving while it connects, filled while casting (figure 14.5). It opens
    Google's device chooser, which lists the devices by their own names.
-2. **play**: while a TV is connected, play, resume and an episode's play start
-   the title on the TV, where they would have started it on the phone: at the
-   resume point, or from the start for a finished title. When the TV already
-   plays that title for this phone, it plays on.
+2. **play**, the design system's emphasized button: while a TV is connected,
+   play, resume and an episode's play start the title on the TV, where they
+   would have started it on the phone: at the resume point, or from the start
+   for a finished title. When the TV already plays that title for this phone,
+   it plays on.
 
 Figure 14.2 shows the same page on a phone held sideways. The bar is slimmer
 and the tabs are a rail on the left ([chapter 2](./frame.md)); the cast button
@@ -169,8 +173,8 @@ Figure 14.2: The cast button on a title's page, on a phone held sideways, at
 780 × 360 dp.
 
 1. **The cast button**, at the right of the bar, as upright.
-2. **The title row**, **play** first, beside the poster and in view without
-   scrolling.
+2. **The title row**, the design system's buttons at the large size, 42 dp,
+   **play** first, beside the poster and in view without scrolling.
 
 ## 14.4 While casting
 
@@ -259,14 +263,14 @@ Signing out, removing the account, changing the server or switching to another
 account saves the position and stops casting, so a title never keeps playing
 under the next person. The question before signing out, removing the account or
 changing the server says “Casting on Living Room TV stops.”, as figure 13.7
-shows in [chapter 13](./downloads.md). A switch asks nothing; after it, a toast
-says “Stopped casting on Living Room TV.”
+shows in [chapter 13](./downloads.md). A switch asks nothing; after it, the
+design system's toast says “Stopped casting on Living Room TV.”
 
 ### 14.4.6 Downloads without the server
 
 While the server can't be reached, a downloaded title plays on the phone, even
-while a TV is connected, and a toast says why: “Playing on this phone: the
-server can't be reached.”
+while a TV is connected, and the design system's toast says why: “Playing on
+this phone: the server can't be reached.”
 
 ### 14.4.7 Turning the phone
 
@@ -279,8 +283,10 @@ open.
 The app sends a version the TV can play whenever there is one. When the TV
 fails at something a second try can mend, such as a part of the stream it
 couldn't load, the phone sends the title once more before it says anything.
-When there is no version the TV can play, a warning banner takes the bar's
-place, as figure 14.7 shows. Casting stops, and the title stays where it was on
+When there is no version the TV can play, the design system's error banner
+takes the bar's place, as figure 14.7 shows: casting the title failed, and an
+action that failed is an error banner that can be dismissed, with its details
+([chapter 17](./errors.md)). Casting stops, and the title stays where it was on
 the phone.
 
 ![Figure 14.7: When the TV can't play a title, on a phone held upright, at 360 × 780 dp](./img/casting-failed-phone.png)
@@ -292,10 +298,11 @@ Figure 14.7: When the TV can't play a title, on a phone held upright, at
    there.
 2. **“Living Room TV can't play this title.”**, with the device's own name. A
    device without a name reads “The device can't play this title.”
-3. **details** gives the reason, for example “the server no longer accepts this
-   phone's sign-in (HTTP 401)” or “the server doesn't let this account play it
-   (HTTP 403)”.
-4. **The close button**, a 48 dp square, puts the banner away.
+3. **details**, the banner's own, gives the reason in the monospace face, for
+   example “the server no longer accepts this phone's sign-in (HTTP 401)” or
+   “the server doesn't let this account play it (HTTP 403)”.
+4. **dismiss**, the banner's small square with a cross, puts the banner away.
+   It has a 48 dp touch area around it.
 
 Figure 14.8 shows the warning on a phone held sideways, at the foot of the
 content, where the bar was. With the width it has there, **details** follows the
@@ -307,7 +314,7 @@ Figure 14.8: When the TV can't play a title, on a phone held sideways, at
 780 × 360 dp.
 
 1. **The line and details**, on one row.
-2. **The close button**, at the banner's right end.
+2. **dismiss**, at the banner's right end.
 
 ## 14.6 Changes
 
@@ -322,9 +329,9 @@ chapter 11 as well.
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 14.C1 | The cast button in a 48 dp square on a title's page | Phone app (Android) | a 40 dp square on the surface, the size of back and home beside it | a 48 dp square at the right of the title page's bar (figure 14.1); in the player, chapter 11's change of its buttons | proposed |
+| 14.C1 | The cast button with a 48 dp touch area on a title's page | Phone app (Android) | a 40 dp square on the surface, the size of back and home beside it | Google's button at the right of the title page's bar, without a surface of its own, with a 48 dp touch area (figure 14.1); in the player, chapter 11's change of its buttons | proposed |
 | 14.C2 | The audio tracks named as the player names them on the TV | Phone app (Android) | Google's chooser of the TV's tracks names the subtitles as the phone's player does, and the audio tracks by the names the stream gives them | the audio tracks too as the player names them, “English · 5.1” (figure 14.5, part 4) | proposed |
-| 14.C3 | The warning's close button 48 dp | Phone app (Android) | a 28 dp square with a cross | a 48 dp square (figure 14.7, part 4) | proposed |
+| 14.C3 | When the TV can't play: the design system's error banner | Phone app (Android) | a warning banner drawn like the design system's: the warning's glyph and its edge, **details** with its caret, and a 28 dp square with a cross to put it away, whose touch area is no larger | the design system's error banner, as every action that failed has it ([chapter 17](./errors.md)): the line, **details** and dismiss, the dismiss drawn 28 dp as the banner draws it, with a 48 dp touch area around it (figures 14.7 and 14.8) | proposed |
 
 ## 14.7 States
 

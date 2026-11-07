@@ -289,11 +289,14 @@ Figure 6.7: A movie's page on a computer, at 1280 × 800.
    ever written on the picture.
 2. **The poster**, beside the name, reaching up into the still.
 3. **The name and its facts**: the year, the length, the genres, the rating
-   and the kind, movie or show. A tagline, where the catalog has one, goes
-   under the name. Section 6.8.1 lists the facts.
-4. **The title row**: **play**, **trailer**, add to list, watched and liked,
-   specified in section 6.5. **trailer** is there only when the title has a
-   trailer.
+   and the kind, movie or show, in the design system's badge. A tagline,
+   where the catalog has one, goes under the name. Section 6.8.1 lists the
+   facts.
+4. **The title row**: **play**, the design system's emphasized button, then
+   **trailer**, add to list with **lists**, watched and liked, its standard
+   buttons, icon buttons and multi select, all at its medium size, 34 px
+   high. Section 6.5 specifies them. **trailer** is there only when the title
+   has a trailer.
 5. **The description.** A title without one goes straight on to the people;
    no sentence says that it's missing.
 6. **The people**: **starring**, the actors with the parts they play, then the
@@ -316,12 +319,13 @@ Figure 6.8: A movie's page on a phone held upright, at 360 × 780 dp.
    the tabs stay. While a TV to cast to is on the network, the cast button
    joins the bar on the right ([chapter 14](./casting.md)).
 2. **The poster** is smaller and stands beside the name, so the title row is
-   in view without scrolling. The facts wrap onto three lines here, in their
-   order, and a fact is never split between two.
-3. **The title row** wraps where the phone is too narrow for it, a control as
-   a whole.
+   in view without scrolling. The name and the facts wrap where they must,
+   the facts onto three lines here, in their order, and a fact is never split
+   between two.
+3. **The title row**, at the design system's large size, 42 dp high, wraps
+   where the phone is too narrow for it, a control as a whole.
 4. **download** comes last in the row, with the size the download will take:
-   “download · 152 MB”. Once it starts, the control shows how the download
+   **download · 152 mb**. Once it starts, the control shows how the download
    stands ([chapter 13](./downloads.md)).
 5. **The people** stand two to a line.
 
@@ -345,7 +349,8 @@ Figure 6.9: A movie's page on a phone held sideways, at 780 × 360 dp.
    the name, as on a computer.
 3. **The name and the facts** stand beside the poster, which keeps its size,
    and the facts fit on one line.
-4. **The title row** runs on one line under the poster, **download** last.
+4. **The title row** runs under the poster, on as few lines as the width
+   allows, **download** last: at the large size, here on two.
 
 The description follows the row, and the people stand three to a line. The web
 on a phone held sideways has the same layout, with its own tabs as the rail
@@ -359,9 +364,9 @@ at, a season that is open stays open, an open list picker or card menu stays
 open, and a download goes on.
 
 - **Turned sideways**, the tabs become the rail and the bar gets slimmer. The
-  still becomes a band, the facts and the row get one line each, and the
-  people stand three to a line. A show's episodes take the computer's layout
-  (section 6.4.3).
+  still becomes a band, the facts get one line and the row as few as it
+  needs, and the people stand three to a line. A show's episodes take the
+  computer's layout (section 6.4.3).
 - **Turned back upright**, the tabs come back at the foot, the facts and the
   row wrap again, and the people stand two to a line.
 
@@ -377,8 +382,9 @@ Figure 6.10: A movie's page on a TV, at 960 × 540 dp.
 1. **The poster and the name** sit low enough for the still to show above
    them. The words stand on the page's colour, as on a computer.
 2. **The focus** starts on **play**, or on **resume** for a title stopped part
-   way. The row's controls are 40 dp high and 12 dp apart, so a focused
-   control can grow and show its ring without touching the next. Left and
+   way. The row's controls are the design system's large ones, 42 dp high,
+   12 dp apart, so a focused control can grow and show its ring without
+   touching the next, as the design system's TV focus draws it. Left and
    right move along the row; down moves to the people, then to a show's
    episodes and to more like this; up from there brings the top of the page
    back.
@@ -434,16 +440,19 @@ Figure 6.12: A show's page on a phone held upright, scrolled to its episodes,
 at 360 × 780 dp.
 
 1. **The season's download**, under its header, takes the season's episodes
-   that aren't on the phone or on their way yet, all at once: here “download 3
-   more episodes · 940 MB”, in the words of [chapter 13](./downloads.md).
+   that aren't on the phone or on their way yet, all at once: here
+   **download 3 more episodes · 940 mb**, in the words of
+   [chapter 13](./downloads.md), a standard button the width of the page.
 2. **The episode row.** The still, then the episode's code and length on one
    line, and its name with the column to itself, on up to two lines, so it's
    never cut to a word.
 3. **The actions line** runs under the still and the text: add to list,
-   watched, and the episode's own download, wrapping between controls, never
-   inside one.
-4. **A download on its way** shows how far it is, with a button to cancel it;
-   a downloaded episode shows its size, with a button to delete it.
+   watched, and the episode's own download, at the title row's large size,
+   wrapping between controls, never inside one.
+4. **A download on its way** shows how far it is in the design system's
+   status, “downloading 42% · 347 mb”, with the cross to cancel it beside it;
+   a downloaded episode shows its size the same way, with the bin to delete
+   it, the design system's danger icon button.
 
 Under the title row, a show that is partly on the phone says how far:
 “1 of 6 downloaded” ([chapter 13](./downloads.md)).
@@ -482,7 +491,8 @@ Figure 6.14: A show's page on a TV, the focus on an episode, at 960 × 540 dp.
    ring inside its edge, 2 % larger. OK plays it, from where the person
    stopped.
 3. **The actions** sit at the row's end, each a focus stop of its own: right
-   from the row reaches add to list, then watched.
+   from the row reaches add to list's bookmark, then **lists**, then
+   watched.
 
 ## 6.5 The actions
 
@@ -498,18 +508,27 @@ On a title's page, in this order:
 **play**, or **resume 1:43** and **start over** · **trailer** · add to list ·
 watched · liked · **download**
 
-Figure 6.15 shows the row on a movie in three states.
+Figure 6.15 shows the row on a movie in three states, at the phone's size,
+where the row has **download**.
 
 ![Figure 6.15: The row on a movie: not started; partly watched and downloaded; in the Watchlist, watched and liked](./img/title-row.png)
 
 Figure 6.15: The row on a movie: not started; partly watched and downloaded;
 in the Watchlist, watched and liked.
 
-- Every control in the row has one height: 48 dp on a computer, a phone or a
-  tablet. Icon buttons are 48 × 48 dp, with 8 dp between controls.
-- The TV keeps its own control height, 40 dp, and its
-  [focus style](https://nalet.github.io/design-system/patterns/tv-focus/), with
-  the same controls in the same order and 12 dp between them.
+- The row is chino's own layout of the design system's controls. **play**, or
+  **resume**, is its emphasized button, the next step; **start over**,
+  **trailer** and **download** are standard buttons; add to list's bookmark,
+  watched and liked are standard icon buttons; **lists** is its multi select
+  (section 6.5.2).
+- Every control in the row has the height of the design system's size for
+  the screen: the medium size, 34 px, on a computer, and the large size,
+  42 dp, on a phone, a tablet and a TV, with 8 dp between controls and 12 dp
+  on a TV. On a phone and a tablet each control's touch area is
+  48 × 48 dp, reaching past the control where it is smaller.
+- On a TV a focused control shows the design system's
+  [TV focus](https://nalet.github.io/design-system/patterns/tv-focus/), with
+  the same controls in the same order.
 - When the row wraps, a control wraps as a whole.
 - **resume 1:43** says where the title picks up, and **start over** plays it
   from its beginning. A title stopped within its last minutes is finished
@@ -522,28 +541,37 @@ in the Watchlist, watched and liked.
 
 ### 6.5.2 Add to list
 
-One control in two parts, in one frame and at one height:
+Two controls side by side, as far apart as the row's others, 8 dp, and 12 dp
+on a TV:
 
-- **The main part** shows and toggles the Watchlist: an outlined bookmark when
-  the title isn't in it, a filled one when it is. It never touches other lists.
-- **“⌄”** opens the list picker, with a check against each list that holds the
-  title. That's where a title leaves other lists; its last row, **create list**,
-  opens the dialog that starts a new list with the title in it
-  ([chapter 8](./watchlist.md)).
-- The two parts touch, with a 1 dp divider and the same fill. The “⌄” part is
-  drawn 40 dp wide at the full height; its touch target is 48 × 48 dp. On a TV
-  they are two focus stops, each with its own ring, drawn inside the part as on
-  a row, so the other part stays whole and the divider stays visible.
+- **The bookmark**, the design system's icon button, shows and toggles the
+  Watchlist: an outlined bookmark when the title isn't in it, a dark one on
+  blue when it is. It never touches other lists.
+- **lists**, the design system's multi select, says which lists hold the
+  title: “none”, the list's name where one does, “Watchlist”, or how many,
+  “2 chosen”, in blue once there is one. It opens the list picker, a box for
+  each list, ticked where the list holds the title. Ticking a box puts the
+  title in that list at once, and clearing one takes it out: that's where a
+  title leaves other lists. **clear lists**, the multi select's own, takes it
+  out of every list.
+- **create list**, under the lists, opens the dialog that starts a new list
+  with the title in it ([chapter 8](./watchlist.md)). The multi select has no
+  place of its own for it, so it is a quiet button between the lists and
+  **clear lists**.
+- The multi select comes in the medium size only, so in the row of 42 dp
+  controls on a phone and a TV, **lists** is 34 dp high, centred on the row.
+- On a TV they are two focus stops, each with its own ring.
 
-Figure 6.16 shows the control off and on, and the picker it opens.
+Figure 6.16 shows the two controls off and on, and the picker open.
 
-![Figure 6.16: The add-to-list control off and on, and the list picker the arrow opens](./img/add-to-list.png)
+![Figure 6.16: Add to list off and on, and the list picker, open](./img/add-to-list.png)
 
-Figure 6.16: The add-to-list control off and on, and the list picker the arrow
-opens.
+Figure 6.16: Add to list off and on, and the list picker, open.
 
-The picker opens under the control on a computer, from the bottom of the
-screen on a phone, and over the page on a TV, where back closes it.
+The picker opens under **lists** on a computer and a phone, as the design
+system's multi select does, and over the page on a TV, where back closes it.
+The design system has no list for a TV, so there the picker is the app's own,
+with the same boxes, **create list** and **clear lists**.
 
 ### 6.5.3 On and off
 
@@ -557,11 +585,12 @@ Labels and icons on a filled colour are dark.
 
 Each meaning has one icon and one colour, on buttons and on cards alike: the
 bookmark on blue for the Watchlist, the check on green for watched, the heart
-on red for liked.
+on red for liked. The design system's icon button has no on state, so this on
+look is chino's own: the icon button filled with its meaning's colour.
 
 The names screen readers announce say the state: “add to Watchlist” and “in
-your Watchlist”, “choose lists”, “mark as watched” and “watched”, “like” and
-“liked”.
+your Watchlist”, “mark as watched” and “watched”, “like” and “liked”.
+**lists** is named by its words, “lists 2 chosen”, as the multi select is.
 
 ### 6.5.4 Nothing on artwork
 
@@ -575,16 +604,18 @@ Figure 6.17: Cards with their status marks, and an episode row with its own
 actions line.
 
 - **Episode rows** carry their actions in the row's own actions line, at the
-  same 48 dp and in the title row's order: add to list, watched, download.
+  title row's height and in its order: add to list, watched, download.
 - **Cards** in a grid show only status marks, drawn as in the table of
   section 6.5.3: the Watchlist bookmark on blue, the watched check on green,
   and the progress bar. Actions live on the title's page, or in a card's menu
   where it has one.
-- **A card's menu** has its button beside the name, under the poster, and on
-  a TV opens when OK is held on the card. It offers **play**, or **resume**
-  for a title the person is in, and **mark as watched**, or **watched** while
-  the mark is on, which takes it off. On home's continue watching it also
-  offers **remove from continue watching** ([chapter 4](./home.md)).
+- **A card's menu** is the design system's action menu. Its button, three
+  small squares, stands at the right of the card's lines under the poster,
+  and the menu opens under it; on a TV the menu opens when OK is held on the
+  card. It offers **play**, or **resume** for a title the person is in, and
+  **mark as watched**, or **mark as unwatched** while the mark is on, which
+  takes it off: a menu item says what it does, as the design system's menus do. On home's continue watching it also offers **remove from continue
+  watching** ([chapter 4](./home.md)).
 
 ## 6.6 Play on a show
 
@@ -598,7 +629,9 @@ an episode, and names it by its code, which keeps its capitals:
 | The last episode watched was finished | **play S01E02**, the next one |
 | Every episode finished | **play S01E01** |
 
-Figure 6.18 shows the row in the first three cases.
+Figure 6.18 shows the row in the first three cases, at the computer's size.
+The code keeps its capitals inside the lowercase button, as the design system
+keeps a name's.
 
 ![Figure 6.18: The row on a show: nothing watched yet; an episode partly watched; the last episode watched finished](./img/title-row-series.png)
 
@@ -730,12 +763,12 @@ has today. The frame itself, the top bar, the tabs and the rail, belongs to
 | 6.C2 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner alone. Android TV: “Loading…”. Samsung TV: a spinner and “Loading…” | nothing for 0.4 seconds, then grey blocks in the page's shape (figure 6.19) | proposed |
 | 6.C3 | No words on the still | Web, Phone app, Samsung TV | Web: the name, the tagline, the facts and the genres stand on the still's dimmed foot (figure 6.1). Phone app: the same from 600 dp wide. Samsung TV: the top half of the page stands on it | the still fades into the page's colour before the first words; only the poster reaches up into it (figure 6.7, parts 1 and 2) | proposed |
 | 6.C4 | Upright: the poster beside the name | Web, Phone app | below 768 px (Web) or 600 dp (Phone app) wide, the poster, 192 wide, stands above the name (figure 6.3) | below 600 dp wide, the poster 96 dp wide beside the name, the facts on up to three lines, the row in view without scrolling (figure 6.8) | proposed |
-| 6.C5 | Sideways: the computer's layout at the phone's size | Web, Phone app | Web: from 768 px the computer's layout, the poster 256 px beside the name and the row beside it, wrapping (figure 6.4). Phone app: from 600 dp the poster, 192 dp, beside the name and the row | from 600 dp wide, figure 6.9: the still a band, the poster 96 dp beside the name, the facts on one line, the row on one line under them, the people three to a line; the episodes as in figure 6.13; turning the phone as section 6.3.4 says | proposed |
-| 6.C6 | The facts line | Web, Phone app, Android TV, Samsung TV | the length “12m”, “1h 32m”, and a show has one; the genres as chips in the catalog's words, “Sci-Fi & Fantasy”. Phone app: the kind “MOVIE”, “SERIES”, the rating cut, no age rating. Android TV: the kind “movie”, “series”, the rating in the TV's language, “7,4”, no age rating. Samsung TV: “MOVIE”, “SERIES”, “EPISODE”, no age rating | section 6.8.1: one line, “2012 · 12 min · science fiction · ★ 6.6”, then the age rating's badge and the kind's, “movie” or “show”; “1 h 32 min”; a show without a length; the genres as words in the line; the rating rounded, with a point | proposed |
+| 6.C5 | Sideways: the computer's layout at the phone's size | Web, Phone app | Web: from 768 px the computer's layout, the poster 256 px beside the name and the row beside it, wrapping (figure 6.4). Phone app: from 600 dp the poster, 192 dp, beside the name and the row | from 600 dp wide, figure 6.9: the still a band, the poster 96 dp beside the name, the facts on one line, the row under them on as few lines as fit, the people three to a line; the episodes as in figure 6.13; turning the phone as section 6.3.4 says | proposed |
+| 6.C6 | The facts line | Web, Phone app, Android TV, Samsung TV | the length “12m”, “1h 32m”, and a show has one; the genres as chips in the catalog's words, “Sci-Fi & Fantasy”. Phone app: the kind “MOVIE”, “SERIES”, the rating cut, no age rating. Android TV: the kind “movie”, “series”, the rating in the TV's language, “7,4”, no age rating. Samsung TV: “MOVIE”, “SERIES”, “EPISODE”, no age rating | section 6.8.1: one line, “2012 · 12 min · science fiction · ★ 6.6”, then the age rating and the kind, “movie” or “show”, as the design system's badges; “1 h 32 min”; a show without a length; the genres as words in the line; the rating rounded, with a point | proposed |
 | 6.C7 | trailer with the clapperboard | Web, Android TV, Samsung TV | a trailer online shows a video site's logo | the clapperboard, whatever plays the trailer (section 6.5.1) | proposed |
-| 6.C8 | Android TV: the row at 40 dp | Android TV | the row's controls 33 dp high, about 22 dp apart | 40 dp high, 12 dp apart, the add-to-list parts as section 6.5.2 has them (figure 6.10, part 2) | proposed |
-| 6.C9 | Samsung TV: the title row | Samsung TV | the words capitalised: “Play”, “Resume 1:43”, “Start over”, “Trailer”; add to list a “+” turning into a check on green, using the default list, with no picker; no liked; watched an eye; a focused plain button white, the ring in the accent's blue | section 6.5: the words lowercase; add to list in two parts with the list picker; liked; watched a check, dark on green when on; the design system's TV focus, the ring in the focus colour | proposed |
-| 6.C10 | The list picker's way to a new list | Web, Phone app, Android TV | Web: “new list…” opens a name field inside the picker. Phone app: “New list…”, a field and a check. Android TV: “New list…” is the first row, then a field | the last row, **create list**, opens the dialog of [chapter 8](./watchlist.md), and the title goes into the new list at once (section 6.5.2) | proposed |
+| 6.C8 | Android TV: the row at 42 dp | Android TV | the row's controls 33 dp high, about 22 dp apart | the design system's large buttons and icon buttons, 42 dp high, 12 dp apart, add to list as section 6.5.2 has it (figure 6.10, part 2) | proposed |
+| 6.C9 | Samsung TV: the title row | Samsung TV | the words capitalised: “Play”, “Resume 1:43”, “Start over”, “Trailer”; add to list a “+” turning into a check on green, using the default list, with no picker; no liked; watched an eye; a focused plain button white, the ring in the accent's blue | section 6.5: the design system's large buttons and icon buttons, the words lowercase; the bookmark and **lists** with the list picker; liked; watched a check, dark on green when on; the design system's TV focus, the ring in the focus colour | proposed |
+| 6.C10 | The list picker: the design system's multi select, and its way to a new list | Web, Phone app, Android TV | add to list in two parts that touch, the bookmark and ⌄, which opens a list of checks. Web: under the control; “new list…” opens a name field inside it. Phone app: from the bottom; “New list…”, a field and a check. Android TV: over the page; “New list…” is the first row, then a field | the bookmark, the design system's icon button, and beside it **lists**, its multi select: “lists none”, “lists Watchlist”, “lists 2 chosen”; its panel of boxes under it on a computer and a phone, with **clear lists**, and the app's own picker over the page on a TV; **create list**, a quiet button under the lists, opens the dialog of [chapter 8](./watchlist.md), and the title goes into the new list at once (section 6.5.2, figure 6.16) | proposed |
 | 6.C11 | The description | Web, Samsung TV | without one, “No description available.”; Samsung TV: never cut | without one, nothing in its place; on a TV four lines at most, ending in “…” (sections 6.3.1, 6.3.5) | proposed |
 | 6.C12 | starring, the crew and the subtitles | Web, Phone app, Android TV, Samsung TV | Web, Phone app: “Starring” a label, “Full cast (12)”, “Show less”; the subtitles in the tracks' order, and in the Phone app with their kind, “English · for deaf and hard of hearing”, cut after two lines. Android TV: the crew's and the subtitles' labels lowercase, “director”, “subtitles”. Samsung TV: the subtitles in the tracks' order, whole | section 6.8.2: **starring** a heading, **full cast (12)** and **show less**; the crew's labels as field labels, “Director”, “Subtitles”; the languages each once, alphabetical, without their kind; on a TV three lines and “+12 more” | proposed |
 | 6.C13 | TV: the starring cards with photos | Android TV, Samsung TV | the cards show the initials, never a photo | the photo, or the initials where the catalog has none (figure 6.10, part 3) | proposed |
@@ -749,8 +782,8 @@ has today. The frame itself, the top bar, the tabs and the rail, belongs to
 | 6.C21 | Opened on an episode, the first button names it | Web, Phone app | the first button names the episode the show's page plays anyway, not the one it was opened on | that episode until the person plays on: **resume S01E03** where it was stopped part way, else **play S01E05** (section 6.6) | proposed |
 | 6.C22 | Samsung TV: an episode opens its show's page | Samsung TV | an episode from continue watching or a notification opens a page of its own, without seasons | its show's page, that season open, the row marked with the blue bar and the focus on it (section 6.7.4) | proposed |
 | 6.C23 | TV: where the focus starts and where it comes back | Android TV, Samsung TV | Android TV: the code sets no first focus. Samsung TV: back from another page or from the player loads the page again, the focus on play | the focus starts on **play** or **resume**; back puts it on the card or the name that opened a page, the page scrolled as it was; back from the player keeps the page (sections 6.3.5, 6.8.4) | proposed |
-| 6.C24 | Couldn't load, removed and no access, by cause | Web, Android TV, Samsung TV | Web: a quiet back beside try again. Android TV: no access says “you don't have access to this title”. Samsung TV: one red line, “Could not load this title: chino-api 503.”, also for 404 and 403; no button | figures 6.20 to 6.22 and the table of section 6.10: try again alone, the reason by cause, details; “this title isn't in the library anymore” and “you don't have access to this”, each with back | proposed |
-| 6.C25 | The episodes that couldn't load say so | Phone app, Android TV, Samsung TV | the episodes are left out without a word | “couldn't load the episodes”, the reason and **try again** in their place, the rest of the page as it is (section 6.10) | proposed |
+| 6.C24 | Couldn't load, removed and no access, by cause | Web, Android TV, Samsung TV | Web: a quiet back beside try again. Android TV: no access says “you don't have access to this title”. Samsung TV: one red line, “Could not load this title: chino-api 503.”, also for 404 and 403; no button | figures 6.20 to 6.22 and the table of section 6.10, the design system's empty state: its error picture, the reason by cause, try again alone and details; its empty picture with “this title isn't in the library anymore” or “you don't have access to this”, each with back | proposed |
+| 6.C25 | The episodes that couldn't load say so | Phone app, Android TV, Samsung TV | the episodes are left out without a word | the design system's empty state at its small size in their place: “couldn't load the episodes”, the reason and **try again**, the rest of the page as it is (section 6.10) | proposed |
 
 ## 6.10 States
 
@@ -772,16 +805,20 @@ blocks in their own layout.
 
 Figure 6.20: The title page when it couldn't load, on a phone.
 
-1. **What couldn't load, and why.** “couldn't load this title”, and under it
-   the reason as far as the app can tell. Figure 6.20 shows the case where the
-   server didn't answer; [chapter 17](./errors.md) lists every cause and its
+1. **What couldn't load, and why**, in the design system's empty state with
+   its error picture: “couldn't load this title”, and under it the reason as
+   far as the app can tell. Figure 6.20 shows the case where the server ran
+   into a problem; [chapter 17](./errors.md) lists every cause and its
    sentence.
 2. **try again** loads the page again. It takes the focus first.
 3. **details** opens the server's answer, such as “HTTP 503 Service
-   Unavailable”, for the people who fix things.
+   Unavailable”, for the people who fix things. The design system's empty
+   state has no details of its own, so they are the banner's details, under
+   the button.
 
 Held sideways, as figure 6.21 shows, the same words stand in the middle of the
-page, beside the rail and under the slimmer bar.
+page, beside the rail and under the slimmer bar, at the empty state's small
+size, so **try again** and **details** stay in view.
 
 ![Figure 6.21: The title page when it couldn't load, on a phone held sideways](./img/title-couldnt-load-side-phone.png)
 
@@ -791,8 +828,10 @@ Figure 6.21: The title page when it couldn't load, on a phone held sideways.
 
 Figure 6.22: A title that isn't in the library anymore, on a computer.
 
-1. **What is true**: “this title isn't in the library anymore”. Trying again
-   can't bring it back, so the page offers no try again and gives no reason.
+1. **What is true**: “this title isn't in the library anymore”, in the
+   design system's empty state with its empty picture, as nothing is there to
+   show. Trying again can't bring it back, so the page offers no try again and
+   gives no reason.
 2. **back** returns to where the person came from, or to home when they came
    straight to the page, from a link.
 
@@ -801,21 +840,21 @@ Figure 6.22: A title that isn't in the library anymore, on a computer.
 | Loading | Figure 6.19 |
 | Couldn't load | Figures 6.20 and 6.21, with the sentence for the cause |
 | The title was removed | Figure 6.22 |
-| The person may not see it | “you don't have access to this”, with **back** |
+| The person may not see it | The empty state of figure 6.22 with “you don't have access to this” and **back** |
 | The sign-in has expired | Nothing of its own: the app renews the sign-in and loads the page; only a refused sign-in leads to signing in, and back to the page |
-| A show's episodes couldn't load | The rest of the page; in the episodes' place, “couldn't load the episodes”, the reason and **try again** |
+| A show's episodes couldn't load | The rest of the page; in the episodes' place, the empty state at its small size: “couldn't load the episodes”, the reason and **try again** |
 | No description, no people, nothing like it | Each part is left out, and nothing says it's missing |
-| The phone app can't reach the server | A downloaded title's page is built from what is on the phone, with the banner on top ([chapter 13](./downloads.md)); any other title's page is figure 6.20 |
+| The phone app can't reach the server | A downloaded title's page is built from what is on the phone, with the banner on top ([chapter 13](./downloads.md)); any other title's page is figure 6.20 without the sentence, which the banner says |
 
 ## 6.11 Words
 
 | Where | Text |
 |---|---|
-| The title row | play · resume 1:43 · start over · trailer · download · 152 MB |
+| The title row | play · resume 1:43 · start over · trailer · download · 152 mb |
 | A show's first button | play S01E01 · resume S01E03 · start over · play S03E18–19 |
-| The row's icon buttons, for screen readers | add to Watchlist · in your Watchlist · choose lists · mark as watched · watched · like · liked |
-| The list picker | add to list · create list |
-| A card's menu | play · resume · mark as watched · watched · remove from continue watching |
+| The row's icon buttons, for screen readers | add to Watchlist · in your Watchlist · mark as watched · watched · like · liked |
+| The list picker | lists · none · Watchlist · 2 chosen · create list · clear lists |
+| A card's menu | play · resume · mark as watched · mark as unwatched · remove from continue watching |
 | The facts | 2012 · 12 min · 1 h 32 min · science fiction · 6.6 · FSK 12 · 12+ · movie · show |
 | The people | starring · full cast (12) · show less · Created by · Director · Directors · Writer · Writers · Producer · Producers · Music · Cinematography · Editor · Editors · Subtitles |
 | Subtitle languages on a TV, when they don't fit | “Arabic, Chinese, English, +12 more” |
@@ -823,8 +862,8 @@ Figure 6.22: A title that isn't in the library anymore, on a computer.
 | An episode row | S01E03 · Alone in the Night · 41 min · 24 min left |
 | A file of several episodes | S03E18–21 · 4 episodes · one file |
 | Similar titles | more like this |
-| The phone's downloads | download · 152 MB · download 3 more episodes · 940 MB · 1 of 6 downloaded, and the statuses of [chapter 13](./downloads.md) |
-| Couldn't load | couldn't load this title · Can't reach the server. · try again · details |
+| The phone's downloads | download · 152 mb · download 3 more episodes · 940 mb · 1 of 6 downloaded, and the statuses of [chapter 13](./downloads.md) |
+| Couldn't load | couldn't load this title · The server ran into a problem., or the sentence of another cause ([chapter 17](./errors.md)) · try again · details |
 | The episodes couldn't load | couldn't load the episodes |
 | Removed | this title isn't in the library anymore · back |
 | No access | you don't have access to this · back |

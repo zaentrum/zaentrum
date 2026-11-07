@@ -254,8 +254,8 @@ showing.
    plays and plays while it doesn't. The speaker turns the sound off and on
    again, and the slider beside it sets how loud.
 4. **The other buttons**, in this order: **audio and subtitles**, where the
-   title has two audio tracks or more, or a subtitle to pick, blue while a
-   subtitle is on, which opens the audio and subtitles panel
+   title has two audio tracks or more, or a subtitle to pick, blue with a dark
+   icon while a subtitle is on, which opens the audio and subtitles panel
    ([chapter 12](./subtitles.md)); **speed**; **settings**, where its menu has
    something to set, a choice of quality or the timing of a subtitle that is
    on; **previous episode** and **next episode**, for an episode with one
@@ -266,11 +266,15 @@ showing.
    (section 11.11). Where the title has a picture area and filling the window
    would change the picture, **zoom to fill** comes before **fullscreen**.
 
-The buttons are 48 × 48 squares on a solid surface, their icons alone. Each
-one's name shows over it as a tooltip and is what a screen reader says; a
-button with something set adds it after a comma: “audio and subtitles,
-English (original), subtitles English”, “settings, Auto · Medium (720p)”,
-“next episode, S01E04 · Triangular Diplomacy”. Section 11.18 lists them.
+The buttons are the design system's icon buttons, of its standard kind and
+34 × 34 on a computer: squares on a solid surface, their icons alone. Each
+one's name is its label, what a screen reader says and what the browser shows
+as its tooltip under the pointer; a button with something set adds it after a
+comma: “audio and subtitles, English (original), subtitles English”,
+“settings, Auto · Medium (720p)”, “next episode, S01E04 · Triangular
+Diplomacy”. Section 11.18 lists them. The icon button has no look for “on”, so
+**audio and subtitles** takes the emphasized kind, blue, while a subtitle is
+on.
 Behind the top and the bottom, the picture darkens towards the edge, so no time
 and no title stands on the bare picture.
 
@@ -310,8 +314,10 @@ Figure 11.5: The player on a phone held upright, at 360 × 780 dp.
 5. **fullscreen** turns the player sideways and full screen (section 11.4.3).
 
 The buttons go on two rows on a screen less than 600 dp wide, as a phone held
-upright is; a tablet keeps one row. While the phone is upright its status bar
-and navigation bar stay, and the controls keep clear of them.
+upright is; a tablet keeps one row. On a phone, held either way, they are the
+icon button's large size, 42 dp, and stand 6 dp apart, so each keeps a touch
+area of 48 dp around it. While the phone is upright its status bar and
+navigation bar stay, and the controls keep clear of them.
 
 The web on a phone held upright has the layout of figure 11.5 without cast. Its
 speaker turns the sound off and on, the phone's own buttons set the volume, and
@@ -385,13 +391,17 @@ Figure 11.7: The player on a TV, at 960 × 540 dp, with its controls showing.
 2. **The seek bar.** With the focus on it, left and right go back or forward
    10 seconds at a time, with the still of that moment above the bar, and the
    title goes on from there.
-3. **The focus.** Whenever the controls come back, the focus is on play or
-   pause. Left and right move along the row, up and down between the row and
-   the seek bar. A menu or the audio and subtitles panel that closes gives
-   the focus back to its button.
+3. **The focus**, as the design system draws it on a TV: the ring outside the
+   button, the button's lighter surface and the button 5% larger. Whenever the
+   controls come back, the focus is on play or pause. Left and right move
+   along the row, up and down between the row and the seek bar. A menu or the
+   audio and subtitles panel that closes gives the focus back to its button.
 4. **The band**: one solid surface under the seek bar and the buttons, out to
    the screen's edges. The controls stay inside the safe area, with room for
    the focus ring. The TV has no fullscreen button: it is always full screen.
+
+The buttons are the icon button's large size, 42 dp, and stand 12 dp apart, so
+a focused one never touches the next.
 
 The volume is one focus stop, the speaker with its level beside it: OK turns
 the sound off and on, and up and down set the player's own level, 5% a press,
@@ -464,8 +474,9 @@ helps past them. The settings this section names are in
 
 While the title plays in one of those parts, a button at the bottom right,
 above the controls' place, jumps to its end: **skip intro**, **skip recap** or
-**skip credits**. It is there whether the controls show or not, on the solid
-surface of the controls, and on a TV it is a focus stop. Other parts, such as a
+**skip credits**. It is the design system's standard button, on its solid
+surface, there whether the controls show or not, and on a TV it is a focus
+stop. Other parts, such as a
 chapter, have no skip button. In the credits of an episode that has another
 after it, up next takes the place of **skip credits** (section 11.8.3).
 
@@ -484,7 +495,9 @@ started playing on the device less than 6 hours before.
   At zero the player jumps to the part's end, and where a recap and an intro
   follow each other within 2 seconds, past both in one jump. **watch the
   intro** or **watch the recap** takes the card away and lets the part play.
-  On a TV the card's buttons are focus stops like the controls' ones.
+  The card is the player's own, on the controls' solid surface, and its
+  buttons are the design system's. On a TV they are focus stops like the
+  controls' ones.
 - **An episode that starts with its intro.** Opened from the episode before, by
   up next or by **next episode**, an episode whose intro begins in its first 2
   seconds starts past it, and past a recap next to it, with nothing to count
@@ -510,9 +523,10 @@ Figure 11.8: Up next, in the credits of an episode, on a computer.
    “Starts in 3 seconds.”, from the **Countdown** setting (3 seconds unless it
    was changed), and the next episode starts at its end. With the setting off,
    the card has no line and waits.
-2. **play now** starts the next episode at once; **cancel** lets the credits
-   play on and takes the card away. On a TV the card's buttons are focus stops
-   like the controls' ones, and back is **cancel**.
+2. **play now**, the design system's emphasized button, starts the next
+   episode at once; **cancel**, its quiet button, lets the credits play on and
+   takes the card away. On a TV the card's buttons are focus stops like the
+   controls' ones, and back is **cancel**.
 
 ### 11.8.4 Going on to the next episode
 
@@ -580,10 +594,11 @@ timing.
    from the server's ready-made qualities starts with **Auto**, which picks the
    quality by the connection and names the one playing: “Auto · Medium
    (720p)”. The other rows are the names of section 11.9.
-2. **subtitle timing**, while a subtitle made as text is on: **−** and **+**
-   move the subtitles a quarter of a second earlier or later with each press,
-   up to 10 seconds either way, the value between them says where they are,
-   “+0.25s”, and **reset** goes back to the subtitles' own timing.
+2. **subtitle timing**, while a subtitle made as text is on: **−** and **+**,
+   the design system's icon buttons, move the subtitles a quarter of a second
+   earlier or later with each press, up to 10 seconds either way, the value
+   between them says where they are, “+0.25s”, and **reset**, its quiet
+   button, goes back to the subtitles' own timing.
 3. **settings**, the sliders, which opened the menu. Without a choice of
    quality and without a subtitle made as text on, the bar has no settings
    button.
@@ -600,10 +615,15 @@ timing.
   **reset** keeps the menu open, so the line can be watched as it moves. For
   subtitles made as pictures, and while subtitles are off, the menu has no
   timing.
-- **The look.** The headers are lowercase, in the monospace face:
-  “quality”, “subtitle timing”, “speed”. The rows are names, in the body face.
-  Controls over the picture, such as a chip, sit on a solid surface, never on a
-  see-through one, and every menu is square.
+- **The look.** The design system has no menu of one choice: its action menu
+  runs commands, and its select opens the device's own list. So the player's
+  menus are its own, with the action menu's look: its surface, its thin frame
+  and its shadow, square, and rows at least 32 px high in the monospace face,
+  lowercase, where a name keeps its case, “High (1080p)”. A header names each
+  group, lowercase, in the monospace face: “quality”, “subtitle timing”,
+  “speed”. On a phone a row is 48 dp high, for a finger, and on a TV 40 dp,
+  with the TV's focus for rows. Controls over the picture sit on a solid
+  surface, never on a see-through one.
 - **Where they open.** One menu, or the panel, is open at a time. A menu opens
   above the whole control bar, at the end where its button is, so it never
   covers the seek bar, and a press outside it or Esc closes it. On a TV the
@@ -611,7 +631,7 @@ timing.
   buttons, and back closes it.
 
 A quality picked in the menu keeps the last picture on the screen, under
-“Switching to Medium (720p)…”, until the new quality's first one, so the screen
+“Switching to Medium (720p)”, until the new quality's first one, so the screen
 never goes black between two qualities; the position and the speed stay.
 
 An open menu never covers the subtitle line. Where it would, the line is
@@ -686,23 +706,27 @@ and the TV's screen saver stays away.
 
 ## 11.13 When the quality changes by itself
 
-When playback has to step down, the player says what it did and why, at the top
-of the picture, on a solid surface, as figure 11.10 shows. {label} is the
-quality's name from the table in section 11.9: “Medium (720p)”, “Low (480p)”.
+When playback has to step down, the player says what it did and why in a
+toast, the design system's neutral one, as figure 11.10 shows. It is news that
+needs nothing done, so it leaves by itself after 5 seconds, as every toast
+does. The toast stands at the top of the picture, not at the bottom where the
+design system puts its toasts, because the controls and the subtitle line are
+there. {label} is the quality's name from the table in section 11.9: “Medium
+(720p)”, “Low (480p)”. The toast writes its line without a full stop.
 
 ![Figure 11.10: The player stepped down, on a computer](./img/player-notice-computer.png)
 
 Figure 11.10: The player stepped down, on a computer.
 
 - From the original, when the connection is too slow: “Switched to {label}
-  quality: the connection can't keep up with the original.”
+  quality: the connection can't keep up with the original”
 - When the original can't be streamed: “Switched to {label} quality: the
-  original couldn't be streamed.”
+  original couldn't be streamed”
 - One step down between qualities: “Switched to {label} quality: the
-  connection can't keep up.”
+  connection can't keep up”
 - When a quality between can't be streamed: “Switched to {label} quality:
-  {previous} couldn't be streamed.”, {previous} named from the same table:
-  “Switched to Low (480p) quality: Medium (720p) couldn't be streamed.”
+  {previous} couldn't be streamed”, {previous} named from the same table:
+  “Switched to Low (480p) quality: Medium (720p) couldn't be streamed”
 
 It keeps the position. Status codes go into the playback report, never into
 the line.
@@ -713,7 +737,7 @@ The player watches that the picture moves while the title plays, and tries to
 get it going again before it says anything went wrong:
 
 - **The picture stands still for 8 seconds.** The panel of section 11.17 says
-  “Reconnecting…”, and the player picks the stream up where it stopped, first
+  “Reconnecting”, and the player picks the stream up where it stopped, first
   in place and then by loading it again there. A ready-made title keeps its
   quality, Auto or the one picked. A title the server converts as it plays
   steps down one quality where that doesn't help, and on its lowest quality
@@ -724,9 +748,9 @@ get it going again before it says anything went wrong:
   through every step at once. On **Auto**, the ready-made qualities step down
   by themselves, and a quality the person picked stays picked.
 - **A part that can't be decoded** is skipped, “Skipping a part that couldn't
-  be played…”. Where the browser can't play the original's format, the web
+  be played”. Where the browser can't play the original's format, the web
   asks the server for one it can: “This browser can't play this video's
-  format. Switching to one it can…”.
+  format. Switching to one it can.”
 - **Back after a while away.** Where the server no longer accepts the stream
   after a long pause, the player asks for it again once, without a word, and
   plays on where it was. On the web, a tab that was hidden for more than 15
@@ -777,8 +801,8 @@ subtitles to [chapter 12](./subtitles.md).
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 11.C1 | The buttons' look and names | Web, Phone app, Android TV, Samsung TV | Web: 36 × 36 px, tooltips capitalised, “Quality (High (1080p))”. Phone app: 36 dp circles, back, home and cast too. Android TV: names capitalised, “Pause”, “Audio track”. Samsung TV: 56 px, names capitalised | 48 × 48 squares, 40 dp on a TV, icons alone; lowercase names with what is set after a comma, “speed, normal” (section 11.3, words in section 11.18) | proposed |
-| 11.C2 | One audio and subtitles button | Web, Phone app, Android TV, Samsung TV | an audio button and a subtitles button, each with its menu: Web: audio a chip with the language's code, “ENG”, and subtitles a caption box. Phone app: the chip, for a title with one track too, and subtitles. Android TV, Samsung TV: an icon each | one button, **audio and subtitles**, the caption box, in their place, blue while a subtitle is on, opening the audio and subtitles panel of [chapter 12](./subtitles.md) (figure 11.4, part 4) | proposed |
+| 11.C1 | The buttons' look and names | Web, Phone app, Android TV, Samsung TV | Web: 36 × 36 px, tooltips capitalised, “Quality (High (1080p))”. Phone app: 36 dp circles, back, home and cast too. Android TV: names capitalised, “Pause”, “Audio track”. Samsung TV: 56 px, names capitalised | the design system's icon buttons, of its standard kind: 34 × 34 px on a computer; 42 dp on a phone, 6 dp apart, so each keeps a touch area of 48 dp; 42 dp on a TV, 12 dp apart; icons alone; lowercase names, the icon button's label, with what is set after a comma, “speed, normal” (sections 11.3 to 11.5, words in section 11.18) | proposed |
+| 11.C2 | One audio and subtitles button | Web, Phone app, Android TV, Samsung TV | an audio button and a subtitles button, each with its menu: Web: audio a chip with the language's code, “ENG”, and subtitles a caption box. Phone app: the chip, for a title with one track too, and subtitles. Android TV, Samsung TV: an icon each | one icon button, **audio and subtitles**, the caption box, in their place, in the icon button's emphasized kind, blue, while a subtitle is on, opening the audio and subtitles panel of [chapter 12](./subtitles.md) (figure 11.4, part 4) | proposed |
 | 11.C3 | settings in place of quality, with the subtitles' timing | Web, Phone app, Android TV, Samsung TV | quality, a menu of its own, for two qualities or more: Web: a gear, before speed. Samsung TV: a gauge. The subtitles' timing only on the web, in its subtitles menu; the apps have none | **settings**, the sliders, after speed, where it has something to set: its menu with quality and subtitle timing (figure 11.9) | proposed |
 | 11.C4 | audio and subtitles only where there is something to pick | Web, Phone app, Android TV, Samsung TV | Web: subtitles dimmed for a title without subtitles, audio for two tracks or more. Phone app: audio for one track too, subtitles with “off” alone. Android TV: subtitles with “off” and “No subtitles available”. Samsung TV: subtitles only with subtitles, audio for two tracks or more | the button only for a title with two audio tracks or more that the device plays, or a subtitle the panel lists ([chapter 12](./subtitles.md)) | proposed |
 | 11.C5 | Android TV: previous and next only where there is one | Android TV | both on every episode; at a season's ends they do nothing | previous episode only for an episode with one before it, next episode only for one with one after it (figure 11.4, part 4) | proposed |
@@ -795,22 +819,22 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C16 | The still over the seek bar | Web, Phone app, Android TV, Samsung TV | Phone app, Android TV, Samsung TV: for ready-made titles only. Samsung TV: always above the handle, without a time. Web, Phone app: “Intro · 1:30” | a still for every title, while the bar is pointed at, touched or focused, with its time and the part in lowercase, “intro · 1:30” (figure 11.4, part 2) | proposed |
 | 11.C17 | Web on a phone: seeking by touch | Web | a touch drag seeks all along, and a press seeks at once | a touch shows the still, and the seek happens where the finger lets go (section 11.4.2) | proposed |
 | 11.C18 | The seek bar for a screen reader | Web, Android TV, Samsung TV | Web: “Seek”, with a value from 0 to 100. Android TV, Samsung TV: not found | “seek”, with “17:23 of 41:23”, 10 seconds a step (section 11.18) | proposed |
-| 11.C19 | The skip buttons | Web, Phone app, Samsung TV | Web, Phone app: white, “Skip Intro”, “Skip Recap”, “Skip Credits”. Samsung TV: “Skip” with the part's name for any part under the playhead, a chapter too | skip intro, skip recap and skip credits on the controls' surface, for those three parts only (section 11.8.1) | proposed |
-| 11.C20 | Auto-skip counts down, on the episodes in a row | Web, Phone app, Android TV, Samsung TV | Web: the intro only, a card “Binge mode”, “Skipping intro in 3…”, “Skip now”, “Watch intro”. Phone app: nothing skipped. Android TV: intro and recap on every episode, the first too, “Skipping intro in 5s”, “Press BACK to cancel”. Samsung TV: the same, “Skipping intro in 10…”, “Press any key to cancel” | Recommended: section 11.8.2, a card that counts down from the Countdown setting, with skip now and watch the intro, from the second episode in a row; an intro and a recap next to it in one jump | proposed |
+| 11.C19 | The skip buttons | Web, Phone app, Samsung TV | Web, Phone app: white, “Skip Intro”, “Skip Recap”, “Skip Credits”. Samsung TV: “Skip” with the part's name for any part under the playhead, a chapter too | skip intro, skip recap and skip credits, the design system's standard button, for those three parts only (section 11.8.1) | proposed |
+| 11.C20 | Auto-skip counts down, on the episodes in a row | Web, Phone app, Android TV, Samsung TV | Web: the intro only, a card “Binge mode”, “Skipping intro in 3…”, “Skip now”, “Watch intro”. Phone app: nothing skipped. Android TV: intro and recap on every episode, the first too, “Skipping intro in 5s”, “Press BACK to cancel”. Samsung TV: the same, “Skipping intro in 10…”, “Press any key to cancel” | Recommended: section 11.8.2, a card that counts down from the Countdown setting, with skip now and watch the intro, the design system's buttons, from the second episode in a row; an intro and a recap next to it in one jump | proposed |
 | 11.C21 | An episode that starts with its intro | Web, Phone app, Android TV, Samsung TV | Web: opened from the one before, it starts past an intro in its first 2 s, whatever the setting, without a word. Android TV: past the intro and a recap next to it, whatever the setting, “Skipped intro”, “Press BACK to watch from the start”. Phone app, Samsung TV: nothing skipped | only with Auto-skip intros on: past the intro and a recap next to it, and “Skipped the intro.” with watch from the start for 6 seconds (section 11.8.2) | proposed |
-| 11.C22 | Up next: one card | Web, Phone app, Android TV, Samsung TV | Web: “UP NEXT”, the name over the code, “Play now (3)”, “Cancel”. Phone app: only with Auto-play next episode on, “Up next”, “Playing next episode in 5s”, “Play now”, “Cancel”, without the name, 5 s whatever the setting. Android TV: a note, “Up next in 5s”, “Press BACK to cancel”, no buttons. Samsung TV: none, the next episode starts at the end | figure 11.8, counting from the Countdown setting; with Auto-play next episode off, the card without its line, waiting | proposed |
+| 11.C22 | Up next: one card | Web, Phone app, Android TV, Samsung TV | Web: “UP NEXT”, the name over the code, “Play now (3)”, “Cancel”. Phone app: only with Auto-play next episode on, “Up next”, “Playing next episode in 5s”, “Play now”, “Cancel”, without the name, 5 s whatever the setting. Android TV: a note, “Up next in 5s”, “Press BACK to cancel”, no buttons. Samsung TV: none, the next episode starts at the end | figure 11.8, its buttons the design system's, play now emphasized and cancel quiet, counting from the Countdown setting; with Auto-play next episode off, the card without its line, waiting | proposed |
 | 11.C23 | Up next without credits | Web, Android TV, Samsung TV | Web: nothing. Android TV, Samsung TV: the next episode starts at the end | the card at the later of 20 seconds before the end and 95% (section 11.8.4) | proposed |
 | 11.C24 | The teaser after the credits | Web, Phone app, Android TV, Samsung TV | Web: “NEXT EPISODE”, “Next episode in 3s”, “Cancel”. Phone app: “Preview playing — jump to the next episode”, “Next episode”, “Dismiss”. Android TV: “Next episode ▶ in 5s”, “Press BACK to cancel”. Samsung TV: skipped as a recap | it plays on under the up next card, never with skip recap (section 11.8.4) | proposed |
 | 11.C25 | Going on only after a picture and 10 seconds | Web, Phone app, Samsung TV | no such rule; Samsung TV starts the next episode at any end of the stream | section 11.8.4 | proposed |
 | 11.C26 | The next episode warmed 30 seconds ahead | Web, Samsung TV | Web: from the credits on. Samsung TV: not warmed | from 30 seconds before the credits, or before the end without them (section 11.8.4) | proposed |
 | 11.C27 | No auto-skip of the credits | Android TV, Samsung TV | Android TV: with Auto-play next episode off, “Skipping credits in 5s”. Samsung TV: on at first, “Skipping credits in 10…”, then the next episode | Recommended: the credits are never skipped by themselves; up next takes their place, and a movie's credits play (section 11.8.2). The phone app's unused “Auto-skip credits” switch is chapter 16's | proposed |
 | 11.C28 | Nothing starts after a movie | Android TV | the first unwatched title of “more like this” starts, after “Up next in 5s” | Recommended: nothing starts by itself after a movie (section 11.8.4) | proposed |
-| 11.C29 | Where the menus open, and their look | Web, Phone app, Android TV, Samsung TV | Web: quality and speed open right above their buttons, over the seek bar, round corners, the picked row blue with a small square. Phone app: above the seek bar under their button, round corners, the same mark. Android TV: at the bottom right, the same mark. Samsung TV: at one fixed place, round corners, a check at the row's end, headers in capitals | settings and speed above the whole bar at their button's end, square, lowercase headers; the picked row with a check before it and the brighter text, as in the audio and subtitles panel (section 11.10) | proposed |
+| 11.C29 | Where the menus open, and their look | Web, Phone app, Android TV, Samsung TV | Web: quality and speed open right above their buttons, over the seek bar, round corners, the picked row blue with a small square. Phone app: above the seek bar under their button, round corners, the same mark. Android TV: at the bottom right, the same mark. Samsung TV: at one fixed place, round corners, a check at the row's end, headers in capitals | settings and speed above the whole bar at their button's end, the player's own menus with the look of the design system's action menu: its surface, thin frame and shadow, square, rows of at least 32 px in its monospace face, lowercase, a name keeping its case, “High (1080p)”; a lowercase header for each group; rows of 48 dp on a phone and 40 dp on a TV; the picked row with a check before it and the brighter text, as in the audio and subtitles panel (section 11.10) | proposed |
 | 11.C30 | The audio rows | Web, Phone app, Android TV, Samsung TV | Web: “English” with “AAC · Stereo” beside it, for a ready-made title “MP4A.40.2 · Stereo”, “English 5.1”, “English (2)”. Phone app: “E-AC-3 · 5.1” under the name, a track it can't play greyed with “Not available on this device”. Android TV: “E-AC-3 · 5.1” under the name. Samsung TV: “English 5.1”. No app marks the original or a described track | the audio column of [chapter 12](./subtitles.md): the language alone, “English (original)” where the title has audio in more than one language, “English (audio description)”, the channels only where two tracks of one language would read the same, “English (5.1)”, “English (stereo)”; a track the device can't play left out. The server's play info passes on the file's mark of a described track | proposed |
 | 11.C31 | The quality menu's Auto | Phone app, Samsung TV | Phone app: the qualities only, no Auto. Samsung TV: “Auto”, without the quality playing | for a ready-made title, Auto first in the settings menu's quality, “Auto · Medium (720p)” (figure 11.9) | proposed |
-| 11.C32 | A quality picked keeps the picture and the speed | Phone app, Android TV, Samsung TV | the stream is loaded again where it was, without the last picture held; Android TV also goes back to normal speed | the last picture stays under “Switching to Medium (720p)…” until the new quality's first, and the speed stays (section 11.10) | proposed |
+| 11.C32 | A quality picked keeps the picture and the speed | Phone app, Android TV, Samsung TV | the stream is loaded again where it was, without the last picture held; Android TV also goes back to normal speed | the last picture stays under “Switching to Medium (720p)” until the new quality's first, and the speed stays (section 11.10) | proposed |
 | 11.C33 | The subtitle line keeps clear of an open menu | Web, Phone app, Samsung TV | nothing moves the line for an open menu | section 11.10 | proposed |
-| 11.C34 | The quality notices at the top | Phone app, Samsung TV | Phone app: at the bottom. Samsung TV: none | figure 11.10, with the four lines of section 11.13 | proposed |
+| 11.C34 | The quality notices: a toast at the top | Web, Phone app, Android TV, Samsung TV | Web: at the top, for 4 to 5 s. Phone app: at the bottom. Android TV: at the top, for 6 s. Samsung TV: none. Where there are notices, each line ends in a full stop | figure 11.10: the design system's toast, neutral, at the top of the picture, for 5 seconds, with the four lines of section 11.13, written as a toast writes them, without a full stop | proposed |
 | 11.C35 | Getting the stream going again, by one rule | Phone app, Android TV, Samsung TV | Phone app: a ready-made title tried again in place 3 times, a converted one moved one quality down. Android TV: the same, with a watchdog at 12 s. Samsung TV: the hls.js engine's own recovery, nothing found for AVPlay | section 11.13.1 | proposed |
 | 11.C36 | Back after a long pause | Android TV, Samsung TV | not found | section 11.13.1 | proposed |
 | 11.C37 | Android: picture in picture and the lock screen | Phone app (Android) | none: no picture in picture, no controls on the lock screen | section 11.12 | proposed |
@@ -818,10 +842,10 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C39 | Finished by the server alone | Web, Phone app, Android TV, Samsung TV | each app also marks a title watched by itself, in the credits or at 95%, and starts one stopped in its last 60 seconds from the start | the server's rule alone: the apps save the place and show what the server says (section 11.7) | proposed |
 | 11.C40 | Saving the place | Web, Android TV, Samsung TV | Web: every 10 s while it plays, only. Android TV: every 10 s and on leaving, without checking that the place has played. Samsung TV: every 10 s, on leaving and on back | also when paused and on leaving, only a place that has played (section 11.7) | proposed |
 | 11.C41 | Phone app: a trailer without subtitles | Phone app | a trailer offers its own subtitles | a trailer has none (section 11.7) | proposed |
-| 11.C42 | A title starting: the loader with its line | Web, Phone app, Android TV, Samsung TV | Web: the loader alone at once, and without the top until the server grants the stream. Phone app: a spinner alone without the top until the server answers, then black until the first picture. Android TV: “Preparing…”, then a spinner alone. Samsung TV: a spinner, “Preparing your title…”, on a darkened screen | Recommended: figure 11.11, nothing for 0.4 seconds, then the loader with “Loading the episode…”, the top from the start | proposed |
-| 11.C43 | Waiting while it plays | Web, Phone app, Android TV, Samsung TV | Web: “Stream paused — reconnecting…” as a notice while it recovers. Phone app: nothing. Android TV: a spinner alone. Samsung TV: a spinner, “Buffering…” | the panel of figure 11.11, with the line for what the player does, the converting line included (section 11.17) | proposed |
+| 11.C42 | A title starting: the loader with its line | Web, Phone app, Android TV, Samsung TV | Web: the loader alone at once, and without the top until the server grants the stream. Phone app: a spinner alone without the top until the server answers, then black until the first picture. Android TV: “Preparing…”, then a spinner alone. Samsung TV: a spinner, “Preparing your title…”, on a darkened screen | Recommended: figure 11.11, nothing for 0.4 seconds, then the design system's loader, 32 px, with “Loading the episode” under it, without an ellipsis, as the design system writes a loader's line; the top from the start | proposed |
+| 11.C43 | Waiting while it plays | Web, Phone app, Android TV, Samsung TV | Web: the panel's lines end in an ellipsis, “Reconnecting…”, and “Stream paused — reconnecting…” shows as a notice while it recovers. Phone app: nothing. Android TV: a spinner alone. Samsung TV: a spinner, “Buffering…” | the panel of figure 11.11, with the line for what the player does, the converting line included, each without an ellipsis, “Reconnecting” (section 11.17) | proposed |
 | 11.C44 | A start that hangs gives up after 20 seconds | Web, Phone app, Android TV, Samsung TV | Web: after 20 s on the screen, “this title won't start”, “Nothing playable came from the server within 20 seconds.” The apps: not found | “couldn't play this title” with that sentence, after 20 seconds on the screen (section 11.17) | proposed |
-| 11.C45 | Couldn't play: one screen, report a bug under details | Web, Phone app, Android TV, Samsung TV | Web: a red triangle, “playback failed”, report a bug a third button. Phone app: Report a bug a third button. Android TV: the error in red, “Playback failed: ERROR_CODE — message”, report this problem, no try again. Samsung TV: “Playback failed” and the error's text, Back, Try again only for a trailer | Recommended: figure 11.12, the sentence by cause, try again or back, report a bug under details | proposed |
+| 11.C45 | Couldn't play: one screen, report a bug under details | Web, Phone app, Android TV, Samsung TV | Web: a red triangle, “playback failed”, report a bug a third button. Phone app: Report a bug a third button. Android TV: the error in red, “Playback failed: ERROR_CODE — message”, report this problem, no try again. Samsung TV: “Playback failed” and the error's text, Back, Try again only for a trailer | Recommended: figure 11.12, the design system's empty state for an error: the sentence by cause, try again or back, report a bug under details | proposed |
 | 11.C46 | The automatic report, with its number | Phone app, Android TV, Samsung TV | Phone app: one for each failure shown, nothing on the screen. Android TV: one for every player error, recovered ones too, nothing on the screen. Samsung TV: none | one when the player gives up, “Reported automatically as #12.” on the screen (section 11.17) | proposed |
 | 11.C47 | A title that isn't there anymore | Phone app, Android TV, Samsung TV | Phone app, Android TV: “This title isn't available to stream yet.” Samsung TV: the error's own text | “this title isn't in the library anymore”, with back ([chapter 17](./errors.md)) | proposed |
 | 11.C48 | Playback info | Phone app, Android TV, Samsung TV | Phone app: the web's dialog without the quality changes. Android TV: a card at the top right that closes after 8 seconds. Samsung TV: none | section 11.15 | proposed |
@@ -836,36 +860,41 @@ and 11.12 show the states in between.
 Figure 11.11: A title starting, on a phone.
 
 While a title starts, the player shows nothing for the first 0.4 seconds, and
-after that the design system's loader in the middle, on a solid surface, with
-one line that says what is loading: “Loading the episode…”, “Loading the
-movie…” or “Loading the trailer…”. The top is there from the start, so back
-works while it loads. A start the server converts as it plays says so after 5
-seconds, so it doesn't look stuck: “Converting the video for this browser…”, in
-the apps “Converting the video for this phone…” (“…for this tablet…” on a
-tablet) or “Converting the video for this TV…”. Later waits use the same panel,
-with a line for what the player does: “Reconnecting…”, “Switching to Medium
-(720p)…”, “Switching audio…”, “Skipping a part that couldn't be played…”,
-“Trying again…”, and on the web “This browser can't play this video's format.
-Switching to one it can…”. The picture under the panel isn't dimmed.
+after that the design system's loader at its size for a player, 32 px, in the
+middle, on a solid surface, with one line under it that says what is loading.
+The line is written as the design system writes a loader's line, without an
+ellipsis: “Loading the episode”, “Loading the movie” or “Loading the trailer”.
+The top is there from the start, so back works while it loads. A start the
+server converts as it plays says so after 5 seconds, so it doesn't look stuck:
+“Converting the video for this browser”, in the apps “Converting the video for
+this phone” (“Converting the video for this tablet” on a tablet) or
+“Converting the video for this TV”. Later waits use the same panel, with a line
+for what the player does: “Reconnecting”, “Switching to Medium (720p)”,
+“Switching audio”, “Skipping a part that couldn't be played”, “Trying again”,
+and on the web “This browser can't play this video's format. Switching to one
+it can.” The picture under the panel isn't dimmed.
 
 ![Figure 11.12: A title that couldn't be played, on a TV](./img/player-failed-tv.png)
 
 Figure 11.12: A title that couldn't be played, on a TV.
 
-1. **What couldn't happen, and why.** “couldn't play this title”, with the
-   reason by cause under it, here that the stream stopped before the title was
-   done. Where the request for the stream fails, the sentence is the one
-   [chapter 17](./errors.md) gives for its cause; what only playback has, as
-   here, is listed in this chapter's states.
+1. **What couldn't happen, and why**, in the design system's empty state for
+   an error, with its picture of a line that doesn't connect: the title
+   “couldn't play this title”, and the reason by cause under it, here that the
+   stream stopped before the title was done. Where the request for the stream
+   fails, the sentence is the one [chapter 17](./errors.md) gives for its
+   cause; what only playback has, as here, is listed in this chapter's states.
 2. **The report the player sent by itself**, with its number, so the person
    knows the people who fix things have it.
-3. **try again** has the focus and starts the title again where it stopped;
-   where trying again can't help, as for a title the server doesn't let the
-   account play, **back** is the only button.
+3. **try again**, the emphasized button, has the focus and starts the title
+   again where it stopped; **back** is the standard one beside it. Where trying
+   again can't help, as for a title the server doesn't let the account play,
+   **back** is the only button.
 4. **details and report a bug.** The details hold the code that tells the
-   cases apart, for the people who fix things. On a TV they show without being
-   opened, as [chapter 17](./errors.md) has it; on a computer and a phone
-   **details** opens them. **report a bug** comes under them.
+   cases apart, for the people who fix things, in the look of a banner's
+   details. On a TV they show without being opened, as
+   [chapter 17](./errors.md) has it; on a computer and a phone **details**
+   opens them. **report a bug**, a quiet button, comes under them.
 
 When the player gives up, it files one bug report by itself, where the server
 takes reports, and the line under the reason gives the report's number. It
@@ -883,7 +912,7 @@ a tab opened in the background isn't taken for a start that hangs.
 | State | What the player shows |
 |---|---|
 | Starting | Figure 11.11 |
-| Converting as it plays | After 5 seconds of a start, the line of figure 11.11 says so: “Converting the video for this browser…” |
+| Converting as it plays | After 5 seconds of a start, the line of figure 11.11 says so: “Converting the video for this browser” |
 | Waiting while it plays | The panel of figure 11.11 with the line for what it does, over the picture |
 | The quality changed by itself | Figure 11.10, with the line of section 11.13 |
 | A start that hangs | After 20 seconds without a picture, figure 11.12 with “Nothing playable came from the server within 20 seconds.” |
@@ -906,7 +935,7 @@ a tab opened in the background isn't taken for a start that hangs.
 | Auto-skip | Skipping the intro in 3 seconds. · Skipping the recap in 3 seconds. · skip now · watch the intro · watch the recap · Skipped the intro. · Skipped the intro and the recap. · watch from the start |
 | Up next | up next · “S01E04 · Triangular Diplomacy” · Starts in 3 seconds. · play now · cancel |
 | The quality notices | the four lines of section 11.13 |
-| Waiting | Loading the episode… · Loading the movie… · Loading the trailer… · Converting the video for this browser… · Converting the video for this phone… · Converting the video for this tablet… · Converting the video for this TV… · Reconnecting… · Switching to Medium (720p)… · Switching audio… · Skipping a part that couldn't be played… · Trying again… · This browser can't play this video's format. Switching to one it can… |
+| Waiting, the loader's line, without an ellipsis | Loading the episode · Loading the movie · Loading the trailer · Converting the video for this browser · Converting the video for this phone · Converting the video for this tablet · Converting the video for this TV · Reconnecting · Switching to Medium (720p) · Switching audio · Skipping a part that couldn't be played · Trying again · This browser can't play this video's format. Switching to one it can. |
 | Couldn't play | couldn't play this title · the sentence for the cause · Nothing playable came from the server within 20 seconds. · Reported automatically as #12. · try again · back · details · report a bug |
 | A trailer that isn't there | trailer not available |
 | The web only | play · unmute |

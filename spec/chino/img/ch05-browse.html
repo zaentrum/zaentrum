@@ -3,8 +3,19 @@
   Chapter 5, movies and shows: the figures of spec/chino/browse.md.
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+  The look is screens.css with the design system's stylesheet, the design
+  system's components are the <ds-*> tags (ds.js), the frame (top bar, tabs,
+  rail) is frame.js, the icons are icons.js. Pink numbers mark the parts the
+  chapter's text explains.
+
+  The filter bar is written out as the package's FilterBar renders it, because
+  ds.js's <ds-filterbar> has no narrow form and no end group: role="search"
+  .nc-filterbar (+ --narrow below 640 px of its own width) > .nc-filterbar__row >
+  the search, the "filters" button (narrow only), .nc-filterbar__facets (the
+  facets, then the sort, chino's own control after them, and on a narrow bar
+  clear all) and .nc-filterbar__end (the count; clear all on a wide bar).
+  A multi select with nothing chosen is written out too: the package shows
+  "any" in it, not in blue, which <ds-multiselect> can't draw.
 -->
 <html lang="en">
 <head>
@@ -22,161 +33,149 @@
   .x3 { background: linear-gradient(160deg, #723030 0%, #3e1a1a 58%, #1c0c0c 100%); }
   .x4 { background: linear-gradient(160deg, #5e3f6a 0%, #33223b 58%, #18101c 100%); }
   .x5 { background: linear-gradient(160deg, #7a4a5f 0%, #432836 58%, #1f1219 100%); }
-  /* the view's heading, with the sort at its end */
-  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  /* the filter bar: a filter is its name and a box with its value; the value is blue while it filters */
-  .fbar { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-  .facet { display: inline-flex; align-items: center; gap: 8px; }
-  .facet .lb { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); white-space: nowrap; }
-  .sel { height: 48px; min-width: 128px; display: inline-flex; align-items: center; gap: 12px; padding: 0 12px 0 14px;
-         border: 1px solid var(--border-control); background: var(--bg-2); color: var(--fg); font: 500 14px/1 var(--ff-mono); white-space: nowrap; }
-  .sel svg.i { margin-left: auto; width: 16px; height: 16px; color: var(--cloud-blue); }
-  .sel.set { color: var(--cloud-blue); }
-  .b.off { color: var(--fg-dim); }                 /* clear all, with nothing to clear */
+  /* the view's heading, then the filter bar, then the grid */
+  .vh { margin-bottom: 20px; }
+  .nc-filterbar { margin-bottom: 24px; }
   /* the status marks: the Watchlist's bookmark top left, watched top right (chapter 6) */
   .card .mk.wl { left: 6px; right: auto; background: var(--cloud-blue); }
-  .endline { margin: 24px 0 0; text-align: center; font: 400 13px/1.4 var(--ff-ui); color: var(--fg-dim); }
   /* a computer: seven posters a row */
   .computer .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
   .computer .grid .card.poster { width: auto; } .computer .grid .card.poster .img { height: 233px; }
-  /* a phone: three a row, the filters folded under one button */
-  .phone .h1 { font-size: 22px; }
-  .phone .fbar { margin-bottom: 16px; }
+  /* a phone: three a row */
+  .phone .vh { margin-bottom: 16px; }
+  .phone .nc-filterbar { margin-bottom: 16px; }
   .phone .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
   .phone .grid .card.poster { width: auto; } .phone .grid .card.poster .img { height: 152px; }
   .phone .grid .card .tt { font-size: 13px; }
-  .phone .sel { min-width: 112px; }
-  .fcol { display: flex; flex-direction: column; gap: 8px; margin: -4px 0 20px; padding: 12px; border: 1px solid var(--border); background: var(--surface); }
-  .fcol .facet .lb { width: 52px; }
-  .fcol .facet .sel { flex: 1; }
-  .fcol .b { align-self: flex-start; padding: 0 4px; }
-  /* a card's menu: its button at the right of the card's lines, under the poster (chapter 6) */
+  /* a card's menu: the design system's action menu, its button at the right of the card's lines, under the poster */
   .card { position: relative; }
-  .card:has(> .mn) .tt, .card:has(> .mn) .st { padding-right: 28px; }
-  .card .mn { position: absolute; right: -6px; bottom: -2px; width: 30px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--fg-dim); }
-  .phone .grid .card:has(> .mn) .tt { padding-right: 0; }
-  .phone .grid .card .mn { height: 22px; bottom: -2px; }
-  /* a phone held sideways: the bar is wide enough to show its facets in a row; seven smaller posters a line. */
-  .phone.side .pg { padding: 12px 16px; }
-  .phone.side .head { margin-bottom: 8px; }
-  .phone.side .fbar { gap: 12px; margin-bottom: 12px; }
-  .phone.side .sel { min-width: 104px; }
+  .card:has(> .nc-actionmenu__trigger) .tt, .card:has(> .nc-actionmenu__trigger) .st { padding-right: 36px; }
+  .card > .nc-actionmenu__trigger { position: absolute; right: -4px; bottom: 1px; }
+  /* on a phone the button stands beside the year, so the name keeps the card's whole width */
+  .phone .grid .card:has(> .nc-actionmenu__trigger) .tt { padding-right: 0; }
+  .phone .grid .card:has(> .nc-actionmenu__trigger) .st { padding-right: 26px; }
+  .phone .grid .card > .nc-actionmenu__trigger { right: -9px; bottom: -9px; }
+  /* a phone held sideways: the bar is wider than 640 dp, so it shows its facets; seven smaller posters a line */
+  .phone.side .pg { padding: 12px 12px 12px 14px; }
+  .phone.side .vh { margin-bottom: 8px; }
+  .phone.side .nc-filterbar { margin-bottom: 12px; }
   .phone.side .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px 12px; }
   .phone.side .grid .card.poster .img { height: 129px; }
-  .phone.side .endline { margin-top: 18px; }
   /* a TV: the page keeps to the safe area; six posters a row */
   .tv .inner { width: 768px; padding-top: 8px; }     /* a focused control's ring and growth stay inside the safe area */
-  .tv .facet { gap: 14px; }
-  .tv .head { margin-bottom: 12px; }
-  .tv .fbar { margin-bottom: 18px; }
-  .tv .sel { height: 40px; min-width: 112px; font-size: 13px; }
-  .tv .sel.focus { background: var(--surface-focus); }
+  .tv .vh { margin-bottom: 14px; }
+  .tv .nc-filterbar { margin-bottom: 20px; }
   .tv .grid { grid-template-columns: repeat(6, 112px); gap: 18px 16px; }
   .tv .grid .card.poster { width: 112px; } .tv .grid .card.poster .img { height: 168px; }
   .tv .card .tt { font-size: 13px; }
   .tv .card .img.focus + .tt { color: var(--fg); }
+  /* the TV's focus on a plain control: the ring and the growth (screens.css), and the focused surface */
   /* grey blocks in the shape of a card */
   .card .ln { height: 12px; margin-top: 10px; width: 80%; }
   .card .ln2 { height: 10px; margin-top: 6px; width: 36px; }
+  /* a state in the grid's place: the design system's empty state, centred */
+  .state { display: flex; justify-content: center; }
 </style>
 </head>
 <body>
 
-<!-- Figure 5.6 · movies on a computer -->
+<!-- Figure 5.6 · movies on a computer, genres open with animation chosen -->
 <figure class="shot" id="browse-movies-computer">
   <div class="computer" data-view="movies">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet" data-co="3" data-co-side="right"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar">
-        <span class="facet" data-co="1"><span class="lb">genre</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost off" style="margin-left:auto" data-co="2" data-co-side="right">clear all</span>
-      </div>
+      <ds-heading level="1" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search" data-co="1"><ds-input icon="search" placeholder="search movies"></ds-input></div>
+        <div class="nc-filterbar__facets">
+          <ds-multiselect label="genres" summary="animation" open clear="clear genres" data-co="2" data-co-side="top">
+            <ds-option count="2">action</ds-option><ds-option checked count="9">animation</ds-option><ds-option count="4">comedy</ds-option><ds-option count="3">fantasy</ds-option><ds-option count="1">horror</ds-option><ds-option count="2">science fiction</ds-option>
+          </ds-multiselect>
+          <label class="nc-filterbar__facet" data-co="3" data-co-side="top"><span class="nc-filterbar__facet-label">decade</span><ds-select value="all"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+        </div>
+        <div class="nc-filterbar__end" data-co="4" data-co-side="right"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true">9 of 10</span><ds-button variant="ghost">clear all</ds-button></div>
+      </div></div>
       <div class="grid">
-        <div class="card poster"><div class="img" data-co="4"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><span class="mn" data-co="6" data-co-side="right"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl" data-co="5"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img" data-co="5"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><ds-menubutton size="md" label="actions for Agent 327: Operation Barbershop"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><ds-menubutton size="md" label="actions for Big Buck Bunny"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><ds-menubutton size="md" label="actions for Charge"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><ds-menubutton size="md" label="actions for Coffee Run"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><ds-menubutton size="md" label="actions for Cosmos Laundromat"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><ds-menubutton size="md" label="actions for Elephants Dream"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel" data-co="7" data-co-side="right"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl" data-co="6"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.7 · movies on a phone held upright -->
+<!-- Figure 5.7 · movies on a phone held upright: the bar folds its facets behind "filters" -->
 <figure class="shot" id="browse-movies-phone">
   <div class="phone" data-view="movies">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet" data-co="1" data-co-side="right"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar"><span class="b" data-co="2"><i data-i="list-filter" class="s16"></i>filters<i data-i="chevron-down" class="s16"></i></span></div>
-      <div class="grid">
-        <div class="card poster"><div class="img" data-co="3"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+      <ds-heading level="2" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar nc-filterbar--narrow"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search" data-co="1"><ds-input icon="search" placeholder="search movies"></ds-input></div>
+        <ds-button aria-expanded="false" data-co="2" data-co-side="right">filters</ds-button>
+        <div class="nc-filterbar__facets" hidden></div>
+        <div class="nc-filterbar__end"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true" data-co="3">10</span></div>
+      </div></div>
+      <div class="grid" data-co="4">
+        <div class="card poster"><div class="img"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><ds-menubutton size="md" label="actions for Agent 327: Operation Barbershop"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><ds-menubutton size="md" label="actions for Big Buck Bunny"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><ds-menubutton size="md" label="actions for Charge"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><ds-menubutton size="md" label="actions for Coffee Run"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><ds-menubutton size="md" label="actions for Cosmos Laundromat"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><ds-menubutton size="md" label="actions for Elephants Dream"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.8 · movies on a phone held sideways -->
+<!-- Figure 5.8 · movies on a phone held sideways: the bar is 676 dp wide, so its facets stand in a line -->
 <figure class="shot" id="browse-movies-sideways-phone">
   <div class="phone side" data-view="movies">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet" data-co="2" data-co-side="right"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar" data-co="1">
-        <span class="facet"><span class="lb">genre</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost off" style="margin-left:auto">clear all</span>
-      </div>
+      <ds-heading level="2" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search"><ds-input icon="search" placeholder="search movies"></ds-input></div>
+        <div class="nc-filterbar__facets" data-co="1">
+          <div class="nc-multiselect nc-multiselect--md"><button type="button" class="nc-multiselect__trigger" aria-expanded="false"><span class="nc-multiselect__label">genres</span> <span class="nc-multiselect__summary">any</span><svg viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" class="nc-multiselect__chevron"><path d="M3 4.5 L6 7.5 L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"></path></svg></button><div class="nc-multiselect__panel" hidden></div></div>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">decade</span><ds-select value="all"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+        </div>
+        <div class="nc-filterbar__end" data-co="2" data-co-side="right"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true">10</span><ds-button variant="ghost" disabled>clear all</ds-button></div>
+      </div></div>
       <div class="grid" data-co="3">
-        <div class="card poster"><div class="img"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
-        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><ds-menubutton size="md" label="actions for Agent 327: Operation Barbershop"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div><ds-menubutton size="md" label="actions for Big Buck Bunny"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><ds-menubutton size="md" label="actions for Charge"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div><ds-menubutton size="md" label="actions for Coffee Run"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><ds-menubutton size="md" label="actions for Cosmos Laundromat"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><ds-menubutton size="md" label="actions for Elephants Dream"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.9 · movies on a TV -->
+<!-- Figure 5.9 · movies on a TV: the bar without a search, the focus on the first card -->
 <figure class="shot" id="browse-movies-tv">
   <div class="tv" data-view="movies">
     <div class="page"><div class="inner">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet" data-co="2" data-co-side="right"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar">
-        <span class="facet" data-co="1"><span class="lb">genre</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost off" style="margin-left:auto">clear all</span>
-      </div>
+      <ds-heading level="2" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__facets" data-co="1">
+          <div class="nc-multiselect nc-multiselect--md"><button type="button" class="nc-multiselect__trigger" aria-expanded="false"><span class="nc-multiselect__label">genres</span> <span class="nc-multiselect__summary">any</span><svg viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" class="nc-multiselect__chevron"><path d="M3 4.5 L6 7.5 L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"></path></svg></button><div class="nc-multiselect__panel" hidden></div></div>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">decade</span><ds-select value="all"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+        </div>
+        <div class="nc-filterbar__end" data-co="2" data-co-side="right"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true">10</span><ds-button variant="ghost" disabled>clear all</ds-button></div>
+      </div></div>
       <div class="grid">
         <div class="card poster"><div class="img focus" data-co="3"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div></div>
         <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div></div>
@@ -193,25 +192,25 @@
   </div>
 </figure>
 
-<!-- Figure 5.10 · shows on a phone held upright, filtered by genre -->
+<!-- Figure 5.10 · shows on a phone held upright, filtered by genre: "filters · 1" open -->
 <figure class="shot" id="browse-shows-phone">
   <div class="phone" data-view="shows">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">shows</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar"><span class="b" data-co="1"><i data-i="list-filter" class="s16"></i>filters · 1<i data-i="chevron-up" class="s16"></i></span></div>
-      <div class="fcol">
-        <span class="facet" data-co="2"><span class="lb">genre</span><span class="sel set">drama<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost" data-co="3">clear all</span>
-      </div>
+      <ds-heading level="2" class="vh">shows</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar nc-filterbar--narrow"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search"><ds-input icon="search" placeholder="search shows"></ds-input></div>
+        <ds-button aria-expanded="true" data-co="1" data-co-side="right">filters · 1</ds-button>
+        <div class="nc-filterbar__facets">
+          <ds-multiselect label="genres" summary="drama" data-co="2"><ds-option count="1">animation</ds-option><ds-option count="1">comedy</ds-option><ds-option checked count="1">drama</ds-option><ds-option count="1">sci-fi &amp; fantasy</ds-option></ds-multiselect>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">decade</span><ds-select value="all"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+          <ds-button variant="ghost" data-co="3">clear all</ds-button>
+        </div>
+        <div class="nc-filterbar__end"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true" data-co="4">1 of 2</span></div>
+      </div></div>
       <div class="grid">
-        <div class="card poster"><div class="img" data-co="4"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img" data-co="5"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Pioneer One"></ds-menubutton></div>
       </div>
-      <p class="endline"><span data-co="5">1 show in all.</span></p>
     </div>
   </div>
 </figure>
@@ -220,38 +219,36 @@
 <figure class="shot" id="browse-shows-sideways-phone">
   <div class="phone side" data-view="shows">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">shows</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar">
-        <span class="facet" data-co="1"><span class="lb">genre</span><span class="sel set">drama<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost" style="margin-left:auto" data-co="2" data-co-side="right">clear all</span>
-      </div>
+      <ds-heading level="2" class="vh">shows</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search"><ds-input icon="search" placeholder="search shows"></ds-input></div>
+        <div class="nc-filterbar__facets">
+          <ds-multiselect label="genres" summary="drama" data-co="1"><ds-option count="1">animation</ds-option><ds-option count="1">comedy</ds-option><ds-option checked count="1">drama</ds-option><ds-option count="1">sci-fi &amp; fantasy</ds-option></ds-multiselect>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">decade</span><ds-select value="all"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+        </div>
+        <div class="nc-filterbar__end" data-co="2" data-co-side="right"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true">1 of 2</span><ds-button variant="ghost">clear all</ds-button></div>
+      </div></div>
       <div class="grid">
-        <div class="card poster"><div class="img"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div><span class="mn"><i data-i="ellipsis-vertical" class="s16"></i></span></div>
+        <div class="card poster"><div class="img"><div class="art a1"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Pioneer One</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Pioneer One"></ds-menubutton></div>
       </div>
-      <p class="endline">1 show in all.</p>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.12 · movies loading, on a TV -->
+<!-- Figure 5.12 · movies loading, on a TV: the heading and the bar at once, grey cards in the grid's place -->
 <figure class="shot" id="browse-loading-tv">
   <div class="tv" data-view="movies">
     <div class="page"><div class="inner">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar">
-        <span class="facet"><span class="lb">genre</span><span class="sel focus">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost off" style="margin-left:auto">clear all</span>
-      </div>
+      <ds-heading level="2" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__facets">
+          <div class="nc-multiselect nc-multiselect--md"><button type="button" class="nc-multiselect__trigger focus" aria-expanded="false"><span class="nc-multiselect__label">genres</span> <span class="nc-multiselect__summary">any</span><svg viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" class="nc-multiselect__chevron"><path d="M3 4.5 L6 7.5 L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"></path></svg></button><div class="nc-multiselect__panel" hidden></div></div>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">decade</span><ds-select value="all"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+        </div>
+        <div class="nc-filterbar__end"><span class="nc-filterbar__count nc-filterbar__count--empty" aria-live="polite" aria-atomic="true"></span><ds-button variant="ghost" disabled>clear all</ds-button></div>
+      </div></div>
       <div class="grid">
         <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
         <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
@@ -270,49 +267,49 @@
   </div>
 </figure>
 
-<!-- Figure 5.13 · filters that match nothing, on a computer -->
+<!-- Figure 5.13 · filters that match nothing, on a computer: the design system's empty state, its no-match kind -->
 <figure class="shot" id="browse-no-match-computer">
   <div class="computer" data-view="movies">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar">
-        <span class="facet" data-co="1"><span class="lb">genre</span><span class="sel set">comedy<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">decade</span><span class="sel set">1990s<i data-i="chevron-down"></i></span></span>
-        <span class="facet"><span class="lb">rating</span><span class="sel">all<i data-i="chevron-down"></i></span></span>
-        <span class="b ghost" style="margin-left:auto">clear all</span>
-      </div>
-      <div class="empty" style="margin-top:120px">
-        <i data-i="search-x" class="s48"></i>
-        <h2 class="h2" data-co="2">no matches</h2>
-        <p class="text">Nothing fits these filters.</p>
-        <span class="b" style="margin-top:6px" data-co="3">clear filters</span>
+      <ds-heading level="1" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search"><ds-input icon="search" placeholder="search movies"></ds-input></div>
+        <div class="nc-filterbar__facets">
+          <ds-multiselect label="genres" summary="comedy" data-co="1" data-co-side="top"><ds-option count="2">action</ds-option><ds-option count="9">animation</ds-option><ds-option checked count="4">comedy</ds-option></ds-multiselect>
+          <label class="nc-filterbar__facet nc-filterbar__facet--active"><span class="nc-filterbar__facet-label">decade</span><ds-select value="1990s"></ds-select></label>
+          <label class="nc-filterbar__facet"><span class="nc-filterbar__facet-label">sort</span><ds-select value="title"></ds-select></label>
+        </div>
+        <div class="nc-filterbar__end"><span class="nc-filterbar__count" aria-live="polite" aria-atomic="true">0 of 10</span><ds-button variant="ghost">clear all</ds-button></div>
+      </div></div>
+      <div class="state" style="margin-top:72px">
+        <ds-empty illustration="search" title='<span data-co="2">no matches</span>' description="Nothing fits these filters."><ds-button data-co="3">clear filters</ds-button></ds-empty>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 5.14 · movies couldn't load, on a phone -->
+<!-- Figure 5.14 · movies couldn't load, on a phone: the design system's empty state, its error kind, in the grid's place -->
 <figure class="shot" id="browse-couldnt-load-phone">
   <div class="phone" data-view="movies">
     <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
-      </div>
-      <div class="fbar"><span class="b"><i data-i="list-filter" class="s16"></i>filters<i data-i="chevron-down" class="s16"></i></span></div>
-      <div class="empty" style="margin-top:130px">
-        <i data-i="circle-alert" class="s48"></i>
-        <h2 class="h2" data-co="1">couldn't load the movies</h2>
-        <p class="text">The server ran into a problem.</p>
-        <span class="b" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
-        <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
+      <ds-heading level="2" class="vh">movies</ds-heading>
+      <div role="search" aria-label="filters" class="nc-filterbar nc-filterbar--narrow"><div class="nc-filterbar__row">
+        <div class="nc-filterbar__search"><ds-input icon="search" placeholder="search movies"></ds-input></div>
+        <ds-button aria-expanded="false">filters</ds-button>
+        <div class="nc-filterbar__facets" hidden></div>
+        <div class="nc-filterbar__end nc-filterbar__end--empty"><span class="nc-filterbar__count nc-filterbar__count--empty" aria-live="polite" aria-atomic="true"></span></div>
+      </div></div>
+      <div class="state" style="margin-top:64px">
+        <ds-empty illustration="error" title='<span data-co="1">couldn&#39;t load the movies</span>' description="The server ran into a problem." details="500 Internal Server Error" data-co-in=".nc-strip__toggle 3 right">
+          <ds-button size="lg" data-co="2">try again</ds-button>
+         
+        </ds-empty>
       </div>
     </div>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

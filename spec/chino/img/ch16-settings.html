@@ -1,11 +1,16 @@
 <!doctype html>
 <!--
   Chapter 16, settings and account: the figures of spec/chino/settings.md (the
-  target; the as-deployed figures are screenshots, *-asis-web-*.png).
+  target; the as-deployed figures are screenshots, *-asis-web-*.webp).
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+  icons are icons.js. The design system's components are the <ds-*> tags, which
+  ds.js expands into the package's own markup; its card with a title and its
+  field around a switch are written in that markup, as ds.js has no tag for them
+  yet. What stays chino's own is drawn on its tokens: who is signed in, the
+  watch history's rows and the watched mark, and the TV's focus. Pink numbers
+  mark the parts the chapter's text explains.
 -->
 <html lang="en">
 <head>
@@ -17,54 +22,37 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* settings on a computer: one column of groups, each a heading and a card */
-  .set { padding: 32px 48px; width: 816px; display: flex; flex-direction: column; gap: 26px; }
-  .set2 { padding: 28px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
-  .set2 > .h1 { grid-column: 1 / -1; margin-bottom: 22px; }
-  .set2 .colg { display: flex; flex-direction: column; gap: 24px; }
-  .srow.stack { flex-direction: column; align-items: stretch; gap: 8px; }
-  .srow.stack .field { width: auto; }
-  .grp { display: flex; flex-direction: column; gap: 10px; }
-  .srow { display: flex; align-items: flex-start; gap: 24px; padding: 14px 18px; border-top: 1px solid var(--border); }
-  .srow:first-child { border-top: none; }
-  .srow.mid { align-items: center; }
-  .lab { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-  .lab .ttl { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); }
-  .lab .hint { font: 400 13px/1.5 var(--ff-ui); color: var(--fg-dim); }
-  .sel { width: 260px; justify-content: flex-start; }
-  .sel .v { flex: 1; }
-  .step { display: inline-flex; align-items: center; gap: 8px; }
-  .step .val { min-width: 52px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border-2);
-               background: var(--bg-2); font: 600 14px/1 var(--ff-mono); color: var(--fg); }
-  /* a phone: sections of rows and fields */
-  .phone .sec { padding: 14px 16px 6px; }
-  .pf { padding: 4px 16px 8px; display: flex; flex-direction: column; gap: 6px; }
-  .pf .lbl { font: 500 13px/1.4 var(--ff-ui); color: var(--fg-2); }
-  .pf .hint { font: 400 12px/1.45 var(--ff-ui); color: var(--fg-dim); }
-  .pf .field { height: 44px; }
-  .phone .li .sub { font-size: 12px; }
-  .sec.t { padding: 12px 16px 6px; }
-  .pf.t { padding-bottom: 8px; }
-  .rrow { height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-top: 1px solid var(--border); font: 400 14px/1.3 var(--ff-ui); color: var(--fg); }
-  .rrow:first-child { border-top: none; }
-  .rgrp { border: 1px solid var(--border); background: var(--surface); }
-  .vrow { display: flex; align-items: center; justify-content: space-between; }
-  .vrow .v { font: 500 14px/1 var(--ff-mono); color: var(--fg-2); }
-  /* a TV: rows that take the focus */
-  .tset { position: absolute; left: 0; top: 18px; width: 620px; display: flex; flex-direction: column; gap: 18px; }
-  .tset .grp { gap: 8px; }
-  .trow { height: 48px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: var(--surface); }
-  .trow .n { flex: 1; font: 500 14px/1.2 var(--ff-ui); color: var(--fg-2); }
-  .trow .v { font: 400 14px/1.2 var(--ff-ui); color: var(--fg-2); }
-  .trow.focus-row .n, .trow.focus-row .v { color: var(--fg); }
-  .tset .hint { font: 400 13px/1.5 var(--ff-ui); color: var(--fg-dim); margin: 2px 0 4px; }
-  .trow.who { height: 64px; }
-  .trow.who .av { width: 40px; height: 40px; line-height: 40px; font-size: 15px; }
-  /* the account */
-  .idc { display: flex; align-items: center; gap: 20px; padding: 20px; }
-  .idc .nm { font: 500 18px/1.3 var(--ff-ui); color: var(--fg); }
-  .idc .em { font: 400 14px/1.4 var(--ff-ui); color: var(--fg-dim); }
-  .hist { display: flex; align-items: center; gap: 14px; padding: 8px 18px; border-top: 1px solid var(--border); }
+  /* settings: the design system's cards, one per group, with its fields, selects and switches inside */
+  .stk { display: flex; flex-direction: column; gap: 18px; }
+  .stk.tight { gap: 12px; }
+  .kv { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .short { width: 120px; }
+  .set { padding: 28px 48px; display: flex; flex-direction: column; gap: 24px; }
+  .set2 { padding: 24px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
+  .set2 > .nc-heading { grid-column: 1 / -1; margin-bottom: 20px; }
+  .colg { display: flex; flex-direction: column; gap: 16px; }
+  /* a phone: the cards one under the other */
+  .pstk { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .sgrid { padding: 12px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  /* a TV: the page's sections, the account a row that takes the focus */
+  .tset { position: absolute; left: 0; top: 2px; width: 640px; display: flex; flex-direction: column; gap: 12px; }
+  .tset .grp { display: flex; flex-direction: column; gap: 8px; }
+  .trow { height: 56px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: var(--surface); border: 1px solid var(--border); }
+  .trow .n { font: 500 15px/1.2 var(--ff-ui); color: var(--fg); }
+  .trow .v { font: 400 13px/1.3 var(--ff-ui); color: var(--fg-dim); }
+  .trow .av { width: 40px; height: 40px; line-height: 40px; font-size: 15px; }
+  /* who is signed in, chino's own: the avatar, the name and the email address */
+  .idc { display: flex; align-items: center; gap: 20px; }
+  .idp { display: flex; align-items: center; gap: 16px; }
+  .idp .av { width: 64px; height: 64px; line-height: 64px; font-size: 22px; }
+  .idp .av.tvav { width: 56px; height: 56px; line-height: 56px; font-size: 20px; }
+  .who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .who .nm { font: 500 17px/1.3 var(--ff-ui); color: var(--fg); }
+  .idc .who .nm { font-size: 18px; }
+  .who .em { font: 400 13px/1.4 var(--ff-ui); color: var(--fg-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .btns { display: flex; flex-direction: column; gap: 8px; }
+  /* the watch history's rows, chino's own: a still or a poster, the title, the day, the watched mark */
+  .hist { display: flex; align-items: center; gap: 14px; padding: 8px 16px; border-top: 1px solid var(--border); }
   .hist:first-child { border-top: none; }
   .hist .th { position: relative; height: 56px; flex: none; overflow: hidden; }
   .hist .th.ep { width: 100px; } .hist .th.mv { width: 37px; }
@@ -73,417 +61,268 @@
   .hist .m .t2 { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hist .d { font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); white-space: nowrap; }
   .wmk { width: 36px; height: 36px; flex: none; display: inline-flex; align-items: center; justify-content: center; background: var(--signal-green); color: var(--bg); }
-  .phone .hist { padding: 8px 16px; gap: 12px; }
+  .phone .hist { gap: 12px; padding: 8px 12px; }
   .phone .hist .th { height: 45px; } .phone .hist .th.ep { width: 80px; } .phone .hist .th.mv { width: 30px; }
-  .tv .hist { padding: 6px 16px; background: var(--surface); border-top: none; margin-bottom: 6px; }
-  .tv .hist .th { height: 45px; } .tv .hist .th.ep { width: 80px; } .tv .hist .th.mv { width: 30px; }
-  /* dialogs over the dimmed screen */
-  .dlgwrap { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; }
-  .phone .scrim-all { top: -56px; bottom: -64px; }
-  .phone .dlgwrap { top: -56px; bottom: -64px; }
-  .dlg { position: relative; }
-  .dlg p:not(.h2) { margin: 0; font: 400 14px/1.5 var(--ff-ui); color: var(--fg-2); }
-  .dlg .h2 { padding-right: 36px; }
-  .tv .dlg .ft { gap: 16px; }
-  .dlg .xb { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--fg-muted); }
-  .dlg.w480 { width: 480px; }
-  .phone .dlg { width: 312px; }
-  .tv .dlg { width: 440px; }
+  .tvhist .hist { padding: 6px 16px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 6px; }
+  .tvhist .hist .th { height: 45px; } .tvhist .hist .th.ep { width: 80px; } .tvhist .hist .th.mv { width: 30px; }
+  /* a dialog on a TV: the room the design system's TV focus asks for between buttons (12 dp at least), as
+     the focused one grows by 5 %; the modal's own footer keeps 8 px */
+  .tv .nc-modal__footer { gap: 16px; }
+  /* in a dialog: what goes, one line each */
+  .nc-modal__body p { margin: 0; }
+  .nc-modal__body .stk { gap: 14px; }
   .goes { margin: 0; padding: 0 0 0 4px; list-style: none; display: flex; flex-direction: column; gap: 5px; }
-  .goes li { display: flex; align-items: center; gap: 10px; font: 400 14px/1.4 var(--ff-ui); color: var(--fg-2); }
+  .goes li { display: flex; align-items: center; gap: 10px; }
   .goes li::before { content: ""; width: 5px; height: 5px; background: var(--fg-dim); flex: none; }
-  .ta { height: 112px; align-items: flex-start; padding-top: 11px; white-space: normal; font-size: 14px; line-height: 1.5; }
-  .chk { display: flex; align-items: center; gap: 10px; font: 400 14px/1.3 var(--ff-ui); color: var(--fg-2); }
-  .fl { display: flex; flex-direction: column; gap: 8px; }
-  .fl .lbl { font: 500 13px/1.4 var(--ff-ui); color: var(--fg-2); }
-  .fl .hint { font: 400 12px/1.4 var(--ff-ui); color: var(--fg-dim); }
-  .dim { opacity: .55; }
-  .tv .banner { font-size: 14px; }
-  .cl { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border: 1px solid var(--border); background: var(--surface); }
-  .cl .h3x { font: 600 14px/1.3 var(--ff-mono); color: var(--fg); }
-  /* a phone held sideways: the sideways rail also matches screens.css's ".phone > .tabs" (64 px high, a top border), undone here */
-  /* settings in two columns, the account beside its history */
-  .sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; padding: 0 8px; }
-  .sgrid .sec { padding: 9px 16px 6px; }
-  .sgrid .li { min-height: 52px; }
-  .agrid { position: absolute; inset: 0; display: grid; grid-template-columns: 240px 1fr; gap: 24px; padding: 16px 16px 0 24px; align-items: start; }
-  .agrid .acol { display: flex; flex-direction: column; gap: 10px; }
-  .agrid .hcol .sec { padding: 0 0 8px; }
-  .agrid .hcol .hist { padding: 6px 0; }
-  .agrid .hcol .hist .th { height: 45px; } .agrid .hcol .hist .th.ep { width: 80px; } .agrid .hcol .hist .th.mv { width: 30px; }
+  /* a screen before the frame (change server), as chapter 3 draws it */
+  .onb { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 18px; padding: 170px 24px 0; }
+  .onb > .mark, .onb > .nc-heading { align-self: center; text-align: center; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 700 28px/1 var(--ff-mono); color: var(--fg-2); }
+  /* who's watching on a TV, under the question */
+  .tiles { display: flex; gap: 28px; justify-content: center; }
+  .tile { width: 132px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .tile .av { width: 112px; height: 112px; font-size: 38px; line-height: 112px; }
+  .tile .nm { font: 500 15px/1.3 var(--ff-ui); color: var(--fg-2); }
 </style>
 </head>
 <body>
 
-<!-- Figure 16.1 · settings on a computer -->
+<!-- Figure 16.7 · settings on a computer -->
 <figure class="shot" id="settings-computer">
   <div class="computer" data-view="none">
     <div class="set2">
-      <h1 class="h1">settings</h1>
+      <ds-heading level="1">settings</ds-heading>
       <div class="colg">
-        <section class="grp">
-          <h2 class="h2">language</h2>
-          <div class="card-box">
-            <div class="srow stack">
-              <span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Audio</span>
-              <span class="field filled" data-co="1"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
-              <span class="hint" style="font:400 13px/1.5 var(--ff-ui); color:var(--fg-dim)">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
-            </div>
-            <div class="srow stack">
-              <span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Subtitles</span>
-              <span class="field filled" data-co="2"><span style="flex:1">English</span><i data-i="chevron-down" class="s16"></i></span>
-              <span class="hint" style="font:400 13px/1.5 var(--ff-ui); color:var(--fg-dim)" data-co="3">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
-            </div>
-          </div>
-        </section>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">language</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Audio"><ds-select value="Original" data-co="1"></ds-select><span class="nc-field__msg nc-field__msg--hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field><ds-field label="Subtitles"><ds-select value="English" data-co="2"></ds-select><span class="nc-field__msg nc-field__msg--hint" data-co="3">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span></ds-field></div></div></div>
       </div>
       <div class="colg">
-        <section class="grp">
-          <h2 class="h2">binge watching</h2>
-          <div class="card-box">
-            <div class="srow mid">
-              <div class="lab"><span class="ttl">Auto-skip intros</span><span class="hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div>
-              <span class="switch on" data-co="4" data-co-side="right"></span>
-            </div>
-            <div class="srow mid">
-              <div class="lab"><span class="ttl">Auto-play next episode</span><span class="hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div>
-              <span class="switch on"></span>
-            </div>
-            <div class="srow mid">
-              <div class="lab"><span class="ttl">Countdown</span><span class="hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></div>
-              <span class="step" data-co="5" data-co-side="right"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span>
-            </div>
-          </div>
-        </section>
-        <section class="grp">
-          <h2 class="h2">feedback</h2>
-          <div class="card-box">
-            <div class="srow stack" style="gap:12px">
-              <span class="hint" style="font:400 14px/1.5 var(--ff-ui); color:var(--fg-2)">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span>
-              <span class="b" style="align-self:flex-start" data-co="6" data-co-side="right"><i data-i="bug" class="s16"></i>report a bug</span>
-            </div>
-          </div>
-        </section>
-        <section class="grp">
-          <h2 class="h2">about</h2>
-          <div class="card-box">
-            <div class="srow mid vrow" data-co="7" data-co-side="right"><span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Version</span><span class="v">0.1.0</span></div>
-          </div>
-        </section>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">binge watching</div></div><div class="nc-card__body"><div class="stk"><div class="nc-field"><ds-switch checked style="align-self:flex-start" data-co="4" data-co-side="right">Auto-skip intros</ds-switch><span class="nc-field__msg nc-field__msg--hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-play next episode</ds-switch><span class="nc-field__msg nc-field__msg--hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><ds-field label="Countdown"><ds-select value="3 s" class="short" data-co="5" data-co-side="right"></ds-select><span class="nc-field__msg nc-field__msg--hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></ds-field></div></div></div>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">feedback</div></div><div class="nc-card__body"><div class="stk tight"><span class="nc-text nc-text--muted">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span><ds-button icon="bug" style="align-self:flex-start" data-co="6" data-co-side="right">report a bug</ds-button></div></div></div>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">about</div></div><div class="nc-card__body"><div class="kv" data-co="7" data-co-side="right"><span class="nc-text nc-text--ui">Version</span><span class="nc-text nc-text--code">0.1.0</span></div></div></div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 16.2 · settings on a phone -->
+<!-- Figure 16.8 · settings on a phone held upright -->
 <figure class="shot" id="settings-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="settings" data-co-parts="back:1">
-    <div class="sec">language</div>
-    <div class="pf">
-      <span class="lbl">Audio</span>
-      <span class="field filled" data-co="2"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
-      <span class="hint" data-co="3">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+    <div class="pstk">
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">language</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Audio"><ds-select size="lg" value="Original" data-co="2"></ds-select><span class="nc-field__msg nc-field__msg--hint" data-co="3">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field><ds-field label="Subtitles"><ds-select size="lg" value="English"></ds-select><span class="nc-field__msg nc-field__msg--hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span></ds-field></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">binge watching</div></div><div class="nc-card__body"><div class="stk"><div class="nc-field"><ds-switch checked style="align-self:flex-start" data-co="4" data-co-side="right">Auto-skip intros</ds-switch><span class="nc-field__msg nc-field__msg--hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-play next episode</ds-switch><span class="nc-field__msg nc-field__msg--hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><ds-field label="Countdown"><ds-select size="lg" value="3 s" class="short"></ds-select><span class="nc-field__msg nc-field__msg--hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></ds-field></div></div></div>
     </div>
-    <div class="pf">
-      <span class="lbl">Subtitles</span>
-      <span class="field filled"><span style="flex:1">English</span><i data-i="chevron-down" class="s16"></i></span>
-      <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
-    </div>
-    <div class="sec">binge watching</div>
-    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on" data-co="4" data-co-side="right"></span></span></div>
-    <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
-    <div class="li"><div class="main"><span class="ttl">Countdown</span><span class="sub">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span><span class="step" style="margin-top:8px"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span></div></div>
   </div>
 </figure>
 
-<!-- Figure 16.3 · settings on a phone, further down -->
+<!-- Figure 16.9 · settings on a phone held upright, further down -->
 <figure class="shot" id="settings-end-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="settings">
-    <div class="sec t">downloads</div>
-    <div class="pf t">
-      <span class="lbl">Download quality</span>
-      <div class="rgrp" data-co="1">
-        <div class="rrow"><span class="radio"></span>High (1080p) · about 2.1 GB an hour</div>
-        <div class="rrow"><span class="radio on"></span>Medium (720p) · about 932 MB an hour</div>
-        <div class="rrow"><span class="radio"></span>Low (480p) · about 412 MB an hour</div>
-      </div>
+    <div class="pstk">
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">downloads</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Download quality"><ds-select size="lg" value="Medium (720p)" data-co="1"></ds-select><span class="nc-field__msg nc-field__msg--hint">About 932 MB an hour.</span></ds-field><div class="nc-field"><ds-switch checked style="align-self:flex-start" data-co="2" data-co-side="right">Download over Wi-Fi only</ds-switch></div></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">server</div></div><div class="nc-card__body"><div class="stk tight"><span class="nc-text nc-text--ui">Connected to media.example.com.</span><ds-button size="lg" style="align-self:flex-start" data-co="3">change server</ds-button></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">feedback</div></div><div class="nc-card__body"><div class="stk tight"><span class="nc-text nc-text--muted">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span><ds-button size="lg" icon="bug" style="align-self:flex-start">report a bug</ds-button></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">about</div></div><div class="nc-card__body"><div class="kv"><span class="nc-text nc-text--ui">Version</span><span class="nc-text nc-text--code">0.2.1</span></div></div></div>
     </div>
-    <div class="li"><div class="main"><span class="ttl">Download over Wi-Fi only</span></div><span class="end"><span class="switch on" data-co="2" data-co-side="right"></span></span></div>
-    <div class="sec t">server</div>
-    <div class="pf t" style="gap:10px">
-      <span class="text">Connected to media.example.com.</span>
-      <span class="b" style="align-self:flex-start" data-co="3">change server</span>
-    </div>
-    <div class="sec t">feedback</div>
-    <div class="pf t" style="gap:10px">
-      <span class="text">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span>
-      <span class="b" style="align-self:flex-start"><i data-i="bug" class="s16"></i>report a bug</span>
-    </div>
-    <div class="sec t">about</div>
-    <div class="li vrow" style="min-height:48px"><span class="ttl" style="font:500 15px/1.3 var(--ff-ui)">Version</span><span class="v">0.2.1</span></div>
   </div>
 </figure>
 
-<!-- settings on a phone held sideways: the groups in two columns -->
+<!-- Figure 16.10 · settings on a phone held sideways: the groups in two columns -->
 <figure class="shot" id="settings-sideways-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="settings">
     <div class="sgrid">
-      <div>
-        <div class="sec">language</div>
-        <div class="pf">
-          <span class="lbl" data-co="1">Audio</span>
-          <span class="field filled"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
-          <span class="hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
-        </div>
-        <div class="pf">
-          <span class="lbl">Subtitles</span>
-          <span class="field filled"><span style="flex:1">English</span><i data-i="chevron-down" class="s16"></i></span>
-          <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
-        </div>
-      </div>
-      <div data-co="2" data-co-side="right">
-        <div class="sec">binge watching</div>
-        <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on"></span></span></div>
-        <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
-        <div class="li"><div class="main"><span class="ttl">Countdown</span><span class="sub">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></div><span class="end"><span class="step"><span class="b sm icon"><i data-i="minus" class="s16"></i></span><span class="val">3 s</span><span class="b sm icon"><i data-i="plus" class="s16"></i></span></span></span></div>
-      </div>
+      <div class="nc-card" data-co="1"><div class="nc-card__header"><div class="nc-card__title">language</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Audio"><ds-select size="lg" value="Original"></ds-select><span class="nc-field__msg nc-field__msg--hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field><ds-field label="Subtitles"><ds-select size="lg" value="English"></ds-select><span class="nc-field__msg nc-field__msg--hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span></ds-field></div></div></div>
+      <div class="nc-card" data-co="2" data-co-side="right"><div class="nc-card__header"><div class="nc-card__title">binge watching</div></div><div class="nc-card__body"><div class="stk"><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-skip intros</ds-switch><span class="nc-field__msg nc-field__msg--hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-play next episode</ds-switch><span class="nc-field__msg nc-field__msg--hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><ds-field label="Countdown"><ds-select size="lg" value="3 s" class="short"></ds-select><span class="nc-field__msg nc-field__msg--hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></ds-field></div></div></div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 16.4 · settings on a TV -->
+<!-- Figure 16.11 · settings on a TV -->
 <figure class="shot" id="settings-tv">
   <div class="tv" data-view="settings">
     <div class="page">
       <div class="tset">
-        <h1 class="h1">settings</h1>
+        <ds-heading level="1">settings</ds-heading>
         <section class="grp">
-          <h2 class="h2">account</h2>
-          <div class="trow who" data-co="1"><span class="av">au</span><span class="col" style="gap:2px; flex:1"><span class="n">Alex Urban</span><span class="v" style="color:var(--fg-dim); font-size:13px">alex@example.com</span></span><i data-i="chevron-right" class="s16" style="color:var(--fg-muted)"></i></div>
+          <ds-heading level="2">account</ds-heading>
+          <div class="trow" data-co="1"><span class="av">au</span><span class="who"><span class="n">Alex Urban</span><span class="v">alex@example.com</span></span><i data-i="chevron-right" class="s16" style="color:var(--fg-muted)"></i></div>
         </section>
         <section class="grp">
-          <h2 class="h2">language</h2>
-          <div class="trow"><span class="n">Audio</span><span class="v">Original</span><i data-i="chevron-down" class="s16" style="color:var(--fg-muted)"></i></div>
-          <span class="hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
-          <div class="trow focus-row" data-co="2" data-co-side="right"><span class="n">Subtitles</span><span class="v">English</span><i data-i="chevron-down" class="s16" style="color:var(--fg-2)"></i></div>
-          <span class="hint" data-co="3">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
+          <ds-heading level="2">language</ds-heading>
+          <ds-field label="Audio"><ds-select size="lg" value="Original"></ds-select><span class="nc-field__msg nc-field__msg--hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field>
+          <ds-field label="Subtitles"><ds-select size="lg" value="English" class="focus-row" data-co="2" data-co-side="right"></ds-select><span class="nc-field__msg nc-field__msg--hint" data-co="3">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span></ds-field>
         </section>
         <section class="grp">
-          <h2 class="h2" style="align-self:flex-start" data-co="4" data-co-side="right">binge watching</h2>
-          <div class="trow"><span class="n">Auto-skip intros</span><span class="switch on"></span></div>
-          <div class="trow"><span class="n">Auto-play next episode</span><span class="switch on"></span></div>
+          <ds-heading level="2" style="align-self:flex-start" data-co="4" data-co-side="right">binge watching</ds-heading>
         </section>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 16.5 · report a bug, on a computer -->
+<!-- Figure 16.12 · report a bug, on a computer: the design system's dialog over settings -->
 <figure class="shot" id="settings-report-computer">
   <div class="computer" data-view="none">
-    <div class="set">
-      <h1 class="h1">settings</h1>
-      <section class="grp"><h2 class="h2">language</h2><div class="card-box" style="height:250px"></div></section>
-      <section class="grp"><h2 class="h2">binge watching</h2><div class="card-box" style="height:220px"></div></section>
-    </div>
-    <div class="scrim-all"></div>
-    <div class="dlgwrap">
-      <div class="dlg w480">
-        <p class="h2">report a bug</p>
-        <span class="xb"><i data-i="x" class="s16"></i></span>
-        <div class="fl" style="margin-top:4px" data-co="1">
-          <span class="lbl">What happened?</span>
-          <span class="field ta">What were you doing, what did you expect, what happened instead?</span>
-        </div>
-        <span class="chk" data-co="2"><span class="tick"></span>Attach a screenshot of the page</span>
-        <p data-co="3">The report goes to the people who run this server, with details of the app and the device.</p>
-        <div class="ft"><span class="b ghost">cancel</span><span class="b primary" data-co="4" data-co-side="right"><i data-i="send" class="s16"></i>send report</span></div>
+    <div class="set2">
+      <ds-heading level="1">settings</ds-heading>
+      <div class="colg">
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">language</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Audio"><ds-select value="Original"></ds-select><span class="nc-field__msg nc-field__msg--hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field><ds-field label="Subtitles"><ds-select value="English"></ds-select><span class="nc-field__msg nc-field__msg--hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span></ds-field></div></div></div>
+      </div>
+      <div class="colg">
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">binge watching</div></div><div class="nc-card__body"><div class="stk"><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-skip intros</ds-switch><span class="nc-field__msg nc-field__msg--hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-play next episode</ds-switch><span class="nc-field__msg nc-field__msg--hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><ds-field label="Countdown"><ds-select value="3 s" class="short"></ds-select><span class="nc-field__msg nc-field__msg--hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></ds-field></div></div></div>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">feedback</div></div><div class="nc-card__body"><div class="stk tight"><span class="nc-text nc-text--muted">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span><ds-button icon="bug" style="align-self:flex-start">report a bug</ds-button></div></div></div>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">about</div></div><div class="nc-card__body"><div class="kv"><span class="nc-text nc-text--ui">Version</span><span class="nc-text nc-text--code">0.1.0</span></div></div></div>
       </div>
     </div>
+    <ds-modal title="report a bug" width="480">
+      <ds-body><div class="stk">
+        <ds-field label="What happened?" hint="What were you doing, what did you expect, what happened instead?" data-co="1"><ds-textarea rows="5"></ds-textarea></ds-field>
+        <ds-checkbox data-co="2">Attach a screenshot of the page</ds-checkbox>
+        <p data-co="3">The report goes to the people who run this server, with details of the app and the device.</p>
+      </div></ds-body>
+      <ds-footer><ds-button variant="ghost">cancel</ds-button><ds-button variant="primary" icon="send" data-co="4" data-co-side="right">send report</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
-<!-- Figure 16.6 · the account, on a computer -->
+<!-- Figure 16.13 · the account, on a computer -->
 <figure class="shot" id="settings-account-computer">
   <div class="computer" data-view="none">
     <div class="set" style="width:900px">
-      <h1 class="h1">account</h1>
-      <div class="card-box idc">
+      <ds-heading level="1">account</ds-heading>
+      <div class="nc-card"><div class="nc-card__body"><div class="idc">
         <span class="av lg" data-co="1">au</span>
-        <div class="col" style="gap:3px; flex:1"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div>
-        <div class="row" style="gap:10px">
-          <span class="b" data-co="2" data-co-side="top"><i data-i="log-out" class="s16"></i>sign out</span>
-          <span class="b danger" data-co="3" data-co-side="right"><i data-i="trash-2" class="s16"></i>delete account</span>
-        </div>
-      </div>
-      <section class="grp">
-        <h2 class="h2">watch history</h2>
-        <div class="card-box">
-          <div class="hist" data-co="4"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk" data-co="5" data-co-side="right"><i data-i="check" class="s16"></i></span></div>
-          <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-          <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-          <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-          <div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-          <div class="hist"><span class="th mv"><span class="art a4"></span></span><span class="m"><span class="t1">Charge</span><span class="t2">2022</span></span><span class="d">28 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-        </div>
-      </section>
+        <div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div>
+        <div class="row" style="gap:8px">
+          <ds-button icon="log-out" data-co="2" data-co-side="top">sign out</ds-button>
+          <ds-button variant="danger" icon="trash-2" data-co="3" data-co-side="right">delete account</ds-button>
+        </div></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">watch history</div></div><div class="nc-card__body nc-card__body--flush"><div class="hist" data-co="4"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk" data-co="5" data-co-side="right"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a4"></span></span><span class="m"><span class="t1">Charge</span><span class="t2">2022</span></span><span class="d">28 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div></div></div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 16.7 · the account, on a phone -->
+<!-- Figure 16.14 · the account, on a phone held upright -->
 <figure class="shot" id="settings-account-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="account">
-    <div class="pg" style="display:flex; flex-direction:column; gap:12px">
-      <div class="row" style="gap:16px"><span class="av" style="width:64px;height:64px;line-height:64px;font-size:22px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
-      <div class="row" style="gap:8px; margin-top:4px">
-        <span class="b" style="flex:1" data-co="1"><i data-i="users" class="s16"></i>switch account</span>
-        <span class="b" style="flex:1" data-co="2" data-co-side="right"><i data-i="log-out" class="s16"></i>sign out</span>
+    <div class="pstk">
+      <div class="idp"><span class="av">au</span><div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div></div>
+      <div class="btns">
+        <ds-button size="lg" icon="users" block data-co="1">switch account</ds-button>
+        <ds-button size="lg" icon="log-out" block data-co="2" data-co-side="right">sign out</ds-button>
+        <ds-button size="lg" variant="danger" icon="trash-2" block data-co="3">delete account</ds-button>
       </div>
-      <span class="b danger wide" data-co="3"><i data-i="trash-2" class="s16"></i>delete account</span>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">watch history</div></div><div class="nc-card__body nc-card__body--flush"><div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div></div></div>
     </div>
-    <div class="sec" style="padding-top:8px">watch history</div>
-    <div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-    <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-    <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-    <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-    <div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
   </div>
 </figure>
 
-<!-- the account, on a phone held sideways: the account and its buttons beside the history -->
+<!-- Figure 16.15 · the account, on a phone held sideways: the account and its buttons beside the history -->
 <figure class="shot" id="settings-account-sideways-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="account">
-    <div class="agrid">
-      <div class="acol" data-co="1">
-        <div class="row" style="gap:14px; margin-bottom:4px"><span class="av" style="width:56px;height:56px;line-height:56px;font-size:20px">au</span><div class="col" style="gap:2px; min-width:0"><span style="font:500 16px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
-        <span class="b wide"><i data-i="users" class="s16"></i>switch account</span>
-        <span class="b wide"><i data-i="log-out" class="s16"></i>sign out</span>
-        <span class="b danger wide"><i data-i="trash-2" class="s16"></i>delete account</span>
+    <div class="sgrid" style="grid-template-columns: 260px 1fr; gap: 20px">
+      <div class="btns" data-co="1">
+        <div class="idp" style="margin-bottom:6px"><span class="av tvav">au</span><div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div></div>
+        <ds-button size="lg" icon="users" block>switch account</ds-button>
+        <ds-button size="lg" icon="log-out" block>sign out</ds-button>
+        <ds-button size="lg" variant="danger" icon="trash-2" block>delete account</ds-button>
       </div>
-      <div class="hcol" data-co="2" data-co-side="right">
-        <div class="sec">watch history</div>
-        <div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-        <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-        <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-        <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div>
-      </div>
+      <div class="nc-card" data-co="2" data-co-side="right"><div class="nc-card__header"><div class="nc-card__title">watch history</div></div><div class="nc-card__body nc-card__body--flush"><div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div></div></div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 16.8 · the account, on a TV -->
+<!-- Figure 16.16 · the account, on a TV -->
 <figure class="shot" id="settings-account-tv">
   <div class="tv" data-view="settings">
     <div class="page">
       <div class="tset">
-        <h1 class="h1">account</h1>
-        <div class="row" style="gap:16px"><span class="av" style="width:56px;height:56px;line-height:56px;font-size:20px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
-        <div class="row" style="gap:14px">
-          <span class="b focus" data-co="1"><i data-i="log-out" class="s16"></i>sign out</span>
-          <span class="b danger" data-co="2" data-co-side="right"><i data-i="trash-2" class="s16"></i>delete account</span>
+        <ds-heading level="1">account</ds-heading>
+        <div class="idp"><span class="av tvav">au</span><div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div></div>
+        <div class="row" style="gap:16px">
+          <ds-button size="lg" icon="log-out" class="focus" style="background:var(--surface-focus)" data-co="1">sign out</ds-button>
+          <ds-button size="lg" variant="danger" icon="trash-2" data-co="2" data-co-side="right">delete account</ds-button>
         </div>
-        <section class="grp" style="margin-top:6px">
-          <h2 class="h2">watch history</h2>
-          <div>
-            <div class="hist" data-co="3"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span></div>
-            <div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span></div>
-            <div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span></div>
-            <div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span></div>
-          </div>
+        <section class="grp">
+          <ds-heading level="2">watch history</ds-heading>
+          <div class="tvhist"><div class="hist" data-co="3"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span></div><div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span></div><div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span></div><div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span></div></div>
         </section>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 16.9 · sign out, on a phone -->
+<!-- Figure 16.17 · sign out, on a phone: the design system's dialog over the account -->
 <figure class="shot" id="settings-sign-out-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="account">
-    <div class="pg" style="display:flex; flex-direction:column; gap:12px">
-      <div class="row" style="gap:16px"><span class="av" style="width:64px;height:64px;line-height:64px;font-size:22px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
-      <div class="row" style="gap:8px; margin-top:4px">
-        <span class="b" style="flex:1"><i data-i="users" class="s16"></i>switch account</span>
-        <span class="b" style="flex:1"><i data-i="log-out" class="s16"></i>sign out</span>
-      </div>
-      <span class="b danger wide"><i data-i="trash-2" class="s16"></i>delete account</span>
-    </div>
-    <div class="scrim-all"></div>
-    <div class="dlgwrap">
-      <div class="dlg">
-        <p class="h2">sign out</p>
-        <span class="xb"><i data-i="x" class="s16"></i></span>
-        <p data-co="1">Your 23 downloads, 12.4 GB, are deleted from this phone.</p>
-        <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="2" data-co-side="right">sign out</span></div>
+    <div class="pstk">
+      <div class="idp"><span class="av">au</span><div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div></div>
+      <div class="btns">
+        <ds-button size="lg" icon="users" block>switch account</ds-button>
+        <ds-button size="lg" icon="log-out" block>sign out</ds-button>
+        <ds-button size="lg" variant="danger" icon="trash-2" block>delete account</ds-button>
       </div>
     </div>
+    <ds-modal title="sign out" width="320">
+      <ds-body><p data-co="1">Your 23 downloads, 12.4 GB, are deleted from this phone.</p></ds-body>
+      <ds-footer><ds-button size="lg" variant="ghost">cancel</ds-button><ds-button size="lg" variant="danger" data-co="2" data-co-side="right">sign out</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
-<!-- Figure 16.10 · remove account, on a TV -->
+<!-- Figure 16.18 · remove account, on a TV: the dialog over who's watching, the focus on cancel -->
 <figure class="shot" id="settings-remove-account-tv">
   <div class="tv full" data-rail="none">
     <div class="page">
-      <div style="position:absolute; left:0; right:0; top:70px; display:flex; flex-direction:column; align-items:center; gap:14px">
-        <h1 class="h1" style="font-size:30px">who's watching?</h1>
-        <p class="text" style="color:var(--fg-muted)">Hold OK on an account to remove it from this TV.</p>
-        <div class="row" style="gap:28px; margin-top:44px">
-          <div class="col" style="align-items:center; gap:10px; width:132px"><span class="av" style="width:112px;height:112px;line-height:112px;font-size:38px">au</span><span class="text">Alex Urban</span></div>
-          <div class="col" style="align-items:center; gap:10px; width:132px"><span class="av c2" style="width:112px;height:112px;line-height:112px;font-size:38px">a</span><span class="text">Anna</span></div>
-          <div class="col" style="align-items:center; gap:10px; width:132px"><span class="av c3" style="width:112px;height:112px;line-height:112px;font-size:38px">sk</span><span class="text">Sam Keller</span></div>
+      <div style="position:absolute; left:0; right:0; top:64px; display:flex; flex-direction:column; align-items:center; gap:14px">
+        <ds-heading level="1">who's watching?</ds-heading>
+        <ds-text>Hold <ds-kbd>OK</ds-kbd> on an account to remove it from this TV.</ds-text>
+        <div class="tiles" style="margin-top:40px">
+          <div class="tile"><span class="av">au</span><span class="nm">Alex Urban</span></div>
+          <div class="tile"><span class="av c2">a</span><span class="nm">Anna</span></div>
+          <div class="tile"><span class="av c3">sk</span><span class="nm">Sam Keller</span></div>
         </div>
       </div>
     </div>
-    <div class="scrim-all"></div>
-    <div class="dlgwrap">
-      <div class="dlg">
-        <p class="h2">remove account</p>
-        <p>This removes Anna from this TV. Signing in again brings the account back.</p>
-        <div class="ft"><span class="b focus" data-co="1">cancel</span><span class="b danger" data-co="2" data-co-side="right">remove account</span></div>
-      </div>
-    </div>
+    <ds-modal title="remove account" width="440" close="false">
+      <ds-body><p>This removes Anna from this TV. Signing in again brings the account back.</p></ds-body>
+      <ds-footer><ds-button size="lg" variant="ghost" class="focus" style="background:var(--surface-focus)" data-co="1">cancel</ds-button><ds-button size="lg" variant="danger" data-co="2" data-co-side="right">remove account</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
-<!-- Figure 16.11 · change server, on a phone -->
+<!-- Figure 16.19 · change server, on a phone: the dialog over chapter 3's screen, once the new server has answered -->
 <figure class="shot" id="settings-change-server-phone">
   <div class="phone" data-bar="none" data-tabs="none">
-    <div style="position:absolute; inset:0; display:flex; flex-direction:column; gap:18px; padding:170px 24px 0">
-      <span class="logo" style="align-self:center; font-size:28px; gap:9px"><svg viewBox="0 0 14 18" style="width:20px;height:26px"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>
-      <h1 class="h1" style="text-align:center; margin-top:6px">change server</h1>
-      <div class="fl" style="margin-top:10px"><span class="lbl">Server address</span><span class="field filled" style="height:48px; font-size:16px">media.example.org</span><span class="hint">The app adds https:// when you leave it out.</span></div>
-      <span class="b primary wide">connect</span>
-      <span class="b ghost wide" style="margin-top:-10px">cancel</span>
+    <div class="onb">
+      <span class="mark"><ds-chevron size="28"></ds-chevron>chino</span>
+      <ds-heading level="2">change server</ds-heading>
+      <ds-field label="Server address" hint="The app adds https:// when you leave it out." style="margin-top:10px"><ds-input size="lg" value="media.example.org"></ds-input></ds-field>
+      <ds-button variant="primary" size="lg" block>connect</ds-button>
+      <ds-button variant="ghost" size="lg" block style="margin-top:-8px">cancel</ds-button>
     </div>
-    <div class="scrim-all" style="top:0; bottom:0"></div>
-    <div class="dlgwrap" style="top:0; bottom:0">
-      <div class="dlg">
-        <p class="h2">change server</p>
-        <span class="xb"><i data-i="x" class="s16"></i></span>
-        <p data-co="1">All 3 accounts on this phone are signed out, and their 31 downloads, 15 GB, are deleted.</p>
-        <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="2" data-co-side="right">change server</span></div>
-      </div>
-    </div>
+    <ds-modal title="change server" width="320">
+      <ds-body><p data-co="1">All 3 accounts on this phone are signed out, and their 31 downloads, 15 GB, are deleted.</p></ds-body>
+      <ds-footer><ds-button size="lg" variant="ghost">cancel</ds-button><ds-button size="lg" variant="danger" data-co="2" data-co-side="right">change server</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
-<!-- Figure 16.12 · delete account, on a computer -->
+<!-- Figure 16.20 · delete account, on a computer: the design system's dialog over the account -->
 <figure class="shot" id="settings-delete-account-computer">
   <div class="computer" data-view="none">
     <div class="set" style="width:900px">
-      <h1 class="h1">account</h1>
-      <div class="card-box idc">
+      <ds-heading level="1">account</ds-heading>
+      <div class="nc-card"><div class="nc-card__body"><div class="idc">
         <span class="av lg">au</span>
-        <div class="col" style="gap:3px; flex:1"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div>
-        <div class="row" style="gap:10px"><span class="b"><i data-i="log-out" class="s16"></i>sign out</span><span class="b danger"><i data-i="trash-2" class="s16"></i>delete account</span></div>
-      </div>
-      <section class="grp"><h2 class="h2">watch history</h2><div class="card-box" style="height:300px"></div></section>
+        <div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div>
+        <div class="row" style="gap:8px">
+          <ds-button icon="log-out">sign out</ds-button>
+          <ds-button variant="danger" icon="trash-2">delete account</ds-button>
+        </div></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">watch history</div></div><div class="nc-card__body nc-card__body--flush"><div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a2"></span></span><span class="m"><span class="t1">Agent 327: Operation Barbershop</span><span class="t2">2017</span></span><span class="d">30 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div><div class="hist"><span class="th mv"><span class="art a4"></span></span><span class="m"><span class="t1">Charge</span><span class="t2">2022</span></span><span class="d">28 oct</span><span class="wmk"><i data-i="check" class="s16"></i></span></div></div></div>
     </div>
-    <div class="scrim-all"></div>
-    <div class="dlgwrap">
-      <div class="dlg w480">
-        <p class="h2">delete account</p>
-        <span class="xb"><i data-i="x" class="s16"></i></span>
+    <ds-modal title="delete account" width="480">
+      <ds-body><div class="stk">
         <p data-co="1">This deletes the account alex@example.com on media.example.com, and with it:</p>
         <ul class="goes" data-co="2">
           <li>your watch progress</li>
@@ -493,77 +332,65 @@
           <li>your sign-in: you can't sign in with this account again</li>
         </ul>
         <p>This can't be undone.</p>
-        <div class="ft"><span class="b ghost">cancel</span><span class="b danger" data-co="3" data-co-side="right">delete account</span></div>
-      </div>
-    </div>
+      </div></ds-body>
+      <ds-footer><ds-button variant="ghost">cancel</ds-button><ds-button variant="danger" data-co="3" data-co-side="right">delete account</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
-<!-- Figure 16.13 · the subtitle languages couldn't load, on a phone -->
+<!-- Figure 16.21 · the subtitle languages couldn't load, on a phone -->
 <figure class="shot" id="settings-languages-couldnt-load-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="settings">
-    <div class="sec">language</div>
-    <div class="pf">
-      <span class="lbl">Audio</span>
-      <span class="field filled"><span style="flex:1">Original</span><i data-i="chevron-down" class="s16"></i></span>
-      <span class="hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span>
+    <div class="pstk">
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">language</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Audio"><ds-select size="lg" value="Original"></ds-select><span class="nc-field__msg nc-field__msg--hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field><div class="nc-field"><label class="nc-field__label">Subtitles</label><ds-empty illustration="error" size="sm" title="couldn't load the subtitle languages" description="Can't reach the server." data-co="1"><ds-button size="lg" data-co="2" data-co-side="right">try again</ds-button></ds-empty></div></div></div></div>
+      <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">binge watching</div></div><div class="nc-card__body"><div class="stk"><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-skip intros</ds-switch><span class="nc-field__msg nc-field__msg--hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-play next episode</ds-switch><span class="nc-field__msg nc-field__msg--hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><ds-field label="Countdown"><ds-select size="lg" value="3 s" class="short"></ds-select><span class="nc-field__msg nc-field__msg--hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></ds-field></div></div></div>
     </div>
-    <div class="pf">
-      <span class="lbl">Subtitles</span>
-      <div class="cl" data-co="1">
-        <span class="h3x">couldn't load the subtitle languages</span>
-        <span class="text">Can't reach the server.</span>
-        <span class="b sm" style="align-self:flex-start; margin-top:4px" data-co="2"><i data-i="refresh-cw" class="s14"></i>try again</span>
-      </div>
-      <span class="hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span>
-    </div>
-    <div class="sec">binge watching</div>
-    <div class="li"><div class="main"><span class="ttl">Auto-skip intros</span><span class="sub">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><span class="end"><span class="switch on"></span></span></div>
-    <div class="li"><div class="main"><span class="ttl">Auto-play next episode</span><span class="sub">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><span class="end"><span class="switch on"></span></span></div>
   </div>
 </figure>
 
-<!-- Figure 16.14 · the server doesn't delete accounts, on a TV -->
+<!-- Figure 16.22 · the server doesn't delete accounts, on a TV -->
 <figure class="shot" id="settings-delete-unavailable-tv">
   <div class="tv" data-view="settings">
     <div class="page">
       <div class="tset">
-        <h1 class="h1">account</h1>
-        <div class="row" style="gap:16px"><span class="av" style="width:56px;height:56px;line-height:56px;font-size:20px">au</span><div class="col" style="gap:2px"><span style="font:500 17px/1.3 var(--ff-ui)">Alex Urban</span><span style="font:400 13px/1.4 var(--ff-ui); color:var(--fg-dim)">alex@example.com</span></div></div>
-        <div class="row" style="gap:14px"><span class="b"><i data-i="log-out" class="s16"></i>sign out</span><span class="b danger"><i data-i="trash-2" class="s16"></i>delete account</span></div>
+        <ds-heading level="1">account</ds-heading>
+        <div class="idp"><span class="av tvav">au</span><div class="who"><span class="nm">Alex Urban</span><span class="em">alex@example.com</span></div></div>
+        <div class="row" style="gap:16px">
+          <ds-button size="lg" icon="log-out">sign out</ds-button>
+          <ds-button size="lg" variant="danger" icon="trash-2">delete account</ds-button>
+        </div>
+        <section class="grp">
+          <ds-heading level="2">watch history</ds-heading>
+          <div class="tvhist"><div class="hist"><span class="th ep"><span class="art a3"></span></span><span class="m"><span class="t1">Caminandes</span><span class="t2">E01 · Llama Drama</span></span><span class="d">5 nov</span></div><div class="hist"><span class="th mv"><span class="art a6"></span></span><span class="m"><span class="t1">Big Buck Bunny</span><span class="t2">2008</span></span><span class="d">4 nov</span></div><div class="hist"><span class="th mv"><span class="art a1"></span></span><span class="m"><span class="t1">Spring</span><span class="t2">2019</span></span><span class="d">2 nov</span></div><div class="hist"><span class="th ep"><span class="art a1"></span></span><span class="m"><span class="t1">Pioneer One</span><span class="t2">S01E01 · Earthfall</span></span><span class="d">1 nov</span></div></div>
+        </section>
       </div>
     </div>
-    <div class="scrim-all"></div>
-    <div class="dlgwrap">
-      <div class="dlg">
-        <p class="h2">delete account</p>
-        <div class="banner error" data-co="1"><i data-i="circle-alert" class="s16"></i><span>This server doesn't delete accounts from the apps. Ask the people who run it.</span></div>
-        <div class="ft"><span class="b focus" data-co="2" data-co-side="right">close</span></div>
-      </div>
-    </div>
+    <ds-modal title="delete account" width="460" close="false">
+      <ds-body><ds-banner state="error" data-co="1">This server doesn't delete accounts from the apps. Ask the people who run it.</ds-banner></ds-body>
+      <ds-footer><ds-button size="lg" class="focus" style="background:var(--surface-focus)" data-co="2" data-co-side="right">close</ds-button></ds-footer>
+    </ds-modal>
   </div>
 </figure>
 
-<!-- Figure 16.15 · the report was sent, on a computer -->
+<!-- Figure 16.23 · the report was sent, on a computer: the dialog closed, the design system's toast -->
 <figure class="shot" id="settings-report-sent-computer">
   <div class="computer" data-view="none">
-    <div class="set">
-      <h1 class="h1">settings</h1>
-      <section class="grp"><h2 class="h2">language</h2><div class="card-box" style="height:250px"></div></section>
-      <section class="grp"><h2 class="h2">binge watching</h2><div class="card-box" style="height:220px"></div></section>
-    </div>
-    <div class="scrim-all"></div>
-    <div class="dlgwrap">
-      <div class="dlg w480">
-        <p class="h2">report a bug</p>
-        <span class="xb"><i data-i="x" class="s16"></i></span>
-        <p style="color:var(--fg); font-weight:500">Thanks for the report.</p>
-        <p data-co="1">It went to the people who run this server as #482.</p>
-        <div class="ft"><span class="b" data-co="2" data-co-side="right">close</span></div>
+    <div class="set2">
+      <ds-heading level="1">settings</ds-heading>
+      <div class="colg">
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">language</div></div><div class="nc-card__body"><div class="stk"><ds-field label="Audio"><ds-select value="Original"></ds-select><span class="nc-field__msg nc-field__msg--hint">Titles play with audio in the language you pick here, where they have it. With Original, each title plays in the language it was made in. A choice in the player applies only to what's playing now.</span></ds-field><ds-field label="Subtitles"><ds-select value="English"></ds-select><span class="nc-field__msg nc-field__msg--hint">Subtitles in the language you pick here come on when a title's audio is in another language. Otherwise, only the foreign-language parts get subtitles, where a title has them. A choice in the player applies only to what's playing now.</span></ds-field></div></div></div>
+      </div>
+      <div class="colg">
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">binge watching</div></div><div class="nc-card__body"><div class="stk"><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-skip intros</ds-switch><span class="nc-field__msg nc-field__msg--hint">Skips the intro and the recap on every episode after the first one you watch in a row.</span></div><div class="nc-field"><ds-switch checked style="align-self:flex-start">Auto-play next episode</ds-switch><span class="nc-field__msg nc-field__msg--hint">Starts the next episode when the credits roll. Off, the up next card waits until you play it.</span></div><ds-field label="Countdown"><ds-select value="3 s" class="short"></ds-select><span class="nc-field__msg nc-field__msg--hint">Seconds the player counts down before it skips the intro or the recap, or starts the next episode.</span></ds-field></div></div></div>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">feedback</div></div><div class="nc-card__body"><div class="stk tight"><span class="nc-text nc-text--muted">Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.</span><ds-button icon="bug" style="align-self:flex-start" data-co="2" data-co-side="right">report a bug</ds-button></div></div></div>
+        <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">about</div></div><div class="nc-card__body"><div class="kv"><span class="nc-text nc-text--ui">Version</span><span class="nc-text nc-text--code">0.1.0</span></div></div></div>
       </div>
     </div>
+    <ds-toasts data-co="1"><ds-toast state="success">Report sent as #482</ds-toast></ds-toasts>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

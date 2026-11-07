@@ -1,13 +1,21 @@
 <!doctype html>
 <!--
-  Chapter 17, when something goes wrong: the figures of spec/chino/errors.md.
+  Chapter 17, when something goes wrong: the figures of spec/chino/errors.md,
+  drawn on the design system's components (<ds-*> tags, ds.js): a page or a
+  list that couldn't load is its empty state with the error drawing and try
+  again; a part of a page that couldn't load is its error banner; removed has
+  the empty drawing, no access the error drawing, each with back.
   Every phone screen is drawn held upright (<div class="phone">, 360 × 780) and
   sideways (<div class="phone side">, 780 × 360, the tabs as a rail on the left).
   Figures 17.1 to 17.3 are screenshots of the deployed web, not drawings.
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Home in the row's figure is chapter 4's (ch04-home.html).
+  The look is screens.css with the design system's stylesheet, the frame (top
+  bar, tabs, rail) is frame.js, the icons are icons.js. Home in the row's
+  figure is chapter 4's (ch04-home.html).
+  The empty state has no details of its own: they are drawn with the banner's
+  details toggle and text (nc-strip__toggle, nc-strip__details) under its
+  button, chino's own way of putting them there.
   Pink numbers mark the parts the chapter's text explains.
 -->
 <html lang="en">
@@ -20,41 +28,38 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* details: the status, for the people who fix things */
-  .det { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); }
-  .det-b { margin: -4px 0 0; font: 500 12px/1.4 var(--ff-mono); color: var(--fg-muted); }
-  .tv .det-b { margin-top: 6px; font-size: 11px; color: var(--fg-dim); }
-  .tv .empty .text { max-width: 440px; }
-  .tv .mid { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; }
+  /* the empty state in the page's place, centred: under the computer's bar, in
+     the phone's scroll area, and on a TV right of the rail inside the safe area */
+  .computer > .mid { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; display: flex; align-items: center; justify-content: center; }
+  .phone .mid { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px; }
+  .tv .page .mid { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; }
+
+  /* details under the empty state's button: the banner's toggle and its text,
+     its rule in the border colour (the empty state has no state colour of its own) */
+  .det { flex-basis: 100%; display: flex; flex-direction: column; align-items: center; --nc-strip-border: var(--border-2); }
+  .det .nc-strip__details { text-align: left; }
+  /* on a TV the details show without a toggle, in the quiet monospace */
+  .det-b { flex-basis: 100%; margin: 4px 0 0; font: 500 12px/1.5 var(--ff-mono); color: var(--fg-dim); }
+  /* the one focused button on a TV: a plain button gets the focused surface (the TV focus pattern) */
 
   /* home on a phone, as chapter 4 draws it, scrolled down to its rows */
   .phone .hero { position: relative; height: 392px; }
   .phone .hero .txt { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
   .phone .t { font-size: 26px; } .phone .meta { font-size: 12px; }
-  .phone .hero .row > .b { flex: 1; padding: 0 12px; }
   .phone .entry { margin: 16px 16px 0; height: 48px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 14px;
                   border: 1px solid var(--border-2); background: var(--surface); font: 600 14px/1 var(--ff-mono); }
   .phone .entry .chev { margin-left: auto; color: var(--fg-dim); }
-  .phone .shelf { padding: 20px 0 0 16px; }
+  .phone .shelf { padding: 20px 16px 0; }
   .shelf .h2 { margin-bottom: 12px; }
+  .phone .shelf .cards { margin-right: -16px; }
   .phone .card { width: 200px; } .phone .card .img { height: 112px; }
   .scrolled { margin-top: -236px; }
 
-  /* a part of a page that couldn't load, in the part's place, at the small size */
-  .part { margin-right: 16px; height: 152px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
-  .part .h3 { font: 600 15px/1.3 var(--ff-mono); color: var(--fg); }
-  .part .text { font-size: 13px; }
-  .part .b { margin-top: 2px; }
-
-  /* held sideways (<div class="phone side">): the rail runs the frame's height
-     (screens.css gives every .phone > .tabs 64 px and a top border, the rail too) */
-  .side .mid2 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 24px; }
-  .side .empty { gap: 10px; }
-  .side .shelf { padding: 16px 0 0 24px; }
+  /* held sideways */
+  .side .shelf { padding: 16px 24px 0; }
+  .side .shelf .cards { margin-right: -24px; }
   .side .shelf .h2 { width: fit-content; }
   .side .card { width: 176px; } .side .card .img { height: 99px; }
-  .side .part { margin-right: 24px; height: 124px; flex-direction: row; gap: 16px; }
-  .side .part .b { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -62,13 +67,11 @@
 <!-- Figure 17.4 · a page that couldn't load, on a computer -->
 <figure class="shot" id="errors-page-computer">
   <div class="computer" data-view="none">
-    <div class="empty" style="margin-top:208px">
-      <i data-i="circle-alert" class="s48"></i>
-      <h2 class="h2" data-co="1">couldn't load this title</h2>
-      <p class="text" data-co="2">The server ran into a problem.</p>
-      <span class="b" style="margin-top:6px" data-co="3"><i data-i="refresh-cw" class="s16"></i>try again</span>
-      <span class="det" style="margin-top:8px" data-co="4">details<i data-i="chevron-up" class="s14"></i></span>
-      <p class="det-b">HTTP 500 Internal Server Error</p>
+    <div class="mid">
+      <ds-empty illustration="error" size="lg" title='<span data-co="1">couldn&#39;t load this title</span>' description='<span data-co="2">The server ran into a problem.</span>'>
+        <ds-button data-co="3">try again</ds-button>
+        <div class="det"><button type="button" class="nc-strip__toggle" aria-expanded="true" data-co="4"><svg viewBox="0 0 12 12" width="10" height="10" fill="none" aria-hidden="true" class="nc-strip__caret"><path d="M4 2.5 L7.5 6 L4 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"></path></svg>details</button><div class="nc-strip__details">HTTP 500 Internal Server Error</div></div>
+      </ds-empty>
     </div>
   </div>
 </figure>
@@ -76,12 +79,11 @@
 <!-- Figure 17.5 · a page that couldn't load, on a phone held upright -->
 <figure class="shot" id="errors-page-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="" data-co-parts="back:1">
-    <div class="empty" style="margin-top:200px;padding:0 24px">
-      <i data-i="hourglass" class="s48"></i>
-      <h2 class="h2">couldn't load this title</h2>
-      <p class="text">The server is busy.</p>
-      <span class="b" style="margin-top:6px"><i data-i="refresh-cw" class="s16"></i>try again</span>
-      <span class="det" style="margin-top:8px" data-co="2">details<i data-i="chevron-down" class="s14"></i></span>
+    <div class="mid">
+      <ds-empty illustration="error" size="lg" title="couldn't load this title" description="The server is busy.">
+        <ds-button size="lg">try again</ds-button>
+        <div class="det"><button type="button" class="nc-strip__toggle" aria-expanded="false" data-co="2"><svg viewBox="0 0 12 12" width="10" height="10" fill="none" aria-hidden="true" class="nc-strip__caret"><path d="M4 2.5 L7.5 6 L4 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"></path></svg>details</button></div>
+      </ds-empty>
     </div>
   </div>
 </figure>
@@ -91,13 +93,10 @@
   <div class="tv" data-view="none">
     <div class="page">
       <div class="mid">
-        <div class="empty" style="margin-top:120px">
-          <i data-i="circle-alert" class="s48"></i>
-          <h2 class="h2">couldn't load this title</h2>
-          <p class="text">The server didn't accept the request. Check for an app update.</p>
-          <span class="b focus" style="margin-top:8px" data-co="1" data-co-side="right"><i data-i="refresh-cw" class="s16"></i>try again</span>
-          <p class="det-b" data-co="2" data-co-side="right">HTTP 400 Bad Request</p>
-        </div>
+        <ds-empty illustration="error" size="lg" title="couldn't load this title" description="The server didn't accept the request. Check for an app update.">
+          <ds-button size="lg" class="focus" data-co="1" data-co-side="right">try again</ds-button>
+          <p class="det-b"><span data-co="2" data-co-side="right">HTTP 400 Bad Request</span></p>
+        </ds-empty>
       </div>
     </div>
   </div>
@@ -112,18 +111,14 @@
         <div class="txt">
           <h1 class="t">Tears of Steel</h1>
           <p class="meta">2012 · 12 min · science fiction</p>
-          <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b icon" style="flex:none"><i data-i="clapperboard"></i></span></div>
+          <div class="row"><ds-button size="lg" variant="primary" icon="play">play</ds-button><ds-button size="lg">see details</ds-button><ds-iconbutton size="lg" icon="clapperboard" label="play the trailer"></ds-iconbutton></div>
           <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         </div>
       </section>
       <div class="entry"><i data-i="zap"></i>zap<i data-i="chevron-right" class="chev"></i></div>
       <section class="shelf">
         <h2 class="h2">continue watching</h2>
-        <div class="part">
-          <h3 class="h3" data-co="1">couldn't load continue watching</h3>
-          <p class="text">The server ran into a problem.</p>
-          <span class="b" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
-        </div>
+        <ds-banner state="error" action='<span data-co="2">try again</span>' details="HTTP 500 Internal Server Error"><span data-co="1">Couldn't load continue watching.</span> The server ran into a problem.</ds-banner>
       </section>
       <section class="shelf">
         <h2 class="h2" data-co="3">recently added movies</h2>
@@ -139,10 +134,10 @@
 <!-- Figure 17.10 · a title that was removed, on a phone held upright -->
 <figure class="shot" id="errors-removed-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="">
-    <div class="empty" style="margin-top:220px;padding:0 24px">
-      <i data-i="circle-slash" class="s48"></i>
-      <h2 class="h2" data-co="1" style="max-width:240px">this title isn't in the library anymore</h2>
-      <span class="b" style="margin-top:6px" data-co="2"><i data-i="arrow-left" class="s16"></i>back</span>
+    <div class="mid">
+      <ds-empty illustration="empty" size="lg" title='<span data-co="1">this title isn&#39;t in the library anymore</span>'>
+        <ds-button size="lg" data-co="2">back</ds-button>
+      </ds-empty>
     </div>
   </div>
 </figure>
@@ -152,11 +147,9 @@
   <div class="tv" data-view="none">
     <div class="page">
       <div class="mid">
-        <div class="empty" style="margin-top:150px">
-          <i data-i="lock" class="s48"></i>
-          <h2 class="h2" data-co="1" data-co-side="right">you don't have access to this</h2>
-          <span class="b focus" style="margin-top:8px" data-co="2" data-co-side="right"><i data-i="arrow-left" class="s16"></i>back</span>
-        </div>
+        <ds-empty illustration="error" size="lg" title='<span data-co="1" data-co-side="right">you don&#39;t have access to this</span>'>
+          <ds-button size="lg" class="focus" data-co="2" data-co-side="right">back</ds-button>
+        </ds-empty>
       </div>
     </div>
   </div>
@@ -165,14 +158,11 @@
 <!-- Figure 17.6 · a page that couldn't load, on a phone held sideways -->
 <figure class="shot" id="errors-page-side-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="" data-co-parts="back:1">
-    <div class="mid2">
-      <div class="empty">
-        <i data-i="hourglass" class="s32"></i>
-        <h2 class="h2" data-co="2" data-co-side="right">couldn't load this title</h2>
-        <p class="text">The server is busy.</p>
-        <span class="b"><i data-i="refresh-cw" class="s16"></i>try again</span>
-        <span class="det">details<i data-i="chevron-down" class="s14"></i></span>
-      </div>
+    <div class="mid">
+      <ds-empty illustration="error" size="sm" title='<span data-co="2" data-co-side="right">couldn&#39;t load this title</span>' description="The server is busy.">
+        <ds-button size="lg">try again</ds-button>
+        <div class="det"><button type="button" class="nc-strip__toggle" aria-expanded="false"><svg viewBox="0 0 12 12" width="10" height="10" fill="none" aria-hidden="true" class="nc-strip__caret"><path d="M4 2.5 L7.5 6 L4 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"></path></svg>details</button></div>
+      </ds-empty>
     </div>
   </div>
 </figure>
@@ -182,11 +172,7 @@
   <div class="phone side" data-view="home">
     <section class="shelf">
       <h2 class="h2">continue watching</h2>
-      <div class="part">
-        <h3 class="h3">couldn't load continue watching</h3>
-        <p class="text">The server ran into a problem.</p>
-        <span class="b" data-co="1" data-co-side="right"><i data-i="refresh-cw" class="s16"></i>try again</span>
-      </div>
+      <ds-banner state="error" action="try again" details="HTTP 500 Internal Server Error" data-co="1" data-co-side="right">Couldn't load continue watching. The server ran into a problem.</ds-banner>
     </section>
     <section class="shelf">
       <h2 class="h2" data-co="2" data-co-side="right">recently added movies</h2>
@@ -202,15 +188,15 @@
 <!-- Figure 17.11 · a title that was removed, on a phone held sideways -->
 <figure class="shot" id="errors-removed-side-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="">
-    <div class="mid2">
-      <div class="empty">
-        <i data-i="circle-slash" class="s32"></i>
-        <h2 class="h2" data-co="1" data-co-side="right">this title isn't in the library anymore</h2>
-        <span class="b" data-co="2" data-co-side="right"><i data-i="arrow-left" class="s16"></i>back</span>
-      </div>
+    <div class="mid">
+      <ds-empty illustration="empty" size="sm" title='<span data-co="1" data-co-side="right">this title isn&#39;t in the library anymore</span>'>
+        <ds-button size="lg" data-co="2" data-co-side="right">back</ds-button>
+      </ds-empty>
     </div>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

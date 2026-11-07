@@ -1,0 +1,12 @@
+{
+  "name": "chino-spec-ds-kit",
+  "private": true,
+  "description": "Renders the nalet design system's real components to make the spec's drawing kit (spec/chino/img/ds.js and ds/nalet-<version>.css).",
+  "dependencies": {
+    "@nalet/design-system": "https://github.com/nalet/design-system/releases/download/v0.4.0/nalet-design-system-0.4.0.tgz",
+    "esbuild": "0.25.10",
+    "lucide-react": "0.469.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

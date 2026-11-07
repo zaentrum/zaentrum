@@ -4,10 +4,15 @@
   (its as-deployed figures are screenshots). Each <figure class="shot" id="…">
   becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+  The look is screens.css with the nalet design system's own stylesheet; the
+  <ds-*> tags are the design system's components (ds.js), the frame (top bar,
+  tabs, rail) is frame.js, the icons are icons.js. Pink numbers mark the parts
+  the chapter's text explains; pink words over a row name the state it shows.
+  What stays chino's own: the still, the poster, the title row's layout, the
+  episode rows and their season, the cards and their status marks, and the on
+  look of a toggle (the design system's icon button has no on state).
   The title row's own figures (title-row, title-row-series, add-to-list,
-  cards-and-episodes) are drawn in mockups.html.
+  cards-and-episodes) moved here from mockups.html, under the same ids.
 -->
 <html lang="en">
 <head>
@@ -19,19 +24,19 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* the title row's parts (section 6.4): add to list in two parts, the on looks */
-  .split { display: inline-flex; flex: none; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
-  .split > span { display: inline-flex; align-items: center; justify-content: center; }
-  .split .m { width: 46px; }
-  .split .c { width: 40px; border-left: 1px solid var(--border-2); }
-  .split.on { background: var(--cloud-blue); border-color: var(--cloud-blue); color: var(--bg); }
-  .split.on .c { border-left-color: rgba(11,15,25,.4); }
-  .tv .split { height: 40px; } .tv .split .m { width: 38px; } .tv .split .c { width: 34px; }
-  .b.green { background: var(--signal-green); border-color: var(--signal-green); color: var(--bg); }
-  .b.st2 { color: var(--fg-2); }
-  .b .bar { width: 100%; height: 3px; }
-  .kind { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; margin-left: 8px; border: 1px solid var(--border-2);
-          background: var(--surface-2); color: var(--fg-muted); font: 500 11px/1 var(--ff-mono); vertical-align: 1px; }
+  /* the title row (section 6.5): chino's own layout of the design system's
+     buttons, icon buttons and multi select; a control wraps as a whole */
+  .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .tv .acts { gap: 12px; }
+  /* a toggle that is on: the design system's icon button has no on state, so
+     chino fills it with its meaning's colour, the icon dark (section 6.5.3) */
+  .nc-iconbtn.on-wl { background: var(--cloud-blue); border-color: var(--cloud-blue); color: var(--bg); }
+  .nc-iconbtn.on-seen { background: var(--signal-green); border-color: var(--signal-green); color: var(--bg); }
+  .nc-iconbtn.on-liked { background: var(--signal-red); border-color: var(--signal-red); color: var(--bg); }
+  .nc-iconbtn.on-wl svg, .nc-iconbtn.on-liked svg { fill: currentColor; }
+  /* the download control of chapter 13 in a row: its status, then its button */
+  .dlc { display: inline-flex; align-items: center; gap: 8px; flex: none; }
+  .meta .nc-badge { margin-left: 8px; vertical-align: 1px; }
   .meta svg.i { vertical-align: -2px; color: var(--fg-muted); }
 
   /* the page's still, fading into the page's colour before any words */
@@ -46,6 +51,8 @@
   .cast { display: flex; gap: 36px; }
   .cast .n { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; }
   .cast .ch { margin-top: 2px; font: 400 13px/1.3 var(--ff-ui); color: var(--fg-dim); white-space: nowrap; }
+  .desc-w { margin: 0; }
+  .fit { display: flex; flex-direction: column; align-items: flex-start; }
 
   /* a movie's page on a computer */
   .computer .bd { top: 56px; height: 320px; }
@@ -55,50 +62,46 @@
   .computer .info { padding-top: 100px; display: flex; flex-direction: column; align-items: flex-start; }
   .computer .info .meta { margin-top: 10px; }
   .computer .info .acts { margin-top: 18px; }
-  .computer .info .desc { margin-top: 18px; max-width: 720px; }
-  .computer .ppl { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-  .computer .ppl .facts { margin-top: 10px; }
-  .computer .more { position: absolute; left: 48px; top: 690px; }
+  .computer .info .desc-w { margin-top: 16px; max-width: 720px; }
+  .computer .ppl { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .computer .ppl .facts { margin-top: 8px; }
+  .computer .more { position: absolute; left: 48px; top: 676px; }
   .computer .more .h2 { margin-bottom: 12px; }
-  .fit { display: flex; flex-direction: column; align-items: flex-start; }
 
   /* a movie's page on a phone */
-  .phone .bd { top: 0; height: 200px; }
+  .phone .bd { top: 0; height: 150px; }
   .phone .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, rgba(11,15,25,.6) 30%, rgba(11,15,25,0) 60%); }
-  .phone .hd { position: absolute; left: 16px; right: 16px; top: 140px; display: flex; gap: 14px; align-items: flex-start; }
+  .phone .hd { position: absolute; left: 16px; right: 16px; top: 86px; display: flex; gap: 14px; align-items: flex-start; }
   .phone .hd .pos { width: 96px; height: 144px; }
-  .phone .hd .nm { padding-top: 50px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
-  .phone .t { font-size: 22px; }
+  .phone .hd .nm { padding-top: 66px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .phone .t { font-size: 26px; }
+  .phone .hd .nm .t { margin-bottom: 4px; }
   .phone .meta { font-size: 12px; }
-  .phone .body { position: absolute; left: 16px; right: 16px; top: 306px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
-  .phone .acts { flex-wrap: wrap; row-gap: 8px; }
-  .phone .acts .b { padding: 0 14px; }
-  .phone .acts .b.icon { padding: 0; }
+  .phone .body { position: absolute; left: 16px; right: 16px; top: 306px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
   .phone .cast2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; width: 100%; }
   .phone .cast2 .n { font: 500 14px/1.3 var(--ff-ui); color: var(--fg); }
   .phone .cast2 .ch { margin-top: 2px; font: 400 13px/1.3 var(--ff-ui); color: var(--fg-dim); }
 
   /* a movie's page on a TV, as it opens */
-  .tv .bd { top: 0; height: 250px; }
+  .tv .bd { top: 0; height: 236px; }
   .tv .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 20%, rgba(11,15,25,.55) 50%, rgba(11,15,25,0) 72%),
                               linear-gradient(90deg, rgba(11,15,25,.85) 0%, rgba(11,15,25,0) 22%); }
-  .tv .head { position: absolute; left: 0; right: 48px; top: 103px; display: flex; gap: 24px; }
+  .tv .head { position: absolute; left: 0; right: 48px; top: 86px; display: flex; gap: 24px; }
   .tv .head .pos { width: 120px; height: 180px; }
-  .tv .info { padding-top: 92px; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+  .tv .info { padding-top: 96px; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
   .tv .info .meta { margin-top: 8px; }
-  .tv .info .acts { margin-top: 14px; gap: 12px; }
-  .tv .info .desc { margin-top: 14px; max-width: 600px; }
-  .tv .tvp { position: absolute; left: 0; top: 444px; }
+  .tv .info .acts { margin-top: 16px; }
+  .tv .info .desc-w { margin-top: 14px; max-width: 600px; }
+  .tv .tvp { position: absolute; left: 0; top: 428px; }
   .tv .tvp .h2 { display: inline-block; margin-bottom: 10px; }
   .pcs { display: flex; gap: 12px; }
   .pc { width: 112px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .pc .ph { width: 72px; height: 72px; flex: none; }
-  .pc .ini { width: 72px; height: 72px; flex: none; background: var(--surface-2); color: var(--fg-muted); font: 600 22px/72px var(--ff-mono); text-align: center; }
 
   /* a show's episodes: one box per season, its header on the surface, its rows on the page */
   .season { border: 1px solid var(--border-2); }
   .season .sh { display: flex; align-items: center; gap: 14px; background: var(--surface); }
-  .season .sh .h2 { font-size: 15px; }
+  .season .sh .sn { font: 600 15px/1.2 var(--ff-mono); color: var(--fg); }
   .season .sh .cnt { font: 500 13px/1 var(--ff-mono); color: var(--fg-dim); }
   .season .sh .chev { margin-left: auto; color: var(--fg-muted); }
   .ep { border-top: 1px solid var(--border); }
@@ -112,21 +115,19 @@
   .ep .len { margin-left: auto; flex: none; font: 500 12px/1 var(--ff-mono); color: var(--fg-dim); }
   .ep .left { font: 500 12px/1.3 var(--ff-mono); color: var(--cloud-blue); }
   .ep .ds { margin: 0; font: 400 13px/1.45 var(--ff-ui); color: var(--fg-2); }
-  .ep .acts { margin-top: 12px; width: fit-content; }
+  .ep .acts { margin-top: 10px; width: fit-content; }
 
   .computer .eps { position: absolute; left: 48px; right: 48px; top: 88px; }
   .computer .eps > .h2 { margin-bottom: 14px; }
   .computer .season .sh { height: 56px; padding: 0 16px 0 20px; }
-  .computer .ep { padding: 16px 20px; }
+  .computer .ep { padding: 14px 20px; }
   .computer .ep .still { width: 160px; height: 90px; }
-  .computer .ep .acts { margin-top: 10px; }
 
   .phone .eps { position: absolute; left: 0; right: 0; top: 16px; }
   .phone .eps > .h2 { margin: 0 16px 12px; }
   .phone .season { border-left: 0; border-right: 0; }
   .phone .season .sh { height: 52px; padding: 0 14px 0 16px; }
   .phone .season .offer { padding: 0 16px 12px; background: var(--surface); }
-  .phone .season .offer .b { padding: 0 12px; }
   .phone .ep { padding: 12px 16px; }
   .phone .ep .top { gap: 12px; }
   .phone .ep .still { width: 128px; height: 72px; }
@@ -134,10 +135,6 @@
   .phone .ep .code { font: 500 12px/1.3 var(--ff-mono); color: var(--fg-muted); }
   .phone .ep .nm { font-size: 14px; }
   .phone .ep .ds { font-size: 12px; line-height: 1.4; }
-  .phone .ep .acts { margin-top: 10px; flex-wrap: wrap; row-gap: 8px; }
-  .phone .ep .acts .b { padding: 0 14px; }
-  .phone .ep .acts .b.icon { padding: 0; }
-  .phone .ep .dl { flex-direction: column; align-items: stretch; justify-content: center; gap: 6px; width: 222px; }
 
   .tv .eps { position: absolute; left: 0; top: 0; width: 764px; }
   .tv .eps > .h2 { margin: 4px 0 10px; }
@@ -148,22 +145,16 @@
   .tv .ep .still { width: 128px; height: 72px; }
   .tv .ep .nm { font-size: 14px; }
   .tv .ep .ds { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tv .ep .side { display: flex; gap: 12px; flex: none; }
-
-  /* loading: grey blocks in the shape of what is coming */
-  .skrow { display: flex; gap: 12px; }
+  .tv .ep .side { display: flex; align-items: center; gap: 12px; flex: none; }
 
   /* a phone held sideways (780 × 360, the tabs a rail on the left): the
      computer's layout at the phone's size - the still a band at the top, the
-     poster beside the name, the row on one line under them */
-  /* screens.css's ".phone > .tabs" (the upright tabs: 64 px high, a line on top)
-     also matches the rail; the rail takes the frame's height */
-  .phone.side .bd { top: 0; height: 132px; }
+     poster beside the name, the row under them */
+  .phone.side .bd { top: 0; height: 120px; }
   .phone.side .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 18%, rgba(11,15,25,.6) 50%, rgba(11,15,25,0) 80%); }
-  .phone.side .hd { top: 36px; align-items: flex-end; gap: 16px; }
-  .phone.side .hd .nm { padding: 0 0 6px; gap: 6px; }
-  .phone.side .body { top: 192px; gap: 14px; }
-  .phone.side .desc { font-size: 14px; }
+  .phone.side .hd { top: 24px; align-items: flex-end; gap: 16px; }
+  .phone.side .hd .nm { padding: 0 0 4px; gap: 6px; }
+  .phone.side .body { top: 182px; gap: 12px; }
   .phone.side .eps { top: 0; }
   .phone.side .season .sh { height: 48px; }
   .phone.side .season .offer { padding: 0 16px 10px; }
@@ -171,6 +162,25 @@
   .phone.side .ep .txt { gap: 3px; }
   .phone.side .ep .l1 { padding-right: 12px; }
   .phone.side .ep .acts { margin-top: 8px; flex-wrap: nowrap; }
+
+  /* the figures of the row and its parts: on the page's colour, without a
+     frame; the pink words over each row name the state it shows */
+  .sheet { background: var(--bg); border: 1px solid var(--border); padding: 28px 32px 32px; display: flex; flex-direction: column; gap: 26px; }
+  .sheet .cap { margin: 0 0 10px; font: 500 12px/1.4 var(--ff-mono); color: var(--mark); }
+  .cols { display: flex; gap: 56px; align-items: flex-start; }
+
+  /* cards: their status marks, and a card's menu: the design system's action
+     menu, its button at the right of the card's lines, as in chapters 4 and 5 */
+  .card .mk.wl { left: 6px; right: auto; background: var(--cloud-blue); }
+  .card { position: relative; }
+  .card:has(> .nc-actionmenu__trigger) .tt, .card:has(> .nc-actionmenu__trigger) .st { padding-right: 36px; }
+  .card > .nc-actionmenu__trigger { position: absolute; right: -4px; bottom: 1px; }
+
+  /* loading: grey blocks in the shape of what is coming */
+  .skrow { display: flex; gap: 12px; align-items: center; }
+
+  /* a page that couldn't load, or a removed title: the design system's empty state, centred in the page's place */
+  .mid { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px; }
 </style>
 </head>
 <body>
@@ -184,16 +194,17 @@
       <div class="info">
         <div class="fit" data-co="3" data-co-side="right">
           <h1 class="t">Tears of Steel</h1>
-          <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+          <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<ds-badge>movie</ds-badge></p>
         </div>
-        <div class="row acts" data-co="4" data-co-side="right">
-          <span class="b primary"><i data-i="play" class="fill"></i>play</span>
-          <span class="b"><i data-i="clapperboard"></i>trailer</span>
-          <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-          <span class="b icon"><i data-i="check"></i></span>
-          <span class="b icon"><i data-i="heart"></i></span>
+        <div class="acts" data-co="4" data-co-side="right">
+          <ds-button variant="primary" icon="play">play</ds-button>
+          <ds-button icon="clapperboard">trailer</ds-button>
+          <ds-iconbutton icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+          <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+          <ds-iconbutton icon="check" label="mark as watched"></ds-iconbutton>
+          <ds-iconbutton icon="heart" label="like"></ds-iconbutton>
         </div>
-        <p class="desc" data-co="5" data-co-side="right">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+        <p class="desc-w" data-co="5" data-co-side="right"><ds-text>In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</ds-text></p>
         <div class="ppl">
           <h2 class="h2" data-co="6" data-co-side="right">starring</h2>
           <div class="cast">
@@ -236,21 +247,22 @@
         <h1 class="t">Tears of Steel</h1>
         <p class="meta">2012 · 12 min</p>
         <p class="meta">science fiction</p>
-        <p class="meta"><i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+        <p class="meta"><i data-i="star" class="fill s14"></i> 6.6<ds-badge>movie</ds-badge></p>
       </div>
     </div>
     <div class="body">
-      <div class="row acts" data-co="3">
-        <span class="b primary"><i data-i="play" class="fill"></i>play</span>
-        <span class="b"><i data-i="clapperboard"></i>trailer</span>
-        <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-        <span class="b icon"><i data-i="check"></i></span>
-        <span class="b icon"><i data-i="heart"></i></span>
-        <span class="b" data-co="4" data-co-side="right"><i data-i="download"></i>download · 152 MB</span>
+      <div class="acts" data-co="3">
+        <ds-button variant="primary" size="lg" icon="play">play</ds-button>
+        <ds-button size="lg" icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton size="lg" icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+        <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
+        <ds-button size="lg" icon="download" data-co="4" data-co-side="right">download · 152 MB</ds-button>
       </div>
-      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+      <p class="desc-w"><ds-text>In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</ds-text></p>
       <h2 class="h2" data-co="5">starring</h2>
-      <div class="cast2" style="margin-top:-4px">
+      <div class="cast2" style="margin-top:-2px">
         <div><div class="n">Derek de Lint</div><div class="ch">Old Thom</div></div>
         <div><div class="n">Sergio Hasselbaink</div><div class="ch">Barley</div></div>
         <div><div class="n">Rogier Schippers</div><div class="ch">Captain</div></div>
@@ -263,24 +275,25 @@
 <!-- Figure 6.9 · a movie's page on a phone held sideways -->
 <figure class="shot" id="title-side-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="Tears of Steel" data-co-parts="tabs:1:bottom">
-    <div class="bd"><div class="art steel"></div><div class="fade"></div><i data-co="2" data-co-side="right" style="position:absolute;right:0;top:20px;width:40px;height:20px"></i></div>
+    <div class="bd"><div class="art steel"></div><div class="fade"></div><i data-co="2" data-co-side="right" style="position:absolute;right:0;top:16px;width:40px;height:20px"></i></div>
     <div class="hd">
       <div class="pos"><div class="art steel"></div></div>
       <div class="nm" data-co="3" data-co-side="right">
         <h1 class="t">Tears of Steel</h1>
-        <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
+        <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<ds-badge>movie</ds-badge></p>
       </div>
     </div>
     <div class="body">
-      <div class="row acts" data-co="4" data-co-side="right">
-        <span class="b primary"><i data-i="play" class="fill"></i>play</span>
-        <span class="b"><i data-i="clapperboard"></i>trailer</span>
-        <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-        <span class="b icon"><i data-i="check"></i></span>
-        <span class="b icon"><i data-i="heart"></i></span>
-        <span class="b"><i data-i="download"></i>download · 152 MB</span>
+      <div class="acts" data-co="4" data-co-side="right">
+        <ds-button variant="primary" size="lg" icon="play">play</ds-button>
+        <ds-button size="lg" icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton size="lg" icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+        <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
+        <ds-button size="lg" icon="download">download · 152 MB</ds-button>
       </div>
-      <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+      <p class="desc-w"><ds-text>In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</ds-text></p>
     </div>
   </div>
 </figure>
@@ -294,15 +307,16 @@
         <div class="pos" data-co="1" data-co-side="top"><div class="art steel"></div></div>
         <div class="info">
           <h1 class="t">Tears of Steel</h1>
-          <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<span class="kind">movie</span></p>
-          <div class="row acts">
-            <span class="b primary focus" data-co="2"><i data-i="play" class="fill s16"></i>play</span>
-            <span class="b"><i data-i="clapperboard" class="s16"></i>trailer</span>
-            <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
-            <span class="b icon"><i data-i="check" class="s16"></i></span>
-            <span class="b icon"><i data-i="heart" class="s16"></i></span>
+          <p class="meta">2012 · 12 min · science fiction · <i data-i="star" class="fill s14"></i> 6.6<ds-badge>movie</ds-badge></p>
+          <div class="acts">
+            <ds-button variant="primary" size="lg" icon="play" class="focus" data-co="2">play</ds-button>
+            <ds-button size="lg" icon="clapperboard">trailer</ds-button>
+            <ds-iconbutton size="lg" icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+            <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+            <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+            <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
           </div>
-          <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
+          <p class="desc-w"><ds-text>In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</ds-text></p>
         </div>
       </div>
       <section class="tvp">
@@ -325,16 +339,17 @@
     <section class="eps">
       <h2 class="h2">episodes</h2>
       <div class="season">
-        <div class="sh" data-co="1"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="sh" data-co="1"><span class="sn">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
         <div class="ep seen">
           <div class="top">
             <div class="still"><div class="art a1"></div></div>
             <div class="txt">
               <div class="l1"><span class="nm">S01E01 · Earthfall</span><span class="len">35 min</span></div>
               <p class="ds">Something falls from the sky over Montana, and two federal agents are sent to find out what it is.</p>
-              <div class="row acts">
-                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-                <span class="b icon green" data-co="2" data-co-side="right"><i data-i="check"></i></span>
+              <div class="acts">
+                <ds-iconbutton icon="bookmark" label="add S01E01 to Watchlist"></ds-iconbutton>
+                <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+                <ds-iconbutton icon="check" label="watched" class="on-seen" data-co="2" data-co-side="right"></ds-iconbutton>
               </div>
             </div>
           </div>
@@ -345,9 +360,10 @@
             <div class="txt">
               <div class="l1"><span class="nm">S01E02 · The Man From Mars</span><span class="len">38 min</span></div>
               <p class="ds">The man found in the wreck says he was born on Mars.</p>
-              <div class="row acts">
-                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-                <span class="b icon green"><i data-i="check"></i></span>
+              <div class="acts">
+                <ds-iconbutton icon="bookmark" label="add S01E02 to Watchlist"></ds-iconbutton>
+                <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+                <ds-iconbutton icon="check" label="watched" class="on-seen"></ds-iconbutton>
               </div>
             </div>
           </div>
@@ -359,9 +375,10 @@
               <div class="l1"><span class="nm">S01E03 · Alone in the Night</span><span class="len">41 min</span></div>
               <span class="left">24 min left</span>
               <p class="ds">The crew loses contact with the ground for the first time.</p>
-              <div class="row acts" data-co="4" data-co-side="right">
-                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-                <span class="b icon"><i data-i="check"></i></span>
+              <div class="acts" data-co="4" data-co-side="right">
+                <ds-iconbutton icon="bookmark" label="add S01E03 to Watchlist"></ds-iconbutton>
+                <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+                <ds-iconbutton icon="check" label="mark S01E03 as watched"></ds-iconbutton>
               </div>
             </div>
           </div>
@@ -372,9 +389,10 @@
             <div class="txt">
               <div class="l1"><span class="nm">S01E04 · Triangular Diplomacy</span><span class="len">36 min</span></div>
               <p class="ds">Three governments want a say in what happens next.</p>
-              <div class="row acts">
-                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-                <span class="b icon"><i data-i="check"></i></span>
+              <div class="acts">
+                <ds-iconbutton icon="bookmark" label="add S01E04 to Watchlist"></ds-iconbutton>
+                <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+                <ds-iconbutton icon="check" label="mark S01E04 as watched"></ds-iconbutton>
               </div>
             </div>
           </div>
@@ -399,8 +417,8 @@
     <section class="eps">
       <h2 class="h2">episodes</h2>
       <div class="season">
-        <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
-        <div class="offer"><span class="b" data-co="1"><i data-i="download"></i>download 3 more episodes · 940 MB</span></div>
+        <div class="sh"><span class="sn">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="offer"><ds-button size="lg" block data-co="1">download 3 more episodes · 940 MB</ds-button></div>
         <div class="ep seen">
           <div class="top" data-co="2">
             <div class="still"><div class="art a1"></div></div>
@@ -410,11 +428,11 @@
               <p class="ds">Something falls from the sky over Montana.</p>
             </div>
           </div>
-          <div class="row acts" data-co="3">
-            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-            <span class="b icon green"><i data-i="check"></i></span>
-            <span class="b st2"><i data-i="check" style="color:var(--signal-green)"></i>downloaded · 281 MB</span>
-            <span class="b icon"><i data-i="trash"></i></span>
+          <div class="acts" data-co="3">
+            <ds-iconbutton size="lg" icon="bookmark" label="add S01E01 to Watchlist"></ds-iconbutton>
+            <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+            <ds-iconbutton size="lg" icon="check" label="watched" class="on-seen"></ds-iconbutton>
+            <span class="dlc"><ds-status state="success">downloaded · 281 MB</ds-status><ds-iconbutton size="lg" variant="danger" icon="trash-2" label="delete download of S01E01"></ds-iconbutton></span>
           </div>
         </div>
         <div class="ep seen">
@@ -426,11 +444,11 @@
               <p class="ds">The man found in the wreck says he was born on Mars.</p>
             </div>
           </div>
-          <div class="row acts">
-            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-            <span class="b icon green"><i data-i="check"></i></span>
-            <span class="b st2 dl" data-co="4"><span>downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></span>
-            <span class="b icon"><i data-i="x"></i></span>
+          <div class="acts">
+            <ds-iconbutton size="lg" icon="bookmark" label="add S01E02 to Watchlist"></ds-iconbutton>
+            <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+            <ds-iconbutton size="lg" icon="check" label="watched" class="on-seen"></ds-iconbutton>
+            <span class="dlc" data-co="4"><ds-status state="information">downloading 42% · 347 MB</ds-status><ds-iconbutton size="lg" icon="x" label="cancel download of S01E02"></ds-iconbutton></span>
           </div>
         </div>
         <div class="ep">
@@ -442,11 +460,11 @@
               <span class="left">24 min left</span>
             </div>
           </div>
-          <div class="row acts">
-            <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-            <span class="b icon"><i data-i="check"></i></span>
-            <span class="b st2">queued · 271 MB</span>
-            <span class="b icon"><i data-i="x"></i></span>
+          <div class="acts">
+            <ds-iconbutton size="lg" icon="bookmark" label="add S01E03 to Watchlist"></ds-iconbutton>
+            <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+            <ds-iconbutton size="lg" icon="check" label="mark S01E03 as watched"></ds-iconbutton>
+            <span class="dlc"><ds-status>queued · 271 MB</ds-status><ds-iconbutton size="lg" icon="x" label="cancel download of S01E03"></ds-iconbutton></span>
           </div>
         </div>
       </div>
@@ -459,19 +477,19 @@
   <div class="phone side" data-view="none" data-bar="back" data-title="Pioneer One" data-co-parts="tabs:4:bottom">
     <section class="eps">
       <div class="season">
-        <div class="sh"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
-        <div class="offer"><span class="b" data-co="1" data-co-side="right"><i data-i="download"></i>download 3 more episodes · 940 MB</span></div>
+        <div class="sh"><span class="sn">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="offer"><ds-button size="lg" icon="download" data-co="1" data-co-side="right">download 3 more episodes · 940 MB</ds-button></div>
         <div class="ep seen">
           <div class="top">
             <div class="still"><div class="art a3"></div></div>
             <div class="txt">
               <div class="l1" data-co="2" data-co-side="right"><span class="nm">S01E02 · The Man From Mars</span><span class="len">38 min</span></div>
               <p class="ds">The man found in the wreck says he was born on Mars.</p>
-              <div class="row acts" data-co="3" data-co-side="right">
-                <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-                <span class="b icon green"><i data-i="check"></i></span>
-                <span class="b st2 dl"><span>downloading 42% · 347 MB</span><span class="bar"><i style="width:42%"></i></span></span>
-                <span class="b icon"><i data-i="x"></i></span>
+              <div class="acts" data-co="3" data-co-side="right">
+                <ds-iconbutton size="lg" icon="bookmark" label="add S01E02 to Watchlist"></ds-iconbutton>
+                <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+                <ds-iconbutton size="lg" icon="check" label="watched" class="on-seen"></ds-iconbutton>
+                <span class="dlc"><ds-status state="information">downloading 42% · 347 MB</ds-status><ds-iconbutton size="lg" icon="x" label="cancel download of S01E02"></ds-iconbutton></span>
               </div>
             </div>
           </div>
@@ -498,7 +516,7 @@
       <section class="eps">
         <h2 class="h2">episodes</h2>
         <div class="season">
-          <div class="sh" data-co="1" data-co-side="right"><span class="h2">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+          <div class="sh" data-co="1" data-co-side="right"><span class="sn">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
           <div class="ep seen">
             <div class="top">
               <div class="still"><div class="art a1"></div></div>
@@ -508,8 +526,9 @@
               </div>
             </div>
             <div class="side">
-              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
-              <span class="b icon green"><i data-i="check" class="s16"></i></span>
+              <ds-iconbutton size="lg" icon="bookmark" label="add S01E01 to Watchlist"></ds-iconbutton>
+              <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+              <ds-iconbutton size="lg" icon="check" label="watched" class="on-seen"></ds-iconbutton>
             </div>
           </div>
           <div class="ep seen">
@@ -521,8 +540,9 @@
               </div>
             </div>
             <div class="side">
-              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
-              <span class="b icon green"><i data-i="check" class="s16"></i></span>
+              <ds-iconbutton size="lg" icon="bookmark" label="add S01E02 to Watchlist"></ds-iconbutton>
+              <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+              <ds-iconbutton size="lg" icon="check" label="watched" class="on-seen"></ds-iconbutton>
             </div>
           </div>
           <div class="ep">
@@ -535,8 +555,9 @@
               </div>
             </div>
             <div class="side" data-co="3" data-co-side="right">
-              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
-              <span class="b icon"><i data-i="check" class="s16"></i></span>
+              <ds-iconbutton size="lg" icon="bookmark" label="add S01E03 to Watchlist"></ds-iconbutton>
+              <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+              <ds-iconbutton size="lg" icon="check" label="mark S01E03 as watched"></ds-iconbutton>
             </div>
           </div>
           <div class="ep">
@@ -548,12 +569,160 @@
               </div>
             </div>
             <div class="side">
-              <span class="split"><span class="m"><i data-i="bookmark" class="s16"></i></span><span class="c"><i data-i="chevron-down" class="s14"></i></span></span>
-              <span class="b icon"><i data-i="check" class="s16"></i></span>
+              <ds-iconbutton size="lg" icon="bookmark" label="add S01E04 to Watchlist"></ds-iconbutton>
+              <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+              <ds-iconbutton size="lg" icon="check" label="mark S01E04 as watched"></ds-iconbutton>
             </div>
           </div>
         </div>
       </section>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.15 · the row on a movie, at the phone's size: not started; partly watched and downloaded; in the Watchlist, watched and liked -->
+<figure class="shot" id="title-row">
+  <div class="sheet">
+    <div>
+      <p class="cap">not started</p>
+      <div class="acts">
+        <ds-button variant="primary" size="lg" icon="play">play</ds-button>
+        <ds-button size="lg" icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton size="lg" icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+        <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
+        <ds-button size="lg" icon="download">download · 1.4 GB</ds-button>
+      </div>
+    </div>
+    <div>
+      <p class="cap">partly watched, and downloaded</p>
+      <div class="acts">
+        <ds-button variant="primary" size="lg" icon="play">resume 1:43</ds-button>
+        <ds-button size="lg">start over</ds-button>
+        <ds-button size="lg" icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton size="lg" icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+        <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
+        <span class="dlc"><ds-status state="success">downloaded · 1.4 GB</ds-status><ds-iconbutton size="lg" variant="danger" icon="trash-2" label="delete download"></ds-iconbutton></span>
+      </div>
+    </div>
+    <div>
+      <p class="cap">in the Watchlist, watched and liked</p>
+      <div class="acts">
+        <ds-button variant="primary" size="lg" icon="play">play</ds-button>
+        <ds-button size="lg" icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton size="lg" icon="bookmark" label="in your Watchlist" class="on-wl"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="Watchlist"><ds-option checked>Watchlist</ds-option><ds-option>Sunday nights</ds-option></ds-multiselect>
+        <ds-iconbutton size="lg" icon="check" label="watched" class="on-seen"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="heart" label="liked" class="on-liked"></ds-iconbutton>
+        <ds-button size="lg" icon="download">download · 1.4 GB</ds-button>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.16 · add to list off and on, and the list picker lists opens -->
+<figure class="shot" id="add-to-list">
+  <div class="sheet" style="padding-bottom:196px">
+    <div class="cols">
+      <div>
+        <p class="cap">not in the Watchlist</p>
+        <div class="acts">
+          <ds-iconbutton icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+          <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option><ds-option>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+        </div>
+      </div>
+      <div>
+        <p class="cap">in the Watchlist</p>
+        <div class="acts">
+          <ds-iconbutton icon="bookmark" label="in your Watchlist" class="on-wl"></ds-iconbutton>
+          <ds-multiselect label="lists" summary="Watchlist"><ds-option checked>Watchlist</ds-option><ds-option>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+        </div>
+      </div>
+      <div>
+        <p class="cap">lists opens the list picker</p>
+        <div class="acts">
+          <ds-iconbutton icon="bookmark" label="in your Watchlist" class="on-wl"></ds-iconbutton>
+          <ds-multiselect label="lists" summary="2 chosen" open clear="clear lists" data-create="create list"><ds-option checked>Watchlist</ds-option><ds-option checked>Sunday nights</ds-option><ds-option>For the kids</ds-option></ds-multiselect>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.17 · cards with their status marks, and an episode row with its own actions line -->
+<figure class="shot" id="cards-and-episodes">
+  <div class="sheet" style="padding-bottom:112px">
+    <div class="cols">
+      <div>
+        <p class="cap">cards: status marks, and the menu beside the name</p>
+        <div class="cards" style="position:relative">
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art a2"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div><ds-menubutton size="md" label="actions for Agent 327: Operation Barbershop"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:38%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><ds-menubutton size="md" label="actions for Elephants Dream" open></ds-menubutton></div>
+          <ds-menu style="position:absolute; top:0; left:0"><ds-item icon="play">resume</ds-item><ds-item icon="check">mark as watched</ds-item></ds-menu>
+        </div>
+      </div>
+      <div style="width:470px">
+        <p class="cap">an episode row: its own actions line, at the phone's size</p>
+        <div class="ep" style="border-top:0">
+          <div class="top">
+            <div class="still" style="width:160px;height:90px"><div class="art a5"></div><div class="bar"><i style="width:42%"></i></div></div>
+            <div class="txt">
+              <div class="l1"><span class="nm">S01E03 · Alone in the Night</span></div>
+              <p class="ds">The crew loses contact with the ground for the first time.</p>
+            </div>
+          </div>
+          <div class="acts" style="margin-top:12px">
+            <ds-iconbutton size="lg" icon="bookmark" label="add S01E03 to Watchlist"></ds-iconbutton>
+            <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+            <ds-iconbutton size="lg" icon="check" label="mark S01E03 as watched"></ds-iconbutton>
+            <ds-button size="lg" icon="download">download · 271 MB</ds-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 6.18 · the row on a show, at the computer's size: nothing watched yet; an episode partly watched; the last episode watched finished -->
+<figure class="shot" id="title-row-series">
+  <div class="sheet">
+    <div>
+      <p class="cap">nothing watched yet, or every episode finished</p>
+      <div class="acts">
+        <ds-button variant="primary" icon="play">play <span class="nc-keep-case">S01E01</span></ds-button>
+        <ds-button icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+        <ds-iconbutton icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton icon="heart" label="like"></ds-iconbutton>
+      </div>
+    </div>
+    <div>
+      <p class="cap">an episode partly watched: start over plays S01E03 from its beginning</p>
+      <div class="acts">
+        <ds-button variant="primary" icon="play">resume <span class="nc-keep-case">S01E03</span></ds-button>
+        <ds-button>start over</ds-button>
+        <ds-button icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+        <ds-iconbutton icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton icon="heart" label="like"></ds-iconbutton>
+      </div>
+    </div>
+    <div>
+      <p class="cap">the last episode watched was finished</p>
+      <div class="acts">
+        <ds-button variant="primary" icon="play">play <span class="nc-keep-case">S01E02</span></ds-button>
+        <ds-button icon="clapperboard">trailer</ds-button>
+        <ds-iconbutton icon="bookmark" label="add to Watchlist"></ds-iconbutton>
+        <ds-multiselect label="lists" summary="none"><ds-option>Watchlist</ds-option></ds-multiselect>
+        <ds-iconbutton icon="check" label="mark as watched"></ds-iconbutton>
+        <ds-iconbutton icon="heart" label="like"></ds-iconbutton>
+      </div>
     </div>
   </div>
 </figure>
@@ -563,13 +732,13 @@
   <div class="tv" data-view="none">
     <div class="sk" style="position:absolute;left:0;right:0;top:0;height:96px"></div>
     <div class="page">
-      <div class="sk" style="position:absolute;left:0;top:84px;width:120px;height:180px"></div>
-      <div style="position:absolute;left:144px;top:168px;display:flex;flex-direction:column;gap:10px">
-        <div class="sk" style="width:300px;height:32px"></div>
-        <div class="sk" style="width:220px;height:14px"></div>
-        <div class="skrow" style="margin-top:8px"><div class="sk" style="width:84px;height:40px"></div><div class="sk" style="width:110px;height:40px"></div><div class="sk" style="width:74px;height:40px"></div><div class="sk" style="width:40px;height:40px"></div><div class="sk" style="width:40px;height:40px"></div></div>
-        <div class="sk" style="width:560px;height:14px;margin-top:10px"></div>
-        <div class="sk" style="width:420px;height:14px"></div>
+      <div class="sk" style="position:absolute;left:0;top:59px;width:120px;height:180px"></div>
+      <div style="position:absolute;left:144px;top:155px;display:flex;flex-direction:column;gap:10px">
+        <div class="sk" style="width:300px;height:36px"></div>
+        <div class="sk" style="width:260px;height:14px"></div>
+        <div class="skrow" style="margin-top:8px"><div class="sk" style="width:108px;height:42px"></div><div class="sk" style="width:133px;height:42px"></div><div class="sk" style="width:42px;height:42px"></div><div class="sk" style="width:124px;height:34px"></div><div class="sk" style="width:42px;height:42px"></div><div class="sk" style="width:42px;height:42px"></div></div>
+        <div class="sk" style="width:560px;height:16px;margin-top:10px"></div>
+        <div class="sk" style="width:420px;height:16px"></div>
       </div>
     </div>
   </div>
@@ -578,12 +747,8 @@
 <!-- Figure 6.20 · the title page when it couldn't load, on a phone -->
 <figure class="shot" id="title-couldnt-load-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="">
-    <div class="empty" style="margin-top:220px;padding:0 24px">
-      <i data-i="cloud-off" class="s48"></i>
-      <h2 class="h2" data-co="1">couldn't load this title</h2>
-      <p class="text">Can't reach the server.</p>
-      <span class="b" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
-      <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px" data-co="3">details<i data-i="chevron-down" class="s14"></i></span>
+    <div class="mid">
+      <ds-empty illustration="error" size="lg" title="couldn't load this title" description="The server ran into a problem." details="HTTP 503 Service Unavailable" data-co-in=".nc-illu__title 1, .nc-strip__toggle 3"><ds-button size="lg" data-co="2">try again</ds-button></ds-empty>
     </div>
   </div>
 </figure>
@@ -591,12 +756,8 @@
 <!-- Figure 6.21 · the title page when it couldn't load, on a phone held sideways -->
 <figure class="shot" id="title-couldnt-load-side-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="">
-    <div class="empty" style="margin-top:44px;padding:0 24px">
-      <i data-i="cloud-off" class="s48"></i>
-      <h2 class="h2">couldn't load this title</h2>
-      <p class="text">Can't reach the server.</p>
-      <span class="b" style="margin-top:6px"><i data-i="refresh-cw" class="s16"></i>try again</span>
-      <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:4px">details<i data-i="chevron-down" class="s14"></i></span>
+    <div class="mid">
+      <ds-empty illustration="error" size="sm" title="couldn't load this title" description="The server ran into a problem." details="HTTP 503 Service Unavailable"><ds-button size="lg">try again</ds-button></ds-empty>
     </div>
   </div>
 </figure>
@@ -604,14 +765,41 @@
 <!-- Figure 6.22 · a title that was removed, on a computer -->
 <figure class="shot" id="title-removed-computer">
   <div class="computer" data-view="none">
-    <div class="empty" style="margin-top:230px">
-      <i data-i="circle-slash" class="s48"></i>
-      <h2 class="h2" data-co="1">this title isn't in the library anymore</h2>
-      <span class="b" style="margin-top:6px" data-co="2"><i data-i="arrow-left" class="s16"></i>back</span>
+    <div class="mid" style="top:56px">
+      <ds-empty illustration="empty" size="lg" title="this title isn't in the library anymore" data-co-in=".nc-illu__title 1"><ds-button data-co="2">back</ds-button></ds-empty>
     </div>
   </div>
 </figure>
 
+<script src="ds.js"></script>
+<script>
+  // the design system's components first (frame.js would expand them too), so
+  // this chapter can finish what the kit leaves open before the frame is drawn
+  DS.expand(document.body);
+  // a multi select's summary is blue only once something is chosen, as the package draws it
+  for (const ms of document.querySelectorAll('.nc-multiselect')) {
+    if (!ms.querySelector('.nc-checkbox__input[checked]')) ms.querySelector('.nc-multiselect__trigger').classList.remove('nc-multiselect__trigger--active');
+  }
+  // the list picker's way to a new list: the multi select has no place for it,
+  // so it is a quiet button under the options (6.C10)
+  for (const ms of document.querySelectorAll('.nc-multiselect[data-create]')) {
+    const t = document.createElement('div');
+    t.innerHTML = `<ds-button variant="ghost" size="sm" icon="plus" block style="justify-content:flex-start;margin-top:4px">${ms.dataset.create}</ds-button>`;
+    DS.expand(t);
+    ms.querySelector('.nc-multiselect__options').after(t.firstElementChild);
+  }
+  // an open card menu opens 4 px under its button, lined up with the button's
+  // right edge, as the design system's action menu does
+  document.fonts.ready.then(() => {
+    for (const m of document.querySelectorAll('.cards > .nc-actionmenu')) {
+      const box = m.parentElement, t = box.querySelector('.nc-actionmenu__trigger[aria-expanded="true"]');
+      if (!t) continue;
+      const b = box.getBoundingClientRect(), r = t.getBoundingClientRect();
+      m.style.top = `${Math.round(r.bottom - b.top + 4)}px`;
+      m.style.left = `${Math.round(r.right - b.left - m.offsetWidth)}px`;
+    }
+  });
+</script>
 <script src="frame.js"></script>
 </body>
 </html>

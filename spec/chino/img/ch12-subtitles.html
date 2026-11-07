@@ -1,13 +1,17 @@
 <!doctype html>
 <!--
   Chapter 12, subtitles: the figures of spec/chino/subtitles.md.
-  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
+  Each figure of class "shot" becomes spec/chino/img/ID.png, ID being its id:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame is frame.js (the player has no top bar,
-  no tabs and no rail), the icons are icons.js. Pink numbers mark the parts
-  the chapter's text explains. The look's guides are drawn in mockups.html
-  (subtitle-look). Figures 12.1 to 12.6 are screenshots of the deployed web
-  player, not drawings.
+  The look is screens.css with the design system's stylesheet; ds.js turns the
+  <ds-*> tags into the design system's components (the panel's close is its
+  icon button, the player's buttons too); frame.js draws the frame (the player
+  has no top bar, no tabs and no rail). The audio and subtitles panel stays
+  chino's own, drawn here on the design system's tokens; its picked rows have
+  the check of the player's menus (ch11-player.html). The look with its guides
+  (subtitle-look) is drawn here too and wins over the old mockups.html. Pink
+  numbers mark the parts the chapter's text explains, pink dashes are guides.
+  Figures 12.1 to 12.6 are screenshots of the deployed web player, not drawings.
 -->
 <html lang="en">
 <head>
@@ -26,6 +30,20 @@
   .tv .pl .pic { inset: 0; transform: none; aspect-ratio: auto; }
   /* a phone held upright with the panel open: the picture moves to the top */
   .pl .pic.at-top { top: 0; transform: none; }
+  /* its top and bar on a phone held sideways: the design system's icon buttons, 42 dp, 6 dp apart */
+  .top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 6px; padding: 12px 12px 36px;
+         background: linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%); }
+  .top .name { flex: 1; min-width: 0; margin-left: 8px; font: 500 16px/1.2 var(--ff-mono); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bottom { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 10px; padding: 36px 12px 12px;
+            background: linear-gradient(0deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.6) 60%, rgba(0,0,0,0) 100%); }
+  .btns { display: flex; align-items: center; gap: 6px; }
+  .btns .sp { flex: 1; }
+  .seek { display: flex; align-items: center; gap: 12px; font: 500 13px/1 var(--ff-mono); color: var(--fg-2); }
+  .track { position: relative; flex: 1; height: 6px; background: rgba(255,255,255,.15); }
+  .track > i { position: absolute; top: 0; bottom: 0; }
+  .track .buf { left: 0; background: rgba(255,255,255,.3); }
+  .track .played { left: 0; background: var(--cloud-blue); }
+  .track .head { top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); background: var(--fg); }
 
   /* a subtitle: white, a black outline, no box; 5.33 % of the picture's height */
   .sub { position: absolute; left: 10%; right: 10%; text-align: center; color: #fff; z-index: 8; font-family: var(--ff-ui); font-weight: 500; line-height: 1.25;
@@ -36,25 +54,30 @@
   /* the picture dimmed under the panel; the subtitle line stays above it */
   .dim { position: absolute; inset: 0; background: rgba(5,7,12,.62); z-index: 4; }
 
-  /* the audio and subtitles panel: two columns, square, on the solid surface */
+  /* the audio and subtitles panel: chino's own, two columns, square, on the solid
+     surface; its close is the design system's icon button (quiet) */
   .panel { position: absolute; z-index: 6; display: flex; background: var(--surface); border: 1px solid var(--border-2); }
   .panel .c { flex: 1 1 0; min-width: 0; position: relative; display: flex; flex-direction: column; }
   .panel .c + .c { border-left: 1px solid var(--border); }
   .panel .hd { height: 44px; flex: none; display: flex; align-items: center; padding: 0 16px; font: 500 13px/1 var(--ff-mono); color: var(--fg-muted); }
-  .panel .hd .x { margin-left: auto; margin-right: -12px; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .panel .hd .nc-iconbtn { margin-left: auto; margin-right: -8px; }
   .panel .it { height: 48px; flex: none; display: flex; align-items: center; padding: 0 16px 0 14px; font: 400 15px/1.25 var(--ff-ui); color: var(--fg-muted); white-space: nowrap; }
-  .panel .it .ck { width: 28px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
+  /* the picked row: the check of the player's menus before its name, and the brighter text */
+  .panel .it .ck, .sheet .it .ck { width: 28px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
   .panel .it.on { color: var(--fg); font-weight: 600; }
   /* where a column is longer than the panel, it scrolls within itself */
   .panel .thumb { position: absolute; right: 3px; width: 3px; background: var(--border-control); }
 
+  /* a phone: the close at 42 dp, in a heading row of 48 dp, its touch area */
+  .phone .panel .hd { height: 48px; }
+  .phone .panel .hd .nc-iconbtn { margin-right: -12px; }
+
   /* on a phone held upright the panel is the screen under the picture, the lists one under the other */
   .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--border-2); }
-  .sheet .hd { height: 44px; display: flex; align-items: center; padding: 0 16px; font: 500 13px/1 var(--ff-mono); color: var(--fg-muted); }
-  .sheet .hd .x { margin-left: auto; margin-right: -10px; width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .sheet .hd { height: 48px; display: flex; align-items: center; padding: 0 16px; font: 500 13px/1 var(--ff-mono); color: var(--fg-muted); }
+  .sheet .hd .nc-iconbtn { margin-left: auto; margin-right: -12px; }
   .sheet .hd.next { border-top: 1px solid var(--border); margin-top: 4px; }
   .sheet .it { height: 48px; display: flex; align-items: center; padding: 0 16px 0 14px; font: 400 15px/1.25 var(--ff-ui); color: var(--fg-muted); }
-  .sheet .it .ck { width: 28px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
   .sheet .it.on { color: var(--fg); font-weight: 600; }
   .sheet .thumb { position: absolute; right: 3px; width: 3px; background: var(--border-control); }
 
@@ -63,6 +86,10 @@
   .tv .panel .it { height: 40px; font-size: 15px; margin: 0 6px; padding-left: 8px; }
   .tv .panel .hd { padding-left: 20px; }
   .tv .panel .it.focus-row { color: var(--fg); position: relative; z-index: 2; }
+
+  /* the look's guides: pink dashes, notes on the drawing */
+  .guide.v { top: 0; bottom: 0; width: 0; border-width: 0 0 0 1.5px; }
+  .guide.h { left: 0; right: 0; height: 0; border-width: 1.5px 0 0 0; }
 </style>
 </head>
 <body>
@@ -82,7 +109,7 @@
           <div class="it"><span class="ck"></span>German</div>
         </div>
         <div class="c">
-          <div class="hd">subtitles<span class="x" data-co="4" data-co-side="right"><i data-i="x"></i></span></div>
+          <div class="hd">subtitles<ds-iconbutton variant="ghost" icon="x" label="close" data-co="4" data-co-side="right"></ds-iconbutton></div>
           <div data-co="2" data-co-side="right">
             <div class="it"><span class="ck"></span>off</div>
             <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English</div>
@@ -108,7 +135,7 @@
       <div class="sub" style="top:159px;font-size:10.8px"><span>It held, didn't it?<br>You owe me a coffee.</span></div>
       <div class="sheet" style="top:202px">
         <div data-co="2">
-          <div class="hd">audio<span class="x" data-co="4" data-co-side="right"><i data-i="x"></i></span></div>
+          <div class="hd">audio<ds-iconbutton variant="ghost" size="lg" icon="x" label="close" data-co="4" data-co-side="right"></ds-iconbutton></div>
           <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English (original)</div>
           <div class="it"><span class="ck"></span>English (audio description)</div>
           <div class="it"><span class="ck"></span>German</div>
@@ -123,7 +150,6 @@
         <div class="it"><span class="ck"></span>Croatian</div>
         <div class="it"><span class="ck"></span>Czech</div>
         <div class="it"><span class="ck"></span>Danish</div>
-        <div class="it"><span class="ck"></span>Dutch</div>
         <i class="thumb" style="top:6px;height:190px"></i>
       </div>
     </div>
@@ -137,7 +163,7 @@
       <div class="pic"><div class="art a1"></div></div>
       <div class="dim"></div>
       <div class="sub" style="bottom:29px;font-size:19.2px;left:17%;right:17%"><span data-co="4">It held, didn't it?<br>You owe me a coffee.</span></div>
-      <div class="panel" style="left:90px;top:16px;width:600px;height:236px">
+      <div class="panel" style="left:90px;top:16px;width:600px;height:240px">
         <div class="c" data-co="1">
           <div class="hd">audio</div>
           <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English (original)</div>
@@ -145,12 +171,12 @@
           <div class="it"><span class="ck"></span>German</div>
         </div>
         <div class="c">
-          <div class="hd">subtitles<span class="x" data-co="2" data-co-side="right"><i data-i="x"></i></span></div>
+          <div class="hd">subtitles<ds-iconbutton variant="ghost" size="lg" icon="x" label="close" data-co="2" data-co-side="right"></ds-iconbutton></div>
           <div class="it"><span class="ck"></span>off</div>
           <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>English</div>
           <div class="it"><span class="ck"></span>English (CC)</div>
           <div class="it" data-co="3" data-co-side="right"><span class="ck"></span>Chinese (Simplified) (AI)</div>
-          <i class="thumb" style="top:48px;height:64px"></i>
+          <i class="thumb" style="top:52px;height:64px"></i>
         </div>
       </div>
     </div>
@@ -199,6 +225,56 @@
     </div>
   </div>
 </figure>
+
+<!-- Figure 12.12 · the look with its guides, and the same line above the controls,
+     on a phone held sideways: the picture 640 × 360 dp in the middle of the screen -->
+<figure class="shot" id="subtitle-look">
+ <div style="display:flex;flex-direction:column;gap:28px">
+  <div class="phone side" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="pic">
+        <div class="art a1"></div>
+        <i class="guide v" style="left:10%" data-co="2"></i>
+        <i class="guide v" style="right:10%"></i>
+        <i class="guide h" style="bottom:8%" data-co="3" data-co-side="right"></i>
+        <div class="sub" style="bottom:8%;font-size:19.2px"><span data-co="1">It held, didn't it?<br>You owe me a coffee.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="phone side" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div></div>
+      <!-- 80 % of the picture's 640 dp, so 134 dp in from each side of the screen; risen above the seek bar -->
+      <div class="sub" style="left:134px;right:134px;bottom:92px;font-size:19.2px"><span data-co="4">It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="top">
+        <ds-iconbutton size="lg" icon="arrow-left" label="back"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="house" label="home"></ds-iconbutton>
+        <span class="name">Tears of Steel</span>
+        <ds-iconbutton size="lg" icon="cast" label="cast"></ds-iconbutton>
+      </div>
+      <div class="bottom">
+        <div class="seek">
+          <span style="width:40px">1:52</span>
+          <div class="track"><i class="buf" style="width:40%"></i><i class="played" style="width:15%"></i><i class="head" style="left:15%"></i></div>
+          <span style="width:40px">12:14</span>
+        </div>
+        <div class="btns">
+          <ds-iconbutton size="lg" icon="pause" label="pause"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="volume-2" label="volume, 80%"></ds-iconbutton>
+          <span class="sp"></span>
+          <ds-iconbutton size="lg" variant="primary" icon="captions" label="audio and subtitles, English, subtitles English"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="gauge" label="speed, normal"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="settings-2" label="settings, Auto · Medium (720p)"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="info" label="playback info"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="minimize" label="exit fullscreen"></ds-iconbutton>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+</figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

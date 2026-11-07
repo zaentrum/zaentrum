@@ -4,8 +4,12 @@
   as-deployed figures are screenshots). Each <figure class="shot" id="…">
   becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+  The look is screens.css with the nalet design system's own stylesheet; the
+  <ds-*> tags are the design system's components (ds.js), the frame (top bar
+  and its search field, tabs, rail) is frame.js, the icons are icons.js. Pink
+  numbers mark the parts the chapter's text explains. What stays chino's own:
+  the bar the phone's search opens in place of the top bar, the person cards,
+  the posters, the TV's keyboard and the phone's own keyboard.
 -->
 <html lang="en">
 <head>
@@ -19,13 +23,15 @@
 <style>
   /* artwork for the films home doesn't draw (as in chapter 5) */
   .x1 { background: linear-gradient(160deg, #1f5e60 0%, #11332f 55%, #0a1a19 100%); }
-  .x2 { background: linear-gradient(160deg, #557232 0%, #2e3d1a 58%, #151c0c 100%); }
-  .x3 { background: linear-gradient(160deg, #723030 0%, #3e1a1a 58%, #1c0c0c 100%); }
-  .x4 { background: linear-gradient(160deg, #5e3f6a 0%, #33223b 58%, #18101c 100%); }
   .x5 { background: linear-gradient(160deg, #7a4a5f 0%, #432836 58%, #1f1219 100%); }
   .card .mk.wl { left: 6px; right: auto; background: var(--cloud-blue); }
-  /* the field in the top bar has the focus while the person types */
-  .computer > .tb .field.focus { border-color: var(--cloud-blue); }
+  /* a card's menu: the design system's action menu, its button at the right of the card's lines, as in chapters 4 and 5 */
+  .card { position: relative; }
+  .card:has(> .nc-actionmenu__trigger) .tt, .card:has(> .nc-actionmenu__trigger) .st { padding-right: 36px; }
+  .card > .nc-actionmenu__trigger { position: absolute; right: -4px; bottom: 1px; }
+  .phone .grid .card:has(> .nc-actionmenu__trigger) .tt { padding-right: 0; }
+  .phone .grid .card:has(> .nc-actionmenu__trigger) .st { padding-right: 26px; }
+  .phone .grid .card > .nc-actionmenu__trigger { right: -9px; bottom: -9px; }
   /* the results: cast & crew, then titles */
   .grp { margin-bottom: 32px; }
   .grp .h2 { margin-bottom: 12px; }
@@ -37,25 +43,30 @@
   .person .sb { font: 500 12px/1.4 var(--ff-mono); color: var(--fg-dim); }
   .computer .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
   .computer .grid .card.poster { width: auto; } .computer .grid .card.poster .img { height: 233px; }
-  /* a phone: the field across the width, in place of the bar */
-  .sbar { height: 56px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 12px 0 4px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
-  .sbar .icon-b { width: 44px; height: 44px; }
-  .sbar .field { flex: 1; min-width: 0; padding-right: 4px; }
-  .sbar .field .xb { margin-left: auto; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  /* a phone: the search opens in a bar of its own, in place of the top bar,
+     the back arrow as the frame draws it and the design system's input */
+  .sbar { height: 56px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 12px 0 6px; background: var(--bg-2); border-bottom: 1px solid var(--border); position: relative; z-index: 10; }
+  .sbar .fw { flex: 1; min-width: 0; position: relative; }
+  .sbar .fw .xb { position: absolute; right: 4px; top: 4px; }
   .phone .pg { padding: 16px; }
-  .phone .h1 { font-size: 22px; }
   .phone .person { width: 248px; }
   .phone .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
   .phone .grid .card.poster { width: auto; } .phone .grid .card.poster .img { height: 152px; }
   .phone .grid .card .tt { font-size: 13px; }
   .phone .grp { margin-bottom: 24px; }
-  /* the page under the open field: the movies view, as chapter 5 draws it */
-  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .facet { display: inline-flex; align-items: center; gap: 8px; }
-  .facet .lb { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
-  .sel { height: 48px; min-width: 112px; display: inline-flex; align-items: center; gap: 12px; padding: 0 12px 0 14px;
-         border: 1px solid var(--border-control); background: var(--bg-2); color: var(--fg); font: 500 14px/1 var(--ff-mono); white-space: nowrap; }
-  .sel svg.i { margin-left: auto; width: 16px; height: 16px; color: var(--cloud-blue); }
+  /* the page under the open field: home, as chapter 4 draws it */
+  .phone .hero { position: relative; height: 392px; }
+  .phone .hero .txt { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .phone .hero .row > .nc-btn { flex: 1 1 auto; }
+  .phone .t { font-size: 26px; } .phone .meta { font-size: 12px; }
+  .phone .entry { margin: 16px 16px 0; height: 48px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 14px;
+                  border: 1px solid var(--border-2); background: var(--surface); font: 600 14px/1 var(--ff-mono); }
+  .phone .entry .chev { margin-left: auto; color: var(--fg-dim); }
+  .phone .shelf { padding: 20px 0 0 16px; }
+  .shelf .h2 { margin-bottom: 12px; }
+  .phone .shelf .card { width: 200px; } .phone .shelf .card .img { height: 112px; }
+  .phone.side .hero { height: 196px; }
+  .phone.side .hero .txt { left: 16px; right: auto; top: 18px; bottom: auto; width: 420px; gap: 8px; }
   /* the phone's own keyboard */
   .oskb { position: absolute; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 4px 14px; background: #1B202A; border-top: 1px solid var(--border);
           display: flex; flex-direction: column; gap: 10px; }
@@ -65,29 +76,25 @@
   .oskb .k.sp { width: 158px; }
   .oskb .k.go { width: 58px; background: #3A4256; }
   /* a TV: the field, the keyboard on the left, what it found on the right */
-  .tv .inner { width: 768px; padding-top: 8px; }
-  .tfield { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 12px; border: 1px solid var(--border-control); background: var(--bg-2);
-            font: 400 15px/1 var(--ff-ui); color: var(--fg); }
-  .tfield .caret { margin-left: -9px; }
-  .tvs { display: flex; gap: 32px; margin-top: 20px; }
-  .keys { flex: none; display: grid; grid-template-columns: repeat(6, 40px); gap: 12px; }
-  .key { height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--surface); border: 1px solid var(--border-2);
-         font: 500 15px/1 var(--ff-mono); color: var(--fg-2); }
+  .tv .inner { width: 768px; padding-top: 4px; }
+  .tvs { display: flex; gap: 32px; margin-top: 18px; }
+  /* the TV's own keyboard: the design system has none; the keys at the TV's
+     control height, 42 dp, 12 dp apart, in the look of its standard buttons */
+  .keys { flex: none; display: grid; grid-template-columns: repeat(6, 42px); gap: 12px; }
+  .key { height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--surface); border: 1px solid var(--border-2);
+         font: 600 15px/1 var(--ff-mono); color: var(--fg-2); }
   .key.w { grid-column: span 3; font-size: 13px; }
   .tv .key.focus { background: var(--surface-focus); color: var(--fg); }
   .tv .res { flex: 1; min-width: 0; }
   .tv .res .h2 { margin-bottom: 10px; }
   .tv .res .card.poster { width: 136px; } .tv .res .card.poster .img { height: 204px; }
-  .tv .res .empty { margin-top: 96px; }
-  .tv .b.focus { background: var(--surface-focus); }
   /* grey blocks in the shape of the results */
   .card .ln { height: 12px; margin-top: 10px; width: 80%; }
   .card .ln2 { height: 10px; margin-top: 6px; width: 40px; }
   /* a phone held sideways (780 × 360, the tabs a rail on the left): the bar
-     slimmer, the posters at their upright size, so six to a line. screens.css's
-     ".phone > .tabs" (the upright tabs: 64 px high, a line on top) also matches
-     the rail; the rail takes the frame's height. */
+     slimmer, the posters at their upright size, so six to a line */
   .phone.side .sbar { height: 48px; }
+  .phone.side .sbar .fw .xb { top: 4px; }
   .phone.side .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px 12px; }
   .phone.side .grid .card.poster .img { height: 152px; }
   .phone.side .grp .h2 { display: inline-block; padding-right: 10px; }
@@ -117,10 +124,10 @@
       <section class="grp">
         <h2 class="h2">titles</h2>
         <div class="grid">
-          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
-          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
-          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
-          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
         </div>
       </section>
     </div>
@@ -132,23 +139,24 @@
   <div class="phone" data-view="none" data-bar="none" data-tabs="none">
     <header class="sbar">
       <span class="icon-b" data-co="1"><i data-i="arrow-left"></i></span>
-      <span class="field focus" data-co="2" data-co-side="right"><span class="caret" style="margin:0 -7px 0 0"></span>Search</span>
+      <div class="fw" data-co="2" data-co-side="right"><ds-input size="lg" icon="search" placeholder="search…" focused></ds-input></div>
     </header>
-    <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim-b"></div>
+      <div class="txt">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
+        <div class="row"><ds-button size="lg" variant="primary" icon="play">play</ds-button><ds-button size="lg">see details</ds-button><ds-iconbutton size="lg" icon="clapperboard" label="trailer"></ds-iconbutton></div>
       </div>
-      <div style="margin-bottom:16px"><span class="b"><i data-i="list-filter" class="s16"></i>filters<i data-i="chevron-down" class="s16"></i></span></div>
-      <div class="grid">
-        <div class="card poster"><div class="img"><div class="art x1"></div><span class="mk"><i data-i="check" class="s16"></i></span></div><div class="tt">Agent 327: Operation Barbershop</div><div class="st">2017</div></div>
-        <div class="card poster"><div class="img"><div class="art x2"></div></div><div class="tt">Big Buck Bunny</div><div class="st">2008</div></div>
-        <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div></div>
-        <div class="card poster"><div class="img"><div class="art x4"></div></div><div class="tt">Coffee Run</div><div class="st">2020</div></div>
-        <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div></div>
-        <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div></div>
+    </section>
+    <div class="entry"><i data-i="zap"></i>zap<i data-i="chevron-right" class="chev"></i></div>
+    <section class="shelf">
+      <h2 class="h2">continue watching</h2>
+      <div class="cards">
+        <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div><ds-menubutton size="md" label="actions for Pioneer One"></ds-menubutton></div>
+        <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
       </div>
-    </div>
+    </section>
     <div class="oskb" data-co="3">
       <div class="r"><span class="k">q</span><span class="k">w</span><span class="k">e</span><span class="k">r</span><span class="k">t</span><span class="k">y</span><span class="k">u</span><span class="k">i</span><span class="k">o</span><span class="k">p</span></div>
       <div class="r"><span class="k">a</span><span class="k">s</span><span class="k">d</span><span class="k">f</span><span class="k">g</span><span class="k">h</span><span class="k">j</span><span class="k">k</span><span class="k">l</span></div>
@@ -163,7 +171,7 @@
   <div class="phone" data-view="none" data-bar="none">
     <header class="sbar">
       <span class="icon-b"><i data-i="arrow-left"></i></span>
-      <span class="field filled">s<span class="xb" data-co="1" data-co-side="right"><i data-i="x" class="s16"></i></span></span>
+      <div class="fw"><ds-input size="lg" icon="search" value="s"></ds-input><ds-iconbutton variant="ghost" icon="x" label="clear search" class="xb" data-co="1" data-co-side="right"></ds-iconbutton></div>
     </header>
     <div class="pg">
       <section class="grp">
@@ -176,10 +184,10 @@
       <section class="grp">
         <h2 class="h2">titles</h2>
         <div class="grid">
-          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
-          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
-          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
-          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
         </div>
       </section>
     </div>
@@ -191,15 +199,15 @@
   <div class="phone side" data-view="none" data-bar="none" data-tabs="none">
     <header class="sbar">
       <span class="icon-b" data-co="1"><i data-i="arrow-left"></i></span>
-      <span class="field focus" data-co="2" data-co-side="right"><span class="caret" style="margin:0 -7px 0 0"></span>Search</span>
+      <div class="fw" data-co="2" data-co-side="right"><ds-input size="lg" icon="search" placeholder="search…" focused></ds-input></div>
     </header>
-    <div class="pg">
-      <div class="head">
-        <h1 class="h1">movies</h1>
-        <span class="facet"><span class="lb">sort</span><span class="sel">title<i data-i="chevron-down"></i></span></span>
+    <section class="hero">
+      <div class="art steel"></div><div class="scrim-l"></div>
+      <div class="txt">
+        <h1 class="t">Tears of Steel</h1>
+        <p class="meta">2012 · 12 min · science fiction</p>
       </div>
-      <div style="margin-bottom:16px"><span class="b"><i data-i="list-filter" class="s16"></i>filters<i data-i="chevron-down" class="s16"></i></span></div>
-    </div>
+    </section>
     <div class="oskb" data-co="3">
       <div class="r"><span class="k">q</span><span class="k">w</span><span class="k">e</span><span class="k">r</span><span class="k">t</span><span class="k">y</span><span class="k">u</span><span class="k">i</span><span class="k">o</span><span class="k">p</span></div>
       <div class="r"><span class="k">a</span><span class="k">s</span><span class="k">d</span><span class="k">f</span><span class="k">g</span><span class="k">h</span><span class="k">j</span><span class="k">k</span><span class="k">l</span></div>
@@ -214,7 +222,7 @@
   <div class="phone side" data-view="none" data-bar="none" data-co-parts="tabs:4:bottom">
     <header class="sbar">
       <span class="icon-b"><i data-i="arrow-left"></i></span>
-      <span class="field filled" data-co="1" data-co-side="right">s<span class="xb"><i data-i="x" class="s16"></i></span></span>
+      <div class="fw" data-co="1" data-co-side="right"><ds-input size="lg" icon="search" value="s"></ds-input><ds-iconbutton variant="ghost" icon="x" label="clear search" class="xb"></ds-iconbutton></div>
     </header>
     <div class="pg">
       <section class="grp">
@@ -228,10 +236,10 @@
       <section class="grp">
         <h2 class="h2" data-co="3" data-co-side="right">titles</h2>
         <div class="grid">
-          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div></div>
-          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div></div>
-          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div></div>
-          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div></div>
+          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
         </div>
       </section>
     </div>
@@ -242,7 +250,7 @@
 <figure class="shot" id="search-tv">
   <div class="tv" data-view="search">
     <div class="page"><div class="inner">
-      <div class="tfield" data-co="1"><i data-i="search" class="s16"></i>llam<span class="caret"></span></div>
+      <ds-input size="lg" icon="search" value="llam" data-co="1"></ds-input>
       <div class="tvs">
         <div class="keys" data-co="2">
           <span class="key">a</span><span class="key">b</span><span class="key">c</span><span class="key">d</span><span class="key">e</span><span class="key">f</span>
@@ -297,7 +305,7 @@
 <figure class="shot" id="search-no-match-tv">
   <div class="tv" data-view="search">
     <div class="page"><div class="inner">
-      <div class="tfield"><i data-i="search" class="s16"></i>lighthouse<span class="caret"></span></div>
+      <ds-input size="lg" icon="search" value="lighthouse"></ds-input>
       <div class="tvs">
         <div class="keys">
           <span class="key">a</span><span class="key">b</span><span class="key">c</span><span class="key">d</span><span class="key focus">e</span><span class="key">f</span>
@@ -309,22 +317,18 @@
           <span class="key w">space</span><span class="key w"><i data-i="delete" class="s16"></i>delete</span>
         </div>
         <div class="res">
-          <div class="empty">
-            <i data-i="search-x" class="s48"></i>
-            <h2 class="h2" data-co="1" data-co-side="right">no matches</h2>
-            <p class="text">Nothing in the library fits this search.</p>
-            <span class="b" style="margin-top:6px" data-co="2" data-co-side="right">clear search</span>
-          </div>
+          <ds-empty illustration="search" title="no matches" description="Nothing in the library fits this search." data-co-in=".nc-illu__title 1 right"><ds-button size="lg" data-co="2" data-co-side="right">clear search</ds-button></ds-empty>
         </div>
       </div>
     </div></div>
   </div>
 </figure>
 
+<script src="ds.js"></script>
 <script src="frame.js"></script>
 <script>
-  // frame.js draws the bar; while the person types, its field has the focus
-  for (const f of document.querySelectorAll('.computer.typing > .tb .field')) f.classList.add('focus');
+  // frame.js draws the top bar's field; while the person types, it has the focus (the kit's drawn focus)
+  for (const f of document.querySelectorAll('.computer.typing > .tb .search-field')) f.classList.add('is-focused');
 </script>
 </body>
 </html>

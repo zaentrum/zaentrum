@@ -5,12 +5,14 @@
   (<div class="phone side">, 780 × 360, the tabs as a rail on the left).
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (tabs) is frame.js, the icons are
-  icons.js. A title's page follows chapter 6's drawings (ch06-title.html); its
-  bar is drawn here, because it holds the cast button. Google's widgets (the
-  button, the bar, the full controls) are drawn in chino's colours, as the
-  chapter specifies; their layouts are Google's and haven't been checked on a
-  real Cast device yet.
+  The look is screens.css with the design system's stylesheet, the frame
+  (tabs) is frame.js, the icons are icons.js. A title's page follows chapter
+  6's drawings (ch06-title.html); its bar is drawn here, because it holds the
+  cast button. Google's widgets (the button, the bar, the full controls) are
+  drawn in chino's colours, as the chapter specifies; their layouts are
+  Google's and haven't been checked on a real Cast device yet. What chino draws
+  itself is the design system's: the buttons of the title row (<ds-*> tags,
+  ds.js) and the error banner when the TV can't play a title.
   Pink numbers mark the parts the chapter's text explains.
 -->
 <html lang="en">
@@ -23,9 +25,6 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* the sideways frame's rail runs the frame's height: screens.css gives
-     every .phone > .tabs 64 px and a top border, the rail too */
-
   /* a title's page's bar: the back arrow, the title's name, the cast button in a 48 dp square */
   .xbar { position: absolute; left: 0; right: 0; top: 0; height: 56px; z-index: 10; display: flex; align-items: center; gap: 10px;
           padding: 0 4px 0 6px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
@@ -36,11 +35,15 @@
   .under { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; overflow: hidden; }
   .side .under { top: 48px; }
 
-  /* the title row's parts, as chapter 6 draws them */
-  .split { display: inline-flex; flex: none; height: 48px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
+  /* the title row's parts, as chapter 6 draws them: add to list is chino's own,
+     two parts in one frame, at the design system's large height */
+  .split { display: inline-flex; flex: none; height: 42px; border: 1px solid var(--border-2); background: var(--surface); color: var(--fg); }
   .split > span { display: inline-flex; align-items: center; justify-content: center; }
-  .split .m { width: 46px; }
-  .split .c { width: 40px; border-left: 1px solid var(--border-2); }
+  .split .m { width: 40px; }
+  .split .c { width: 34px; border-left: 1px solid var(--border-2); }
+  /* the download control (chapter 13): the button, and the size after it */
+  .dlc { display: inline-flex; align-items: center; gap: 8px; flex: none; }
+  .size { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); white-space: nowrap; }
 
   /* a title's page on a phone (chapter 6) */
   .bd { position: absolute; left: 0; right: 0; top: 0; height: 200px; overflow: hidden; }
@@ -51,12 +54,8 @@
   .hd .nm { padding-top: 68px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .phone .t { font-size: 22px; }
   .phone .meta { font-size: 12px; }
-  .kind { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border: 1px solid var(--border-2);
-          background: var(--surface-2); color: var(--fg-muted); font: 500 11px/1 var(--ff-mono); }
   .body { position: absolute; left: 16px; right: 16px; top: 300px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
-  .acts { display: flex; flex-wrap: wrap; gap: 8px; }
-  .acts .b { padding: 0 14px; }
-  .acts .b.icon { padding: 0; }
+  .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 
   /* held sideways: the poster at the left, the name, the row and the words beside it */
   .side .bd { height: 140px; }
@@ -107,20 +106,9 @@
   .side .fc .right .seek { position: static; width: 100%; }
   .side .fc .right .ctl { position: static; width: fit-content; }
 
-  /* the warning in the bar's place, above the tabs */
-  .castwarn { position: absolute; left: 0; right: 0; bottom: 0; z-index: 9; padding: 10px 12px; background: var(--bg); border-top: 1px solid var(--border); }
-  .castwarn .banner { align-items: flex-start; padding: 12px 4px 12px 14px; }
-  .castwarn .banner > div { flex: 1; min-width: 0; }
-  .det { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
-  .det-b { margin: 6px 0 0; font: 500 12px/1.45 var(--ff-mono); color: var(--fg-2); }
-  .castwarn .x { width: 48px; height: 48px; margin-top: -14px; margin-bottom: -14px; }
-  .castwarn .banner .x svg.i, .castwarn .banner .det svg.i { color: var(--fg-muted); margin-top: 0; }
-  /* held sideways: the line and details on one row */
-  .side .castwarn { padding: 8px 24px; }
-  .side .castwarn .banner { align-items: center; padding: 6px 4px 6px 14px; }
-  .side .castwarn .row1 { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .side .castwarn .det { margin-top: 0; }
-  .side .castwarn .x { margin: 0; }
+  /* the bar's place, above the tabs, holding the design system's error banner when the TV can't play a title */
+  .castwarn { position: absolute; left: 0; right: 0; bottom: 0; z-index: 9; padding: 12px 16px; background: var(--bg); border-top: 1px solid var(--border); }
+  .side .castwarn { padding: 10px 24px; }
 </style>
 </head>
 <body>
@@ -140,17 +128,17 @@
         <div class="nm">
           <h1 class="t">Sprite Fright</h1>
           <p class="meta">2021 · 10 min</p>
-          <p class="meta"><span class="kind">movie</span></p>
+          <p class="meta"><ds-badge>movie</ds-badge></p>
         </div>
       </div>
       <div class="body">
         <div class="acts">
-          <span class="b primary" data-co="2"><i data-i="play" class="fill"></i>play</span>
-          <span class="b"><i data-i="clapperboard"></i>trailer</span>
+          <ds-button size="lg" variant="primary" icon="play" data-co="2">play</ds-button>
+          <ds-button size="lg" icon="clapperboard">trailer</ds-button>
           <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-          <span class="b icon"><i data-i="check"></i></span>
-          <span class="b icon"><i data-i="heart"></i></span>
-          <span class="b"><i data-i="download"></i>download · 120 MB</span>
+          <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
+          <span class="dlc"><ds-button size="lg" icon="download">download</ds-button><span class="size">120 MB</span></span>
         </div>
         <p class="desc">Teenagers on a trip into the woods meet the small folk who live there, and the small folk don't want them.</p>
       </div>
@@ -172,13 +160,13 @@
         <div class="pos"><div class="art a4"></div></div>
         <div class="info">
           <h1 class="t">Sprite Fright</h1>
-          <p class="meta">2021 · 10 min<span class="kind" style="margin-left:10px">movie</span></p>
+          <p class="meta">2021 · 10 min <ds-badge style="margin-left:6px">movie</ds-badge></p>
           <div class="acts" data-co="2" data-co-side="right">
-            <span class="b primary"><i data-i="play" class="fill"></i>play</span>
-            <span class="b"><i data-i="clapperboard"></i>trailer</span>
+            <ds-button size="lg" variant="primary" icon="play">play</ds-button>
+            <ds-button size="lg" icon="clapperboard">trailer</ds-button>
             <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-            <span class="b icon"><i data-i="check"></i></span>
-            <span class="b icon"><i data-i="heart"></i></span>
+            <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+            <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
           </div>
           <p class="desc">Teenagers on a trip into the woods meet the small folk who live there, and the small folk don't want them.</p>
         </div>
@@ -306,30 +294,22 @@
         <div class="nm">
           <h1 class="t">Sprite Fright</h1>
           <p class="meta">2021 · 10 min</p>
-          <p class="meta"><span class="kind">movie</span></p>
+          <p class="meta"><ds-badge>movie</ds-badge></p>
         </div>
       </div>
       <div class="body">
         <div class="acts">
-          <span class="b primary" data-co="1"><i data-i="play" class="fill"></i>resume 3:12</span>
-          <span class="b">start over</span>
-          <span class="b"><i data-i="clapperboard"></i>trailer</span>
+          <ds-button size="lg" variant="primary" icon="play" data-co="1">resume 3:12</ds-button>
+          <ds-button size="lg">start over</ds-button>
+          <ds-button size="lg" icon="clapperboard">trailer</ds-button>
           <span class="split"><span class="m"><i data-i="bookmark"></i></span><span class="c"><i data-i="chevron-down" class="s16"></i></span></span>
-          <span class="b icon"><i data-i="check"></i></span>
-          <span class="b icon"><i data-i="heart"></i></span>
+          <ds-iconbutton size="lg" icon="check" label="mark as watched"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="heart" label="like"></ds-iconbutton>
         </div>
       </div>
     </div>
     <div class="castwarn">
-      <div class="banner warn">
-        <i data-i="triangle-alert" class="s16"></i>
-        <div>
-          <div data-co="2">Living Room TV can't play this title.</div>
-          <span class="det" data-co="3">details<i data-i="chevron-up" class="s14"></i></span>
-          <p class="det-b">the server doesn't let this account play it (HTTP 403)</p>
-        </div>
-        <span class="icon-b x" data-co="4" data-co-side="right"><i data-i="x" class="s16"></i></span>
-      </div>
+      <ds-banner state="error" dismiss details-open details='<span data-co="3">the server doesn&#39;t let this account play it (HTTP 403)</span>' data-co="4" data-co-side="right"><span data-co="2">Living Room TV can't play this title.</span></ds-banner>
     </div>
   </div>
 </figure>
@@ -348,24 +328,22 @@
         <div class="pos"><div class="art a4"></div></div>
         <div class="info">
           <h1 class="t">Sprite Fright</h1>
-          <p class="meta">2021 · 10 min<span class="kind" style="margin-left:10px">movie</span></p>
+          <p class="meta">2021 · 10 min <ds-badge style="margin-left:6px">movie</ds-badge></p>
           <div class="acts">
-            <span class="b primary"><i data-i="play" class="fill"></i>resume 3:12</span>
-            <span class="b">start over</span>
-            <span class="b"><i data-i="clapperboard"></i>trailer</span>
+            <ds-button size="lg" variant="primary" icon="play">resume 3:12</ds-button>
+            <ds-button size="lg">start over</ds-button>
+            <ds-button size="lg" icon="clapperboard">trailer</ds-button>
           </div>
         </div>
       </div>
     </div>
     <div class="castwarn">
-      <div class="banner warn">
-        <i data-i="triangle-alert" class="s16"></i>
-        <div class="row1"><span data-co="1" data-co-side="bottom">Living Room TV can't play this title.</span><span class="det">details<i data-i="chevron-down" class="s14"></i></span></div>
-        <span class="icon-b x" data-co="2" data-co-side="right"><i data-i="x" class="s16"></i></span>
-      </div>
+      <ds-banner state="error" dismiss details="the server doesn't let this account play it (HTTP 403)" data-co="2" data-co-side="right"><span data-co="1" data-co-side="bottom">Living Room TV can't play this title.</span></ds-banner>
     </div>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

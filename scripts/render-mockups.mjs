@@ -29,7 +29,13 @@ const browser = await chromium.launch();
 try {
   // wide enough for a whole computer screen (1280) with its frame and notes
   const page = await browser.newPage({ deviceScaleFactor: 2, viewport: { width: 1600, height: 1000 } });
+  // a drawing's own errors (a missing icon, a <ds-*> tag that didn't expand, a mark with no part) are printed
+  let current = '';
+  page.on('console', (msg) => { if (msg.type() === 'error') console.log(`  ! ${current}: ${msg.text()}`); });
+  page.on('pageerror', (err) => console.log(`  ! ${current}: ${err.message}`));
+  const rendered = new Map(); // id → the file it was rendered from: the first file wins
   for (const html of readdirSync(dir).filter((name) => name.endsWith('.html')).sort()) {
+    current = html;
     await page.goto(pathToFileURL(path.join(dir, html)).href, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     const missing = await page.evaluate(() =>
@@ -38,6 +44,8 @@ try {
     const ids = await page.$$eval('figure.shot', (els) => els.map((el) => el.id));
     for (const id of ids) {
       if (only.length && !only.includes(id)) continue;
+      if (rendered.has(id)) { console.log(`  ! ${html}: figure "${id}" is also in ${rendered.get(id)}, which wins`); continue; }
+      rendered.set(id, html);
       const file = path.join(dir, `${id}.png`);
       await page.locator(`#${id}`).screenshot({ path: file });
       console.log(`  ${path.relative(root, file)}`);

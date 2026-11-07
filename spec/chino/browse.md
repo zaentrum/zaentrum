@@ -196,32 +196,48 @@ doesn't have.
 
 ## 5.3 Movies on a computer
 
-Figure 5.6 shows movies on a computer. The view's name heads the page with the
-sort at the end of its line, the filters follow on one line, and the grid of
-posters fills the rest.
+Figure 5.6 shows movies on a computer, with **genres** open and animation
+chosen. The view's name heads the page, the design system's filter bar follows
+on one line, and the grid of posters fills the rest. The posters and their
+cards are chino's own; the heading, the filter bar and the card's menu are the
+design system's.
 
 ![Figure 5.6: Movies on a computer, at 1280 × 800](./img/browse-movies-computer.png)
 
 Figure 5.6: Movies on a computer, at 1280 × 800.
 
-1. **The filters**: **genre**, **decade** and **rating**. Each is its name and
-   a box that shows its choice, here **all**; choosing the box opens the list
-   of choices. A filter that narrows the grid shows its choice in blue.
-   Section 5.7.1 lists the choices.
-2. **clear all** sets every filter back to **all**. With nothing to clear, it
-   is dimmed, as here.
-3. **sort** puts the grid in order: **title**, the order the view starts with,
-   **newest added**, **rating** or **year (newest)** (section 5.7.2).
-4. **A card**: the poster, then the title's name on one line, cut with “…”
+1. **The search**, the filter bar's search field, “search movies”. The grid
+   keeps the movies whose name holds what is typed, with every key, and Esc
+   empties the field.
+2. **genres**, the design system's multi select. Choosing it opens a panel
+   under it, with a tick box for each genre the view's titles have and how
+   many of them have it. Ticking a genre keeps its titles, and ticking several
+   keeps the titles of any of them. The box says **any** while nothing is
+   ticked, the genre in blue while one is, and “2 chosen” while two are;
+   **clear genres** at the panel's foot unticks them all.
+3. **decade** and **sort**, the design system's selects: each box shows its
+   choice, and choosing it opens the device's own list. decade shows its
+   choice in blue while it narrows the grid. sort puts the grid in order,
+   **title** first (section 5.7.2); it is an order, not a filter, so it never
+   turns blue.
+4. **The count** and **clear all**, at the bar's end. The count says what the
+   filters leave out of the view's titles, “9 of 10”, and how many titles the
+   view has, “10”, while nothing filters. clear all, a quiet button, empties
+   the search and sets every filter back; it leaves the sort, and it is dimmed
+   while there is nothing to clear.
+5. **A card**: the poster, then the title's name on one line, cut with “…”
    where it's too long, and its year. Choosing the card opens the title's page.
-5. **The status marks** on the poster, as [chapter 6](./title-actions.md)
+6. **The status marks** on the poster, as [chapter 6](./title-actions.md)
    draws them: the bookmark on blue for a title in the Watchlist, the check on
    green for a watched one, and the bar along the foot for how far the person
    got. Nothing else is drawn on a poster.
-6. **⋮**, at the right of the card's lines, opens the card's menu
-   (section 5.8).
+7. **The menu button**, three small squares at the right of the card's lines,
+   opens the card's menu, the design system's action menu (section 5.8).
 
-The grid takes as many posters to a line as fit, seven at 1280 wide.
+The grid takes as many posters to a line as fit, seven at 1280 wide. The
+filter bar stays on one line while it fits, and wraps onto a second when it
+doesn't, as the design system's filter bar does; its controls are 34 px high,
+the one size it has.
 
 ## 5.4 Movies on a phone
 
@@ -236,12 +252,17 @@ turned.
 
 Figure 5.7: Movies on a phone held upright, at 360 × 780 dp.
 
-1. **sort** stays at the end of the name's line, as on a computer.
-2. **filters** folds the three filters away behind one button, which opens
-   them in a column under it, as figure 5.10 shows. While filters are set, the
-   button counts them: **filters · 1**.
-3. **The grid** has three posters to a line, each with its name, its year and
-   ⋮, which stands beside the year so the name has the card's whole width.
+1. **The search** and **filters** share the first line. The filter bar is
+   narrower than 640 dp here, so it folds genres, decade, sort and clear all
+   away behind one button, as the design system's filter bar does when it is
+   narrow.
+2. **filters**, a standard button, opens them in a column under it, as figure
+   5.10 shows, and folds them away again. While filters are set, it counts
+   them: **filters · 1**. The search and the sort don't count.
+3. **The count**, “10”, keeps a line of its own.
+4. **The grid** has three posters to a line, each with its name, its year and
+   the menu button, which stands beside the year so the name has the card's
+   whole width.
 
 The web on a phone held upright has the layout of figure 5.7, with its own tabs
 ([chapter 2](./frame.md)).
@@ -252,11 +273,13 @@ The web on a phone held upright has the layout of figure 5.7, with its own tabs
 
 Figure 5.8: Movies on a phone held sideways, at 780 × 360 dp.
 
-1. **The filters** stand in one line, as on a computer, with **clear all** at
-   its end: the bar is wide enough for them, so it doesn't fold them away.
-2. **sort** at the end of the name's line, as upright.
+1. **genres**, **decade** and **sort** stand in a line under the search: the
+   bar is 676 dp wide here, more than the 640 dp under which it folds them
+   away.
+2. **The count** and **clear all** end that line, clear all dimmed while
+   nothing filters.
 3. **The grid** has seven smaller posters to a line, so a whole line of cards,
-   their names and years too, shows under the filters.
+   their names and years too, shows under the filter bar.
 
 The tabs run down the left edge as a rail while the phone is sideways
 ([chapter 2](./frame.md)). The web on a phone held sideways has the layout of
@@ -264,15 +287,15 @@ figure 5.8.
 
 ### 5.4.3 Turning the phone
 
-Turning the phone keeps the filters, the sort and the place in the grid: the
-card at the top of the screen stays in view. The filter bar goes by its own
-width, as the design system's
+Turning the phone keeps the search, the filters, the sort and the place in the
+grid: the card at the top of the screen stays in view. The filter bar goes by
+its own width, as the design system's
 [filter bar](https://nalet.github.io/design-system/components/filter-bar/)
-does: narrower than 640 dp, it folds the filters behind **filters**, and from
-640 dp it shows them in a line. So turned sideways, the filters stand in their
-line, and turned back upright they fold again, behind **filters** open or
-closed as it was. Upright the grid has three posters to a line and sideways
-seven smaller ones.
+does: narrower than 640 dp, it folds genres, decade, sort and clear all behind
+**filters**, and from 640 dp it shows them in a line, which wraps when it has
+to. So turned sideways, the filters stand in their line, and turned back
+upright they fold again, behind **filters** open or closed as it was. Upright
+the grid has three posters to a line and sideways seven smaller ones.
 
 ## 5.5 Movies on a TV
 
@@ -283,23 +306,27 @@ and the grid scrolls past its foot.
 
 Figure 5.9: Movies on a TV, at 960 × 540 dp.
 
-1. **The filters** are buttons the focus can take, 40 dp high, as every TV
-   control is. OK opens a menu of one choice, like the player's menus in
-   [chapter 11](./playback.md): the chosen row in blue with a small square
-   before it. Up and down move in the menu, OK picks a row and closes it, and
-   back closes it without a change.
-2. **sort** works the same way, at the end of the name's line.
+1. **genres**, **decade** and **sort**, the filter bar's, each take the focus.
+   The TV's bar has no search: the rail's search ([chapter 9](./search.md))
+   finds a title by its name. OK on a filter opens the TV's own list, like the
+   player's menus in [chapter 11](./playback.md). For decade and sort it is a
+   list of one choice, the chosen row in blue with a small square before it,
+   and OK picks a row and closes the list. For genres it has a tick box for
+   each genre, and OK ticks or clears the genre the focus is on, with the list
+   staying open. Up and down move in the list, and back closes it.
+2. **The count** and **clear all** end the line. clear all, dimmed here, takes
+   the focus once something is set.
 3. **The focus** on a card: the ring sits 2 dp outside the poster, and the card
    grows by 5 %, as the design system's
    [TV focus](https://nalet.github.io/design-system/patterns/tv-focus/) sets
    out. Right from the rail lands on the first card. The arrows move from card
-   to card, up from the first line reaches the filters, and left from the
+   to card, up from the first line reaches the filter bar, and left from the
    first column opens the rail.
 4. **The grid** keeps six posters to a line inside the safe area. The next
    line shows under the outline, and the grid scrolls when the focus reaches
    it, so the focus never leaves the safe area.
 
-A TV card has no ⋮: holding OK on it opens its menu (section 5.8).
+A TV card has no menu button: holding OK on it opens its menu (section 5.8).
 
 ## 5.6 Shows
 
@@ -310,25 +337,23 @@ and work as movies do, at every size, with the shows' own words.
 
 Figure 5.10: Shows on a phone held upright, filtered by genre, at 360 × 780 dp.
 
-1. **filters · 1** counts the filters that are set. Pressed again, it folds
-   them away.
-2. **A filter that is set** shows its choice in blue: **drama**.
-3. **clear all**, at the end of the column, sets them all back to **all**.
-4. **The grid** holds only what fits the filters: here the one drama in the
+1. **filters · 1** counts the filters that are set. Pressed, it opened them in
+   a column under the search; pressed again, it folds them away.
+2. **genres** with one genre ticked shows it in blue: **drama**.
+3. **clear all**, at the end of the column, empties the search and sets the
+   filters back. On a narrow bar it folds away with the filters.
+4. **The count**, “1 of 2”: one of the two shows fits the filters.
+5. **The grid** holds only what fits the filters: here the one drama in the
    library, Pioneer One. A show's year is the year it started.
-5. **The count** under the last card says how many the grid holds, once all of
-   them are in: “1 show in all.”
 
 ![Figure 5.11: Shows on a phone held sideways, filtered by genre, at 780 × 360 dp](./img/browse-shows-sideways-phone.png)
 
 Figure 5.11: Shows on a phone held sideways, filtered by genre, at 780 × 360
 dp.
 
-1. **A filter that is set**, in the line of filters, shows its choice in blue:
-   **drama**.
-2. **clear all** at the line's end is bright, because there is something to
-   clear. The count, “1 show in all.”, follows under the grid, past the
-   screen's foot.
+1. **genres**, in the line of filters, shows its choice in blue: **drama**.
+2. **The count**, “1 of 2”, and **clear all**, no longer dimmed, because there
+   is something to clear.
 
 ## 5.7 The filters and the sort
 
@@ -336,25 +361,33 @@ dp.
 
 | Filter | Choices | Keeps |
 |---|---|---|
-| genre | **all**, then the genres of the view's own titles, lowercase: **drama**, **science fiction** | Titles of that genre |
+| search | What the person types | Titles whose name holds it, whatever the capitals |
+| genres | **any**, or one or more of the genres of the view's own titles, lowercase, each with how many of them have it: **drama**, **science fiction** | Titles of any genre ticked |
 | decade | **all** · **2020s** · **2010s** · **2000s** · **1990s** · **1980s** · **before 1980** | Titles from those years; before 1980 is every year before 1980 |
-| rating | **all** · **8.0+** · **7.0+** · **6.0+** | Titles the catalog rates that high or higher |
 
-- A filter holds one choice at a time, and the grid changes as soon as it's
-  made, with nothing to confirm. The filters add up: a title shows when it fits
-  all of them. **all** comes first in every filter, as the design system's
-  filter bar has it, so each filter has its way back.
+- A filter applies as soon as it changes, with nothing to confirm, and the
+  search with every key typed. The filters add up: a title shows when it fits
+  all of them. **all** comes first in decade, as the design system's filter
+  bar has the choice that filters nothing, and genres says **any** while
+  nothing is ticked, so each filter has its way back.
 - **clear all** in the filter bar and **clear filters** in an empty grid
-  (figure 5.13) both set every filter back to **all**. Neither changes the
-  sort.
-- Each view lists the genres its own titles have, each once, so a genre on its
-  own never leads to an empty grid: movies the genres of the movies, shows
-  those of the shows. The two can name a genre differently, as the catalog
-  does: the demo's science fiction is **science fiction** in movies and
-  **sci-fi & fantasy** in shows. A genre with a title of this kind leads to the
-  no-match state of section 5.10 only together with another filter.
+  (figure 5.13) both empty the search and set every filter back. Neither
+  changes the sort.
+- Each view lists the genres its own titles have, each once, with the number
+  of its titles of each, so a genre on its own never leads to an empty grid:
+  movies the genres of the movies, shows those of the shows. The two can name
+  a genre differently, as the catalog does: the demo's science fiction is
+  **science fiction** in movies and **sci-fi & fantasy** in shows. A genre
+  with a title of this kind leads to the no-match state of section 5.10 only
+  together with another filter.
+- There is no filter by rating: the sort **rating** puts the highest rated
+  first.
 
 ### 5.7.2 The sort
+
+**sort**, the design system's select after the filters, puts the grid in
+order. It isn't a filter: **filters · 1** doesn't count it, it doesn't turn
+blue, and clear all leaves it as it is.
 
 | Sort | Order |
 |---|---|
@@ -365,15 +398,16 @@ dp.
 
 ### 5.7.3 Where the view starts
 
-- Opened from the frame, the view has the filters and the sort the person left
-  it with while the app runs. When the app starts, the filters are at **all**
-  and the sort is **title**.
+- Opened from the frame, the view has the search, the filters and the sort the
+  person left it with while the app runs. When the app starts, the search is
+  empty, genres at **any**, decade at **all** and the sort **title**.
 - Back from a title's page, the grid is where it was, and on a TV the focus is
   on the card that opened the page. On the web, movies and shows have
-  addresses of their own that hold the filters and the sort, so back from a
-  title's page, a reload and a shared link open the view as it was.
+  addresses of their own that hold the search, the filters and the sort, so
+  back from a title's page, a reload and a shared link open the view as it
+  was.
 - **see all** at the end of a row on home opens the view in the row's order,
-  with every filter at **all**:
+  with the search empty and no filter set:
 
 | Row on home | Opens | Sort |
 |---|---|---|
@@ -388,16 +422,21 @@ titles show among the row's.
 
 - The grid holds the titles in the sort's order and loads more as the person
   nears its end, with grey cards in the places still loading (section 5.10).
-  Once all of them are in, a line under the last card counts them:
-  “10 movies in all.”, “1 movie in all.”
-- A card shows the poster with its status marks, the name, the year and ⋮. On
-  a TV the focused card's name turns to the brightest text colour.
-- A card's menu, as in [chapter 6](./title-actions.md), offers **play**, or
-  **resume** for a title the person is in, and the watched mark: **mark as
-  watched**, or **watched** while it's on, which takes the mark off. A show's
-  **play** plays the episode its page's first button names. ⋮ opens the menu
-  on a computer and a phone, and in the phone app a long press on the card
-  opens it too. On a TV, holding OK opens it.
+  How many titles it holds is the filter bar's count, from the first page on
+  (figure 5.6, part 4), so no line under the last card says it again.
+- A card shows the poster with its status marks, the name, the year and the
+  menu button. On a TV the focused card's name turns to the brightest text
+  colour.
+- A card's menu is the design system's action menu, as in
+  [chapter 6](./title-actions.md). It offers **play**, or **resume** for a
+  title the person is in, and the watched mark: **mark as watched**, or
+  **mark as unwatched** while it's on, which takes the mark off (a menu item
+  says what it does, as the design system's menus do). A show's **play** plays
+  the episode its page's first button names. The menu button opens the menu
+  on a computer and a phone, just under the button and lined up with its
+  right edge, and in the phone app a long press on the card opens it too.
+  Screen readers name the button after the card's title: “actions for
+  Sintel”. On a TV, holding OK opens the menu.
 
 ## 5.9 Changes
 
@@ -414,26 +453,26 @@ navigation and the tabs are [chapter 2](./frame.md)'s.
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 5.C1 | The filter bar | Web, Phone app, Android TV, Samsung TV | lines of chips: “Genre”, “Decade”, “Rating” and “Sort”, the genres on a line that scrolls sideways; on Android TV three lines that scroll; on Samsung TV “Genre” and “Sort” | Recommended: the design system's filter bar, a box per filter that opens a menu of one choice, folded behind filters on a bar narrower than 640 dp; sort a box at the end of the name's line (figures 5.6 to 5.9) | proposed |
-| 5.C2 | all in every filter; before 1980 | Web, Phone app, Android TV | decade and rating have no all: a second press on the chip that is on takes it off; the oldest decade is “Older” (“older”), 1900 to 1979 | all first in every filter; before 1980, every year before 1980 (section 5.7.1) | proposed |
-| 5.C3 | The genres of the view's own titles | Web, Phone app, Android TV, Samsung TV, the server | one list for movies and shows, with its capitals: movies offers “Sci-Fi & Fantasy” and “War & Politics”, which no movie has, and science fiction twice; shows offers “Science Fiction”, which no show has; Samsung TV shows six of its own while the list comes | the server gives each kind its own list, and each view offers the genres its titles have, once each, lowercase (section 5.7.1) | proposed |
-| 5.C4 | clear all leaves the sort | Web, Phone app, Android TV | “Clear filters” (“clear filters”), there while a filter is set or the sort isn't title, and it sets the sort back too; a text button on the web, a chip in the apps | clear all at the end of the filters, dimmed with nothing to clear; it sets the filters back to all and leaves the sort (figure 5.6, part 2) | proposed |
-| 5.C5 | Samsung TV: decade, rating and the sorts | Samsung TV | no decade or rating, no way to clear; the sorts “Recommended” (by rating, the one it starts with), “Newest”, “A–Z” | the three filters, clear all, and the four sorts of section 5.7.2, starting with title | proposed |
-| 5.C6 | The views' names | Web, Samsung TV | Web: “Movies”, “Shows”. Samsung TV: “Movies”, “Series” | movies · shows (section 5.11) | proposed |
+| 5.C1 | The filter bar | Web, Phone app, Android TV, Samsung TV | lines of chips: “Genre”, “Decade”, “Rating” and “Sort”, the genres on a line that scrolls sideways, one genre at a time, and no search; on Android TV three lines that scroll; on Samsung TV “Genre” and “Sort” | Recommended: the design system's filter bar (figures 5.6 to 5.9): its search, “search movies” or “search shows”, in the design system's words for a search; genres, its multi select, several genres at once, the box saying any while none is ticked; decade, its select; the sort, its select after the filters, not counted as one; the count and clear all at the bar's end; while the bar is narrower than 640 dp, its own width, the filters, the sort and clear all folded behind filters, a standard button that counts the filters set, “filters · 1”; no rating filter, the sort by rating instead; on a TV, the bar without its search | proposed |
+| 5.C2 | all in decade; before 1980 | Web, Phone app, Android TV | decade and rating have no all: a second press on the chip that is on takes it off; the oldest decade is “Older” (“older”), 1900 to 1979 | all first in decade, the choice that filters nothing in the design system's select; before 1980, every year before 1980 (section 5.7.1) | proposed |
+| 5.C3 | The genres of the view's own titles | Web, Phone app, Android TV, Samsung TV, the server | one list for movies and shows, with its capitals: movies offers “Sci-Fi & Fantasy” and “War & Politics”, which no movie has, and science fiction twice; shows offers “Science Fiction”, which no show has; Samsung TV shows six of its own while the list comes | the server gives each kind its own list of genres, with how many of its titles have each, and each view offers its genres once each, lowercase, with that number, in genres (figure 5.6, part 2; section 5.7.1) | proposed |
+| 5.C4 | clear all leaves the sort | Web, Phone app, Android TV | “Clear filters” (“clear filters”), there while a filter is set or the sort isn't title, and it sets the sort back too; a text button on the web, a chip in the apps | the filter bar's clear all, a quiet button at its end, or at the end of the folded filters on a narrow bar, dimmed with nothing to clear; it empties the search and sets the filters back, and leaves the sort (figure 5.6, part 4) | proposed |
+| 5.C5 | Samsung TV: decade, clear all and the sorts | Samsung TV | no decade or rating, no way to clear; the sorts “Recommended” (by rating, the one it starts with), “Newest”, “A–Z” | decade, clear all and the four sorts of section 5.7.2, starting with title, in the filter bar of 5.C1 | proposed |
+| 5.C6 | The views' names | Web, Samsung TV | Web: “Movies”, “Shows”. Samsung TV: “Movies”, “Series” | movies · shows, the design system's heading (section 5.11) | proposed |
 | 5.C7 | The card: the name and the year | Web, Phone app, Android TV, Samsung TV | the name in the monospace face, then the year with the rating in blue, “2017 • 7.0” | Recommended: the name in the body face and the year, without the rating (figure 5.6, part 4) | proposed |
 | 5.C8 | The bar on the grid's cards | Web, Phone app, Android TV, Samsung TV | the grid's cards have no bar | the bar along the poster's foot for how far the person got (figure 5.6, part 5) | proposed |
-| 5.C9 | The card's menu: its button and resume | Web, Phone app, Android TV, Samsung TV | Web: play, never resume, in the grid. Phone app: a long press only; play, never resume. Android TV: play on a movie's card alone. Samsung TV: no menu | ⋮ at the right of the card's lines, the phone app's long press too; holding OK on a TV; play or resume, a show's play its episode, and the watched mark (section 5.8) | proposed |
+| 5.C9 | The card's menu: its button and resume | Web, Phone app, Android TV, Samsung TV | Web: ⋮ beside the name; play, never resume, in the grid. Phone app: a long press only; play, never resume. Android TV: play on a movie's card alone. Samsung TV: no menu | the design system's action menu: its button, three small squares, at the right of the card's lines, named after the title, “actions for Sintel”, and the phone app's long press too; holding OK on a TV; play or resume, a show's play its episode, and the watched mark (section 5.8) | proposed |
 | 5.C10 | The grid's posters | Web, Phone app | Web: five to a line at 1280 px, two on a phone. Phone app: four from 600 dp | seven at 1280 px; on a phone three upright and seven smaller ones sideways (figures 5.6 to 5.8) | proposed |
-| 5.C11 | A phone held sideways | Web | the computer's layout: the chips fill the screen (figure 5.3) | figure 5.8: the filters in one line, the grid under them | proposed |
+| 5.C11 | A phone held sideways | Web | the computer's layout: the chips fill the screen (figure 5.3) | figure 5.8: the filter bar, 676 dp wide, its search on the first line, the filters, the count and clear all on the second, and the grid under them | proposed |
 | 5.C12 | Back from a title's page | Web, Samsung TV | Web: movies and shows have no address of their own, so back goes to home, the filters and the sort gone. Samsung TV: the view starts over, the focus on the first card | the view as it was, and on a TV the focus on the card that opened the page; on the web, addresses that hold the filters and the sort (section 5.7.3) | proposed |
-| 5.C13 | The filters kept while the app runs | Web, Android TV, Samsung TV | Web: they start over with another view. Android TV: kept for a title's page, not for another view. Samsung TV: kept only between movies and shows from the rail | kept for each view while the app runs (section 5.7.3) | proposed |
-| 5.C14 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner alone, and a filter that changes empties the grid. Android TV: “Loading Movies…”, and after a chip “Loading movies…” in the grid's place. Samsung TV: a spinner, “Loading movies…”, and a chip loads the grid again from the top | figure 5.12, with the name, the sort and the filters there at once; a change keeps the cards under a thin blue line (section 5.10) | proposed |
+| 5.C13 | The search, the filters and the sort kept while the app runs | Web, Android TV, Samsung TV | Web: they start over with another view. Android TV: kept for a title's page, not for another view. Samsung TV: kept only between movies and shows from the rail | kept for each view while the app runs (section 5.7.3) | proposed |
+| 5.C14 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner alone, and a filter that changes empties the grid. Android TV: “Loading Movies…”, and after a chip “Loading movies…” in the grid's place. Samsung TV: a spinner, “Loading movies…”, and a chip loads the grid again from the top | figure 5.12, with the heading and the filter bar there at once; a change keeps the cards under a thin blue line (section 5.10) | proposed |
 | 5.C15 | Samsung TV: no load more button | Samsung TV | 60 at a time, and a “Load more” button after the grid | Recommended: more as the focus nears the end, with grey cards, and no button (section 5.8) | proposed |
-| 5.C16 | No match | Web, Phone app, Android TV, Samsung TV | Web, Android TV: “No movies match the current filters.”, with nothing to press; Android TV adds “You've reached the end — 0 movies.” Phone app: “No items match the current filters.” Samsung TV: “No movies to show”, “Nothing tagged “Drama”. Pick “All” to clear the filter.” | figure 5.13: no matches, “Nothing fits these filters.” and clear filters | proposed |
-| 5.C17 | No movies in the library | Web, Phone app, Android TV, Samsung TV | the no-match line, with the filters; Samsung TV: “No movies to show”, “This library is empty.” | “no movies yet” without the filters, with nothing to press (section 5.10) | proposed |
-| 5.C18 | Couldn't load, under the view's name | Android TV, Samsung TV | Android TV: over the whole page, the chips too. Samsung TV: “Couldn’t load the library” in red and the error's text, no try again | figure 5.14: in the grid's place, the name, the sort and the filters staying; the reason by cause and try again | proposed |
-| 5.C19 | More couldn't load | Phone app, Android TV, Samsung TV | Phone app: “Couldn't load more movies.” with try again. Android TV: the grid ends there. Samsung TV: couldn't load takes the grid's place | “couldn't load more movies”, the reason and try again under the cards loaded (section 5.10) | proposed |
-| 5.C20 | The end of the grid | Android TV, Samsung TV | “You've reached the end — 10 movies.”, on Android TV “1 movies” for one | “10 movies in all.”, “1 movie in all.” (section 5.8) | proposed |
+| 5.C16 | No match | Web, Phone app, Android TV, Samsung TV | Web, Android TV: “No movies match the current filters.”, with nothing to press; Android TV adds “You've reached the end — 0 movies.” Phone app: “No items match the current filters.” Samsung TV: “No movies to show”, “Nothing tagged “Drama”. Pick “All” to clear the filter.” | figure 5.13: the design system's empty state, its no-match kind, under the filter bar: no matches, “Nothing fits these filters.” and clear filters | proposed |
+| 5.C17 | No movies in the library | Web, Phone app, Android TV, Samsung TV | the no-match line, with the filters; Samsung TV: “No movies to show”, “This library is empty.” | the design system's empty state, its nothing-yet kind: “no movies yet”, without the filter bar, with nothing to press (section 5.10) | proposed |
+| 5.C18 | Couldn't load, under the view's name | Android TV, Samsung TV | Android TV: over the whole page, the chips too. Samsung TV: “Couldn’t load the library” in red and the error's text, no try again | figure 5.14: the design system's empty state, its couldn't-load kind, in the grid's place, the heading and the filter bar staying; the reason by cause, try again and details | proposed |
+| 5.C19 | More couldn't load | Phone app, Android TV, Samsung TV | Phone app: “Couldn't load more movies.” with try again. Android TV: the grid ends there. Samsung TV: couldn't load takes the grid's place | under the cards loaded, the design system's empty state at its small size, its couldn't-load kind: “couldn't load more movies”, the reason and try again (section 5.10) | proposed |
+| 5.C20 | The count in the filter bar | Web, Phone app, Android TV, Samsung TV | Web, Phone app: “26 movies in all.” under the grid, once all of it is in. Android TV: “You've reached the end — 10 movies.”, “1 movies” for one. Samsung TV: “You’ve reached the end — 10 movies.” | the filter bar's count, in the design system's words: “10” while nothing filters, “9 of 10” while the filters leave nine, from the first page on, with the totals the server gives with it; no line under the last card (figure 5.6, part 4; section 5.8) | proposed |
 
 ## 5.10 States
 
@@ -448,34 +487,40 @@ While the grid loads, it shows nothing for the first 0.4 seconds, and after
 that grey blocks in the shape of the posters and their lines, as the design
 system's
 [loading and progress](https://nalet.github.io/design-system/patterns/loading-and-progress/)
-describes. The name, the sort and the filters are there at once, so the focus
-can already rest on them, here on **genre**. A computer and a phone show the
-same blocks in their own grid.
+describes. The heading and the filter bar are there at once, so the focus can
+already rest on them, here on **genres**: the ring outside the box, the box
+grown by 5 % on the focused surface, as on every plain control on a TV. The
+count comes with the first titles. A computer and a phone show the same
+blocks in their own grid.
 
 ![Figure 5.13: Filters that match nothing, on a computer](./img/browse-no-match-computer.png)
 
 Figure 5.13: Filters that match nothing, on a computer.
 
 1. **The filters that are set** stay as they are, in blue, so the person can
-   change one of them instead of starting over.
-2. **no matches**: the design system's no-match state, with “Nothing fits
-   these filters.” under it, in the grid's place.
-3. **clear filters** sets the filters back to **all**, and the grid comes
-   back. It is the state's one way out.
+   change one of them instead of starting over, and the count says “0 of 10”.
+2. **no matches**: the design system's empty state, its no-match kind, with
+   “Nothing fits these filters.” under it, in the grid's place.
+3. **clear filters**, a standard button, does what clear all does, where the
+   person is looking: it empties the search and sets the filters back, and
+   the grid comes back.
 
 ![Figure 5.14: Movies when they couldn't load, on a phone](./img/browse-couldnt-load-phone.png)
 
 Figure 5.14: Movies when they couldn't load, on a phone.
 
-1. **What couldn't load, and why.** “couldn't load the movies”, or “couldn't
-   load the shows”, and under it the reason as far as the app can tell. Figure
-   5.14 shows the case where the server ran into a problem;
-   [chapter 17](./errors.md) lists every cause and its sentence.
-2. **try again** loads the grid again, with the filters and the sort as they
-   were.
-3. **details** holds the status the server answered with, for the people who
-   fix things, and stays closed until it is tapped, as
-   [chapter 17](./errors.md) sets out.
+1. **What couldn't load, and why**, in the design system's empty state, its
+   couldn't-load kind, in the grid's place: “couldn't load the movies”, or
+   “couldn't load the shows”, and under it the reason as far as the app can
+   tell. Figure 5.14 shows the case where the server ran into a problem;
+   [chapter 17](./errors.md) lists every cause and its sentence. The filter
+   bar has no count until the titles are in.
+2. **try again**, a standard button at its large size, loads the grid again,
+   with the search, the filters and the sort as they were.
+3. **details**, under the button: the design system's details toggle, as its
+   banner has it (its empty state has none yet, so chino adds it). It holds the
+   status the server answered with, for the people who fix things, and stays closed until it is
+   tapped, as [chapter 17](./errors.md) sets out.
 
 | State | What the view shows |
 |---|---|
@@ -484,9 +529,9 @@ Figure 5.14: Movies when they couldn't load, on a phone.
 | More loading | Grey cards in the places still loading, at the end of the grid |
 | No match | Figure 5.13 |
 | Couldn't load | Figure 5.14, with the sentence for the cause |
-| More couldn't load | The cards loaded stay; under them “couldn't load more movies”, the reason and **try again** |
-| No movies in the library | “no movies yet” in the grid's place, without the filters and with nothing to press, as on home ([chapter 4](./home.md)) |
-| Asking again failed | The grid stays as it was, under the warning banner of [chapter 17](./errors.md): “Couldn't refresh the movies; it shows what was loaded 4 minutes ago.”, with **try again** |
+| More couldn't load | The cards loaded stay; under them the design system's empty state at its small size, its couldn't-load kind: “couldn't load more movies”, the reason and **try again** |
+| No movies in the library | The design system's empty state, its nothing-yet kind, in the grid's place: “no movies yet”, without the filter bar and with nothing to press, as on home ([chapter 4](./home.md)) |
+| Asking again failed | The grid stays as it was, under the design system's warning banner, as [chapter 17](./errors.md) has it: “Couldn't refresh the movies; it shows what was loaded 4 minutes ago.”, with **try again** |
 | The phone app can't reach the server | The banner of [chapter 13](./downloads.md), with the titles the phone loaded under it as they were; with none, figure 5.14 without the sentence, which the banner already says |
 
 ## 5.11 Words
@@ -494,15 +539,16 @@ Figure 5.14: Movies when they couldn't load, on a phone.
 | Where | Text |
 |---|---|
 | The views' names | movies · shows |
-| The sort | sort · title · newest added · rating · year (newest) |
-| The filters | genre · decade · rating · all · clear all |
-| The genres | the view's own, lowercase: drama · science fiction · sci-fi & fantasy |
+| The search | search movies · search shows |
+| The filters | genres · any · 2 chosen · clear genres · decade · all · clear all |
+| The genres | the view's own, lowercase, each with its number: drama · science fiction · sci-fi & fantasy |
 | The decades | 2020s · 2010s · 2000s · 1990s · 1980s · before 1980 |
-| The ratings | 8.0+ · 7.0+ · 6.0+ |
-| The filters on a phone held upright | filters · filters · 1 |
-| A card | the name, the year: 2012, and ⋮ |
-| The end of the grid | 10 movies in all. · 1 movie in all. · 2 shows in all. · 1 show in all. |
-| A card's menu | play · resume · mark as watched · watched |
+| The sort | sort · title · newest added · rating · year (newest) |
+| The count | 10 · 9 of 10 · 1 of 2 · 0 of 10 |
+| The filters on a narrow bar | filters · filters · 1 |
+| A card | the name, the year: 2012, and the menu button |
+| A card's menu button, for screen readers | actions for Sintel, after the card's title |
+| A card's menu | play · resume · mark as watched · mark as unwatched |
 | No match | no matches · Nothing fits these filters. · clear filters |
 | Couldn't load | couldn't load the movies · couldn't load the shows · The server ran into a problem. · try again · details |
 | More couldn't load | couldn't load more movies · couldn't load more shows |

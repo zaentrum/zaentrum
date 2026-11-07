@@ -5,7 +5,8 @@
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
   The look is screens.css, the frame is frame.js (this chapter specifies what
-  frame.js draws), the icons are icons.js.
+  frame.js draws), the icons are icons.js. The design system's components are
+  the <ds-*> tags, which ds.js expands into the package's own markup.
 -->
 <html lang="en">
 <head>
@@ -23,72 +24,78 @@
   .computer .ph { position: absolute; left: 48px; right: 48px; top: 88px; bottom: 32px; }
   .phone .ph { position: absolute; left: 16px; right: 16px; top: 16px; bottom: 16px; }
   .phone.side .ph { left: 24px; right: 24px; }
-  /* the sideways rail also matches screens.css's ".phone > .tabs" (64 px high, a top border): undone here */
   .tv .ph { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; }
-  .usermenu { position: absolute; right: 24px; top: 60px; z-index: 30; width: 260px; }
-  .usermenu .who { padding: 12px 16px 12px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
-  .usermenu .who .n { font: 500 15px/1.2 var(--ff-ui); color: var(--fg); }
-  .usermenu .who .e { font: 400 13px/1.2 var(--ff-ui); color: var(--fg-dim); }
+  /* the avatar's menu, as the design system's top bar draws its user menu: one sheet under the
+     avatar, its right edge on the avatar's. The design system's user menu is planned, so the sheet
+     and its header (the name, then the email address, quieter) are drawn on its tokens, with the
+     action menu's frame and shadow; the items are its action menu's. The action menu has no
+     separators yet, so sign out, set apart, is a second menu under a rule. */
+  .usermenu { position: absolute; z-index: 150; top: 60px; right: 24px; width: 248px; display: flex; flex-direction: column;
+              box-shadow: 0 8px 24px #00000073; }
+  .usermenu .who { display: flex; flex-direction: column; gap: 2px; padding: 12px 12px 11px; background: var(--surface);
+                   border: 1px solid var(--border-2); border-bottom: 0; }
+  .usermenu .nc-actionmenu { position: relative; box-shadow: none; }
+  .usermenu .nc-actionmenu + .nc-actionmenu { margin-top: -1px; }
   .tv .railopen { position: absolute; left: 0; top: 0; bottom: 0; width: 248px; z-index: 12; background: var(--bg-2); border-right: 1px solid var(--border);
                   display: flex; flex-direction: column; padding: 27px 0 27px 48px; gap: 6px; }
   .tv .railopen .it { height: 40px; display: flex; align-items: center; gap: 14px; padding: 0 14px 0 10px; color: var(--fg-muted); font: 500 14px/1 var(--ff-mono); width: 184px; }
   .tv .railopen .it.cur { color: var(--fg); box-shadow: inset 4px 0 0 var(--cloud-blue); }
+  /* the focused row: the design system's TV focus for a row, its ring inside the edge (in place of the current view's bar) */
+  .tv .railopen .it.focus-row { color: var(--fg); box-shadow: inset 0 0 0 3px var(--focus-ring); }
   .tv .railopen .who { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font: 500 14px/1 var(--ff-ui); color: var(--fg); }
   .tv .railopen .gap { flex: 1; }
 </style>
 </head>
 <body>
 
-<!-- Figure 2.1 · the frame on a computer -->
+<!-- Figure 2.6 · the frame on a computer -->
 <figure class="shot" id="frame-computer">
   <div class="computer" data-view="movies" data-co-parts="logo:1:top,views:2:top,search:3:top,bell:4:top,avatar:5:top">
     <div class="ph" data-co="6">the page</div>
   </div>
 </figure>
 
-<!-- Figure 2.2 · the avatar's menu, on a computer -->
+<!-- Figure 2.7 · the avatar's menu, on a computer -->
 <figure class="shot" id="frame-menu-computer">
   <div class="computer" data-view="movies">
     <div class="ph">the page</div>
-    <div class="menu usermenu" data-co="1" data-co-side="right">
-      <div class="who"><span class="n">Alex Urban</span><span class="e">alex@example.com</span></div>
-      <div class="it"><i data-i="user"></i>account</div>
-      <div class="it"><i data-i="settings"></i>settings</div>
-      <div class="sep"></div>
-      <div class="it"><i data-i="log-out"></i>sign out</div>
+    <div class="usermenu">
+      <div class="who" data-co="1" data-co-side="right"><span class="nc-text nc-text--ui">Alex Urban</span><span class="nc-text nc-text--dim">alex@example.com</span></div>
+      <ds-menu data-co="2" data-co-side="right"><ds-item icon="user">account</ds-item><ds-item icon="settings">settings</ds-item></ds-menu>
+      <ds-menu data-co="3" data-co-side="right"><ds-item icon="log-out">sign out</ds-item></ds-menu>
     </div>
   </div>
 </figure>
 
-<!-- Figure 2.3 · the frame on a phone -->
+<!-- Figure 2.8 · the frame on a phone held upright -->
 <figure class="shot" id="frame-phone">
   <div class="phone" data-view="movies" data-co-parts="logo:1:top,search:2:top,bell:3:top,avatar:4:top,tabs:5">
     <div class="ph">the page</div>
   </div>
 </figure>
 
-<!-- Figure 2.4 · the web on a phone -->
+<!-- Figure 2.9 · the web on a phone -->
 <figure class="shot" id="frame-web-phone">
   <div class="phone" data-view="movies" data-tabs="web" data-co-parts="tabs:1">
     <div class="ph">the page</div>
   </div>
 </figure>
 
-<!-- Figure 2.x · the frame on a phone held sideways: the tabs as a rail at the left, the bar slimmer -->
+<!-- Figure 2.10 · the frame on a phone held sideways: the tabs as a rail at the left, the bar slimmer -->
 <figure class="shot" id="frame-sideways-phone">
   <div class="phone side" data-view="movies" data-co-parts="tabs:1,current:2,logo:3:top">
     <div class="ph" data-co="4" data-co-side="right">the page</div>
   </div>
 </figure>
 
-<!-- Figure 2.5 · the frame on a TV -->
+<!-- Figure 2.11 · the frame on a TV -->
 <figure class="shot" id="frame-tv">
   <div class="tv" data-view="movies" data-co-parts="avatar:1,current:2,bell:3,settings:4">
     <div class="page"><div class="ph" data-co="5" data-co-side="right">the page</div></div>
   </div>
 </figure>
 
-<!-- Figure 2.6 · the rail opened, on a TV -->
+<!-- Figure 2.12 · the rail opened, on a TV -->
 <figure class="shot" id="frame-rail-tv">
   <div class="tv" data-view="none" data-rail="none">
     <div class="page"><div class="ph">the page</div></div>
@@ -106,6 +113,8 @@
     </nav>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

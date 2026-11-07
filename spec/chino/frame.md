@@ -229,13 +229,14 @@ Figure 2.6 shows the frame on a computer, with movies as the current view.
 
 Figure 2.6: The frame on a computer, at 1280 × 800.
 
-1. **The product's name**, chino, with the chevron. It leads to home.
+1. **The product's name**, chino, led by the design system's chevron. It leads
+   to home.
 2. **The five views**: home, movies, shows, watchlist and zap. The current one
    is in the brighter colour with a blue line under it. Settings is not a
    view: it's in the avatar's menu (part 5).
-3. **The search**, the only one in the product. Its placeholder says what it
-   finds: “Search movies, shows and people”. Typing in it shows the results
-   ([chapter 9](./search.md)).
+3. **The search**, the design system's search field, and the only search in
+   the product. Its placeholder says what it finds: “Search movies, shows and
+   people”. Typing in it shows the results ([chapter 9](./search.md)).
 4. **The bell.** Its number counts the notifications the person hasn't read;
    with none unread, the number goes. The bell opens the notifications
    ([chapter 15](./notifications.md)).
@@ -243,6 +244,10 @@ Figure 2.6: The frame on a computer, at 1280 × 800.
    colours ([chapter 3](./start.md)). It opens the menu of figure 2.7.
 6. **The page**, everything under the bar. There's no side navigation: the
    views are all in the bar.
+
+The bar is chino's own, as the design system's top bar allows a product for
+people watching (section 2.1); the chevron and the search field in it are the
+design system's.
 
 Every screen but the player keeps the bar: a title's page, a person's page,
 settings and the account page open under it. Each view, and settings, has an
@@ -256,18 +261,25 @@ on its short side. One smaller than that, a phone held either way, has the
 phone's frame of section 2.4. Where a window is too narrow for the search field
 beside the five views, the search becomes the phone's search icon.
 
-Figure 2.7 shows the avatar's menu open.
+Figure 2.7 shows the avatar's menu open, as the design system's top bar draws
+its user menu.
 
 ![Figure 2.7: The avatar's menu, on a computer](./img/frame-menu-computer.png)
 
 Figure 2.7: The avatar's menu, on a computer.
 
-1. **The menu** starts with the person's name and, quieter, their email
-   address, then holds **account**, **settings** and **sign out**. account and
-   settings open the screens of [chapter 16](./settings.md); sign out signs out
-   of this server, as chapter 16 describes. The menu closes with Esc, a click
-   outside it, or a second click on the avatar, and the focus goes back to the
-   avatar. The arrow keys move between its items.
+1. **Who is signed in**: the person's name and, quieter, their email address,
+   at the top of the menu.
+2. **account** and **settings**, items of the design system's menu, each with
+   its icon. They open the screens of [chapter 16](./settings.md).
+3. **sign out**, last and set apart under a rule, so nobody presses it by
+   accident. It signs out of this server, as chapter 16 describes.
+
+The menu opens under the avatar, its right edge on the avatar's. It closes with
+Esc, a click outside it, or a second click on the avatar, and the focus goes
+back to the avatar. The arrow keys move between its items. **help** joins it
+between settings and sign out once there is a guide for the people watching
+(2.C10).
 
 ## 2.4 The frame on a phone
 
@@ -285,11 +297,11 @@ bottom, in reach of a thumb.
 Figure 2.8: The frame on a phone held upright, at 360 × 780 dp.
 
 1. **The product's name**, as on a computer.
-2. **The search** is an icon. It opens a field across the whole width of the
-   bar, with the keyboard ([chapter 9](./search.md)).
+2. **The search** is an icon. It opens the design system's search field across
+   the whole width of the bar, with the keyboard ([chapter 9](./search.md)).
 3. **The bell**, as on a computer. On a phone it opens a screen of its own.
-4. **The avatar**, as on a computer. Its menu opens from the bottom of the
-   screen, with the same items as figure 2.7.
+4. **The avatar**, as on a computer. Its menu is the one of figure 2.7 and
+   opens under it in the same way, within the screen's width.
 5. **The tabs**: home, movies, shows, watchlist and downloads, each an icon
    with its name. The current tab is blue. Zap, the computer's fifth view,
    starts from home on a phone ([chapter 4](./home.md)), and downloads take its
@@ -380,10 +392,10 @@ figure 2.12 shows.
 
 Figure 2.12: The rail opened, on a TV.
 
-1. **The focused item** fills its row in the focus colour, with the ring
-   inside it, and grows by 2 %. Up and down move between the items, and OK
-   opens one. Right, or Back, closes the rail and puts the focus back on the
-   page.
+1. **The focused item** has the design system's TV focus for a row: the ring
+   inside its edge, the lighter focused surface, and 2 % growth. Up and down
+   move between the items, and OK opens one. Right, or Back, closes the rail
+   and puts the focus back on the page.
 2. **The items** keep their order: search, the five views, then notifications
    and settings at the foot. The avatar sits at the top with the person's name.
 
@@ -402,9 +414,9 @@ words to [chapter 9](./search.md), the avatar's look to
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 2.C1 | The avatar's menu, with settings in it | Web, Phone app | Web: **account** and **sign out**, without the name or the email address and without settings; it closes only with a click outside it or on the avatar, and on a phone it drops down under the avatar. Phone app: no menu; the avatar opens the account page | figure 2.7: the name and, quieter, the email address, then account, settings and sign out; Esc, a click outside it or on the avatar closes it, the focus back on the avatar; the arrow keys move between its items; on a phone it opens from the bottom of the screen (section 2.4.1). Built before 2.C2 and 2.C3, which take settings out of the views | proposed |
-| 2.C2 | The computer's frame: the views in the top bar | Web | the views as icons alone in a side navigation down the left edge, the logo “>c” at its top and settings, a gear, at its foot; their names only tooltips and for screen readers, capitalised | figure 2.6: chino with the chevron at the left of the bar, then home, movies, shows, watchlist and zap as words, the current one brighter with a blue line under it; no side navigation; settings only in the avatar's menu (2.C1) | proposed |
-| 2.C3 | The phone's frame held upright: the bar and five named tabs | Web, Phone app | Web: the bar a search field, the bell and the avatar, without the product's name; six tabs, icons alone, zap fifth and settings sixth. Phone app: the same bar; seven tabs on Android and six on iOS, icons alone, zap and settings among them; on Android downloads is left out where the server offers none and nothing is on the phone | figures 2.8 and 2.9: chino with the chevron, the search icon, the bell and the avatar in the bar; each tab its icon over its name: home, movies, shows, watchlist and downloads, four without downloads, and on the web zap in place of downloads; settings in the avatar's menu (2.C1); zap from home in the phone app ([chapter 4](./home.md)) | proposed |
+| 2.C1 | The avatar's menu, with settings in it | Web, Phone app | Web: **account** and **sign out**, without the name or the email address and without settings; it closes only with a click outside it or on the avatar, and on a phone it drops down under the avatar. Phone app: no menu; the avatar opens the account page | figure 2.7: one sheet under the avatar, its right edge on the avatar's: the name and, quieter, the email address, then account and settings, items of the design system's menu, and sign out set apart under a rule; the design system's user menu is planned and its menu has no rule yet, so the header and the rule are built on its tokens around its menu's items; Esc, a click outside it or on the avatar closes it, the focus back on the avatar; the arrow keys move between its items; on a phone the same menu opens under the avatar (section 2.4.1). Built before 2.C2 and 2.C3, which take settings out of the views | proposed |
+| 2.C2 | The computer's frame: the views in the top bar | Web | the views as icons alone in a side navigation down the left edge, the logo “>c” at its top and settings, a gear, at its foot; their names only tooltips and for screen readers, capitalised | figure 2.6: chino led by the design system's chevron at the left of the bar, then home, movies, shows, watchlist and zap as words, the current one brighter with a blue line under it; no side navigation; settings only in the avatar's menu (2.C1) | proposed |
+| 2.C3 | The phone's frame held upright: the bar and five named tabs | Web, Phone app | Web: the bar a search field, the bell and the avatar, without the product's name; six tabs, icons alone, zap fifth and settings sixth. Phone app: the same bar; seven tabs on Android and six on iOS, icons alone, zap and settings among them; on Android downloads is left out where the server offers none and nothing is on the phone | figures 2.8 and 2.9: chino led by the design system's chevron, the search icon, the bell and the avatar in the bar; each tab its icon over its name: home, movies, shows, watchlist and downloads, four without downloads, and on the web zap in place of downloads; settings in the avatar's menu (2.C1); zap from home in the phone app ([chapter 4](./home.md)) | proposed |
 | 2.C4 | The phone's frame held sideways | Web, Phone app | by the width: the web from 768 px wide has the computer's frame, its views scrolling in their column on a phone held sideways (figure 2.3); the phone app from 600 dp wide, measured on the window, has an 80 dp rail with the logo, the tabs' icons and settings at its foot, under the upright bar | by the short side: a screen or a window less than 600 dp on its short side has the phone's frame held either way, sideways the tabs as a 72 dp rail at the left with their names and the bar 48 dp high (figure 2.10); 600 dp and more, the computer's frame (section 2.3) | proposed |
 | 2.C5 | Every screen in the frame, but the player and zap | Web, Phone app, Android TV, Samsung TV | Web: a title's page, a person's page and the account page without the frame. Phone app: every screen opened from a tab covers the frame, tabs included, with its own top; zap keeps the top bar and the tabs. Android TV, Samsung TV: a title's page has no rail and no bar | every screen inside the frame except the player, and except zap in the phone app and on a TV; on a phone, a screen opened from a view has a back arrow and its name in place of the bar, and the tabs stay (section 2.4.1). This change builds the frame's part and the account page; the screens with a change of their own follow it: a title's page 6.C1, a person's page 7.C1, the phone app's notifications 15.C5 and zap in the phone app 10.C1 | proposed |
 | 2.C6 | Web: an address for every view | Web | only the watchlist and the search have an address of their own; a reload on movies, shows, zap or settings opens home | each view and settings with its own address, so a reload, a link or back brings the person to it (section 2.3) | proposed |
@@ -412,6 +424,7 @@ words to [chapter 9](./search.md), the avatar's look to
 | 2.C8 | The TV keeps to the safe area | Android TV, Samsung TV | the rail starts at the screen's left edge and the bar at its top; Android TV keeps the safe area only in the player and zap, the Samsung TV nowhere | everything that matters inside the safe area, 48 dp from the left and right edges and 27 dp from the top and bottom (figure 2.11, part 5) | proposed |
 | 2.C9 | The avatar's name for a screen reader | Web, Phone app, Android TV, Samsung TV | Web: the button “Account”, the initials inside it named by the account's name. Phone app, Android TV: no name of its own. Samsung TV: the account's name | “Alex Urban, user menu” on a computer and a phone; on a TV the account's name, “Alex Urban” (section 2.7) | proposed |
 | 2.C10 | help in the avatar's menu | Web, Phone app | no help | Recommended: help between settings and sign out, as the design system's top bar has it, once there is a guide for the people watching; until then none, so the menu never offers something with nothing behind it | proposed |
+| 2.C11 | The apps take the design system's components | Web, Phone app, Android TV, Samsung TV | Web: its own controls, built by hand on Tailwind, with the design system's colours and faces copied into its Tailwind setup. Phone app, Android TV, Samsung TV: their own controls in the design system's colours | Web: the package `@nalet/design-system` 0.4.0, its stylesheet and its components for every part [section 1.5](./README.md) lists, the same version as the portal's. Phone app, Android TV, Samsung TV: those parts drawn as the package draws them, in its sizes and states. The frame of this chapter stays chino's own | proposed |
 
 ## 2.7 Words
 
@@ -421,7 +434,7 @@ words to [chapter 9](./search.md), the avatar's look to
 | The views | home · movies · shows · watchlist · zap |
 | The phone's tabs | home · movies · shows · watchlist · downloads |
 | The web's tabs on a phone | home · movies · shows · watchlist · zap |
-| The search's placeholder on a computer | Search movies, shows and people |
+| The search's placeholder on a computer | search movies, shows and people… ([chapter 9](./search.md), as the design system's top bar words a search) |
 | The search on a phone | the icon, named “search” for screen readers; the field it opens says “Search” |
 | The bell, for screen readers | notifications, 2 unread |
 | The avatar, for screen readers | Alex Urban, user menu |

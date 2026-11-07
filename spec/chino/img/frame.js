@@ -21,6 +21,9 @@
 // frame.js draws itself: logo, views, search, bell, avatar, tabs, back, rail,
 // settings, current (the current view) (name:number:side).
 //
+// data-co-in=".nc-illu__title 3, .nc-btn 4 right" numbers parts inside an element by a selector
+// (the parts a <ds-*> tag draws itself).
+//
 // data-co="2" on any element inside a frame numbers that part of the drawing; the
 // text under the figure says what each number is. The number sits in the margin
 // left of the screen, level with the element, with a line to it;
@@ -28,8 +31,12 @@
 // the same height push each other down, so number things at different heights,
 // or put one on the right.
 (function () {
+  // the design system's components first: <ds-*> tags become the package's markup (ds.js)
+  if (window.DS) DS.expand(document.body);
+  else if (document.querySelector('body *')) for (const e of document.querySelectorAll('*')) if (e.tagName.toLowerCase().startsWith('ds-')) { console.error('load ds.js before frame.js'); break; }
   const icon = (name, cls = '') => `<i data-i="${name}" class="${cls}"></i>`;
-  const logo = '<span class="logo"><svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>chino</span>';
+  const chevron = window.DS ? DS.svg.chevron : '<svg viewBox="0 0 14 18"><path d="M2 2 L11 9 L2 16" fill="none" stroke="#58A6FF" stroke-width="3"/></svg>';
+  const logo = `<span class="logo">${chevron}chino</span>`;
   const views = ['home', 'movies', 'shows', 'watchlist', 'zap'];
   const bell = (count) => `<span class="icon-b bell">${icon('bell')}${count === '0' ? '' : `<span class="count">${count || 2}</span>`}</span>`;
   const make = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; };
@@ -39,8 +46,8 @@
     const view = f.dataset.view || 'home';
     if (f.dataset.bar !== 'none') {
       const q = f.dataset.query;
-      const field = q ? `<span class="field filled">${icon('search', 's16')}${q}<span class="caret" style="margin-left:1px"></span></span>`
-                      : `<span class="field">${icon('search', 's16')}Search movies, shows and people</span>`;
+      const affix = window.DS ? `<span class="nc-input__affix nc-input__affix--prefix">${DS.svg.searchAffix}</span>` : icon('search', 's16');
+      const field = `<div class="nc-input nc-input--md search-field${q ? ' filled' : ''}">${affix}<input class="nc-input__control" placeholder="${f.dataset.placeholder || 'search movies, shows and people…'}" value="${q || ''}"></div>`;
       f.prepend(make(`<header class="tb">${logo}<nav class="views">${views.map((v) => `<span class="${v === view ? 'on' : ''}">${v}</span>`).join('')}</nav>
         <div class="end">${field}${bell(f.dataset.count)}<span class="av">au</span></div></header>`));
     }
@@ -61,6 +68,8 @@
     } else if (f.dataset.bar !== 'none') {
       col.prepend(make(`<header class="tb">${logo}<span class="icon-b search">${icon('search')}</span>${bell(f.dataset.count)}<span class="av">au</span></header>`));
     }
+    // a dialog covers the whole screen, the bar and the tabs too, as the design system's dialog covers the window
+    for (const m of f.querySelectorAll('.scroll .nc-modal')) f.appendChild(m);
     if (f.dataset.tabs !== 'none') {
       const tabs = f.dataset.tabs === 'web'
         ? [['home', 'house'], ['movies', 'film'], ['shows', 'tv'], ['watchlist', 'bookmark'], ['zap', 'zap']]
@@ -95,7 +104,7 @@
   }
 
   
-  const parts = { logo: '.tb .logo', views: '.tb .views', search: '.tb .field, .tb .search, .rail .it-search',
+  const parts = { logo: '.tb .logo', views: '.tb .views', search: '.tb .search-field, .tb .search, .rail .it-search',
                   bell: '.tb .bell, .rail .it-notifications', avatar: '.tb .av, .rail .av', tabs: '.tabs',
                   back: '.tb.back .icon-b', rail: '.rail', settings: '.rail .it-settings',
                   current: '.tb .views .on, .tabs .on, .rail .it.cur' };
@@ -104,6 +113,21 @@
       const [name, n, side] = entry.trim().split(':');
       const el = parts[name] && f.querySelector(parts[name]);
       if (!el) { console.error(`data-co-parts: no "${name}" in this frame`); continue; }
+      el.dataset.co = n;
+      if (side) el.dataset.coSide = side;
+    }
+  }
+
+  // data-co-in=".nc-illu__title 3, .nc-btn 4 right" on any element numbers parts inside it by a selector,
+  // such as the parts a <ds-*> tag draws itself (an empty state's title, a banner's button): each entry is
+  // a selector, then the number, then optionally the side
+  for (const host of document.querySelectorAll('[data-co-in]')) {
+    for (const entry of host.dataset.coIn.split(',')) {
+      const words = entry.trim().split(/\s+/);
+      const side = ['left', 'right', 'top', 'bottom'].includes(words[words.length - 1]) ? words.pop() : '';
+      const n = words.pop(), sel = words.join(' ');
+      const el = sel && host.querySelector(sel);
+      if (!el || !/^\d+$/.test(n || '')) { console.error(`data-co-in: no "${sel}" with a number inside`); continue; }
       el.dataset.co = n;
       if (side) el.dataset.coSide = side;
     }

@@ -355,24 +355,29 @@ doesn't have.
 ### 16.3.1 On a computer
 
 Figure 16.7 shows settings on a computer: the heading, then the groups in two
-columns, each a heading over a card.
+columns, each the design system's card with the group's name as its title, as
+its [forms and
+settings](https://nalet.github.io/design-system/patterns/forms-and-settings/)
+draws a card of settings that apply at once.
 
 ![Figure 16.7: Settings on a computer, at 1280 × 800](./img/settings-computer.png)
 
 Figure 16.7: Settings on a computer, at 1280 × 800.
 
-1. **Audio**, the language titles play in: “Original” or a language (section
-   16.4.1).
-2. **Subtitles**, the language subtitles come on in: “off” or one of the
-   server's subtitle languages (section 16.4.1).
-3. **The text under a setting** says what it does. The two language settings
-   have the same text in every app, the audio's from
-   [chapter 11](./playback.md) and the subtitles' from
-   [chapter 12](./subtitles.md).
-4. **A switch** applies at once, with nothing to save, and says what it does in
-   the line under its name (section 16.4.2).
-5. **The countdown**, in seconds, with − and + on either side.
-6. **report a bug**, only where the server takes reports (section 16.4.5).
+1. **Audio**, the design system's select, in a field with its label and its
+   hint: the language titles play in, “Original” or a language (section
+   16.4.1). Its list is the browser's own.
+2. **Subtitles**, a select too: the language subtitles come on in, “off” or one
+   of the server's subtitle languages (section 16.4.1).
+3. **The text under a setting**, the field's hint, says what it does. The two
+   language settings have the same text in every app, the audio's from [chapter
+   11](./playback.md) and the subtitles' from [chapter 12](./subtitles.md).
+4. **A switch**, the design system's: its track comes before the setting's
+   name, and it applies at once, with nothing to save. The line under it says
+   what it does (section 16.4.2).
+5. **Countdown**, a select of the seconds, from 1 s to 15 s.
+6. **report a bug**, a button, only where the server takes reports (section
+   16.4.5).
 7. **Version**, the app's version (section 16.4.6).
 
 ### 16.3.2 On a phone held upright
@@ -387,13 +392,13 @@ Figure 16.8: Settings on a phone held upright, at 360 × 780 dp.
 
 1. **The back arrow** goes back to the screen settings were opened from. The
    tabs stay, as [chapter 2](./frame.md) describes.
-2. **A language field** opens a menu of one choice under it, inside the page and
-   as wide as the field. The chosen language is in the accent blue, with a
-   small filled square before it, as in the player's menus
-   ([chapter 11](./playback.md)). A long menu scrolls within itself.
+2. **A language field**, the design system's select, 42 dp high on a phone.
+   Its list is the phone's own: it opens over the page, with the chosen
+   language marked as the phone marks a choice.
 3. **The text** under the field, as on a computer.
-4. **The switches** sit at the end of their rows, and a tap anywhere on the row
-   flips them.
+4. **The switches**, as on a computer, each with its track before its name. A
+   tap on the switch or on its name flips it; the area that takes the tap is 48 dp
+   high, more than the switch draws.
 
 Figure 16.9 shows the end of the page, which on a phone holds two groups more.
 
@@ -401,13 +406,16 @@ Figure 16.9 shows the end of the page, which on a phone holds two groups more.
 
 Figure 16.9: Settings on a phone held upright, further down.
 
-1. **downloads**: the quality titles download in, each with what an hour takes
-   at it, as [chapter 13](./downloads.md) specifies. The group shows only where
-   the phone keeps downloads and the server offers them.
-2. **Download over Wi-Fi only**, on until it is switched off
+1. **Download quality**, the design system's select: the quality titles
+   download in. The phone's own list shows each quality with what an hour takes
+   at it, “Medium (720p) · about 932 MB an hour”, as
+   [chapter 13](./downloads.md) specifies; the field shows the picked quality's
+   name, and its hint what an hour takes at it. The group, **downloads**, shows
+   only where the phone keeps downloads and the server offers them.
+2. **Download over Wi-Fi only**, a switch, on until it is switched off
    ([chapter 13](./downloads.md)).
-3. **server**: the server the app is connected to, and **change server**
-   (section 16.4.4).
+3. **server**: the server the app is connected to, and **change server**, a
+   button (section 16.4.4).
 
 The groups **feedback** and **about** follow, as on a computer. The web on a
 phone has the layout of figure 16.8, without downloads and server.
@@ -429,23 +437,28 @@ Figure 16.10: Settings on a phone held sideways, at 780 × 360 dp.
    scrolls.
 
 The tabs are the rail at the left and the bar is slimmer, as on every screen of
-a phone held sideways ([chapter 2](./frame.md)). A language field's menu opens
-under it, within its column.
+a phone held sideways ([chapter 2](./frame.md)). A language field's list is the
+phone's own, as upright.
 
 ### 16.3.4 On a TV
 
 Figure 16.11 shows settings on a TV, opened from the rail. Right moves the focus
-onto the page, and up and down go from row to row.
+onto the page, and up and down go from setting to setting. On a TV the groups
+are sections of the page under the design system's headings, without cards, so
+that more of them fits inside the safe area.
 
 ![Figure 16.11: Settings on a TV, at 960 × 540 dp](./img/settings-tv.png)
 
 Figure 16.11: Settings on a TV, at 960 × 540 dp.
 
-1. **account**: who is signed in. OK opens the account page (section 16.5.4).
-   A TV has no avatar's menu, so this row is its way to the account.
-2. **A row with a language** shows what is set. OK opens its menu of one choice
-   over the page, in the look of the player's menus, with the setting's
-   language focused; picking one closes it, and so does Back.
+1. **account**: who is signed in, in a row that takes the focus. OK opens the
+   account page (section 16.5.4). A TV has no avatar's menu, so this row is its
+   way to the account.
+2. **A language**, the design system's select, 42 dp high, shows what is set.
+   Focused, it has the TV focus of a row: the ring inside its edge, the lighter
+   surface. OK opens the TV's own list over the page, in the look of the
+   player's menus, with the setting's language focused, as the design system
+   has no list for a TV; picking one closes it, and so does Back.
 3. **The text** under the row, as on a computer.
 4. **binge watching** and the groups after it follow below. The page scrolls as
    the focus goes down, and OK flips a switch.
@@ -482,9 +495,12 @@ alphabetical order. Each language has the name the player's menus give it,
 “German”, “Chinese (Simplified)”, and a language set before that the list no
 longer has stays in it, so the setting always shows what is set.
 
-While the server's subtitle languages load, the subtitles field is a grey
-block; when they couldn't load, the reason and **try again** take its place
-(figure 16.21).
+While the server's subtitle languages load, the Subtitles field keeps its label
+and shows the design system's small loader in its box, as its [loading and
+progress](https://nalet.github.io/design-system/patterns/loading-and-progress/)
+has it for a field. When they couldn't load, the design system's empty state for
+an error takes the box's place, with the reason and **try again** (figure
+16.21).
 
 ### 16.4.2 Binge watching
 
@@ -494,6 +510,8 @@ block; when they couldn't load, the reason and **try again** take its place
 | Auto-play next episode | Starts the next episode when the credits roll. Off, the up next card waits until you play it. | on |
 | Countdown | Seconds the player counts down before it skips the intro or the recap, or starts the next episode. | 3 seconds, from 1 to 15 |
 
+Auto-skip intros and Auto-play next episode are the design system's switches,
+and Countdown is its select, “1 s” to “15 s”, each with its line as the hint.
 What the player skips, its countdown and its up next card are specified in
 [chapter 11](./playback.md). An episode that starts with its intro and was
 opened from the one before starts past it at once, without a countdown, while
@@ -524,27 +542,32 @@ what goes with them: “Reports go to the people who run this server, with
 details of the app and the device. Crashes and playback failures are reported
 on their own.”
 
-**report a bug** opens the dialog of figure 16.12.
+**report a bug** opens the design system's dialog of figure 16.12.
 
 ![Figure 16.12: Report a bug, on a computer](./img/settings-report-computer.png)
 
 Figure 16.12: Report a bug, on a computer.
 
-1. **What happened?** holds the person's own words, and the report needs them:
-   sent without any, the field says “Describe what happened to send the
-   report.” It opens empty.
-2. **Attach a screenshot of the page** is off until it is ticked, and only the
+1. **What happened?**, the design system's field around its text area, holds
+   the person's own words, and the report needs them: sent without any, the
+   field's error says “Describe what happened to send the report.” It opens
+   empty, with “What were you doing, what did you expect, what happened
+   instead?” as its hint, where it stays in view while the person types.
+2. **Attach a screenshot of the page**, a checkbox, is off until it is ticked,
+   and only the
    tick takes the screenshot: of the screen under the dialog, without the
    dialog. A small preview then shows under the box, with **retake**. On a
    phone it says “Attach a screenshot of the screen”.
 3. **Who receives the report**, and what goes with it.
-4. **send report** is busy while the report goes, and then the dialog says it
-   went (figure 16.23).
+4. **send report**, the dialog's primary button, after **cancel**, the quiet
+   one, is busy while the report goes. Then the dialog closes, and the design
+   system's toast says it went (figure 16.23).
 
-When the report couldn't be sent, an error banner over the buttons says why, by
-cause, and the words stay: “Couldn't send the report. Can't reach the server.”
-A server that has stopped taking reports since says “Bug reporting is switched
-off on this server, so this report can't be sent.”
+When the report couldn't be sent, the design system's error banner in the
+dialog, over the buttons, says why, by cause, and the words stay: “Couldn't send
+the report. Can't reach the server.” A server that has stopped taking reports
+since says “Bug reporting is switched off on this server, so this report can't
+be sent.”
 
 The same dialog opens from the player when a title won't play
 ([chapter 17](./errors.md)). What the player knows of the failure is then under
@@ -555,7 +578,8 @@ On a TV, typing with a remote is slow, so the dialog asks for no words. Under
 its heading, “What's going wrong? Pick the closest match.”, it lists **playback
 won't start**, **video stutters or freezes**, **audio out of sync**,
 **subtitles wrong or missing**, **the app is slow** and **something else**; OK
-on one sends the report, with that as its title.
+on one sends the report, with that as its title, and the toast of figure 16.23
+says it went.
 
 ### 16.4.6 About
 
@@ -578,14 +602,15 @@ Figure 16.13: The account, on a computer, at 1280 × 800.
 
 1. **Who is signed in**: the avatar ([chapter 3](./start.md)), the name and the
    email address, as the server's sign-in gives them.
-2. **sign out** signs out of this server (section 16.5.5). On the web it also
-   ends the sign-in on the server's sign-in page, where the web then goes.
+2. **sign out**, a button, signs out of this server (section 16.5.5). On the web
+   it also ends the sign-in on the server's sign-in page, where the web then
+   goes.
 3. **delete account** is the design system's amber-outline danger button, as
    it deletes what can't be brought back (section 16.5.6).
-4. **watch history**: what the person has finished, newest first, up to 60
-   titles. A movie shows its year, an episode its show, its code and its name,
-   and each row the day it was finished. A row opens the title page
-   ([chapter 6](./title-actions.md)).
+4. **watch history**, the design system's card with that title: what the
+   person has finished, newest first, up to 60 titles. A movie shows its year,
+   an episode its show, its code and its name, and each row the day it was
+   finished. A row opens the title page ([chapter 6](./title-actions.md)).
 5. **The watched mark**, the title actions' dark check on green
    ([chapter 6](./title-actions.md)), takes a title off the history: it marks
    it as not watched, and the row goes.
@@ -599,8 +624,9 @@ Figure 16.14 shows the account page on a phone. It has the parts of figure
 
 Figure 16.14: The account, on a phone held upright, at 360 × 780 dp.
 
-1. **switch account** opens who's watching ([chapter 3](./start.md)), where the
-   phone's other accounts are and another one is added.
+1. **switch account**, a button across the width like the two under it, opens
+   who's watching ([chapter 3](./start.md)), where the phone's other accounts
+   are and another one is added.
 2. **sign out**, as on a computer, except that on a phone it asks first when
    downloads would go (section 16.5.5).
 3. **delete account**, across the width.
@@ -627,8 +653,8 @@ Figure 16.16 shows the account page on a TV, opened from settings.
 
 Figure 16.16: The account, on a TV, at 960 × 540 dp.
 
-1. **sign out** has the focus when the page opens.
-2. **delete account**, right of it.
+1. **sign out**, a button, has the focus when the page opens.
+2. **delete account**, the danger button, right of it.
 3. **The rows of the history** take the focus one by one, and OK opens the
    title page. On a TV, a title leaves the history on its title page, where its
    watched mark is ([chapter 6](./title-actions.md)).
@@ -646,10 +672,13 @@ does, and signing in again brings it back.
 
 What signing in again doesn't bring back is lost: downloads, a cast that is
 running, and the sign-in of another person's account. So each action asks
-first when it would lose one of them. The dialog's title is the action, its
-sentence says what is lost, and its confirming button repeats the title as the
-amber-outline danger button, with **cancel** before it, as the design system's
-[modal](https://nalet.github.io/design-system/components/modal/) has it.
+first when it would lose one of them, in the design system's dialog. Its title
+is the action, its sentence says what is lost, and its confirming button
+repeats the title as the amber-outline danger button, with **cancel**, the
+quiet button, before it, as the design system's
+[modal](https://nalet.github.io/design-system/components/modal/) has it. On a
+TV the dialog has no ✕ in its header: Back closes it, as it closes every layer
+on a TV.
 
 | Action | Asks first when | Its sentence |
 |---|---|---|
@@ -720,14 +749,14 @@ too, and the focus starts on cancel. The server's answer decides what follows:
 | The server | The dialog |
 |---|---|
 | Deleted the account | It closes, and the account is signed out. The web says so on a screen of its own, “account deleted”, with **sign in**; the phone and TV apps open who's watching or sign in, with the toast “Account deleted”. |
-| Refused, with its reason | The reason in an error banner. **delete account** goes, and **cancel** becomes **close**. |
+| Refused, with its reason | The reason in the design system's error banner in the dialog. **delete account** goes, and **cancel** becomes **close**. |
 | Doesn't delete accounts from the apps | Figure 16.22, with **close**. |
-| Didn't answer, or failed | “Couldn't delete the account, so nothing was deleted.” and the reason in an error banner, with **delete account** to try again. |
+| Didn't answer, or failed | “Couldn't delete the account, so nothing was deleted.” and the reason in the error banner, with **delete account** to try again. |
 
 ## 16.6 Turning the phone
 
 Settings and the account turn with the phone and keep the person's place: the
-page scrolled to the same group, a language menu that was open still open, a
+page scrolled to the same group, a language list that was open still open, a
 question still asked. Upright, the groups are one column and the account's
 buttons stand under its name; sideways, the groups go in two columns and the
 account's buttons stand beside its history (figures 16.10 and 16.15).
@@ -746,25 +775,25 @@ Where settings and the account open from belongs to [chapter 2](./frame.md)
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 16.C1 | The groups, their order and their headings | Web, Phone app, Android TV, Samsung TV | Web: binge watching, audio, subtitles, feedback, then reset to defaults, the first three with a line under the heading. Phone app: Account, Binge watching, Downloads, Server, Support, Audio, Subtitles, in mixed case. Android TV: binge watching, audio, subtitles, account, server, feedback, each with a line under its controls. Samsung TV: Binge watching, Audio, Subtitles, Account, Server, Feedback, in mixed case, each with a line | figures 16.7 to 16.11: language, binge watching, downloads (phone), server (phone and TV), feedback, about, lowercase, without a line of a group's own; on a TV the account row first; on a computer and on a phone held sideways, two columns. The phone app's Account group goes with 16.C12 | proposed |
-| 16.C2 | The language settings: their names, texts and menus | Web, Android TV, Samsung TV | Web: the groups audio and subtitles, their texts above the cards, each field named “Preferred language”, the browser's own list; a server's few subtitle languages a row of buttons. Android TV: rows named “Language”, their menus headed “audio language” and “subtitle language”. Samsung TV: buttons, each language in its own words, “Deutsch”, “日本語”, and texts of its own, “Default audio language. …” | figures 16.7, 16.8 and 16.11: one group, language, with the fields Audio and Subtitles, each with its text under it (section 16.4.1); a field opens a menu of one choice, the chosen language blue with the small square, on a phone under the field and on a TV over the page | proposed |
+| 16.C1 | The groups, their order and their headings | Web, Phone app, Android TV, Samsung TV | Web: binge watching, audio, subtitles, feedback, then reset to defaults, the first three with a line under the heading. Phone app: Account, Binge watching, Downloads, Server, Support, Audio, Subtitles, in mixed case. Android TV: binge watching, audio, subtitles, account, server, feedback, each with a line under its controls. Samsung TV: Binge watching, Audio, Subtitles, Account, Server, Feedback, in mixed case, each with a line | figures 16.7 to 16.11: language, binge watching, downloads (phone), server (phone and TV), feedback, about, lowercase, without a line of a group's own; each group the design system's card with its name as the title, on a TV a section under the design system's heading; on a TV the account row first; on a computer and on a phone held sideways, two columns. The phone app's Account group goes with 16.C12 | proposed |
+| 16.C2 | The language settings: their names, texts and menus | Web, Phone app, Android TV, Samsung TV | Web: the groups audio and subtitles, their texts above the cards, each field named “Preferred language”, the browser's own list; a server's few subtitle languages a row of buttons. Phone app: a field opens its menu under it, in the page, the chosen language blue with a small square before it. Android TV: rows named “Language”, their menus headed “audio language” and “subtitle language”. Samsung TV: buttons, each language in its own words, “Deutsch”, “日本語”, and texts of its own, “Default audio language. …” | figures 16.7, 16.8 and 16.11: one group, language, with Audio and Subtitles, each the design system's select in a field with its label and its text as the hint (section 16.4.1); on the web and the phone its list is the browser's or the phone's own; on a TV the TV's own list over the page, in the look of the player's menus, the chosen language blue with the small square, as the design system has no list for a TV | proposed |
 | 16.C3 | The languages offered, and their order | Web, Phone app, Samsung TV | Web: Original or off, then every language in alphabetical order. Phone app: Original and eight languages for the audio. Samsung TV: Original or Off and the same eight, for both | section 16.4.1: Original, then the person's own languages, the one set and the device's or the browser's, then every other in alphabetical order, each named as the player's menus name it; for the subtitles off, then the server's subtitle languages, or every language where it names none | proposed |
-| 16.C4 | Binge watching: three settings with their lines | Web, Phone app, Android TV, Samsung TV | Web: Auto-skip intros' line without the recap; the countdown a slider, “Countdown before auto-skip”, “3s”, over “Seconds between the countdown appearing and the player skipping.” Phone app: “Auto-skip intros & recaps”, “Auto-skip credits” and “Auto-play next episode”, without lines, and no countdown. Android TV: the same three as on and off buttons with lines of their own, and “Countdown before auto-skip”, 5 s at first. Samsung TV: the same as one ON or OFF button each, the countdown 10 s at first | the table in section 16.4.2: Auto-skip intros and Auto-play next episode as switches, Countdown with − and +, from 1 to 15, 3 s at first, each with its line; no Auto-skip credits. The player's side is chapter 11's (11.C20, 11.C22, 11.C27) | proposed |
-| 16.C5 | Downloads: the picked quality | Phone app | the chosen quality's row blue, with a check mark | a radio before each quality, the chosen one filled (figure 16.9); the qualities' words as [chapter 13](./downloads.md) has them | proposed |
-| 16.C6 | The server group | Phone app, Samsung TV | Phone app: a row, “Change server”, with the server's address under it. Samsung TV: “Connected to media.example.com.”, then “Connecting to a different server signs out the accounts on this one.” and **Change server** | “Connected to media.example.com.” and **change server** (figure 16.9) | proposed |
-| 16.C7 | The feedback group | Web, Phone app, Android TV, Samsung TV | Web: “Reports go to the people who run this server, with a screenshot of the page if you attach one.”, a row “Report a bug” with “Opens a short form. Crashes and playback failures are also reported automatically, without a screenshot.” Phone app: “Support”, a row “Report a bug” with “Tell the people who run this server. The app's and the device's details go with your report.” Android TV: that line, and **report a problem**. Samsung TV: always there, “Something not working? File a bug straight to the dev backlog — …”, **Report a problem** | feedback, only where the server takes reports, with “Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.” and **report a bug** (figure 16.7, section 16.4.5) | proposed |
+| 16.C4 | Binge watching: three settings with their lines | Web, Phone app, Android TV, Samsung TV | Web: Auto-skip intros' line without the recap; the countdown a slider, “Countdown before auto-skip”, “3s”, over “Seconds between the countdown appearing and the player skipping.” Phone app: “Auto-skip intros & recaps”, “Auto-skip credits” and “Auto-play next episode”, without lines, and no countdown. Android TV: the same three as on and off buttons with lines of their own, and “Countdown before auto-skip”, 5 s at first. Samsung TV: the same as one ON or OFF button each, the countdown 10 s at first | the table in section 16.4.2: Auto-skip intros and Auto-play next episode as the design system's switches, Countdown as its select, 1 s to 15 s, 3 s at first, each with its line as the hint; no Auto-skip credits. The player's side is chapter 11's (11.C20, 11.C22, 11.C27) | proposed |
+| 16.C5 | Downloads: the picked quality | Phone app | the chosen quality's row blue, with a check mark | the design system's select (figure 16.9): its list the phone's own, each quality with what an hour takes at it, in the words of [chapter 13](./downloads.md); the field shows the picked quality's name, and its hint what an hour takes at it, “About 932 MB an hour.” | proposed |
+| 16.C6 | The server group | Phone app, Samsung TV | Phone app: a row, “Change server”, with the server's address under it. Samsung TV: “Connected to media.example.com.”, then “Connecting to a different server signs out the accounts on this one.” and **Change server** | “Connected to media.example.com.” and **change server**, a button (figure 16.9) | proposed |
+| 16.C7 | The feedback group | Web, Phone app, Android TV, Samsung TV | Web: “Reports go to the people who run this server, with a screenshot of the page if you attach one.”, a row “Report a bug” with “Opens a short form. Crashes and playback failures are also reported automatically, without a screenshot.” Phone app: “Support”, a row “Report a bug” with “Tell the people who run this server. The app's and the device's details go with your report.” Android TV: that line, and **report a problem**. Samsung TV: always there, “Something not working? File a bug straight to the dev backlog — …”, **Report a problem** | feedback, only where the server takes reports, with “Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own.” and **report a bug**, a button (figure 16.7, section 16.4.5) | proposed |
 | 16.C8 | about, with the version | Web, Phone app, Android TV, Samsung TV | no app shows its version | **about**, with Version and the app's version (figure 16.7, section 16.4.6) | proposed |
 | 16.C9 | Web: no reset to defaults | Web | **reset to defaults** at the page's end sets every setting back at once, without asking | Recommended: left out, as no other app has it: a setting is set back by hand, and a stray press loses nothing | proposed |
-| 16.C10 | Report a bug: the dialog | Web, Phone app | Web: not sent, “Couldn't file the report.” and the reason, or “Bug reporting is switched off on this server, so this report can't be filed.” Phone app: the screenshot taken before the dialog opens and attached until “Include screenshot” is switched off; the box without a label, “What went wrong? What did you expect to happen?”, from the player with its error in it; **Cancel** and **Submit**; sent, “Filed bug #482” or “Added to existing bug #482” and “Thanks — the report reached the people who run this server.” | figures 16.12 and 16.23: What happened?, the screenshot off until ticked and taken then, the player's details under **details** and never in the box, **cancel** and **send report**, then “Thanks for the report.” and “It went to the people who run this server as #482.”; not sent, “Couldn't send the report.” and the reason (section 16.4.5) | proposed |
-| 16.C11 | Report a bug on a TV | Android TV, Samsung TV | headed “report a problem” (Samsung TV “Report a problem”), the choices in sentence case, “Playback won't start”, “App is slow”; sent, “Filed bug #482”, then “Sent to the people who run this server.” (Android TV) or “Thanks — the report landed on the dev backlog.” (Samsung TV), and **Close** | **report a bug**, with “What's going wrong? Pick the closest match.” and the choices of section 16.4.5 in lowercase, **playback won't start** to **something else**; sent, the words of figure 16.23 | proposed |
-| 16.C12 | The account page on a computer and a phone | Web, Phone app | Web: “Account”, “Sign out” and “Delete Account” capitalised in the body face, Delete Account in a red outline, “Watch history”, dates such as “Oct 25”. Phone app: **Sign out** beside the name; switch account and delete account only in settings' Account group, with “Your account” and “Sign out” | figures 16.13 and 16.14: **account**, **sign out**, on a phone **switch account**, **delete account** the amber-outline danger button, **watch history**, dates such as “5 nov”; settings without an account group | proposed |
-| 16.C13 | The account on a TV | Android TV, Samsung TV | Android TV: settings' account group with **see your account**, **switch account** and **delete account**; the account page without buttons; nothing signs out. Samsung TV: settings' Account group with the name, **Switch account**, **Sign out** and **Delete Account**; no account page and no watch history; after a sign-out another account becomes active and settings stays | figures 16.11 and 16.16: the account row first in settings; the account page with **sign out**, focused, **delete account** and the watch history; switching from the avatar ([chapter 3](./start.md)); after a sign-out, who's watching or sign in (section 16.5.5) | proposed |
-| 16.C14 | The questions before an account leaves a device | Phone app, Android TV, Samsung TV | Phone app: remove account without downloads, “This removes Anna from this phone. You'll need to sign in again to use the account.”; change server asked only where downloads go or a cast stops, with “Your 31 downloads, 15 GB, are deleted from this phone.”, and nothing of the other accounts. Android TV: remove account, “You'll need to sign in again to use this account on this TV.”; change server asks nothing. Samsung TV: change server signs every account out at once, before an address is typed, and asks nothing | the table in section 16.5.5: “This removes Anna from this phone. Signing in again brings the account back.”, on a TV with the focus on cancel (figure 16.18); change server from the screen of [chapter 3](./start.md), asked once the new server has answered, where downloads, a cast or another account's sign-in would go (figure 16.19). One change with 13.C5 | proposed |
-| 16.C15 | Delete account: one dialog, by name, with nothing to type | Web, Phone app, Android TV, Samsung TV | Web: headed “Delete Account”, the account by its email address “on this server”, “Type DELETE to confirm”, the button filled red. Phone app: only in settings. Android TV, Samsung TV: a screen of its own without the frame, ending in “Press BACK to keep your account.”, the Samsung TV's headed “Delete Account”. The apps: a deleted account goes without a word | figure 16.20: **delete account**, the account and the server by name, what goes, the amber-outline danger button, nothing to type; on a TV a dialog with the focus on cancel; after a deletion the toast “Account deleted” in the apps (section 16.5.6) | proposed |
-| 16.C16 | Delete account's answers | Web, Phone app, Android TV, Samsung TV | each answer under a heading of its own: “Not Deleted” with the server's reason or “This server won't delete your account.”; “Not Available” with “Deleting your account isn't available on this server — ask its administrator.”; “Try Again Later” with the server's message, “Your account couldn't be deleted right now (HTTP 500).”, “The server couldn't be reached.” or “Another account is signed in now. Open Delete Account again.” | the table in section 16.5.6: the reason in an error banner; “This server doesn't delete accounts from the apps. Ask the people who run it.” (figure 16.22); “Couldn't delete the account, so nothing was deleted.” and the reason by cause ([chapter 17](./errors.md)) | proposed |
+| 16.C10 | Report a bug: the dialog | Web, Phone app | Web: the instruction “What were you doing, what did you expect, what happened instead?” the box's placeholder; sent, the dialog says “Thanks for the report.” and “It went to the people who run this server as #482.”; not sent, “Couldn't file the report.” and the reason, or “Bug reporting is switched off on this server, so this report can't be filed.” Phone app: the screenshot taken before the dialog opens and attached until “Include screenshot” is switched off; the box without a label, “What went wrong? What did you expect to happen?”, from the player with its error in it; **Cancel** and **Submit**; sent, “Filed bug #482” or “Added to existing bug #482” and “Thanks — the report reached the people who run this server.” | figures 16.12 and 16.23: the design system's dialog: What happened?, a text area in a field, empty, with “What were you doing, what did you expect, what happened instead?” as its hint, as the design system puts an instruction in the hint and not in the placeholder; Attach a screenshot of the page, a checkbox off until ticked, the screenshot taken then; the player's details under **details** and never in the box; **cancel** and **send report**; sent, the dialog closes and the design system's toast says “Report sent as #482”, or “Already reported as #482, your details added”, as it confirms with a toast and not with a dialog that only says it went; not sent, “Couldn't send the report.” and the reason in an error banner in the dialog (section 16.4.5) | proposed |
+| 16.C11 | Report a bug on a TV | Android TV, Samsung TV | headed “report a problem” (Samsung TV “Report a problem”), the choices in sentence case, “Playback won't start”, “App is slow”; sent, “Filed bug #482”, then “Sent to the people who run this server.” (Android TV) or “Thanks — the report landed on the dev backlog.” (Samsung TV), and **Close** | **report a bug**, with “What's going wrong? Pick the closest match.” and the choices of section 16.4.5 in lowercase, **playback won't start** to **something else**; sent, the toast of figure 16.23 | proposed |
+| 16.C12 | The account page on a computer and a phone | Web, Phone app | Web: “Account”, “Sign out” and “Delete Account” capitalised in the body face, Delete Account in a red outline, “Watch history”, dates such as “Oct 25”. Phone app: **Sign out** beside the name; switch account and delete account only in settings' Account group, with “Your account” and “Sign out” | figures 16.13 and 16.14: **account**, the design system's heading; **sign out**, and on a phone **switch account**, its buttons, across the width on a phone; **delete account** its danger button, amber-outlined; **watch history** its card with that title, dates such as “5 nov”; settings without an account group | proposed |
+| 16.C13 | The account on a TV | Android TV, Samsung TV | Android TV: settings' account group with **see your account**, **switch account** and **delete account**; the account page without buttons; nothing signs out. Samsung TV: settings' Account group with the name, **Switch account**, **Sign out** and **Delete Account**; no account page and no watch history; after a sign-out another account becomes active and settings stays | figures 16.11 and 16.16: the account row first in settings; the account page with **sign out**, a button, focused, **delete account**, the danger button, and the watch history; switching from the avatar ([chapter 3](./start.md)); after a sign-out, who's watching or sign in (section 16.5.5) | proposed |
+| 16.C14 | The questions before an account leaves a device | Phone app, Android TV, Samsung TV | Phone app: remove account without downloads, “This removes Anna from this phone. You'll need to sign in again to use the account.”; change server asked only where downloads go or a cast stops, with “Your 31 downloads, 15 GB, are deleted from this phone.”, and nothing of the other accounts. Android TV: remove account, “You'll need to sign in again to use this account on this TV.”; change server asks nothing. Samsung TV: change server signs every account out at once, before an address is typed, and asks nothing | the table in section 16.5.5, each question the design system's dialog, its confirming button the danger button and **cancel** the quiet one before it: “This removes Anna from this phone. Signing in again brings the account back.”, on a TV without the ✕ and with the focus on cancel (figure 16.18); change server from the screen of [chapter 3](./start.md), asked once the new server has answered, where downloads, a cast or another account's sign-in would go (figure 16.19). One change with 13.C5 | proposed |
+| 16.C15 | Delete account: one dialog, by name, with nothing to type | Web, Phone app, Android TV, Samsung TV | Web: headed “Delete Account”, the account by its email address “on this server”, “Type DELETE to confirm”, the button filled red. Phone app: only in settings. Android TV, Samsung TV: a screen of its own without the frame, ending in “Press BACK to keep your account.”, the Samsung TV's headed “Delete Account”. The apps: a deleted account goes without a word | figure 16.20: the design system's dialog **delete account**, the account and the server by name, what goes, its amber-outline danger button, nothing to type; on a TV a dialog without the ✕, with the focus on cancel; after a deletion the toast “Account deleted” in the apps (section 16.5.6) | proposed |
+| 16.C16 | Delete account's answers | Web, Phone app, Android TV, Samsung TV | each answer under a heading of its own: “Not Deleted” with the server's reason or “This server won't delete your account.”; “Not Available” with “Deleting your account isn't available on this server — ask its administrator.”; “Try Again Later” with the server's message, “Your account couldn't be deleted right now (HTTP 500).”, “The server couldn't be reached.” or “Another account is signed in now. Open Delete Account again.” | the table in section 16.5.6: the reason in the design system's error banner in the dialog; “This server doesn't delete accounts from the apps. Ask the people who run it.” (figure 16.22); “Couldn't delete the account, so nothing was deleted.” and the reason by cause ([chapter 17](./errors.md)) | proposed |
 | 16.C17 | delete account only where the server deletes accounts | Web, Phone app, Android TV, Samsung TV, the server | delete account is offered on every server; a server says it deletes none only when it is asked to delete one | Recommended: the server says in its configuration whether it deletes accounts, as it says whether it takes reports, and the apps offer delete account only where it does | proposed |
 | 16.C18 | The settings' first values | Web, Phone app, Android TV, Samsung TV | until the person picks: Web: audio English, subtitles English. Phone app, Android TV: audio English, subtitles off. Samsung TV: audio Original, subtitles off | Recommended: audio **Original**, and subtitles in the device's or the browser's language where the server offers it, else **off**, in every app; so a title made in another language comes with subtitles, and one in the person's language without (section 16.4.1, [chapter 12](./subtitles.md)) | proposed |
-| 16.C19 | Loading and couldn't load | Web, Phone app, Android TV | Web: the subtitle languages load under the loader with “Loading the subtitle languages…”; the watch history loads under the loader, and one that couldn't load reads as nothing watched; nothing watched is a line without a heading. Phone app: the history under a spinner, and one that couldn't load reads as nothing watched. Android TV: “Loading your account…”, and “Nothing watched yet. Watched items appear here once you finish a movie or episode (or mark one watched on a detail page).” | the table in section 16.8: grey blocks in the shape of what loads; **nothing watched yet** over “A movie or an episode shows here once you finish it, or mark it as watched.”; “couldn't load your watch history”, the reason and **try again** | proposed |
+| 16.C19 | Loading and couldn't load | Web, Phone app, Android TV | Web: the subtitle languages load under the loader with “Loading the subtitle languages…”; the watch history loads under the loader, and one that couldn't load reads as nothing watched; nothing watched is a line without a heading. Phone app: the history under a spinner, and one that couldn't load reads as nothing watched. Android TV: “Loading your account…”, and “Nothing watched yet. Watched items appear here once you finish a movie or episode (or mark one watched on a detail page).” | the table in section 16.8: grey blocks in the shape of the history while it loads, the design system's small loader in the Subtitles field while its languages load; the design system's empty states: **nothing watched yet** over “A movie or an episode shows here once you finish it, or mark it as watched.”, and for an error “couldn't load your watch history”, the reason and **try again** | proposed |
 
 ## 16.8 States
 
@@ -775,7 +804,8 @@ loaded. Figures 16.21 to 16.23 show the states that matter most.
 
 Figure 16.21: The subtitle languages couldn't load, on a phone.
 
-1. **What couldn't load, and why**, in the field's place, by cause
+1. **What couldn't load, and why**, the design system's empty state for an
+   error, at its small size, in the place of the field's box, by cause
    ([chapter 17](./errors.md)). The rest of settings works, as it is kept on
    the phone.
 2. **try again** asks the server again.
@@ -784,7 +814,8 @@ Figure 16.21: The subtitle languages couldn't load, on a phone.
 
 Figure 16.22: The server doesn't delete accounts, on a TV.
 
-1. **Why the account is still there**, in an error banner inside the dialog.
+1. **Why the account is still there**, in the design system's error banner
+   inside the dialog.
 2. **close** has the focus. Asking again would change nothing, so delete
    account is gone.
 
@@ -792,24 +823,25 @@ Figure 16.22: The server doesn't delete accounts, on a TV.
 
 Figure 16.23: The report was sent, on a computer.
 
-1. **The report's number**, as the people who run the server file it. When they
-   already have the same report, the sentence says “The people who run this
-   server already have this one. Your details were added to #482.”
-2. **close** closes the dialog.
+1. **The toast**, the design system's, once the dialog has closed: “Report sent
+   as #482”, the report's number as the people who run the server file it.
+   When they already have the same report, it says “Already reported as #482,
+   your details added”. It leaves after five seconds, as a toast does.
+2. **report a bug**, where the focus goes back as the dialog closes.
 
 | State | What the screen shows |
 |---|---|
-| The subtitle languages load | A grey block in the field's shape |
+| The subtitle languages load | The Subtitles field's label, and the design system's small loader in its box |
 | They couldn't load | Figure 16.21 |
 | The watch history loads | Grey rows in the shape of the history |
-| Nothing watched yet | “nothing watched yet”, and “A movie or an episode shows here once you finish it, or mark it as watched.” |
-| The watch history couldn't load | “couldn't load your watch history”, the reason and **try again** |
+| Nothing watched yet | The design system's empty state in the history's place: “nothing watched yet”, and “A movie or an episode shows here once you finish it, or mark it as watched.” |
+| The watch history couldn't load | The design system's empty state for an error: “couldn't load your watch history”, the reason and **try again** |
 | A question's action runs | Its danger button is busy, and the dialog stays until it is done |
 | A report is being sent | **send report** is busy |
 | The report was sent | Figure 16.23 |
 | A report without words | The field's error: “Describe what happened to send the report.” |
 | A report couldn't be sent | “Couldn't send the report.” and the reason in an error banner; the words stay |
-| The server stopped taking reports | “Bug reporting is switched off on this server, so this report can't be sent.” |
+| The server stopped taking reports | “Bug reporting is switched off on this server, so this report can't be sent.” in an error banner in the dialog |
 | The account is deleted | Section 16.5.6: “account deleted” on the web, the toast “Account deleted” in the phone and TV apps |
 | The server refused to delete it | Its reason in an error banner, and **close** |
 | The server doesn't delete accounts | Figure 16.22 |
@@ -821,8 +853,8 @@ Figure 16.23: The report was sent, on a computer.
 |---|---|
 | Settings | settings · account (TV) · language · binge watching · downloads · server · feedback · about |
 | Language | Audio · Original · Subtitles · off · the two texts in section 16.4.1 |
-| Binge watching | Auto-skip intros · Skips the intro and the recap on every episode after the first one you watch in a row. · Auto-play next episode · Starts the next episode when the credits roll. Off, the up next card waits until you play it. · Countdown · Seconds the player counts down before it skips the intro or the recap, or starts the next episode. · 3 s |
-| Downloads | Download quality · Medium (720p) · about 932 MB an hour · Download over Wi-Fi only ([chapter 13](./downloads.md)) |
+| Binge watching | Auto-skip intros · Skips the intro and the recap on every episode after the first one you watch in a row. · Auto-play next episode · Starts the next episode when the credits roll. Off, the up next card waits until you play it. · Countdown · Seconds the player counts down before it skips the intro or the recap, or starts the next episode. · 1 s to 15 s · 3 s |
+| Downloads | Download quality · Medium (720p) · About 932 MB an hour. · in the phone's list: Medium (720p) · about 932 MB an hour · Download over Wi-Fi only ([chapter 13](./downloads.md)) |
 | Server | Connected to media.example.com. · change server |
 | Feedback | Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own. · report a bug |
 | About | Version · 0.1.0 |
@@ -831,7 +863,7 @@ Figure 16.23: The report was sent, on a computer.
 | An empty history | nothing watched yet · A movie or an episode shows here once you finish it, or mark it as watched. |
 | The history couldn't load | couldn't load your watch history · try again |
 | Report a bug | report a bug · What happened? · What were you doing, what did you expect, what happened instead? · Attach a screenshot of the page · Attach a screenshot of the screen (phone) · retake · The report goes to the people who run this server, with details of the app and the device. · details · cancel · send report · Describe what happened to send the report. |
-| A report sent | Thanks for the report. · It went to the people who run this server as #482. · The people who run this server already have this one. Your details were added to #482. · close |
+| A report sent | Report sent as #482 · Already reported as #482, your details added |
 | A report not sent | Couldn't send the report. · Bug reporting is switched off on this server, so this report can't be sent. |
 | Report a bug on a TV | What's going wrong? Pick the closest match. · playback won't start · video stutters or freezes · audio out of sync · subtitles wrong or missing · the app is slow · something else |
 | The questions | sign out · remove account · change server · cancel · the sentences in section 16.5.5 · Casting on Living Room TV stops. |

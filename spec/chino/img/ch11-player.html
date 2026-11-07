@@ -1,13 +1,18 @@
 <!doctype html>
 <!--
   Chapter 11, the player: the figures of spec/chino/playback.md.
-  Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
+  Each figure of class "shot" becomes spec/chino/img/ID.png, ID being its id:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame is frame.js (the player has no top bar,
-  no tabs and no rail), the icons are icons.js. Pink numbers mark the parts
-  the chapter's text explains. The settings menu is figure 11.9 here; the
-  audio and subtitles panel is drawn in ch12-subtitles.html. Figures 11.1 to
-  11.3 are screenshots of the deployed web player, not drawings.
+  The look is screens.css with the design system's stylesheet; ds.js turns the
+  <ds-*> tags into the design system's components (its icon buttons, buttons,
+  loader, toast and empty state); frame.js draws the frame (the player has no
+  top bar, no tabs and no rail). What stays chino's own is drawn here on the
+  design system's tokens: the player, its top and bar, the seek bar, the volume,
+  the up next card, the settings menu (the design system has no menu of one
+  choice; it follows the action menu's look) and the details on a TV. Pink
+  numbers mark the parts the chapter's text explains. The audio and subtitles
+  panel is drawn in ch12-subtitles.html. Figures 11.1 to 11.3 are screenshots
+  of the deployed web player, not drawings.
 -->
 <html lang="en">
 <head>
@@ -19,15 +24,6 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
-  /* a phone held upright: the title under back, home and cast, on up to two
-     lines; the buttons on two rows */
-  .up .top { flex-wrap: wrap; row-gap: 10px; }
-  .up .top .sp { flex: 1; }
-  .up .top .name { flex: 0 0 100%; margin: 0; white-space: normal; line-height: 1.35;
-                   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-  .up .bottom { gap: 8px; }
-  .up .bottom .seek { margin-bottom: 4px; }
-
   /* the player: the picture fitted in the middle, the controls over it */
   .pl { position: absolute; inset: 0; background: #000; overflow: hidden; }
   .pl .pic { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); aspect-ratio: 16 / 9; overflow: hidden; }
@@ -36,11 +32,17 @@
   .pl .credits .art::after { display: none; }
   .pl .credits { filter: brightness(.55); }
 
+  /* the top and the bar: the design system's icon buttons (34 px on a computer,
+     42 dp on a phone and a TV) on a picture that darkens towards the edge */
   .top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 8px; padding: 16px 16px 40px;
          background: linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%); }
   .top .name { flex: 1; min-width: 0; margin-left: 8px; font: 500 16px/1.2 var(--ff-mono); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bottom { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 12px; padding: 40px 16px 16px;
             background: linear-gradient(0deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.6) 60%, rgba(0,0,0,0) 100%); }
+  .btns, .grp { display: flex; align-items: center; gap: 8px; }
+  .btns .sp, .top .sp { flex: 1; }
+
+  /* the seek bar and the volume: chino's own, on the design system's tokens */
   .seek { display: flex; align-items: center; gap: 12px; font: 500 13px/1 var(--ff-mono); color: var(--fg-2); }
   .seek .t1 { width: 52px; text-align: right; } .seek .t2 { width: 52px; }
   .track { position: relative; flex: 1; height: 6px; background: rgba(255,255,255,.15); }
@@ -50,55 +52,71 @@
   .track .seg.past { background: #A9CDFF; }      /* a marked part already played: a lighter blue */
   .track .seg.ahead { background: #8E96A4; }     /* a marked part ahead: a lighter grey */
   .track .head { top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); background: var(--fg); }
-  .btns { display: flex; align-items: center; gap: 8px; }
-  .btns .sp { flex: 1; }
   .vol { width: 96px; height: 4px; background: var(--border-2); position: relative; margin: 0 6px; flex: none; }
   .vol > i { position: absolute; left: 0; top: 0; bottom: 0; width: 80%; background: var(--cloud-blue); }
 
-  /* the TV: the controls inside the safe area; the bottom band solid, out to the edges */
-  /* inside the safe area with room for a focused control's ring (8 dp) */
+  /* a phone: 42 dp buttons 6 dp apart, so each keeps a touch area of 48 dp */
+  .phone .top, .phone .btns, .phone .grp { gap: 6px; }
+  .phone .top { padding: 12px 12px 36px; }
+  .phone .bottom { padding: 36px 12px 12px; gap: 10px; }
+  /* held upright: the title under back, home and cast, on up to two lines; the buttons on two rows */
+  .up .top { flex-wrap: wrap; row-gap: 10px; }
+  .up .top .name { flex: 0 0 100%; margin: 0 0 0 4px; white-space: normal; line-height: 1.35;
+                   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+  /* the TV: the controls inside the safe area, with room for the focus ring (8 dp);
+     the bottom band solid, out to the edges */
   .tv .top { padding: 35px 56px 48px; gap: 12px; }
   .tv .top .name { font-size: 17px; margin-left: 4px; }
   .tv .bottom { padding: 16px 56px 35px; background: var(--bg); gap: 14px; }
-  .tv .btns { gap: 12px; }
+  .tv .btns, .tv .grp { gap: 12px; }
   .tv .vol { width: 72px; }
   .tv .seek { font-size: 12px; }
 
-  /* the settings menu: above the whole bar at its button's end; the picked row
-     with a check and the brighter text, as in the audio and subtitles panel */
-  .smenu { position: absolute; right: 16px; width: 304px; background: var(--surface); border: 1px solid var(--border-2); padding: 4px 0; z-index: 6; }
-  .smenu .hd { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); padding: 12px 16px 8px; }
-  .smenu .it { height: 44px; display: flex; align-items: center; padding: 0 16px 0 12px; font: 400 14px/1 var(--ff-ui); color: var(--fg-muted); }
-  .smenu .it .ck { width: 26px; flex: none; display: inline-flex; align-items: center; color: var(--cloud-blue); }
-  .smenu .it.on { color: var(--fg); font-weight: 600; }
-  .smenu .it .tail { font-weight: 400; color: var(--fg-2); white-space: pre; }
-  .smenu .timing { border-top: 1px solid var(--border); margin-top: 4px; padding-bottom: 12px; }
-  .smenu .timing .row { gap: 8px; padding: 0 16px; }
-  .smenu .timing .v { flex: 1; text-align: center; font: 500 14px/1 var(--ff-mono); color: var(--fg); }
-  .smenu .timing .b { height: 40px; padding: 0 12px; font-size: 13px; }
-  .smenu .timing .b.icon { width: 40px; padding: 0; }
+  /* the settings menu: chino's own, with the look of the design system's action
+     menu (its surface, frame and shadow, rows of 32 px in its monospace face);
+     what the action menu has no part for: a header for each group, the picked
+     row's check and brighter text, and the timing's controls */
+  .pmenu { position: absolute; right: 16px; width: 264px; padding: 4px 0; background: var(--surface); border: 1px solid var(--border-2);
+           box-shadow: 0 8px 24px rgba(0,0,0,.45); z-index: 6; }
+  .pmenu .hd { padding: 8px 12px 4px; font: 500 12px/1.3 var(--ff-mono); color: var(--fg-muted); }
+  .pmenu .it { min-height: 32px; display: flex; align-items: center; gap: 8px; padding: 4px 12px; font: 500 13px/1.3 var(--ff-mono);
+               color: var(--fg-2); text-transform: lowercase; white-space: nowrap; }
+  .pmenu .it .ck { width: 16px; height: 16px; flex: none; display: inline-flex; color: var(--cloud-blue); }
+  .pmenu .it.on { color: var(--fg); font-weight: 600; }
+  .pmenu .it .tail { font-weight: 500; color: var(--fg-muted); white-space: pre; }
+  .pmenu .timing { border-top: 1px solid var(--border); margin-top: 4px; padding-bottom: 8px; }
+  .pmenu .timing .grp { padding: 4px 12px 0; }
+  .pmenu .timing .v { flex: 1; text-align: center; font: 500 13px/1 var(--ff-mono); color: var(--fg); }
+
+  /* a subtitle: white, a black outline, no box; 5.33 % of the picture's height */
   .sub { position: absolute; text-align: center; color: #fff; z-index: 2; font-family: var(--ff-ui); font-weight: 500; line-height: 1.25;
          text-shadow: -1.5px -1.5px 0 #000, 0 -1.5px 0 #000, 1.5px -1.5px 0 #000, 1.5px 0 0 #000, 1.5px 1.5px 0 #000, 0 1.5px 0 #000, -1.5px 1.5px 0 #000, -1.5px 0 0 #000; }
   .sub > span { display: inline-block; }
   /* a mark's target under a button, so its line runs under the row, not across it */
   .under { position: absolute; left: 0; right: 0; top: 100%; margin-top: 5px; height: 4px; }
 
-  /* the states */
-  .wait { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 14px;
-          padding: 18px 22px; background: var(--surface); border: 1px solid var(--border-2); }
-  .loader { width: 36px; height: 36px; border: 3px solid var(--cloud-blue); border-top-color: var(--border-2); }
-  .wait .line { font: 400 14px/1.3 var(--ff-ui); color: var(--fg); white-space: nowrap; }
-  .notice { position: absolute; left: 50%; top: 80px; transform: translateX(-50%); padding: 10px 16px; white-space: nowrap;
-            background: var(--surface); border: 1px solid var(--border-2); font: 400 14px/1.3 var(--ff-ui); color: var(--fg); }
-  .nextcard { position: absolute; right: 24px; bottom: 112px; width: 340px; padding: 16px; display: flex; flex-direction: column; gap: 6px;
-              background: var(--surface); border: 1px solid var(--border-2); }
+  /* up next: chino's own card on the controls' solid surface, the design system's buttons in it */
+  .nextcard { position: absolute; right: 24px; bottom: 104px; width: 340px; padding: 16px; display: flex; flex-direction: column; gap: 6px;
+              background: var(--surface); border: 1px solid var(--border-2); box-shadow: 0 8px 24px rgba(0,0,0,.45); }
   .nextcard .hd { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
   .nextcard .ep { font: 500 15px/1.3 var(--ff-ui); color: var(--fg); }
-  .nextcard .row { margin-top: 8px; }
-  .details { display: inline-flex; align-items: center; gap: 4px; font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); margin-top: 4px; }
-  /* on a TV the details show without being opened (chapter 17) */
-  .tvdetails { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 6px; font: 500 12px/1.4 var(--ff-mono); color: var(--fg-dim); }
-  .tvdetails .hd { color: var(--fg-muted); }
+  .nextcard .grp { margin-top: 8px; }
+
+  /* waiting: the design system's loader, large, in the middle on a solid surface, one line under it */
+  .wait { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 14px;
+          padding: 20px 24px; background: var(--surface); border: 1px solid var(--border-2); }
+  .wait .line { font: 400 14px/1.4 var(--ff-ui); color: var(--fg-muted); white-space: nowrap; }
+
+  /* couldn't play, on a TV: the design system's empty state, then the details shown
+     without being opened (the look of a banner's details) and report a bug */
+  .fail { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .fail .nc-illu { padding: 0 16px 0; }
+  .fail .nc-illu__actions { gap: 12px; }
+  .det { margin-top: 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .det .tg { font: 500 12px/1 var(--ff-mono); color: var(--fg-muted); }
+  .det .tx { padding: 6px 12px; border-left: 1px solid var(--border-2); font: 500 12px/1.55 var(--ff-mono); color: var(--fg-muted); }
+  .fail > .nc-btn { margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -109,8 +127,8 @@
     <div class="pl">
       <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:50%;width:60px;height:20px" data-co="5" data-co-side="right"></span></div>
       <div class="top">
-        <span class="b icon" data-co="1"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
+        <ds-iconbutton icon="arrow-left" label="back" data-co="1"></ds-iconbutton>
+        <ds-iconbutton icon="house" label="home"></ds-iconbutton>
         <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
       </div>
       <div class="bottom">
@@ -124,19 +142,19 @@
           <span class="t2">41:23</span>
         </div>
         <div class="btns">
-          <span data-co="3" style="display:flex;align-items:center;gap:8px">
-            <span class="b icon"><i data-i="pause" class="fill"></i></span>
-            <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
+          <span class="grp" data-co="3">
+            <ds-iconbutton icon="pause" label="pause"></ds-iconbutton>
+            <ds-iconbutton icon="volume-2" label="volume, 80%"></ds-iconbutton><span class="vol"><i></i></span>
           </span>
           <span class="sp"></span>
-          <span data-co="4" data-co-side="right" style="display:flex;align-items:center;gap:8px">
-            <span class="b icon"><i data-i="captions"></i></span>
-            <span class="b icon"><i data-i="gauge"></i></span>
-            <span class="b icon"><i data-i="settings-2"></i></span>
-            <span class="b icon"><i data-i="chevron-left"></i></span>
-            <span class="b icon"><i data-i="chevron-right"></i></span>
-            <span class="b icon"><i data-i="info"></i></span>
-            <span class="b icon"><i data-i="maximize"></i></span>
+          <span class="grp" data-co="4" data-co-side="right">
+            <ds-iconbutton icon="captions" label="audio and subtitles, English (original), subtitles off"></ds-iconbutton>
+            <ds-iconbutton icon="gauge" label="speed, normal"></ds-iconbutton>
+            <ds-iconbutton icon="settings-2" label="settings, Auto · Medium (720p)"></ds-iconbutton>
+            <ds-iconbutton icon="chevron-left" label="previous episode"></ds-iconbutton>
+            <ds-iconbutton icon="chevron-right" label="next episode, S01E04 · Triangular Diplomacy"></ds-iconbutton>
+            <ds-iconbutton icon="info" label="playback info"></ds-iconbutton>
+            <ds-iconbutton icon="maximize" label="fullscreen"></ds-iconbutton>
           </span>
         </div>
       </div>
@@ -150,39 +168,39 @@
     <div class="pl">
       <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:50%;width:60px;height:20px" data-co="2" data-co-side="right"></span></div>
       <div class="top">
-        <span class="b icon"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
+        <ds-iconbutton size="lg" icon="arrow-left" label="back"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="house" label="home"></ds-iconbutton>
         <span class="sp"></span>
-        <span class="b icon"><i data-i="cast"></i></span>
+        <ds-iconbutton size="lg" icon="cast" label="cast"></ds-iconbutton>
         <span class="name" data-co="1">Pioneer One — S01E03 · Alone in the Night</span>
       </div>
       <div class="bottom">
         <div class="seek">
-          <span class="t1">17:23</span>
+          <span class="t1" style="width:40px">17:23</span>
           <div class="track">
             <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
             <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
             <i class="head" style="left:42%"></i>
           </div>
-          <span class="t2">41:23</span>
+          <span class="t2" style="width:40px">41:23</span>
         </div>
         <div class="btns">
-          <span data-co="3" style="display:flex;align-items:center;gap:8px">
-            <span class="b icon"><i data-i="pause" class="fill"></i></span>
-            <span class="b icon"><i data-i="volume-2"></i></span>
+          <span class="grp" data-co="3">
+            <ds-iconbutton size="lg" icon="pause" label="pause"></ds-iconbutton>
+            <ds-iconbutton size="lg" icon="volume-2" label="volume, 80%"></ds-iconbutton>
           </span>
           <span class="sp"></span>
-          <span class="b icon"><i data-i="chevron-left"></i></span>
-          <span class="b icon"><i data-i="chevron-right"></i></span>
-          <span class="b icon" data-co="5" data-co-side="right"><i data-i="maximize"></i></span>
+          <ds-iconbutton size="lg" icon="chevron-left" label="previous episode"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="chevron-right" label="next episode, S01E04 · Triangular Diplomacy"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="maximize" label="fullscreen" data-co="5" data-co-side="right"></ds-iconbutton>
         </div>
         <div class="btns">
           <span class="sp"></span>
-          <span data-co="4" style="display:flex;align-items:center;gap:8px">
-            <span class="b icon"><i data-i="captions"></i></span>
-            <span class="b icon"><i data-i="gauge"></i></span>
-            <span class="b icon"><i data-i="settings-2"></i></span>
-            <span class="b icon"><i data-i="info"></i></span>
+          <span class="grp" data-co="4">
+            <ds-iconbutton size="lg" icon="captions" label="audio and subtitles, English (original), subtitles off"></ds-iconbutton>
+            <ds-iconbutton size="lg" icon="gauge" label="speed, normal"></ds-iconbutton>
+            <ds-iconbutton size="lg" icon="settings-2" label="settings, Auto · Medium (720p)"></ds-iconbutton>
+            <ds-iconbutton size="lg" icon="info" label="playback info"></ds-iconbutton>
           </span>
         </div>
       </div>
@@ -196,32 +214,32 @@
     <div class="pl">
       <div class="pic"><div class="art a1"></div><span style="position:absolute;right:0;top:45%;width:60px;height:20px" data-co="3" data-co-side="right"></span></div>
       <div class="top">
-        <span class="b icon"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
+        <ds-iconbutton size="lg" icon="arrow-left" label="back"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="house" label="home"></ds-iconbutton>
         <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
-        <span class="b icon" data-co="1" data-co-side="right"><i data-i="cast"></i></span>
+        <ds-iconbutton size="lg" icon="cast" label="cast" data-co="1" data-co-side="right"></ds-iconbutton>
       </div>
       <div class="bottom">
         <div class="seek">
-          <span class="t1">17:23</span>
+          <span class="t1" style="width:40px">17:23</span>
           <div class="track">
             <i class="buf" style="width:52%"></i><i class="played" style="width:42%"></i>
             <i class="seg past" style="left:2.9%;width:2%"></i><i class="seg ahead" style="left:96.25%;width:3.75%"></i>
             <i class="head" style="left:42%"></i>
           </div>
-          <span class="t2">41:23</span>
+          <span class="t2" style="width:40px">41:23</span>
         </div>
         <div class="btns">
-          <span class="b icon"><i data-i="pause" class="fill"></i></span>
-          <span class="b icon" data-co="2"><i data-i="volume-2"></i></span>
+          <ds-iconbutton size="lg" icon="pause" label="pause"></ds-iconbutton>
+          <span style="position:relative;display:inline-flex"><ds-iconbutton size="lg" icon="volume-2" label="volume, 80%"></ds-iconbutton><span class="under" style="margin-top:4px" data-co="2"></span></span>
           <span class="sp"></span>
-          <span class="b icon"><i data-i="captions"></i></span>
-          <span class="b icon"><i data-i="gauge"></i></span>
-          <span class="b icon"><i data-i="settings-2"></i></span>
-          <span class="b icon"><i data-i="chevron-left"></i></span>
-          <span class="b icon"><i data-i="chevron-right"></i></span>
-          <span class="b icon"><i data-i="info"></i></span>
-          <span class="b icon" data-co="4" data-co-side="right"><i data-i="minimize"></i></span>
+          <ds-iconbutton size="lg" icon="captions" label="audio and subtitles, English (original), subtitles off"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="gauge" label="speed, normal"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="settings-2" label="settings, Auto · Medium (720p)"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="chevron-left" label="previous episode"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="chevron-right" label="next episode, S01E04 · Triangular Diplomacy"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="info" label="playback info"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="minimize" label="exit fullscreen" data-co="4" data-co-side="right"></ds-iconbutton>
         </div>
       </div>
     </div>
@@ -234,8 +252,8 @@
     <div class="pl">
       <div class="pic"><div class="art a1"></div></div>
       <div class="top">
-        <span class="b icon" data-co="1"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
+        <ds-iconbutton size="lg" icon="arrow-left" label="back" data-co="1"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="house" label="home"></ds-iconbutton>
         <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
       </div>
       <div class="bottom">
@@ -250,15 +268,15 @@
           <span class="t2" style="width:40px;text-align:right">41:23</span>
         </div>
         <div class="btns">
-          <span class="b icon primary focus" data-co="3"><i data-i="pause" class="fill"></i></span>
-          <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
+          <ds-iconbutton size="lg" icon="pause" label="pause" class="focus" data-co="3"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="volume-2" label="volume, 80%"></ds-iconbutton><span class="vol"><i></i></span>
           <span class="sp"></span>
-          <span class="b icon"><i data-i="captions"></i></span>
-          <span class="b icon"><i data-i="gauge"></i></span>
-          <span class="b icon"><i data-i="settings-2"></i></span>
-          <span class="b icon"><i data-i="chevron-left"></i></span>
-          <span class="b icon"><i data-i="chevron-right"></i></span>
-          <span class="b icon"><i data-i="info"></i></span>
+          <ds-iconbutton size="lg" icon="captions" label="audio and subtitles, English (original), subtitles off"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="gauge" label="speed, normal"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="settings-2" label="settings, Auto · Medium (720p)"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="chevron-left" label="previous episode"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="chevron-right" label="next episode, S01E04 · Triangular Diplomacy"></ds-iconbutton>
+          <ds-iconbutton size="lg" icon="info" label="playback info"></ds-iconbutton>
         </div>
       </div>
     </div>
@@ -274,7 +292,7 @@
         <span class="hd" data-co="1" data-co-side="right">up next</span>
         <span class="ep">S01E04 · Triangular Diplomacy</span>
         <span class="text">Starts in 3 seconds.</span>
-        <div class="row" data-co="2" data-co-side="right"><span class="b primary"><i data-i="play" class="fill s16"></i>play now</span><span class="b">cancel</span></div>
+        <div class="grp" data-co="2" data-co-side="right"><ds-button variant="primary" icon="play">play now</ds-button><ds-button variant="ghost">cancel</ds-button></div>
       </div>
     </div>
   </div>
@@ -286,22 +304,22 @@
     <div class="pl">
       <div class="pic"><div class="art a1"></div></div>
       <div class="top">
-        <span class="b icon"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
+        <ds-iconbutton icon="arrow-left" label="back"></ds-iconbutton>
+        <ds-iconbutton icon="house" label="home"></ds-iconbutton>
         <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
       </div>
-      <div class="sub" style="left:96px;right:412px;bottom:140px;font-size:38px"><span data-co="4">It held, didn't it?<br>You owe me a coffee.</span></div>
-      <div class="smenu" style="bottom:128px">
+      <div class="sub" style="left:100px;right:380px;bottom:98px;font-size:38.4px"><span data-co="4">It held, didn't it?<br>You owe me a coffee.</span></div>
+      <div class="pmenu" style="bottom:86px" role="menu" aria-label="settings">
         <div data-co="1" data-co-side="right">
           <div class="hd">quality</div>
-          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span>Auto<span class="tail"> · Medium (720p)</span></div>
+          <div class="it on"><span class="ck"><i data-i="check" class="s16"></i></span><span class="nc-keep-case">Auto<span class="tail"> · Medium (720p)</span></span></div>
         </div>
-        <div class="it"><span class="ck"></span>High (1080p)</div>
-        <div class="it"><span class="ck"></span>Medium (720p)</div>
-        <div class="it"><span class="ck"></span>Low (480p)</div>
+        <div class="it"><span class="ck"></span><span class="nc-keep-case">High (1080p)</span></div>
+        <div class="it"><span class="ck"></span><span class="nc-keep-case">Medium (720p)</span></div>
+        <div class="it"><span class="ck"></span><span class="nc-keep-case">Low (480p)</span></div>
         <div class="timing" data-co="2" data-co-side="right">
           <div class="hd">subtitle timing</div>
-          <div class="row"><span class="b icon"><i data-i="minus" class="s16"></i></span><span class="v">+0.25s</span><span class="b icon"><i data-i="plus" class="s16"></i></span><span class="b">reset</span></div>
+          <div class="grp"><ds-iconbutton icon="minus" label="−"></ds-iconbutton><span class="v">+0.25s</span><ds-iconbutton icon="plus" label="+"></ds-iconbutton><ds-button variant="ghost">reset</ds-button></div>
         </div>
       </div>
       <div class="bottom">
@@ -315,28 +333,28 @@
           <span class="t2">41:23</span>
         </div>
         <div class="btns">
-          <span class="b icon"><i data-i="pause" class="fill"></i></span>
-          <span class="b icon"><i data-i="volume-2"></i></span><span class="vol"><i></i></span>
+          <ds-iconbutton icon="pause" label="pause"></ds-iconbutton>
+          <ds-iconbutton icon="volume-2" label="volume, 80%"></ds-iconbutton><span class="vol"><i></i></span>
           <span class="sp"></span>
-          <span class="b icon primary"><i data-i="captions"></i></span>
-          <span class="b icon"><i data-i="gauge"></i></span>
-          <span style="position:relative;display:inline-flex"><span class="b icon"><i data-i="settings-2"></i></span><span class="under" data-co="3" data-co-side="right"></span></span>
-          <span class="b icon"><i data-i="chevron-left"></i></span>
-          <span class="b icon"><i data-i="chevron-right"></i></span>
-          <span class="b icon"><i data-i="info"></i></span>
-          <span class="b icon"><i data-i="maximize"></i></span>
+          <ds-iconbutton variant="primary" icon="captions" label="audio and subtitles, English (original), subtitles English"></ds-iconbutton>
+          <ds-iconbutton icon="gauge" label="speed, normal"></ds-iconbutton>
+          <span style="position:relative;display:inline-flex"><ds-iconbutton icon="settings-2" label="settings, Auto · Medium (720p)"></ds-iconbutton><span class="under" data-co="3" data-co-side="right"></span></span>
+          <ds-iconbutton icon="chevron-left" label="previous episode"></ds-iconbutton>
+          <ds-iconbutton icon="chevron-right" label="next episode, S01E04 · Triangular Diplomacy"></ds-iconbutton>
+          <ds-iconbutton icon="info" label="playback info"></ds-iconbutton>
+          <ds-iconbutton icon="maximize" label="fullscreen"></ds-iconbutton>
         </div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 11.10 · the quality changed by itself, on a computer -->
+<!-- Figure 11.10 · the quality changed by itself, on a computer: the design system's toast, at the top of the picture -->
 <figure class="shot" id="player-notice-computer">
   <div class="computer" data-bar="none">
     <div class="pl">
       <div class="pic"><div class="art a1"></div></div>
-      <div class="notice">Switched to Medium (720p) quality: the connection can't keep up.</div>
+      <ds-toasts style="top:64px;bottom:auto"><ds-toast state="neutral">Switched to Medium (720p) quality: the connection can't keep up</ds-toast></ds-toasts>
     </div>
   </div>
 </figure>
@@ -346,11 +364,11 @@
   <div class="phone side" data-bar="none" data-tabs="none">
     <div class="pl">
       <div class="top">
-        <span class="b icon"><i data-i="arrow-left"></i></span>
-        <span class="b icon"><i data-i="house"></i></span>
+        <ds-iconbutton size="lg" icon="arrow-left" label="back"></ds-iconbutton>
+        <ds-iconbutton size="lg" icon="house" label="home"></ds-iconbutton>
         <span class="name">Pioneer One — S01E03 · Alone in the Night</span>
       </div>
-      <div class="wait"><span class="loader"></span><span class="line">Loading the episode…</span></div>
+      <div class="wait"><ds-spinner size="32" aria-hidden="true"></ds-spinner><span class="line">Loading the episode</span></div>
     </div>
   </div>
 </figure>
@@ -359,18 +377,19 @@
 <figure class="shot" id="player-failed-tv">
   <div class="tv full" data-rail="none" data-view="none">
     <div class="page">
-      <div class="empty" style="margin-top:84px">
-        <i data-i="circle-alert" class="s48"></i>
-        <h2 class="h2" data-co="1">couldn't play this title</h2>
-        <p class="text">The stream stopped before it was done.</p>
-        <p class="text small muted" data-co="2">Reported automatically as #12.</p>
-        <div class="row" style="gap:12px;margin-top:8px"><span class="b primary focus" data-co="3"><i data-i="refresh-cw" class="s16"></i>try again</span><span class="b">back</span></div>
-        <div class="tvdetails" data-co="4"><span class="hd">details</span><span>the stream ended at 17:23 of 41:23 · packaged · High (1080p)</span></div>
-        <span class="b">report a bug</span>
+      <div class="fail">
+        <ds-empty illustration="error" title='<span data-co="1">couldn&#39;t play this title</span>' description='The stream stopped before it was done.<br><span data-co="2">Reported automatically as #12.</span>'>
+          <ds-button variant="primary" size="lg" icon="refresh-cw" class="focus" data-co="3">try again</ds-button>
+          <ds-button size="lg">back</ds-button>
+        </ds-empty>
+        <div class="det" data-co="4"><span class="tg">details</span><span class="tx">the stream ended at 17:23 of 41:23 · packaged · High (1080p)</span></div>
+        <ds-button variant="ghost" size="lg">report a bug</ds-button>
       </div>
     </div>
   </div>
 </figure>
+
+<script src="ds.js"></script>
 
 <script src="frame.js"></script>
 </body>

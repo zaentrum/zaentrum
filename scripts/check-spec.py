@@ -18,14 +18,17 @@ ORDER = ['README', 'frame', 'start', 'home', 'browse', 'title-actions', 'person'
 
 # marks per figure id, from every drawing source
 marks = {}
-for name in os.listdir(os.path.join(d, 'img')):
+for name in sorted(os.listdir(os.path.join(d, 'img'))):
     if not name.endswith('.html'):
         continue
     html = open(os.path.join(d, 'img', name), encoding='utf-8').read()
-    for m in re.finditer(r'<figure class="shot" id="([^"]+)">(.*?)</figure>', html, re.S):
+    html = re.sub(r'<!--.*?-->', '', html, flags=re.S)  # a comment that shows a figure tag is not a figure
+    for m in re.finditer(r'<figure class="shot" id="([^"]+)"[^>]*>(.*?)</figure>', html, re.S):
+        if m.group(1) in marks:
+            continue  # the first file wins, as when rendering (chNN before mockups.html)
         body = m.group(2)
         n = len(re.findall(r'\sdata-co="\d+"', body))
-        for parts in re.findall(r'data-co-parts="([^"]+)"', body):
+        for parts in re.findall(r'data-co-(?:parts|in)="([^"]+)"', body):
             n += len([p for p in parts.split(',') if p.strip()])
         marks[m.group(1)] = n
 

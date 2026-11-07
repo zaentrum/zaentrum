@@ -1,20 +1,17 @@
-/* The chino screens: one look for every drawing in docs/chino/img/ch*.html.
-   The nalet design system 0.4.0: its tokens, square frames, the monospace face
-   lowercase for chrome (headings, buttons, tabs, menus, chips), the body face
-   for text. frame.js draws the frame (top bar, tabs, rail) around a screen.
-   Marks in pink (.co numbers, .guide outlines) are notes on a drawing, never
-   part of a screen. */
+@import url('ds/nalet-0.4.0.css');
+/* The chino screens: one look for every drawing in spec/chino/img/ch*.html.
+   The nalet design system 0.4.0 is imported above, unchanged: its tokens and its
+   components (nc-*), which the drawings write as short <ds-*> tags that ds.js
+   expands to the package's own markup. This file holds only what is chino's own:
+   the frame frame.js draws (the top bar, the tabs, the rails), cards, posters,
+   the player, and the kit's older parts. Marks in pink (.co numbers, .guide
+   outlines) are notes on a drawing, never part of a screen. */
 :root {
-  --bg: #0B0F19; --bg-2: #0D1117; --surface: #11161F; --surface-2: #161B26;
-  --border: #1F2633; --border-2: #2A3142; --border-control: #646C7A;
-  --fg: #E6E6E6; --fg-2: #C9D1D9; --fg-muted: #AEB8C2; --fg-dim: #7B8597;
-  --cloud-blue: #58A6FF; --focus-ring: #00A4DC; --surface-focus: #2A3142;
-  --signal-green: #2EA043; --signal-amber: #F2B233; --signal-red: #F85149;
-  --info-bg: #15202E; --info-border: #3F6697;
-  --warn-bg: #24211A; --warn-border: #846B3B;
-  --error-bg: #25171C; --error-border: #873F45;
-  --ok-bg: #101F1B; --ok-border: #2C6342;
-  --ff-ui: Inter, system-ui, sans-serif; --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* the kit's own names for some of the design system's tokens */
+  --info-bg: var(--state-information-bg); --info-border: var(--state-information-border);
+  --warn-bg: var(--state-warning-bg); --warn-border: var(--state-warning-border);
+  --error-bg: var(--state-error-bg); --error-border: var(--state-error-border);
+  --ok-bg: var(--state-success-bg); --ok-border: var(--state-success-border);
   --mark: #FF7AC6; /* notes on a drawing */
 }
 * { box-sizing: border-box; }
@@ -24,9 +21,9 @@ figure { margin: 0; }
 .shot { background: #05070C; padding: 28px; display: inline-flex; flex-direction: row; align-items: flex-start; gap: 28px; }
 
 /* ── notes on a drawing ─────────────────────────────────────────────── */
-.co { position: absolute; z-index: 50; width: 22px; height: 22px; background: var(--mark); color: #0B0F19;
+.co { position: absolute; z-index: 301; width: 22px; height: 22px; background: var(--mark); color: #0B0F19;
       font: 700 12px/22px var(--ff-mono); text-align: center; }
-.co-line { position: absolute; z-index: 49; height: 1.5px; background: var(--mark); }
+.co-line { position: absolute; z-index: 300; height: 1.5px; background: var(--mark); }
 .co-line.left::after, .co-line.right::before { content: ""; position: absolute; top: -2.5px; width: 6px; height: 6px; background: var(--mark); }
 .co-line.left::after { right: -3px; } .co-line.right::before { left: -3px; }
 .co-line.top, .co-line.bottom { width: 1.5px; }
@@ -164,8 +161,8 @@ svg.i.s24 { width: 24px; height: 24px; } svg.i.s32 { width: 32px; height: 32px; 
 .tv .page { position: absolute; left: 132px; top: 27px; right: 0; bottom: 27px; }   /* right of the rail, inside the safe area top and bottom */
 .tv.full .page { left: 48px; right: 48px; }
 
-.logo { display: inline-flex; align-items: center; gap: 6px; font: 600 18px/1 var(--ff-mono); color: var(--fg); white-space: nowrap; }
-.logo svg { width: 14px; height: 18px; }
+.logo { display: inline-flex; align-items: center; gap: 6px; font: 700 18px/1 var(--ff-mono); letter-spacing: .01em; color: var(--fg-2); white-space: nowrap; } /* as the design system's lockup sets a name */
+.logo svg { width: 16px; height: 16px; }
 
 /* the computer's top bar */
 .computer > .tb { height: 56px; display: flex; align-items: center; gap: 32px; padding: 0 24px; background: var(--bg-2); border-bottom: 1px solid var(--border); position: relative; z-index: 10; }
@@ -173,7 +170,7 @@ svg.i.s24 { width: 24px; height: 24px; } svg.i.s32 { width: 32px; height: 32px; 
 .computer > .tb .views span { display: inline-flex; align-items: center; font: 500 14px/1 var(--ff-mono); color: var(--fg-muted); }
 .computer > .tb .views .on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--cloud-blue); }
 .computer > .tb .end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.computer > .tb .field { width: 340px; height: 36px; margin-right: 8px; font-size: 14px; border-color: var(--border-2); background: var(--surface); }
+.computer > .tb .search-field { width: 340px; margin-right: 8px; }
 .computer .pg { padding: 32px 48px; }          /* a page's content below the bar */
 
 /* the phone's top bar and tabs */
@@ -219,4 +216,18 @@ svg.i.s24 { width: 24px; height: 24px; } svg.i.s32 { width: 32px; height: 32px; 
 .tv .card .tt { font-size: 13px; } .tv .card .st { font-size: 11px; }
 /* the one focused item on a TV: the ring 2 dp outside, 5 % larger (rows: inside, 2 %) */
 .tv .focus { outline: 3px solid var(--focus-ring); outline-offset: 2px; transform: scale(1.05); position: relative; z-index: 5; }
+/* an empty state's details: chino's addition until the design system's empty state has them; the banner's own toggle and block */
+.kit-details { display: flex; flex-direction: column; align-items: center; gap: var(--s-2); margin-top: var(--s-3); max-width: 100%; }
+.kit-details .nc-strip__toggle { display: inline-flex; }
+.kit-details .nc-strip__details { text-align: left; align-self: stretch; }
+/* a field or a dropdown drawn with the focus in it: the design system's own focus look (its :focus-within) */
+.nc-input.is-focused, .nc-select.is-focused { border-color: var(--cloud-blue); box-shadow: inset 0 0 0 1px var(--cloud-blue); }
+/* the design system's TV focus: a plain button takes the focused surface; a filled one keeps its fill */
+.tv :is(.nc-btn--default, .nc-btn--ghost, .nc-iconbtn--default, .nc-iconbtn--ghost, .nc-multiselect__trigger).focus { background: var(--surface-focus); }
 .tv .focus-row { box-shadow: inset 0 0 0 3px var(--focus-ring); background: var(--surface-focus); transform: scale(1.02); }
+
+/* ── the design system's overlays, inside a drawing ─────────────────── */
+/* its menus, dialogs and toasts open over the browser window; in a drawing they
+   open over the screen's frame, so they are placed against it */
+:is(.computer, .phone, .tv) :is(.nc-actionmenu, .nc-modal, .nc-toaster) { position: absolute; }
+:is(.computer, .phone, .tv) .nc-modal { z-index: 60; }

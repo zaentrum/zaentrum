@@ -192,34 +192,59 @@ doesn't have; only the phone app downloads.
 
 The download control sits last in a title's row of actions, after **liked**
 ([chapter 6](./title-actions.md)). It shows the title's download status and
-offers the one thing that makes sense in it. Figure 13.1 shows the control in
+offers the one thing that makes sense in it. The control is chino's own, put
+together from the design system's parts: the button that offers the download,
+or, once the title has one, its status, the design system's
+[status](https://nalet.github.io/design-system/components/status/); after it
+the size; and the action that status allows. Figure 13.1 shows the control in
 each status.
 
 ![Figure 13.1: The download control in each status](./img/download-control.png)
 
 Figure 13.1: The download control in each status.
 
-| Status | The control says | What people can do |
-|---|---|---|
-| Not on the phone | **download · 1.4 GB** | Download it |
-| Waiting its turn | **queued · 1.4 GB** | Cancel |
-| Waiting for Wi-Fi | **waiting for Wi-Fi · 1.4 GB** | Cancel; it starts by itself on Wi-Fi |
-| Waiting for a connection | **waiting for a connection · 1.4 GB** | Cancel; it starts by itself once the phone is online |
-| On its way | **downloading 42% · 1.4 GB**, with a thin bar | Cancel |
-| On the phone | **downloaded · 1.4 GB** | Play it, delete it |
-| Needs a check | **downloaded · check needed**, and “Downloads are checked with the server every 30 days. This one plays again once the server can be reached.” | Nothing until the server can be reached |
-| Failed | **couldn't download**, and the reason in a sentence | **try again**, or remove it from the list |
-| Can't come along | **can't be downloaded**, and “This title can only be streamed.” | Nothing |
+The table is the downloads' status vocabulary, written once as the design
+system's [status
+vocabulary](https://nalet.github.io/design-system/patterns/status-vocabulary/)
+asks: every status a download can have, in its words, and its state, which
+gives the status its colour and its sign.
 
-- The control is 48 dp high, like every control, and its actions are buttons
-  of their own: **cancel download** and **delete download**, the cross and the
-  bin, and **try again**.
-- The size is the size of exactly what will be downloaded at the chosen
-  quality, as the server reports it: the same number before and after. When it
-  isn't known, it is left out, **download** alone, rather than guessed.
+| Status | The control says | State | What people can do |
+|---|---|---|---|
+| Not on the phone | **download**, a button, and the size after it, “1.4 GB” | — | Download it |
+| Waiting its turn | **queued** | neutral | Cancel |
+| Waiting for Wi-Fi | **waiting for Wi-Fi** | neutral | Cancel; it starts by itself on Wi-Fi |
+| Waiting for a connection | **waiting for a connection** | neutral | Cancel; it starts by itself once the phone is online |
+| On its way | **downloading 42%**, with a thin bar | information | Cancel |
+| On the phone | **downloaded** | success | Play it, delete it |
+| Needs a check | **check needed**, and “Downloads are checked with the server every 30 days. This one plays again once the server can be reached.” | warning | Nothing until the server can be reached |
+| Failed | **couldn't download**, and the reason in a sentence | error | **try again**, or **remove** it from the list |
+| Can't come along | **can't be downloaded**, and “This title can only be streamed.” | neutral | Nothing |
+
+- **The status** is the design system's status as a chip: its words in the
+  monospace face, lowercase, in the colour of its state and after the state's
+  sign; Wi-Fi keeps its capitals, as a name does. It is text, which the
+  keyboard passes over, and it stays on one line. A title has one status at a
+  time, so a download that waits for its check says **check needed** alone.
+- **The size** follows the button or the status, in the monospace face and the
+  quieter colour: “1.4 GB”. It is the size of exactly what will be downloaded
+  at the chosen quality, as the server reports it: the same number before and
+  after. When it isn't known, it is left out, **download** alone, rather than
+  guessed. A failed title shows none, and neither does one that can't be
+  downloaded.
 - Sizes have one decimal without a trailing zero, “18 GB”, and are given in MB
   below 1 GB.
-- Status and size are one text, and wrap as one; “check needed” stays together.
+- **The actions** are the design system's buttons at the large size, 42 dp
+  high, each with a 48 dp touch area around it: **download**, a standard
+  button; **cancel download** and **delete download**, icon buttons with the
+  cross and the bin; **try again**, a standard button, and **remove**, a quiet
+  one.
+- The control wraps as a whole: the status and its size stay together, and the
+  action goes to the next line where the row has no room for it. A failure's
+  reason and its two buttons stand under the status.
+- **The bar** under the status and its size shows how far the download has
+  come, in the information blue. The design system plans a progress bar but
+  has none yet, so the bar is chino's own until it has one.
 - The percentage changes at most once a second.
 - A failure's sentence is a reason, never an instruction, because the control
   already offers **try again**. The reasons:
@@ -285,11 +310,12 @@ phone yet, on a phone held upright.
 Figure 13.3: A season with nothing on the phone yet, on a phone held upright,
 at 360 × 780 dp.
 
-1. **The season's control** downloads every episode of it that isn't on the
-   phone or on its way, one after the other, in their order. Leaving the page
-   stops none of them.
+1. **The season's control**, a standard button with the size after it,
+   downloads every episode of it that isn't on the phone or on its way, one
+   after the other, in their order. Leaving the page stops none of them.
 2. **An episode's own control**, as in figure 13.1, after add to list and
-   watched.
+   watched. Here the row has no room for it beside them, so it takes the next
+   line, as a whole.
 
 Figure 13.4 shows the same season on a phone held sideways. The tabs become a
 rail down the left edge and the bar is slimmer ([chapter 2](./frame.md)).
@@ -298,32 +324,38 @@ rail down the left edge and the bar is slimmer ([chapter 2](./frame.md)).
 
 Figure 13.4: The same season on a phone held sideways, at 780 × 360 dp.
 
-1. **The season's control** keeps its place at the season's head, with its
-   words on one line.
-2. **An episode's actions** stand under its words, beside the still, so a row
-   takes less height.
+1. **The season's control** keeps its place at the season's head, the size
+   after it.
+2. **An episode's actions** stand under its words, beside the still, on one
+   line, so a row takes less height.
 
 Turning the phone keeps the page where it was: the season open, the page
 scrolled to the same episode, and the downloads on their way.
 
-The season's control says what it downloads:
+The season's control says what it downloads, and the size of it follows the
+button, as the size follows the control of figure 13.1:
 
-- **download season 1 · 6 episodes · 1.8 GB**, only when every episode of the
-  season can be downloaded and none is on the phone or on its way yet;
-- **download 5 episodes · 1.5 GB**, when some can only be streamed;
-- **download 3 more episodes · 940 MB** (**download 1 more episode · 323 MB**),
-  once some are on the phone or on their way.
+- **download season 1**, “1.8 GB”, only when every episode of the season can
+  be downloaded and none is on the phone or on its way yet; the season's head
+  says how many episodes that is, “6 episodes”;
+- **download 5 episodes**, “1.5 GB”, when some can only be streamed;
+- **download 3 more episodes**, “940 MB” (**download 1 more episode**,
+  “323 MB”), once some are on the phone or on their way.
 
-A file that holds two episodes counts as both. The size is given once every
-episode's size is known, and left out until then.
+The button keeps its words short, as the design system's buttons do, so that it
+fits on one line on a phone held upright. A file that holds two episodes counts
+as both. The size is given once every episode's size is known, and left out
+until then.
 
 A show that is partly on the phone says how far, under its row of actions and
-beside its season's control: “1 of 6 downloaded”. It counts only the episodes
-that can be downloaded, and a green check stands before it once all of them are
-on the phone. While the server can't be reached, the show's page says only
-what is on the phone, “1 episode on this phone” (figure 13.11), with the check
-mark, or the information mark in its place while one of the episodes waits for
-its check.
+beside its season's control, with the design system's status shown as text:
+“1 of 6 downloaded”, neutral, and “6 of 6 downloaded”, a success with its
+check, once all of them are on the phone. It counts only the episodes that can
+be downloaded. While the
+server can't be reached, the show's page says only what is on the phone,
+“1 episode on this phone” (figure 13.11), as a success; while one of those
+episodes waits for its check, that episode's own control says **check
+needed**, as figure 13.13 shows for a movie.
 
 ### 13.3.2 While downloads run
 
@@ -358,11 +390,23 @@ Figure 13.5: The downloads screen on a phone held upright, at 360 × 780 dp.
 2. **A show's group**: the show's name, then each season, then its episodes in
    their order. Every title has a picture 80 dp wide at 16:9, an episode its
    still and a movie its backdrop, so the rows line up.
-3. **A title on its way**: its status with the bar, and **cancel download**.
-   A title on the phone ends in **delete download** instead.
-4. **A failed title** shows its reason, with **try again** and **remove** under
-   it, and no size: a failed download frees what it had downloaded so far.
-5. **delete all**, at the end of the list (section 13.4.4).
+3. **A title on its way**: its status, the design system's, with its size and
+   the bar under them, and **cancel download**, a quiet icon button at the
+   row's end. A title on the phone ends in **delete download** instead.
+4. **A failed title** shows its status and its reason, with **try again** and
+   **remove** under them, and no size: a failed download frees what it had
+   downloaded so far.
+5. **delete all**, the design system's danger button, at the end of the list
+   (section 13.4.4).
+
+A row's status reads as the title's control says it (figure 13.1), as a chip
+in the colour of its state. The icon buttons at the rows' ends are the design
+system's quiet ones, without a frame, as it has them in the rows of a list; the
+control on a title's page has the standard ones, framed like the rest of its
+row. The heading is the design system's. Where a row is too narrow for its
+status, as on a phone held upright for **waiting for a connection** beside
+its button, the status ends in an ellipsis, as the design system's status does,
+and the size stays.
 
 The storage line counts what is on the phone, as the questions of section 13.5
 do: in figure 13.5, the 281 MB and the 120 MB of the two titles downloaded, and
@@ -393,17 +437,24 @@ title, a question that was open still open, and the downloads running.
 
 - **Delete one** with the button on its row, or with its control on the
   title's page. It asks nothing.
-- **delete all**, at the end of the list, asks once, in the dialog of figure
-  13.7 on the left: “This removes 3 downloads, 547 MB, from this phone.”, with
-  **cancel** and **delete all**. Both **delete all** buttons are the design
-  system's danger button. It counts only what is on the phone: a title partly
-  downloaded counts, a queued one doesn't. With only failed or queued titles
-  left, it says “This clears the list of downloads.”
+- **delete all**, at the end of the list, asks once, in the design system's
+  dialog of figure 13.7 on the left: “This removes 3 downloads, 547 MB, from
+  this phone.”, with **cancel** and **delete all**. Both **delete all**
+  buttons are the design system's danger button. It counts only what is on the
+  phone: a title partly downloaded counts, a queued one doesn't. With only
+  failed or queued titles left, it says “This clears the list of downloads.”
 
-![Figure 13.7: The questions before deleting all downloads and before signing out](./img/download-questions.png)
+![Figure 13.7: The questions before deleting all downloads and before signing out, on a phone held upright, at 360 × 780 dp](./img/download-questions.png)
 
 Figure 13.7: The questions before deleting all downloads and before signing
-out.
+out, on a phone held upright, at 360 × 780 dp.
+
+1. **delete all downloads**, a dialog over the downloads screen, which it
+   dims: the title is the action, the body says what goes, and the footer
+   offers **cancel**, the quiet button, and **delete all**, the danger button,
+   last.
+2. **sign out**, the same dialog over the account page
+   ([chapter 16](./settings.md)), here with a cast that stops as well.
 
 The screen with nothing on it is drawn in section 13.9.
 
@@ -422,10 +473,10 @@ changing the server signs out every account on the phone and deletes all their
 downloads, so the app asks first, as [chapter 16](./settings.md) specifies:
 signing out where downloads would go or a cast would stop, removing an account
 always, and changing the server where downloads would go, a cast would stop or
-another account than the one signed in now would be signed out. The title is
-the action, the confirming button repeats it and is the danger button, and the
-body names what goes. Figure 13.7 on the right shows the question before
-signing out.
+another account than the one signed in now would be signed out. Each question
+is the design system's dialog, set up as a confirm: the title is the action,
+the confirming button repeats it and is the danger button, and the body names
+what goes. Figure 13.7 on the right shows the question before signing out.
 
 | Action | Title | It says |
 |---|---|---|
@@ -451,18 +502,20 @@ several, figure 13.8 shows the banner.
 
 Figure 13.8: Downloads the server took off the phone, on a phone.
 
-1. **The banner** says how many went and why. It shows once: the next visit to
-   the downloads screen, or the app started again, doesn't show it again.
-2. **details** opens the titles that went.
+1. **The banner**, the design system's information banner, above the screen's
+   heading, says how many went and why. It shows once: the next visit to the
+   downloads screen, or the app started again, doesn't show it again.
+2. **details**, the banner's own, opens the titles that went.
 
 ## 13.6 When the server can't be reached
 
 The app opens on the downloads screen while the server can't be reached, with
-an information banner on top: “Can't reach the server. Your downloads still
-play.”, or only “Can't reach the server.” when nothing would play. The banner
-has the information mark, not a sign of the phone's connection, because the
-phone may well be online while the server isn't. It has no close button while
-the server can't be reached, and the bell is hidden
+the design system's information banner on top: “Can't reach the server. Your
+downloads still play.”, or only “Can't reach the server.” when nothing would
+play. The banner has the information mark, not a sign of the phone's
+connection, because the phone may well be online while the server isn't. It has
+no dismiss button, as the design system leaves it off a condition that is still
+true, and the bell is hidden
 ([chapter 15](./notifications.md)). While the app is in front, it asks the
 server again every 15 seconds; once it answers, the banner goes, the bell comes
 back, and what was played meanwhile is sent.
@@ -477,8 +530,8 @@ phone held upright.
 Figure 13.9: The downloads screen while the server can't be reached, on a phone
 held upright, at 360 × 780 dp.
 
-1. **The banner**, above the screen's heading. Two of the titles are on the
-   phone, so it says that they still play.
+1. **The banner**, the information banner, above the screen's heading. Two of
+   the titles are on the phone, so it says that they still play.
 2. **The bar** has no bell while the server can't be reached.
 3. **The titles on the phone**, as in figure 13.5. They play from here, and
    **delete download** works without the server.
@@ -511,10 +564,12 @@ on a phone held upright, at 360 × 780 dp.
 1. **The banner**, as on the downloads screen. It says “Your downloads still
    play.” only where this title plays: a movie on the phone, or one of the
    show's episodes.
-2. **play S01E01** plays the episode from the phone. The row holds nothing else:
-   add to list, watched, liked and the trailer need the server.
-3. **How far**, from the phone alone: “1 episode on this phone”. Further down,
-   the page lists only the episodes on the phone, each with its control.
+2. **play S01E01**, the emphasized button, plays the episode from the phone.
+   The row holds nothing else: add to list, watched, liked and the trailer need
+   the server.
+3. **How far**, from the phone alone: “1 episode on this phone”, the status
+   shown as text, a success. Further down, the page lists only the episodes on
+   the phone, each with its control.
 4. **The description**, as the download kept it. The people, who come from the
    server, are left out.
 
@@ -548,10 +603,10 @@ Figure 13.13: A movie whose download waits for its check, on a phone.
 
 1. **The banner** says only “Can't reach the server.”: nothing on this page
    plays.
-2. **play**, dimmed: the title doesn't play until the server has checked the
-   download.
-3. **The control** says **downloaded · check needed**, and the sentence under
-   it says why.
+2. **play**, dimmed, as the design system dims a button that can't be used:
+   the title doesn't play until the server has checked the download.
+3. **The control** says **check needed**, its warning, with the size after it,
+   and the sentence under it says why.
 
 ### 13.6.4 The rest of the app
 
@@ -562,14 +617,14 @@ Figure 13.13: A movie whose download waits for its check, on a phone.
 - **The other screens** that need the server, home, movies, shows, search, the
   watchlist and its lists, a person's page and the parts of settings the server
   fills, show the banner as well. What the phone loaded of them earlier stays
-  under it, as it was; a screen it never loaded shows its couldn't-load screen
-  ([chapter 17](./errors.md)), without the sentence, which the banner already
-  says.
+  under it, as it was; a screen it never loaded shows the empty state of
+  [chapter 17](./errors.md) for what couldn't load, without the sentence,
+  which the banner already says.
 - **Watch progress** made offline is kept and sent once the server can be
   reached, with nothing for people to do. Queued downloads then carry on.
 - **Casting**: a downloaded title plays on the phone, even while a TV is
-  connected, with the toast “Playing on this phone: the server can't be
-  reached.” ([chapter 14](./casting.md)).
+  connected, with the design system's toast “Playing on this phone: the
+  server can't be reached.” ([chapter 14](./casting.md)).
 
 ## 13.7 Settings
 
@@ -577,13 +632,14 @@ The phone app's settings ([chapter 16](./settings.md)) hold two settings for
 downloads, shown only where the phone keeps downloads and the server offers
 them:
 
-- **Download quality**: named as in the player's quality menu
+- **Download quality**, the design system's select, whose list is the phone's
+  own: the qualities named as in the player's quality menu
   ([chapter 11](./playback.md)), with the size of an hour of video as the server
   reports it: “Medium (720p) · about 932 MB an hour”. Where too few titles have a
   quality to tell its size reliably, the size is left out. Medium (720p) is
   picked until it is changed.
-- **Download over Wi-Fi only**: on by default. While it is on, a download waits
-  for Wi-Fi.
+- **Download over Wi-Fi only**, the design system's switch: on by default.
+  While it is on, a download waits for Wi-Fi.
 
 ## 13.8 Changes
 
@@ -599,10 +655,10 @@ heading and how the picked quality is marked, to [chapter 16](./settings.md).
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 13.C1 | The control and its actions as buttons | Phone app | a status on the surface without a border; **try again** and **remove** as blue words; cancel and delete as squares without a border | the status in a 48 dp control with the design system's border; **try again** a button, **remove** a quiet button; **cancel download** and **delete download** icon buttons with the border (figures 13.1 and 13.5) | proposed |
-| 13.C2 | The status in one colour | Phone app | on the control, the icon tinted by the status: the download arrow white, blue or grey, the information mark, a red warning triangle, a failure's reason in red; on the downloads screen, the status in green, blue, red or grey, and a failure's reason in red | Recommended: the status and its size in the label's colour, the download arrow on **download** and the green check on **downloaded** the only icons, and a failure's reason in the muted text, as figures 13.1 and 13.5 draw them | proposed |
-| 13.C3 | The downloads screen's layout | Phone app | the banners under the heading **downloads**; each title a row on the surface, an episode with its still 112 dp wide, a movie with its poster 56 dp wide; nothing downloaded: a 56 dp square outline round the download arrow | the banners above the heading; the rows on the page, without a surface, every title with a picture 80 dp wide at 16:9, an episode's still or a movie's backdrop; nothing downloaded: the download icon alone, 48 dp, above **nothing downloaded yet** (figures 13.5, 13.8, 13.9 and 13.14) | proposed |
-| 13.C4 | The banner on every screen that needs the server | Phone app | the banner on home, movies, shows, a title's page and the downloads screen only; search, the watchlist and its lists, a person's page and settings show their couldn't-load with “Can't reach the server.” | the banner on every screen that needs the server; under it what the phone loaded earlier, or the screen's couldn't-load without the sentence (section 13.6.4) | proposed |
+| 13.C1 | The control and its actions as the design system's buttons | Phone app | the offer, “download · 1.4 GB”, and the status in one 48 dp control on the surface without a border; a season's offer the same, “download season 1 · 6 episodes · 1.8 GB”; **try again** and **remove** as blue words; cancel and delete as squares without a border | the design system's buttons at the large size, 42 dp, each with a 48 dp touch area: **download** and a season's **download season 1**, standard buttons, with the size after them in the quiet monospace, “1.4 GB”; **cancel download** and **delete download** icon buttons, framed on a title's page and quiet in the downloads rows; **try again** a standard button and **remove** a quiet one, under the reason (section 13.3, figures 13.1, 13.3 and 13.5) | proposed |
+| 13.C2 | The status as the design system's status | Phone app | the status as words after an icon tinted by it: the download arrow white, blue or grey, a green check, the information mark, a red warning triangle; on the downloads screen the words in green, blue, red or grey; the size in the status, “downloaded · 1.4 GB”; “downloaded · check needed”; a failure's reason in red; a show's “1 of 6 downloaded” with a green check once all are there, and offline the information mark while one of its episodes waits for its check | the design system's status, a chip, in the state of section 13.3's table: neutral for queued, waiting and can't be downloaded, information for downloading, success for downloaded, warning for **check needed**, which stands alone, error for couldn't download; the size after the status, not in it; a failure's reason in the muted body face; a show's how far the status shown as text, neutral and success once all are there, the episode's own control saying check needed; the bar under the status chino's own until the design system has its planned progress bar (figures 13.1, 13.5, 13.11 and 13.13) | proposed |
+| 13.C3 | The downloads screen's layout | Phone app | the banners under the heading **downloads**; each title a row on the surface, an episode with its still 112 dp wide, a movie with its poster 56 dp wide; nothing downloaded: a 56 dp square outline round the download arrow | the design system's banners above its heading; the rows on the page, without a surface, every title with a picture 80 dp wide at 16:9, an episode's still or a movie's backdrop; nothing downloaded: the design system's empty state, its empty drawing above **nothing downloaded yet** and the sentence (figures 13.5, 13.8, 13.9 and 13.14) | proposed |
+| 13.C4 | The banner on every screen that needs the server | Phone app | the banner on home, movies, shows, a title's page and the downloads screen only; search, the watchlist and its lists, a person's page and settings show their couldn't-load with “Can't reach the server.” | the banner on every screen that needs the server; under it what the phone loaded earlier, or chapter 17's empty state for what couldn't load, without the sentence (section 13.6.4) | proposed |
 | 13.C5 | The questions before removing an account and changing the server | Phone app | remove account without downloads: “This removes Anna from this phone. You'll need to sign in again to use the account.” Change server: asked only where the old server's downloads go or a cast stops, with “Your 3 downloads, 547 MB, are deleted from this phone.” | “This removes Anna from this phone. Signing in again brings the account back.”; change server also asks where another account would be signed out, “All 3 accounts on this phone are signed out, and their 31 downloads, 15 GB, are deleted.” (section 13.5); one change with chapter 16's for the same questions | proposed |
 | 13.C6 | Downloads in the iOS app | Phone app (iOS) | no download control, no downloads tab, no settings for downloads, and nothing plays without the server | the whole of this chapter, as the Android app has it | proposed |
 
@@ -617,7 +673,8 @@ the storage line follows as soon as the phone has counted. Figures 13.14 and
 Figure 13.14: Nothing downloaded yet, on a phone held upright.
 
 1. **The storage line** says only what is free.
-2. **The empty state** says what is true, and what will be here: “Titles you
+2. **The empty state**, the design system's, with its empty drawing: nothing
+   is here yet. It says what is true, and what will be here: “Titles you
    download show up here, ready to watch without a connection.” It offers no
    button, because titles are downloaded from their pages, and **delete all**
    is left out.
@@ -629,7 +686,8 @@ held sideways.
 
 1. **The banner** says only “Can't reach the server.”: nothing would play.
 2. **The bar** has no bell while the server can't be reached.
-3. **The empty state**, as in figure 13.14.
+3. **The empty state**, as in figure 13.14, at its small size, so that it fits
+   under the banner.
 
 | State | What the phone shows |
 |---|---|
@@ -646,12 +704,13 @@ held sideways.
 
 | Where | Text |
 |---|---|
-| The download control | “download · 1.4 GB”, “queued · 1.4 GB”, “waiting for Wi-Fi · 1.4 GB”, “waiting for a connection · 1.4 GB”, “downloading 42% · 1.4 GB”, “downloaded · 1.4 GB”, “downloaded · check needed”, couldn't download, can't be downloaded, try again, remove |
+| The download control | download · queued · waiting for Wi-Fi · waiting for a connection · “downloading 42%” · downloaded · check needed · couldn't download · can't be downloaded · try again · remove |
+| The size after the button or the status | “1.4 GB”, “281 MB” |
 | The control's buttons, for screen readers | cancel download · delete download |
 | The control's sentences | Downloads are checked with the server every 30 days. This one plays again once the server can be reached. · This title can only be streamed. |
 | A failure's reason | Not enough space on this phone. · Can't reach the server. · This title isn't available to this account anymore. · The server has turned downloads off. · The server ran into a problem. · The server didn't accept the download. · The download stopped before it was done. |
-| A season's control | “download season 1 · 6 episodes · 1.8 GB”, “download 5 episodes · 1.5 GB”, “download 3 more episodes · 940 MB”, “download 1 more episode · 323 MB” |
-| How far a show is | 1 of 6 downloaded · 1 episode on this phone |
+| A season's control | download season 1 · download 5 episodes · download 3 more episodes · download 1 more episode, each with its size after it, “1.8 GB” |
+| How far a show is | 1 of 6 downloaded · 6 of 6 downloaded · 1 episode on this phone |
 | The notification | “Pioneer One · S01E01 · Earthfall” · Downloads · Downloading 42% · 2 queued · Queued · Waiting for Wi-Fi · Waiting for a connection |
 | The downloads screen | downloads · “547 MB used by downloads · 18 GB free on this phone”, “18 GB free on this phone” · movies · season 1 · try again · remove · delete all |
 | Nothing downloaded | nothing downloaded yet · Titles you download show up here, ready to watch without a connection. |

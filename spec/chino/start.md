@@ -225,26 +225,29 @@ doesn't have.
 
 ### 3.3.1 On a phone held upright
 
-Figure 3.2 shows the first screen of a newly installed phone app: one field,
-one button.
+Figure 3.2 shows the first screen of a newly installed phone app: the
+product's mark, the design system's chevron before chino, a heading, one field
+and one button.
 
 ![Figure 3.2: Connect to a server, on a phone held upright, at 360 × 780 dp](./img/start-server-phone.png)
 
 Figure 3.2: Connect to a server, on a phone held upright, at 360 × 780 dp.
 
-1. **Server address.** The address of the server, as the people who run it
-   gave it out: “media.example.com”. https:// can be left out, and the hint
-   under the field says so. The field has the focus when the screen opens, so
+1. **Server address**, the design system's field around its text input, 42 dp
+   high: the address of the server, as the people who run it gave it out,
+   “media.example.com”. https:// can be left out, and the hint under the field
+   says so. The field has the focus when the screen opens, its border blue, so
    the keyboard comes up at once (the figure leaves it out), and the keyboard's
    go key works like connect.
-2. **connect** checks the address (section 3.3.4). When a chino server answers
-   there, the app keeps it and goes on to sign in (section 3.4).
+2. **connect**, the screen's one primary button, across the width, checks the
+   address (section 3.3.4). When a chino server answers there, the app keeps it
+   and goes on to sign in (section 3.4).
 
 Under **connect**, a list headed **recent** offers the servers this device was
 connected to before, one press each; a newly installed app has none. Changing
 the server later, from settings ([chapter 16](./settings.md)), opens this
 screen headed **change server**, with the server connected now in the field and
-**cancel** under connect.
+**cancel**, a quiet button, under connect.
 
 ### 3.3.2 On a phone held sideways
 
@@ -273,12 +276,13 @@ numbers mark what differs.
 
 Figure 3.4: Connect to a server, on a TV, at 960 × 540 dp.
 
-1. **The field has the focus** when the screen opens. OK opens the TV's
-   keyboard, and its enter key works like connect. Until something is typed,
-   the field shows “media.example.com” in the dim colour of a placeholder, as an
-   example.
-2. **connect**, down from the field. The column keeps to the middle of the
-   screen, well inside the safe area.
+1. **The field has the focus** when the screen opens, shown as the design
+   system's TV focus shows it on a row: the ring inside its edge, the lighter
+   surface, 2 % larger. OK opens the TV's keyboard, and its enter key works
+   like connect. Until something is typed, the field shows “media.example.com”
+   in the dim colour of a placeholder, as an example.
+2. **connect**, the primary button, 42 dp high, down from the field. The column
+   keeps to the middle of the screen, well inside the safe area.
 
 ### 3.3.4 The check
 
@@ -289,7 +293,8 @@ last question is whether its sign-in offers signing in with a code (section
 3.11 shows. Until the check passes, nothing changes: on a change of server, the
 old one stays.
 
-When the check fails, the field says why in place of its hint and keeps the
+When the check fails, the field says why, as the design system's field shows
+an error: in red, in place of its hint, with a red border. It keeps the
 address, so a typing mistake is fixed in place, and connect tries again (figure
 3.12). On a TV the focus goes back to the field. The reasons:
 
@@ -321,13 +326,14 @@ Figure 3.5: Sign in, on a phone held upright, at 360 × 780 dp.
 
 1. **The server's name** is in the heading, so the person sees where they sign
    in before a page opens. The sentence under it says what happens next.
-2. **sign in** opens the server's sign-in page in the browser, and is busy
-   while the page is open. When the person has signed in, the browser hands
-   back to the app, which opens home ([chapter 4](./home.md)) as the new
-   account. When they close the page without signing in, the screen is as it
-   was.
-3. **change server** opens figure 3.2 again, for an address that turned out to
-   be the wrong one. It asks nothing, as nobody is signed in yet.
+2. **sign in**, the primary button, opens the server's sign-in page in the
+   browser, and is busy while the page is open. When the person has signed in,
+   the browser hands back to the app, which opens home ([chapter 4](./home.md))
+   as the new account. When they close the page without signing in, the screen
+   is as it was.
+3. **change server**, a quiet button, opens figure 3.2 again, for an address
+   that turned out to be the wrong one. It asks nothing, as nobody is signed in
+   yet.
 
 Before it offers **sign in**, the app asks the server for its sign-in once
 more, so that a server whose sign-in changed since it was added is followed.
@@ -364,9 +370,11 @@ Figure 3.7: Sign in with a code, on a TV, at 960 × 540 dp.
    sign-in that takes codes, without its https://.
 3. **The code**, each letter in a box of its own, large enough to read from
    across the room.
-4. **Waiting.** The screen moves on by itself once the sign-in is done, to home
-   as the new account. Nothing needs pressing on the TV.
-5. **change server** is the only thing to focus, so it has the focus. When the
+4. **Waiting**, with the design system's loader before the line. The screen
+   moves on by itself once the sign-in is done, to home as the new account.
+   Nothing needs pressing on the TV.
+5. **change server**, a button, is the only thing to focus, so it has the
+   focus: the ring outside it, the lighter surface, 5 % larger. When the
    screen opens from who's watching to add an account (section 3.5), it has no
    change server, and Back goes back to who's watching.
 
@@ -378,8 +386,9 @@ screen says “The code expired.”, with **try again**, which asks for a new on
 The web signs in on the server's own sign-in page, which chino doesn't draw;
 figure 3.1 shows the demo's. When nobody is signed in, the web goes there by
 itself, showing only “Signing you in…” on the way, and comes back to the page
-it left. When the sign-in fails, the web says “couldn't sign you in”, the reason
-from section 3.8, and offers **sign in**.
+it left. When the sign-in fails, the web says so on a page of its own, in the
+design system's empty state for an error: “couldn't sign you in”, the reason
+from section 3.8, and **sign in**.
 
 A sign-in that has expired renews itself on every device, without a screen.
 Only when the server refuses it does the app open sign in again, for the same
@@ -407,9 +416,9 @@ Figure 3.8: Who's watching, on a phone held upright, at 360 × 780 dp.
 1. **An account**: its avatar and its name. A tap opens home as that account.
    The accounts come in the order they were last used, and the one used last
    has a blue frame round its avatar.
-2. **✕** removes the account from this phone, after asking, as
-   [chapter 16](./settings.md) describes. It reacts to a touch anywhere in the
-   48 dp square round it, larger than the square it draws.
+2. **✕**, the design system's icon button, 42 dp, removes the account from
+   this phone, after asking, as [chapter 16](./settings.md) describes. It
+   reacts to a touch anywhere in the 48 dp square round it.
 3. **add account** opens the server's sign-in page, as sign in does in figure
    3.5. Once the person has signed in, the new account opens home.
 
@@ -442,7 +451,8 @@ Figure 3.10: Who's watching, on a TV, at 960 × 540 dp.
    one press of OK. Left and right move between the accounts.
 2. **add account** opens sign in with a code, as in figure 3.7.
 3. **The line under the heading** says how to remove an account, because
-   holding OK can't be seen. It opens the same question as the phone's ✕.
+   holding OK can't be seen; the key in it is the design system's key. Holding
+   OK opens the same question as the phone's ✕.
 
 ### 3.5.4 The avatar
 
@@ -480,16 +490,16 @@ what happens when the server refuses a sign-in later, to
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 3.C1 | Connect to a server: its words and the field | Phone app, Android TV, Samsung TV | headed “Connect to your server” (Android TV “connect to your server”), with “Enter the address of your Chino server.” under it; the field without a label and without a hint, the placeholder “https://media.example.com”; on the Samsung TV the field without the focus as the screen opens | figure 3.2: headed connect to a server, with no sentence; the field labelled Server address, with the hint “The app adds https:// when you leave it out.”, focused as the screen opens; on a TV the placeholder “media.example.com” (figure 3.4) | proposed |
-| 3.C2 | connect busy while the check runs | Phone app, Android TV, Samsung TV | the button greyed with **Connecting…** (Android TV **connecting…**); the phone app's spinner under the buttons, the Samsung TV's in the button | figure 3.11: the field dimmed, connect busy with the design system's square loader before its name, which stays; nothing for the first 0.4 seconds; a second press does nothing | proposed |
-| 3.C3 | The check's reasons | Phone app, Android TV, Samsung TV | other sentences, from “Couldn't reach that server. Check the address and that it's online.” to “This server's login provider doesn't support TV sign-in (device flow).” (section 3.2.5); in the phone app and on the Samsung TV an untrusted certificate reads as no answer | the six sentences of the table in section 3.3.4, the certificate's wherever the app can tell | proposed |
+| 3.C1 | Connect to a server: its words and the field | Phone app, Android TV, Samsung TV | headed “Connect to your server” (Android TV “connect to your server”), with “Enter the address of your Chino server.” under it; the field without a label and without a hint, the placeholder “https://media.example.com”; on the Samsung TV the field without the focus as the screen opens | figure 3.2: headed connect to a server, with no sentence; the design system's field labelled Server address around its text input, 42 dp high, with the hint “The app adds https:// when you leave it out.”, focused as the screen opens; **connect** its primary button, across the width; on a TV the placeholder “media.example.com” (figure 3.4) | proposed |
+| 3.C2 | connect busy while the check runs | Phone app, Android TV, Samsung TV | the button greyed with **Connecting…** (Android TV **connecting…**); the phone app's spinner under the buttons, the Samsung TV's in the button | figure 3.11: the field dimmed, as the design system dims a field that can't be changed; connect the design system's busy button, its square loader before its name, which stays; nothing for the first 0.4 seconds; a second press does nothing | proposed |
+| 3.C3 | The check's reasons | Phone app, Android TV, Samsung TV | other sentences, from “Couldn't reach that server. Check the address and that it's online.” to “This server's login provider doesn't support TV sign-in (device flow).” (section 3.2.5); in the phone app and on the Samsung TV an untrusted certificate reads as no answer | the six sentences of the table in section 3.3.4, the certificate's wherever the app can tell, each as the field's error, in place of its hint, with the field's red border (figure 3.12) | proposed |
 | 3.C4 | The phone held sideways | Phone app | connect to a server and sign in one column in the middle, at most 480 dp wide, held either way; who's watching's tiles at least 160 dp wide from 600 dp wide | figures 3.3, 3.6 and 3.9: the product's mark and the heading in the left half, the rest in the right; the accounts in one row, as upright, as many as fit (section 3.6) | proposed |
 | 3.C5 | Samsung TV: recent servers | Samsung TV | the list is in the code, but the app keeps no servers, so it never shows | **recent**, the servers this TV was connected to before, under connect (section 3.3.1) | proposed |
-| 3.C6 | Sign in on a phone | Phone app | headed “Chino” in blue, with “Movies and series — sign in to media.example.com.”; a spinner takes the buttons' place while the server is checked again and while the page is open; **Change server** a link | figure 3.5: headed sign in to media.example.com, with “The server's sign-in page opens in your browser.”; **sign in** busy, for 4 seconds at most while the server is asked again, and while the page is open; **change server** a quiet button | proposed |
-| 3.C7 | Sign in on a TV | Android TV, Samsung TV | Android TV: “Connect your Chino account”, “Scan with your phone — or visit:”, the address with its https://, “and enter this code:”, “Waiting for confirmation…”; nothing to focus. Samsung TV: “Sign in”, no picture code, “On your phone or computer, open”, “and enter this code:”. Neither has change server | figure 3.7: sign in to media.example.com, the picture code, “Scan this with your phone's camera, or open”, the address without https://, “on a phone or a computer and enter”, the code a letter to a box, the loader with “Waiting for you to sign in…”; **change server** with the focus, except where the screen opened from who's watching | proposed |
-| 3.C8 | A failed sign-in says why, by cause | Web, Phone app, Android TV, Samsung TV | Web: “couldn't sign you in”, the reason, **sign in again** and **home**. Phone app: the sign-in service's own description in red, or “authorization failed”, with **Try again** and **Change server**. Android TV: seven sentences, **try again** and details. Samsung TV: “The code expired. Please try again.”, “Sign-in failed:” with the error's code, or the error's own text, with **Try again** | the reasons of the table in section 3.8: on a phone the error banner of figure 3.13, “Couldn't sign you in.” and the reason, with **details** holding the service's own error, and **sign in** to try again; on a TV “couldn't sign you in”, the reason and **try again** in place of the codes, with the focus; on the web “couldn't sign you in”, the reason and **sign in** | proposed |
+| 3.C6 | Sign in on a phone | Phone app | headed “Chino” in blue, with “Movies and series — sign in to media.example.com.”; a spinner takes the buttons' place while the server is checked again and while the page is open; **Change server** a link | figure 3.5: headed sign in to media.example.com, with “The server's sign-in page opens in your browser.”; **sign in** the design system's primary button, busy for 4 seconds at most while the server is asked again, and while the page is open; **change server** its quiet button | proposed |
+| 3.C7 | Sign in on a TV | Android TV, Samsung TV | Android TV: “Connect your Chino account”, “Scan with your phone — or visit:”, the address with its https://, “and enter this code:”, “Waiting for confirmation…”; nothing to focus. Samsung TV: “Sign in”, no picture code, “On your phone or computer, open”, “and enter this code:”. Neither has change server | figure 3.7: sign in to media.example.com, the picture code, “Scan this with your phone's camera, or open”, the address without https://, “on a phone or a computer and enter”, the code a letter to a box, the design system's loader with “Waiting for you to sign in…”; **change server**, a button, with the focus, except where the screen opened from who's watching | proposed |
+| 3.C8 | A failed sign-in says why, by cause | Web, Phone app, Android TV, Samsung TV | Web: “couldn't sign you in”, the reason, **sign in again** and **home**. Phone app: the sign-in service's own description in red, or “authorization failed”, with **Try again** and **Change server**. Android TV: seven sentences, **try again** and details. Samsung TV: “The code expired. Please try again.”, “Sign-in failed:” with the error's code, or the error's own text, with **Try again** | the reasons of the table in section 3.8: on a phone the design system's error banner of figure 3.13, “Couldn't sign you in.” and the reason, with **details** holding the service's own error, and **sign in** to try again; on a TV “couldn't sign you in”, the reason and **try again** in place of the codes, with the focus; on the web a page of its own with the design system's empty state for an error, “couldn't sign you in”, the reason and **sign in** | proposed |
 | 3.C9 | Web: back to the page the address named | Web | after the first sign-in the web opens home, whatever page its address named, a title's page from a link too; only a sign-in the server refused later goes back to its page | back to the page it left, on every sign-in (section 3.4.4) | proposed |
-| 3.C10 | Who's watching: its words and the ✕ | Phone app, Android TV | Phone app: “Who's watching?” over “Tap to switch. Tap ✕ to remove an account from this phone.”, **Add account**; the ✕ answers a touch only in its 28 dp square. Android TV: “Long-press an account to remove it.” | figures 3.8 and 3.10: **who's watching?** alone on a phone, and on a TV over “Hold OK on an account to remove it from this TV.”; **add account**; the ✕ answers a touch anywhere in the 48 dp square round it | proposed |
+| 3.C10 | Who's watching: its words and the ✕ | Phone app, Android TV | Phone app: “Who's watching?” over “Tap to switch. Tap ✕ to remove an account from this phone.”, **Add account**; the ✕ answers a touch only in its 28 dp square. Android TV: “Long-press an account to remove it.” | figures 3.8 and 3.10: **who's watching?** alone on a phone, and on a TV over “Hold OK on an account to remove it from this TV.”, OK the design system's key; **add account**; the ✕ the design system's icon button, 42 dp, answering a touch anywhere in the 48 dp square round it | proposed |
 | 3.C11 | Samsung TV: who's watching | Samsung TV | nothing opens it: with two accounts or more the app opens on the active one's home, and settings' **Switch account** lists the accounts over the page, its **Add account** going to home without signing in | figure 3.10, at the start with two accounts or more and from the avatar at the top of the rail ([chapter 2](./frame.md)); **add account** opens sign in with a code (figure 3.7) | proposed |
 | 3.C12 | The avatar's look | Web, Phone app, Android TV, Samsung TV | Web: the initials in capitals, blue on grey. Phone app: the initials in capitals on one of twelve colours. Android TV: the same in a circle. Samsung TV: the name's first letter in capitals, dark on blue for every account | section 3.5.4: a square, the initials lowercase in the monospace face, dark on one of twelve colours from the email address, the same way in every app | proposed |
 | 3.C13 | No picture in the avatar | Web, Phone app, Android TV | Web: the picture the sign-in gives the account. Phone app, Android TV: a picture looked up from an outside service by a hash of the email address, over the initials | Recommended: initials only, so that no app tells an outside service which accounts it has (section 3.5.4) | proposed |
@@ -503,10 +513,11 @@ states in between that matter most.
 
 Figure 3.11: Checking the address, on a phone.
 
-1. **The field waits** while the check runs, its address dimmed.
-2. **connect is busy**: the design system's square loader before its name,
-   which stays, as
-   [loading and progress](https://nalet.github.io/design-system/patterns/loading-and-progress/)
+1. **The field waits** while the check runs, dimmed as the design system dims
+   a field that can't be changed.
+2. **connect is busy**, as the design system's button is: its square loader
+   before its name, which stays, as [loading and
+   progress](https://nalet.github.io/design-system/patterns/loading-and-progress/)
    has it. For the first 0.4 seconds nothing changes; a second press does
    nothing.
 
@@ -514,18 +525,19 @@ Figure 3.11: Checking the address, on a phone.
 
 Figure 3.12: No server answers at the address, on a TV.
 
-1. **The field keeps the address**, with a red edge, and has the focus again,
-   so the typing mistake, here “exmaple”, is fixed in place.
-2. **The reason**, in place of the hint, from the table in section 3.3.4.
-   connect tries again.
+1. **The field keeps the address**, with the red border of a field that needs
+   a fix, and has the focus again, so the typing mistake, here “exmaple”, is
+   fixed in place.
+2. **The reason**, the field's error in place of its hint, from the table in
+   section 3.3.4. connect tries again.
 
 ![Figure 3.13: The sign-in was refused, on a phone](./img/start-refused-phone.png)
 
 Figure 3.13: The sign-in was refused, on a phone.
 
-1. **What went wrong**, in an error banner over the buttons: “Couldn't sign you
-   in.” and the reason. **details** opens the sign-in service's own error, for
-   the people who run the server.
+1. **What went wrong**, in the design system's error banner over the buttons:
+   “Couldn't sign you in.” and the reason. **details** opens the sign-in
+   service's own error, for the people who run the server.
 2. **sign in** tries again. Nothing else on the screen changes.
 
 A sign-in that fails says why, by cause, in every app:
@@ -547,9 +559,9 @@ A sign-in that fails says why, by cause, in every app:
 | Asking the server for its sign-in, before sign in | sign in is busy, for 4 seconds at most |
 | The browser's sign-in page is open (phone) | sign in is busy |
 | Asking for a code (TV) | Grey blocks in the shape of the picture code and the code |
-| Waiting for the other device (TV) | Figure 3.7: the loader and “Waiting for you to sign in…” |
+| Waiting for the other device (TV) | Figure 3.7: the design system's loader and “Waiting for you to sign in…” |
 | The sign-in failed | Figure 3.13 on a phone. On a TV, “couldn't sign you in”, the reason and **try again** in place of the codes, with the focus on try again. On the web, “couldn't sign you in”, the reason and **sign in** |
-| Switching to another account | The account's tile is busy until the switch is done |
+| Switching to another account | The account's tile shows the design system's loader until the switch is done |
 | The phone app can't reach the server | Who's watching works without it, and opens the account's downloads ([chapter 13](./downloads.md)) |
 
 ## 3.9 Words

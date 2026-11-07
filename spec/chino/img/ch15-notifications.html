@@ -5,9 +5,15 @@
   drawn here.
   Each <figure class="shot" id="…"> becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Home under the panel is chapter 4's (ch04-home.html).
-  Pink numbers mark the parts the chapter's text explains.
+  The look is screens.css with the design system's stylesheet under it; the
+  design system's components are the <ds-*> tags ds.js expands; the frame (top
+  bar, tabs, rail, and the bell in them) is frame.js; the icons are icons.js.
+  Home under the panel is chapter 4's (ch04-home.html). Pink numbers mark the
+  parts the chapter's text explains.
+  The panel and its rows are chino's own layout on the design system's tokens.
+  Inside them: mark all read is the quiet button, delete the quiet icon button
+  (the standard one on a TV, where it takes the focus), a refresh that failed
+  the warning banner above the list, and nothing yet the empty state.
 -->
 <html lang="en">
 <head>
@@ -33,8 +39,10 @@
   .tv .shelf { position: absolute; left: 132px; top: 330px; }
   .tv .shelf .h2 { margin-bottom: 10px; }
 
-  /* the panel under the bell, on a computer */
-  .np { position: absolute; top: 60px; right: 56px; width: 380px; z-index: 30; background: var(--surface); border: 1px solid var(--border-2); }
+  /* the panel under the bell, on a computer: the surface, frame and shadow of the
+     design system's menus, which open over the page as this panel does */
+  .np { position: absolute; top: 60px; right: 56px; width: 380px; z-index: 30; background: var(--surface); border: 1px solid var(--border-2);
+        box-shadow: 0 8px 24px rgba(0,0,0,.45); }
   .np .hd { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 8px 0 16px; border-bottom: 1px solid var(--border); }
   .np .hd .h2 { font-size: 15px; }
 
@@ -48,43 +56,52 @@
   .nr .sq { display: inline-block; width: 8px; height: 8px; margin-right: 8px; background: var(--cloud-blue); vertical-align: 1px; }
   .nr .bd { font: 400 13px/1.45 var(--ff-ui); color: var(--fg-muted); }
   .nr .go { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; font: 500 12px/1 var(--ff-mono); color: var(--cloud-blue); }
-  .nr .b.icon { flex: none; }
-  .np .nr .b.icon { margin-top: -6px; }
+  /* delete, the design system's icon button, level with the row's first line */
+  .nr > .nc-iconbtn { flex: none; margin-top: -9px; }
+  .phone .nr > .nc-iconbtn { margin-top: -13px; }
 
   /* a screen of its own on a phone: frame.js's back bar, with mark all read at its right */
   .xbar { position: absolute; left: 0; right: 0; top: 0; height: 56px; z-index: 10; display: flex; align-items: center; gap: 10px;
           padding: 0 8px 0 6px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
   .xbar .title { font: 600 16px/1 var(--ff-mono); margin-right: auto; white-space: nowrap; }
   .xbar .icon-b { color: var(--fg); }
-  .xbar .b { padding: 0 10px; font-size: 13px; }
   .under { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; overflow: hidden; }
   .phone .nr { padding: 14px 8px 14px 16px; }
   .phone .nr .ttl { font-size: 15px; }
-  .phone .nr .b.icon { margin-top: -4px; }
   /* held sideways: the bar as slim as frame.js draws it there (48), the rows
      across the width beside the rail */
-  /* screens.css's ".phone > .tabs" (the upright tabs: 64 high, a line on top)
-     matches the sideways rail too; the rail is the phone's height */
   .phone.side .xbar { height: 48px; }
   .phone.side .under { top: 48px; }
   .phone.side .nr { padding: 10px 12px 10px 24px; }
   .phone.side .nr .main { gap: 4px; }
 
   /* the screen on a TV */
-  .tv .head { display: flex; align-items: center; gap: 16px; width: 712px; margin-top: 14px; }
-  .tv .head .h1 { margin-right: auto; font-size: 22px; }
-  .tv .list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .tv .head { display: flex; align-items: center; gap: 16px; width: 712px; margin-top: 10px; }
+  .tv .head .nc-heading { margin-right: auto; }
+  .tv .list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
   .tv .tn { display: flex; align-items: center; gap: 16px; width: 712px; }
   .tv .tn .nr { flex: 1; padding: 10px 16px; background: var(--surface); border: 0; }
   .tv .tn .nr .main { gap: 4px; }
   .tv .tn .nr .ttl { font-size: 15px; }
   .tv .tn .nr .bd { font-size: 13px; }
+  .tv .tn > .nc-iconbtn { flex: none; }
   /* the rail's bell counts the unread, as the top bar's does */
   .tv > .rail .it-notifications { position: relative; }
   /* the server has no notifications: no bell */
   .tv.nobell > .rail .it-notifications { display: none; }
 
-  .banner .b.sm { margin-top: 10px; }
+  /* the states. The empty state in place of the list, its mark on its title: the empty
+     state hugs its widest line, the title, which at the large size starts 64 + 165 + 24 down
+     (padding, picture, the room under it) and 16 in, as the design system's specs give them */
+  .under.center { display: flex; align-items: center; justify-content: center; }
+  .hug { position: relative; }
+  .at-title { position: absolute; left: 16px; top: 253px; width: 1px; height: 28px; }
+  /* the warning banner above the list. The banner draws its own try again, so that mark meets
+     a stand-in: the button wraps under the text at the text's left, 3 + 16 + 14 + 12 in (the
+     bar, the padding, the glyph, the room after it), 13 up from the banner's foot (padding and
+     frame), 91 wide (9 characters of 12 px mono, 12 on each side, the frame) */
+  .np .above { position: relative; padding: 12px 12px 0; }
+  .at-action { position: absolute; left: 57px; bottom: 13px; width: 91px; height: 28px; }
 </style>
 </head>
 <body>
@@ -98,7 +115,7 @@
         <h1 class="t">Tears of Steel</h1>
         <p class="meta">2012 · 12 min · science fiction</p>
         <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
-        <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard"></i>trailer</span></div>
+        <div class="row"><ds-button variant="primary" icon="play">play</ds-button><ds-button>see details</ds-button><ds-button icon="clapperboard">trailer</ds-button></div>
         <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
     </section>
@@ -112,7 +129,7 @@
       </div>
     </section>
     <div class="np">
-      <div class="hd" data-co="2" data-co-side="right"><h2 class="h2">notifications</h2><span class="b sm ghost"><i data-i="check-check" class="s16"></i>mark all read</span></div>
+      <div class="hd" data-co="2" data-co-side="right"><h2 class="h2">notifications</h2><ds-button variant="ghost">mark all read</ds-button></div>
       <div class="nr unread">
         <div class="main">
           <span class="fr">subtitles · 5m</span>
@@ -120,7 +137,7 @@
           <div class="bd">In the player's subtitles menu as German · AI.</div>
           <span class="go" data-co="4" data-co-side="right">open title</span>
         </div>
-        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: German subtitles for Sintel"></ds-iconbutton>
       </div>
       <div class="nr unread">
         <div class="main">
@@ -129,7 +146,7 @@
           <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b sm icon ghost" data-co="5" data-co-side="right"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: Chinese (Simplified) subtitles for Tears of Steel" data-co="5" data-co-side="right"></ds-iconbutton>
       </div>
       <div class="nr">
         <div class="main">
@@ -137,7 +154,7 @@
           <div class="ttl">Elephants Dream has 5.1 sound now</div>
           <span class="go">open title</span>
         </div>
-        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: Elephants Dream has 5.1 sound now"></ds-iconbutton>
       </div>
       <div class="nr">
         <div class="main">
@@ -146,7 +163,7 @@
           <div class="bd">The titles that had none have them now.</div>
           <span class="go" data-co="6" data-co-side="right">open link</span>
         </div>
-        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: English subtitles for 12 titles"></ds-iconbutton>
       </div>
     </div>
   </div>
@@ -158,7 +175,7 @@
     <header class="xbar">
       <span class="icon-b" data-co="1"><i data-i="arrow-left"></i></span>
       <span class="title">notifications</span>
-      <span class="b ghost" data-co="2" data-co-side="right"><i data-i="check-check" class="s16"></i>mark all read</span>
+      <ds-button variant="ghost" size="lg" data-co="2" data-co-side="right">mark all read</ds-button>
     </header>
     <div class="under">
       <div class="nr unread">
@@ -168,7 +185,7 @@
           <div class="bd">In the player's subtitles menu as German · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b icon ghost" data-co="3" data-co-side="right"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: German subtitles for Sintel" data-co="3" data-co-side="right"></ds-iconbutton>
       </div>
       <div class="nr unread">
         <div class="main">
@@ -177,7 +194,7 @@
           <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: Chinese (Simplified) subtitles for Tears of Steel"></ds-iconbutton>
       </div>
       <div class="nr">
         <div class="main">
@@ -185,7 +202,7 @@
           <div class="ttl">Elephants Dream has 5.1 sound now</div>
           <span class="go">open title</span>
         </div>
-        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: Elephants Dream has 5.1 sound now"></ds-iconbutton>
       </div>
       <div class="nr">
         <div class="main">
@@ -194,7 +211,7 @@
           <div class="bd">The titles that had none have them now.</div>
           <span class="go" data-co="4">open link<i data-i="external-link" class="s14"></i></span>
         </div>
-        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: English subtitles for 12 titles"></ds-iconbutton>
       </div>
     </div>
   </div>
@@ -206,7 +223,7 @@
     <header class="xbar">
       <span class="icon-b"><i data-i="arrow-left"></i></span>
       <span class="title">notifications</span>
-      <span class="b ghost" data-co="1" data-co-side="right"><i data-i="check-check" class="s16"></i>mark all read</span>
+      <ds-button variant="ghost" size="lg" data-co="1" data-co-side="right">mark all read</ds-button>
     </header>
     <div class="under">
       <div class="nr unread">
@@ -216,7 +233,7 @@
           <div class="bd">In the player's subtitles menu as German · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: German subtitles for Sintel"></ds-iconbutton>
       </div>
       <div class="nr unread" style="position:relative">
         <!-- the mark's anchor: the row's left edge, level with the gap between the rail's shows and watchlist -->
@@ -227,7 +244,7 @@
           <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: Chinese (Simplified) subtitles for Tears of Steel"></ds-iconbutton>
       </div>
       <div class="nr">
         <div class="main">
@@ -235,7 +252,7 @@
           <div class="ttl">Elephants Dream has 5.1 sound now</div>
           <span class="go">open title</span>
         </div>
-        <span class="b icon ghost"><i data-i="trash-2"></i></span>
+        <ds-iconbutton variant="ghost" size="lg" icon="trash-2" label="delete notification: Elephants Dream has 5.1 sound now"></ds-iconbutton>
       </div>
     </div>
   </div>
@@ -246,8 +263,8 @@
   <div class="tv" data-view="notifications" data-co-parts="bell:1">
     <div class="page">
       <div class="head">
-        <h1 class="h1">notifications</h1>
-        <span class="b" data-co="2" data-co-side="right"><i data-i="check-check" class="s16"></i>mark all read</span>
+        <ds-heading level="1">notifications</ds-heading>
+        <ds-button variant="ghost" size="lg" data-co="2" data-co-side="right">mark all read</ds-button>
       </div>
       <div class="list">
         <div class="tn">
@@ -259,7 +276,7 @@
               <span class="go">open title</span>
             </div>
           </div>
-          <span class="b icon" data-co="4" data-co-side="right"><i data-i="trash-2" class="s16"></i></span>
+          <ds-iconbutton size="lg" icon="trash-2" label="delete notification: German subtitles for Sintel" data-co="4" data-co-side="right"></ds-iconbutton>
         </div>
         <div class="tn">
           <div class="nr unread">
@@ -270,7 +287,7 @@
               <span class="go">open title</span>
             </div>
           </div>
-          <span class="b icon"><i data-i="trash-2" class="s16"></i></span>
+          <ds-iconbutton size="lg" icon="trash-2" label="delete notification: Chinese (Simplified) subtitles for Tears of Steel"></ds-iconbutton>
         </div>
         <div class="tn">
           <div class="nr">
@@ -280,7 +297,7 @@
               <span class="go">open title</span>
             </div>
           </div>
-          <span class="b icon"><i data-i="trash-2" class="s16"></i></span>
+          <ds-iconbutton size="lg" icon="trash-2" label="delete notification: Elephants Dream has 5.1 sound now"></ds-iconbutton>
         </div>
         <div class="tn">
           <div class="nr" data-co="5" data-co-side="right">
@@ -290,30 +307,30 @@
               <div class="bd">The titles that had none have them now.</div>
             </div>
           </div>
-          <span class="b icon"><i data-i="trash-2" class="s16"></i></span>
+          <ds-iconbutton size="lg" icon="trash-2" label="delete notification: English subtitles for 12 titles"></ds-iconbutton>
         </div>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 15.8 · no notifications yet, on a phone -->
+<!-- Figure 15.8 · no notifications yet, on a phone: the design system's empty state, nothing-yet kind -->
 <figure class="shot" id="notifications-empty-phone">
   <div class="phone" data-view="home" data-bar="none">
     <header class="xbar">
       <span class="icon-b"><i data-i="arrow-left"></i></span>
       <span class="title" data-co="1" data-co-side="right">notifications</span>
     </header>
-    <div class="under">
-      <div class="empty" style="margin-top:210px">
-        <i data-i="bell" class="s48"></i>
-        <h2 class="h2" data-co="2">no notifications yet</h2>
+    <div class="under center">
+      <div class="hug">
+        <ds-empty illustration="empty" size="lg" title="no notifications yet"></ds-empty>
+        <i class="at-title" data-co="2"></i>
       </div>
     </div>
   </div>
 </figure>
 
-<!-- Figure 15.9 · the notifications couldn't be refreshed, on a computer -->
+<!-- Figure 15.9 · the notifications couldn't be refreshed, on a computer: the warning banner above the list -->
 <figure class="shot" id="notifications-couldnt-refresh-computer">
   <div class="computer" data-view="home">
     <section class="hero">
@@ -322,7 +339,7 @@
         <h1 class="t">Tears of Steel</h1>
         <p class="meta">2012 · 12 min · science fiction</p>
         <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
-        <div class="row"><span class="b primary"><i data-i="play" class="fill"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard"></i>trailer</span></div>
+        <div class="row"><ds-button variant="primary" icon="play">play</ds-button><ds-button>see details</ds-button><ds-button icon="clapperboard">trailer</ds-button></div>
         <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
     </section>
@@ -336,14 +353,10 @@
       </div>
     </section>
     <div class="np">
-      <div class="hd"><h2 class="h2">notifications</h2><span class="b sm ghost"><i data-i="check-check" class="s16"></i>mark all read</span></div>
-      <div style="padding:12px 12px 0">
-        <div class="banner warn" data-co="1" data-co-side="right"><i data-i="triangle-alert" class="s16"></i>
-          <div>
-            <div>Couldn't refresh the notifications; the list shows what was loaded 4 minutes ago.</div>
-            <span class="b sm" data-co="2" data-co-side="right"><i data-i="refresh-cw" class="s14"></i>try again</span>
-          </div>
-        </div>
+      <div class="hd"><h2 class="h2">notifications</h2><ds-button variant="ghost">mark all read</ds-button></div>
+      <div class="above">
+        <ds-banner state="warning" action="try again" data-co="1" data-co-side="right">Couldn't refresh the notifications; the list shows what was loaded 4 minutes ago.</ds-banner>
+        <i class="at-action" data-co="2" data-co-side="right"></i>
       </div>
       <div class="nr unread">
         <div class="main">
@@ -352,7 +365,7 @@
           <div class="bd">In the player's subtitles menu as German · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: German subtitles for Sintel"></ds-iconbutton>
       </div>
       <div class="nr unread">
         <div class="main">
@@ -361,7 +374,7 @@
           <div class="bd">In the player's subtitles menu as Chinese (Simplified) · AI.</div>
           <span class="go">open title</span>
         </div>
-        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: Chinese (Simplified) subtitles for Tears of Steel"></ds-iconbutton>
       </div>
       <div class="nr">
         <div class="main">
@@ -369,7 +382,7 @@
           <div class="ttl">Elephants Dream has 5.1 sound now</div>
           <span class="go">open title</span>
         </div>
-        <span class="b sm icon ghost"><i data-i="trash-2" class="s16"></i></span>
+        <ds-iconbutton variant="ghost" icon="trash-2" label="delete notification: Elephants Dream has 5.1 sound now"></ds-iconbutton>
       </div>
     </div>
   </div>
@@ -383,7 +396,7 @@
       <h1 class="t">Tears of Steel</h1>
       <p class="meta">2012 · 12 min · science fiction</p>
       <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
-      <div class="row"><span class="b primary focus"><i data-i="play" class="fill s16"></i>play</span><span class="b">see details</span><span class="b"><i data-i="clapperboard" class="s16"></i>trailer</span></div>
+      <div class="row"><ds-button variant="primary" size="lg" icon="play" class="focus">play</ds-button><ds-button size="lg">see details</ds-button><ds-button size="lg" icon="clapperboard">trailer</ds-button></div>
       <div class="dots" style="margin-top:6px"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </div>
     <section class="shelf">
@@ -398,6 +411,7 @@
   </div>
 </figure>
 
+<script src="ds.js"></script>
 <script src="frame.js"></script>
 </body>
 </html>

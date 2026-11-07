@@ -212,7 +212,10 @@ feature the app doesn't have.
 
 ## 15.3 Notifications on a computer
 
-Figure 15.4 shows the panel on a computer, opened over home.
+Figure 15.4 shows the panel on a computer, opened over home. The panel and
+its rows are chino's own, drawn with the design system's colours, type and
+spacing, and the panel opens over the page as the design system's menus do,
+with their shadow; the buttons in it are the design system's.
 
 ![Figure 15.4: The notifications on a computer, at 1280 × 800](./img/notifications-computer.png)
 
@@ -223,15 +226,17 @@ Figure 15.4: The notifications on a computer, at 1280 × 800.
    unread”, or “notifications”. A click opens the panel under it, and the app
    asks the server for the list again as it opens.
 2. **The panel's head**: the heading **notifications** and, while any is
-   unread, **mark all read**, which marks every one read at once.
+   unread, **mark all read**, a quiet button, which marks every one read at
+   once.
 3. **A notification**: whom it is from, the app's name, and how long ago it
    came, then its title and its text. While it is unread, a small blue square
    stands before its title and the title is brighter; screen readers hear
    “unread” before it.
 4. **open title** says where it leads. A click anywhere on the notification
    marks it read and opens the title's page ([chapter 6](./title-actions.md)).
-5. **Delete** takes the notification away, without opening it. After a delete
-   or **mark all read**, the focus stays in the panel.
+5. **Delete**, the trash can, a quiet icon button, 34 px, takes the
+   notification away, without opening it. After a delete or **mark all
+   read**, the focus stays in the panel.
 6. **open link**: a notification about no title leads to a page of this server,
    which opens in the same tab. One that leads nowhere shows no label, and
    opening it only marks it read.
@@ -255,8 +260,10 @@ Figure 15.5: The notifications on a phone held upright, at 360 × 780 dp.
 
 1. **A screen of its own**, with the back arrow and the heading in its bar. The
    tabs stay ([chapter 2](./frame.md)).
-2. **mark all read** sits at the right of the bar.
-3. **Delete** is a 48 dp button, beside each notification.
+2. **mark all read**, the quiet button at the design system's large size, sits
+   at the right of the bar.
+3. **Delete**, the quiet icon button at its large size, 42 dp, beside each
+   notification, answers to a touch in the 48 dp square around it.
 4. **open link** opens the page in the phone's browser.
 
 The web on a phone has the same screen, with its own tabs, and there **open
@@ -294,14 +301,15 @@ Figure 15.7: The notifications on a TV, at 960 × 540 dp.
 
 1. **The bell**, at the foot of the rail, with its count. OK on it opens the
    notifications, and the rail marks them as the current view.
-2. **mark all read**, right of the heading. Up from the first notification
-   reaches it.
+2. **mark all read**, the quiet button, right of the page's heading. Up from
+   the first notification reaches it.
 3. **The focus** starts on the newest notification or, back from a title, on
-   the one that opened it. Up and down move between the notifications, and OK
-   opens one.
-4. **Delete**, right of each notification: right moves the focus to it. After
-   a delete the focus moves to the notification now in its place, and after
-   **mark all read** to the newest.
+   the one that opened it, drawn as the design system draws a focused row on
+   a TV. Up and down move between the notifications, and OK opens one.
+4. **Delete**, right of each notification, an icon button of the standard
+   kind, so that it reads as a place for the focus from across the room:
+   right moves the focus to it. After a delete the focus moves to the
+   notification now in its place, and after **mark all read** to the newest.
 5. **A notification that leads to a page** shows no label: a TV shows no web
    pages, so OK only marks it read.
 
@@ -356,16 +364,16 @@ the banner's wording to [chapter 17](./errors.md).
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 15.C1 | The words | Web, Phone app, Android TV, Samsung TV | Web: the bell “Notices” and “Notices, 2 unread”, the heading “Notices”, “Mark All Read”, “Open Title” and “Open”, “Unread: ” before an unread title, delete's tooltip “Delete” and its name “Delete notice: …”. Phone app: “Notices”, “Mark All Read”, “Open Title”, “Open Link”, “Delete Notice”. Android TV: the bell “Notices”, the heading “notices”, “Open”, “Delete notice: …”. Samsung TV: “Notices”, “Mark All Read”, “Open”, “Delete”, “Delete notice: …” | the words of section 15.9: notifications, “notifications, 2 unread”, mark all read, open title, open link, “unread” before an unread title, “delete notification: German subtitles for Sintel” | proposed |
-| 15.C2 | No notifications yet | Web, Phone app, Android TV, Samsung TV | Web: “No notices yet.”, in the body face. Phone app, Android TV, Samsung TV: “No notices. An addon you use can tell you something here.” | figure 15.8: the bell's icon and “no notifications yet”, with nothing under it | proposed |
-| 15.C3 | A notification's row | Web, Phone app, Android TV, Samsung TV | Web, Phone app: an unread one has a blue line down its left edge, and delete is an X, on the phone in a 40 dp square. Android TV: the blue square stands before whom it is from, and “Open” at the end of that line. Samsung TV: a blue line down the left edge, “Open” with a chevron, and delete a red “Delete” with a trash can | figure 15.4: a small blue square before the title, which is brighter while unread; open title or open link under the text; delete the trash can, a 48 dp button on a phone (sections 15.3, 15.4) | proposed |
+| 15.C1 | The words | Web, Phone app, Android TV, Samsung TV | Web: the bell “Notices” and “Notices, 2 unread”, the heading “Notices”, “Mark All Read”, “Open Title” and “Open”, “Unread: ” before an unread title, delete's tooltip “Delete” and its name “Delete notice: …”. Phone app: “Notices”, “Mark All Read”, “Open Title”, “Open Link”, “Delete Notice”. Android TV: the bell “Notices”, the heading “notices”, “Open”, “Delete notice: …”. Samsung TV: “Notices”, “Mark All Read”, “Open”, “Delete”, “Delete notice: …” | the words of section 15.9: notifications, “notifications, 2 unread”, mark all read, open title, open link, “unread” before an unread title, “delete notification: German subtitles for Sintel”; mark all read the design system's quiet button (figures 15.4 to 15.7) | proposed |
+| 15.C2 | No notifications yet | Web, Phone app, Android TV, Samsung TV | Web: “No notices yet.”, in the body face. Phone app, Android TV, Samsung TV: “No notices. An addon you use can tell you something here.” | figure 15.8: the design system's empty state of the nothing-yet kind, “no notifications yet”, with nothing under it | proposed |
+| 15.C3 | A notification's row | Web, Phone app, Android TV, Samsung TV | Web, Phone app: an unread one has a blue line down its left edge, and delete is an X, on the phone in a 40 dp square. Android TV: the blue square stands before whom it is from, and “Open” at the end of that line. Samsung TV: a blue line down the left edge, “Open” with a chevron, and delete a red “Delete” with a trash can | figure 15.4: a small blue square before the title, which is brighter while unread; open title or open link under the text; delete the trash can, the design system's quiet icon button, 34 px on a computer and 42 dp on a phone, where it answers to a touch in a 48 dp square, and of the standard kind on a TV (sections 15.3 to 15.5) | proposed |
 | 15.C4 | One place per notification | Phone app | a notification with a title and a link offers both, “Open Title” and “Open Link” | Recommended: the title alone, as the web and the TVs open it (section 15.6.2) | proposed |
 | 15.C5 | Phone app: the screen inside the frame | Phone app | the screen covers the top bar and the tabs, and back, the heading and Mark All Read are the list's first row, scrolling away with it | figure 15.5: back and the heading in the bar, mark all read at its right, the tabs staying; held sideways, figure 15.6 | proposed |
 | 15.C6 | The web on a phone: a screen of its own | Web | the panel opens across the screen under the top bar, over the page (figure 15.2), and on a phone held sideways under the bell, as on a computer (figure 15.3) | on a phone, a screen whose short side is 600 px or less, held either way: the screen of figures 15.5 and 15.6, with the web's tabs; open link in the same tab (section 15.4) | proposed |
 | 15.C7 | The TV: the bell in the rail | Android TV, Samsung TV | the bell sits in a top bar, beside the avatar; on the notifications screen no item of the rail is current | the bell at the rail's foot, with its count, and notifications current in the rail while they show (figure 15.7, [chapter 2](./frame.md)) | proposed |
 | 15.C8 | Android TV: changes at once, and the screen asks as it opens | Android TV | a read, a delete or mark all read shows only once the server has made it; opening the screen asks nothing, so it shows the bell's last answer, up to about 70 seconds old | each change shows at once and is sent, and the list is read again when the server doesn't make it; the screen asks the server as it opens (section 15.6.3) | proposed |
 | 15.C9 | The ages from a week on | Web, Phone app, Android TV | Web, Android TV: “Sep 12”, without a year. Phone app: “12 Sep”, without a year | “28 Oct”, with the year when it came in another year, “12 Sep 2025”, as the Samsung TV has them (section 15.6.1) | proposed |
-| 15.C10 | Couldn't refresh: the banner | Web, Phone app, Android TV, Samsung TV | a refresh that fails keeps the list without a word | figure 15.9: the warning banner with how old the list is and try again, gone as soon as a refresh works (section 15.8) | proposed |
+| 15.C10 | Couldn't refresh: the banner | Web, Phone app, Android TV, Samsung TV | a refresh that fails keeps the list without a word | figure 15.9: the design system's warning banner above the list, with how old the list is and try again, never a toast, gone as soon as a refresh works (section 15.8) | proposed |
 | 15.C11 | Samsung TV: the focus | Samsung TV | back from a title it starts on the newest, not on the notification that opened it; after a delete it moves to the next notification's Delete, or the one before's, or the bell | back from a title, on the one that opened it; after a delete, on the notification now in its place (section 15.5) | proposed |
 | 15.C12 | Samsung TV: an episode opens its show | Samsung TV | an episode opens a page of its own | its show's page, at that episode ([chapter 6](./title-actions.md)) | proposed |
 | 15.C13 | Samsung TV: no loading state | Samsung TV | while the screen has no list yet, a spinner turns over “Loading notices…” | none: the screen shows the list the bell already has, and the answer updates it in place (section 15.8) | proposed |
@@ -380,18 +388,22 @@ to 15.10 show the other states.
 Figure 15.8: No notifications yet, on a phone.
 
 1. **The bar** holds no **mark all read**: nothing is unread.
-2. **“no notifications yet”**, and nothing under it: there is nothing to do
-   about it.
+2. **“no notifications yet”**, the design system's empty state of the
+   nothing-yet kind, at its large size, and nothing under it: there is nothing
+   to do about it.
 
 ![Figure 15.9: The notifications couldn't be refreshed, on a computer](./img/notifications-couldnt-refresh-computer.png)
 
 Figure 15.9: The notifications couldn't be refreshed, on a computer.
 
-1. **The banner** says that asking again failed and how old the list is:
-   “Couldn't refresh the notifications; the list shows what was loaded 4
-   minutes ago.” The list under it stays as it was, and the bell keeps its
-   count. The banner goes as soon as a refresh works.
-2. **try again** asks the server again.
+1. **The banner**, the design system's warning banner, above the list, says
+   that asking again failed and how old the list is: “Couldn't refresh the
+   notifications; the list shows what was loaded 4 minutes ago.” It is a
+   banner, never a toast, because it stays while it is true and offers a way
+   on, and it has no dismiss, because the list stays old until a refresh
+   works. The list under it stays as it was, and the bell keeps its count.
+   The banner goes as soon as a refresh works.
+2. **try again**, the banner's own button, asks the server again.
 
 While the panel is closed, a refresh that fails changes nothing on screen, and
 the next one follows a minute later.

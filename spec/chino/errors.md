@@ -2,7 +2,7 @@
 
 Section 17.2 describes what the apps say today when a screen can't show what
 it is for. The sections after it are the target, what they are meant to say,
-and section 17.14 lists every difference between the two as a numbered change.
+and section 17.15 lists every difference between the two as a numbered change.
 Only a change the owner has approved is built, one change at a time; anything
 no change names stays as it is deployed.
 
@@ -23,7 +23,8 @@ where trying again can help, **back** where it can't. The cases come from the
 design system's [empty
 states](https://nalet.github.io/design-system/patterns/empty-states/#when-it-couldnt-load-say-why),
 and every app tells them apart the same way, by the server's answer, so the
-same problem reads the same everywhere.
+same problem reads the same everywhere. Section 17.3 says which of the design
+system's components each case uses, so that it looks the same everywhere too.
 
 ## 17.2 As deployed
 
@@ -235,40 +236,81 @@ doesn't have.
 | The app at its start | “couldn't load the app”, the cause's sentence; “No chino server answers at this address.” | [chapter 3](./start.md) | [chapter 3](./start.md) | [chapter 3](./start.md) |
 | Movies and shows without a stream token | the cases above | the cases above | the app closes | the cases above |
 
-## 17.3 A page that couldn't load, on a computer
+## 17.3 Which component each case uses
+
+Every case uses one of the design system's components, the same in every app,
+so a chapter with a screen of its own points here for what that screen shows
+when something goes wrong. Which one depends on what is still on the screen.
+When nothing of the content could be shown, an [empty
+state](https://nalet.github.io/design-system/patterns/empty-states/) takes its
+place. When the content, or the rest of the page, is still there, a banner says
+it, above the part it is about or in that part's place, as the design system's
+[message
+handling](https://nalet.github.io/design-system/patterns/message-handling/)
+sets out. A toast never carries a failure.
+
+| Case | The component | Where it stands |
+|---|---|---|
+| A page about one thing couldn't load | The empty state at its large size, with the error drawing, the cause's sentence, **try again** and **details** | In the page's place, under the frame (sections 17.4 to 17.6) |
+| A list couldn't load | The empty state at its usual size, with the same parts | In the list's place, under the view's heading, its tabs and its filters (section 17.8) |
+| A part of a page couldn't load | The error banner, with **try again** and **details** | In the part's place; the rest of the page shows (section 17.8) |
+| It was removed | The empty state with the empty drawing, and **back** | In the page's place (section 17.9) |
+| No access | The empty state with the error drawing, and **back**; in a part of a page, the error banner alone | In the page's, the list's or the part's place (section 17.10) |
+| A refresh failed, and the content still shows | The warning banner, with **try again** | Above the content it is about (section 17.14) |
+| An action failed | The error banner, which can be dismissed, with **details** | Above what the action was about, or in its dialog (section 17.13) |
+| The phone app can't reach the server | The information banner of [chapter 13](./downloads.md) | Above the screen's heading |
+| The sign-in no longer holds | None: the app signs in again (section 17.11) | — |
+
+- **The empty state's** title names what couldn't load, in the screen's own
+  words; its description is the cause's sentence (section 17.7); and its one
+  button is the design system's standard button: **try again**, or **back**
+  where trying again can't help. Its drawing is decoration, and the words carry
+  the meaning.
+- **The banner's** text is a sentence for the part or the action, then the
+  cause's: “Couldn't load continue watching. The server ran into a problem.”
+  Its button is the banner's own small one, **try again**.
+- **details** hold the status, for the people who fix things. A banner has its
+  own. The empty state has none, so chino puts them under its button as the
+  banner draws them: a quiet toggle, and the status under it in the monospace
+  face. On a TV they show without the toggle (section 17.6).
+
+## 17.4 A page that couldn't load, on a computer
 
 Figure 17.4 shows a title's page that couldn't load, on a computer. The frame
-stays, and the message takes the page's place.
+stays, and the design system's empty state takes the page's place, at its large
+size.
 
 ![Figure 17.4: A page that couldn't load, on a computer, at 1280 × 800](./img/errors-page-computer.png)
 
 Figure 17.4: A page that couldn't load, on a computer, at 1280 × 800.
 
 1. **What couldn't load**, in the page's own words: “couldn't load this title”.
-   It is the page's heading, in the monospace face.
+   It is the empty state's title and the page's heading, in the monospace face,
+   under the error drawing.
 2. **Why**, as far as the app can tell: here “The server ran into a problem.”
-   The sentence gives the reason and nothing the button says. Section 17.6
+   The sentence gives the reason and nothing the button says. Section 17.7
    lists every cause and its sentence.
-3. **try again** loads the page again, with the page's loading state while it
-   runs. It is the only way on, as a quiet button; the way back is the frame's.
+3. **try again**, the design system's standard button, loads the page again,
+   with the page's loading state while it runs. It is the only way on; the way
+   back is the frame's.
 4. **details** opens the server's answer for the people who fix things:
    “HTTP 500 Internal Server Error”. The status is never part of the heading or
    the sentence.
 
-The picture above the heading belongs to the cause, and the words carry the
-meaning without it: a cloud crossed out when nothing answered, a circle with an
-exclamation mark when the server ran into a problem or didn't accept the
-request, an hourglass when it is busy, a circle crossed through for a title
-that was removed and a person crossed out for a person, and a lock for no
-access.
+The drawing above the heading is the design system's error drawing, a line that
+doesn't connect, the same for every cause: the words say which cause it is, and
+the drawing only repeats that something failed. A removed title or person has
+the empty drawing instead (section 17.9), and no access the error drawing with
+**back** (section 17.10).
 
-## 17.4 A page that couldn't load, on a phone
+## 17.5 A page that couldn't load, on a phone
 
-### 17.4.1 Held upright
+### 17.5.1 Held upright
 
 Figure 17.5 shows the same page on a phone held upright, here with another
-cause, “The server is busy.” The parts are those of figure 17.4; the numbers
-mark where the phone differs.
+cause, “The server is busy.” The parts are those of figure 17.4, the empty state
+keeps its large size, and **try again** is the large button, 42 dp high, with a
+48 dp touch area; the numbers mark where the phone differs.
 
 ![Figure 17.5: A page that couldn't load, on a phone held upright, at 360 × 780 dp](./img/errors-page-phone.png)
 
@@ -278,7 +320,7 @@ Figure 17.5: A page that couldn't load, on a phone held upright, at
 1. **The back arrow** in the bar is the way back.
 2. **details** stays closed until it is tapped.
 
-### 17.4.2 Held sideways
+### 17.5.2 Held sideways
 
 Figure 17.6 shows the page on a phone held sideways. The tabs are a rail on the
 left and the bar is slimmer ([chapter 2](./frame.md)); the message stays in the
@@ -290,15 +332,15 @@ Figure 17.6: A page that couldn't load, on a phone held sideways, at
 780 × 360 dp.
 
 1. **The back arrow**, in the slimmer bar.
-2. **The message**, centred in the page's place, with its picture smaller so
-   that **try again** and **details** are in view.
+2. **The message**, centred in the page's place: the empty state at its small
+   size, so that **try again** and **details** are in view.
 
-### 17.4.3 Turning the phone
+### 17.5.3 Turning the phone
 
 Turning the phone keeps the message and the case as they were: it doesn't load
 again by itself, and **details**, open or closed, stays so.
 
-## 17.5 A page that couldn't load, on a TV
+## 17.6 A page that couldn't load, on a TV
 
 Figure 17.7 shows the page on a TV, with a third cause, “The server didn't
 accept the request. Check for an app update.” The parts are those of figure
@@ -308,12 +350,14 @@ accept the request. Check for an app update.” The parts are those of figure
 
 Figure 17.7: A page that couldn't load, on a TV, at 960 × 540 dp.
 
-1. **The focus** starts on **try again**, the way on. Back on the remote goes
-   back.
+1. **The focus** starts on **try again**, the way on, drawn as the design
+   system's [TV focus](https://nalet.github.io/design-system/patterns/tv-focus/)
+   draws it on a plain button: the ring, the focused surface, and the button
+   5 % larger. Back on the remote goes back.
 2. **The details** show under the button without being opened, in the quiet
-   text: a disclosure would take the focus from the way on.
+   monospace: a disclosure would take the focus from the way on.
 
-## 17.6 The causes
+## 17.7 The causes
 
 The app tells the cases apart by the server's answer, its HTTP status, never by
 the words of an error.
@@ -324,9 +368,9 @@ the words of an error.
 | The server ran into a problem | 5xx, or an answer the app couldn't read | “The server ran into a problem.” |
 | The server is busy | 429 | “The server is busy.” |
 | The server didn't accept the request | Any other 4xx; on a list, 404 and 410 as well | “The server didn't accept the request. Check for an app update.” |
-| It was removed | 404 or 410 on a page about one thing | None: the heading says it (section 17.8) |
-| No access | 403 | None: the heading says it (section 17.9) |
-| The sign-in no longer holds | 401 | None: the app signs in again (section 17.10) |
+| It was removed | 404 or 410 on a page about one thing | None: the heading says it (section 17.9) |
+| No access | 403 | None: the heading says it (section 17.10) |
+| The sign-in no longer holds | 401 | None: the app signs in again (section 17.11) |
 
 - The sentence is the reason, and only the reason. **try again** is the button,
   so the sentence never asks people to try again; only what no button offers,
@@ -346,46 +390,50 @@ the words of an error.
   What only playback has, such as a stream that stops before the title is done,
   is in [chapter 11](./playback.md).
 
-## 17.7 A page, a list, a part of a page
+## 17.8 A page, a list, a part of a page
 
 A cause reads the same wherever it happens. What differs from one place to the
-next is the heading, which names what couldn't load in that screen's own words,
-and how the message sits in it.
+next is the component, and the words that name what couldn't load in that
+screen's own words.
 
-| Place | The heading | The way on |
-|---|---|---|
-| A page about one thing: a title, a person | couldn't load this title · couldn't load this person | **try again**, in the page's place; the frame's back goes back |
-| A list: home, movies, shows, zap, search, the watchlists, one list, the subtitle languages in settings | couldn't load the library · couldn't load the movies · couldn't load the shows · couldn't load the movies and shows · couldn't search the library · couldn't load your watchlists · couldn't load this list · couldn't load the subtitle languages | **try again**, in the list's place; the view's heading, its tabs and its filters stay, and so do the words in the search field |
-| A part of a page: a row of home, a show's episodes, the next page of a grid | couldn't load continue watching · couldn't load the episodes · couldn't load more movies · couldn't load more shows | **try again**, in the part's place, smaller; the rest of the page shows |
+| Place | The component | What couldn't load | The way on |
+|---|---|---|---|
+| A page about one thing: a title, a person | The empty state, large, in the page's place | couldn't load this title · couldn't load this person | **try again**; the frame's back goes back |
+| A list: home, movies, shows, zap, search, the watchlists, one list, the subtitle languages in settings | The empty state, at its usual size, in the list's place | couldn't load the library · couldn't load the movies · couldn't load the shows · couldn't load the movies and shows · couldn't search the library · couldn't load your watchlists · couldn't load this list · couldn't load the subtitle languages | **try again**; the view's heading, its tabs and its filters stay, and so do the words in the search field |
+| A part of a page: a row of home, a show's episodes, the next page of a grid | The error banner, in the part's place | Couldn't load continue watching. · Couldn't load the episodes. · Couldn't load more movies. · Couldn't load more shows. | **try again**, in the banner; the rest of the page shows |
 
 Each chapter names its own: search, for one, says “couldn't search the library”
 ([chapter 9](./search.md)). A failure never reads as an empty list: a list that
-couldn't load says so, by its cause, in place of its empty state. Figure 4.5 in
-[chapter 4](./home.md) shows a list that couldn't load, and figure 17.8 shows a
-part of a page: home's continue watching on a phone held upright.
+couldn't load says so, by its cause, in place of its empty state. A part's
+banner says what couldn't load in a sentence of its own, then the cause's, as a
+failed action does (section 17.13), and it has no dismiss: it stays as long as
+the part couldn't load, as the design system leaves dismiss off a condition that
+is still true. Figure 4.5 in [chapter 4](./home.md) shows a list that couldn't
+load, and figure 17.8 shows a part of a page: home's continue watching on a
+phone held upright.
 
 ![Figure 17.8: A part of a page that couldn't load, on a phone held upright](./img/errors-row-phone.png)
 
 Figure 17.8: A part of a page that couldn't load, on a phone held upright.
 
-1. **The part's own heading**, under the row's name, in the place of its cards.
-2. **try again** loads the part again, and the part alone.
+1. **The banner**, the design system's error banner, under the row's name in
+   the place of its cards: the part's sentence, then the cause's.
+2. **try again**, the banner's button, loads the part again, and the part
+   alone. **details**, beside it, holds the status.
 3. **The next row** shows as usual: a part that couldn't load never takes the
    page down.
 
-Figure 17.9 shows the same row on a phone held sideways. The part keeps the
-height of the cards it stands for, so the rows under it don't move when it
-loads.
+Figure 17.9 shows the same row on a phone held sideways, where the banner has
+the width for its sentences, **try again** and **details** on one line.
 
 ![Figure 17.9: A part of a page that couldn't load, on a phone held sideways](./img/errors-row-side-phone.png)
 
 Figure 17.9: A part of a page that couldn't load, on a phone held sideways.
 
-1. **The part**, in the row's place: its heading, its reason and **try again**
-   on one line where the width allows.
+1. **The banner**, on one line in the row's place.
 2. **The next row**, as usual.
 
-## 17.8 A removed title or person
+## 17.9 A removed title or person
 
 Trying again can't bring back something that was removed, so the page offers
 the way back instead. Figure 17.10 shows a removed title on a phone held
@@ -396,13 +444,15 @@ upright.
 Figure 17.10: A title that was removed, on a phone held upright.
 
 1. **“this title isn't in the library anymore”**, or “this person isn't in the
-   library anymore” on a person's page. Nothing stands under it: there is no
-   reason to give and nothing to try.
-2. **back** goes back to where the person came from, or home when they came
-   from nowhere, such as a link.
+   library anymore” on a person's page: the empty state's title, under the
+   empty drawing, because nothing is there, and not the error drawing, because
+   nothing failed. Nothing stands under it: there is no reason to give and
+   nothing to try.
+2. **back**, the standard button, goes back to where the person came from, or
+   home when they came from nowhere, such as a link.
 
-Figure 17.11 shows the same page on a phone held sideways: the heading on one
-line, and **back** under it.
+Figure 17.11 shows the same page on a phone held sideways: the empty state at
+its small size, the heading on one line, and **back** under it.
 
 ![Figure 17.11: A title that was removed, on a phone held sideways](./img/errors-removed-side-phone.png)
 
@@ -412,11 +462,11 @@ Figure 17.11: A title that was removed, on a phone held sideways.
 2. **back**, as upright.
 
 Removed is only for a page about one thing. A list can't be removed, so on a
-list, not found means that the app and the server don't match (section 17.11).
+list, not found means that the app and the server don't match (section 17.12).
 The server answers for a title above an account's limit as for one that isn't
 there, so its page reads as removed as well.
 
-## 17.9 No access
+## 17.10 No access
 
 When the server answers that the account may not see what a screen shows, the
 screen says so and offers the way back. Figure 17.12 shows it on a TV.
@@ -426,11 +476,13 @@ screen says so and offers the way back. Figure 17.12 shows it on a TV.
 Figure 17.12: No access, on a TV.
 
 1. **“you don't have access to this”**, the same on a page, a list and a part of
-   a page. It names nothing and gives no reason, and nothing stands under it.
-2. **back**, with the focus on it on a TV. A part of a page has no back: the
-   heading stands alone in the part's place.
+   a page: the empty state's title, under the error drawing, because something
+   blocks the way. It names nothing and gives no reason, and nothing stands
+   under it.
+2. **back**, with the focus on it on a TV. A part of a page has no back: its
+   error banner says “You don't have access to this.” alone, without a button.
 
-## 17.10 A sign-in that expired
+## 17.11 A sign-in that expired
 
 A sign-in doesn't last for ever. When the server no longer accepts it, the app
 renews it by itself, without a word, and loads the screen again; meanwhile the
@@ -443,10 +495,11 @@ person was. Downloads stay on the phone and come back with the same account
 - A renewal that can't reach the sign-in service is the connection's case:
   “Can't reach the server.”, with **try again**.
 - When the server still refuses the sign-in right after the person signed in
-  again, the app stops and says so: “The server didn't accept your sign-in.”,
-  with **try again**. It never goes round again by itself.
+  again, the app stops and says so, in the screen's empty state: “The server
+  didn't accept your sign-in.”, with **try again**. It never goes round again
+  by itself.
 
-## 17.11 When the app and the server don't match
+## 17.12 When the app and the server don't match
 
 The apps and the server are updated separately, so for a while one can be newer
 than the other.
@@ -454,7 +507,7 @@ than the other.
 - **An app newer than its server** asks for things the server doesn't know.
   The server answers not found on a list, or turns the request down as it was
   sent, another 4xx: “The server didn't accept the request. Check for an app
-  update.”, or on the web its first part alone (section 17.6).
+  update.”, or on the web its first part alone (section 17.7).
 - **A server older than the app** may lack a part the app asks for. The app
   then leaves the part out, or does it the older way, and says nothing about
   it: a server without notifications has no bell
@@ -464,31 +517,33 @@ than the other.
   server answers at its address at all (404, 410), the sentence is “No chino
   server answers at this address.”
 
-## 17.12 When an action fails
+## 17.13 When an action fails
 
 Something the person does can fail as well: saving a list, sending a report,
 deleting the account. The screen stays as it was, with what the person typed,
-and an error banner says what couldn't be done and why, the action's own
-sentence first and then the cause's: “Couldn't create the list. Can't reach the
-server.” The banner stays until the person tries again or puts it away, and
-the status goes under its **details**, as the design system's [message
+and the design system's error banner says what couldn't be done and why, the
+action's own sentence first and then the cause's: “Couldn't create the list.
+Can't reach the server.” It stands above what the action was about, in the
+dialog the action came from or above the screen's content. The banner stays
+until the person tries again or dismisses it, and the status goes under its
+**details**, as the design system's [message
 handling](https://nalet.github.io/design-system/patterns/message-handling/)
 sets out. A toast never carries a failure: it would be gone before it is read.
 The chapters name their own actions: [chapter 8](./watchlist.md) the lists,
 [chapter 16](./settings.md) a report and the account.
 
-## 17.13 When a screen couldn't refresh
+## 17.14 When a screen couldn't refresh
 
 A screen that already shows what it loaded keeps it when asking the server
-again fails, and says so in a warning banner above it: what couldn't be
-refreshed and how old the screen is, “Couldn't refresh the movies; it shows
-what was loaded 4 minutes ago.”, with **try again**. The banner goes as soon as
-a refresh works. The notifications do the same in their panel
+again fails, and says so in the design system's warning banner above it: what
+couldn't be refreshed and how old the screen is, “Couldn't refresh the movies;
+it shows what was loaded 4 minutes ago.”, with **try again**. The banner goes as
+soon as a refresh works. The notifications do the same in their panel
 ([chapter 15](./notifications.md)). The phone app without a server says it
 once, in the information banner of [chapter 13](./downloads.md), and its
 screens keep what the phone has under it.
 
-## 17.14 Changes
+## 17.15 Changes
 
 Every difference between section 17.2 and the target is one change in the
 table. A change names the apps it is built in, what they do today and the
@@ -504,50 +559,50 @@ server to [chapter 13](./downloads.md).
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 17.C1 | The causes, by the server's answer | Phone app, Samsung TV | Phone app: 503 counts as busy, like 429, and an answer it can't read as not accepted. Samsung TV: no causes; every screen shows the error's own text, “chino-api 503”, removed and no access included | the table of section 17.6: 429 alone is busy, an answer that can't be read is the server's problem; on the Samsung TV every case of the table, with its heading, its sentence and its way on | proposed |
+| 17.C1 | The causes, by the server's answer | Phone app, Samsung TV | Phone app: 503 counts as busy, like 429, and an answer it can't read as not accepted. Samsung TV: no causes; every screen shows the error's own text, “chino-api 503”, removed and no access included | the table of section 17.7: 429 alone is busy, an answer that can't be read is the server's problem; on the Samsung TV every case of the table, with its heading, its sentence and its way on | proposed |
 | 17.C2 | The Samsung TV's requests give up | Samsung TV | a request has no time limit of its own, so one without an answer waits as long as the TV lets it | Recommended: 10 seconds to connect and 20 to read, as Android TV has them; then the connection's case, “Can't reach the server.” | proposed |
-| 17.C3 | The way on: one quiet button | Web, Phone app, Android TV, Samsung TV | Web: **try again** blue on a page and a list, a quiet **back** beside it on a page, **back** blue on removed and no access. Phone app, Android TV: **try again** and **back** blue. Samsung TV: no button, the remote's back only | **try again**, or **back** where trying again can't help, the design system's quiet button and the only one; on a page the way back is the frame's (figures 17.4, 17.5 and 17.10); on a TV it has the focus | proposed |
-| 17.C4 | The picture of the cause above the heading | Web, Phone app, Android TV, Samsung TV | no picture | the picture of the cause, section 17.3: a cloud crossed out, a circle with an exclamation mark, an hourglass, a circle crossed through, a person crossed out, a lock | proposed |
+| 17.C3 | The way on: one standard button | Web, Phone app, Android TV, Samsung TV | Web: **try again** blue on a page and a list, a quiet **back** beside it on a page, **back** blue on removed and no access. Phone app, Android TV: **try again** and **back** blue. Samsung TV: no button, the remote's back only | **try again**, or **back** where trying again can't help, the empty state's one button, the design system's standard button; on a page the way back is the frame's (figures 17.4, 17.5 and 17.10); on a TV it has the focus | proposed |
+| 17.C4 | The design system's empty state, with its drawing | Web, Phone app, Android TV, Samsung TV | each app's own heading, sentence and button, without a picture | the design system's empty state, in the place of what couldn't load: the error drawing above the heading for every cause, the empty drawing for a removed title or person, the error drawing for no access; at its large size for a page, its usual size for a list, its small size on a phone held sideways (sections 17.3 and 17.4) | proposed |
 | 17.C5 | The message in the page's place, centred | Web, Android TV, Samsung TV | Web: a title's, a person's or a trailer's page that couldn't load takes the whole window, without the frame (figure 17.1). Android TV: home's and a title's take the whole screen, without the rail; the lines start at one edge in a centred block. Samsung TV: a title's page a single red line without the rail; the other messages red | the frame stays and the message is centred in the page's place, the heading in the foreground colour (figures 17.4 and 17.7); with the frame chapters 6 and 7 give a title's and a person's page | proposed |
-| 17.C6 | Details: the status and its reason phrase | Web, Phone app, Android TV, Samsung TV | Web: “an answer that could not be read”. Phone app: “details: HTTP 503”, the status alone, and “no answer” where nothing answered. Android TV: always showing, under the word **details**, the error's own message, “HTTP 503 Service Unavailable”, and for no answer the network's words, “timeout”. Samsung TV: none | “HTTP 503 Service Unavailable”, “an answer that couldn't be read”, nothing where nothing answered; behind **details** on a computer and a phone, in the quiet text without a word over it on a TV (figures 17.4 and 17.7) | proposed |
-| 17.C7 | The headings, in the screen's own words | Web, Phone app, Android TV, Samsung TV | Web: home “couldn't load the movies and shows”, search “couldn't search for "s"”. Phone app: search “couldn't load the results”; “Couldn't load more movies.”, with a capital and a full stop. Android TV: search “Search failed”, in red, with the error's text and no button. Samsung TV: “Couldn’t load your library.”, “Couldn’t load the library”, “Couldn’t load person”, “Could not load this title:”, “Couldn't load your lists.”, “Search failed” | the headings of section 17.7: “couldn't load the library”, “couldn't search the library”, “couldn't load more movies”, “couldn't load this title”, “couldn't load this person”, “couldn't load your watchlists”; search's built with chapter 9's change | proposed |
-| 17.C8 | A part of a page says it couldn't load | Web, Phone app, Android TV, Samsung TV | Web: a row of home that fails is left out; only when every row of titles fails, home says so at its top. Phone app: a row other than continue watching keeps what the phone had of it, or is left out. Android TV: a row, a show's episodes and a list's titles are left out; a later page of a grid ends it, “You've reached the end — 10 movies.” Samsung TV: rows and episodes left out; a later page replaces the whole grid | figures 17.8 and 17.9: the part's own heading, its reason and **try again**, smaller, in its place; the rest of the page shows; a row that has what the phone loaded before keeps it, under the banner of section 17.13 | proposed |
-| 17.C9 | A failure never reads as empty | Android TV, Samsung TV | Android TV: zap “Nothing left to zap. Come back later.”, whatever failed; a list that couldn't load as an empty list. Samsung TV: home “Your library is empty. Add titles on your server to see them here.”; zap the same as Android TV; the watchlist “You don’t have any lists yet. …” under its red line; a list as empty | the couldn't-load of the place, by its cause (section 17.7); zap's own words in chapter 10 | proposed |
-| 17.C10 | No access, in one sentence | Web, Phone app, Android TV | Web: **back** in a part of a page too. Phone app: no **back** on a list. Android TV: “you don't have access to this title”, “you don't have access to this person” | “you don't have access to this” everywhere; **back** on a page and a list, the heading alone in a part (section 17.9) | proposed |
-| 17.C11 | A sign-in that no longer holds | Phone app, Android TV, Samsung TV | Phone app: home answers 401 and 403 with “This server no longer accepts your sign-in. Sign in again.” in red, **Sign in again** and **Change server**; a refused renewal goes to the sign-in, which starts over. Android TV: a refused renewal goes to the sign-in, “Connect your Chino account”, and then home; where a 401 reaches a screen, “you're signed out”, “Sign in again to keep watching.”, **sign in**. Samsung TV: a 401 isn't renewed or followed, “chino-api 401”; a refused renewal keeps the account signed in | section 17.10: renewed without a word; a refused renewal to chapter 3's sign-in for the same account and back to where the person was; “The server didn't accept your sign-in.” with **try again** when it still refuses right after; a 403 on home is no access | proposed |
-| 17.C12 | Android TV: movies and shows say why instead of closing | Android TV | opened while the server gives no stream token and none is kept, the screen's first request isn't caught and the app closes | the couldn't-load of the cause, “couldn't load the movies” with **try again** (section 17.7) | proposed |
-| 17.C13 | A refresh that fails keeps the screen, under a warning | Web, Phone app, Android TV, Samsung TV | Web: a title's page keeps what it shows, without a word. Phone app: home's rows keep what the phone had, without a word. Android TV: home after a filter change and the watchlists after a change show the couldn't-load in place of what they showed; a title's page keeps it, without a word. Samsung TV: every screen loads again when opened, and a failure replaces it | section 17.13: what the screen showed stays, under the warning banner “Couldn't refresh the movies; it shows what was loaded 4 minutes ago.” with **try again** | proposed |
-| 17.C14 | A failed action in an error banner, by cause | Web, Phone app, Android TV, Samsung TV | Web: in its dialog, the error's own message, or “Could not create list”, “Could not rename list”, “Could not delete list”. Phone app: “Couldn't save the list. Try again.” Android TV: a list's create, rename or delete that fails says nothing; a report that couldn't be sent says “Couldn't send the report. Check your connection and try again.” in red. Samsung TV: “Couldn't create that list.” in red on the watchlist, after the dialog closed | section 17.12: the screen stays with what was typed, under an error banner with the action's sentence and the cause's, “Couldn't create the list. Can't reach the server.”, the status under its details; the lists' own words in chapter 8, the report's in chapter 16 | proposed |
-| 17.C15 | The web's not-accepted sentence | Web | “The server didn't accept the request.”, without “Check for an app update.”, which the design system's table has | Recommended: keep it so, the first part alone, because a web page updates itself and has no app update to check for (section 17.6); once approved, nothing needs building | proposed |
+| 17.C6 | Details: the status and its reason phrase | Web, Phone app, Android TV, Samsung TV | Web: “an answer that could not be read”. Phone app: “details: HTTP 503”, the status alone, and “no answer” where nothing answered. Android TV: always showing, under the word **details**, the error's own message, “HTTP 503 Service Unavailable”, and for no answer the network's words, “timeout”. Samsung TV: none | “HTTP 503 Service Unavailable”, “an answer that couldn't be read”, nothing where nothing answered; behind **details** on a computer and a phone, a banner's own in a banner and, under an empty state, drawn as the banner draws them; on a TV in the quiet text, without a word over it (figures 17.4, 17.7 and 17.8) | proposed |
+| 17.C7 | The headings, in the screen's own words | Web, Phone app, Android TV, Samsung TV | Web: home “couldn't load the movies and shows”, search “couldn't search for "s"”. Phone app: search “couldn't load the results”. Android TV: search “Search failed”, in red, with the error's text and no button. Samsung TV: “Couldn’t load your library.”, “Couldn’t load the library”, “Couldn’t load person”, “Could not load this title:”, “Couldn't load your lists.”, “Search failed” | the headings of section 17.8: “couldn't load the library”, “couldn't search the library”, “couldn't load this title”, “couldn't load this person”, “couldn't load your watchlists”; search's built with chapter 9's change; a part's sentence in its banner, with change 17.C8 | proposed |
+| 17.C8 | A part of a page in the error banner | Web, Phone app, Android TV, Samsung TV | Web: a row of home that fails is left out, and only when every row of titles fails does home say so at its top; a show's episodes and a later page of a grid say so in their place, a heading, the reason and **try again**. Phone app: continue watching says so in its place, a heading, the reason and a filled **try again**; a later page, “Couldn't load more movies.” with **try again** beside it; another row keeps what the phone had of it, or is left out. Android TV: a row, a show's episodes and a list's titles are left out; a later page of a grid ends it, “You've reached the end — 10 movies.” Samsung TV: rows and episodes left out; a later page replaces the whole grid | figures 17.8 and 17.9: the design system's error banner in the part's place, the part's sentence and the cause's, “Couldn't load continue watching. The server ran into a problem.”, with **try again** and **details** and without dismiss; the rest of the page shows; a row that has what the phone loaded before keeps it, under the warning banner of section 17.14 | proposed |
+| 17.C9 | A failure never reads as empty | Android TV, Samsung TV | Android TV: zap “Nothing left to zap. Come back later.”, whatever failed; a list that couldn't load as an empty list. Samsung TV: home “Your library is empty. Add titles on your server to see them here.”; zap the same as Android TV; the watchlist “You don’t have any lists yet. …” under its red line; a list as empty | the couldn't-load of the place, by its cause (section 17.8); zap's own words in chapter 10 | proposed |
+| 17.C10 | No access, in one sentence | Web, Phone app, Android TV | Web: **back** in a part of a page too. Phone app: no **back** on a list. Android TV: “you don't have access to this title”, “you don't have access to this person” | “you don't have access to this” everywhere; **back** on a page and a list, in the empty state with the error drawing; in a part of a page the error banner alone, “You don't have access to this.” (section 17.10) | proposed |
+| 17.C11 | A sign-in that no longer holds | Phone app, Android TV, Samsung TV | Phone app: home answers 401 and 403 with “This server no longer accepts your sign-in. Sign in again.” in red, **Sign in again** and **Change server**; a refused renewal goes to the sign-in, which starts over. Android TV: a refused renewal goes to the sign-in, “Connect your Chino account”, and then home; where a 401 reaches a screen, “you're signed out”, “Sign in again to keep watching.”, **sign in**. Samsung TV: a 401 isn't renewed or followed, “chino-api 401”; a refused renewal keeps the account signed in | section 17.11: renewed without a word; a refused renewal to chapter 3's sign-in for the same account and back to where the person was; “The server didn't accept your sign-in.” with **try again** when it still refuses right after; a 403 on home is no access | proposed |
+| 17.C12 | Android TV: movies and shows say why instead of closing | Android TV | opened while the server gives no stream token and none is kept, the screen's first request isn't caught and the app closes | the couldn't-load of the cause, “couldn't load the movies” with **try again** (section 17.8) | proposed |
+| 17.C13 | A refresh that fails keeps the screen, under a warning | Web, Phone app, Android TV, Samsung TV | Web: a title's page keeps what it shows, without a word. Phone app: home's rows keep what the phone had, without a word. Android TV: home after a filter change and the watchlists after a change show the couldn't-load in place of what they showed; a title's page keeps it, without a word. Samsung TV: every screen loads again when opened, and a failure replaces it | section 17.14: what the screen showed stays, under the design system's warning banner, “Couldn't refresh the movies; it shows what was loaded 4 minutes ago.”, with **try again** | proposed |
+| 17.C14 | A failed action in an error banner, by cause | Web, Phone app, Android TV, Samsung TV | Web: in its dialog, the error's own message, or “Could not create list”, “Could not rename list”, “Could not delete list”. Phone app: “Couldn't save the list. Try again.” Android TV: a list's create, rename or delete that fails says nothing; a report that couldn't be sent says “Couldn't send the report. Check your connection and try again.” in red. Samsung TV: “Couldn't create that list.” in red on the watchlist, after the dialog closed | section 17.13: the screen stays with what was typed, under the design system's error banner, which can be dismissed, with the action's sentence and the cause's, “Couldn't create the list. Can't reach the server.”, the status under its details; the lists' own words in chapter 8, the report's in chapter 16 | proposed |
+| 17.C15 | The web's not-accepted sentence | Web | “The server didn't accept the request.”, without “Check for an app update.”, which the design system's table has | Recommended: keep it so, the first part alone, because a web page updates itself and has no app update to check for (section 17.7); once approved, nothing needs building | proposed |
 
-## 17.15 States
+## 17.16 States
 
 Every case, and what each place shows.
 
 | Case | A page about one thing | A list | A part of a page |
 |---|---|---|---|
-| Can't reach the server | Heading, “Can't reach the server.”, **try again** | The same, in the list's place | The same, smaller |
-| The server ran into a problem | Heading, sentence, **try again**, details (figure 17.4) | The same, in the list's place | The same, smaller (figure 17.8) |
-| The server is busy | Heading, sentence, **try again**, details (figure 17.5) | The same, in the list's place | The same, smaller |
-| The server didn't accept the request | Heading, sentence, **try again**, details (figure 17.7) | The same; 404 and 410 as well | The same, smaller |
-| Removed | Figure 17.10 | Doesn't happen: the not-accepted case | Doesn't happen: the not-accepted case |
-| No access | Figure 17.12 | The same, in the list's place | The heading alone |
+| Can't reach the server | The empty state: the heading, “Can't reach the server.”, **try again** | The same, in the list's place | The error banner: the part's sentence, “Can't reach the server.”, **try again** |
+| The server ran into a problem | The empty state, with details (figure 17.4) | The same, in the list's place | The error banner, with details (figure 17.8) |
+| The server is busy | The empty state, with details (figure 17.5) | The same, in the list's place | The error banner, with details |
+| The server didn't accept the request | The empty state, with details (figure 17.7) | The same; 404 and 410 as well | The error banner, with details |
+| Removed | The empty state with the empty drawing and **back** (figure 17.10) | Doesn't happen: the not-accepted case | Doesn't happen: the not-accepted case |
+| No access | The empty state with the error drawing and **back** (figure 17.12) | The same, in the list's place | The error banner alone: “You don't have access to this.” |
 | The sign-in no longer holds | Renewed without a word, else sign-in and back | The same | The same |
-| The sign-in refused right after signing in | “The server didn't accept your sign-in.”, **try again** | The same | The same |
-| Asking again failed, the screen still shows what it had | The screen, under the warning banner of section 17.13 | The same | The same |
-| An action failed | The screen as it was, under the error banner of section 17.12 | The same | The same |
-| The phone app can't reach the server | The banner of [chapter 13](./downloads.md), and what the phone has | The same | The same |
+| The sign-in refused right after signing in | The empty state: “The server didn't accept your sign-in.”, **try again** | The same | The error banner, with that sentence |
+| Asking again failed, the screen still shows what it had | The screen, under the warning banner of section 17.14 | The same | The same |
+| An action failed | The screen as it was, under the error banner of section 17.13 | The same | The same |
+| The phone app can't reach the server | The information banner of [chapter 13](./downloads.md), and what the phone has | The same | The same |
 
-## 17.16 Words
+## 17.17 Words
 
 | Where | Text |
 |---|---|
 | A page about one thing | couldn't load this title · couldn't load this person |
 | A list | couldn't load the library · couldn't load the movies · couldn't load the shows · couldn't load the movies and shows · couldn't search the library · couldn't load your watchlists · couldn't load this list · couldn't load the subtitle languages |
-| A part of a page | couldn't load continue watching · couldn't load the episodes · couldn't load more movies · couldn't load more shows |
+| A part of a page, in its banner | Couldn't load continue watching. · Couldn't load the episodes. · Couldn't load more movies. · Couldn't load more shows. |
 | The sentences | Can't reach the server. · The server ran into a problem. · The server is busy. · The server didn't accept the request. Check for an app update. · The server didn't accept the request. (the web) · The server didn't accept your sign-in. |
 | Removed | this title isn't in the library anymore · this person isn't in the library anymore |
-| No access | you don't have access to this |
+| No access | you don't have access to this · You don't have access to this. (in a part of a page) |
 | The buttons | try again · back |
 | Details | details · “HTTP 500 Internal Server Error”, the status and its reason phrase · an answer that couldn't be read |
 | A refresh that failed | Couldn't refresh the movies; it shows what was loaded 4 minutes ago. · try again |

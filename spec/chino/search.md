@@ -193,18 +193,20 @@ Figure 9.5 shows search on a computer, after the person typed one letter.
 
 Figure 9.5: Search on a computer, at 1280 × 800.
 
-1. **The field** in the top bar. Its placeholder says what it finds, “Search
-   movies, shows and people”, and the / key puts the focus in it from
-   anywhere, except while the person is typing in another field. As soon as it
-   holds a letter, the results take the page's place, and no view in the bar
-   is current.
+1. **The field** in the top bar, the design system's input with its search
+   mark, framed in blue while it has the focus. Its placeholder says what it
+   finds, “search movies, shows and people…”, and the / key puts the focus in
+   it from anywhere, except while the person is typing in another field. As
+   soon as it holds a letter, the results take the page's place, and no view
+   in the bar is current.
 2. **cast & crew**: the people whose names match, in one line of cards. A card
    shows the photo, or the initials where the catalog has no photo, the name,
    and how many of their titles the library has: “1 title”. It opens the
    person's page ([chapter 7](./person.md)).
 3. **titles**: the movies, shows and episodes that match, in one grid, the best
    match first, whatever its kind. The cards are those of movies and shows
-   ([chapter 5](./browse.md)), with their status marks.
+   ([chapter 5](./browse.md)), with their status marks and the button of
+   their menu.
 
 Esc in the field empties it and brings back the page the person was on, and so
 does choosing a view in the bar. The address holds the words, so a reload, or
@@ -227,11 +229,12 @@ Figure 9.6: The search opened on a phone held upright, at 360 × 780 dp.
 
 1. **The back arrow** closes the search and gives the bar back, with the page
    as it was.
-2. **The field** takes the whole width of the bar, and the focus. Its
-   placeholder is “Search”: at 320 dp, the narrowest phone, the computer's
-   “Search movies, shows and people” would be cut off.
+2. **The field**, the design system's input at the large size, takes the
+   whole width of the bar, and the focus. Its placeholder is “search…”: at
+   320 dp, the narrowest phone, the computer's “search movies, shows and
+   people…” would be cut off.
 3. **The phone's own keyboard** comes up with the field. Until the first
-   letter, the page under the field stays as it was.
+   letter, the page under the field stays as it was, here home.
 
 Figure 9.7 shows the results. The keyboard's search key has closed the
 keyboard, and the results stay.
@@ -240,8 +243,9 @@ keyboard, and the results stay.
 
 Figure 9.7: Search on a phone held upright, at 360 × 780 dp.
 
-1. **×** empties the field and brings the page back. The field stays open,
-   with the keyboard, for other words.
+1. **×**, the design system's quiet icon button at the field's end, empties
+   the field and brings the page back. The field stays open, with the
+   keyboard, for other words.
 2. **cast & crew** is one line that scrolls sideways, with a card and a part of
    the next in view, so the people never push the titles far down.
 3. **titles**, three to a line, as in movies and shows.
@@ -300,13 +304,16 @@ Figure 9.10 shows the search view, opened from the rail, after the person typed
 
 Figure 9.10: Search on a TV, at 960 × 540 dp.
 
-1. **The field** shows what is typed. It takes no focus of its own: the
-   keyboard types into it.
+1. **The field**, the design system's input at the large size, shows what is
+   typed. It takes no focus of its own: the keyboard types into it.
 2. **The keyboard**: the letters a to z and the digits 0 to 9 in six columns,
-   then **space** and **delete**. The view opens with an empty field and the
-   focus on **a**; OK on a key types it. Right from the keyboard's last column
-   goes into the results, left from their first column back to the keyboard,
-   and left from the keyboard's first column opens the rail.
+   then **space** and **delete**. The design system has no keyboard, so the
+   keys are chino's own, at the TV's control height, 42 dp, 12 dp apart, in
+   the look of its standard buttons, and the focused key has its TV focus. The
+   view opens with an empty field and the focus on **a**; OK on a key types
+   it. Right from the keyboard's last column goes into the results, left from
+   their first column back to the keyboard, and left from the keyboard's first
+   column opens the rail.
 3. **An episode that matches** shows as its show's card, with the episode
    under the name: “S01E03 · Llamigos”. OK opens the show's page on that
    episode ([chapter 6](./title-actions.md)). Two episodes of one show make two
@@ -362,15 +369,15 @@ frame, the phone's search icon and the search on the TV's rail belong to
 | 9.C4 | The titles' size and number | Web, Phone app | Web: two to a line below 640 px. Phone app: two to a line at 360 dp, three held sideways; at most 40 titles | three to a line upright, six held sideways, at the size of a poster in movies and shows; up to 60 titles and 12 people (figures 9.7, 9.9, section 9.6.1) | proposed |
 | 9.C5 | Episodes in search | Web, Phone app, Android TV, Samsung TV | only movies and shows are asked for | an episode as its show's card with the episode under the name, “S01E03 · Llamigos”, opening the show's page on it; one card where the show matched too (figure 9.10, section 9.6.1) | proposed |
 | 9.C6 | Loading | Web, Phone app, Android TV, Samsung TV | Web: “Searching for "s"…” as the heading. Phone app: the same with a spinner, and after each key the old count with the new words. Android TV, Samsung TV: “Searching for “s”…” | nothing for 0.4 seconds, then grey blocks; typing on, the results stay with a thin blue line along their top (figure 9.11) | proposed |
-| 9.C7 | No matches, and only one group | Web, Phone app, Android TV, Samsung TV | “No results for "s"”, with an addon's buttons; Phone app: also under the people where only people match. Android TV, Samsung TV: where only people match, “0 results for “s”” and “No matching titles.” | **no matches**, “Nothing in the library fits this search.” and **clear search**, an addon's buttons under them (figure 9.12); where only people or only titles match, that group alone | proposed |
-| 9.C8 | Couldn't search | Web, Phone app, Android TV, Samsung TV | Web: headed “couldn't search for "s"”, the reason, try again. Phone app: “Results for "s"”, then “couldn't load the results”, the reason, try again. Android TV, Samsung TV: “Search failed” in red with the error's text; no try again | “couldn't search the library”, the reason by cause and **try again** in the results' place; the words stay in the field (section 9.8) | proposed |
+| 9.C7 | No matches, and only one group | Web, Phone app, Android TV, Samsung TV | “No results for "s"”, with an addon's buttons; Phone app: also under the people where only people match. Android TV, Samsung TV: where only people match, “0 results for “s”” and “No matching titles.” | the design system's empty state with its search picture: **no matches**, “Nothing in the library fits this search.” and **clear search**, an addon's buttons under them (figure 9.12); where only people or only titles match, that group alone | proposed |
+| 9.C8 | Couldn't search | Web, Phone app, Android TV, Samsung TV | Web: headed “couldn't search for "s"”, the reason, try again. Phone app: “Results for "s"”, then “couldn't load the results”, the reason, try again. Android TV, Samsung TV: “Search failed” in red with the error's text; no try again | with nothing shown yet, the design system's empty state with its error picture in the results' place: “couldn't search the library”, the reason by cause and **try again**; with the results of earlier words shown, they stay under the warning banner “Couldn't search for “sp”; it shows the results for “s”.” with **try again**; the words stay in the field (section 9.8) | proposed |
 | 9.C9 | Nothing typed | Web, Android TV, Samsung TV | Web, the results page without words: “Search the library”, “Type a movie or show title in the search bar to look it up.” Android TV: “Search the library”, “Type a movie or show title to look it up.” Samsung TV: “Search the library”, “Open the keyboard to look up a movie or show title.” | on a computer and a phone, the page as it was; on a TV, the keyboard with nothing beside it (section 9.8) | proposed |
 | 9.C10 | Web: Esc and the / key | Web | Esc closes the list under the field and keeps the words; no key puts the focus in the field | Esc in the field empties it and brings back the page; / puts the focus in the field from anywhere, except while typing in another field (section 9.3) | proposed |
 | 9.C11 | Phone app: a tab closes the search | Phone app | choosing a tab keeps the results until the field is empty | a tab closes the search and opens its view; × empties the field and keeps it open, with the keyboard (section 9.4.1) | proposed |
 | 9.C12 | Back from a result | Phone app, Android TV, Samsung TV | Phone app: the search runs again, with its spinner. Android TV: the results stay, the focus on the field. Samsung TV: the words are gone | the results as they were, with the words in the field; on a TV the focus on the result that was opened (section 9.6.2) | proposed |
-| 9.C13 | The TV's own keyboard beside the results | Android TV, Samsung TV | Android TV: the system's keyboard. Samsung TV: the app's keyboard over the whole screen, hiding the results: 1–0, q–p, a–l and @, z–m and . - /, signs, space, delete and done | Recommended: the app's own keyboard in the page, a to z and 0 to 9 in six columns, then **space** and **delete**, with the results beside it (figure 9.10); the same keyboard types a list's name ([chapter 8](./watchlist.md)) | proposed |
+| 9.C13 | The TV's own keyboard beside the results | Android TV, Samsung TV | Android TV: the system's keyboard. Samsung TV: the app's keyboard over the whole screen, hiding the results: 1–0, q–p, a–l and @, z–m and . - /, signs, space, delete and done | Recommended: the app's own keyboard in the page, a to z and 0 to 9 in six columns, then **space** and **delete**, its keys chino's own, as the design system has no keyboard: 42 dp square, 12 dp apart, in the look of its standard buttons, with the results beside it (figure 9.10); the same keyboard types a list's name ([chapter 8](./watchlist.md)) | proposed |
 | 9.C14 | A screen reader hears the count | Web, Phone app, Android TV, Samsung TV | not found | “3 people, 4 titles”, or “no matches”, as the results change (section 9.6.1) | proposed |
-| 9.C15 | The field's placeholder | Web, Phone app, Android TV, Samsung TV | “Search movies, shows…” in every app; on the web narrower than 768 px it is cut off, “Search movies, sho” | “Search movies, shows and people” on a computer and a TV; “Search” in the phone's field, which opens from the bar's search icon (2.C3, section 9.4.1) | proposed |
+| 9.C15 | The field's placeholder | Web, Phone app, Android TV, Samsung TV | “Search movies, shows…” in every app; on the web narrower than 768 px it is cut off, “Search movies, sho” | “search movies, shows and people…” on a computer and a TV; “search…” in the phone's field, which opens from the bar's search icon (2.C3, section 9.4.1): lowercase and ending in “…”, as the design system's top bar words a search's placeholder, “search apps…” | proposed |
 
 ## 9.8 States
 
@@ -393,12 +400,19 @@ doesn't flicker with every key.
 
 Figure 9.12: A search that matches nothing, on a TV.
 
-1. **no matches**: the design system's no-match state, with “Nothing in the
-   library fits this search.” under it, in the results' place. The words stay
-   in the field, so the person can change a letter instead of starting over.
-2. **clear search** empties the field, the state's one way out. On a TV it
-   spares deleting the words key by key, and the focus goes to **a**; on a
-   computer and a phone the focus goes to the field.
+1. **no matches**: the design system's empty state with its search picture,
+   and “Nothing in the library fits this search.” under it, in the results'
+   place. The words stay in the field, so the person can change a letter
+   instead of starting over.
+2. **clear search**, its standard button, empties the field, the state's one
+   way out. On a TV it spares deleting the words key by key, and the focus
+   goes to **a**; on a computer and a phone the focus goes to the field.
+
+Where search couldn't be made, what shows follows the design system's
+[message handling](https://nalet.github.io/design-system/patterns/message-handling/):
+with nothing on the screen yet, the empty state with its error picture takes
+the results' place; with the results of earlier words on the screen, they
+stay, under a warning banner that says whose results they are.
 
 | State | What search shows |
 |---|---|
@@ -407,15 +421,16 @@ Figure 9.12: A search that matches nothing, on a TV.
 | Typing on | The results stay, with a thin blue line running along their top |
 | Only people, or only titles, match | That group alone, without the other's heading |
 | No matches | Figure 9.12. Where an addon on the server adds buttons for a search that found nothing, they follow under it |
-| Couldn't search | “couldn't search the library”, the reason and **try again** in the results' place; the words stay in the field. [Chapter 17](./errors.md) lists every cause and its sentence |
-| The phone app can't reach the server | The banner of [chapter 13](./downloads.md), and under it “couldn't search the library” with **try again**, without the sentence, which the banner already says |
+| Couldn't search, with nothing shown yet | The empty state with its error picture in the results' place: “couldn't search the library”, the reason and **try again**; the words stay in the field. [Chapter 17](./errors.md) lists every cause and its sentence |
+| Couldn't search for new words, with the results of earlier ones shown | The results stay, under the warning banner “Couldn't search for “sp”; it shows the results for “s”.”, with **try again**; the banner goes once a search works |
+| The phone app can't reach the server | The banner of [chapter 13](./downloads.md), and under it the empty state “couldn't search the library” with **try again**, without the sentence, which the banner already says |
 
 ## 9.9 Words
 
 | Where | Text |
 |---|---|
-| The field's placeholder on a computer and a TV | Search movies, shows and people |
-| The field's placeholder on a phone | Search |
+| The field's placeholder on a computer and a TV | search movies, shows and people… |
+| The field's placeholder on a phone | search… |
 | The phone's buttons, for screen readers | search · close search · clear search |
 | The groups | cast & crew · titles |
 | A person's card | Sergio Hasselbaink · 1 title · 4 titles |
@@ -425,3 +440,4 @@ Figure 9.12: A search that matches nothing, on a TV.
 | What a screen reader says as the results change | 3 people, 4 titles · no matches |
 | No matches | no matches · Nothing in the library fits this search. · clear search |
 | Couldn't search | couldn't search the library · Can't reach the server. · try again |
+| Couldn't search for new words | Couldn't search for “sp”; it shows the results for “s”. · try again |

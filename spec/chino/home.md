@@ -200,8 +200,11 @@ doesn't have.
 
 ## 4.3 Home on a computer
 
-Figure 4.5 shows home on a computer. The hero takes the top of the page, and
-the rows follow under it, each scrolling sideways.
+Figure 4.5 shows home on a computer, with the menu of the last card in
+continue watching open. The hero takes the top of the page, and the rows
+follow under it, each scrolling sideways. The hero, its squares and the rows
+of cards are chino's own; the buttons and the card's menu are the design
+system's.
 
 ![Figure 4.5: Home on a computer, at 1280 × 800](./img/home-computer.png)
 
@@ -212,8 +215,10 @@ Figure 4.5: Home on a computer, at 1280 × 800.
    fades into the page on the left, so the words always stand on the page's
    own colour, never on the picture. Section 4.6.1 says which titles the hero
    shows.
-2. **play**, **see details** and **trailer.** play plays the title from where
-   the person stopped, as resume on its page does, and a show the episode its
+2. **play**, **see details** and **trailer**, the design system's buttons at
+   their medium size, 34 px high: play is the emphasized one, with its
+   triangle, the other two are standard. play plays the title from where the
+   person stopped, as resume on its page does, and a show the episode its
    page's first button names; see details opens its title page
    ([chapter 6](./title-actions.md)); trailer plays its trailer, the one this
    server has in the player and one that is only online outside the app, as
@@ -224,14 +229,20 @@ Figure 4.5: Home on a computer, at 1280 × 800.
 4. **continue watching.** What the person stopped in the middle of. Each card
    shows a still with a bar for how far the person got, the title's name,
    and the time left. An episode puts its code first: “S01E03 · 24 min left”.
-   ⋮ beside the name opens the card's menu (section 4.6.2).
+   The menu button at the right of the card's lines, three small squares,
+   opens the card's menu (section 4.6.2).
 5. **next up.** The next episode of a show whose last episode the person
    finished, by its code and name, “S01E02 · Gran Dillama”. The rows that
    follow it are listed in section 4.6.2.
+6. **The card's menu**, open on Sprite Fright: the design system's action
+   menu, just under its button and lined up with its right edge, over the
+   row below. It lists **resume**, **mark as watched** and **remove from
+   continue watching**, the last one in amber and at the end, as the design
+   system marks an item that takes something away.
 
 The rows after next up hold posters, as the grid of movies and shows does
 ([chapter 5](./browse.md)): the poster with its status marks, the name, the
-year and ⋮.
+year and the menu button.
 
 ## 4.4 Home on a phone
 
@@ -248,7 +259,9 @@ Figure 4.6: Home on a phone held upright, at 360 × 780 dp.
 
 1. **The hero** leaves out the description, which the title page has. The
    artwork fills the width and fades into the page below the name.
-2. **play** and **see details** share the width; **trailer** is its icon only.
+2. **play** and **see details**, the design system's buttons at their large
+   size, 42 dp high, share the width; **trailer** is the design system's icon
+   button, its clapperboard alone, named “trailer” for screen readers.
 3. **The squares**, as on a computer. A swipe on the hero brings the next
    title as well.
 4. **zap** opens zap ([chapter 10](./zap.md)). The phone app has no zap tab
@@ -270,7 +283,7 @@ Figure 4.7: Home on a phone held sideways, at 780 × 360 dp.
    show without scrolling: the name, the year, the length and the genre stand
    left of the artwork, on its darkened side, without the description.
 2. **trailer** has its name again, as on a computer, because the row has the
-   room.
+   room. The three are the large buttons of figure 4.6.
 3. **zap**, right under the hero, as upright.
 4. **The rows** follow. A short scroll brings continue watching, whose cards
    keep their upright size, so a row shows more of them.
@@ -298,7 +311,8 @@ the TV's safe area, the dashed outline in the figure.
 
 Figure 4.8: Home on a TV, at 960 × 540 dp.
 
-1. **The hero**, as on a computer, with the description.
+1. **The hero**, as on a computer, with the description, and its buttons at
+   the design system's large size, 42 dp high.
 2. **The focus.** Home opens with the focus on **play**: the ring sits 2 dp
    outside the button, and the button grows by 5 %, as the design system's
    [TV focus](https://nalet.github.io/design-system/patterns/tv-focus/) sets
@@ -347,11 +361,14 @@ show's name. The other rows show posters, as movies and shows do
 
 When the server counts a title as finished ([chapter 11](./playback.md)), a
 movie leaves continue watching and an episode makes way for the next one in
-next up. A card's menu opens with ⋮ beside its name, or by holding OK on a TV,
-and offers what [chapter 6](./title-actions.md) lists: **play**, or **resume**
-for a title the person is in, and **mark as watched** or **watched**. In
-continue watching it also has **remove from continue watching**, which takes
-the card off without changing what was watched.
+next up. A card's menu is the design system's action menu. It opens with the
+menu button at the right of the card's lines, named after the title for
+screen readers, “actions for Sprite Fright”, or by holding OK on a TV, and
+offers what [chapter 6](./title-actions.md) lists: **play**, or **resume** for
+a title the person is in, and **mark as watched** or **watched**. In continue
+watching it also has **remove from continue watching**, last and in amber
+(figure 4.5, part 6), which takes the card off without changing what was
+watched.
 
 A row holds up to 20 titles. recently added movies, recently added shows and
 top rated end with a **see all** card, which opens movies or shows in that
@@ -378,9 +395,9 @@ menu opens, in every row and grid, to [chapter 5](./browse.md).
 | 4.C3 | 20 seconds a title, held while in use | Phone app, Android TV, Samsung TV | every 12 s; the phone app holds it only while a finger drags it | 20 seconds; held while the pointer, the focus or a finger is on the hero (section 4.6.1) | proposed |
 | 4.C4 | The hero's line: year, length and genre | Web, Phone app, Android TV, Samsung TV | the year and the rating in a blue badge, “2010 • 7.3” | Recommended: “2012 · 12 min · science fiction”, without the rating (figure 4.5, part 1) | proposed |
 | 4.C5 | The current square in blue | Web, Phone app, Android TV, Samsung TV | white | blue (figure 4.5, part 3) | proposed |
-| 4.C6 | Web: one trailer icon, no empty description | Web | a trailer online shows a screen with a play triangle; a title without a description says “No description available.” | the clapperboard for every trailer; a title without a description shows none (figure 4.5, part 2; section 4.6.1) | proposed |
-| 4.C7 | The TVs' hero buttons | Android TV, Samsung TV | Android TV: play and see details, no trailer. Samsung TV: “Play” and “More Info”, no trailer | play · see details · trailer (figure 4.8) | proposed |
-| 4.C8 | Phone app: play alone on the hero | Phone app | resume 1:43 and start over for a title the person is in, play S01E01 for a show | Recommended: play, which plays from where the person stopped, so the three buttons keep to one row 360 dp wide; resume and start over stay on the title page (figure 4.6) | proposed |
+| 4.C6 | Web: the hero's buttons, one trailer icon, no empty description | Web | see details has an “i” in a circle; a trailer online shows a screen with a play triangle; a title without a description says “No description available.” | the design system's buttons at their medium size: play emphasized, with its triangle, see details and trailer standard, see details without an icon, the clapperboard for every trailer; a title without a description shows none (figure 4.5, part 2; section 4.6.1) | proposed |
+| 4.C7 | The TVs' hero buttons | Android TV, Samsung TV | Android TV: play and see details, no trailer. Samsung TV: “Play” and “More Info”, no trailer | play · see details · trailer, the design system's buttons at their large size, 42 dp, play emphasized (figure 4.8) | proposed |
+| 4.C8 | Phone app: play alone on the hero | Phone app | resume 1:43 and start over for a title the person is in, play S01E01 for a show | Recommended: play, which plays from where the person stopped, so the three buttons, the design system's large ones with trailer as its icon button, keep to one row 360 dp wide; resume and start over stay on the title page (figure 4.6) | proposed |
 | 4.C9 | Phone app: a hero without a trailer | Phone app | no hero when no title has a trailer | the newest movie the person hasn't watched, without trailer and squares (section 4.6.1) | proposed |
 | 4.C10 | The rows' names | Web, Phone app, Samsung TV | “Continue watching”, “Next Up”, “Recently added — Movies”, “Recently added — Shows”, “Top rated”; on Samsung TV “Continue Watching” and “Top Rated” | continue watching · next up · recently added movies · recently added shows · top rated, lowercase in the monospace face (section 4.9) | proposed |
 | 4.C11 | continue watching and next up: stills with the time left | Web, Phone app, Android TV, Samsung TV | 2:3 posters with the year and the rating, an episode “S01E01 · Earthfall”, no time left | Recommended: 16:9 stills; continue watching “24 min left”, an episode “S01E03 · 24 min left”; next up “S01E02 · Gran Dillama” (figure 4.5, parts 4 and 5) | proposed |
@@ -392,9 +409,9 @@ menu opens, in every row and grid, to [chapter 5](./browse.md).
 | 4.C17 | A phone held sideways: the hero keeps to the screen | Web, Phone app | Web: the computer's hero, 460 px tall, its buttons below the screen's foot (figure 4.4). Phone app: the wide hero, 500 dp tall | figure 4.7: no taller than the screen, its buttons in view, no description | proposed |
 | 4.C18 | Samsung TV: back on home keeps it | Samsung TV | home loads again, with the focus on Play | home as it was, the focus on the card that opened the page (section 4.5) | proposed |
 | 4.C19 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner alone. Android TV: “Loading your library…”. Samsung TV: a spinner, “Loading library…” | nothing for 0.4 seconds, then the grey blocks of figure 4.9 | proposed |
-| 4.C20 | Couldn't load the library | Web, Samsung TV | Web: “couldn't load the movies and shows”, above continue watching. Samsung TV: “Couldn’t load your library. ” and the error's text, no try again | figure 4.10: “couldn't load the library”, the reason by cause, try again, details | proposed |
-| 4.C21 | A row that couldn't load says so | Web, Phone app, Android TV, Samsung TV | the row is left out; the phone app says “couldn't load continue watching” for that row alone | the row in its place says “couldn't load”, with the reason and try again (section 4.8) | proposed |
-| 4.C22 | An empty library says so | Web, Phone app, Android TV, Samsung TV | Web, Phone app: nothing. Android TV: “No items yet.” Samsung TV: “Your library is empty. Add titles on your server to see them here.” | figure 4.11: “no movies or shows yet”, with nothing to press | proposed |
+| 4.C20 | Couldn't load the library | Web, Samsung TV | Web: “couldn't load the movies and shows”, above continue watching. Samsung TV: “Couldn’t load your library. ” and the error's text, no try again | figure 4.10: the design system's empty state, its couldn't-load kind at the size for a page, in place of the hero and the rows: “couldn't load the library”, the reason by cause, try again, and details as its quiet second button | proposed |
+| 4.C21 | A row that couldn't load says so | Web, Phone app, Android TV, Samsung TV | the row is left out; the phone app says “couldn't load continue watching” for that row alone | the row keeps its name, and in place of its cards the design system's empty state at its small size says “couldn't load”, with the reason and try again (section 4.8) | proposed |
+| 4.C22 | An empty library says so | Web, Phone app, Android TV, Samsung TV | Web, Phone app: nothing. Android TV: “No items yet.” Samsung TV: “Your library is empty. Add titles on your server to see them here.” | figure 4.11: the design system's empty state, its nothing-yet kind: “no movies or shows yet”, with nothing to press | proposed |
 
 ## 4.8 States
 
@@ -416,30 +433,34 @@ a phone held sideways show the same blocks in their own layout.
 
 Figure 4.10: Home when nothing could load, on a computer.
 
-1. **What couldn't load, and why.** The title names what is missing, and the
-   sentence under it gives the reason as far as the app can tell. Figure 4.10
-   shows the case where the server ran into a problem; [chapter
-   17](./errors.md) lists every cause, its sentence, and the causes that have
-   details.
-2. **try again** loads home again. The sentence above it never repeats what
-   the button says.
-3. **details** opens the technical facts of the failure, such as the status
-   the server answered with, for a bug report or for the people who run the
-   server. It stays closed until someone opens it.
+1. **What couldn't load, and why**, in the design system's empty state, its
+   couldn't-load kind, at the size for a whole page. The title names what is
+   missing, and the sentence under it gives the reason as far as the app can
+   tell. Figure 4.10 shows the case where the server ran into a problem;
+   [chapter 17](./errors.md) lists every cause, its sentence, and the causes
+   that have details.
+2. **try again**, a standard button, loads home again. The sentence above it
+   never repeats what the button says.
+3. **details**, under the button: the design system's details toggle, as its
+   banner has it (its empty state has none yet, so chino adds it). It opens the
+   technical facts of the failure under it, such as the status the server answered with,
+   for a bug report or for the people who run the server. It stays closed
+   until someone opens it.
 
 ![Figure 4.11: Home when the library is empty, on a TV](./img/home-empty-tv.png)
 
 Figure 4.11: Home when the library is empty, on a TV.
 
-When the library has no movies and no shows, home says so and offers nothing
-to press, because there is nothing the person can do about it from here.
-Figure 4.11 shows it on a TV.
+When the library has no movies and no shows, home says so in the design
+system's empty state, its nothing-yet kind, and offers nothing to press,
+because there is nothing the person can do about it from here. Figure 4.11
+shows it on a TV.
 
 | State | What home shows |
 |---|---|
 | Loading | Figure 4.9 |
 | Nothing could load | Figure 4.10, with the sentence for the cause |
-| One row couldn't load | That row says “couldn't load” with the reason and **try again** in its place; the other rows show |
+| One row couldn't load | That row keeps its name, and in place of its cards the design system's empty state at its small size says “couldn't load”, with the reason and **try again**; the other rows show |
 | The library is empty | Figure 4.11 |
 | The phone app can't reach the server | Home isn't shown: the app opens on downloads, as [chapter 13](./downloads.md) describes |
 
@@ -453,7 +474,9 @@ Figure 4.11 shows it on a TV.
 | The last card of recently added movies, recently added shows and top rated | see all |
 | A card in continue watching | “24 min left”, an episode “S01E03 · 24 min left” |
 | A card in next up | “S01E02 · Gran Dillama” |
-| A card's menu | play · resume · mark as watched · watched · remove from continue watching |
+| A card's menu | play · resume · mark as watched · mark as unwatched · remove from continue watching |
+| A card's menu button, for screen readers | actions for Sprite Fright, after the card's title |
+| The trailer's icon button on a phone, for screen readers | trailer |
 | The phone's zap entry | zap |
 | Nothing could load | couldn't load the library · The server ran into a problem. · try again · details |
 | One row couldn't load | couldn't load · the reason · try again |

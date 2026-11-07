@@ -4,8 +4,11 @@
   as-deployed figures are screenshots). Each <figure class="shot" id="…">
   becomes spec/chino/img/<id>.png:
     node scripts/render-mockups.mjs chino [id …]
-  The look is screens.css, the frame (top bar, tabs, rail) is frame.js, the
-  icons are icons.js. Pink numbers mark the parts the chapter's text explains.
+  The look is screens.css with the nalet design system's own stylesheet; the
+  <ds-*> tags are the design system's components (ds.js), the frame (top bar,
+  tabs, rail) is frame.js, the icons are icons.js. Pink numbers mark the parts
+  the chapter's text explains. What stays chino's own: the photo, the name in a
+  title's type, the labelled facts and the posters.
 -->
 <html lang="en">
 <head>
@@ -24,8 +27,7 @@
   .facts .k { font: 500 13px/1.3 var(--ff-ui); color: var(--fg-muted); }
   .facts .v { margin-top: 3px; font: 400 14px/1.45 var(--ff-ui); color: var(--fg); }
   .facts .v .muted { color: var(--fg-dim); }
-  .bio { margin: 0; font: 400 15px/1.5 var(--ff-ui); color: var(--fg-2); }
-  .more { display: inline-flex; align-items: center; gap: 4px; font: 600 13px/1 var(--ff-mono); color: var(--cloud-blue); }
+  .bio { margin: 0; }
   .tcount { margin: 0; font: 500 13px/1.3 var(--ff-mono); color: var(--fg-muted); }
   .fit { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 
@@ -40,12 +42,12 @@
   /* on a phone */
   .phone .hd { position: absolute; left: 16px; right: 16px; top: 16px; display: flex; gap: 14px; align-items: center; }
   .phone .hd .portrait { width: 96px; height: 144px; }
-  .phone .t { font-size: 22px; }
-  .phone .about { position: absolute; left: 16px; right: 16px; top: 176px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+  .phone .t { font-size: 26px; }
+  .phone .about { position: absolute; left: 16px; right: 16px; top: 176px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
   .phone .facts { gap: 28px; width: 100%; } .phone .facts > div { flex: none; } .phone .facts > div + div { flex: 1; min-width: 0; }
-  .phone .bio { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
-  .phone .about .more { margin-top: -8px; }
-  .phone .lib { position: absolute; left: 16px; right: 16px; top: 436px; }
+  .phone .bio .nc-text { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+  .phone .about .more { margin: -10px 0 0 -24px; }
+  .phone .lib { position: absolute; left: 16px; right: 16px; top: 484px; }
   .phone .lib .h2 { display: inline-block; margin-bottom: 12px; }
   .phone .card.poster { width: 98px; } .phone .card.poster .img { height: 147px; }
 
@@ -54,22 +56,28 @@
   .tv .hd .portrait { width: 120px; height: 180px; }
   .tv .about { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; }
   .tv .facts { gap: 40px; }
-  .tv .bio { font-size: 14px; max-width: 600px; }
-  .tv .lib { position: absolute; left: 0; top: 245px; }
+  .tv .bio { max-width: 600px; }
+  .tv .bio .nc-text { font-size: 14px; }
+  .tv .lib { position: absolute; left: 0; top: 260px; }
   .tv .lib .h2 { display: inline-block; margin-bottom: 12px; }
   .tv .card.poster { width: 96px; } .tv .card.poster .img { height: 144px; }
 
   /* a phone held sideways (780 × 360, the tabs a rail on the left): the
-     computer's layout at the phone's size. screens.css's ".phone > .tabs" (the
-     upright tabs: 64 px high, a line on top) also matches the rail; the rail
-     takes the frame's height. */
+     computer's layout at the phone's size */
   .phone.side .hd { align-items: flex-start; gap: 16px; }
-  .phone.side .about { position: static; flex: 1; min-width: 0; gap: 12px; }
+  .phone.side .about { position: static; flex: 1; min-width: 0; gap: 10px; }
   .phone.side .facts { gap: 40px; width: auto; }
   .phone.side .facts > div + div { flex: none; }
-  .phone.side .bio { font-size: 14px; line-height: 1.5; }
-  .phone.side .lib { top: 256px; }
+  .phone.side .bio .nc-text { font-size: 14px; line-height: 1.5; }
+  .phone.side .lib { top: 262px; }
   .phone.side .lib .h2 { padding-right: 10px; }
+
+  /* a page that couldn't load, or a removed person: the design system's empty
+     state, centred in the page's place */
+  .mid { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px; }
+  /* on a TV the details stand under the button in the quiet text, without a
+     disclosure that would take the focus from the way on (chapter 17) */
+  .tvdet { width: 100%; margin: 6px 0 0; font: 400 12px/1.55 var(--ff-mono); color: var(--fg-muted); }
 </style>
 </head>
 <body>
@@ -88,7 +96,7 @@
           <div><div class="k">Known for</div><div class="v">Acting</div></div>
           <div><div class="k">Born</div><div class="v">17 July 1950 <span class="muted">(age 76)</span><br>The Hague, Netherlands</div></div>
         </div>
-        <p class="bio" data-co="4" data-co-side="right">Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</p>
+        <p class="bio" data-co="4" data-co-side="right"><ds-text>Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</ds-text></p>
       </div>
     </div>
     <section class="lib">
@@ -115,8 +123,8 @@
         <div><div class="k">Known for</div><div class="v">Acting</div></div>
         <div><div class="k">Born</div><div class="v">17 July 1950 <span class="muted">(age 76)</span><br>The Hague, Netherlands</div></div>
       </div>
-      <p class="bio">Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</p>
-      <span class="more" data-co="3">read more<i data-i="chevron-down" class="s14"></i></span>
+      <p class="bio"><ds-text>Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</ds-text></p>
+      <ds-button variant="ghost" size="lg" icon-end="chevron-down" class="more" data-co="3">read more</ds-button>
     </div>
     <section class="lib">
       <h2 class="h2" data-co="4">in the library</h2>
@@ -141,7 +149,7 @@
           <div><div class="k">Known for</div><div class="v">Acting</div></div>
           <div><div class="k">Born</div><div class="v">17 July 1950 <span class="muted">(age 76)</span><br>The Hague, Netherlands</div></div>
         </div>
-        <p class="bio" data-co="2" data-co-side="right">Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</p>
+        <p class="bio" data-co="2" data-co-side="right"><ds-text>Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</ds-text></p>
       </div>
     </div>
     <section class="lib">
@@ -168,7 +176,7 @@
             <div><div class="k">Known for</div><div class="v">Acting</div></div>
             <div><div class="k">Born</div><div class="v">17 July 1950 <span class="muted">(age 76)</span><br>The Hague, Netherlands</div></div>
           </div>
-          <p class="bio">Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</p>
+          <p class="bio"><ds-text>Derek de Lint is a Dutch film and television actor, born in The Hague. He plays the grown-up Anton Steenwijk in The Assault, which won the Academy Award for Best Foreign Language Film, and Derek Rayne in the series Poltergeist: The Legacy. In the open movie Tears of Steel he plays Old Thom.</ds-text></p>
         </div>
       </div>
       <section class="lib">
@@ -189,9 +197,10 @@
       <div class="sk" style="width:330px;height:40px"></div>
       <div class="sk" style="width:70px;height:14px"></div>
       <div style="display:flex;gap:48px;margin-top:10px"><div class="sk" style="width:90px;height:38px"></div><div class="sk" style="width:180px;height:56px"></div></div>
-      <div class="sk" style="width:740px;height:15px;margin-top:10px"></div>
-      <div class="sk" style="width:740px;height:15px"></div>
-      <div class="sk" style="width:420px;height:15px"></div>
+      <div class="sk" style="width:740px;height:16px;margin-top:10px"></div>
+      <div class="sk" style="width:740px;height:16px"></div>
+      <div class="sk" style="width:740px;height:16px"></div>
+      <div class="sk" style="width:420px;height:16px"></div>
     </div>
     <div class="sk" style="position:absolute;left:48px;top:420px;width:150px;height:18px"></div>
     <div style="position:absolute;left:48px;top:452px;display:flex;gap:16px">
@@ -203,13 +212,9 @@
 <!-- Figure 7.9 · a person's page when it couldn't load, on a TV -->
 <figure class="shot" id="person-couldnt-load-tv">
   <div class="tv" data-view="none">
-    <div class="page">
-      <div class="empty" style="margin:150px 48px 0 0">
-        <i data-i="circle-alert" class="s48"></i>
-        <h2 class="h2" data-co="1">couldn't load this person</h2>
-        <p class="text">The server ran into a problem.</p>
-        <span class="b focus" style="margin-top:6px" data-co="2"><i data-i="refresh-cw" class="s16"></i>try again</span>
-        <span class="mono muted" style="font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:6px">details<i data-i="chevron-down" class="s14"></i></span>
+    <div class="page" style="right:48px">
+      <div class="mid">
+        <ds-empty illustration="error" size="lg" title="couldn't load this person" description="The server ran into a problem." data-co-in=".nc-illu__title 1"><ds-button size="lg" class="focus" data-co="2">try again</ds-button><p class="tvdet">HTTP 500 Internal Server Error</p></ds-empty>
       </div>
     </div>
   </div>
@@ -218,10 +223,8 @@
 <!-- Figure 7.10 · a person who was removed, on a phone -->
 <figure class="shot" id="person-removed-phone">
   <div class="phone" data-view="none" data-bar="back" data-title="">
-    <div class="empty" style="margin-top:230px;padding:0 24px">
-      <i data-i="user-x" class="s48"></i>
-      <h2 class="h2" data-co="1" style="max-width:250px">this person isn't in the library anymore</h2>
-      <span class="b" style="margin-top:6px" data-co="2"><i data-i="arrow-left" class="s16"></i>back</span>
+    <div class="mid">
+      <ds-empty illustration="empty" size="lg" title="this person isn't in the library anymore" data-co-in=".nc-illu__title 1"><ds-button size="lg" data-co="2">back</ds-button></ds-empty>
     </div>
   </div>
 </figure>
@@ -229,14 +232,13 @@
 <!-- Figure 7.11 · a person who was removed, on a phone held sideways -->
 <figure class="shot" id="person-removed-side-phone">
   <div class="phone side" data-view="none" data-bar="back" data-title="">
-    <div class="empty" style="margin-top:74px;padding:0 24px">
-      <i data-i="user-x" class="s48"></i>
-      <h2 class="h2">this person isn't in the library anymore</h2>
-      <span class="b" style="margin-top:6px"><i data-i="arrow-left" class="s16"></i>back</span>
+    <div class="mid">
+      <ds-empty illustration="empty" size="sm" title="this person isn't in the library anymore"><ds-button size="lg">back</ds-button></ds-empty>
     </div>
   </div>
 </figure>
 
+<script src="ds.js"></script>
 <script src="frame.js"></script>
 </body>
 </html>

@@ -189,8 +189,9 @@ Figure 7.5: A person's page on a phone held upright, at 360 × 780 dp.
 2. **The photo** is smaller and stands beside the name. The facts and the
    biography run the full width under them, the facts two to a line.
 3. **read more.** The biography is cut after six lines and ends in “…”.
-   **read more** opens the rest in place, and **show less** cuts it again.
-   Neither shows when the whole text fits.
+   **read more**, the design system's quiet button at the large size, with an
+   arrow after its word, opens the rest in place, and **show less** cuts it
+   again. Neither shows when the whole text fits.
 4. **in the library**: the posters three to a line, the size of a poster in
    movies and shows ([chapter 5](./browse.md)).
 
@@ -305,13 +306,13 @@ itself, the top bar, the tabs and the rail, belongs to
 | 7.C1 | The frame on the person page | Web, Phone app | Web: none; back floats alone at the top left, a 36 px square on a see-through black, and there is no home (figure 7.1). Phone app: back floats alone, a 40 dp square; no tabs | the frame of [chapter 2](./frame.md) with no view current, in every state of the page: the top bar on a computer; on a phone the back arrow and the person's name in place of the bar, with the tabs, or the rail held sideways (figures 7.4 to 7.6) | proposed |
 | 7.C2 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner. Android TV: “Loading…”. Samsung TV: a spinner and “Loading…” | nothing for 0.4 seconds, then grey blocks in the page's shape (figure 7.8) | proposed |
 | 7.C3 | The initials in a square | Web | the initials stand in the photo's 2:3 frame while it loads and where it can't be loaded (figure 7.1); without a photo, in a square of 88 px | the initials in a square in the photo's place, while it loads and where there is no photo (section 7.6.1) | proposed |
-| 7.C4 | read more and show less | Web, Phone app, Samsung TV | “Read more” and “Show less”, capitalised; Samsung TV: “Read more” | **read more** and **show less**, lowercase in the monospace face (section 7.6.3) | proposed |
+| 7.C4 | read more and show less | Web, Phone app, Samsung TV | “Read more” and “Show less”, capitalised; Samsung TV: “Read more” | **read more** and **show less**, the design system's quiet buttons, lowercase in the monospace face (section 7.6.3) | proposed |
 | 7.C5 | The TV's open biography | Android TV, Samsung TV | Android TV: “▲▼ to scroll · BACK to close”, or “BACK to close”. Samsung TV: the name, “Up / Down to scroll” and **Close** | the whole text over the page with “Press up or down to scroll, and back to close.”; back closes it and the focus goes back to **read more** (section 7.5) | proposed |
 | 7.C6 | in the library | Web, Phone app, Android TV, Samsung TV | the titles headed “Filmography”; Android TV: “filmography” | **in the library** (section 7.6.4) | proposed |
 | 7.C7 | A title's line: the year and the roles | Web, Phone app, Android TV, Samsung TV | the year and the rating, “2017 • 7.0”, then the roles capitalised on a line of their own, “Director · Cinematographer” | the year and the roles on one line under the name, lowercase: “2012 · actor”, “2012 · director · writer” (section 7.6.4) | proposed |
 | 7.C8 | The posters' size | Web, Phone app | Web: two to a line below 640 px, then as many of at least 190 px as fit, three on a phone held sideways. Phone app: three to a line below 600 dp, four on a phone held sideways | the size of a poster in movies and shows: three to a line upright, six held sideways (figures 7.5, 7.6) | proposed |
 | 7.C9 | Nothing of theirs in the library | Web, Phone app, Android TV, Samsung TV | Web, Phone app: “No titles available for this person.”, and the web counts “0 titles”. Android TV, Samsung TV: “No titles for Derek de Lint.” | the count left out, and “nothing of theirs in the library” in the titles' place (section 7.6.4) | proposed |
-| 7.C10 | Couldn't load, removed and no access, by cause | Web, Android TV, Samsung TV | Web: a quiet back beside try again. Android TV: no access says “you don't have access to this person”. Samsung TV: “Couldn’t load person” in red and the error's text, “chino-api 404” for a removed person too; no button | figures 7.9 to 7.11 and the table of section 7.8: try again alone, the reason by cause, details; “this person isn't in the library anymore” and “you don't have access to this”, each with back | proposed |
+| 7.C10 | Couldn't load, removed and no access, by cause | Web, Android TV, Samsung TV | Web: a quiet back beside try again. Android TV: no access says “you don't have access to this person”. Samsung TV: “Couldn’t load person” in red and the error's text, “chino-api 404” for a removed person too; no button | figures 7.9 to 7.11 and the table of section 7.8, the design system's empty state: its error picture, the reason by cause, try again alone and details; its empty picture with “this person isn't in the library anymore” or “you don't have access to this”, each with back | proposed |
 | 7.C11 | Android TV: the focus on the first title | Android TV | the code sets no first focus | the focus starts on the first title, with the page at its top (section 7.5) | proposed |
 
 ## 7.8 States
@@ -334,25 +335,30 @@ blocks in their own layout.
 
 Figure 7.9: A person's page when it couldn't load, on a TV.
 
-1. **What couldn't load, and why.** “couldn't load this person”, and under it
-   the reason as far as the app can tell. Figure 7.9 shows the case where the
-   server ran into a problem; [chapter 17](./errors.md) lists every cause and
-   its sentence.
+1. **What couldn't load, and why**, in the design system's empty state with
+   its error picture: “couldn't load this person”, and under it the reason as
+   far as the app can tell. Figure 7.9 shows the case where the server ran
+   into a problem; [chapter 17](./errors.md) lists every cause and its
+   sentence.
 2. **try again** loads the page again. It has the focus, so OK is all it
-   takes. **details** under it opens the server's answer, for the people who
-   fix things.
+   takes. Under it the server's answer, “HTTP 500 Internal Server Error”,
+   stands in the quiet text for the people who fix things, without
+   **details** over it: on a TV a disclosure would take the focus from the
+   way on, as [chapter 17](./errors.md) sets out.
 
 ![Figure 7.10: A person who isn't in the library anymore, on a phone](./img/person-removed-phone.png)
 
 Figure 7.10: A person who isn't in the library anymore, on a phone.
 
-1. **What is true**: “this person isn't in the library anymore”. Trying again
-   can't bring them back, so the page offers no try again and gives no reason.
+1. **What is true**: “this person isn't in the library anymore”, in the
+   design system's empty state with its empty picture, as nothing is there to
+   show. Trying again can't bring them back, so the page offers no try again
+   and gives no reason.
 2. **back** returns to where the page was opened from, or to home when it was
    opened from a link.
 
 Held sideways, as figure 7.11 shows, the same words and **back** stand in the
-middle of the page, beside the rail.
+middle of the page, beside the rail, at the empty state's small size.
 
 ![Figure 7.11: A person who isn't in the library anymore, on a phone held sideways](./img/person-removed-side-phone.png)
 
@@ -364,7 +370,7 @@ sideways.
 | Loading | Figure 7.8 |
 | Couldn't load | Figure 7.9, with the sentence for the cause |
 | The person was removed | Figures 7.10 and 7.11 |
-| The viewer may not see the page | “you don't have access to this”, with **back** |
+| The viewer may not see the page | The empty state of figure 7.10 with “you don't have access to this” and **back** |
 | The sign-in has expired | Nothing of its own: the app renews the sign-in and loads the page; only a refused sign-in leads to signing in, and back to the page |
 | No photo | The initials (section 7.6.1) |
 | Nothing known beyond the name | The photo or the initials, the name and the titles |

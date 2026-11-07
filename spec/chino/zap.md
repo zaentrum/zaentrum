@@ -265,9 +265,9 @@ ready-made qualities, so it starts at once.
 ## 10.3 Zap on a computer
 
 Figure 10.4 shows zap on a computer. One card fills the page under the top
-bar, and the next card waits below it. The card is the owner's design, the
-same on a computer and a phone; a phone held sideways only shortens its foot
-(section 10.4.2).
+bar, and the next card waits below it. The card is chino's own, the owner's
+design, the same on a computer and a phone; a phone held sideways only
+shortens its foot (section 10.4.2).
 
 ![Figure 10.4: Zap on a computer, at 1280 × 800](./img/zap-computer.png)
 
@@ -285,19 +285,20 @@ Figure 10.4: Zap on a computer, at 1280 × 800.
    rating has one decimal, rounded. An episode's code comes before the year:
    “S01E03”.
 4. **Three lines of the overview**, cut short at the end of the third.
-5. **Save, the bookmark.** It adds the title to the Watchlist or takes it out
-   again, as the main part of add to list does on a title's page
-   ([chapter 6](./title-actions.md)): an outlined bookmark on the plain
-   surface, and a dark, filled one on blue while the title is in the
-   Watchlist. It touches no other list.
-6. **watch**, the maximize icon. It opens the player at the scene that plays,
-   at the second it has reached.
+5. **Save, the bookmark**, the design system's icon button. It adds the title
+   to the Watchlist or takes it out again, as the main part of add to list
+   does on a title's page ([chapter 6](./title-actions.md)), and shows which
+   as that does: an outlined bookmark, and a dark one on blue while the title
+   is in the Watchlist. It touches no other list.
+6. **watch**, the maximize icon, an icon button too. It opens the player at the
+   scene that plays, at the second it has reached.
 
-The two buttons are 48 × 48 squares on a solid surface, their icons alone, one
-over the other at the card's right edge, and the foot of the column sits on
-the text's bottom line. Their names, for a screen reader and as a tooltip, are
-**add to Watchlist** or **in your Watchlist**, and **watch**. A click anywhere
-else on the card is **watch** as well.
+The two buttons are of the standard kind, with its solid surface, their icons
+alone, 34 px square on a computer, one over the other at the card's right
+edge, and the foot of the column sits on the text's bottom line.
+Their names, for a screen reader and as the browser's tooltip, are **add to
+Watchlist** or **in your Watchlist**, and **watch**. A click anywhere else on
+the card is **watch** as well.
 
 The mouse wheel, or a swipe on the touchpad, brings the next card; scrolling
 back brings the card before again, and its scene plays again from where the
@@ -306,10 +307,10 @@ to watch · swipe up”, no genres and no mute button. Zap plays with sound, and
 the device's own volume is its mute.
 
 A browser may refuse a page's sound until the person has pressed something on
-it. Zap then plays the card without sound and shows **unmute**, with the muted
-speaker, in the middle of the card, on a solid surface. One press brings the
-sound back for every card after it. While the browser allows the sound,
-**unmute** never shows.
+it. Zap then plays the card without sound and shows **unmute** in the middle
+of the card: a button of the standard kind, the muted speaker before its word.
+One press brings the sound back for every card after it. While the browser
+allows the sound, **unmute** never shows.
 
 ## 10.4 Zap on a phone
 
@@ -335,7 +336,9 @@ Figure 10.5: Zap on a phone held upright, at 360 × 780 dp.
 3. **The foot**, as on a computer: the title, the year and the rating, and
    three lines of the overview, on the light.
 4. **Save over watch**, at the right edge, the foot of the column on the
-   text's bottom line.
+   text's bottom line. On a phone the icon buttons take the design system's
+   large size, 42 dp, and each answers to a touch in the 48 dp square around
+   it.
 
 Upright, the phone's status bar and navigation bar stay, and the card keeps
 clear of them.
@@ -396,10 +399,10 @@ screen, without a word.
 
 Figure 10.7: Zap on a TV, the scene alone, at 960 × 540 dp.
 
-When zap opens, and whenever the person presses ▲, the info shows at the foot
-of the screen, as in figure 10.8; ▶ shows it too, with the Watchlist's change.
-It fades after a minute, and a channel change hides it: the next channel
-starts without it.
+When zap opens, and whenever the person presses up, the info shows at the foot
+of the screen, as in figure 10.8; right shows it too, with the Watchlist's
+change. It fades after a minute, and a channel change hides it: the next
+channel starts without it.
 
 ![Figure 10.8: The TV's info, at 960 × 540 dp](./img/zap-info-tv.png)
 
@@ -410,10 +413,12 @@ Figure 10.8: The TV's info, at 960 × 540 dp.
 2. **The Watchlist chip**: **add to Watchlist** with an outlined bookmark, or
    **in your Watchlist** with a dark one on blue. Right on the remote adds the
    title or takes it out, and shows the info, so the change is seen. The chip
-   only shows the state; it takes no focus.
+   is chino's own, not a button: it only shows the state and takes no focus.
 3. **The overview**, three lines at most.
-4. **The keys**, each as its key cap, then what it does. While the sound is
-   off, the left key says **unmute**.
+4. **The keys**, each the design system's key cap, then what it does. The
+   arrow keys are named in words, up, down, left and right, as the design
+   system writes keys, and “or” joins two keys that do the same. While the
+   sound is off, the left key says **unmute**.
 5. **The band**: one solid surface under the info, out to the screen's edges,
    so no word stands on the picture. The info itself keeps inside the safe
    area.
@@ -422,11 +427,11 @@ Nothing on the TV takes the focus, so the remote's keys work at once:
 
 | Key | What it does |
 |---|---|
-| ▼ or CH+ | The next channel. The info hides. |
+| down or CH+ | The next channel. The info hides. |
 | CH− | The channel before, its scene again from where it began. The info hides. |
-| ▲ | Shows the info. |
-| ◀ | Turns zap's sound off, and on again. It stays off from channel to channel, until zap closes. |
-| ▶ | Adds the title to the Watchlist, or takes it out. |
+| up | Shows the info. |
+| left | Turns zap's sound off, and on again. It stays off from channel to channel, until zap closes. |
+| right | Adds the title to the Watchlist, or takes it out. |
 | OK | **watch from here**: the player, at this scene. |
 | back | Home. |
 
@@ -523,7 +528,7 @@ has today. The frame around zap, the web's rail and tabs among it, belongs to
 | 10.C3 | iOS: the cards play | Phone app (iOS) | every card is a black box saying “iOS preview — coming soon”: no clip, no sound, no light | the cards of figures 10.5 and 10.6, as on Android | proposed |
 | 10.C4 | Web: a short card leaves out the overview | Web | the foot keeps three lines of the overview at any height; on a phone held sideways they cover the lower third of the clip (figure 10.3) | on a card less than 400 px high, the title on one line over the year and the rating, no overview, and a scrim no taller than the text (figure 10.6) | proposed |
 | 10.C5 | Going back brings the card before | Web, Phone app | Web: a card that was left is dropped, so scrolling back doesn't bring it again. Phone app: the card just before goes on from where it was paused | the card before comes back, and its scene plays again from where the card began (sections 10.3, 10.6.2) | proposed |
-| 10.C6 | watch's name and the rating | Web, Phone app, Android TV | Web, Phone app: watch is named “Watch”. Phone app, Android TV: the rating is cut to one decimal, 7.86 showing “★ 7.8” | watch named “watch”; the rating rounded to one decimal, “★ 7.9” (section 10.3) | proposed |
+| 10.C6 | Save and watch, and the rating | Web, Phone app, Android TV | Web, Phone app: save and watch are 48 × 48 squares, and watch is named “Watch”. Phone app, Android TV: the rating is cut to one decimal, 7.86 showing “★ 7.8” | save and watch the design system's icon buttons of the standard kind, 34 px on a computer and 42 dp on a phone, where each answers to a touch in a 48 dp square (figures 10.4, 10.5); watch named “watch”; the rating rounded to one decimal, “★ 7.9” (section 10.3) | proposed |
 | 10.C7 | Web: every card has its backdrop and its rating | Web | the server's ready pool, which the web asks first for its cards, sends no backdrop, poster or rating: until its first frame such a card is a dark wash, and its foot never shows a rating (figure 10.1) | every card has the title's backdrop, as its light until the first frame, and its rating where the title has one (sections 10.3, 10.7) | proposed |
 | 10.C8 | Web: only titles the person hasn't watched | Web | the ready pool's first cards are checked against the titles watched only where that list came in before them, and its later cards not at all | no card of a title the person has watched (section 10.6.1) | proposed |
 | 10.C9 | Movies and episodes | Phone app, Android TV, Samsung TV | Phone app, Android TV: the 30 best-rated movies and the 30 newest shows, ready-made only, and a show is never ready-made, so only movies come. Samsung TV: movies, shows and episodes, 30 of each, ready-made or not, so a show itself can be a card | the movies and the episodes the person hasn't watched, ready-made only, a file of several episodes once, as its first; an episode with its code before the year (sections 10.3, 10.6.1) | proposed |
@@ -534,10 +539,10 @@ has today. The frame around zap, the web's rail and tabs among it, belongs to
 | 10.C14 | Back from the player returns to the session | Web, Phone app, Samsung TV | Web: watch loads the player as a new page, and back loads zap anew, with new cards. Phone app: opening the player ends the session, and back starts a new one. Samsung TV: back from the player starts zap anew | Recommended: zap keeps its session while the player shows; back returns to the card that was watched, from where it began, as Android TV does (section 10.6.3) | proposed |
 | 10.C15 | Phone app: no subtitles on a card | Phone app (Android) | the card's player is left to its defaults: nothing turns its subtitles off | subtitles off on every card, forced ones too, as on the web and Android TV (section 10.6.3) | proposed |
 | 10.C16 | A starting card: the backdrop, without a word | Web, Samsung TV | Web: “TUNING…” pulses in the middle until the first frame, and goes on pulsing on a card that can't be played; the card's own light fades in over 0.7 seconds. Samsung TV: the poster, not the backdrop, with “TUNING…” pulsing | the backdrop alone until the first frame, then the scene, and the card's light in 0.6 seconds (section 10.7); a card that can't be played keeps its backdrop (section 10.9) | proposed |
-| 10.C17 | The TV's info and keys | Android TV, Samsung TV | Android TV: up to three genres after the rating; the keys as plain text, “OK · watch from here”, “▼ / CH+ next”, “CH- back”, “▲ info”, “◀ mute”, “▶ Watchlist”. Samsung TV: the info on a gradient, not a band; the chip “Save” or “Saved”, in green; genres; the keys on one line, “OK Watch from here ▼ / CH+ Next CH- Back ▲ Info ◀ Mute ▶ Save” | figure 10.8: the band, the chip “add to Watchlist” or “in your Watchlist”, no genres, and each key as a key cap before its word, as section 10.10 has them | proposed |
+| 10.C17 | The TV's info and keys | Android TV, Samsung TV | Android TV: up to three genres after the rating; the keys as plain text, “OK · watch from here”, “▼ / CH+ next”, “CH- back”, “▲ info”, “◀ mute”, “▶ Watchlist”. Samsung TV: the info on a gradient, not a band; the chip “Save” or “Saved”, in green; genres; the keys on one line, “OK Watch from here ▼ / CH+ Next CH- Back ▲ Info ◀ Mute ▶ Save” | figure 10.8: the band, the chip “add to Watchlist” or “in your Watchlist”, no genres, and each key as the design system's key cap before its word, the arrow keys in words, “down”, “up”, “left”, “right”, as the design system writes keys, not “▼ ▲ ◀ ▶”, as section 10.10 has them | proposed |
 | 10.C18 | Samsung TV: back, the mute, and a channel that can't be played | Samsung TV | back goes to the screen zap was opened from; ◀ mutes the TV's own sound, and leaving zap leaves it muted; a channel that can't be played is meant to be skipped, but the skip never comes, and it stays on its poster with “TUNING…” until ▼ | back goes home; zap's mute ends when zap closes; a channel that can't be played is skipped, at most six in a row (section 10.5) | proposed |
-| 10.C19 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web: a spinner alone. Phone app: a spinner over “Tuning in…”. Android TV: “Loading…”. Samsung TV: “Tuning in…” | figure 10.9: nothing for 0.4 seconds, then grey blocks in the shape of a card (section 10.9) | proposed |
-| 10.C20 | Couldn't load, apart from nothing to zap | Phone app, Android TV, Samsung TV | a list that fails counts as empty, and nothing offers to try again: Phone app “Nothing to zap right now”; Android TV, Samsung TV “Nothing left to zap. Come back later.”, said for both | figure 10.10, “couldn't load the movies and shows” with the sentence for the cause and **try again**; figure 10.11, “nothing to zap yet”, only when nothing is left to play (section 10.9) | proposed |
+| 10.C19 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web: a spinner alone. Phone app: a spinner over “Tuning in…”. Android TV: “Loading…”. Samsung TV: “Tuning in…” | figure 10.9: nothing for 0.4 seconds, then grey blocks in the shape of a card, as the design system's loading pattern has them for a page (section 10.9) | proposed |
+| 10.C20 | Couldn't load, apart from nothing to zap | Phone app, Android TV, Samsung TV | a list that fails counts as empty, and nothing offers to try again: Phone app “Nothing to zap right now”; Android TV, Samsung TV “Nothing left to zap. Come back later.”, said for both | figure 10.10, the design system's empty state for an error, “couldn't load the movies and shows” with the sentence for the cause and **try again**; figure 10.11, its nothing-yet kind, “nothing to zap yet”, only when nothing is left to play (section 10.9) | proposed |
 | 10.C21 | Phone app without a connection | Phone app | the zap tab stays and says “Nothing to zap right now” | zap isn't offered: the app opens on downloads, and home with its zap entry isn't shown ([chapter 13](./downloads.md)) | proposed |
 
 ## 10.9 States
@@ -550,29 +555,32 @@ show the states in between.
 Figure 10.9: Zap loading, on a phone.
 
 While zap picks its first cards, it shows nothing for the first 0.4 seconds,
-and after that grey blocks in the shape of a card: the clip in the middle, the
-title, the year and the overview at the foot, and the two squares beside them.
-A computer and a TV show the same blocks in their own layout, and a phone held
-sideways in the layout of figure 10.6.
+and after that grey blocks in the shape of a card, as the design system's
+loading pattern has them for a page: the clip in the middle, the title, the
+year and the overview at the foot, and the squares of the two buttons beside
+them. A computer and a TV show the same blocks in their own layout, and a
+phone held sideways in the layout of figure 10.6.
 
 ![Figure 10.10: Zap when the titles couldn't load, on a computer](./img/zap-couldnt-load-computer.png)
 
 Figure 10.10: Zap when the titles couldn't load, on a computer.
 
-1. **What couldn't load, and why.** Zap builds its cards from the library's
-   movies and shows, so the title names those, and the sentence under it gives
-   the reason as far as the app can tell. Figure 10.10 shows the case where the
-   server didn't answer; [chapter 17](./errors.md) lists every cause and its
-   sentence.
-2. **try again** asks for the titles again.
+1. **What couldn't load, and why**, the design system's empty state for an
+   error, at its large size, in the card's place. Zap builds its cards from
+   the library's movies and shows, so the title names those, and the sentence
+   under it gives the reason as far as the app can tell. Figure 10.10 shows the
+   case where the server didn't answer; [chapter 17](./errors.md) lists every
+   cause and its sentence.
+2. **try again**, a button of the standard kind, asks for the titles again.
 
 ![Figure 10.11: Nothing to zap, on a TV](./img/zap-empty-tv.png)
 
 Figure 10.11: Nothing to zap, on a TV.
 
 When the library has no title zap can play, zap says so and says what it
-plays, so the person can tell why. It offers nothing to press; back returns
-home. Figure 10.11 shows it on a TV.
+plays, so the person can tell why, with the design system's empty state of the
+nothing-yet kind. It offers nothing to press; back returns home. Figure 10.11
+shows it on a TV.
 
 | State | What zap shows |
 |---|---|
@@ -591,10 +599,10 @@ home. Figure 10.11 shows it on a TV.
 | Where | Text |
 |---|---|
 | The view | zap |
-| The card's buttons, for a screen reader and as a tooltip | add to Watchlist · in your Watchlist · watch |
+| The card's buttons, for a screen reader and as the browser's tooltip | add to Watchlist · in your Watchlist · watch |
 | The card's foot | “2010 ★ 7.4”, an episode “S01E03 2010 ★ 7.1” |
 | Where the browser blocked the sound | unmute |
 | The TV's Watchlist chip | add to Watchlist · in your Watchlist |
-| The TV's keys | OK watch from here · ▼ CH+ next · CH− previous · ▲ info · ◀ mute, while muted unmute · ▶ Watchlist |
+| The TV's keys, each key in its key cap | OK watch from here · down or CH+ next · CH− previous · up info · left mute, while muted unmute · right Watchlist |
 | The titles couldn't load | couldn't load the movies and shows · Can't reach the server. · try again |
 | Nothing to zap | nothing to zap yet · Zap plays the movies and shows you haven't watched yet. |

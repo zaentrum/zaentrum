@@ -100,7 +100,48 @@ the deployed apps show it.
 
 ## 1.5 The design system
 
-The general rules come from the nalet design system, and this specification
+The apps are built from the nalet design system, the package
+`@nalet/design-system` 0.4.0, which the web takes in change 2.C11. The target
+drawings use the package's own stylesheet and draw each of its components as
+the package renders it, so a screen built with the package looks like its
+figure.
+
+| A part of a screen | The design system's component |
+|---|---|
+| The one main action, the others, quiet ones such as cancel, and what deletes | button: emphasized, standard, quiet, danger; icon button |
+| A choice of one from a list: a language, the countdown, the download quality, a decade, the sort | select, drawn closed: open, it is the device's own list |
+| Actions in a menu: a card's ⋮, the avatar's menu | action menu |
+| A choice of several: genres, the lists that hold a title | multi-select |
+| The filters over a grid | filter bar, folded behind **filters** on a phone |
+| A server's address, a list's name, a report | field, input, text area |
+| A setting that applies at once; a choice inside a form | switch; checkbox |
+| A group of settings | card |
+| A question or a form over the screen | dialog |
+| A problem with a page or with a part of it | banner, with its details |
+| Good news or progress that leaves by itself | toast |
+| Nothing to show, couldn't load, removed, no access | empty state ([chapter 17](./errors.md) says which case uses which) |
+| Waiting in a button, a field, a panel or the player | loader |
+| A download's state | status |
+| A short fact, such as the kind of a title | badge |
+| A key on a TV's remote | key |
+| A view's heading; the product's name in the bar | heading; the chevron |
+
+The rest is chino's own, drawn on the design system's colours, faces and sizes,
+with its components inside where they fit: the frame of
+[chapter 2](./frame.md) (the top bar with the views, the phone's tabs, the rail
+held sideways and on a TV), posters, cards and rows (chapters 4, 5 and 8), the
+hero (4), the title row and episode rows (6), zap's cards (10), the player and
+its menus (11), the audio and subtitles panel (12), the download control (13),
+the notifications panel (15), and the TV's focus on cards and rows.
+
+Where the design system has nothing yet, the drawings show how chino draws it
+until it does: the top bar and its user menu; a tab bar for a phone and a rail
+for a TV; a touch size of 48 dp and sizes for a TV, as its largest control is
+42 px; a menu of one choice with a check; an on state for an icon button; a
+list for a TV in place of a select's; details on an empty state; a progress
+bar; a slider; a sheet from the foot of a phone's screen; a stepper.
+
+The general rules come from the design system too, and this specification
 doesn't repeat them:
 
 - [Meaningful text](https://nalet.github.io/design-system/foundations/meaningful-text/):
@@ -119,9 +160,16 @@ doesn't repeat them:
 
 ## 1.6 The drawings' sources
 
-Whole screens are drawn in one file per chapter, `img/ch04-home.html` for
-chapter 4 and so on, and parts such as controls, menus and dialogs in
-[img/mockups.html](./img/mockups.html). They share one stylesheet
-([img/screens.css](./img/screens.css)), and [img/frame.js](./img/frame.js)
-draws the frame of chapter 2 around every screen and places the pink marks.
-`node scripts/render-mockups.mjs chino` draws every figure again after a change.
+Every screen is drawn in one file per chapter, `img/ch04-home.html` for
+chapter 4 and so on. They share one stylesheet,
+[img/screens.css](./img/screens.css), which imports the design system's own,
+[img/ds/nalet-0.4.0.css](./img/ds/nalet-0.4.0.css), unchanged. A drawing
+writes a design system component as a short tag, such as
+`<ds-button variant="primary" icon="play">play</ds-button>`, and
+[img/ds.js](./img/ds.js) turns it into the markup the package's component
+renders; [img/frame.js](./img/frame.js) then draws the frame of chapter 2
+around every screen and places the pink marks.
+`node scripts/render-mockups.mjs chino` draws every figure again after a
+change. ds.js is made from the package itself, by
+[scripts/ds-kit](../../scripts/ds-kit/README.md), when the design system has a
+new release.

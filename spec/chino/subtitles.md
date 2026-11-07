@@ -268,7 +268,8 @@ Figure 12.7: The audio and subtitles panel on a computer, at 1280 × 800.
 3. **The tags**, short and in brackets: “(CC)” for subtitles that also describe
    the sounds and name who speaks, “(AI)” for subtitles the server made. A
    column longer than the panel scrolls within itself, under its heading.
-4. **close**, at the panel's top right.
+4. **close**, the design system's icon button, of its quiet kind, at the
+   panel's top right.
 5. **The line**, at its place at the foot of the picture and as bright as ever:
    the panel ends above it, so a pick shows in the line at once.
 
@@ -283,11 +284,14 @@ Figure 12.7: The audio and subtitles panel on a computer, at 1280 × 800.
   before the panel closes. A new audio track keeps the place; a subtitle that
   came on by itself follows it (section 12.9). Nothing else says what was
   picked: the check does.
-- **The rows.** The picked row of each column has a check before its name and
-  the brighter text; every other row keeps the check's room, so the names line
-  up. The headings, **audio** and **subtitles**, are in the monospace face, in
+- **The rows.** The picked row of each column has a check before its name, the
+  same check as in the player's menus ([chapter 11](./playback.md)), and the
+  brighter text; every other row keeps the check's room, so the names line up.
+  The headings, **audio** and **subtitles**, are in the monospace face, in
   lowercase; the rows are names, in the body face, 48 px high, and a name too
-  long for its column wraps to a second line.
+  long for its column wraps to a second line. The panel is the player's own,
+  in the design system's colours; of the design system's components it has
+  only the icon button, as close.
 - **Its size.** Two columns of 340 px, as tall as the longer one needs, up to
   the room above the line's place; a longer column scrolls within itself, its
   heading staying.
@@ -320,11 +324,14 @@ Figure 12.8: The audio and subtitles panel on a phone held upright, at
 2. **audio**, the first list, under the picture.
 3. **subtitles**, the second list, under the audio's. The two lists scroll as
    one, their headings with them.
-4. **close**, at the right of the first heading. A tap on the picture and the
-   phone's back close the panel too, and the picture goes back to the middle.
+4. **close**, the design system's icon button at its large size, 42 dp, at the
+   right of the first heading. A tap on the picture and the phone's back close
+   the panel too, and the picture goes back to the middle.
 
 Upright, two columns don't fit 360 dp, so the lists stand one under the other in
-the order of the computer's columns, with the same rows, 48 dp high. The panel
+the order of the computer's columns, with the same rows, 48 dp high. The
+headings' rows are 48 dp high too, so the close button keeps a touch area of
+48 dp around it, as the player's buttons do. The panel
 fills the screen under the picture, and the phone's status bar and navigation
 bar stay, with the panel clear of them.
 
@@ -336,8 +343,9 @@ Figure 12.9: The audio and subtitles panel on a phone held sideways, at
 780 × 360 dp.
 
 1. **The two columns** of figure 12.7, 300 dp each, over the dimmed picture.
-2. **close**, at the panel's top right. A tap on the dimmed picture and the
-   phone's back close the panel too.
+2. **close**, the design system's icon button at its large size, at the
+   panel's top right. A tap on the dimmed picture and the phone's back close
+   the panel too.
 3. **A column longer than the panel** scrolls within itself, under its heading:
    the screen leaves room for four rows above the line.
 4. **The line**, at the foot of the picture under the panel: the panel ends
@@ -519,13 +527,26 @@ Figure 12.11: Subtitles on a TV, at 960 × 540 dp, with the controls hidden.
    from off screen.
 2. **The safe area.** On a TV the line keeps inside it, whatever the picture.
 
-Figure 12.12 shows the look with its guides, and the same line above the
-controls.
+Figure 12.12 shows the look with its guides on a phone held sideways, where the
+picture, 640 × 360 dp, stands in the middle of the screen, and in a second
+screen below, the same line with the controls showing.
 
-![Figure 12.12: A subtitle with the controls hidden, with its guides, and the same line above the controls](./img/subtitle-look.png)
+![Figure 12.12: A subtitle with the controls hidden, with its guides, and the same line above the controls, on a phone held sideways](./img/subtitle-look.png)
 
 Figure 12.12: A subtitle with the controls hidden, with its guides, and the same
-line above the controls.
+line above the controls, on a phone held sideways.
+
+1. **The line**: white with a black outline and no box, 5.33% of the picture's
+   height, here 19 dp, on at most two lines.
+2. **80% of the picture's width**, between the two upright guides: the line
+   keeps within it, measured on the picture, not on the screen with its black
+   bars.
+3. **8% above the picture's bottom edge**, the guide under the line: the line
+   is centred on the picture, its foot on the guide.
+4. **The same line with the controls showing**: it has risen above the seek
+   bar, and it comes back down when they hide, at the controls' own pace. The
+   buttons are the design system's icon buttons, as in
+   [chapter 11](./playback.md).
 
 ## 12.9 What switches on by itself
 
@@ -620,7 +641,7 @@ rows, such as its first value, belong to [chapter 16](./settings.md).
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 12.C1 | One panel for the audio and the subtitles | Web, Phone app, Android TV, Samsung TV | an audio menu and a subtitles menu, each at its own button: Web: the subtitles menu above the whole bar (figure 12.1), the audio menu over the seek bar, round corners. Phone app: round cards above the seek bar. Android TV: at the bottom right. Samsung TV: at one fixed place, headers in capitals. The picked row blue with a square (Samsung TV: a check at its end). A pick closes the menu, but in the web's subtitles menu; Android TV then says “Subtitles: English” or “Audio: …” at the top. Samsung TV's focus starts on the first row | the panel of sections 12.3 to 12.5: two columns, audio and subtitles, over the dimmed picture, on a phone held upright the two lists under the picture at the top; the controls step back while it is open; the picked row with a check and the brighter text; a pick applies at once, the panel stays open and nothing else says what was picked; close, Esc, a press on the dimmed picture or back closes it; it ends above the subtitle line; on a TV the focus starts on the picked row of the column, left and right move between the columns | proposed |
+| 12.C1 | One panel for the audio and the subtitles | Web, Phone app, Android TV, Samsung TV | an audio menu and a subtitles menu, each at its own button: Web: the subtitles menu above the whole bar (figure 12.1), the audio menu over the seek bar, round corners. Phone app: round cards above the seek bar. Android TV: at the bottom right. Samsung TV: at one fixed place, headers in capitals. The picked row blue with a square (Samsung TV: a check at its end). A pick closes the menu, but in the web's subtitles menu; Android TV then says “Subtitles: English” or “Audio: …” at the top. Samsung TV's focus starts on the first row | the panel of sections 12.3 to 12.5: two columns, audio and subtitles, over the dimmed picture, on a phone held upright the two lists under the picture at the top; the controls step back while it is open; the picked row with a check and the brighter text; a pick applies at once, the panel stays open and nothing else says what was picked; close, the design system's icon button, Esc, a press on the dimmed picture or back closes it; it ends above the subtitle line; on a TV the focus starts on the picked row of the column, left and right move between the columns | proposed |
 | 12.C2 | The subtitles column: one list, the person's languages first | Web, Phone app, Android TV, Samsung TV | Web, Phone app (Android), Android TV: off, the setting's language and the server's languages, or the person's own where the server names none, then more languages with the rest (figure 12.2). iOS: off, then every track in the order they come. Samsung TV: Off, then every track, the server's first | off, the person's languages, then every other language in alphabetical order of their names, in one list without more languages; the server's languages don't change the order (section 12.7) | proposed |
 | 12.C3 | Short tags for the subtitles' kinds | Web, Phone app, Android TV, Samsung TV | Web, Phone app, Android TV: “English · for deaf and hard of hearing”, “German · AI”, “English · Commentary”. Samsung TV: what the label adds in brackets, “English (SDH)”, “German (AI)”, and two that read the same numbered, “English 2” | “English (CC)”, “German (AI)”, “English (CC, AI)”, “English (Commentary)”, never numbered (section 12.7). The word list of [chapter 18](./words.md) changes with it: “(CC)” in place of “for deaf and hard of hearing”, “(AI)” in brackets in place of “· AI”, and “foreign-language parts only” no longer a row's name | proposed |
 | 12.C4 | The foreign-language parts: not listed, and on with off | Web, Phone app, Android TV, Samsung TV | listed as rows, “German · foreign-language parts only” (Samsung TV: “German (Forced)”); a person's off turns them off too | not listed; in the audio's language they come on by themselves whenever no listed subtitle is on, off included, and follow the audio (section 12.9) | proposed |
