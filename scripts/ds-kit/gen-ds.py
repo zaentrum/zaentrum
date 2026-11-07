@@ -72,7 +72,7 @@ JS = r'''// ds.js: the nalet design system's components in the chino drawings, a
 //       actions, if any </ds-empty>
 //   <ds-spinner size="16"></ds-spinner>  any size (a player: 24 to 40)   <ds-status state appearance="chip|text">text</ds-status>
 //   <ds-badge tone="neutral|green|amber|blue" dot>text</ds-badge>   <ds-kbd>OK</ds-kbd>
-//   <ds-heading level="1|2|3">text</ds-heading>   <ds-text>text</ds-text>
+//   <ds-heading level="1|2">text</ds-heading>   <ds-text>text</ds-text>
 //   <ds-card title="language"> <ds-aside>a button</ds-aside> the body </ds-card>   <ds-divider heavy|label="or"></ds-divider>
 //   <ds-toolbar label>…</ds-toolbar>   <ds-tooltip text="…"> a control </ds-tooltip>   <ds-chevron size="16"></ds-chevron>
 //
@@ -201,7 +201,12 @@ JS = r'''// ds.js: the nalet design system's components in the chino drawings, a
     'ds-divider': (el) => (el.hasAttribute('label')
       ? `<div class="nc-divider nc-divider--labeled" role="separator"><span class="nc-divider__line"></span><span class="nc-divider__label">${el.getAttribute('label')}</span><span class="nc-divider__line"></span></div>`
       : `<div class="nc-divider nc-divider--horizontal${has(el, 'heavy') ? ' nc-divider--heavy' : ''}" role="separator" aria-orientation="horizontal"></div>`),
-    'ds-heading': (el) => { const l = at(el, 'level', '2'); return `<${l === '1' ? 'h1' : 'h2'} class="nc-heading nc-heading--h${l}">${inner(el)}</${l === '1' ? 'h1' : 'h2'}>`; },
+    // the package's heading has two levels; a third is the design system's text set as a heading
+    'ds-heading': (el) => {
+      let l = at(el, 'level', '2');
+      if (l !== '1' && l !== '2') { console.error(`ds.js: <ds-heading level="${l}">: the design system's heading has levels 1 and 2`); l = '2'; }
+      return `<${l === '1' ? 'h1' : 'h2'} class="nc-heading nc-heading--h${l}">${inner(el)}</${l === '1' ? 'h1' : 'h2'}>`;
+    },
     'ds-text': (el) => `<span class="nc-text nc-text--body">${inner(el)}</span>`,
     'ds-card': (el) => {
       const aside = kids(el, 'ds-aside').map(inner).join('');
