@@ -37,9 +37,9 @@ Samsung TV app isn't released yet.
 
 Figures 11.1 to 11.3 are screenshots of the web's player while a title starts.
 The picture is black in all three, because the browser that took them couldn't
-decode the original and the server was still converting it; the controls are
-the ones that show while a title plays. Figure 11.1 shows a movie on a
-computer.
+decode the title's video as it is and the server was still converting it; the
+controls are the ones that show while a title plays. Figure 11.1 shows a movie
+on a computer.
 
 ![Figure 11.1: The web's player as deployed on 6 November 2026, on a computer, at 1280 × 800](./img/player-asis-web-computer.webp)
 
@@ -218,15 +218,15 @@ qualities.
 | The picture | the picture area fitted, its bars cropped; zoom to fill | Android: the picture area fitted, a pinch fills; iOS: the whole frame | the whole frame | the whole frame |
 | A title starting | the loader alone | a spinner alone, without the top; then black until the first picture | “Preparing…”, then a spinner alone | a spinner, “Preparing your title…”, on a darkened screen |
 | Waiting while it plays | the panel with a line, “Reconnecting…”, “Switching audio…”, “Converting the video for this browser…” and others; a notice, “Stream paused — reconnecting…” | nothing | a spinner alone | a spinner, “Buffering…” |
-| The quality changed by itself | at the top, for 4 to 5 s, the four lines of section 11.13 | at the bottom, the same lines | at the top, for 6 s, the same lines | — |
+| The quality changed by itself | at the top, for 4 to 5 s, the four lines of section 11.13, with “the original” where they name Original: “the original couldn't be streamed” | at the bottom, the same lines | at the top, for 6 s, the same lines | — |
 | No picture after 20 s | “this title won't start”, “Nothing playable came from the server within 20 seconds.” | not found | not found | not found |
 | Couldn't play | a red triangle, “playback failed”, the reason, “Reported automatically as #12.”, try again · back · report a bug | “couldn't play this title”, the reason by cause, try again or back, details, Report a bug | the error in red, “Playback failed: ERROR_CODE — message”, report this problem; no try again | a red glyph, “Playback failed”, the error's text, Back; Try again only for a trailer |
 | The title isn't there | “this title isn't in the library anymore” | “This title isn't available to stream yet.” | “This title isn't available to stream yet.” | the error's own text |
 | Automatic report | when it gives up, at most 3 a session; its number on the screen | one for each failure shown, with a screenshot; nothing on the screen | one for every player error, recovered ones too; nothing on the screen | — |
 | The place saved | every 10 s while playing | every 10 s, on pause and on leaving; only a place that has played; kept offline | every 10 s and on leaving | every 10 s, on leaving and on back; only a place that has played |
-| Watched | marked in the credits or at 95%, besides the server's rule | the same | the same | the same |
+| Watched | marked in the credits or at 95%, besides the server's rule: the last 5% or the last 2 minutes, whichever is longer, at most the second half, without the credits | the same | the same | the same |
 | Picture in picture, AirPlay, the lock screen | the browser's own picture in picture | iOS: picture in picture, AirPlay, sound in the background, the lock screen's controls; Android: none | — | — |
-| Playback info | a dialog: how it plays, the original, the stream now, its quality changes, what the browser can decode | the dialog without the quality changes | a card at the top right that closes after 8 s | — |
+| Playback info | a dialog: how it plays, the source file, the stream now, its quality changes, what the browser can decode | the dialog without the quality changes | a card at the top right that closes after 8 s | — |
 
 ## 11.3 The player on a computer
 
@@ -442,14 +442,18 @@ they hide ([chapter 12](./subtitles.md)).
 
 - A title people stopped part way, more than 30 seconds in, shows **resume
   1:43**, with **start over** beside it.
-- A title stopped within its last 5% or its last 2 minutes, whichever is
-  longer, counts as **finished**: it shows **play**, from the start, and the
-  watched mark. For a short title, finished never starts before its second
-  half.
+- A title stopped in its credits, from where the server knows they start,
+  counts as **finished**: it shows **play**, from the start, and the watched
+  mark. The credits are the part the server marks for the seek bar and for up
+  next (section 11.8). Where the server knows no credits, the title's last 5%
+  or its last 2 minutes, whichever is longer, count instead; for a short
+  title, they never start before its second half.
 - The server decides finished, once, from the place the apps save, so every
-  app agrees; no app marks a title watched by a rule of its own. Continue
-  watching drops a finished movie and moves a finished episode on to the next
-  one.
+  app agrees; no app marks a title watched by a rule of its own. Counting from
+  the credits keeps a film with long credits from staying unfinished once the
+  apps' own rule is gone: a two-hour film's last 5% is 6 minutes, and its
+  credits often run longer. Continue watching drops a finished movie and moves
+  a finished episode on to the next one.
 - Removing a title from continue watching doesn't mark it as watched.
 
 The player saves the place every 10 seconds while the title plays, when it is
@@ -565,7 +569,7 @@ like a 16:9 film of 1920 × 1080, because both are full HD.
 | 720p | “Medium (720p)” |
 | 480p | “Low (480p)” |
 | below 480p | “Lowest (360p)” |
-| the original, played as it is | “Original” |
+| the title's own picture, as the original had it, not converted | “Original” |
 
 A step up to 10% above a standard height, in a frame no taller than it, or up
 to 3% below it, counts as that height. The standard heights are 240, 360, 480,
@@ -575,6 +579,15 @@ other step takes the name of the table's next lower height, with its own number:
 1024 × 576 is “Low (576p)”, 2560 × 1072 is “High (1440p)”, 1666 × 900 is “Medium
 (937p)”, and a scope film's 720-line encode, 1728 × 720, is “Medium (972p)”. A
 re-encode at the original's size is named by its step like any other.
+
+“Original” is a picture, never a file: every app plays the title's package,
+and the original is deleted once its package meets the master spec
+([ADR-0015](../../docs/adr/0015-the-package-is-the-master.md)). The server
+names a quality “Original” where its video is the original's picture copied
+unchanged, at its own size and bit rate, as the package keeps it when the
+original's video needed no converting. It isn't the audio setting's
+“Original”, the language a title was made in (section 11.14), and the two
+never share a list.
 
 ## 11.10 The player's menus
 
@@ -718,10 +731,10 @@ there. {label} is the quality's name from the table in section 11.9: “Medium
 
 Figure 11.10: The player stepped down, on a computer.
 
-- From the original, when the connection is too slow: “Switched to {label}
-  quality: the connection can't keep up with the original”
-- When the original can't be streamed: “Switched to {label} quality: the
-  original couldn't be streamed”
+- From Original, the title's own picture, when the connection is too slow:
+  “Switched to {label} quality: the connection can't keep up with Original”
+- When Original can't be streamed: “Switched to {label} quality: Original
+  couldn't be streamed”
 - One step down between qualities: “Switched to {label} quality: the
   connection can't keep up”
 - When a quality between can't be streamed: “Switched to {label} quality:
@@ -741,16 +754,16 @@ get it going again before it says anything went wrong:
   in place and then by loading it again there. A ready-made title keeps its
   quality, Auto or the one picked. A title the server converts as it plays
   steps down one quality where that doesn't help, and on its lowest quality
-  loads again there; the original played as it is moves to Medium (720p).
+  loads again there; a title playing on Original moves to Medium (720p).
   Each step down comes with its notice.
 - **Three waits within 30 seconds**, each with the picture standing still, step
   down the same way, at most once every 2 minutes, so the quality never falls
   through every step at once. On **Auto**, the ready-made qualities step down
   by themselves, and a quality the person picked stays picked.
 - **A part that can't be decoded** is skipped, “Skipping a part that couldn't
-  be played”. Where the browser can't play the original's format, the web
-  asks the server for one it can: “This browser can't play this video's
-  format. Switching to one it can.”
+  be played”. Where the browser can't play the format of the title's own
+  picture, the web asks the server for one it can: “This browser can't play
+  this video's format. Switching to one it can.”
 - **Back after a while away.** Where the server no longer accepts the stream
   after a long pause, the player asks for it again once, without a word, and
   plays on where it was. On the web, a tab that was hidden for more than 15
@@ -775,7 +788,8 @@ what plays, and how it reaches the screen. It holds:
 
 - **how it plays**: packaged, passthrough, remux or transcode, by the server's
   name for it, and why the server chose it for this device;
-- **the original**: its container, its video and its audio;
+- **the package**, what the server keeps of the title and plays it from: its
+  container, its video and its audio;
 - **the stream now**: the quality, the encoder, what the stream was made for,
   the position, how much is loaded ahead, and the player's state;
 - **quality changes**: the last 16, each with its time, the quality before and
@@ -830,16 +844,16 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C27 | No auto-skip of the credits | Android TV, Samsung TV | Android TV: with Auto-play next episode off, “Skipping credits in 5s”. Samsung TV: on at first, “Skipping credits in 10…”, then the next episode | Recommended: the credits are never skipped by themselves; up next takes their place, and a movie's credits play (section 11.8.2). The phone app's unused “Auto-skip credits” switch is chapter 16's | proposed |
 | 11.C28 | Nothing starts after a movie | Android TV | the first unwatched title of “more like this” starts, after “Up next in 5s” | Recommended: nothing starts by itself after a movie (section 11.8.4) | proposed |
 | 11.C29 | Where the menus open, and their look | Web, Phone app, Android TV, Samsung TV | Web: quality and speed open right above their buttons, over the seek bar, round corners, the picked row blue with a small square. Phone app: above the seek bar under their button, round corners, the same mark. Android TV: at the bottom right, the same mark. Samsung TV: at one fixed place, round corners, a check at the row's end, headers in capitals | settings and speed above the whole bar at their button's end, the player's own menus with the look of the design system's action menu: its surface, thin frame and shadow, square, rows of at least 32 px in its monospace face, lowercase, a name keeping its case, “High (1080p)”; a lowercase header for each group; rows of 48 dp on a phone and 40 dp on a TV; the picked row with a check before it and the brighter text, as in the audio and subtitles panel (section 11.10) | proposed |
-| 11.C30 | The audio rows | Web, Phone app, Android TV, Samsung TV | Web: “English” with “AAC · Stereo” beside it, for a ready-made title “MP4A.40.2 · Stereo”, “English 5.1”, “English (2)”. Phone app: “E-AC-3 · 5.1” under the name, a track it can't play greyed with “Not available on this device”. Android TV: “E-AC-3 · 5.1” under the name. Samsung TV: “English 5.1”. No app marks the original or a described track | the audio column of [chapter 12](./subtitles.md): the language alone, “English (original)” where the title has audio in more than one language, “English (audio description)”, the channels only where two tracks of one language would read the same, “English (5.1)”, “English (stereo)”; a track the device can't play left out. The server's play info passes on the file's mark of a described track | proposed |
+| 11.C30 | The audio rows | Web, Phone app, Android TV, Samsung TV, the server | Web: “English” with “AAC · Stereo” beside it, for a ready-made title “MP4A.40.2 · Stereo”, “English 5.1”, “English (2)”. Phone app: “E-AC-3 · 5.1” under the name, a track it can't play greyed with “Not available on this device”. Android TV: “E-AC-3 · 5.1” under the name. Samsung TV: “English 5.1”. No app marks the original or a described track. The server has no data for “(original)”: the catalog keeps no original language per title, and package.json has only a per-track “original” flag, the file's own mark, which releases rarely set; the apps' Original plays the track the file marks as its default, which in a release with two languages is often the dub. A described track is marked in package.json, its audio purpose “description”, but the play info doesn't pass it on | the audio column of [chapter 12](./subtitles.md): the language alone, “English (original)” where the title has audio in more than one language, “English (audio description)”, the channels only where two tracks of one language would read the same, “English (5.1)”, “English (stereo)”; a track the device can't play left out. chino-stream's play info passes on each audio track's purpose from package.json, “description” for a described track, and marks the tracks in the title's original language, which the catalog keeps (change 12.C10) | proposed |
 | 11.C31 | The quality menu's Auto | Phone app, Samsung TV | Phone app: the qualities only, no Auto. Samsung TV: “Auto”, without the quality playing | for a ready-made title, Auto first in the settings menu's quality, “Auto · Medium (720p)” (figure 11.9) | proposed |
 | 11.C32 | A quality picked keeps the picture and the speed | Phone app, Android TV, Samsung TV | the stream is loaded again where it was, without the last picture held; Android TV also goes back to normal speed | the last picture stays under “Switching to Medium (720p)” until the new quality's first, and the speed stays (section 11.10) | proposed |
 | 11.C33 | The subtitle line keeps clear of an open menu | Web, Phone app, Samsung TV | nothing moves the line for an open menu | section 11.10 | proposed |
-| 11.C34 | The quality notices: a toast at the top | Web, Phone app, Android TV, Samsung TV | Web: at the top, for 4 to 5 s. Phone app: at the bottom. Android TV: at the top, for 6 s. Samsung TV: none. Where there are notices, each line ends in a full stop | figure 11.10: the design system's toast, neutral, at the top of the picture, for 5 seconds, with the four lines of section 11.13, written as a toast writes them, without a full stop | proposed |
+| 11.C34 | The quality notices: a toast at the top | Web, Phone app, Android TV, Samsung TV | Web: at the top, for 4 to 5 s. Phone app: at the bottom. Android TV: at the top, for 6 s. Samsung TV: none. Where there are notices, each line ends in a full stop, and the lines from Original name it “the original”: “Switched to Medium (720p) quality: the original couldn't be streamed.” | figure 11.10: the design system's toast, neutral, at the top of the picture, for 5 seconds, with the four lines of section 11.13, written as a toast writes them, without a full stop | proposed |
 | 11.C35 | Getting the stream going again, by one rule | Phone app, Android TV, Samsung TV | Phone app: a ready-made title tried again in place 3 times, a converted one moved one quality down. Android TV: the same, with a watchdog at 12 s. Samsung TV: the hls.js engine's own recovery, nothing found for AVPlay | section 11.13.1 | proposed |
 | 11.C36 | Back after a long pause | Android TV, Samsung TV | not found | section 11.13.1 | proposed |
 | 11.C37 | Android: picture in picture and the lock screen | Phone app (Android) | none: no picture in picture, no controls on the lock screen | section 11.12 | proposed |
 | 11.C38 | Samsung TV: no screen saver while the player shows | Samsung TV | not found | section 11.12 | proposed |
-| 11.C39 | Finished by the server alone | Web, Phone app, Android TV, Samsung TV | each app also marks a title watched by itself, in the credits or at 95%, and starts one stopped in its last 60 seconds from the start | the server's rule alone: the apps save the place and show what the server says (section 11.7) | proposed |
+| 11.C39 | Finished by the server alone, from the credits | Web, Phone app, Android TV, Samsung TV, the server | each app also marks a title watched by itself, in the credits or at 95%, and starts one stopped in its last 60 seconds from the start. The server counts a title finished in its last 5% or its last 2 minutes, whichever is longer, at most its second half, and knows nothing of the credits: without the apps' rule, a film whose credits run longer than its last 5% would stay unfinished | the server's rule alone: the server counts a title finished from the start of its credits, as the analyzer marks them, and where it knows none, from its last 5% or its last 2 minutes, whichever is longer, at most its second half; the apps save the place and show what the server says (section 11.7) | proposed |
 | 11.C40 | Saving the place | Web, Android TV, Samsung TV | Web: every 10 s while it plays, only. Android TV: every 10 s and on leaving, without checking that the place has played. Samsung TV: every 10 s, on leaving and on back | also when paused and on leaving, only a place that has played (section 11.7) | proposed |
 | 11.C41 | Phone app: a trailer without subtitles | Phone app | a trailer offers its own subtitles | a trailer has none (section 11.7) | proposed |
 | 11.C42 | A title starting: the loader with its line | Web, Phone app, Android TV, Samsung TV | Web: the loader alone at once, and without the top until the server grants the stream. Phone app: a spinner alone without the top until the server answers, then black until the first picture. Android TV: “Preparing…”, then a spinner alone. Samsung TV: a spinner, “Preparing your title…”, on a darkened screen | Recommended: figure 11.11, nothing for 0.4 seconds, then the design system's loader, 32 px, with “Loading the episode” under it, without an ellipsis, as the design system writes a loader's line; the top from the start | proposed |
@@ -848,7 +862,7 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C45 | Couldn't play: one screen, report a bug under details | Web, Phone app, Android TV, Samsung TV | Web: a red triangle, “playback failed”, report a bug a third button. Phone app: Report a bug a third button. Android TV: the error in red, “Playback failed: ERROR_CODE — message”, report this problem, no try again. Samsung TV: “Playback failed” and the error's text, Back, Try again only for a trailer | Recommended: figure 11.12, the design system's empty state for an error: the sentence by cause, try again or back, report a bug under details | proposed |
 | 11.C46 | The automatic report, with its number | Phone app, Android TV, Samsung TV | Phone app: one for each failure shown, nothing on the screen. Android TV: one for every player error, recovered ones too, nothing on the screen. Samsung TV: none | one when the player gives up, “Reported automatically as #12.” on the screen (section 11.17) | proposed |
 | 11.C47 | A title that isn't there anymore | Phone app, Android TV, Samsung TV | Phone app, Android TV: “This title isn't available to stream yet.” Samsung TV: the error's own text | “this title isn't in the library anymore”, with back ([chapter 17](./errors.md)) | proposed |
-| 11.C48 | Playback info | Phone app, Android TV, Samsung TV | Phone app: the web's dialog without the quality changes. Android TV: a card at the top right that closes after 8 seconds. Samsung TV: none | section 11.15 | proposed |
+| 11.C48 | Playback info | Web, Phone app, Android TV, Samsung TV | Web: the title as it is kept under “Source file”. Phone app: the web's dialog without the quality changes. Android TV: a card at the top right that closes after 8 seconds. Samsung TV: none | section 11.15, the title as it is kept under **the package** | proposed |
 
 ## 11.17 States
 
@@ -939,5 +953,5 @@ a tab opened in the background isn't taken for a start that hangs.
 | Couldn't play | couldn't play this title · the sentence for the cause · Nothing playable came from the server within 20 seconds. · Reported automatically as #12. · try again · back · details · report a bug |
 | A trailer that isn't there | trailer not available |
 | The web only | play · unmute |
-| Playback info | playback info · how it plays · the original · the stream now · quality changes · this browser can decode · this device can decode |
+| Playback info | playback info · how it plays · the package · the stream now · quality changes · this browser can decode · this device can decode |
 | The audio setting | the text of section 11.14 |

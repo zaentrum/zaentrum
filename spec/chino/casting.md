@@ -82,6 +82,12 @@ casting, a cross. A long press shows their names, “back 10 seconds”, “forw
 chooser, which names the subtitles as the phone's player does and the audio
 tracks by the names the stream gives them.
 
+**Subtitles on the TV.** The phone casts to Google's default receiver, which
+draws only WebVTT, and sends it the text subtitles alone. A subtitle made as
+pictures, PGS or VobSub, is left out, so a title whose only subtitles are
+pictures has none on the TV. A styled subtitle, ASS, goes as the plain copy the
+package keeps beside it, without its styles.
+
 **Outside the app**, Google's media notification and the lock screen show the
 title, the device, play or pause and stop. While the TV plays, a quiet
 notification of the app's own says “Keeping your place while Living Room TV
@@ -132,6 +138,7 @@ doesn't have; only the phone app casts.
 | The full controls | — | Google's expanded controller on the background colour: the artwork, the toolbar with the title and the cast button, the seek bar in blue | — | — |
 | Their buttons | — | subtitles and audio in one button, back 10 seconds, play or pause, forward 10 seconds, stop casting as a cross | — | — |
 | The TV's tracks | — | Google's chooser: the subtitles named as the phone's player names them, the audio tracks by the stream's names | — | — |
+| Subtitles on the TV | — | Google's default receiver, WebVTT only: the text subtitles alone; pictures (PGS, VobSub) left out; a styled subtitle (ASS) as its plain copy | — | — |
 | Outside the app | — | Google's media notification and the lock screen; the quiet “Keeping your place while Living Room TV plays”; one channel, “Casting” | — | — |
 | Stopping | — | the TV's last position written back; the phone's player doesn't start | — | — |
 | Changing accounts | — | sign out, remove account and change server stop casting, their questions say so; a switch: the toast “Stopped casting on Living Room TV.” | — | — |
@@ -223,7 +230,9 @@ Figure 14.5: The full controls while casting, on a phone held upright, at
 4. **Subtitles and audio**, there when the TV offers a choice. The choice names
    the tracks as the player does: the subtitles as
    [chapter 12](./subtitles.md) names them, the audio as
-   [chapter 11](./playback.md) does, “English · 5.1”.
+   [chapter 11](./playback.md) does, “English (5.1)”. The TV draws every
+   subtitle the phone's player lists, as the apps draw them: pictures, PGS
+   and VobSub, on the picture, and a styled subtitle, ASS, as it was made.
 5. **Back and forward 10 seconds**, with play or pause between them.
 6. **stop casting**: casting stops, and the phone keeps the TV's position.
 
@@ -330,8 +339,9 @@ chapter 11 as well.
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
 | 14.C1 | The cast button with a 48 dp touch area on a title's page | Phone app (Android) | a 40 dp square on the surface, the size of back and home beside it | Google's button at the right of the title page's bar, without a surface of its own, with a 48 dp touch area (figure 14.1); in the player, chapter 11's change of its buttons | proposed |
-| 14.C2 | The audio tracks named as the player names them on the TV | Phone app (Android) | Google's chooser of the TV's tracks names the subtitles as the phone's player does, and the audio tracks by the names the stream gives them | the audio tracks too as the player names them, “English · 5.1” (figure 14.5, part 4) | proposed |
+| 14.C2 | The audio tracks named as the player names them on the TV | Phone app (Android) | Google's chooser of the TV's tracks names the subtitles as the phone's player does, and the audio tracks by the names the stream gives them | the audio tracks too as the player names them, “English (5.1)” (figure 14.5, part 4) | proposed |
 | 14.C3 | When the TV can't play: the design system's error banner | Phone app (Android) | a warning banner drawn like the design system's: the warning's glyph and its edge, **details** with its caret, and a 28 dp square with a cross to put it away, whose touch area is no larger | the design system's error banner, as every action that failed has it ([chapter 17](./errors.md)): the line, **details** and dismiss, the dismiss drawn 28 dp as the banner draws it, with a 48 dp touch area around it (figures 14.7 and 14.8) | proposed |
+| 14.C4 | Subtitles on the TV as the apps draw them | Phone app (Android) | the phone casts to Google's default receiver, which draws only WebVTT, and sends it the text subtitles alone: a title whose subtitles are only pictures, PGS or VobSub, shows none of them on the TV, and a styled subtitle, ASS, shows as its plain copy, without its styles | the receiver draws every subtitle the phone's player lists as the apps draw them ([chapter 12](./subtitles.md)): PGS and VobSub on the picture, ASS as it was made, as [ADR-0015](../../docs/adr/0015-the-package-is-the-master.md) decides (figure 14.5, part 4) | proposed |
 
 ## 14.7 States
 

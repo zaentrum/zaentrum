@@ -26,10 +26,10 @@ words as a numbered change: the subtitle and audio tags are change 12.C3 of
 | “movies” | Films, as the app's tab says | “films” |
 | “account” | Who is watching, as the account picker says | “profile”, “user” |
 | “downloads”, “on this phone” | What is stored on the device (“on this tablet” on a tablet) | “offline mode”, “sync”, “cache” |
-| “finished” | Watched to the end, or into its last minutes ([chapter 11](./playback.md)) | “completed” |
+| “finished” | Watched to the end, or into its credits or its last minutes ([chapter 11](./playback.md)) | “completed” |
 | “Medium (720p)” | A quality: its name and its height, from the table in [chapter 11](./playback.md) | “adaptive streaming”, a height or a bitrate alone, “High (source)” |
 | “notifications” | What the bell holds ([chapter 15](./notifications.md)) | “notices”, “alerts” |
-| “Original” (a quality) | The file a title was packaged from, played as it is: the quality “Original” in the player's settings menu ([chapter 11](./playback.md)) | “source”, “High (source)” |
+| “Original” (a quality) | The title's own picture, as the original had it, not converted: the quality “Original” in the player's settings menu, where the server copied the original's video into the package unchanged ([chapter 11](./playback.md)). Never a file played as it is: every app plays the package | “source”, “High (source)” |
 | “Original”, “(original)” (audio) | The language a title was made in: the audio setting's “Original” ([chapter 16](./settings.md)), and the tag on that language's audio rows, “English (original)” ([chapter 12](./subtitles.md)) | “default”, “native” |
 | “settings” | In the player, the menu of this playback's quality and subtitle timing ([chapter 11](./playback.md)); elsewhere the view that holds the account's settings ([chapter 16](./settings.md)) | “options”, “preferences” |
 | “Watchlist” | The list every account has; it keeps its name, and the view that holds it with the other lists is “watchlist” ([chapter 8](./watchlist.md)) | “favourites”, “my list” |
@@ -40,7 +40,7 @@ words as a numbered change: the subtitle and audio tags are change 12.C3 of
 | “the people who run this server” | Who receives a bug report | “the dev backlog” |
 
 “Original” names two things, told apart by where it stands: in the player's
-settings menu it is the file, in the audio setting and on an audio row the
+settings menu it is the picture, in the audio setting and on an audio row the
 language. They never share a list.
 
 ### Open

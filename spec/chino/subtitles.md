@@ -144,11 +144,12 @@ grey, “AAC · Stereo”, for a ready-made title “MP4A.40.2 · Stereo”; a 5
 reads “English 5.1”, and two that still read the same “English (2)”.
 A pick closes the menu and shows “Switching audio…” until the new track plays.
 A title without subtitles has its subtitles button dimmed, as
-[chapter 11](./playback.md) shows. The web draws subtitles made as pictures
-over the player, and leaves out the ones it has no way to draw. A styled
-subtitle shows as the plain copy the package keeps beside it, in the one look. A
-web page can't read the device's caption preferences, so the web always shows
-its own look.
+[chapter 11](./playback.md) shows. Of the subtitles made as pictures, the web
+draws PGS, those of a Blu-ray, onto a canvas over the player. It has no way to
+draw VobSub, those of a DVD, and leaves them out of the menu, as it does any
+other picture format. A styled subtitle shows as the plain copy the package
+keeps beside it, in the one look. A web page can't read the device's caption
+preferences, so the web always shows its own look.
 
 ### 12.2.2 The phone app
 
@@ -166,12 +167,17 @@ one track too. Its menu, “audio”, has the codec and the channels under each
 name, “E-AC-3 · 5.1”, and lists a track the phone can't play greyed, with “Not
 available on this device”. A pick closes it. The line is white with a black
 outline and no box, sized by the picture, as section 12.8 has it, and the
-phone's caption preferences win where someone has set them. Subtitles made as
-pictures are drawn.
+phone's caption preferences win where someone has set them. Of the subtitles
+made as pictures, it draws PGS: it loads the track's .sup file beside the
+stream, keeps it on the phone's storage rather than in memory, and reads it
+with a reader of its own, which hands each picture to the player's PGS decoder
+at its time. ADR-0015 has this as in testing. A VobSub track is listed but
+shows nothing, as the player has no decoder for it.
 
 The iOS app's subtitles menu lists every track in the order they come, without
-**more languages**, and a subtitle made as pictures is listed greyed, with “Not
-available on” and the device's name. Its picked row has a round dot.
+**more languages**, and a subtitle made as pictures, PGS or VobSub, is listed
+greyed, with “Not available on” and the device's name: it draws neither. Its
+picked row has a round dot.
 
 ### 12.2.3 Android TV
 
@@ -189,7 +195,10 @@ codec and the channels under each name, “E-AC-3 · 5.1”, lists only the trac
 the TV can play, and a pick says “Audio: English • E-AC-3 • 5.1” at the top.
 The remote's subtitles key and audio key open their menus. While a menu is
 open, the subtitle line moves out of its way, left of it or above it. The TV's
-caption preferences win over the look.
+caption preferences win over the look. Of the subtitles made as pictures, it
+draws PGS as the phone app does, from the track's .sup file with a reader of
+its own, in testing too; a VobSub track goes to the player, which has no
+decoder for it, so it shows nothing.
 
 ### 12.2.4 Samsung TV
 
@@ -208,8 +217,9 @@ subtitles, and the audio button for two tracks or more, its rows “English” a
 The line sits in a dark box, at one size, 5rem above the foot of the screen
 and 17rem while the controls show, and the cue's markup is dropped, italics
 included. The TV's own caption settings weren't found in the code. On a TV the
-app plays through the TV's own player, and subtitles made as pictures are left
-out; only the browser engine it uses elsewhere draws them.
+app plays through the TV's own player, which draws no subtitles made as
+pictures, so PGS and VobSub are both left out. The browser engine it falls back
+to, and uses off the TV, draws PGS and leaves VobSub out too.
 
 ### 12.2.5 Feature by feature
 
@@ -230,7 +240,8 @@ doesn't have, and “not found” one its code was searched for and doesn't have
 | A pick | the menu stays open | the menu closes | the menu closes; “Subtitles: English” at the top | the menu closes |
 | On a TV, the focus as it opens | — | — | on the subtitle that is on | on the first row |
 | Timing | in the menu: −, “0.00s”, +, reset; 0.25 s a press, up to 10 s either way | — | — | — |
-| Subtitles made as pictures | drawn | Android: drawn; iOS: listed greyed, “Not available on” and the device's name | drawn | left out on the TV's own player |
+| Picture subtitles: PGS, from a Blu-ray | drawn, on a canvas over the player | Android: drawn, from the .sup file by a reader of its own; iOS: listed greyed, “Not available on” and the device's name | drawn, as the phone app does | left out on the TV's own player |
+| Picture subtitles: VobSub, from a DVD | left out | Android: listed, shows nothing; iOS: listed greyed, “Not available on” and the device's name | shows nothing: the player has no decoder for it | left out |
 | Styled subtitles | the plain copy | the plain copy | the plain copy | the plain copy |
 | The look | white, a black outline, no box; 5.33% of the picture's height, 8% above its foot, within 80% of its width | the same | the same, inside the safe area | a dark box, one size, 5rem above the foot of the screen |
 | Italics and ruby | kept | kept | kept | dropped |
@@ -469,8 +480,17 @@ Some tracks aren't listed at all:
   (section 12.9), so it is never a row of its own.
 - **A subtitle this device can't draw**, as an audio track it can't play isn't
   listed either.
-- **Subtitles made as pictures inside an original file**, which the server
-  can't hand out as a file of their own.
+- **Subtitles made as pictures in a title that has no package yet**, which
+  plays from its original: the server hands out an original's own subtitles
+  only as text, and a picture is none. They are listed once the title is
+  packaged.
+
+Subtitles made as pictures, PGS from a Blu-ray and VobSub from a DVD, are
+otherwise listed like any other. The package keeps every one as pictures, each
+in a file of its own, as
+[ADR-0015](../../docs/adr/0015-the-package-is-the-master.md) decides, and the
+server lists it with its format and hands it out. Once a title's original is
+deleted, they are often its only subtitles.
 
 The picked row has the check and the brighter text. **off** is picked when no
 listed subtitle is on, the foreign-language parts showing or not. A title
@@ -505,8 +525,8 @@ without subtitles, whose panel opens for its audio, shows **off** alone;
 - **The picture is what shows of it.** Where the player crops a file's black
   bars or fills the screen (the picture, in [chapter 11](./playback.md)), the
   size, the margin and the width go by the frame as it shows on the screen.
-- **Subtitles made as pictures (PGS) stay on the picture**, where the file
-  puts them, scaled with it. One in a bar that is cropped moves up onto the
+- **Subtitles made as pictures (PGS, VobSub) stay on the picture**, where the
+  file puts them, scaled with it. One in a bar that is cropped moves up onto the
   picture (or down, from a top bar), keeping the gap it had to the frame's
   edge, at most a text line's 8%; one wider than what shows is made smaller in
   its own shape. None is ever cut off the screen, and where nothing is
@@ -604,25 +624,28 @@ that names none offers every language by name.
   player's own drawing leaves the readings out, so the apps draw them
   themselves. The view sits over the player's frame, not inside it: the frame is
   drawn scaled and moved to fit its picture, the subtitle view is laid out at
-  what shows of it, and a PGS picture is placed there by the same rule as the
-  web's.
+  what shows of it, and a PGS or VobSub picture is placed there by the same
+  rule as the web's.
 - Web: an overlay the app draws instead of the browser's own captions, one track
   at a time: white, no background, an outline drawn with text shadows in eight
   directions, a font size relative to the picture's height. It keeps `<i>` and
-  `<ruby>` from the cue and drops every other style. PGS pictures are drawn one
-  by one onto a canvas over the player, each where the picture's transform and
-  the rule above put it. The overlay sits above the panel's dimming, so the line
-  keeps its brightness while the panel is open.
+  `<ruby>` from the cue and drops every other style. PGS and VobSub pictures are
+  drawn one by one onto a canvas over the player, each where the picture's
+  transform and the rule above put it. The overlay sits above the panel's
+  dimming, so the line keeps its brightness while the panel is open.
 - Language names come from the platform in their standard form, the language
   first and the region or script in brackets: “Portuguese (Brazil)”, “English
   (Guam)”, “Chinese (Simplified)”. On the web that is `Intl.DisplayNames` with
   `languageDisplay: 'standard'`; its default gives “Brazilian Portuguese”.
-- The audio tags: “(original)” goes by the track the apps play for **Original**
-  today, the one the file marks as its default, and its language. “(audio
-  description)” needs the file's mark for a described track, its disposition
-  for the visually impaired, which the server's play info doesn't pass on yet
-  and has to, with each audio track (change 11.C30); a track's name that says
-  “Audio Description” counts too.
+- The audio tags: “(original)” goes on the tracks the play info marks as in the
+  title's original language, which the catalog keeps (change 12.C10). Until
+  the server has it, nothing tells the original apart: the apps play the track
+  the file marks as its default for **Original**, often the dub in a release
+  with two languages, and package.json's per-track “original” flag is the
+  file's own mark, which releases rarely set. “(audio description)” goes by
+  each audio track's purpose, “description” for a described track, which
+  package.json has and chino-stream's play info doesn't pass on yet and has to
+  (change 11.C30); a track's name that says “Audio description” counts too.
 - “(CC)” goes on the tracks the apps call “for deaf and hard of hearing”
   today: a label that says so, SDH, CC or hard of hearing, or on Android the
   stream's mark of a track that describes the sounds.
@@ -639,16 +662,25 @@ button is change 11.C2 of [chapter 11](./playback.md), the timing in the
 settings menu 11.C3, and the audio column's names 11.C30; the setting's own
 rows, such as its first value, belong to [chapter 16](./settings.md).
 
+Once a title's original is deleted, its package is all there is
+([ADR-0015](../../docs/adr/0015-the-package-is-the-master.md)), and subtitles
+made as pictures are then often the title's only subtitles: an app that can't
+draw PGS or VobSub shows such a title without any. So the changes that draw
+them come first: 12.C7 for PGS, 12.C9 for VobSub, and 14.C4 for a title cast
+to a TV ([chapter 14](./casting.md)).
+
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
 | 12.C1 | One panel for the audio and the subtitles | Web, Phone app, Android TV, Samsung TV | an audio menu and a subtitles menu, each at its own button: Web: the subtitles menu above the whole bar (figure 12.1), the audio menu over the seek bar, round corners. Phone app: round cards above the seek bar. Android TV: at the bottom right. Samsung TV: at one fixed place, headers in capitals. The picked row blue with a square (Samsung TV: a check at its end). A pick closes the menu, but in the web's subtitles menu; Android TV then says “Subtitles: English” or “Audio: …” at the top. Samsung TV's focus starts on the first row | the panel of sections 12.3 to 12.5: two columns, audio and subtitles, over the dimmed picture, on a phone held upright the two lists under the picture at the top; the controls step back while it is open; the picked row with a check and the brighter text; a pick applies at once, the panel stays open and nothing else says what was picked; close, the design system's icon button, Esc, a press on the dimmed picture or back closes it; it ends above the subtitle line; on a TV the focus starts on the picked row of the column, left and right move between the columns | proposed |
 | 12.C2 | The subtitles column: one list, the person's languages first | Web, Phone app, Android TV, Samsung TV | Web, Phone app (Android), Android TV: off, the setting's language and the server's languages, or the person's own where the server names none, then more languages with the rest (figure 12.2). iOS: off, then every track in the order they come. Samsung TV: Off, then every track, the server's first | off, the person's languages, then every other language in alphabetical order of their names, in one list without more languages; the server's languages don't change the order (section 12.7) | proposed |
 | 12.C3 | Short tags for the subtitles' kinds | Web, Phone app, Android TV, Samsung TV | Web, Phone app, Android TV: “English · for deaf and hard of hearing”, “German · AI”, “English · Commentary”. Samsung TV: what the label adds in brackets, “English (SDH)”, “German (AI)”, and two that read the same numbered, “English 2” | “English (CC)”, “German (AI)”, “English (CC, AI)”, “English (Commentary)”, never numbered (section 12.7). The word list of [chapter 18](./words.md) changes with it: “(CC)” in place of “for deaf and hard of hearing”, “(AI)” in brackets in place of “· AI”, and “foreign-language parts only” no longer a row's name | proposed |
 | 12.C4 | The foreign-language parts: not listed, and on with off | Web, Phone app, Android TV, Samsung TV | listed as rows, “German · foreign-language parts only” (Samsung TV: “German (Forced)”); a person's off turns them off too | not listed; in the audio's language they come on by themselves whenever no listed subtitle is on, off included, and follow the audio (section 12.9) | proposed |
-| 12.C5 | iOS: a subtitle it can't draw is left out | Phone app (iOS) | a subtitle made as pictures is listed, greyed, with “Not available on” and the device's name | Recommended: left out, as the other apps leave out what they can't draw (section 12.7); drawing it is change 12.C7 | proposed |
+| 12.C5 | iOS: a subtitle it can't draw is left out | Phone app (iOS) | a subtitle made as pictures, PGS or VobSub, is listed, greyed, with “Not available on” and the device's name | Recommended: left out, as the web and the Samsung TV leave out what they can't draw (section 12.7); drawing them is changes 12.C7 and 12.C9 | proposed |
 | 12.C6 | Samsung TV: the one look | Samsung TV | the line in a dark box, one size, 5rem above the foot of the screen and 17rem while the controls show; the cue's markup dropped, italics too; the TV's caption settings not found | section 12.8: white with a black outline and no box, 5.33% of the picture's height, 8% above its foot, within 80% of its width and the safe area; italics and ruby kept; the TV's caption settings win | proposed |
-| 12.C7 | Subtitles made as pictures, drawn on iOS and Samsung TV | Phone app (iOS), Samsung TV | iOS: not drawn. Samsung TV: left out on the TV's own player | drawn on the picture, as section 12.8 says and ADR-0015 decides | proposed |
+| 12.C7 | PGS drawn on iOS and Samsung TV | Phone app (iOS), Samsung TV | iOS: PGS not drawn, listed greyed. Samsung TV: left out on the TV's own player; only the browser engine it falls back to draws it. The web, the Android app and Android TV draw it | drawn on the picture, as section 12.8 says and ADR-0015 decides | proposed |
 | 12.C8 | Styled subtitles drawn as they were made | Web, Phone app, Android TV, Samsung TV | every app shows the plain copy the package keeps beside a styled subtitle, in the one look | drawn as made, with the fonts the title carries (section 12.8), as ADR-0015 decides; the plain copy only in an app that can't draw them yet | proposed |
+| 12.C9 | VobSub drawn on every app | Web, Phone app, Android TV, Samsung TV | no app draws VobSub. Web, Samsung TV: left out. Phone app: Android lists it and shows nothing, iOS lists it greyed. Android TV: handed to the player, which has no decoder for it, so it shows nothing | drawn on the picture, as section 12.8 says and ADR-0015 decides, from the two files the server hands out for each VobSub track, its .idx and its .sub | proposed |
+| 12.C10 | An original language for every title | the server | the catalog keeps no original language per title, and package.json has only a per-track “original” flag, the file's own mark, which releases rarely set. So nothing tells the original audio from a dub; the apps' Original plays the track the file marks as its default, which in a release with two languages is often the dub | the catalog keeps each title's original language, the one it was made in, and chino-stream's play info marks the audio tracks in that language; the tag “(original)” (11.C30 of [chapter 11](./playback.md)) and the audio setting's Original (16.C18 of [chapter 16](./settings.md)) go by it | proposed |
 
 ## 12.13 States
 
@@ -663,7 +695,8 @@ between:
 | The title has one audio track | The audio column shows it alone, picked, without a tag (section 12.6) |
 | A subtitle for the foreign-language parts only | Not listed; it comes on by itself (section 12.9) |
 | A subtitle this device can't draw | Not listed (section 12.7) |
-| A file's subtitles made as pictures inside it | Not listed (section 12.7) |
+| A subtitle made as pictures, PGS or VobSub | Listed like any other, and drawn on the picture (section 12.8) |
+| A title without a package yet, its original's subtitles made as pictures | Not listed until the title is packaged (section 12.7) |
 | A subtitle that can't be loaded | The title plays on without it |
 | The panel is open | The picture dims, the controls step back, and the line keeps its place and its brightness (section 12.3) |
 | The device has caption preferences | They win over the look (section 12.8) |
