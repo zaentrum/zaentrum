@@ -3,7 +3,7 @@
 //
 //   <div class="computer" data-view="movies">…</div>
 //       the web's frame: the rail of icons down the left with "movies" current, the
-//       mark >c and the top bar with the search, the bell and the avatar.
+//       mark >c and the top bar with the search just before the bell, and the avatar.
 //       data-query="sin" shows typed text in the search field; data-count="0" hides
 //       the bell's count; data-bar="none" for no frame (the player, zap). The page is
 //       80 px narrower than the frame: what a drawing places by coordinates against
@@ -83,7 +83,7 @@
     while (f.firstChild) page.appendChild(f.firstChild);
     const it = (v, i) => `<span class="it it-${v}${v === view ? ' on' : ''}" aria-label="${v}" title="${v}">${icon(i)}</span>`;
     f.classList.add('railed');
-    f.append(make(`<header class="tb"><span class="mark logo" aria-label="chino, home">${chevron}<b>c</b></span>${field}<div class="end">${bell(f.dataset.count)}<span class="av">au</span></div></header>`));
+    f.append(make(`<header class="tb"><span class="mark logo" aria-label="chino, home">${chevron}<b>c</b></span><div class="end">${field}${bell(f.dataset.count)}<span class="av">au</span></div></header>`));
     f.append(make(`<nav class="crail" aria-label="views">${it('home', 'house')}${it('movies', 'film')}${it('shows', 'tv')}${it('watchlist', 'bookmark')}${it('zap', 'zap')}<span class="gap"></span>${it('settings', 'settings')}</nav>`));
     f.append(page);
     // a dialog covers the whole screen, the bar and the rail too

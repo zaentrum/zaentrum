@@ -94,6 +94,35 @@
 </figure>
 
 <!-- Figure 9 · the search across spaces, on a computer: "log" typed, the matching tiles of every space, under the spaces' names -->
+<figure class="shot" id="home-settings-computer">
+  <div class="computer" data-frame="portal">
+    <nav class="spaces" aria-label="spaces">
+      <a href="#"><span>apps</span></a><a href="#"><span>manage</span></a><a href="#" aria-current="page"><span>settings<i class="cur" data-co="1"></i></span></a>
+    </nav>
+    <div class="space">
+      <div class="nc-portal nc-portal--comfortable">
+        <div class="nc-portal__bar"><h1 class="nc-portal__title"><ds-chevron size="18" class="nc-portal__chev"></ds-chevron>settings</h1></div>
+        <div class="nc-portal__body">
+          <ds-tilegroup legend="platform" data-co-in=".nc-tilegroup__legend 2">
+            <ds-tile title="registry" description="Apps, spaces, tiles and addons" icon="settings"></ds-tile>
+            <ds-tile title="people" description="Accounts, invites and rating caps" icon="users"></ds-tile>
+            <ds-tile title="operator" description="Instances, scaling and updates" icon="boxes"></ds-tile>
+          </ds-tilegroup>
+          <ds-tilegroup legend="diagnostics" data-co-in=".nc-tilegroup__legend 3">
+            <ds-tile title="logs" description="Every container's logs, redacted" icon="scroll-text"></ds-tile>
+            <ds-tile title="events" description="The event bus and a live tail" icon="radio"></ds-tile>
+            <ds-tile title="database" description="Chosen tables, read-only" icon="database"></ds-tile>
+            <ds-tile title="export" description="A support bundle, redacted" icon="life-buoy"></ds-tile>
+          </ds-tilegroup>
+          <ds-tilegroup legend="addons" data-co-in=".nc-tilegroup__legend 4">
+            <ds-tile title="an addon" description="2 sections need setup" icon="boxes" badge="2" badge-tone="warning" data-co="5" data-co-side="right"></ds-tile>
+          </ds-tilegroup>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
 <figure class="shot" id="home-search-computer">
   <div class="computer" data-frame="portal" data-portal-query="log" data-co-parts="search:1:top">
     <nav class="spaces" aria-label="spaces" data-co="2" data-co-side="right">
@@ -136,6 +165,9 @@
             <ds-tile title="database" description="Chosen tables, read-only" icon="database"></ds-tile>
             <ds-tile title="export" description="A support bundle, redacted" icon="life-buoy"></ds-tile>
           </ds-tilegroup>
+          <ds-tilegroup legend="addons">
+            <ds-tile title="an addon" description="2 sections need setup" icon="boxes" badge="2" badge-tone="warning"></ds-tile>
+          </ds-tilegroup>
         </div>
       </div>
     </div>
@@ -162,6 +194,9 @@
             <ds-tile title="events" description="The event bus and a live tail" icon="radio"></ds-tile>
             <ds-tile title="database" description="Chosen tables, read-only" icon="database"></ds-tile>
             <ds-tile title="export" description="A support bundle, redacted" icon="life-buoy"></ds-tile>
+          </ds-tilegroup>
+          <ds-tilegroup legend="addons">
+            <ds-tile title="an addon" description="2 sections need setup" icon="boxes" badge="2" badge-tone="warning"></ds-tile>
           </ds-tilegroup>
         </div>
       </div>

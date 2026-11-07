@@ -253,6 +253,8 @@ These are the rules for the spaces:
   settings is the portal's own, and comes last. An admin may add spaces in the
   registry, up to five in all, settings counted, each named with one word of
   eight letters at most, so the bar fits a phone held upright.
+- **The bar is the home page's.** Inside an app, the app's own navigation
+  takes its place under the top bar, which stays the same everywhere.
 - **A space with nothing the person may open is hidden.** Someone who may open
   only one space sees no bar at all, because a bar of one is no choice: the
   top bar, then that space's title and tiles.
@@ -270,17 +272,43 @@ These are the rules for the spaces:
 - **A space holds the tiles of its kind of work.** Where they are all of one
   kind, they stand under the space's title without a group's name; where they
   are of several kinds, each kind is one of the design system's tile groups,
-  with its name. Of the three spaces, only settings has two kinds: platform,
-  with registry, people and operator, and diagnostics, with logs, events,
-  database and export (figure 10).
+  with its name. Of the three spaces, only settings has several kinds:
+  platform, with registry, people and operator; diagnostics, with logs,
+  events, database and export; and addons, the setup of each installed addon
+  (figure 9).
 - **An addon joins a space; it never brings one of its own.** Its tile goes
   into the space its manifest names, if that space exists, or else into the
   one the admin chose when installing it. It brings one tile, its app's, as
   figure 8 shows.
+- **An addon's setup is in settings.** Each installed addon that declares
+  setup sections in its manifest has one tile in settings' addons group: its
+  name, and its state as the addon reports it: while sections aren't ready,
+  a warning badge counts them and the description says so, “2 sections need
+  setup”. The tile
+  opens the addon's setup checklist (settings → registry → addons, in
+  [settings and setup](./settings.md)), where **configure** leads into the
+  addon's own console. The values stay in the addon
+  ([ADR-0010](../../docs/adr/0010-addon-component-groups-and-setup.md)); an
+  addon without setup sections has no tile there (H.C17).
 - **A product that isn't installed has no tile**, and nothing says it is
   coming. A tile that can't be opened isn't shown.
 - **No badge says who a tile is for**: only the people a tile is for see it.
   No badge or status square shows what the portal doesn't check.
+
+Figure 9 shows the settings space, with its three groups.
+
+![Figure 9: The settings space on a computer, at 1280 × 800](./img/home-settings-computer.png)
+
+Figure 9: The settings space on a computer, at 1280 × 800.
+
+1. **settings, the current space**, for the people who may change the
+   platform.
+2. **platform**: registry, people and operator.
+3. **diagnostics**: logs, events, database and export.
+4. **addons**: one tile for each installed addon that has setup sections.
+5. **An addon's tile**, with a warning badge that counts the sections that
+   aren't ready, “2 sections need setup” in its description. It opens the
+   addon's setup checklist.
 
 Until an admin marks the platform as set up, the first-run checklist stands
 above the first space's tiles, to admins only, as
@@ -288,12 +316,12 @@ above the first space's tiles, to admins only, as
 
 ## Search across spaces
 
-The search in the top bar finds tiles in every space. Figure 9 shows it while
+The search in the top bar finds tiles in every space. Figure 10 shows it while
 it holds “log”.
 
-![Figure 9: The search across spaces on a computer, at 1280 × 800, while it holds “log”](./img/home-search-computer.png)
+![Figure 10: The search across spaces on a computer, at 1280 × 800, while it holds “log”](./img/home-search-computer.png)
 
-Figure 9: The search across spaces on a computer, at 1280 × 800, while it
+Figure 10: The search across spaces on a computer, at 1280 × 800, while it
 holds “log”.
 
 1. **The search**, with the words typed into it, and the focus.
@@ -321,15 +349,15 @@ search field across the bar.
 
 A screen or a window less than 600 px on its short side, a phone held either
 way, has the phone's top bar: the search is an icon, and the spaces bar is 48
-px high, so each space is a touch area of 48 px. Figure 10 shows the settings
-space on a phone held upright and figure 11 the same space held sideways; the
+px high, so each space is a touch area of 48 px. Figure 11 shows the settings
+space on a phone held upright and figure 12 the same space held sideways; the
 last part of this section says what happens when the phone is turned.
 
 ### Held upright
 
-![Figure 10: The settings space on a phone held upright, at 360 × 780](./img/home-phone.png)
+![Figure 11: The settings space on a phone held upright, at 360 × 780](./img/home-phone.png)
 
-Figure 10: The settings space on a phone held upright, at 360 × 780.
+Figure 11: The settings space on a phone held upright, at 360 × 780.
 
 1. **The search**, an icon. It opens the search field across the bar, with the
    keyboard.
@@ -337,7 +365,7 @@ Figure 10: The settings space on a phone held upright, at 360 × 780.
    each name in the middle of its share.
 3. **settings, the current space**, with the blue line under its name and the
    name's padding.
-4. **platform**, the first of the space's two tile groups. diagnostics follows
+4. **platform**, the first of the space's three tile groups. diagnostics and addons follow
    further down.
 5. **The tiles**, one under the other across the width, as the design system's
    grid has them where only one column fits.
@@ -347,9 +375,9 @@ width of a phone held upright, each name whole.
 
 ### Held sideways
 
-![Figure 11: The settings space on a phone held sideways, at 780 × 360](./img/home-side-phone.png)
+![Figure 12: The settings space on a phone held sideways, at 780 × 360](./img/home-side-phone.png)
 
-Figure 11: The settings space on a phone held sideways, at 780 × 360.
+Figure 12: The settings space on a phone held sideways, at 780 × 360.
 
 1. **The top bar**, 48 px high, so the page keeps more of the screen.
 2. **The spaces bar**, the spaces one after another from the left, as on a
@@ -394,28 +422,29 @@ or takes away something the portal has today.
 | H.C1 | The design system 0.4.0 | Web | the package 0.3.0, a copy kept in the portal's code | 0.4.0, the version chino's web takes ([chino, chapter 2](../chino/frame.md)), so the shell and the apps it hosts are on one version; every part this page calls the design system's is that version's component | proposed |
 | H.C2 | The design system's top bar | Web | the lockup, its cursor blinking; the bell; the account's name in a blue badge with a dot; **sign out** as a button of its own; no search; the same row on a phone (figures 1 and 2) | figure 7: the product's name led by the chevron, still, leading to the first space; the search (H.C11), a field on a computer and an icon on a phone; the bell as today; the avatar, a square with the person's initials, opening the design system's user menu with the person's name, their email address, **settings** for admins, which opens the settings space, and **sign out** set apart; no badge with the name and no sign out in the bar | proposed |
 | H.C3 | Spaces, under the top bar | Web | one page: the heading, then every group the person may see, one under the other, in a column at most 1200 px wide in the middle of the window; one address, /portal/, and the window's title “zaentrum” (figure 1) | figures 7 and 8 and the section Spaces: the spaces bar under the top bar, across the window, 35 px high on a computer and 48 px on a phone, staying in view with the top bar; one space at a time, the design system's home page component with the space's name as its title and its tiles, in line with the first space's name, as wide as the window; the first space at /portal/ and each space at /portal/spaces/ and its key; the address of a space the person may not open, or of one that isn't there, opens the first space; someone with one space sees no bar; the window's title the space's name, then zaentrum; the bar a landmark named “spaces”, the current space with aria-current="page"; the first-run checklist above the first space's tiles | proposed |
-| H.C4 | settings in the server's answer | Server, Web | the portal draws the settings group itself, for admins, after the registry's spaces; the server's answer doesn't hold it | Recommended: the server's answer holds settings last, for admins only, with the seven consoles as its tiles in their groups (H.C6), so the bar, the search and the states read one answer; the registry refuses a space with the key settings | proposed |
+| H.C4 | settings in the server's answer | Server, Web | the portal draws the settings group itself, for admins, after the registry's spaces; the server's answer doesn't hold it | Recommended: the server's answer holds settings last, for admins only, with the seven consoles and each installed addon's setup as its tiles in their groups (H.C6, H.C17), so the bar, the search and the states read one answer; the registry refuses a space with the key settings | proposed |
 | H.C5 | No greeting and no foot | Web | “welcome back”, with “your spaces and apps” under it, a second-level heading, so the page has no main heading; “zaentrum · demo” at the foot, on every installation | neither: the space's title is the page's main heading (H.C3), and the page ends with its tiles | proposed |
-| H.C6 | settings in two groups | Server, Web | one group of seven tiles | Recommended: platform, with registry, people and operator, and diagnostics, with logs, events, database and export, two of the design system's tile groups (figure 10) | proposed |
+| H.C6 | settings in three groups | Server, Web | one group of seven tiles | Recommended: platform, with registry, people and operator, and diagnostics, with logs, events, database and export, and addons, one tile per installed addon's setup (H.C17), three of the design system's tile groups (figure 11) | proposed |
 | H.C7 | The tiles' words | Server, Web | the descriptions lowercase, with “&” and “·”: “movies & shows”, “browse the catalog”, “register apps, spaces & tiles”, “accounts · invites · rating caps”, “instances · scale · update”, “container logs · redacted”, “kafka topology · live tail”, “curated tables · read-only”, “support bundle · redacted”; names stored with capitals, “Catalog”, “People” | the names and descriptions of the section Words, the descriptions in sentence case and the names stored as the tiles show them, in lowercase; the seed changes a row only while it still holds the seed's own words, so an admin's words stay | proposed |
-| H.C8 | catalog admin, a name that fits | Server; catalog management's own heading | “Catalog Management”, “scan & settings”: at 18 characters the name is cut to one line with “…” on a tile narrower than 250 px, and the design system's tiles may be 224 px wide | Recommended: “catalog admin”, “Scans, processing and rules” (figure 8), 15 characters at most so it fits the narrowest tile; the app's own heading and its name in its top bar change with it | proposed |
+| H.C8 | catalog admin, a name that fits | Server; catalog management's own heading | “Catalog Management”, “scan & settings”: at 18 characters the name is cut to one line with “…” on a tile narrower than 250 px, and the design system's tiles may be 224 px wide | Recommended: “catalog admin”, “Scans, processing and rules” (figure 8), 15 characters at most so it fits the narrowest tile; the app's own heading and its name in its top bar change with it | approved |
 | H.C9 | No badge or square the portal doesn't check | Server, Web | words stored in the registry, never checked: chino “ready” and a green square; tv and musig “soon” and a red square; Catalog and Catalog Management “admin” and a green square; every settings tile “admin”, operator a green square | Recommended: none of them, because no badge says who a tile is for and no square shows a state the portal doesn't check; the seed clears them where they are still its own, and a badge an admin sets in the registry still shows | proposed |
 | H.C10 | A tile that can't be opened isn't shown | Server | a disabled tile, the tile of a disabled app or one without a destination is in the answer and shown faded, such as tv and musig with “soon” | left out of the answer, as a tile the person may not see; a space left with nothing is left out with it | proposed |
-| H.C11 | The search across spaces | Web | no search on the home page | figure 9 and the section Search across spaces: the design system's search field in the top bar, “search apps…”; while it holds words, every space's tiles in tile groups named after their spaces, narrowed by the design system's home page; no space current in the bar; Esc clears it and brings back the space; a space pressed in the bar clears it; when nothing matches, “No apps match “backup”. Try another word.”, where the design system's example adds “or press Esc in the search box to clear it”, which a phone can't do | proposed |
+| H.C11 | The search across spaces | Web | no search on the home page | figure 10 and the section Search across spaces: the design system's search field in the top bar, “search apps…”; while it holds words, every space's tiles in tile groups named after their spaces, narrowed by the design system's home page; no space current in the bar; Esc clears it and brings back the space; a space pressed in the bar clears it; when nothing matches, “No apps match “backup”. Try another word.”, where the design system's example adds “or press Esc in the search box to clear it”, which a phone can't do | proposed |
 | H.C12 | Five spaces at most | Server | the registry takes any number of spaces, with any name | the registry takes four spaces at most, settings being the fifth on the home page, each named with one word of eight letters at most; it refuses more, or a longer name, with the words of the section Words | proposed |
-| H.C13 | An addon joins a space | Server | an addon's manifest may bring a space of its own, which the portal creates and removes with the addon, and a tile for each of its views | Recommended: the portal never creates a space for an addon: its tile goes into the space its manifest names if that space exists, or else into the one chosen at install, and it gets one tile, its app's (figure 8); the documentation for addon authors changes with it | proposed |
-| H.C14 | Loading: grey blocks | Web | the loader and “loading your launchpad…”, at once, under the heading (figure 4) | figure 12: nothing for 0.4 seconds, then grey blocks in the shape of a space's title and tiles; a screen reader hears “Loading your apps” once | proposed |
-| H.C15 | Couldn't load: say why | Web | “couldn’t load your launchpad:” and the raw error, in red, such as “Failed to fetch”; no way to try again (figure 5) | figure 13: the design system's empty state of its error kind, large, “couldn't load your apps”, the reason by cause, **try again**, and the status under **details** | proposed |
-| H.C16 | Nothing to open | Server, Web | for an account that may see no tile, the server writes the list of spaces as null, and the page goes blank, top bar included (figure 6) | the server writes an empty list, and the page shows figure 14 under the top bar | proposed |
+| H.C13 | An addon joins a space | Server | an addon's manifest may bring a space of its own, which the portal creates and removes with the addon, and a tile for each of its views | Recommended: the portal never creates a space for an addon: its tile goes into the space its manifest names if that space exists, or else into the one chosen at install, and it gets one tile, its app's (figure 8); the documentation for addon authors changes with it | approved |
+| H.C14 | Loading: grey blocks | Web | the loader and “loading your launchpad…”, at once, under the heading (figure 4) | figure 13: nothing for 0.4 seconds, then grey blocks in the shape of a space's title and tiles; a screen reader hears “Loading your apps” once | proposed |
+| H.C15 | Couldn't load: say why | Web | “couldn’t load your launchpad:” and the raw error, in red, such as “Failed to fetch”; no way to try again (figure 5) | figure 14: the design system's empty state of its error kind, large, “couldn't load your apps”, the reason by cause, **try again**, and the status under **details** | proposed |
+| H.C16 | Nothing to open | Server, Web | for an account that may see no tile, the server writes the list of spaces as null, and the page goes blank, top bar included (figure 6) | the server writes an empty list, and the page shows figure 15 under the top bar | proposed |
+| H.C17 | An addon's setup in the settings space | Server, Web | an addon's setup is only a checklist in settings → registry → addons, inside the registry console; nothing in the settings group shows it | Recommended: settings' third group, addons: one tile for each installed addon that declares setup sections in its manifest, its name, the state the addon reports (a warning badge counting the sections that aren't ready, “2 sections need setup” in its description), opening its setup checklist; the server's answer carries these tiles (H.C4); the values stay in the addon (ADR-0010) (figure 9) | proposed |
 
 ## States
 
-The home page is drawn in figures 7 to 11 with its tiles. Figures 12 to 14 show
+The home page is drawn in figures 7 to 12 with its tiles. Figures 13 to 15 show
 the states before and instead of them.
 
-![Figure 12: The home page loading, on a phone held upright, at 360 × 780](./img/home-loading-phone.png)
+![Figure 13: The home page loading, on a phone held upright, at 360 × 780](./img/home-loading-phone.png)
 
-Figure 12: The home page loading, on a phone held upright, at 360 × 780.
+Figure 13: The home page loading, on a phone held upright, at 360 × 780.
 
 While the home page loads, it shows nothing for the first 0.4 seconds, so a
 quick answer doesn't flash a loading state, and then grey blocks in the shape
@@ -425,9 +454,9 @@ pattern has it for a page. The spaces bar comes with the tiles, because only
 the answer says whether there is more than one space. A screen reader hears
 “Loading your apps” once.
 
-![Figure 13: The home page when the spaces couldn't load, on a computer, at 1280 × 800](./img/home-couldnt-load-computer.png)
+![Figure 14: The home page when the spaces couldn't load, on a computer, at 1280 × 800](./img/home-couldnt-load-computer.png)
 
-Figure 13: The home page when the spaces couldn't load, on a computer, at 1280
+Figure 14: The home page when the spaces couldn't load, on a computer, at 1280
 × 800.
 
 1. **What couldn't load, and why**, in the design system's empty state of its
@@ -444,9 +473,9 @@ without the spaces bar. The reason is the one the design system's
 [empty states](https://nalet.github.io/design-system/patterns/empty-states/#when-it-couldnt-load-say-why)
 give for the answer's status.
 
-![Figure 14: Nothing to open, on a phone held sideways, at 780 × 360](./img/home-nothing-side-phone.png)
+![Figure 15: Nothing to open, on a phone held sideways, at 780 × 360](./img/home-nothing-side-phone.png)
 
-Figure 14: Nothing to open, on a phone held sideways, at 780 × 360.
+Figure 15: Nothing to open, on a phone held sideways, at 780 × 360.
 
 An account that may open no tile at all, one that isn't an admin, since an
 admin always has settings, sees the design system's empty state of its
@@ -456,13 +485,13 @@ page can change it.
 
 | State | What the home page shows |
 |---|---|
-| Loading | Figure 12 |
-| Couldn't load: no answer | Figure 13, with “Can't reach the server.” |
-| Couldn't load: the server ran into a problem | Figure 13 |
-| Couldn't load: the server is busy | Figure 13, with “The server is busy.” |
-| Couldn't load: the server didn't accept the request | Figure 13, with “The server didn't accept the request. Check for an app update.” |
+| Loading | Figure 13 |
+| Couldn't load: no answer | Figure 14, with “Can't reach the server.” |
+| Couldn't load: the server ran into a problem | Figure 14 |
+| Couldn't load: the server is busy | Figure 14, with “The server is busy.” |
+| Couldn't load: the server didn't accept the request | Figure 14, with “The server didn't accept the request. Check for an app update.” |
 | Signed out | no empty state: the portal signs the person in again and comes back to the same address, as today |
-| Nothing to open | Figure 14 |
+| Nothing to open | Figure 15 |
 | No matches for the search | under the spaces bar, the design system's home page's message: “No apps match “backup”. Try another word.” |
 | One space only | no spaces bar: the top bar, then the space's title and tiles |
 | An address of a space the person may not open, or that isn't there | the first space |
@@ -478,7 +507,8 @@ page can change it.
 | The window's title | the space's name, then the product's: “apps · zaentrum”, “manage · zaentrum” |
 | The spaces bar | the landmark “spaces” · apps · manage · settings |
 | A space's title | its name: apps · manage · settings |
-| settings' groups | platform · diagnostics |
+| settings' groups | platform · diagnostics · addons |
+| An addon's setup tile | its name · the count of sections that need setup · “1 section needs setup”, “2 sections need setup” |
 | The tiles, name and description | chino “Movies and shows” · catalog “Every title and its files” · catalog admin “Scans, processing and rules” · registry “Apps, spaces, tiles and addons” · people “Accounts, invites and rating caps” · operator “Instances, scaling and updates” · logs “Every container's logs, redacted” · events “The event bus and a live tail” · database “Chosen tables, read-only” · export “A support bundle, redacted” |
 | An addon's tile | its own name and description, from its manifest, in sentence case as the design system writes a description |
 | The search | the groups named after their spaces · for a screen reader “3 apps match”, “1 app matches” · No apps match “backup”. Try another word. |
