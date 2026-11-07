@@ -30,7 +30,8 @@
 <style>
   /* the empty state in the page's place, centred: under the computer's bar, in
      the phone's scroll area, and on a TV right of the rail inside the safe area */
-  .computer > .mid { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; display: flex; align-items: center; justify-content: center; }
+  /* the page's place beside the rail: frame.js moves what is placed against the frame 80 px right with the page */
+  .computer .mid { position: absolute; left: 0; right: 80px; top: 56px; bottom: 0; display: flex; align-items: center; justify-content: center; }
   .phone .mid { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px; }
   .tv .page .mid { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; }
 

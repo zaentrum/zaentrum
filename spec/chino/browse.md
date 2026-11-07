@@ -448,8 +448,8 @@ owner approves it, it is built, one change at a time. A target that starts with
 “Recommended” was an open decision, or takes away something an app has today.
 What a card shows and how its menu opens hold for every card, on home
 ([chapter 4](./home.md)) and in the watchlist ([chapter 8](./watchlist.md))
-too. The order see all opens in is chapter 4's change 4.C14, and the side
-navigation and the tabs are [chapter 2](./frame.md)'s.
+too. The order see all opens in is chapter 4's change 4.C14, and the rail and
+the tabs are [chapter 2](./frame.md)'s.
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|

@@ -198,7 +198,7 @@ Figure 9.5: Search on a computer, at 1280 × 800.
    finds, “search movies, shows and people…”, and the / key puts the focus in
    it from anywhere, except while the person is typing in another field. As
    soon as it holds a letter, the results take the page's place, and no view
-   in the bar is current.
+   in the rail is current.
 2. **cast & crew**: the people whose names match, in one line of cards. A card
    shows the photo, or the initials where the catalog has no photo, the name,
    and how many of their titles the library has: “1 title”. It opens the
@@ -209,7 +209,7 @@ Figure 9.5: Search on a computer, at 1280 × 800.
    their menu.
 
 Esc in the field empties it and brings back the page the person was on, and so
-does choosing a view in the bar. The address holds the words, so a reload, or
+does choosing a view in the rail. The address holds the words, so a reload, or
 back from a result, brings the same results back.
 
 ## 9.4 Search on a phone
@@ -347,7 +347,7 @@ keyboard types a list's name on a TV ([chapter 8](./watchlist.md)).
   episode that matched, or a person's page. Back returns to the results as
   they were, with the words in the field, and on a TV with the focus on the
   result that was opened.
-- Search closes with Esc or a view in the bar on a computer, with the back
+- Search closes with Esc or a view in the rail on a computer, with the back
   arrow or a tab on a phone, and with back on a TV.
 
 ## 9.7 Changes

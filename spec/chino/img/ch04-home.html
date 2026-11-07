@@ -20,7 +20,9 @@
 <script src="icons.js"></script>
 <style>
   .computer .hero { position: relative; height: 384px; }
-  .computer .hero .txt { position: relative; padding: 64px 48px 0; width: 600px; display: flex; flex-direction: column; gap: 14px; }
+  /* 74 down, so the lines of marks 2 and 3 pass between the rail's icons; mark 1 meets the name's end */
+  .computer .hero .txt { position: relative; padding: 74px 48px 0; width: 600px; display: flex; flex-direction: column; gap: 14px; }
+  .computer .hero .t { align-self: flex-start; }
   .computer .hero .row { margin-top: 6px; }
   .computer .shelf { padding: 0 48px; margin-bottom: 28px; }
   .shelf .h2 { margin-bottom: 12px; }
@@ -58,13 +60,13 @@
 </head>
 <body>
 
-<!-- Figure 4.5 · home on a computer, the last card's menu open -->
+<!-- Figure 4.5 · home on a computer, the menu of Elephants Dream open -->
 <figure class="shot" id="home-computer">
   <div class="computer" data-view="home">
     <section class="hero">
       <div class="art steel"></div><div class="scrim-l"></div>
       <div class="txt">
-        <h1 class="t" data-co="1">Tears of Steel</h1>
+        <h1 class="t" data-co="1" data-co-side="right">Tears of Steel</h1>
         <p class="meta">2012 · 12 min · science fiction</p>
         <p class="desc">In a future Amsterdam, a group of scientists tries to save the world from robots by staging one moment from the past again.</p>
         <div class="row" data-co="2"><ds-button variant="primary" icon="play">play</ds-button><ds-button>see details</ds-button><ds-button icon="clapperboard">trailer</ds-button></div>
@@ -77,9 +79,9 @@
         <div class="card"><div class="img"><div class="art a1"></div><div class="bar"><i style="width:42%"></i></div></div><div class="tt">Pioneer One</div><div class="st">S01E03 · 24 min left</div><ds-menubutton size="md" label="actions for Pioneer One"></ds-menubutton></div>
         <div class="card"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">9 min left</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
         <div class="card"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">4 min left</div><ds-menubutton size="md" label="actions for Cosmos Laundromat"></ds-menubutton></div>
-        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div><ds-menubutton size="md" label="actions for Elephants Dream"></ds-menubutton></div>
-        <div class="card"><div class="img"><div class="art a6"></div><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">5 min left</div><ds-menubutton size="md" label="actions for Sprite Fright" open></ds-menubutton>
+        <div class="card"><div class="img"><div class="art a5"></div><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">8 min left</div><ds-menubutton size="md" label="actions for Elephants Dream" open></ds-menubutton>
           <ds-menu style="top: calc(100% + 5px); right: 0" data-co="6" data-co-side="right"><ds-item icon="play">resume</ds-item><ds-item icon="check">mark as watched</ds-item><ds-item icon="x" danger>remove from continue watching</ds-item></ds-menu></div>
+        <div class="card"><div class="img"><div class="art a6"></div><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">5 min left</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
       </div>
     </section>
     <section class="shelf">

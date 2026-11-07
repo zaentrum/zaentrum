@@ -29,6 +29,10 @@
   .shelf { margin-bottom: 28px; }
   .shelf .h2 { margin-bottom: 12px; }
   .h2 .n { color: var(--fg-dim); font-weight: 500; }
+  /* on a computer some marks meet their part a little lower down, at a point (.at), so that their
+     lines pass between the rail's icons: frame.js draws a line level with what it marks */
+  .at { position: absolute; left: 0; width: 1px; height: 2px; }
+  .computer .shelf .h2, .computer .titlerow { position: relative; }
   .card .mk.wl { left: 6px; right: auto; background: var(--cloud-blue); }
   .seeall { flex: none; width: 150px; height: 225px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
             background: var(--surface); border: 1px solid var(--border); color: var(--cloud-blue); font: 600 14px/1 var(--ff-mono); }
@@ -81,9 +85,9 @@
         <ds-button icon="plus" data-co="1" data-co-side="right">create list</ds-button>
       </div>
       <section class="shelf">
-        <h2 class="h2" data-co="2">Watchlist<span class="n"> · 5</span></h2>
+        <h2 class="h2">Watchlist<span class="n"> · 5</span><i class="at" style="top:17px" data-co="2"></i></h2>
         <div class="cards">
-          <div class="card poster"><div class="img" data-co="3"><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div><ds-menubutton size="md" label="actions for Caminandes"></ds-menubutton></div>
+          <div class="card poster"><div class="img"><i class="at" style="top:48px" data-co="3"></i><div class="art a3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Caminandes</div><div class="st">S01E03 · Llamigos</div><ds-menubutton size="md" label="actions for Caminandes"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art x3"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span></div><div class="tt">Charge</div><div class="st">2022</div><ds-menubutton size="md" label="actions for Charge"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><ds-menubutton size="md" label="actions for Elephants Dream"></ds-menubutton></div>
@@ -194,12 +198,12 @@
   <div class="computer" data-view="watchlist">
     <div class="pg">
       <div class="head">
-        <div class="titlerow"><ds-iconbutton variant="ghost" icon="arrow-left" label="back" data-co="1"></ds-iconbutton><ds-heading level="1">Sunday nights</ds-heading></div>
+        <div class="titlerow"><ds-iconbutton variant="ghost" icon="arrow-left" label="back"></ds-iconbutton><ds-heading level="1">Sunday nights</ds-heading><i class="at" style="top:30px" data-co="1"></i></div>
         <div class="row" data-co="2" data-co-side="right"><ds-button icon="pencil">rename list</ds-button><ds-button variant="danger" icon="trash-2">delete list</ds-button></div>
       </div>
       <p class="meta listcount">4 titles</p>
       <div class="grid">
-        <div class="card poster"><div class="img" data-co="3"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
+        <div class="card poster"><div class="img"><i class="at" style="top:50px" data-co="3"></i><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
         <div class="card poster"><div class="img"><div class="art a5"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:28%"></i></div></div><div class="tt">Elephants Dream</div><div class="st">2006</div><ds-menubutton size="md" label="actions for Elephants Dream"></ds-menubutton></div>
         <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
         <div class="card poster"><div class="img"><div class="art a4"></div><div class="bar"><i style="width:68%"></i></div></div><div class="tt">Cosmos Laundromat</div><div class="st">2015</div><ds-menubutton size="md" label="actions for Cosmos Laundromat"></ds-menubutton></div>

@@ -171,7 +171,29 @@ svg.i.s24 { width: 24px; height: 24px; } svg.i.s32 { width: 32px; height: 32px; 
 .computer > .tb .views .on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--cloud-blue); }
 .computer > .tb .end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 .computer > .tb .search-field { width: 340px; margin-right: 8px; }
-.computer .pg { padding: 32px 48px; }          /* a page's content below the bar */
+.computer .pg { padding: 32px 48px; }
+/* the portal's frame: the design system's top bar alone */
+.computer[data-frame="portal"] { display: flex; flex-direction: column; }
+.computer[data-frame="portal"] > .ppage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+.phone[data-frame="portal"] > .tb .logo { margin-right: auto; }
+.phone.side[data-frame="portal"] { flex-direction: column; }
+.phone.side[data-frame="portal"] > .tb { height: 48px; }
+.tb.portal .logo { font-size: 16px; }
+/* the web's frame on a computer: the rail of icons down the left, as the web has it */
+.computer.railed { display: grid; grid-template-columns: 80px minmax(0, 1fr); grid-template-rows: 64px minmax(0, 1fr); }
+.computer.railed > .tb { grid-column: 1 / -1; grid-row: 1; height: 64px; padding: 0 24px 0 0; gap: 24px; } /* 64 px high, as built */
+.computer.railed > .tb .mark { width: 80px; align-self: stretch; flex: none; display: flex; align-items: center; justify-content: center; gap: 1px;
+                               border-right: 1px solid var(--border); font: 700 20px/1 var(--ff-mono); color: var(--fg-2); }
+.computer.railed > .tb .mark svg { width: 16px; height: 16px; }
+.computer.railed > .tb .search-field { width: 576px; } /* as built */
+.computer.railed > .crail { grid-column: 1; grid-row: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0;
+                            background: var(--bg-2); border-right: 1px solid var(--border); position: relative; z-index: 9; }
+.computer.railed > .crail .it { width: 48px; height: 48px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--fg-muted); }
+.computer.railed > .crail .it svg.i { width: 24px; height: 24px; }
+/* the current view: blue on a lighter square, as built, and a bar on its edge, so not by colour alone */
+.computer.railed > .crail .it.on { color: var(--cloud-blue); background: var(--surface-2); box-shadow: inset 2px 0 0 var(--cloud-blue); }
+.computer.railed > .crail .gap { flex: 1; }
+.computer.railed > .cpage { grid-column: 2; grid-row: 2; min-width: 0; overflow: hidden; }          /* a page's content below the bar */
 
 /* the phone's top bar and tabs */
 .phone > .tb { height: 56px; flex: none; display: flex; align-items: center; gap: 2px; padding: 0 12px 0 16px; background: var(--bg-2); border-bottom: 1px solid var(--border); position: relative; z-index: 10; }
@@ -194,10 +216,10 @@ svg.i.s24 { width: 24px; height: 24px; } svg.i.s32 { width: 32px; height: 32px; 
 .phone.side > .side-col > .tb .av { width: 28px; height: 28px; line-height: 28px; font-size: 12px; margin-left: 6px; }
 .phone.side > .side-col > .tb.back { gap: 10px; padding: 0 12px 0 6px; }
 .phone.side > .side-col > .tb.back .title { font: 600 16px/1 var(--ff-mono); margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.phone.side > .siderail { width: 72px; height: auto; flex: none; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+.phone.side > .siderail { width: 80px; height: auto; flex: none; display: flex; flex-direction: column; justify-content: center; gap: 8px;
                           grid-template-columns: none; border-top: 0; background: var(--bg-2); border-right: 1px solid var(--border); position: relative; z-index: 10; }
-.phone.side > .siderail span { height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font: 500 10px/1 var(--ff-mono); color: var(--fg-dim); }
-.phone.side > .siderail .on { color: var(--cloud-blue); box-shadow: inset 3px 0 0 var(--cloud-blue); }
+.phone.side > .siderail span { height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font: 500 10px/1 var(--ff-mono); color: var(--fg-dim); }
+.phone.side > .siderail .on { color: var(--cloud-blue); box-shadow: inset 2px 0 0 var(--cloud-blue); }
 
 /* the TV's rail */
 .tv > .rail { position: absolute; left: 0; top: 0; bottom: 0; width: 104px; background: rgba(11,15,25,.9); z-index: 10;

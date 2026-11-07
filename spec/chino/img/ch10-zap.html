@@ -30,7 +30,9 @@
 <style>
   /* the card: its light, the clip, the foot */
   .card-z { position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow: hidden; background: #000; }
-  .computer .card-z { top: 56px; }
+  /* on a computer the card fills the page beside the rail: frame.js moves what is placed against the
+     frame 80 px right with the page, so it ends 80 short of the frame's right edge */
+  .computer .card-z { top: 56px; right: 80px; }
   .card-z .light { position: absolute; inset: -12%; filter: blur(44px) saturate(1.15); }
   .card-z .veil { position: absolute; inset: 0; background: rgba(0,0,0,.4); }
   .card-z .clip { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); aspect-ratio: 16 / 9; overflow: hidden; }
@@ -71,7 +73,7 @@
   /* the states: grey blocks in the card's shape; the design system's empty state in place of the card */
   .sk-sq { width: 42px; height: 42px; }
   .state { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; }
-  .computer .state { top: 56px; }
+  .computer .state { top: 56px; right: 80px; }   /* the page beside the rail, as the card */
   /* the empty state hugs its widest line, its title, so a mark meets the title's left end: at
      the large size the title starts 64 + 165 + 24 down (padding, picture, the room under it)
      and 16 in, as the design system's specs give them */

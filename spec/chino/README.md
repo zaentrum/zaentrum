@@ -80,7 +80,7 @@ the deployed apps show it.
 | No. | Chapter | What it covers |
 |---|---|---|
 | 1 | Introduction | this chapter |
-| 2 | [The frame](./frame.md) | the top bar, the phone's tabs, the TV's rail, the avatar's menu |
+| 2 | [The frame](./frame.md) | the rail and the top bar on a computer, the phone's tabs, the TV's rail, the avatar's menu |
 | 3 | [Getting started](./start.md) | adding a server, signing in, who's watching |
 | 4 | [Home](./home.md) | the first screen after signing in |
 | 5 | [Movies and shows](./browse.md) | the library by kind, with filters |
@@ -124,22 +124,23 @@ figure.
 | A download's state | status |
 | A short fact, such as the kind of a title | badge |
 | A key on a TV's remote | key |
-| A view's heading; the product's name in the bar | heading; the chevron |
+| A view's heading; the chevron of the product's name in the bar, and of its mark “>c” | heading; the chevron |
 
 The rest is chino's own, drawn on the design system's colours, faces and sizes,
-with its components inside where they fit: the frame of
-[chapter 2](./frame.md) (the top bar with the views, the phone's tabs, the rail
-held sideways and on a TV), posters, cards and rows (chapters 4, 5 and 8), the
-hero (4), the title row and episode rows (6), zap's cards (10), the player and
-its menus (11), the audio and subtitles panel (12), the download control (13),
-the notifications panel (15), and the TV's focus on cards and rows.
+with its components inside where they fit: the frame of [chapter 2](./frame.md)
+(the rail of icons on a computer, the phone's tabs, the rail held sideways and
+on a TV), posters, cards and rows (chapters 4, 5 and 8), the hero (4), the title
+row and episode rows (6), zap's cards (10), the player and its menus (11), the
+audio and subtitles panel (12), the download control (13), the notifications
+panel (15), and the TV's focus on cards and rows.
 
 Where the design system has nothing yet, the drawings show how chino draws it
-until it does: the top bar and its user menu; a tab bar for a phone and a rail
-for a TV; a touch size of 48 dp and sizes for a TV, as its largest control is
-42 px; a menu of one choice with a check; an on state for an icon button; a
-list for a TV in place of a select's; details on an empty state; a progress
-bar; a slider; a sheet from the foot of a phone's screen; a stepper.
+until it does: the top bar and its user menu; a rail of icons for a computer, a
+tab bar for a phone and a rail for a TV; a touch size of 48 dp and sizes for a
+TV, as its largest control is 42 px; a menu of one choice with a check; an on
+state for an icon button; a list for a TV in place of a select's; details on an
+empty state; a progress bar; a slider; a sheet from the foot of a phone's
+screen; a stepper.
 
 The general rules come from the design system too, and this specification
 doesn't repeat them:

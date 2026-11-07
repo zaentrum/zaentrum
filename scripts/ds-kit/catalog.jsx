@@ -5,9 +5,9 @@ import { createRoot } from 'react-dom/client';
 import {
   Button, IconButton, Select, Field, Input, Textarea, Switch, Checkbox, ActionMenu, MultiSelect,
   FilterBar, FilterTabs, Tabs, Modal, Banner, toast, Toaster, EmptyState, Spinner, Status, Badge,
-  Heading, Text, Kbd, Divider, Toolbar, Tooltip, Card, Chevron, Lockup,
+  Heading, Text, Kbd, Divider, Toolbar, Tooltip, Card, Chevron, Lockup, Tile, TileGroup,
 } from '@nalet/design-system';
-import { Play, Plus, Trash2, Check, Download, ListPlus, Bell, Search, Settings, LogOut, User, Pencil, Eye } from 'lucide-react';
+import { Play, Plus, Trash2, Check, Download, ListPlus, Bell, Search, Settings, LogOut, User, Pencil, Eye, Film, Library, Wrench, Users } from 'lucide-react';
 
 const Ex = ({ id, children, w }) => (
   <section data-ex={id} style={{ padding: 16, borderBottom: '1px solid #1F2633', width: w }}>
@@ -140,6 +140,15 @@ function App() {
           onClearAll={noop} resultCount="9 of 10" />
       </Ex>
       <Ex id="multiselect-none" w={360}><MultiSelect label="genres" value={[]} onChange={noop} options={[{ value: 'animation', label: 'animation', count: 12 }]} /></Ex>
+      <Ex id="tilegroup" w={1100}>
+        <TileGroup legend="apps" description="what you can open">
+          <Tile title="chino" description="Movies and shows" icon={Film} href="#" status="online" />
+          <Tile title="catalog" description="Browse the catalog" icon={Library} href="#" badge="3" badgeTone="warning" />
+          <Tile title="catalog management" description="Scan and settings" icon={Wrench} href="#" status="degraded" />
+          <Tile title="people" description="Accounts and invites" icon={Users} href="#" disabled />
+        </TileGroup>
+      </Ex>
+      <Ex id="tile-sizes" w={1100}><div style={{ display: 'flex', gap: 12 }}><Tile title="small" icon={Film} href="#" size="sm" /><Tile title="large" description="A large tile" icon={Film} href="#" size="lg" /><Tile title="kpi" variant="kpi" value="1,240" unit="titles" delta={{ value: '+12', direction: 'up', tone: 'positive' }} /></div></Ex>
       <Ex id="spinner"><div style={{ display: 'flex', gap: 16 }}><Spinner label="loading" /><Spinner size={32} label="loading" /></div></Ex>
       <Ex id="status" w={720}>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

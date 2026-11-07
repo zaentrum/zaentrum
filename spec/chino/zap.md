@@ -19,7 +19,7 @@ person into a random scene of a movie or an episode they haven't watched, with
 its sound, and the next card comes with a swipe, a scroll or a key. When a
 scene catches them, **watch** goes on from that very moment in the player.
 
-Zap opens from the **zap** view: in the top bar on a computer, as the web's
+Zap opens from the **zap** view: in the rail on a computer, as the web's
 fifth tab on a phone, from the entry under the hero on the phone app's home
 ([chapter 4](./home.md)), and from the rail on a TV.
 
@@ -264,10 +264,10 @@ ready-made qualities, so it starts at once.
 
 ## 10.3 Zap on a computer
 
-Figure 10.4 shows zap on a computer. One card fills the page under the top
-bar, and the next card waits below it. The card is chino's own, the owner's
-design, the same on a computer and a phone; a phone held sideways only
-shortens its foot (section 10.4.2).
+Figure 10.4 shows zap on a computer. One card fills the page beside the rail
+and under the top bar, and the next card waits below it. The card is chino's
+own, the owner's design, the same on a computer and a phone; a phone held
+sideways only shortens its foot (section 10.4.2).
 
 ![Figure 10.4: Zap on a computer, at 1280 × 800](./img/zap-computer.png)
 

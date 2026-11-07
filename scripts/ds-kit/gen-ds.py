@@ -23,6 +23,8 @@ svg['ellipsis'] = one(m['actionmenu'], r'<button[^>]*nc-actionmenu__trigger[^>]*
 svg['stripDismiss'] = one(m['banner'], r'<button type="button" class="nc-strip__dismiss" aria-label="dismiss">(<svg.*?</svg>)</button>')
 svg['stripCaret'] = one(m['banner'], r'<button type="button" class="nc-strip__toggle"[^>]*>(<svg.*?</svg>)details</button>')
 svg['chevron'] = one(m['lockup'], r'(<svg class="nc-chevron".*?</svg>)')
+svg['groupChevron'] = one(m['tilegroup'], r'(<svg class="nc-chevron nc-tilegroup__chev".*?</svg>)')
+svg['tileChevron'] = one(m['tilegroup'], r'(<svg class="nc-chevron nc-tile__chevron".*?</svg>)')
 for st in ['information', 'warning', 'error', 'success']:
     svg['strip_' + st] = one(m['banner'], r'<div class="nc-strip nc-strip--' + st + r'" data-state="' + st + r'"><span class="nc-strip__icon" aria-hidden="true">(<svg.*?</svg>)</span>')
 for st in ['success', 'information', 'warning', 'error', 'neutral']:
@@ -74,6 +76,8 @@ JS = r'''// ds.js: the nalet design system's components in the chino drawings, a
 //   <ds-badge tone="neutral|green|amber|blue" dot>text</ds-badge>   <ds-kbd>OK</ds-kbd>
 //   <ds-heading level="1|2">text</ds-heading>   <ds-text>text</ds-text>
 //   <ds-card title="language"> <ds-aside>a button</ds-aside> the body </ds-card>   <ds-divider heavy|label="or"></ds-divider>
+//   <ds-tilegroup legend="apps" description="…"> <ds-tile title="chino" description="Movies and shows" icon="film"
+//       status="online|offline|degraded|unknown" badge="3" badge-tone="info|success|warning|danger|neutral" disabled size> </ds-tilegroup>
 //   <ds-toolbar label>…</ds-toolbar>   <ds-tooltip text="…"> a control </ds-tooltip>   <ds-chevron size="16"></ds-chevron>
 //
 // Attributes the tags don't use (data-co, style, class) carry over to the component's outer element.
@@ -216,6 +220,20 @@ JS = r'''// ds.js: the nalet design system's components in the chino drawings, a
     },
     'ds-toolbar': (el) => `<div role="toolbar" aria-label="${esc(at(el, 'label', ''))}" tabindex="-1" class="nc-toolbar">${inner(el)}<div class="nc-toolbar__actions"></div></div>`,
     'ds-tooltip': (el) => `<span class="nc-tooltip"><span class="nc-tooltip__trigger" tabindex="0">${inner(el)}</span><span role="tooltip" class="nc-tooltip__bubble nc-tooltip__bubble--${at(el, 'position', 'top')}">${at(el, 'text', '')}</span></span>`,
+    'ds-tilegroup': (el) => {
+      const d = el.hasAttribute('description') ? `<p class="nc-tilegroup__desc">${el.getAttribute('description')}</p>` : '';
+      return `<section class="nc-tilegroup"><div class="nc-tilegroup__head"><h2 class="nc-tilegroup__legend">${SVG.groupChevron}${at(el, 'legend', '')}</h2></div>${d}<div class="nc-tilegroup__grid nc-tilegroup__grid--gap-md" style="grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));">${inner(el)}</div></section>`;
+    },
+    'ds-tile': (el) => {
+      const s = at(el, 'size', 'md'), off = has(el, 'disabled');
+      const ic = el.hasAttribute('icon') ? `<span class="nc-tile__icon">${lucide(el.getAttribute('icon'), 22).replace('stroke-width="2"', 'stroke-width="1.75"').replace('class="lucide', 'aria-hidden="true" class="lucide')}</span>` : '';
+      const st = el.hasAttribute('status') ? `<span class="nc-tile__status nc-tile__status--${el.getAttribute('status')}" role="img" aria-label="status: ${el.getAttribute('status')}"></span>` : '';
+      const bd = el.hasAttribute('badge') ? `<span class="nc-tile__badge nc-tile__badge--${at(el, 'badge-tone', 'neutral')}">${el.getAttribute('badge')}</span>` : '';
+      const d = el.hasAttribute('description') ? `<div class="nc-tile__desc">${el.getAttribute('description')}</div>` : '';
+      const top = `<div class="nc-tile__top">${ic}<div class="nc-tile__heading"><span class="nc-tile__title">${at(el, 'title', '')}</span>${off ? '' : SVG.tileChevron}</div>${off ? '' : st + bd}</div>`;
+      return off ? `<div class="nc-tile nc-tile--app nc-tile--${s} nc-tile--disabled" aria-disabled="true">${top}${d}</div>`
+        : `<a class="nc-tile nc-tile--app nc-tile--${s} nc-tile--interactive" href="#">${top}${d}</a>`;
+    },
     'ds-chevron': (el) => { const s = at(el, 'size', '16'); return SVG.chevron.replace('width="16" height="16"', `width="${s}" height="${s}"`); },
   };
   function ms(el, size) {
@@ -230,7 +248,7 @@ JS = r'''// ds.js: the nalet design system's components in the chino drawings, a
     const st = glyphState(at(t, 'state', 'information'));
     return `<li class="nc-toast nc-toast--${st}" data-state="${st}"><span class="nc-toast__icon" aria-hidden="true">${SVG['glyph_' + st]}</span><span class="nc-toast__text">${srState(st)}${inner(t)}</span></li>`;
   }
-  const KEEP = ['focused', 'heavy', 'narrow', 'filters', 'tag', 'variant', 'size', 'icon', 'icon-end', 'loading', 'disabled', 'block', 'label', 'value', 'invalid', 'placeholder', 'rows', 'hint', 'error', 'required',
+  const KEEP = ['focused', 'heavy', 'narrow', 'filters', 'legend', 'badge', 'badge-tone', 'status', 'tag', 'variant', 'size', 'icon', 'icon-end', 'loading', 'disabled', 'block', 'label', 'value', 'invalid', 'placeholder', 'rows', 'hint', 'error', 'required',
     'checked', 'text', 'open', 'summary', 'clear', 'count', 'type', 'active', 'selected', 'state', 'action', 'dismiss', 'details', 'details-open', 'title', 'width', 'close',
     'illustration', 'description', 'appearance', 'tone', 'dot', 'level', 'position'];
   // tags read by their parent's template, never expanded on their own

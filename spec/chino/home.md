@@ -6,8 +6,8 @@ between the two as a numbered change. Only a change the owner has approved is
 built, one change at a time; anything no change names stays as it is deployed.
 
 This chapter specifies home, the first screen after signing in. The frame
-around it, the top bar with the phone's tabs and the TV's rail, is specified in
-[chapter 2](./frame.md).
+around it, the rail and the top bar on a computer, the phone's tabs and the
+TV's rail, is specified in [chapter 2](./frame.md).
 
 ## 4.1 Purpose
 
@@ -200,10 +200,10 @@ doesn't have.
 
 ## 4.3 Home on a computer
 
-Figure 4.5 shows home on a computer, with the menu of the last card in
-continue watching open. The hero takes the top of the page, and the rows
-follow under it, each scrolling sideways. The hero, its squares and the rows
-of cards are chino's own; the buttons and the card's menu are the design
+Figure 4.5 shows home on a computer, with the menu of a card in continue
+watching open, Elephants Dream's. The hero takes the top of the page, and the
+rows follow under it, each scrolling sideways. The hero, its squares and the
+rows of cards are chino's own; the buttons and the card's menu are the design
 system's.
 
 ![Figure 4.5: Home on a computer, at 1280 × 800](./img/home-computer.png)
@@ -234,7 +234,7 @@ Figure 4.5: Home on a computer, at 1280 × 800.
 5. **next up.** The next episode of a show whose last episode the person
    finished, by its code and name, “S01E02 · Gran Dillama”. The rows that
    follow it are listed in section 4.6.2.
-6. **The card's menu**, open on Sprite Fright: the design system's action
+6. **The card's menu**, open on Elephants Dream: the design system's action
    menu, just under its button and lined up with its right edge, over the
    row below. It lists **resume**, **mark as watched** and **remove from
    continue watching**, the last one in amber and at the end, as the design
@@ -384,7 +384,7 @@ target, with the figure or the section that sets it out; it is built as its row
 says, and nothing else changes with it. Each change starts as proposed; once the
 owner approves it, it is built, one change at a time. A target that starts with
 “Recommended” was an open decision, or takes away something an app has today.
-The frame's own rows, such as zap's tab and the side navigation, belong to
+The frame's own rows, such as zap's tab and the computer's rail, belong to
 [chapter 2](./frame.md), and what a card shows under its poster and how its
 menu opens, in every row and grid, to [chapter 5](./browse.md).
 

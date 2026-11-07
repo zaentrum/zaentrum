@@ -22,6 +22,8 @@
 <link rel="stylesheet" href="screens.css">
 <script src="icons.js"></script>
 <style>
+  /* the toaster is fixed to the window, at its bottom centre, as the design system has it, so it isn't
+     moved 80 px right with the page as frame.js moves what is placed against the frame */
   /* settings: the design system's cards, one per group, with its fields, selects and switches inside */
   .stk { display: flex; flex-direction: column; gap: 18px; }
   .stk.tight { gap: 12px; }
@@ -89,7 +91,7 @@
 
 <!-- Figure 16.7 · settings on a computer -->
 <figure class="shot" id="settings-computer">
-  <div class="computer" data-view="none">
+  <div class="computer" data-view="settings">
     <div class="set2">
       <ds-heading level="1">settings</ds-heading>
       <div class="colg">
@@ -161,7 +163,7 @@
 
 <!-- Figure 16.12 · report a bug, on a computer: the design system's dialog over settings -->
 <figure class="shot" id="settings-report-computer">
-  <div class="computer" data-view="none">
+  <div class="computer" data-view="settings">
     <div class="set2">
       <ds-heading level="1">settings</ds-heading>
       <div class="colg">
@@ -374,7 +376,7 @@
 
 <!-- Figure 16.23 · the report was sent, on a computer: the dialog closed, the design system's toast -->
 <figure class="shot" id="settings-report-sent-computer">
-  <div class="computer" data-view="none">
+  <div class="computer" data-view="settings">
     <div class="set2">
       <ds-heading level="1">settings</ds-heading>
       <div class="colg">
@@ -386,7 +388,7 @@
         <div class="nc-card"><div class="nc-card__header"><div class="nc-card__title">about</div></div><div class="nc-card__body"><div class="kv"><span class="nc-text nc-text--ui">Version</span><span class="nc-text nc-text--code">0.1.0</span></div></div></div>
       </div>
     </div>
-    <ds-toasts data-co="1"><ds-toast state="success">Report sent as #482</ds-toast></ds-toasts>
+    <ds-toasts data-co="1" data-co-side="right"><ds-toast state="success">Report sent as #482</ds-toast></ds-toasts>
   </div>
 </figure>
 

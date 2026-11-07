@@ -21,7 +21,9 @@
   /* a page's place, shown as quiet blocks: this chapter is about the frame */
   .ph { background: var(--surface); border: 1px dashed var(--border-2); display: flex; align-items: center; justify-content: center;
         font: 500 13px/1 var(--ff-mono); color: var(--fg-dim); }
-  .computer .ph { position: absolute; left: 48px; right: 48px; top: 88px; bottom: 32px; }
+  /* placed against the frame, which frame.js then moves 80 px right with the page, beside the rail:
+     right 128 leaves the page its 48 on the right */
+  .computer .ph { position: absolute; left: 48px; right: 128px; top: 88px; bottom: 32px; }
   .phone .ph { position: absolute; left: 16px; right: 16px; top: 16px; bottom: 16px; }
   .phone.side .ph { left: 24px; right: 24px; }
   .tv .ph { position: absolute; left: 0; right: 48px; top: 0; bottom: 0; }
@@ -29,8 +31,9 @@
      avatar, its right edge on the avatar's. The design system's user menu is planned, so the sheet
      and its header (the name, then the email address, quieter) are drawn on its tokens, with the
      action menu's frame and shadow; the items are its action menu's. The action menu has no
-     separators yet, so sign out, set apart, is a second menu under a rule. */
-  .usermenu { position: absolute; z-index: 150; top: 60px; right: 24px; width: 248px; display: flex; flex-direction: column;
+     separators yet, so sign out, set apart, is a second menu under a rule. frame.js moves it 80 px
+     right with the page, so right 104 puts its right edge on the avatar's, 24 px from the frame's. */
+  .usermenu { position: absolute; z-index: 150; top: 60px; right: 104px; width: 248px; display: flex; flex-direction: column;
               box-shadow: 0 8px 24px #00000073; }
   .usermenu .who { display: flex; flex-direction: column; gap: 2px; padding: 12px 12px 11px; background: var(--surface);
                    border: 1px solid var(--border-2); border-bottom: 0; }
@@ -48,10 +51,10 @@
 </head>
 <body>
 
-<!-- Figure 2.6 · the frame on a computer -->
+<!-- Figure 2.6 · the frame on a computer: the web's rail of icons, as built, and the top bar -->
 <figure class="shot" id="frame-computer">
-  <div class="computer" data-view="movies" data-co-parts="logo:1:top,views:2:top,search:3:top,bell:4:top,avatar:5:top">
-    <div class="ph" data-co="6">the page</div>
+  <div class="computer" data-view="movies" data-co-parts="logo:1:top,views:2,current:3,settings:4,search:5:top,bell:6:top,avatar:7:top">
+    <div class="ph">the page</div>
   </div>
 </figure>
 

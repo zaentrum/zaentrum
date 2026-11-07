@@ -9,8 +9,9 @@ apps, and for the review of every release.
 > what the apps do today, in screenshots of the deployed web; then the target;
 > then every difference between the two as a numbered change with its status.
 > Only a change the owner approved is built, one at a time, and anything no
-> change names stays as it is deployed. The portal's pages show the target
-> only: nothing in them is built until a change to it is approved.
+> change names stays as it is deployed. The portal's home page has the same
+> form; its settings page shows the target only, and nothing in it is built
+> until a change to it is approved.
 
 The [documentation](../docs/README.md) is the other half: it is for the people
 who run zaentrum, extend it with addons, or build on its library format, and it

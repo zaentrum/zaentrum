@@ -284,9 +284,9 @@ started. The page scrolls as a whole; the figure shows its top.
 
 Figure 6.7: A movie's page on a computer, at 1280 × 800.
 
-1. **The still.** A picture from the title fills the width under the top bar
-   and fades into the page's colour before the first words, so nothing is
-   ever written on the picture.
+1. **The still.** A picture from the title fills the page's width, beside the
+   rail and under the top bar, and fades into the page's colour before the
+   first words, so nothing is ever written on the picture.
 2. **The poster**, beside the name, reaching up into the still.
 3. **The name and its facts**: the year, the length, the genres, the rating
    and the kind, movie or show, in the design system's badge. A tagline,
@@ -759,7 +759,7 @@ has today. The frame itself, the top bar, the tabs and the rail, belongs to
 
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
-| 6.C1 | The frame on the title page | Web, Phone app, Android TV, Samsung TV | Web: none; back and home float over the still, and on a phone held upright the poster covers them (figure 6.3). Phone app: a bar of its own with back and home, no tabs, and no bar while the page loads or when it couldn't load. Android TV, Samsung TV: no rail, nothing at the top | the frame of [chapter 2](./frame.md) with no view current, in every state of the page: the top bar on a computer; on a phone the back arrow and the title's name in place of the bar, with the tabs, or the rail held sideways; on a TV the rail (figures 6.7 to 6.10). The page has no home button of its own | proposed |
+| 6.C1 | The frame on the title page | Web, Phone app, Android TV, Samsung TV | Web: none; back and home float over the still, and on a phone held upright the poster covers them (figure 6.3). Phone app: a bar of its own with back and home, no tabs, and no bar while the page loads or when it couldn't load. Android TV, Samsung TV: no rail, nothing at the top | the frame of [chapter 2](./frame.md) with no view current, in every state of the page: the rail and the top bar on a computer; on a phone the back arrow and the title's name in place of the bar, with the tabs, or the rail held sideways; on a TV the rail (figures 6.7 to 6.10). The page has no home button of its own | proposed |
 | 6.C2 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner alone. Android TV: “Loading…”. Samsung TV: a spinner and “Loading…” | nothing for 0.4 seconds, then grey blocks in the page's shape (figure 6.19) | proposed |
 | 6.C3 | No words on the still | Web, Phone app, Samsung TV | Web: the name, the tagline, the facts and the genres stand on the still's dimmed foot (figure 6.1). Phone app: the same from 600 dp wide. Samsung TV: the top half of the page stands on it | the still fades into the page's colour before the first words; only the poster reaches up into it (figure 6.7, parts 1 and 2) | proposed |
 | 6.C4 | Upright: the poster beside the name | Web, Phone app | below 768 px (Web) or 600 dp (Phone app) wide, the poster, 192 wide, stands above the name (figure 6.3) | below 600 dp wide, the poster 96 dp wide beside the name, the facts on up to three lines, the row in view without scrolling (figure 6.8) | proposed |

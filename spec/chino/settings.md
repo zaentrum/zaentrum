@@ -18,10 +18,12 @@ play in, how episodes follow one another, and on a phone how titles download.
 The account page says who is signed in, and it is where the person signs out
 or deletes the account.
 
-Neither is a view of its own. On a computer and a phone, both open from the
-avatar's menu ([chapter 2](./frame.md)); on a phone they open as screens with a
-back arrow and their name in place of the bar. On a TV, settings is the last
-item of the rail, and the account page is the first row of settings.
+Neither is one of the views. On a computer, settings opens from the gear at
+the rail's foot and from the avatar's menu, and the account page from the
+avatar's menu ([chapter 2](./frame.md)); on a phone both open from the
+avatar's menu, as screens with a back arrow and their name in place of the
+bar. On a TV, settings is the last item of the rail, and the account page is
+the first row of settings.
 
 A setting applies the moment it changes, as the design system's
 [forms and settings](https://nalet.github.io/design-system/patterns/forms-and-settings/)
@@ -354,9 +356,9 @@ doesn't have.
 
 ### 16.3.1 On a computer
 
-Figure 16.7 shows settings on a computer: the heading, then the groups in two
-columns, each the design system's card with the group's name as its title, as
-its [forms and
+Figure 16.7 shows settings on a computer, with the gear at the rail's foot
+current: the heading, then the groups in two columns, each the design system's
+card with the group's name as its title, as its [forms and
 settings](https://nalet.github.io/design-system/patterns/forms-and-settings/)
 draws a card of settings that apply at once.
 

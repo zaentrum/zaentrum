@@ -1,0 +1,229 @@
+<!doctype html>
+<!--
+  The portal's home page: the target figures of spec/portal/home.md.
+  Each <figure class="shot" id="…"> becomes spec/portal/img/<id>.png:
+    node scripts/render-mockups.mjs portal [id …]
+  Drawn on the chino kit, linked from spec/chino/img/: screens.css with the
+  design system's stylesheet, the design system's components as <ds-*> tags
+  (ds.js) or as the package's own markup where ds.js has no tag (the home page
+  component, nc-portal), the portal's frame from frame.js (data-frame="portal":
+  the design system's top bar with zaentrum, the search, the bell and the
+  avatar) and the icons from icons.js. The spaces bar is the portal's own and is
+  drawn here, on the design system's tokens. Pink numbers mark the parts the
+  page explains.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>portal · home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../chino/img/screens.css">
+<script src="../../chino/img/icons.js"></script>
+<style>
+  /* the page under the portal's top bar: frame.js puts it in .ppage on a computer and in .scroll on a phone */
+  .ppage, .phone[data-frame="portal"] > .scroll { display: flex; flex-direction: column; }
+  /* a phone held sideways keeps the portal's bar on top (frame.js lays the portal's phone out upright), lower */
+
+  /* the spaces bar, the design system's bar of spaces (planned), drawn on its tokens: across the whole width on
+     the page's background, with the 1 px rule of a row of tabs along its foot. Each space a link in the monospace
+     face, 13 px, lowercase, with 8 px 12 px of padding as a tab: 35 px high; the first name in line with the
+     space's title and tiles; the current one brighter, with a 2 px blue line under it that lies over the rule */
+  .spaces { flex: none; display: flex; height: 36px; padding: 0 12px; position: relative; z-index: 9; border-bottom: 1px solid var(--border); }
+  .spaces a { display: flex; justify-content: center; text-decoration: none; }
+  .spaces a > span { position: relative; display: inline-flex; align-items: center; padding: 0 12px; white-space: nowrap;
+                     font: 500 13px/1 var(--ff-mono); color: var(--fg-muted); }
+  .spaces a[aria-current="page"] > span { color: var(--fg); }
+  .spaces .cur { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--cloud-blue); }
+  /* a touch screen: each space 48 px high at the least; less than 600 px wide, as a phone held upright, the spaces
+     share the bar's width, each name in the middle of its share */
+  .phone .spaces { height: 49px; }
+  .phone:not(.side) .spaces { padding: 0; }
+  .phone:not(.side) .spaces a { flex: 1 1 0; }
+  .phone.side .spaces { padding: 0 4px; }
+
+  /* a space: the design system's home page (nc-portal) with the space's name as its title and no search box of
+     its own; its tiles in the design system's grid, its groups (when it has several) the design system's tile groups */
+  .space { padding: 24px; }
+  .phone .space { padding: 16px; }
+  /* a state in the space's place: the design system's empty state, centred */
+  .state { display: flex; justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- Figure 7 · an admin's home on a computer, apps current -->
+<figure class="shot" id="home-computer">
+  <div class="computer" data-frame="portal" data-co-parts="logo:1,search:2:top,bell:3:top,avatar:4:top">
+    <nav class="spaces" aria-label="spaces">
+      <a href="#" aria-current="page"><span>apps<i class="cur" data-co="5"></i></span></a><a href="#"><span>manage</span></a><a href="#"><span>settings</span></a>
+    </nav>
+    <div class="space">
+      <div class="nc-portal nc-portal--comfortable">
+        <div class="nc-portal__bar"><h1 class="nc-portal__title" data-co="6"><ds-chevron size="18" class="nc-portal__chev"></ds-chevron>apps</h1></div>
+        <div class="nc-portal__body">
+          <div class="nc-tilegroup__grid nc-tilegroup__grid--gap-md" style="grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));">
+            <ds-tile title="chino" description="Movies and shows" data-glyph="c"></ds-tile>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 8 · the manage space on a computer -->
+<figure class="shot" id="home-manage-computer">
+  <div class="computer" data-frame="portal">
+    <nav class="spaces" aria-label="spaces">
+      <a href="#"><span>apps</span></a><a href="#" aria-current="page"><span>manage<i class="cur" data-co="1"></i></span></a><a href="#"><span>settings</span></a>
+    </nav>
+    <div class="space">
+      <div class="nc-portal nc-portal--comfortable">
+        <div class="nc-portal__bar"><h1 class="nc-portal__title"><ds-chevron size="18" class="nc-portal__chev"></ds-chevron>manage</h1></div>
+        <div class="nc-portal__body">
+          <div class="nc-tilegroup__grid nc-tilegroup__grid--gap-md" style="grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));">
+            <ds-tile title="catalog" description="Every title and its files" icon="library" data-co="2"></ds-tile>
+            <ds-tile title="catalog admin" description="Scans, processing and rules" icon="wrench"></ds-tile>
+            <ds-tile title="an addon" description="Its views are in its own navigation" icon="boxes" data-co="3" data-co-side="right"></ds-tile>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 9 · the search across spaces, on a computer: "log" typed, the matching tiles of every space, under the spaces' names -->
+<figure class="shot" id="home-search-computer">
+  <div class="computer" data-frame="portal" data-portal-query="log" data-co-parts="search:1:top">
+    <nav class="spaces" aria-label="spaces" data-co="2" data-co-side="right">
+      <a href="#"><span>apps</span></a><a href="#"><span>manage</span></a><a href="#"><span>settings</span></a>
+    </nav>
+    <div class="space">
+      <div class="nc-portal nc-portal--comfortable">
+        <div class="nc-portal__body">
+          <ds-tilegroup legend="manage" data-co-in=".nc-tilegroup__legend 3">
+            <ds-tile title="catalog" description="Every title and its files" icon="library"></ds-tile>
+            <ds-tile title="catalog admin" description="Scans, processing and rules" icon="wrench"></ds-tile>
+          </ds-tilegroup>
+          <ds-tilegroup legend="settings" data-co-in=".nc-tilegroup__legend 4">
+            <ds-tile title="logs" description="Every container's logs, redacted" icon="scroll-text"></ds-tile>
+          </ds-tilegroup>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 10 · the settings space on a phone held upright, in its two groups -->
+<figure class="shot" id="home-phone">
+  <div class="phone" data-frame="portal" data-co-parts="search:1:top">
+    <nav class="spaces" aria-label="spaces" data-co="2">
+      <a href="#"><span>apps</span></a><a href="#"><span>manage</span></a><a href="#" aria-current="page"><span>settings<i class="cur" data-co="3" data-co-side="right"></i></span></a>
+    </nav>
+    <div class="space">
+      <div class="nc-portal nc-portal--comfortable">
+        <div class="nc-portal__bar"><h1 class="nc-portal__title"><ds-chevron size="18" class="nc-portal__chev"></ds-chevron>settings</h1></div>
+        <div class="nc-portal__body">
+          <ds-tilegroup legend="platform" data-co-in=".nc-tilegroup__legend 4">
+            <ds-tile title="registry" description="Apps, spaces, tiles and addons" icon="settings"></ds-tile>
+            <ds-tile title="people" description="Accounts, invites and rating caps" icon="users" data-co="5"></ds-tile>
+            <ds-tile title="operator" description="Instances, scaling and updates" icon="boxes"></ds-tile>
+          </ds-tilegroup>
+          <ds-tilegroup legend="diagnostics">
+            <ds-tile title="logs" description="Every container's logs, redacted" icon="scroll-text"></ds-tile>
+            <ds-tile title="events" description="The event bus and a live tail" icon="radio"></ds-tile>
+            <ds-tile title="database" description="Chosen tables, read-only" icon="database"></ds-tile>
+            <ds-tile title="export" description="A support bundle, redacted" icon="life-buoy"></ds-tile>
+          </ds-tilegroup>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11 · the same space on a phone held sideways -->
+<figure class="shot" id="home-side-phone">
+  <div class="phone side" data-frame="portal" data-co-parts="logo:1">
+    <nav class="spaces" aria-label="spaces" data-co="2" data-co-side="right">
+      <a href="#"><span>apps</span></a><a href="#"><span>manage</span></a><a href="#" aria-current="page"><span>settings<i class="cur"></i></span></a>
+    </nav>
+    <div class="space">
+      <div class="nc-portal nc-portal--comfortable">
+        <div class="nc-portal__bar"><h1 class="nc-portal__title"><ds-chevron size="18" class="nc-portal__chev"></ds-chevron>settings</h1></div>
+        <div class="nc-portal__body">
+          <ds-tilegroup legend="platform">
+            <ds-tile title="registry" description="Apps, spaces, tiles and addons" icon="settings"></ds-tile>
+            <ds-tile title="people" description="Accounts, invites and rating caps" icon="users"></ds-tile>
+            <ds-tile title="operator" description="Instances, scaling and updates" icon="boxes" data-co="3" data-co-side="right"></ds-tile>
+          </ds-tilegroup>
+          <ds-tilegroup legend="diagnostics">
+            <ds-tile title="logs" description="Every container's logs, redacted" icon="scroll-text"></ds-tile>
+            <ds-tile title="events" description="The event bus and a live tail" icon="radio"></ds-tile>
+            <ds-tile title="database" description="Chosen tables, read-only" icon="database"></ds-tile>
+            <ds-tile title="export" description="A support bundle, redacted" icon="life-buoy"></ds-tile>
+          </ds-tilegroup>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 12 · loading, on a phone held upright: grey blocks in the shape of a space's title and tiles -->
+<figure class="shot" id="home-loading-phone">
+  <div class="phone" data-frame="portal">
+    <div class="space" style="display:flex;flex-direction:column;gap:16px">
+      <div class="sk" style="height:24px;width:132px;margin-bottom:8px"></div>
+      <div class="sk" style="height:112px"></div>
+      <div class="sk" style="height:112px"></div>
+      <div class="sk" style="height:112px"></div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 13 · the spaces couldn't load, on a computer: the design system's empty state, its error kind, at the page's size -->
+<figure class="shot" id="home-couldnt-load-computer">
+  <div class="computer" data-frame="portal">
+    <div class="state" style="margin-top:150px">
+      <ds-empty illustration="error" size="lg" title='<span data-co="1">couldn&#39;t load your apps</span>' description="The server ran into a problem." details="HTTP 500 Internal Server Error" data-co-in=".nc-strip__toggle 3 right">
+        <ds-button data-co="2">try again</ds-button>
+      </ds-empty>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 14 · nothing to open, on a phone held sideways, for an account that isn't an admin: the design system's empty state, its nothing-yet kind -->
+<figure class="shot" id="home-nothing-side-phone">
+  <div class="phone side" data-frame="portal" data-avatar="sk">
+    <div class="state" style="margin-top:28px">
+      <ds-empty illustration="empty" size="md" title="no apps to open" description="An admin decides which apps each account can open."></ds-empty>
+    </div>
+  </div>
+</figure>
+
+<script src="../../chino/img/ds.js"></script>
+<script src="../../chino/img/frame.js"></script>
+<script>
+  // after the frame: a product's mark on its tile, the chevron and the product's letter, as the portal
+  // draws the products' marks (every other tile has a line icon)
+  for (const t of document.querySelectorAll('.nc-tile[data-glyph]')) {
+    const ic = document.createElement('span');
+    ic.className = 'nc-tile__icon';
+    ic.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 6 L10 12 L4.5 18" stroke="var(--cloud-blue)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path><text x="12" y="16.6" font-family="JetBrains Mono, monospace" font-weight="700" font-size="13" fill="var(--fg-2)">${t.dataset.glyph}</text></svg>`;
+    t.querySelector('.nc-tile__top').prepend(ic);
+  }
+  // another account's initials, where the drawing isn't the admin's (frame.js draws au)
+  for (const f of document.querySelectorAll('[data-avatar]')) {
+    const av = f.querySelector('.tb.portal .av');
+    av.textContent = f.dataset.avatar;
+    av.classList.add('c2');
+  }
+  // words typed into the portal's search (frame.js draws its field empty)
+  for (const f of document.querySelectorAll('[data-portal-query]')) {
+    const field = f.querySelector('.tb.portal .search-field');
+    field.classList.add('is-focused');
+    field.querySelector('input').setAttribute('value', f.dataset.portalQuery);
+  }
+</script>
+</body>
+</html>

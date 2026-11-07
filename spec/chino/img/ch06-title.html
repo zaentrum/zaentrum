@@ -54,10 +54,12 @@
   .desc-w { margin: 0; }
   .fit { display: flex; flex-direction: column; align-items: flex-start; }
 
-  /* a movie's page on a computer */
-  .computer .bd { top: 56px; height: 320px; }
+  /* a movie's page on a computer. What is placed against the frame, frame.js moves 80 px right with
+     the page, beside the rail: a right edge at the page's edge is 80 from the frame's, one 48 in from
+     it is 128 */
+  .computer .bd { top: 56px; right: 80px; height: 320px; }
   .computer .bd .fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 24%, rgba(11,15,25,.6) 50%, rgba(11,15,25,0) 64%); }
-  .computer .head { position: absolute; left: 48px; right: 48px; top: 200px; display: flex; gap: 32px; }
+  .computer .head { position: absolute; left: 48px; right: 128px; top: 200px; display: flex; gap: 32px; }
   .computer .head .pos { width: 200px; height: 300px; }
   .computer .info { padding-top: 100px; display: flex; flex-direction: column; align-items: flex-start; }
   .computer .info .meta { margin-top: 10px; }
@@ -117,7 +119,7 @@
   .ep .ds { margin: 0; font: 400 13px/1.45 var(--ff-ui); color: var(--fg-2); }
   .ep .acts { margin-top: 10px; width: fit-content; }
 
-  .computer .eps { position: absolute; left: 48px; right: 48px; top: 88px; }
+  .computer .eps { position: absolute; left: 48px; right: 128px; top: 88px; }
   .computer .eps > .h2 { margin-bottom: 14px; }
   .computer .season .sh { height: 56px; padding: 0 16px 0 20px; }
   .computer .ep { padding: 14px 20px; }
@@ -181,6 +183,7 @@
 
   /* a page that couldn't load, or a removed title: the design system's empty state, centred in the page's place */
   .mid { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px; }
+  .computer .mid { right: 80px; }   /* moved 80 px right with the page: centred beside the rail */
 </style>
 </head>
 <body>
@@ -339,7 +342,7 @@
     <section class="eps">
       <h2 class="h2">episodes</h2>
       <div class="season">
-        <div class="sh" data-co="1"><span class="sn">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
+        <div class="sh" data-co="1" data-co-side="right"><span class="sn">season 1</span><span class="cnt">6 episodes</span><i data-i="chevron-down" class="chev"></i></div>
         <div class="ep seen">
           <div class="top">
             <div class="still"><div class="art a1"></div></div>

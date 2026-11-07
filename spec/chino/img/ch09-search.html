@@ -36,6 +36,10 @@
   .grp { margin-bottom: 32px; }
   .grp .h2 { margin-bottom: 12px; }
   .people { display: flex; gap: 16px; }
+  /* on a computer this mark meets its part a little lower down, at a point (.at), so that its
+     line passes between the rail's icons: frame.js draws a line level with what it marks */
+  .at { position: absolute; left: 0; width: 1px; height: 2px; }
+  .computer .people { position: relative; }
   .person { flex: none; width: 260px; display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface); border: 1px solid var(--border); }
   .person .ph { width: 48px; height: 48px; flex: none; }
   .person .who { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -115,7 +119,7 @@
     <div class="pg">
       <section class="grp">
         <h2 class="h2">cast &amp; crew</h2>
-        <div class="people" data-co="2">
+        <div class="people"><i class="at" style="top:56px" data-co="2"></i>
           <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
           <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
           <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sacha Goedegebure</span><span class="sb">1 title</span></div></div>

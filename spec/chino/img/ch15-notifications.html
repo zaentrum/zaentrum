@@ -40,8 +40,9 @@
   .tv .shelf .h2 { margin-bottom: 10px; }
 
   /* the panel under the bell, on a computer: the surface, frame and shadow of the
-     design system's menus, which open over the page as this panel does */
-  .np { position: absolute; top: 60px; right: 56px; width: 380px; z-index: 30; background: var(--surface); border: 1px solid var(--border-2);
+     design system's menus, which open over the page as this panel does. frame.js moves
+     it 80 px right with the page, so right 136 keeps its right edge 56 px in from the frame's */
+  .np { position: absolute; top: 60px; right: 136px; width: 380px; z-index: 30; background: var(--surface); border: 1px solid var(--border-2);
         box-shadow: 0 8px 24px rgba(0,0,0,.45); }
   .np .hd { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 8px 0 16px; border-bottom: 1px solid var(--border); }
   .np .hd .h2 { font-size: 15px; }

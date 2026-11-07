@@ -2,8 +2,12 @@
 // the rail is made once. Load it at the end of a drawing's page, after icons.js:
 //
 //   <div class="computer" data-view="movies">…</div>
-//       the top bar, with "movies" current. data-query="sin" shows typed text in
-//       the search field; data-count="0" hides the bell's count.
+//       the web's frame: the rail of icons down the left with "movies" current, the
+//       mark >c and the top bar with the search, the bell and the avatar.
+//       data-query="sin" shows typed text in the search field; data-count="0" hides
+//       the bell's count; data-bar="none" for no frame (the player, zap). The page is
+//       80 px narrower than the frame: what a drawing places by coordinates against
+//       the frame moves with it.
 //   <div class="phone" data-view="movies">…</div>
 //       the top bar and the five tabs. data-tabs="web" for the web on a phone
 //       (zap in place of downloads), data-tabs="none" for no tabs.
@@ -16,6 +20,9 @@
 //       other sizes), and the safe area's outline.
 //       data-rail="none" (with class "full") for a screen without the rail.
 //   data-view="none" marks no view as current.
+//   data-frame="portal" on a computer or a phone draws the portal's frame instead: the design
+//       system's top bar with zaentrum, the search for apps (an icon on a phone), the bell and
+//       the avatar, and no rail or tabs (the portal's own spec draws its spaces under it).
 //
 // data-co-parts="logo:1:top,views:2:top,bell:3:top" on a frame numbers the parts
 // frame.js draws itself: logo, views, search, bell, avatar, tabs, back, rail,
@@ -42,19 +49,57 @@
   const make = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; };
   const lift = () => {};
 
-  for (const f of document.querySelectorAll('.computer')) {
+  // the computer: the web's own frame, as it is built: the views as icons alone in a rail down the
+  // left, the mark >c over it at the bar's start, settings at the rail's foot, and the top bar with the
+  // search, the bell and the avatar. The page takes the rest, beside the rail and under the bar.
+  const RAIL = 80, BAR = 64, DRAWN_BAR = 56; // the web's rail and bar; drawings were laid out under a 56 px bar
+  // the portal (data-frame="portal"): the design system's top bar alone, the product's name zaentrum,
+  // the search for apps, the bell and the avatar; no rail and no tabs (spec/portal)
+  const portalBar = (wide) => `<header class="tb portal"><span class="logo">${chevron}zaentrum</span>${wide
+    ? `<div class="end"><div class="nc-input nc-input--md search-field">${window.DS ? `<span class="nc-input__affix nc-input__affix--prefix">${DS.svg.searchAffix}</span>` : ''}<input class="nc-input__control" placeholder="search apps…" value=""></div>`
+    : `<span class="icon-b search">${icon('search')}</span>`}${bell('0')}<span class="av">au</span>${wide ? '</div>' : ''}</header>`;
+  for (const f of document.querySelectorAll('.computer[data-frame="portal"], .phone[data-frame="portal"]')) {
+    const wide = f.classList.contains('computer');
+    const page = document.createElement('div');
+    page.className = wide ? 'ppage' : 'scroll';
+    while (f.firstChild) page.appendChild(f.firstChild);
+    f.append(make(portalBar(wide)));
+    f.append(page);
+    f.classList.add('framed');
+  }
+
+  for (const f of document.querySelectorAll('.computer:not([data-frame="portal"])')) {
     const view = f.dataset.view || 'home';
-    if (f.dataset.bar !== 'none') {
-      const q = f.dataset.query;
-      const affix = window.DS ? `<span class="nc-input__affix nc-input__affix--prefix">${DS.svg.searchAffix}</span>` : icon('search', 's16');
-      const field = `<div class="nc-input nc-input--md search-field${q ? ' filled' : ''}">${affix}<input class="nc-input__control" placeholder="${f.dataset.placeholder || 'search movies, shows and people…'}" value="${q || ''}"></div>`;
-      f.prepend(make(`<header class="tb">${logo}<nav class="views">${views.map((v) => `<span class="${v === view ? 'on' : ''}">${v}</span>`).join('')}</nav>
-        <div class="end">${field}${bell(f.dataset.count)}<span class="av">au</span></div></header>`));
+    if (f.dataset.bar === 'none') { lift(f); continue; }
+    // what the drawing placed by coordinates against the frame stays where it was drawn, moved with the page
+    const fr0 = f.getBoundingClientRect();
+    const placed = [...f.querySelectorAll('*')].filter((el) => el.offsetParent === f && getComputedStyle(el).position === 'absolute' && !el.classList.contains('nc-toaster'))
+      .map((el) => { const r = el.getBoundingClientRect(); return [el, r.left - fr0.left, r.top - fr0.top]; });
+    const q = f.dataset.query;
+    const affix = window.DS ? `<span class="nc-input__affix nc-input__affix--prefix">${DS.svg.searchAffix}</span>` : icon('search', 's16');
+    const field = `<div class="nc-input nc-input--md search-field${q ? ' filled' : ''}">${affix}<input class="nc-input__control" placeholder="${f.dataset.placeholder || 'search movies, shows and people…'}" value="${q || ''}"></div>`;
+    const page = document.createElement('div');
+    page.className = 'cpage';
+    while (f.firstChild) page.appendChild(f.firstChild);
+    const it = (v, i) => `<span class="it it-${v}${v === view ? ' on' : ''}" aria-label="${v}" title="${v}">${icon(i)}</span>`;
+    f.classList.add('railed');
+    f.append(make(`<header class="tb"><span class="mark logo" aria-label="chino, home">${chevron}<b>c</b></span>${field}<div class="end">${bell(f.dataset.count)}<span class="av">au</span></div></header>`));
+    f.append(make(`<nav class="crail" aria-label="views">${it('home', 'house')}${it('movies', 'film')}${it('shows', 'tv')}${it('watchlist', 'bookmark')}${it('zap', 'zap')}<span class="gap"></span>${it('settings', 'settings')}</nav>`));
+    f.append(page);
+    // a dialog covers the whole screen, the bar and the rail too
+    for (const m of page.querySelectorAll('.nc-modal')) f.appendChild(m);
+    const fr1 = f.getBoundingClientRect();
+    for (const [el, x0, y0] of placed) {
+      if (el.classList.contains('nc-modal') || !el.isConnected) continue;
+      const r = el.getBoundingClientRect();
+      // moved with the page: right by the rail, and down by what the bar grew for what sits under it
+      const dx = x0 + RAIL - (r.left - fr1.left), dy = y0 + (y0 >= DRAWN_BAR ? BAR - DRAWN_BAR : 0) - (r.top - fr1.top);
+      if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) el.style.translate = `${Math.round(dx)}px ${Math.round(dy)}px`;
     }
     lift(f);
   }
 
-  for (const f of document.querySelectorAll('.phone')) {
+  for (const f of document.querySelectorAll('.phone:not([data-frame="portal"])')) {
     const view = f.dataset.view || 'home';
     const side = f.classList.contains('side'); // held sideways: 780 × 360, the tabs become a rail on the left
     const scroll = document.createElement('div');
@@ -105,10 +150,10 @@
   }
 
   
-  const parts = { logo: '.tb .logo', views: '.tb .views', search: '.tb .search-field, .tb .search, .rail .it-search',
+  const parts = { logo: '.tb .logo', views: '.crail, .tb .views', search: '.tb .search-field, .tb .search, .rail .it-search',
                   bell: '.tb .bell, .rail .it-notifications', avatar: '.tb .av, .rail .av', tabs: '.tabs',
-                  back: '.tb.back .icon-b', rail: '.rail', settings: '.rail .it-settings',
-                  current: '.tb .views .on, .tabs .on, .rail .it.cur' };
+                  back: '.tb.back .icon-b', rail: '.rail, .crail', settings: '.rail .it-settings, .crail .it-settings',
+                  current: '.crail .it.on, .tb .views .on, .tabs .on, .rail .it.cur' };
   for (const f of document.querySelectorAll('[data-co-parts]')) {
     for (const entry of f.dataset.coParts.split(',')) {
       const [name, n, side] = entry.trim().split(':');
