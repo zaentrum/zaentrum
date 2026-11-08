@@ -21,9 +21,15 @@ It checks, and fails on the first kind of problem it finds in each row:
   - the pages' generated blocks are what the model says (--check), else they are
     written. A block is the text between "<!-- generated: name -->" and
     "<!-- end: name -->"; everything outside the blocks is written by hand.
-Numbers on the pages come from here, never typed."""
+Numbers on the pages come from here, never typed.
+
+capabilities.py --json PATH writes the model instead, resolved, for the site's map
+and fact sheets: each reference into the spec with its file and heading, each change
+with its row, each id with its row of the inventory. It changes no page, and it
+writes the file even when the check finds problems: they are in it, under problems."""
 import csv
 import glob
+import json
 import os
 import re
 import sys
@@ -105,31 +111,43 @@ def headings(path):
     return _headings[path]
 
 
-def resolve_spec(ref):
+def resolve_ref(ref):
     """chino/playback#11.7 | chino/playback | portal/home#Spaces | docs/adr/0015-…
-    -> (link from spec/capabilities/, label) or None"""
+    -> {file, kind, page, heading, level, anchor, label} or None. file is the page's
+    path in the repository; heading is None for a whole page, and so is anchor for a
+    page's own title (the site shows the H1 as the title, with no anchor)."""
     page, _, sec = ref.partition('#')
     if page.startswith('docs/'):
-        path = os.path.join(ROOT, page + '.md')
-        rel = '../../' + page + '.md'
+        file, kind = page + '.md', 'docs'
         label = page[len('docs/'):].split('/')[-1].replace('-', ' ')
     else:
-        path = os.path.join(SPEC, page + '.md')
-        rel = '../' + page + '.md'
+        file, kind = 'spec/' + page + '.md', 'chapter'
         label = page.split('/')[0] + ' ' + page.split('/')[-1].replace('-', ' ')
+    path = os.path.join(ROOT, file)
     if not os.path.exists(path):
         return None
+    hs = headings(path)
+    title = hs[0][1] if hs and hs[0][0] == 1 else ''
+    out = {'ref': ref, 'file': file, 'kind': kind, 'page': title, 'heading': None, 'level': None, 'anchor': None}
     if not sec:
         if page.startswith('chino/'):
-            first = headings(path)[0][1] if headings(path) else ''
-            m = re.match(r'(\d+)\s', first)
+            m = re.match(r'(\d+)\s', title)
             label = f'chapter {m.group(1)}' if m else label
-        return rel, label
-    for level, h in headings(path):
+        return {**out, 'label': label}
+    for level, h in hs:
         if re.match(rf'^{re.escape(sec)}\s', h) or h.lower() == sec.lower():
-            # a page's own title is its page: the site shows the H1 as the title, with no anchor
-            return (rel if level == 1 else f'{rel}#{slug(h)}'), (sec if re.match(r'^\d', sec) else h)
+            return {**out, 'heading': h, 'level': level, 'anchor': None if level == 1 else slug(h),
+                    'label': sec if re.match(r'^\d', sec) else h}
     return None
+
+
+def resolve_spec(ref):
+    """-> (link from spec/capabilities/, label) or None"""
+    r = resolve_ref(ref)
+    if not r:
+        return None
+    rel = '../../' + r['file'] if r['kind'] == 'docs' else '../' + r['file'][len('spec/'):]
+    return (f'{rel}#{r["anchor"]}' if r['anchor'] else rel), r['label']
 
 
 def spec_changes():
@@ -139,6 +157,41 @@ def spec_changes():
             m = re.match(r'^\|\s*((?:\d+|[A-Z])\.C\d+)\s*\|.*\|\s*([a-z]+)\s*\|\s*$', line)
             if m:
                 out[m.group(1)] = m.group(2)
+    return out
+
+
+def cells(line):
+    """a table row's cells; a \\| inside a cell is the cell's own"""
+    parts = re.split(r'(?<!\\)\|', line.strip())
+    return [p.strip().replace('\\|', '|') for p in parts[1:-1]]
+
+
+def change_rows():
+    """every numbered change of the spec, with its row and the heading over its table:
+    {number: {file, heading, anchor, title, apps, today, target, status}}"""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(SPEC, '*', '*.md'))):
+        file = os.path.relpath(path, ROOT).replace(os.sep, '/')
+        heading, fence = None, False
+        for line in open(path, encoding='utf-8'):
+            if line.lstrip().startswith(('```', '~~~')):
+                fence = not fence
+                continue
+            if fence:
+                continue
+            m = re.match(r'^(#{1,6})\s+(.*?)\s*$', line)
+            if m:
+                heading = (len(m.group(1)), m.group(2))
+                continue
+            if not re.match(r'^\|\s*(?:\d+|[A-Z])\.C\d+\s*\|', line):
+                continue
+            row = cells(line)
+            while len(row) < 6:
+                row.insert(-1, '')
+            number, title, apps, today, target, status = row[0], row[1], row[2], row[3], ' | '.join(row[4:-1]), row[-1]
+            out[number] = {'file': file, 'heading': heading[1] if heading else None,
+                           'anchor': slug(heading[1]) if heading and heading[0] > 1 else None,
+                           'title': title, 'apps': apps, 'today': today, 'target': target, 'status': status}
     return out
 
 
@@ -395,6 +448,52 @@ def configuration_blocks(caps, settings, areas):
     return out
 
 
+def export(areas, caps, settings, inventory, path):
+    """the model, resolved, as one JSON file (see the docstring)"""
+    by_id = {r['id']: r for r in inventory}
+    keep = ('id', 'kind', 'repo', 'name', 'value', 'note', 'where')
+
+    def rows(ids):
+        out = []
+        for i in ids:
+            hit = [by_id[i]] if i in by_id else []
+            if not hit and '*' in i:
+                family = re.compile('^' + re.escape(i).replace(r'\*', '.*') + '$')
+                hit = [r for r in inventory if family.match(r['id'])]
+            out.extend({k: r[k] for k in keep} for r in hit)
+        return out
+
+    def refs(v):
+        return [r for r in (resolve_ref(x) for x in split(v)) if r]
+    sources = {}
+    path_sources = os.path.join(CAP, 'inventory-sources.csv')
+    if os.path.exists(path_sources):
+        with open(path_sources, encoding='utf-8', newline='') as fh:
+            sources = {r['repo']: r['commit'] for r in csv.DictReader(fh)}
+    named = {ch for c in caps for ch in split(c['changes'])}
+    model = {
+        'parts': [{'key': p, 'label': label, 'page': f'spec/capabilities/{page}'} for p, label, page in PARTS],
+        'faces': [{'key': k, 'label': label, 'app': True} for k, label in APPS] +
+                 [{'key': k, 'label': label, 'app': False} for k, label in FACES],
+        'areas': [{**a, 'spec': resolve_ref(a['spec']) if a['spec'] else None} for a in areas],
+        'capabilities': [{
+            'key': c['key'], 'area': c['area'], 'capability': c['capability'], 'who': c['who'], 'note': c['note'],
+            'status': {k: c[k] for k, _ in APPS + FACES},
+            'screens': rows(split(c['screens'])), 'served_by': rows(split(c['served_by'])),
+            'settings': split(c['settings']), 'spec': refs(c['spec']), 'changes': split(c['changes']),
+        } for c in caps],
+        'settings': [{**{k: s[k] for k in SET_COLS if k not in ('capability', 'ids')},
+                      'capability': split(s['capability']), 'ids': rows(split(s['ids']))} for s in settings],
+        'changes': [{'number': n, 'named': n in named, **row} for n, row in change_rows().items()],
+        'sources': sources,
+        'problems': list(problems),
+    }
+    with open(path, 'w', encoding='utf-8') as fh:
+        json.dump(model, fh, ensure_ascii=False, indent=1)
+        fh.write('\n')
+    return model
+
+
 def fill(path, blocks, write):
     text = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
     new = text
@@ -418,6 +517,13 @@ def main():
     settings = read('settings.csv', SET_COLS)
     inventory = read('inventory.csv', ['id', 'kind', 'repo', 'name', 'value', 'note', 'where'])
     area_keys, changes = check(areas, caps, settings, inventory)
+    if '--json' in sys.argv:
+        at = sys.argv.index('--json') + 1
+        if at >= len(sys.argv):
+            sys.exit('--json needs the file to write')
+        export(areas, caps, settings, inventory, sys.argv[at])
+        print(f'{len(problems)} problems; {len(caps)} capabilities, {len(settings)} settings written to {sys.argv[at]}')
+        return
     settings_by_key = {s['key']: s for s in settings}
     fill(os.path.join(CAP, 'README.md'), {
         'overview': overview(areas, caps, settings, inventory, changes),

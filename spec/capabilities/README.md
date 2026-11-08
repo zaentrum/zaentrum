@@ -7,6 +7,14 @@ the specification. The chapters of [chino](../chino/README.md) and the
 [portal](../portal/README.md) say how a capability looks and behaves; this layer
 says that it exists, and keeps the list complete.
 
+On the site the model is also a [map](https://zaentrum.github.io/spec/capabilities/map/):
+a lane for each part, a cluster for each area, a tile for each capability, coloured
+by where it is built, whether this specification describes it, the requirements open
+on it, or whether its values can be set. Each tile opens the capability's fact sheet:
+its requirements (the numbered changes that name it, with today and the target), the
+sections that specify it, the screens and interfaces in the code that serve it, and
+its settings.
+
 > **A model, checked against the code.** The capabilities and their settings are
 > data, written by hand; what the code offers is listed from the main branch of
 > every repository by a program. A check fails when the code offers something no
@@ -79,7 +87,9 @@ does. Chapters and changes refer to capabilities by their keys.
 
 To change the model, edit the CSV files and run `python3 scripts/capabilities.py`,
 which checks them and writes the tables. To list the code again, run
-`python3 scripts/inventory.py --src <a folder of clones> --fetch`.
+`python3 scripts/inventory.py --src <a folder of clones> --fetch`. The site's map and
+fact sheets are built from `python3 scripts/capabilities.py --json <file>`: the same
+model, each reference, change and id resolved, written by the same program.
 
 ## What is checked
 
@@ -147,6 +157,7 @@ might want to change, are settings with “Where” code; the rest are the code'
 
 | Page | Covers |
 |---|---|
+| [the map](https://zaentrum.github.io/spec/capabilities/map/) | every capability as a tile, by part and area, and its fact sheet (on the site only) |
 | [chino](./chino.md) | the apps for watching, chapter by chapter |
 | [the portal](./portal.md) | the portal's home, its registry, addons, people, running the platform |
 | [the catalog and the pipeline](./catalog.md) | the catalog, the library and its originals, preparing titles |
