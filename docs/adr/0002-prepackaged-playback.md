@@ -1,6 +1,6 @@
 # ADR-0002: Transcode once at ingest, serve pre-packaged segments
 
-**Status:** Accepted · recorded retrospectively (decision from 2026-05)
+**Status:** Accepted · recorded retrospectively (decision from 2026-05) · amended by [ADR-0013](./0013-live-rungs-safety-net.md) (live rungs as a supervised fallback)
 
 ## Context
 

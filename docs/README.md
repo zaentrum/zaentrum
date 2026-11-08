@@ -24,7 +24,7 @@ single `Zaentrum` custom resource. Chart values map 1:1 onto the CR spec.
 | **Pick a release channel, install a release, or cut one** | [Releases](./releases.md) |
 | **Fix a broken deploy** | [Troubleshooting](./troubleshooting.md) |
 | **Extend it with an addon** (or write one) | [Extending zaentrum](./extending/README.md) |
-| **Understand how it fits together** | [Architecture](./architecture.md) · [Decision records](./adr/README.md) |
+| **Understand how it fits together** | [Architecture](./architecture.md) · [its model, component by component](../spec/architecture/README.md) · [Decision records](./adr/README.md) |
 | **Understand how the library is kept on storage** (manifest, metadata, versions) | [The library format](./library/README.md) |
 | **See how the portal behaves** (the home page, settings and setup) | [The portal](../spec/portal/README.md) |
 | **See how the chino apps behave** (title actions, playback, subtitles, downloads, casting, words) | [The chino apps](../spec/chino/README.md) |

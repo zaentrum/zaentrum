@@ -24,16 +24,37 @@ Kinds:
   setting   a setting of the catalog's settings table
   constant  a number, a duration, a switch or a list fixed in the code
 
+What the operator's platform chart runs, from `helm template` of the chart at the
+commit (helm must be installed), with the values a plain install has and with
+every optional part on:
+  workload  a Deployment, StatefulSet, Job or CronJob: its images, and the value
+            it needs, if a plain install leaves it off
+  service   a Service: the workload it leads to, its ports
+  path      a path of the Ingress a plain install has: the workload it leads to
+  volume    a PersistentVolumeClaim
+  wire      how the chart sets a workload up: an environment variable it gives it
+            (a secret's or a config map's by name and key, never the value) or a
+            claim it mounts
+
+And the organisation's repositories, from GitHub's API:
+  repo      a repository of github.com/zaentrum: active or archived
+
 The specification's capability model (spec/capabilities) claims every row
 of the kinds route, graphql, screen, tab, command, field, env and setting;
-scripts/capabilities.py checks that. Constants are listed, not claimed yet."""
+its architecture (spec/architecture) every repo, workload and volume, and every
+wire that connects one component to another. scripts/capabilities.py checks
+both. Constants are listed, not claimed yet."""
 import argparse
 import csv
 import io
+import json
 import os
 import re
 import subprocess
 import sys
+import tarfile
+import tempfile
+import urllib.request
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 OUT = os.path.join(ROOT, 'spec', 'capabilities', 'inventory.csv')
@@ -116,6 +137,26 @@ def strip_code(line):
     """the line without its strings and its // comment, for counting braces"""
     line = re.sub(r'"(?:\\.|[^"\\])*"|`[^`]*`|\'(?:\\.|[^\'\\])\'', '""', line)
     return line.split('//', 1)[0]
+
+
+def uncomment(line):
+    """the line without its // comment: one outside a string, so that a URL in a
+    string ("http://…") stays"""
+    quote, i = None, 0
+    while i < len(line):
+        ch = line[i]
+        if quote:
+            if ch == '\\' and quote != '`':
+                i += 2
+                continue
+            if ch == quote:
+                quote = None
+        elif ch in '"\'`':
+            quote = ch
+        elif line.startswith('//', i):
+            return line[:i]
+        i += 1
+    return line
 
 
 # ---------------------------------------------------------------- Go routes
@@ -314,7 +355,7 @@ def env_vars(repo):
                 add('env', repo, mm.group(1), f, i)
             # a call of an env helper: env("A", "B"), envDefault("8080", "PORT"), _env_int("X", 4);
             # in a config file any call whose argument is a name: _require("X"), r.int("X", 4)
-            code = line.split('//', 1)[0]
+            code = uncomment(line)
             for mm in re.finditer(r'\b([\w.]+)\(', code):
                 fn = mm.group(1).split('.')[-1]
                 if fn in ('Getenv', 'LookupEnv', 'getenv', 'Environ', 'environ', 'get', 'Errorf', 'Sprintf', 'New', 'Error', 'print', 'Printf', 'Println', 'append'):
@@ -448,6 +489,365 @@ def constants(repo):
                 add('constant', repo, f'{stem}.{name}', f, i, value)
 
 
+# ------------------------------------------------- YAML, as helm writes it
+# block mappings and sequences, block scalars, flow collections, quoted and plain
+# scalars: enough for Kubernetes manifests, without a library. Every scalar is text.
+KEY_LINE = re.compile(r'''^("(?:\\.|[^"\\])*"|'(?:''|[^'])*'|[^\s"'#\-\[\]{},:][^:#]*?)\s*:(?:\s+(.*))?$''')
+
+
+def _plain(v):
+    v = v.strip()
+    if len(v) >= 2 and v[0] == v[-1] == '"':
+        try:
+            return json.loads(v)
+        except ValueError:
+            return v[1:-1]
+    if len(v) >= 2 and v[0] == v[-1] == "'":
+        return v[1:-1].replace("''", "'")
+    return v
+
+
+def _uncomment(s):
+    """s without a trailing # comment, outside quotes"""
+    quote, i = None, 0
+    while i < len(s):
+        ch = s[i]
+        if quote == '"':
+            if ch == '\\':
+                i += 1
+            elif ch == '"':
+                quote = None
+        elif quote == "'":
+            if ch == "'":
+                if s[i + 1:i + 2] == "'":
+                    i += 1
+                else:
+                    quote = None
+        elif ch in '"\'' and (i == 0 or s[i - 1] in ' \t[{,:'):
+            quote = ch
+        elif ch == '#' and (i == 0 or s[i - 1] in ' \t'):
+            return s[:i].rstrip()
+        i += 1
+    return s.rstrip()
+
+
+def _flow_scalar(s, i, stops):
+    while i < len(s) and s[i] == ' ':
+        i += 1
+    if i < len(s) and s[i] in '"\'':
+        q, j = s[i], i + 1
+        while j < len(s):
+            if q == '"' and s[j] == '\\':
+                j += 2
+                continue
+            if s[j] == q:
+                if q == "'" and s[j + 1:j + 2] == "'":
+                    j += 2
+                    continue
+                break
+            j += 1
+        return _plain(s[i:j + 1]), j + 1
+    j = i
+    while j < len(s) and s[j] not in stops:
+        j += 1
+    return s[i:j].strip(), j
+
+
+def _flow(s, i=0):
+    """the flow collection or scalar at s[i], and the index after it"""
+    while i < len(s) and s[i] == ' ':
+        i += 1
+    if i < len(s) and s[i] in '[{':
+        close, out = (']', []) if s[i] == '[' else ('}', {})
+        i += 1
+        while True:
+            while i < len(s) and s[i] in ' ,':
+                i += 1
+            if i >= len(s) or s[i] == close:
+                return out, i + 1
+            if isinstance(out, list):
+                v, i = _flow(s, i)
+                out.append(v)
+            else:
+                k, i = _flow_scalar(s, i, ':,}')
+                if s[i:i + 1] == ':':
+                    v, i = _flow(s, i + 1)
+                else:
+                    v = None
+                out[k] = v
+    return _flow_scalar(s, i, ',]}')
+
+
+class _Block:
+    def __init__(self, lines):
+        self.lines, self.i = lines, 0
+
+    def peek(self):
+        """the next line that holds something: its indent and its text without comment"""
+        while self.i < len(self.lines):
+            raw = self.lines[self.i]
+            text = raw.strip()
+            if text and not text.startswith('#'):
+                return len(raw) - len(raw.lstrip(' ')), _uncomment(text)
+            self.i += 1
+        return None, None
+
+    def node(self, indent):
+        at, text = self.peek()
+        if text is None or at < indent:
+            return None
+        return self.seq(at) if text == '-' or text.startswith('- ') else self.map(at)
+
+    def seq(self, at):
+        out = []
+        while True:
+            ind, text = self.peek()
+            if text is None or ind != at or not (text == '-' or text.startswith('- ')):
+                return out
+            rest = text[1:].lstrip()
+            if not rest:
+                self.i += 1
+                out.append(self.node(at + 1))
+            elif KEY_LINE.match(rest):
+                col = at + len(text) - len(rest)
+                self.lines[self.i] = ' ' * col + rest
+                out.append(self.map(col))
+            else:
+                self.i += 1
+                out.append(self.value(rest, at))
+
+    def map(self, at):
+        out, last = {}, None
+        while True:
+            ind, text = self.peek()
+            if text is None or ind < at:
+                return out
+            if ind > at:  # a plain scalar going on on the next line
+                if last is not None and isinstance(out.get(last), str):
+                    out[last] += ' ' + text
+                self.i += 1
+                continue
+            if text == '-' or text.startswith('- '):
+                return out
+            m = KEY_LINE.match(text)
+            self.i += 1
+            if not m:
+                continue
+            key, v = _plain(m.group(1)), (m.group(2) or '').strip()
+            last = key
+            if v:
+                out[key] = self.value(v, at)
+                continue
+            ind2, text2 = self.peek()
+            if text2 is not None and ind2 > at:
+                out[key] = self.node(ind2)
+            elif text2 is not None and ind2 == at and (text2 == '-' or text2.startswith('- ')):
+                out[key] = self.seq(ind2)
+            else:
+                out[key] = None
+
+    def value(self, v, at):
+        if v[0] in '|>':  # a block scalar: the lines after it, blank or deeper than its key
+            body = []
+            while self.i < len(self.lines):
+                raw = self.lines[self.i]
+                if raw.strip() and len(raw) - len(raw.lstrip(' ')) <= at:
+                    break
+                body.append(raw)
+                self.i += 1
+            cut = min((len(b) - len(b.lstrip(' ')) for b in body if b.strip()), default=0)
+            return '\n'.join(b[cut:] for b in body).strip('\n')
+        if v[0] in '[{':
+            return _flow(v)[0]
+        return _plain(v)
+
+
+def yaml_docs(text):
+    """every document of a helm render: (its template, the document)"""
+    out, lines = [], []
+    for line in text.split('\n') + ['---']:
+        if line.rstrip() != '---':
+            lines.append(line)
+            continue
+        source = next((l.split(':', 1)[1].strip() for l in lines if l.startswith('# Source:')), '')
+        doc = _Block(lines).node(0)
+        if isinstance(doc, dict) and doc.get('kind'):
+            out.append((source, doc))
+        lines = []
+    return out
+
+
+# ------------------------------------------------- what the operator's chart runs
+CHART = 'operator/platform/chart'
+# the values that turn on what a plain install leaves off, and the switches that make
+# a bundled part someone else's (each with what the chart needs then)
+CHART_ON = [('features.pipeline', 'true'), ('liveWorker.enabled', 'true'), ('backup.enabled', 'true'),
+            ('routing.provisionRoutes', 'true'), ('jobs.seed', 'true')]
+CHART_OFF = [(('identity.mode', 'external'), ('identity.issuer', 'https://id.example.com/realms/zaentrum')),
+             (('eventStreaming.mode', 'external'), ('eventStreaming.bootstrap', 'kafka.example.com:9093')),
+             (('databases.mode', 'external'), ('databases.external.host', 'postgres.example.com'))]
+WORKLOADS = ('Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob')
+
+
+def render(repo, sets):
+    with tempfile.TemporaryDirectory() as tmp:
+        archive = subprocess.run(['git', '-C', repo.dir, 'archive', repo.commit, CHART],
+                                 capture_output=True, check=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+            tar.extractall(tmp, filter='data')
+        cmd = ['helm', 'template', 'zaentrum', os.path.join(tmp, CHART)]
+        for k, v in sets:
+            cmd += ['--set', f'{k}={v}']
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True)
+        except FileNotFoundError:
+            sys.exit('inventory.py needs helm, to render the operator\'s chart')
+        if r.returncode:
+            raise RuntimeError(f'{" ".join(cmd[:3])} {sets}: {r.stderr.strip()}')
+        return yaml_docs(r.stdout)
+
+
+def pod(doc):
+    spec = doc.get('spec') or {}
+    if doc['kind'] == 'CronJob':
+        spec = ((spec.get('jobTemplate') or {}).get('spec') or {})
+    return ((spec.get('template') or {}).get('spec') or {}), (((spec.get('template') or {}).get('metadata') or {}).get('labels') or {})
+
+
+def image_name(image):
+    """an image without the tag the CR sets (ghcr.io/zaentrum/*), others as pinned"""
+    return image.rsplit(':', 1)[0] if image.startswith('ghcr.io/zaentrum/') and ':' in image.rsplit('/', 1)[-1] else image
+
+
+def chart(repo):
+    base = render(repo, [])
+    every = render(repo, CHART_ON)
+
+    def names(docs, kinds):
+        return {(d['kind'], d['metadata']['name']) for _, d in docs if d['kind'] in kinds}
+    kinds = WORKLOADS + ('PersistentVolumeClaim',)
+    found_base, found_every = names(base, kinds), names(every, kinds)
+    when = {}
+    for i, (k, v) in enumerate(CHART_ON):
+        missing = found_every - names(render(repo, CHART_ON[:i] + CHART_ON[i + 1:]), kinds)
+        for item in missing - found_base:
+            when.setdefault(item, f'with {k} {v}')
+    for switch, needs in CHART_OFF:
+        for item in found_base - names(render(repo, [switch, needs]), kinds):
+            when.setdefault(item, f'not with {switch[0]} {switch[1]}')
+
+    def where(source, *needles):
+        path = CHART + '/' + source.split('/', 1)[1] if '/' in source else CHART
+        try:
+            lines = repo.text(path).split('\n')
+        except RuntimeError:
+            return path, 1
+        start = 0
+        for needle in needles:
+            hit = next((i for i in range(start, len(lines)) if needle in lines[i]), None)
+            if hit is None:
+                hit = next((i for i in range(len(lines)) if needle in lines[i]), None)
+            if hit is not None:
+                start = hit
+        return path, start + 1
+
+    workloads = {}  # name -> pod labels
+    for source, d in every:
+        if d['kind'] not in WORKLOADS:
+            continue
+        name = d['metadata']['name']
+        spec, labels = pod(d)
+        workloads[name] = labels
+        containers = (spec.get('containers') or []) + (spec.get('initContainers') or [])
+        images = []
+        for c in containers:
+            img = image_name(c.get('image') or '')
+            if img and img not in images:
+                images.append(img)
+        cond = when.get((d['kind'], name), '')
+        path, line = where(source, f'kind: {d["kind"]}', f'name: {name}')
+        add('workload', repo, name, path, line, ' '.join(images), d['kind'] + (f', {cond}' if cond else ''))
+        claims = {v.get('name'): (v.get('persistentVolumeClaim') or {}).get('claimName')
+                  for v in spec.get('volumes') or [] if isinstance(v, dict)}
+        for c in containers:
+            for e in c.get('env') or []:
+                if not isinstance(e, dict) or not e.get('name'):
+                    continue
+                src = e.get('valueFrom') or {}
+                if 'value' in e:
+                    value = e.get('value') or ''
+                elif src.get('secretKeyRef'):
+                    value = f'secret {src["secretKeyRef"].get("name")} {src["secretKeyRef"].get("key")}'
+                elif src.get('configMapKeyRef'):
+                    value = f'configmap {src["configMapKeyRef"].get("name")} {src["configMapKeyRef"].get("key")}'
+                elif src.get('fieldRef'):
+                    value = f'field {src["fieldRef"].get("fieldPath")}'
+                else:
+                    value = ''
+                path, line = where(source, f'name: {name}', f'name: {e["name"]}')
+                add('wire', repo, f'{name} {e["name"]}', path, line, value)
+            for e in c.get('envFrom') or []:
+                ref = e.get('secretRef') or e.get('configMapRef') or {}
+                kind = 'secret' if e.get('secretRef') else 'configmap'
+                path, line = where(source, f'name: {name}', f'name: {ref.get("name")}')
+                add('wire', repo, f'{name} {kind} {ref.get("name")}', path, line, 'every key')
+            for m in c.get('volumeMounts') or []:
+                claim = claims.get(m.get('name'))
+                if claim:
+                    path, line = where(source, f'name: {name}', f'claimName: {claim}')
+                    add('wire', repo, f'{name} volume {claim}', path, line,
+                        m.get('mountPath', '') + (' read-only' if str(m.get('readOnly')).lower() == 'true' else ''))
+    for source, d in every:
+        name = d['metadata']['name']
+        if d['kind'] == 'Service':
+            sel = (d.get('spec') or {}).get('selector') or {}
+            to = next((w for w, labels in workloads.items() if sel and all(labels.get(k) == v for k, v in sel.items())), '')
+            ports = ', '.join(f'{p.get("port")}→{p.get("targetPort", p.get("port"))}' for p in (d.get('spec') or {}).get('ports') or [])
+            path, line = where(source, 'kind: Service', f'name: {name}')
+            add('service', repo, name, path, line, to, ports)
+        elif d['kind'] == 'PersistentVolumeClaim':
+            spec = d.get('spec') or {}
+            size = ((spec.get('resources') or {}).get('requests') or {}).get('storage', '')
+            cond = when.get((d['kind'], name), '')
+            path, line = where(source, 'kind: PersistentVolumeClaim', f'name: {name}')
+            add('volume', repo, name, path, line, size, ', '.join(spec.get('accessModes') or []) + (f'; {cond}' if cond else ''))
+    services = {r['name']: r['value'] for r in rows.values() if r['kind'] == 'service' and r['repo'] == repo.name}
+    for source, d in base:
+        if d['kind'] != 'Ingress':
+            continue
+        for rule in (d.get('spec') or {}).get('rules') or []:
+            for p in ((rule.get('http') or {}).get('paths')) or []:
+                svc = ((p.get('backend') or {}).get('service')) or {}
+                port = (svc.get('port') or {})
+                path, line = where(source, f'path: {p.get("path")}')
+                add('path', repo, p.get('path', '/'), path, line, services.get(svc.get('name'), ''),
+                    f'service {svc.get("name")}:{port.get("number") or port.get("name")}, {p.get("pathType", "")}')
+
+
+# ------------------------------------------------- the organisation's repositories
+def org_repos():
+    class Org:
+        name = ''
+    page, found = 1, []
+    while True:
+        req = urllib.request.Request(f'https://api.github.com/orgs/zaentrum/repos?per_page=100&page={page}',
+                                     headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'zaentrum-inventory'})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                items = json.load(r)
+        except OSError as e:
+            sys.exit(f'inventory.py lists the organisation\'s repositories from api.github.com: {e}')
+        found += items
+        if len(items) < 100:
+            break
+        page += 1
+    for it in found:
+        org = Org()
+        org.name = it['name']
+        add('repo', org, it['name'], '', 0, 'archived' if it.get('archived') else 'active', it.get('description') or '')
+        rows[f'repo:{it["name"]}:{it["name"]}']['where'] = ''
+
+
 def build(src):
     sources = []
     for name in REPOS:
@@ -462,10 +862,12 @@ def build(src):
             zae_commands(repo)
         if name == 'zaentrum-operator':
             operator_fields(repo)
+            chart(repo)
         if name == 'katalog-manager':
             catalog_settings(repo)
         env_vars(repo)
         constants(repo)
+    org_repos()
     return sources
 
 

@@ -1,6 +1,6 @@
 # ADR-0011: Addons are Helm charts installed by the operator
 
-**Status:** Accepted (2026-09-15) · amends [ADR-0009](./0009-pull-based-addon-installation.md) (an addon can be installed from a chart, not only pulled from a running address) and [ADR-0010](./0010-addon-component-groups-and-setup.md) (the chart, not the installer's deployment channel, deploys the components)
+**Status:** Accepted (2026-09-15) · amends [ADR-0009](./0009-pull-based-addon-installation.md) (an addon can be installed from a chart, not only pulled from a running address) and [ADR-0010](./0010-addon-component-groups-and-setup.md) (the chart, not the installer's deployment channel, deploys the components) · amends [ADR-0006](./0006-operator-owned-runtime.md) (an addon is a resource of its own, not a list in the `Zaentrum` resource)
 
 ## Context
 

@@ -1,6 +1,6 @@
 # ADR-0001: Neutral core and addon seams
 
-**Status:** Accepted · recorded retrospectively (decision from 2026-07) · amended by the [addendum of 2026-10-05](#addendum-2026-10-05--notices-a-third-seam) (a third seam: notices)
+**Status:** Accepted · recorded retrospectively (decision from 2026-07) · amended by the [addendum of 2026-10-05](#addendum-2026-10-05--notices-a-third-seam) (a third seam: notices) · extended by [ADR-0012](./0012-catalog-identity-for-addons.md) (the ingest seam by identity)
 
 ## Context
 

@@ -522,7 +522,7 @@ apps fix the same thing, the default names each app's value.
 - `credit-caps`: A movie keeps every director, a show every creator
 - `failed-steps-shown`: The API gives at most 200 a page
 - `stereo-loudness`: Louder tracks, 5.1 companions and copied tracks are left as they are
-- `service-addresses`: Fixed in the operator's chart. Not set: ANALYZER_BASE_URL, an old alias, and the subtitler's, which the chart does not run
+- `service-addresses`: Fixed in the operator's chart; not set there: ANALYZER_BASE_URL (an old alias), PORTAL_KATALOG_MANAGER_URL, the subtitler's
 - `listen-ports`: Fixed in the operator's chart; PORT is portal-api's alias, not set
 - `web-app-paths`: VITE_* fixed at build; BASE_URL rewritten at start from the chart's BASE_PATH. VITE_MANAGE_API_BASE: the older admin app
 - `tool-paths`: Set by the images, not the chart
@@ -534,7 +534,7 @@ apps fix the same thing, the default names each app's value.
 - `media-paths`: The chart mounts the media claim at /var/lib/katalog; portal-api reads katalog-manager's roots to show them
 - `nvenc-quality`: Fixed in the operator's chart for both
 - `speech-recognition`: Fixed off in the operator's chart; the model's settings are left to the pipeline The model, device and precision are read; no pass uses them
-- `chapters-lookup`: Fixed off in the operator's chart
+- `chapters-lookup`: Fixed off in the operator's chart; the database is at CHAPTERSDB_BASE_URL
 - `stream-encoder`: Fixed in the operator's chart: chino-stream never encodes on a GPU
 <!-- end: fixed -->
 
@@ -548,7 +548,7 @@ apps fix the same thing, the default names each app's value.
 | The project and personal keys of an artwork source, asked where TMDB has no image `artwork-source-keys` | catalog |  |
 | The part-of label every workload of the platform carries `part-of-label` | resource | `Zaentrum.spec.partOf` |
 | Pull secrets added to every workload, for a private registry `image-pull-secrets` | resource | `Zaentrum.spec.imagePullSecrets` |
-| The in-cluster addresses the services call each other at `service-addresses` | code | `ANALYZER_BASE_URL`, `ARTWORK_BASE_URL`, `KATALOG_BASE_URL`, `KATALOG_MANAGER_URL` and 11 more |
+| The in-cluster addresses the services call each other at `service-addresses` | code | `ANALYZER_BASE_URL`, `ARTWORK_BASE_URL`, `KATALOG_BASE_URL`, `KATALOG_MANAGER_URL` and 12 more |
 | The port each service listens on `listen-ports` | code | `ADDR`, `LISTEN_ADDR`, `KATALOG_API_ADDR`, `KATALOG_INGEST_ADDR` and 3 more |
 | The paths the web consoles are served under and call their APIs at `web-app-paths` | code | `BASE_URL`, `VITE_KATALOG_GQL`, `VITE_KATALOG_STREAM`, `VITE_PORTAL_API` and 2 more |
 | The cluster's API server, which portal-api calls and the chart fetcher refuses to dial `kubernetes-api` | env | `KUBERNETES_SERVICE_HOST`, `KUBERNETES_SERVICE_PORT`, `KUBERNETES_SERVICE_HOST` |

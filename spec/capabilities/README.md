@@ -143,15 +143,18 @@ model, each reference, change and id resolved, written by the same program.
 | tabs | 24 | a capability |  |
 | CLI commands | 30 | a capability |  |
 | fields of the operator's resources | 87 | a setting |  |
-| environment variables | 278 | a setting |  |
+| environment variables | 280 | a setting |  |
 | the catalog's settings | 41 | a setting |  |
 | constants in the code | 858 | listed | 279 in a setting |
 
-From the main branch of 18 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them.
+From the main branch of 31 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them.
 <!-- end: inventory -->
 
 Constants are listed, not claimed: the ones a person notices, or that an admin
 might want to change, are settings with “Where” code; the rest are the code's own.
+The inventory also lists what the operator's chart runs, how it sets each part up,
+and the organisation's repositories: the [architecture](../architecture/README.md)
+claims those.
 
 ## Pages
 

@@ -1,0 +1,43 @@
+key,component,layer,kind,status,code,runs,note
+chino-web,the web app,apps,web,runs,chino-web,workload:zaentrum-operator:chino-web,"Served at /chino, signed in at /auth/callback"
+chino-mobile,the phone and tablet app,apps,app,ships,chino-mobile,,"For Android and iOS, at the server address a person gives it"
+chino-androidtv,the Android TV app,apps,app,ships,chino-androidtv,,
+chino-tizen,the Samsung TV app,apps,app,ships,chino-tizen,,
+zaentrum-portal,"the portal: its launchpad, its settings and the consoles of addons",portal,web,runs,zaentrum-portal,workload:zaentrum-operator:zaentrum-portal,
+portal-api,"the portal's API: the registry, people, addons, running the platform",portal,service,runs,zaentrum-portal/server/,workload:zaentrum-operator:portal-api,"Built from the portal's repository, its server/, as an image of its own"
+katalog-manager-ui,the catalog console,portal,web,runs,katalog-manager-ui,workload:zaentrum-operator:katalog-manager-ui;workload:zaentrum-operator:katalog-manage-ui,"One image, run twice: at /katalog and at /katalog-manage"
+chino-api,"chino's API, for every app",chino,service,runs,chino-api,workload:zaentrum-operator:chino-api,
+chino-stream,the stream origin: packages and the renditions made while playing,chino,service,runs,chino-stream,workload:zaentrum-operator:chino-stream,
+live-worker,warm GPU workers for the renditions made while playing,chino,service,runs,live-worker,workload:zaentrum-operator:live-worker,With liveWorker.enabled (ADR-0013)
+notifications,push to the apps,chino,service,idle,notifications,,A scaffold: built once the phone apps take pushes
+katalog-api,the catalog's read side,catalog,service,runs,katalog-api,workload:zaentrum-operator:katalog-api,
+katalog-manager,"the catalog's only writer: scan, ingest, enrichment, the management API",catalog,service,runs,katalog-manager,workload:zaentrum-operator:katalog-manager-api,"Runs as katalog-manager-api, the name of the service it replaced"
+katalog-ingest,the ingest scheduler,catalog,worker,runs,katalog-ingest,workload:zaentrum-operator:katalog-ingest,With features.pipeline
+analyzer,"analysis: intro and credits, chapters, the picture area",pipeline,worker,runs,analyzer,workload:zaentrum-operator:analyzer,With features.pipeline
+transcoder,the transcode to the package's rules,pipeline,worker,runs,transcoder,workload:zaentrum-operator:transcoder,With features.pipeline
+packager,HLS and CMAF packaging,pipeline,worker,runs,packager,workload:zaentrum-operator:packager,With features.pipeline
+subtitler,subtitles where a title has none,pipeline,worker,idle,subtitler,,"Run by hand on a GPU beside live playback; the chart doesn't run it yet (ADR-0014)"
+postgres,"the bundled database server: chino, katalog, keycloak, portal",bundled,database,runs,,workload:zaentrum-operator:postgres;workload:zaentrum-operator:zaentrum-backup;volume:zaentrum-operator:postgres-data;volume:zaentrum-operator:backups,"Not with databases.mode external; its databases are dumped every day"
+valkey,the bundled cache,bundled,cache,runs,,workload:zaentrum-operator:valkey,
+kafka,the bundled event broker,bundled,broker,runs,,workload:zaentrum-operator:kafka,Not with eventStreaming.mode external
+keycloak,"the bundled identity provider, and the job that sets up its realm",bundled,identity,runs,,workload:zaentrum-operator:keycloak;workload:zaentrum-operator:zaentrum-realm,Not with identity.mode external
+media,the media volume: originals and packages,bundled,volume,runs,,volume:zaentrum-operator:media,"A claim the chart makes, or a volume of your own"
+zaentrum-operator,"the operator: the Zaentrum resource, the platform chart, addons",runtime,operator,runs,zaentrum-operator,,"Installed on its own, it runs what the chart holds"
+zae,the zae CLI; the platform's self-test runs it,runtime,cli,ships,zae,workload:zaentrum-operator:zaentrum-verify,
+demo-seed,"content for a demo: fetched, scanned and queued",runtime,job,runs,,workload:zaentrum-operator:seed-demo-content;workload:zaentrum-operator:scan-catalog;workload:zaentrum-operator:enqueue-processing,With jobs.seed
+kubernetes,the Kubernetes API of the cluster,outside,service,outside,,,
+issue-tracker,an issue tracker for bug reports,outside,service,outside,,,"Optional: OpenProject, when the secret zaentrum-feedback names one"
+metadata-service,an outside metadata service,outside,service,outside,,,"TMDB, with the key the secret katalog-tmdb holds"
+chapters-service,an outside database of chapter names,outside,service,outside,,,"ChaptersDB, when CHAPTERSDB_ENABLED is on: the chart has it off"
+zaentrum,"the front door: the docs, the specification, the releases",beside,docs,beside,zaentrum,,
+zaentrum-site,"the site: the product page, the docs and the specification",beside,docs,beside,zaentrum.github.io,,
+schemas,the event contracts,beside,contracts,beside,schemas,,"Records of an earlier design: the item events are JSON today (ADR-0005)"
+sample-addon,the reference addon,beside,addon,beside,sample-addon,,
+tv-api,the tv product's API,later,service,later,tv-api,,
+tv-stream,the tv product's stream origin,later,service,later,tv-stream,,
+musig-api,the music product's API,later,service,later,musig-api,,
+musig-stream,the music product's stream origin,later,service,later,musig-stream,,
+api-gateway,an edge gateway,retired,service,retired,api-gateway,,
+artwork,an image service,retired,service,retired,artwork,,katalog-manager serves the pictures now
+katalog-manager-api,the catalog's writer before katalog-manager,retired,service,retired,katalog-manager-api,,Its successor's workload kept the name
+metadata-enricher,metadata enrichment,retired,worker,retired,metadata-enricher,,katalog-manager enriches now

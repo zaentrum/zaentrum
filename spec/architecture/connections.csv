@@ -1,0 +1,74 @@
+from,to,kind,on,via,note
+chino-web,chino-api,calls,/api,path:zaentrum-operator:/api,
+chino-web,keycloak,signs in,,path:zaentrum-operator:/auth/realms,
+chino-mobile,chino-api,calls,/api,path:zaentrum-operator:/api,At the address a person gives it
+chino-mobile,keycloak,signs in,,path:zaentrum-operator:/auth/realms,"The authorization code with PKCE, in the system's browser"
+chino-androidtv,chino-api,calls,/api,path:zaentrum-operator:/api,
+chino-androidtv,keycloak,signs in,,path:zaentrum-operator:/auth/realms,"The device grant: a code, entered on another device"
+chino-tizen,chino-api,calls,/api,path:zaentrum-operator:/api,
+chino-tizen,keycloak,signs in,,path:zaentrum-operator:/auth/realms,"The device grant: a code, entered on another device"
+zaentrum-portal,portal-api,calls,/api/portal,path:zaentrum-operator:/api/portal;env:zaentrum-portal:VITE_PORTAL_API,
+zaentrum-portal,chino-api,calls,/api/config,path:zaentrum-operator:/api,The client to sign in with
+zaentrum-portal,keycloak,signs in,,path:zaentrum-operator:/auth/realms,
+katalog-manager-ui,katalog-manager,calls,/api/manage,path:zaentrum-operator:/api/manage;env:katalog-manager-ui:VITE_KATALOG_GQL;env:katalog-manager-ui:VITE_KATALOG_STREAM,"GraphQL, and the streams of its previews"
+katalog-manager-ui,chino-api,calls,/api/config,path:zaentrum-operator:/api,The client to sign in with
+katalog-manager-ui,keycloak,signs in,,path:zaentrum-operator:/auth/realms,
+portal-api,postgres,writes,portal,wire:zaentrum-operator:portal-api PG_URL;env:zaentrum-portal:PG_URL;env:zaentrum-portal:DATABASE_URL;env:zaentrum-portal:SPRING_DATASOURCE_URL,"The registry, invitations, addons"
+portal-api,keycloak,signs in,,wire:zaentrum-operator:portal-api OIDC_ISSUER;env:zaentrum-portal:OIDC_ISSUER;env:zaentrum-portal:SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,
+portal-api,keycloak,manages,people,wire:zaentrum-operator:portal-api PORTAL_PEOPLE_KEYCLOAK_URL;env:zaentrum-portal:PORTAL_PEOPLE_KEYCLOAK_URL,"Adds, changes and deletes people in the bundled realm"
+portal-api,chino-api,calls,a person's data,wire:zaentrum-operator:portal-api PORTAL_CHINO_API_URL;env:zaentrum-portal:PORTAL_CHINO_API_URL,Deletes the data of someone an admin deletes
+portal-api,kafka,consumes,*,wire:zaentrum-operator:portal-api KAFKA_BROKERS;env:zaentrum-portal:KAFKA_BROKERS,"The events console: the topics, their groups, recent events"
+portal-api,kubernetes,manages,the platform's parts,env:zaentrum-portal:KUBERNETES_SERVICE_HOST,"Its parts, the Zaentrum resource, addons"
+portal-api,chino-web,links,/chino,env:zaentrum-portal:CHINO_PUBLIC_URL,The launchpad's tile for chino
+portal-api,katalog-manager,calls,setting up,env:zaentrum-portal:PORTAL_KATALOG_MANAGER_URL,"The library's volume and its scan, while the platform is set up"
+portal-api,keycloak,links,where people are managed,env:zaentrum-portal:PORTAL_PEOPLE_MANAGE_URL,"The identity provider's own console, when people aren't the portal's to manage"
+chino-api,katalog-api,calls,,wire:zaentrum-operator:chino-api KATALOG_BASE_URL;env:chino-api:KATALOG_BASE_URL,
+chino-api,katalog-manager,calls,"admin actions, pictures",wire:zaentrum-operator:chino-api KATALOG_MANAGER_URL;wire:zaentrum-operator:chino-api ARTWORK_BASE_URL;env:chino-api:KATALOG_MANAGER_URL;env:chino-api:ARTWORK_BASE_URL;env:chino-api:ANALYZER_BASE_URL,ANALYZER_BASE_URL is an older name of KATALOG_MANAGER_URL
+chino-api,chino-stream,calls,,wire:zaentrum-operator:chino-api STREAM_BASE_URL;env:chino-api:STREAM_BASE_URL,
+chino-api,portal-api,calls,"slots, account deletion",wire:zaentrum-operator:chino-api PORTAL_BASE_URL;env:chino-api:PORTAL_BASE_URL,
+chino-api,postgres,writes,chino,wire:zaentrum-operator:chino-api PG_URL;env:chino-api:PG_URL,"Watch state, lists, settings"
+chino-api,kafka,consumes,catalog.item.*;catalog.extra.packaged,wire:zaentrum-operator:chino-api KAFKA_BROKERS;env:chino-api:KAFKA_BROKERS,The apps' live refresh
+chino-api,keycloak,signs in,,wire:zaentrum-operator:chino-api OIDC_ISSUER;env:chino-api:OIDC_ISSUER,
+chino-api,issue-tracker,calls,bug reports,wire:zaentrum-operator:chino-api OPENPROJECT_URL;env:chino-api:OPENPROJECT_URL,When the secret zaentrum-feedback names one
+chino-stream,katalog-api,calls,,wire:zaentrum-operator:chino-stream KATALOG_API_BASE_URL;env:chino-stream:KATALOG_API_BASE_URL,
+chino-stream,live-worker,calls,,wire:zaentrum-operator:chino-stream LIVE_WORKER_URL;env:chino-stream:LIVE_WORKER_URL,"As far as LIVE_WORKER_MODE says: off, shadow or on"
+chino-stream,media,reads,,wire:zaentrum-operator:chino-stream volume media,
+chino-stream,keycloak,signs in,,wire:zaentrum-operator:chino-stream OIDC_ISSUER;env:chino-stream:OIDC_ISSUER,
+live-worker,media,reads,,wire:zaentrum-operator:live-worker volume media,
+katalog-api,postgres,reads,katalog,wire:zaentrum-operator:katalog-api KATALOG_API_PG_URL;env:katalog-api:KATALOG_API_PG_URL,
+katalog-api,keycloak,signs in,,wire:zaentrum-operator:katalog-api KATALOG_API_OIDC_ISSUER;env:katalog-api:KATALOG_API_OIDC_ISSUER,
+katalog-manager,postgres,writes,katalog,wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_URL;env:katalog-manager:DATABASE_URL;env:katalog-manager:SPRING_DATASOURCE_URL,The catalog's only writer (ADR-0003)
+katalog-manager,media,writes,,wire:zaentrum-operator:katalog-manager-api volume media,"Scans the library, takes titles in, retires originals"
+katalog-manager,kafka,publishes,catalog.item.discovered;catalog.item.enriched;catalog.item.packaged;catalog.item.removed;catalog.extra.queued;catalog.extra.packaged,wire:zaentrum-operator:katalog-manager-api KAFKA_BROKERS;env:katalog-manager:KAFKA_BROKERS,
+katalog-manager,kafka,consumes,catalog.item.discovered,wire:zaentrum-operator:katalog-manager-api KAFKA_ENRICHER_GROUP,Its enricher
+katalog-manager,keycloak,signs in,,wire:zaentrum-operator:katalog-manager-api SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI;env:katalog-manager:OIDC_ISSUER;env:katalog-manager:SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,
+katalog-manager,metadata-service,calls,metadata,wire:zaentrum-operator:katalog-manager-api TMDB_API_KEY;env:katalog-manager:TMDB_API_KEY,With a key
+katalog-manager,chapters-service,calls,chapter names,env:katalog-manager:CHAPTERSDB_BASE_URL,Off in the chart
+katalog-ingest,katalog-api,calls,,wire:zaentrum-operator:katalog-ingest KATALOG_API_URL;env:katalog-ingest:KATALOG_API_URL,
+katalog-ingest,katalog-manager,calls,,wire:zaentrum-operator:katalog-ingest KATALOG_MANAGER_API_URL;env:katalog-ingest:KATALOG_MANAGER_API_URL,
+katalog-ingest,kafka,publishes,processing.task.*,wire:zaentrum-operator:katalog-ingest KAFKA_BROKERS;env:katalog-ingest:KAFKA_BROKERS,On a fixed cadence
+analyzer,kafka,consumes,catalog.item.enriched,wire:zaentrum-operator:analyzer CONSUME_TOPIC;wire:zaentrum-operator:analyzer KAFKA_BROKERS;env:analyzer:CONSUME_TOPIC;env:analyzer:KAFKA_BROKERS,
+analyzer,kafka,publishes,catalog.item.analyzed,wire:zaentrum-operator:analyzer PRODUCE_TOPIC;env:analyzer:PRODUCE_TOPIC,
+analyzer,katalog-manager,calls,claims and results,wire:zaentrum-operator:analyzer KATALOG_API_URL;env:analyzer:KATALOG_API_URL,
+analyzer,keycloak,signs in,a service's token,wire:zaentrum-operator:analyzer OIDC_TOKEN_URL;env:analyzer:OIDC_TOKEN_URL,
+analyzer,media,writes,,wire:zaentrum-operator:analyzer volume media,
+transcoder,kafka,consumes,catalog.item.analyzed;catalog.extra.queued,wire:zaentrum-operator:transcoder CONSUME_TOPIC;wire:zaentrum-operator:transcoder EXTRAS_GROUP_ID;wire:zaentrum-operator:transcoder KAFKA_BROKERS;env:transcoder:CONSUME_TOPIC;env:transcoder:KAFKA_BROKERS,
+transcoder,kafka,publishes,catalog.item.transcoded;catalog.extra.transcoded,wire:zaentrum-operator:transcoder PRODUCE_TOPIC;env:transcoder:PRODUCE_TOPIC,
+transcoder,katalog-manager,calls,claims and results,wire:zaentrum-operator:transcoder KATALOG_API_URL;env:transcoder:KATALOG_API_URL,
+transcoder,keycloak,signs in,a service's token,wire:zaentrum-operator:transcoder OIDC_TOKEN_URL;env:transcoder:OIDC_TOKEN_URL,
+transcoder,media,writes,,wire:zaentrum-operator:transcoder volume media,
+packager,kafka,consumes,catalog.item.transcoded;catalog.extra.transcoded,wire:zaentrum-operator:packager CONSUME_TOPIC;wire:zaentrum-operator:packager EXTRAS_GROUP_ID;wire:zaentrum-operator:packager KAFKA_BROKERS;env:packager:CONSUME_TOPIC;env:packager:KAFKA_BROKERS,
+packager,katalog-manager,calls,packaging complete,wire:zaentrum-operator:packager KATALOG_API_URL;env:packager:KATALOG_API_URL,"It publishes nothing: katalog-manager announces the package"
+packager,keycloak,signs in,a service's token,wire:zaentrum-operator:packager OIDC_TOKEN_URL;env:packager:OIDC_TOKEN_URL,
+packager,media,writes,,wire:zaentrum-operator:packager volume media,
+subtitler,katalog-manager,calls,the attach endpoint,env:subtitler:KATALOG_URL,
+subtitler,live-worker,calls,its metrics,env:subtitler:LIVE_METRICS_URL,Leaves the GPU to live playback
+keycloak,postgres,writes,keycloak,wire:zaentrum-operator:keycloak KC_DB_URL_HOST,
+zaentrum-operator,kubernetes,manages,the platform,env:zaentrum-operator:KUBERNETES_SERVICE_HOST,"The chart's parts, addons' charts"
+zaentrum-operator,zaentrum,calls,releases.json,env:zaentrum-operator:RELEASES_URL,The versions it may update to
+zae,kubernetes,manages,the platform,command:zae:platform,
+zae,keycloak,signs in,,command:zae:login,
+zae,keycloak,manages,the self-test's account,wire:zaentrum-operator:zaentrum-verify KC_SERVER,
+demo-seed,media,writes,,wire:zaentrum-operator:seed-demo-content volume media;wire:zaentrum-operator:scan-catalog volume media;wire:zaentrum-operator:enqueue-processing volume media,
+demo-seed,katalog-manager,calls,a scan,wire:zaentrum-operator:scan-catalog MANAGER_SECRET,
+demo-seed,postgres,writes,katalog,wire:zaentrum-operator:enqueue-processing PGUSER,Queues the pipeline's first steps in the catalog's database itself

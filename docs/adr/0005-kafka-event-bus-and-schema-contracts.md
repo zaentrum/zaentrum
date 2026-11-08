@@ -1,6 +1,6 @@
 # ADR-0005: Kafka event bus and schema contracts
 
-**Status:** Accepted · recorded retrospectively (decision from 2026-05)
+**Status:** Accepted · recorded retrospectively (decision from 2026-05) · extended by [ADR-0012](./0012-catalog-identity-for-addons.md) (identities in the item events)
 
 ## Context
 
