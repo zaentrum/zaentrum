@@ -25,6 +25,8 @@ jobs:
         run: python3 scripts/check-docs.py
       - name: the specification's structure (numbers, captions, legends)
         run: python3 scripts/check-spec.py
+      - name: the capability model (every capability, setting and claim; its tables)
+        run: python3 scripts/capabilities.py --check
 
   site:
     runs-on: ubuntu-latest
