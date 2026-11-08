@@ -53,12 +53,12 @@ events on the bus, and the stores. Each is a row of
 | `subtitler` | calls | `live-worker` | its metrics | Leaves the GPU to live playback |
 | `transcoder` | calls | `katalog-manager` | claims and results | — |
 | `transcoder` | signs in | `keycloak` | a service's token | — |
-| `demo-seed` | calls | `katalog-manager` | a scan | — |
 | `zae` | signs in | `keycloak` | — | — |
 | `zae` | manages | `keycloak` | the self-test's account | — |
 | `zae` | manages | `kubernetes` | the platform | — |
 | `zaentrum-operator` | calls | `zaentrum` | releases.json | The versions it may update to |
 | `zaentrum-operator` | manages | `kubernetes` | the platform | The chart's parts, addons' charts |
+| `demo-seed` | calls | `katalog-manager` | a scan | — |
 
 ## Events
 

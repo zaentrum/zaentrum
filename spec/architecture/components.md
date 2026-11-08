@@ -88,10 +88,8 @@ columns is on the [front page](./README.md#how-to-read-it).
 |---|---|---|---|---|---|---|---|---|
 | `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 23 | 70 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011 |
 | `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011 |
-| `demo-seed` | content for a demo: fetched, scanned and queued | job | runs | — | `seed-demo-content`, `scan-catalog`, `enqueue-processing` | — | — | — |
 
 - `zaentrum-operator`: Installed on its own, it runs what the chart holds
-- `demo-seed`: With jobs.seed
 
 ## Outside the platform
 
@@ -105,6 +103,14 @@ columns is on the [front page](./README.md#how-to-read-it).
 - `issue-tracker`: Optional: OpenProject, when the secret zaentrum-feedback names one
 - `metadata-service`: TMDB, with the key the secret katalog-tmdb holds
 - `chapters-service`: ChaptersDB, when CHAPTERSDB_ENABLED is on: the chart has it off
+
+## The reference demo
+
+| Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
+|---|---|---|---|---|---|---|---|---|
+| `demo-seed` | the reference demo's content: fetched, scanned and queued | job | demo | — | `seed-demo-content`, `scan-catalog`, `enqueue-processing` | — | — | — |
+
+- `demo-seed`: Only with jobs.seed, which the reference demo sets: a plain install runs none of it
 
 ## Beside the platform
 

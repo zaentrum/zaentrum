@@ -514,10 +514,11 @@ def export(areas, caps, settings, inventory, path, arch=None):
 LAYERS = [('apps', 'the apps'), ('portal', 'the portal and its consoles'), ('chino', "chino's services"),
           ('catalog', 'the catalog'), ('pipeline', 'the pipeline'), ('bundled', 'bundled services'),
           ('runtime', 'running the platform'), ('outside', 'outside the platform'),
-          ('beside', 'beside the platform'), ('later', 'later products'), ('retired', 'retired')]
+          ('demo', 'the reference demo'), ('beside', 'beside the platform'), ('later', 'later products'),
+          ('retired', 'retired')]
 COMP_KINDS = ['app', 'web', 'service', 'worker', 'job', 'operator', 'cli', 'database', 'cache', 'broker',
               'identity', 'volume', 'docs', 'contracts', 'addon']
-COMP_STATUS = ['runs', 'ships', 'idle', 'outside', 'beside', 'later', 'retired']
+COMP_STATUS = ['runs', 'ships', 'idle', 'outside', 'demo', 'beside', 'later', 'retired']
 CONN_KINDS = ['calls', 'signs in', 'manages', 'links', 'publishes', 'consumes', 'writes', 'reads']
 COMP_COLS = ['key', 'component', 'layer', 'kind', 'status', 'code', 'runs', 'note']
 CONN_COLS = ['from', 'to', 'kind', 'on', 'via', 'note']
@@ -837,11 +838,14 @@ class Arch:
             if x['kind'] == 'writes' and self.comp[x['to']]['kind'] == 'database':
                 for db in split(x['on']) or ['']:
                     writers[(x['to'], db)].append(x)
+        def named(k):
+            return f'{k} (the reference demo\'s)' if self.comp[k]['status'] == 'demo' else k
         for (store, db), xs in sorted(writers.items()):
             if len({x['from'] for x in xs}) > 1:
-                who = sorted({x['from'] for x in xs})
+                who = sorted({x['from'] for x in xs}, key=lambda k: (self.comp[k]['status'] == 'demo', k))
                 out.append({'kind': 'two writers', 'about': who + [store],
-                            'what': f'the database {db} is written by {" and ".join(who)}; each database is one service\'s',
+                            'what': f'the database {db} is written by {" and ".join(named(k) for k in who)}; '
+                                    f'each database is one service\'s',
                             'via': [i for x in xs for i in split(x['via'])]})
         incoming = {x['to'] for x in self.conns}
         for c in self.comps:
@@ -883,8 +887,25 @@ class Arch:
                 for host in re.findall(r'([a-z0-9][a-z0-9-]*)\.[a-z0-9.-]*\.svc\b', r['value']):
                     if host not in self.services:
                         out.append({'kind': 'outside default', 'about': [self.owner(r)] if self.owner(r) else [],
-                                    'what': f'{r["repo"]}\'s {r["name"]} defaults to {r["value"]}, a service the platform doesn\'t run',
+                                    'what': f'{r["repo"]}\'s {r["name"]} defaults to a service in another namespace of '
+                                            f'one cluster, not to one the platform runs',
                                     'via': [r['id']]})
+        # the reference demo's names in what every install runs
+        seen = set()
+        for r in self.inventory:
+            if r['kind'] != 'wire':
+                continue
+            k = self.owner(r)
+            env = r['name'].split(' ', 1)[1]
+            if not k or self.comp[k]['status'] == 'demo' or (k, env) in seen:
+                continue
+            if re.search(r'demo', env + ' ' + r['value'], re.I):
+                seen.add((k, env))
+                said = (f'comes from the secret {r["value"].split()[1]}' if r['value'].startswith('secret ')
+                        else f'is {r["value"]}')
+                out.append({'kind': 'the demo in the product', 'about': [k],
+                            'what': f'{k}\'s {env} {said}: a name of the reference demo, set by the chart every install uses',
+                            'via': [r['id']]})
         return out
 
     # ------------------------------------------------------------------ pages

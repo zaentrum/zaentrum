@@ -23,6 +23,19 @@ its settings and its decisions.
 > or when one decision record changes another and the other doesn't say so. The
 > numbers here are computed, never typed.
 
+## The product, not an instance
+
+This layer is the product: what the repositories of
+[github.com/zaentrum](https://github.com/zaentrum) hold, and what the operator's
+chart installs, rendered with the chart's own defaults and then with every option
+on. No running instance is read for it. An instance, the reference demo or anyone's
+own, is the product with its own values: its routing, its storage, its databases and
+broker when they are someone else's. Those values aren't modelled here.
+
+Where the product still carries a deployment, the model shows it rather than taking
+it for the product: the jobs the chart runs only for the reference demo are a lane
+of their own, and a name of the demo in what every install runs is a finding.
+
 ## How to read it
 
 A **component** is a part of zaentrum you can point at: an app, a service, a
@@ -42,6 +55,7 @@ The **layers** are the map's lanes:
 | bundled services | what the chart runs from others' images: the database server, the cache, the broker, the identity provider, and the media volume |
 | running the platform | the operator, the CLI, the demo's jobs |
 | outside the platform | what the platform calls and doesn't run: the cluster's API, outside services |
+| the reference demo | what the chart runs only for the reference demo: its content, fetched, scanned and queued |
 | beside the platform | the docs, the site, the event contracts, the reference addon |
 | later products | products that are only registered |
 | retired | archived repositories, and what replaced them |
@@ -54,6 +68,7 @@ A component's **status**:
 | ships | published for people to install: the phone and TV apps, the CLI |
 | idle | built, and nothing runs it yet |
 | outside | not the platform's: it calls it |
+| demo | in the chart for the reference demo only, behind an option a plain install leaves off |
 | beside | part of the project, not of the running platform |
 | later | a later product's |
 | retired | its repository is archived |
@@ -125,20 +140,21 @@ to render the chart.
 ## The state of the model
 
 <!-- generated: state -->
-| Layer | Components | runs | ships | idle | outside | beside | later | retired |
-|---|---|---|---|---|---|---|---|---|
-| the apps | 4 | 1 | 3 |  |  |  |  |  |
-| the portal and its consoles | 3 | 3 |  |  |  |  |  |  |
-| chino's services | 4 | 3 |  | 1 |  |  |  |  |
-| the catalog | 3 | 3 |  |  |  |  |  |  |
-| the pipeline | 4 | 3 |  | 1 |  |  |  |  |
-| bundled services | 5 | 5 |  |  |  |  |  |  |
-| running the platform | 3 | 2 | 1 |  |  |  |  |  |
-| outside the platform | 4 |  |  |  | 4 |  |  |  |
-| beside the platform | 4 |  |  |  |  | 4 |  |  |
-| later products | 4 |  |  |  |  |  | 4 |  |
-| retired | 4 |  |  |  |  |  |  | 4 |
-| all | 42 | 20 | 4 | 2 | 4 | 4 | 4 | 4 |
+| Layer | Components | runs | ships | idle | outside | demo | beside | later | retired |
+|---|---|---|---|---|---|---|---|---|---|
+| the apps | 4 | 1 | 3 |  |  |  |  |  |  |
+| the portal and its consoles | 3 | 3 |  |  |  |  |  |  |  |
+| chino's services | 4 | 3 |  | 1 |  |  |  |  |  |
+| the catalog | 3 | 3 |  |  |  |  |  |  |  |
+| the pipeline | 4 | 3 |  | 1 |  |  |  |  |  |
+| bundled services | 5 | 5 |  |  |  |  |  |  |  |
+| running the platform | 2 | 1 | 1 |  |  |  |  |  |  |
+| outside the platform | 4 |  |  |  | 4 |  |  |  |  |
+| the reference demo | 1 |  |  |  |  | 1 |  |  |  |
+| beside the platform | 4 |  |  |  |  |  | 4 |  |  |
+| later products | 4 |  |  |  |  |  |  | 4 |  |
+| retired | 4 |  |  |  |  |  |  |  | 4 |
+| all | 42 | 19 | 4 | 2 | 4 | 1 | 4 | 4 | 4 |
 
 | Connections | Rows | Made by the chart's wiring | Only in the code |
 |---|---|---|---|
@@ -175,7 +191,7 @@ change to the code, to a decision, or to the model.
 <!-- generated: findings -->
 | Finding | Components | What the model shows | In the code |
 |---|---|---|---|
-| two writers | `demo-seed`, `katalog-manager`, `postgres` | the database katalog is written by demo-seed and katalog-manager; each database is one service's | `katalog-manager-api SPRING_DATASOURCE_URL`, `DATABASE_URL` and 2 more |
+| two writers | `katalog-manager`, `demo-seed`, `postgres` | the database katalog is written by katalog-manager and demo-seed (the reference demo's); each database is one service's | `katalog-manager-api SPRING_DATASOURCE_URL`, `DATABASE_URL` and 2 more |
 | unconnected | `valkey` | valkey runs, and no component connects to it | `valkey` |
 | unread topic | `katalog-ingest` | katalog-ingest publishes processing.task.*, and no component consumes it | `katalog-ingest KAFKA_BROKERS`, `KAFKA_BROKERS` |
 | named for another | `chino-api`, `katalog-manager` | chino-api's ARTWORK_BASE_URL is named for artwork (retired), and leads to katalog-manager | `chino-api ARTWORK_BASE_URL` |
@@ -183,7 +199,10 @@ change to the code, to a decision, or to the model.
 | named for another | `analyzer`, `katalog-manager` | analyzer's KATALOG_API_URL is named for katalog-api, and leads to katalog-manager | `analyzer KATALOG_API_URL` |
 | named for another | `transcoder`, `katalog-manager` | transcoder's KATALOG_API_URL is named for katalog-api, and leads to katalog-manager | `transcoder KATALOG_API_URL` |
 | named for another | `packager`, `katalog-manager` | packager's KATALOG_API_URL is named for katalog-api, and leads to katalog-manager | `packager KATALOG_API_URL` |
-| outside default | `katalog-ingest` | katalog-ingest's KAFKA_BROKERS defaults to platform-kafka-kafka-bootstrap.platform-event-streaming.svc:9093, a service the platform doesn't run | `KAFKA_BROKERS` |
+| outside default | `katalog-ingest` | katalog-ingest's KAFKA_BROKERS defaults to a service in another namespace of one cluster, not to one the platform runs | `KAFKA_BROKERS` |
+| the demo in the product | `katalog-ingest` | katalog-ingest's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-ingest KAFKA_GROUP_ID` |
+| the demo in the product | `katalog-manager` | katalog-manager's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-manager-api KAFKA_GROUP_ID` |
+| the demo in the product | `keycloak` | keycloak's DEMO_USER_PASSWORD comes from the secret zaentrum-demo-user: a name of the reference demo, set by the chart every install uses | `keycloak DEMO_USER_PASSWORD` |
 <!-- end: findings -->
 
 ## Pages

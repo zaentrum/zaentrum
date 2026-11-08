@@ -24,7 +24,7 @@ keycloak,"the bundled identity provider, and the job that sets up its realm",bun
 media,the media volume: originals and packages,bundled,volume,runs,,volume:zaentrum-operator:media,"A claim the chart makes, or a volume of your own"
 zaentrum-operator,"the operator: the Zaentrum resource, the platform chart, addons",runtime,operator,runs,zaentrum-operator,,"Installed on its own, it runs what the chart holds"
 zae,the zae CLI; the platform's self-test runs it,runtime,cli,ships,zae,workload:zaentrum-operator:zaentrum-verify,
-demo-seed,"content for a demo: fetched, scanned and queued",runtime,job,runs,,workload:zaentrum-operator:seed-demo-content;workload:zaentrum-operator:scan-catalog;workload:zaentrum-operator:enqueue-processing,With jobs.seed
+demo-seed,"the reference demo's content: fetched, scanned and queued",demo,job,demo,,workload:zaentrum-operator:seed-demo-content;workload:zaentrum-operator:scan-catalog;workload:zaentrum-operator:enqueue-processing,"Only with jobs.seed, which the reference demo sets: a plain install runs none of it"
 kubernetes,the Kubernetes API of the cluster,outside,service,outside,,,
 issue-tracker,an issue tracker for bug reports,outside,service,outside,,,"Optional: OpenProject, when the secret zaentrum-feedback names one"
 metadata-service,an outside metadata service,outside,service,outside,,,"TMDB, with the key the secret katalog-tmdb holds"
