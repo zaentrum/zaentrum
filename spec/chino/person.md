@@ -281,7 +281,8 @@ instead, so the page never shows an empty frame.
 ### 7.6.4 In the library
 
 - **in the library** holds every title of theirs the library has, in the
-  order the server gives them, as posters with their status marks
+  order the server gives them: newest first, then the higher rated, then by
+  name. They come as posters with their status marks
   ([chapter 6](./title-actions.md)).
 - Under each poster: the year, then what they did on that title, each role
   once: “2012 · actor”, “2012 · director · writer”. The roles are actor,

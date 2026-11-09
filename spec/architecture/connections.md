@@ -32,11 +32,11 @@ events on the bus, and the stores. Each is a row of
 | `zaentrum-portal` | signs in | `keycloak` | — | — |
 | `chino-api` | calls | `chino-stream` | — | — |
 | `chino-api` | calls | `issue-tracker` | bug reports | When the secret zaentrum-feedback names one |
-| `chino-api` | calls | `katalog-api` | — | — |
+| `chino-api` | calls | `katalog-api` | — | With the viewer's bearer and their max_rating |
 | `chino-api` | calls | `katalog-manager` | admin actions, pictures | ANALYZER_BASE_URL is an older name of KATALOG_MANAGER_URL |
 | `chino-api` | calls | `portal-api` | slots, account deletion | — |
 | `chino-api` | signs in | `keycloak` | — | — |
-| `chino-stream` | calls | `katalog-api` | — | — |
+| `chino-stream` | calls | `katalog-api` | — | The playback lookups take no bearer: in-cluster only |
 | `chino-stream` | calls | `live-worker` | — | As far as LIVE_WORKER_MODE says: off, shadow or on |
 | `chino-stream` | signs in | `keycloak` | — | — |
 | `katalog-api` | signs in | `keycloak` | — | — |

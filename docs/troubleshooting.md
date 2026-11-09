@@ -20,6 +20,9 @@ operations against a running install; the reference demo details are in
 | 7 | Admin login demands a password change | Fresh Keycloak realm import forces `UPDATE_PASSWORD` |
 | 8 | Sign-in fails with "Cookie not found" from a phone, a TV or another computer | Plain http on a name other than `localhost`: Keycloak's login cookies are `Secure` |
 | 9 | Keycloak's admin console answers 404 on the public host | The admin console is not published there unless `identity.exposeAdminConsole` |
+| 10 | With an external provider nothing signs in: `503` and `401` from the APIs | `identity.issuer` is not exactly the issuer the provider serves |
+| 11 | The bundled Keycloak refuses its own admin, `RealmConfigured` is `False` | The admin's password was changed in the console; the Secret kept the old one |
+| 12 | Lists and posters load, but every title answers `403` | chino-api and chino-stream sign and check stream tokens with different keys |
 
 ---
 
@@ -329,3 +332,64 @@ On the appliance the port-forward runs inside the container, which needs
 [the admin console](./self-hosting.md#the-admin-console). Or publish the console with
 `identity.exposeAdminConsole: true` on the CR, knowing that it then answers anyone who can
 reach the public host.
+
+---
+
+## 10. With an external provider nothing signs in
+
+**Symptom** — with `identity.mode: external` the pages load, but the APIs refuse every
+signed-in request: chino-api and katalog-api answer `503`, portal-api and katalog-manager
+`401`.
+
+**Cause** — `identity.issuer` is not exactly the issuer the provider serves: another realm
+than the one the clients live in (for a Keycloak realm `https://<host>/realms/<realm>`, never
+`master`), a missing path segment, `http` for `https`, or an empty field, which the operator
+fills from `spec.hostname` — an address no external provider answers. Discovery fails, and the
+services keep sign-in closed.
+
+**Fix** — the provider's discovery document must name exactly the value in `identity.issuer`:
+
+```bash
+curl -s <issuer>/.well-known/openid-configuration | jq -r .issuer
+```
+
+Copy the provider's value into the CR; the operator rolls the services with it. chino-api tries
+discovery once: a provider that was down at its first signed-in request leaves it answering
+`503` until it restarts (`kubectl -n <namespace> rollout restart deploy/chino-api`). What the
+provider must offer besides: [prerequisites](./prerequisites.md#identity).
+
+---
+
+## 11. The bundled Keycloak refuses its own admin
+
+**Symptom** — `RealmConfigured` turns `False`, and the realm Job, the verification run or the
+port-forwarded admin console refuse the master realm's `admin` from Secret
+`zaentrum-keycloak-admin`.
+
+**Cause** — that admin's password was changed, or the user removed, in the admin console, and
+the Secret kept the old value. Keycloak makes its bootstrap admin from the Secret only when it
+first creates the master realm, so a restart does not bring it back.
+
+**Fix** — recover it as Keycloak's guide to
+[recovering the master admin](https://www.keycloak.org/server/bootstrap-admin-recovery)
+describes: `kc.sh bootstrap-admin user` makes a temporary admin, with every Keycloak node
+stopped and the same database settings the platform's Keycloak starts with. Sign in with the
+temporary admin, give `admin` the Secret's password again (or write the new one into the
+Secret), and delete the temporary admin.
+
+---
+
+## 12. Lists and posters load, but every title answers 403
+
+**Symptom** — the apps sign in and show their lists and posters, but every title refuses to
+play with `403`.
+
+**Cause** — chino-api signs the stream token every playlist and segment carries, and
+chino-stream checks it with its own copy of the key. With the operator both read Secret
+`zaentrum-stream-signing`; where Secrets are made outside it (`secrets.external`) or by hand,
+two different keys refuse every play while everything else works. A service started without a
+key makes one of its own and says so in its log: its tokens then fail on every other pod and
+after each restart.
+
+**Fix** — give chino-api, chino-stream and katalog-manager the same `STREAM_SIGNING_KEY`
+(base64, at least 16 bytes) and restart all three.

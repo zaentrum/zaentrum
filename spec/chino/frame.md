@@ -222,7 +222,7 @@ doesn't have.
 | The focus into the rail | — | — | left from a screen's first column, onto the current view; right goes back | the arrow keys, to the nearest item |
 | A focused item in the rail | — | — | the focus ring outside it, 5 % larger | the blue ring outside it; nothing grows |
 | The safe area | — | — | none for the frame; the player and zap keep 48 × 27 dp | none |
-| A view's address | only the watchlist and the search; a reload elsewhere opens home | — | — | — |
+| A view's address | only the watchlist and the search; a reload elsewhere opens home. A title's page, a person's page, the account, the player and a trailer each have one of their own | — | — | — |
 
 ## 2.3 The frame on a computer
 

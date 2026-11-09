@@ -368,7 +368,9 @@ offers what [chapter 6](./title-actions.md) lists: **play**, or **resume** for
 a title the person is in, and **mark as watched** or **watched**. In continue
 watching it also has **remove from continue watching**, last and in amber
 (figure 4.5, part 6), which takes the card off without changing what was
-watched.
+watched. A card marked as watched from its menu leaves its row at once, as the
+rows hold only what the person hasn't finished, and the row fills up again
+from the titles after it.
 
 A row holds up to 20 titles. recently added movies, recently added shows and
 top rated end with a **see all** card, which opens movies or shows in that

@@ -3,11 +3,17 @@
 **Status:** Accepted · recorded retrospectively (decision from 2026-06)
 
 > **Status — partly ahead of the code.** Built: the `bundled` and `external` modes, and the
-> CRD accepts no other value — **`broker` is not built**. Also not built: the platform's own
-> user management, directory and claim-to-role editor (accounts are managed in the bundled
-> Keycloak's admin console), the setup question, SCIM, and the emergency admin. And an empty
-> issuer in `external` mode is not yet an error: it is derived from `spec.hostname`, as in
-> `bundled` mode.
+> CRD accepts no other value — **`broker` is not built**. In `bundled` mode the portal's
+> People page manages the realm's people — add, invite, rename, change the role, give a
+> rating cap, switch off, delete — through a client whose service account may only view,
+> query and manage users. Not built: passwords and second factors set from the platform,
+> per-library access; for `external`, the directory, the claim-to-role editor, per-principal
+> grants and connection health; the setup question, SCIM, and the emergency admin. The
+> clients are one per app — the web app, the portal and its consoles, the phone, the TV, the
+> command line — not one unified client
+> ([sign-in redirects](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#sign-in-redirects-and-the-realm-job)).
+> And an empty issuer in `external` mode is not yet an error: it is derived from
+> `spec.hostname`, as in `bundled` mode.
 
 ## Context
 
@@ -67,7 +73,10 @@ flowchart TB
   device flow keeps working even when the upstream does not support it, because
   it runs against the local Keycloak. Ownership is hybrid: the upstream owns
   credentials and MFA; the platform owns the linked record, roles, and a local
-  break-glass admin.
+  break-glass admin. Brokering adds one registration upstream: the bundled
+  realm's broker endpoint, `https://<hostname>/auth/realms/<realm>/broker/<alias>/endpoint`,
+  must be an allowed redirect URI of the client the upstream IdP issues for the
+  platform.
 - **`external`** — no bundled Keycloak is rendered at all. The platform is a
   pure OIDC relying party: it validates tokens directly against the remote
   issuer's discovery document and JWKS. Users live entirely upstream; the
@@ -120,6 +129,37 @@ populated user store and is gated behind an explicit destructive-switch flag.
   admin pinned by `(iss, sub)` even in external mode.
 - The management UI must show provenance per principal (local vs. federated),
   so an admin never believes they can reset a federated user's password here.
+- What sign-in depends on differs by mode. `bundled` depends on the in-cluster
+  Keycloak alone. `broker` depends on the upstream IdP for federated sign-ins
+  only: local accounts, the break-glass admin among them, still sign in while it
+  is down. `external` depends on the remote IdP for every sign-in.
+
+### The fields, sketched (not built)
+
+How the parts of this decision that aren't built would sit on the resource;
+nothing here is in the CRD yet, and secrets stay references, never values:
+
+```yaml
+spec:
+  identity:
+    mode: broker                       # bundled | broker | external
+    roleMapping:                       # deterministic claim-to-role resolution
+      claim: realm_access.roles        # a dotted path into the token
+      adminValues: [zaentrum-admin]
+      userValues: [zaentrum-user]
+      onNoMatch: user-no-library       # user-no-library (the fail-safe default) | deny
+    broker:                            # an upstream IdP federated through the bundled realm
+      alias: upstream
+      issuer: https://login.example.org/realms/example
+      clientId: zaentrum-broker
+      clientSecretRef: { name: zaentrum-broker-idp, key: client-secret }
+      claimToRole:
+        - { claim: groups, value: media-admins, role: zaentrum-admin }
+        - { claim: groups, value: "*", role: zaentrum-user }
+      trustEmail: false                # never link on an unverified email
+      firstLoginFlow: confirm-link     # confirm-link | verify-email; never a silent link
+    allowDestructiveSwitch: false      # true lets a switch drop a populated bundled realm
+```
 
 ### What this rules out
 

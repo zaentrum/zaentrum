@@ -154,5 +154,79 @@ The TV, phone and tablet apps (`chino-androidtv`, `chino-mobile`,
 `chino-tizen`) ship through their stores, on their own versions, and are not
 part of a platform release yet.
 
+### App identity
+
+A published build carries the project's identity, not an installation's: the
+reverse-DNS name of the project's GitHub Pages site. The phone and tablet app
+(Android, iOS) and the Android TV app are `io.github.zaentrum.chino`; debug
+builds add `.debug`, so they install beside a release. The Samsung TV app is
+package `zaentrumio`, application `zaentrumio.Chino` (`config.xml`).
+
+A store never lets a published id change, so a fork publishes under its own:
+`-PchinoAppId` (Android), `CHINO_BUNDLE_ID` in `iosApp/Configuration/` (iOS),
+the ids in `config.xml` (Samsung). Two identifiers don't follow the app id: the
+code's Kotlin namespace, and the phone app's OAuth redirect URI, which identity
+providers register exactly as written ([chino-mobile, redirect URI](https://github.com/zaentrum/chino-mobile#redirect-uri)).
+A new redirect URI breaks sign-in wherever it isn't registered yet: it goes
+into the operator's realm, and is announced for external providers, one release
+before a build uses it.
+
+### Publishing the apps
+
+- **Google Play.** The two Android apps share one app id, so they are one Play
+  entry: sign both bundles with the same upload key. Play gives each device the
+  bundle whose manifest fits it (the TV app requires leanback). Their version
+  codes never meet: the phone app's is set at release, above Play's last; the
+  TV app's is the build's run number plus 2,000,000. A new personal Play
+  developer account runs a closed test with at least 12 testers for 14 days
+  before it may publish to production.
+- **App Store.** iOS is built and signed on a Mac with Xcode. The app keeps its
+  settings in user defaults, so the bundle needs a privacy manifest that
+  declares that, and an export-compliance answer.
+- **Samsung.** The `.wgt` is signed with Samsung author and distributor
+  certificates. A TV in developer mode installs it only when its DUID is in
+  that distributor certificate. The TV emulator runs x86 images and needs an
+  x86-64 machine with hardware virtualisation. Publishing goes through
+  Samsung's seller portal.
+- **Every store.** Check playback on a real device, not only an emulator. Fill
+  in the content rating, and give the listing a privacy policy and a page that
+  says how to delete an account (the app's **Delete Account**, or the people
+  who run the server). Screenshots show only openly licensed titles, such as
+  the reference demo's, and the listing names no other media product and no
+  server.
+
+### What the apps send
+
+What a store's data-safety form asks, as the apps are built today:
+
+- The apps talk only to the server the person adds and to the outside services
+  below; nothing goes to whoever published them. There is no analytics or
+  crash-reporting SDK.
+- Sign-in runs at that server's identity provider. The tokens stay on the
+  device: encrypted on Android TV; in the phone app's own storage, with
+  encryption on its roadmap.
+- The server keeps progress, watched marks, likes, lists and history.
+- App events go to the server's event log, which records each with the
+  account. The phone and Android TV apps add the device's model, maker, system
+  version, the app's version and the account's id to theirs; their playback
+  quality reports and the web's events carry no device details.
+- Bug reports go only where the server takes them ([bug reports from the
+  apps](./self-hosting.md#bug-reports-from-the-apps-optional)). They hold the
+  person's words, the same app and device details, the account's username,
+  which the server adds, and on the web and the phone a screenshot the person
+  can leave out. The Android phone app's own report of a playback failure
+  includes a screenshot of the app. Reports go to the tracker the server's
+  operators chose, and stay there when the account is deleted.
+- Offline titles on Android stay in the app's own storage; nothing of the
+  Android apps goes into a device backup.
+- The phone and Android TV apps fetch an avatar from an outside avatar service
+  by a hash of the account's email (change 3.C13 of the
+  [specification](../spec/chino/start.md) proposes dropping it). The web and
+  Samsung TV apps load their typefaces from a public font service. The Android
+  phone app casts with Google Cast. A trailer that is only online opens outside
+  the app.
+- **Delete Account**, in every app, deletes the account and what the server
+  keeps of it.
+
 See also: [updating](./updating.md) · [updating the operator](./updating-the-operator.md) ·
 [the operator & CR reference](./operator.md)

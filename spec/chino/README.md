@@ -23,8 +23,17 @@ The specification covers the four chino apps:
 | The Android TV app | Android TV and Google TV | TV |
 | The Samsung TV app | Samsung TVs (not released yet) | TV |
 
+The web app also installs to a home screen as an app of its own. It keeps its
+page, its code and the pictures for a failing network, never the server's
+answers or streams, and offers to reload when a new version is out. There is no
+chino app for computers, watches or other TV platforms: a computer uses the web
+app.
+
 It doesn't cover the server, the portal ([the portal's pages](../portal/README.md))
-or the consoles where a server is set up.
+or the consoles where a server is set up. What every app must show alike is
+decided once, on the server, and the apps show it as given: how a title plays
+on this device, the order of search results and of a row, which titles a row
+holds, and a title's marked parts.
 
 ## 1.2 How to read the figures
 

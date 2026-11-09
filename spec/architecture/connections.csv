@@ -22,7 +22,7 @@ portal-api,kubernetes,manages,the platform's parts,env:zaentrum-portal:KUBERNETE
 portal-api,chino-web,links,/chino,env:zaentrum-portal:CHINO_PUBLIC_URL,The launchpad's tile for chino
 portal-api,katalog-manager,calls,setting up,env:zaentrum-portal:PORTAL_KATALOG_MANAGER_URL,"The library's volume and its scan, while the platform is set up"
 portal-api,keycloak,links,where people are managed,env:zaentrum-portal:PORTAL_PEOPLE_MANAGE_URL,"The identity provider's own console, when people aren't the portal's to manage"
-chino-api,katalog-api,calls,,wire:zaentrum-operator:chino-api KATALOG_BASE_URL;env:chino-api:KATALOG_BASE_URL,
+chino-api,katalog-api,calls,,wire:zaentrum-operator:chino-api KATALOG_BASE_URL;env:chino-api:KATALOG_BASE_URL,With the viewer's bearer and their max_rating
 chino-api,katalog-manager,calls,"admin actions, pictures",wire:zaentrum-operator:chino-api KATALOG_MANAGER_URL;wire:zaentrum-operator:chino-api ARTWORK_BASE_URL;env:chino-api:KATALOG_MANAGER_URL;env:chino-api:ARTWORK_BASE_URL;env:chino-api:ANALYZER_BASE_URL,ANALYZER_BASE_URL is an older name of KATALOG_MANAGER_URL
 chino-api,chino-stream,calls,,wire:zaentrum-operator:chino-api STREAM_BASE_URL;env:chino-api:STREAM_BASE_URL,
 chino-api,portal-api,calls,"slots, account deletion",wire:zaentrum-operator:chino-api PORTAL_BASE_URL;env:chino-api:PORTAL_BASE_URL,
@@ -30,7 +30,7 @@ chino-api,postgres,writes,chino,wire:zaentrum-operator:chino-api PG_URL;env:chin
 chino-api,kafka,consumes,catalog.item.*;catalog.extra.packaged,wire:zaentrum-operator:chino-api KAFKA_BROKERS;env:chino-api:KAFKA_BROKERS,The apps' live refresh
 chino-api,keycloak,signs in,,wire:zaentrum-operator:chino-api OIDC_ISSUER;env:chino-api:OIDC_ISSUER,
 chino-api,issue-tracker,calls,bug reports,wire:zaentrum-operator:chino-api OPENPROJECT_URL;env:chino-api:OPENPROJECT_URL,When the secret zaentrum-feedback names one
-chino-stream,katalog-api,calls,,wire:zaentrum-operator:chino-stream KATALOG_API_BASE_URL;env:chino-stream:KATALOG_API_BASE_URL,
+chino-stream,katalog-api,calls,,wire:zaentrum-operator:chino-stream KATALOG_API_BASE_URL;env:chino-stream:KATALOG_API_BASE_URL,The playback lookups take no bearer: in-cluster only
 chino-stream,live-worker,calls,,wire:zaentrum-operator:chino-stream LIVE_WORKER_URL;env:chino-stream:LIVE_WORKER_URL,"As far as LIVE_WORKER_MODE says: off, shadow or on"
 chino-stream,media,reads,,wire:zaentrum-operator:chino-stream volume media,
 chino-stream,keycloak,signs in,,wire:zaentrum-operator:chino-stream OIDC_ISSUER;env:chino-stream:OIDC_ISSUER,

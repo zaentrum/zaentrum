@@ -124,6 +124,8 @@ them unset.
 | `identity.issuer` | string | — | Explicit public issuer URL. Empty → derived as `<scheme>://<hostname>/auth/realms/zaentrum`, in `external` mode too (it is not rejected), so set it there. |
 | `identity.issuerScheme` | enum `http` \| `https` | `http` | Scheme of the derived issuer + Keycloak `KC_HOSTNAME`. Use `https` when TLS is terminated at the edge — needed for any host but a `localhost` name, where plain http cannot sign in. |
 | `identity.clientId` | string | `chino-web` | Public OIDC client id the web SPA authenticates as. |
+| `identity.tvClientId` | string | — | Public client the TV apps sign in through, with the device authorization grant and PKCE (S256); chino-api advertises it in `/api/config`. Empty: the bundled realm's `chino-tv` with `bundled`, chino-api's own default `chino` with `external`. |
+| `identity.mobileClientId` | string | — | Public client the phone and tablet apps sign in through: the authorization code with PKCE (S256) in the system browser, returning to `cloud.nalet.chino:/oauth/callback` exactly; advertised in `/api/config`. Empty: the bundled realm's `chino-mobile` with `bundled`, `chino` with `external`. |
 | `identity.audience` | string | `chino` | Expected token audience services validate against. |
 | `identity.loginTheme` | string | — (Keycloak default) | Bundled Keycloak login theme name (the demo uses `zaentrum`). |
 | `identity.exposeAdminConsole` | bool | `false` | Publish the bundled Keycloak's admin console and admin API on the public host, under `/auth/admin` (the Ingress or Routes then send `/auth` whole to Keycloak). Off: the public host routes only what people sign in through — `/auth/realms` (the login and account pages, the OIDC endpoints) and `/auth/resources` — and the console answers only through a port-forward, at `http://localhost:8080/auth/admin/` after `kubectl port-forward svc/keycloak 8080:80` ([the admin console](./self-hosting.md#the-admin-console)). |
@@ -307,9 +309,10 @@ first — see
 in the operator's README. The rest of the first run is a TMDB key and your library, which the
 portal's **Set Up Your Server** checklist walks an admin through — see
 [self-hosting.md](./self-hosting.md#first-run). Further accounts are
-made in Keycloak's admin console, which is not on the public host unless
-`identity.exposeAdminConsole` publishes it: a port-forward reaches it, as the master
-realm's bootstrap admin — see [the admin console](./self-hosting.md#the-admin-console).
+made on the portal's **People** page (`/portal/people`), which invites each person by a
+link. Keycloak's admin console stays for what the page doesn't do; it is not on the public
+host unless `identity.exposeAdminConsole` publishes it: a port-forward reaches it, as the
+master realm's bootstrap admin — see [the admin console](./self-hosting.md#the-admin-console).
 
 ### Reference-demo profile
 

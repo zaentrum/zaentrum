@@ -559,7 +559,7 @@ apps fix the same thing, the default names each app's value.
 | Where the images keep the tools the services run `tool-paths` | code | `FFMPEG_BIN`, `FFPROBE_BIN`, `TESSDATA_PREFIX` |
 | The version a worker records on what it makes `image-version-stamp` | code | `IMAGE_VERSION`, `IMAGE_VERSION` |
 | The issuer every service takes sign-in tokens from `oidc-issuer` | resource | `Zaentrum.spec.identity.issuer`, `OIDC_ISSUER`, `OIDC_ISSUER`, `KATALOG_API_OIDC_ISSUER` and 5 more |
-| The token audience every service accepts `token-audience` | resource | `Zaentrum.spec.identity.audience`, `OIDC_AUDIENCE`, `OIDC_AUDIENCE`, `KATALOG_API_OIDC_AUDIENCE` and 2 more |
+| The token audience the services accept `token-audience` | resource | `Zaentrum.spec.identity.audience`, `OIDC_AUDIENCE`, `OIDC_AUDIENCE`, `KATALOG_API_OIDC_AUDIENCE` and 2 more |
 | The client ids the web, TV, phone, portal and CLI sign in through `sign-in-clients` | resource | `Zaentrum.spec.identity.clientId`, `Zaentrum.spec.identity.tvClientId`, `Zaentrum.spec.identity.mobileClientId`, `OIDC_CLIENT_ID_WEB` and 5 more |
 | The client credentials the workers sign in with `service-clients` | env | `KEYCLOAK_KATALOG_CLIENT_ID`, `KATALOG_SERVICE_CLIENTS`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` and 8 more |
 | How the portal's People page reaches the realm's accounts `people-admin-client` | code | `PORTAL_PEOPLE_KEYCLOAK_URL`, `PORTAL_PEOPLE_REALM`, `PORTAL_PEOPLE_CLIENT_ID`, `PORTAL_PEOPLE_CLIENT_SECRET` and 1 more |

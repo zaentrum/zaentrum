@@ -5,7 +5,9 @@
 > **Status — partly ahead of the code.** Only chino ships: `chino-api` and `chino-stream` are
 > the one product API and streaming origin that exist. **tv** (live TV) and **musig** (music)
 > are planned products — no `tv-*` or `musig-*` service is built or published, and the
-> launchpad shows them as coming soon.
+> launchpad shows them as coming soon. Rule 3 is ahead of the code too: no streaming origin
+> publishes `playback.session.*`. The players report their sessions to chino-api
+> (`POST /api/v1/play/events`), which logs and counts them and keeps none.
 
 ## Context
 

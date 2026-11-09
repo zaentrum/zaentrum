@@ -89,9 +89,15 @@ same three steps as below, which also work by hand:
 
    On a cluster it is the same command without `docker exec zaentrum`, in the platform's
    namespace, and the CR's `SecretsGenerated` condition names the Secret too
-   ([operator.md](./operator.md#minimal-self-host)). Further accounts are made in
-   Keycloak's admin console, which is not on the public host — see
-   [the admin console](#the-admin-console).
+   ([operator.md](./operator.md#minimal-self-host)). Further accounts are made on the
+   portal's **People** page (`/portal/people`, admins only): add a person as a user or an
+   administrator, with a rating cap if you like, and hand them the invite link the page
+   shows once. The link works once, for seven days by default (`PORTAL_INVITE_TTL`); the
+   person opens it without signing in, chooses a password, and then signs in on every app.
+   Keycloak's admin console stays for what the page doesn't do — the first administrator's
+   own account, password resets and second factors — and is not on the public host: see
+   [the admin console](#the-admin-console). With `identity.mode: external`, people live in
+   your identity provider, and the page says so.
 2. **Add a TMDB key — before the first scan.** Titles, posters and plots come from TMDB, and
    the published images carry no key of their own. In **Catalog Management** on the launchpad
    (`/katalog-manage/`), open **settings** and enter a TMDB v4 read access token as **TMDB api
@@ -113,8 +119,8 @@ same three steps as below, which also work by hand:
 
 ### The admin console
 
-Keycloak's admin console — where further accounts are made — and its admin API are **not on the
-public host**: the ingress sends Keycloak only `/auth/realms` (the login and account pages, the
+Keycloak's admin console — for what the portal's People page doesn't do — and its admin API
+are **not on the public host**: the ingress sends Keycloak only `/auth/realms` (the login and account pages, the
 OIDC endpoints) and `/auth/resources`, so <http://zaentrum.localhost/auth/admin/> answers 404.
 The console answers through a port-forward on local port 8080, where its own links point
 (`http://localhost:8080/auth`), signed in as the master realm's bootstrap admin: `admin`, with
@@ -503,6 +509,26 @@ transcode/package pipeline for adaptive streaming.
 
 > Zaentrum intentionally has **no** built-in downloaders or indexer integrations. It catalogs
 > and streams files that are already on disk. How they got there is out of scope.
+
+## Bug reports from the apps (optional)
+
+The apps can file bug reports, by hand and when playback fails, into an OpenProject project.
+Create Secret `zaentrum-feedback` with all four keys — `url`, `token`, `project-id`,
+`bug-type-id` ([operator.md](./operator.md)) — and restart `chino-api`. Without it the apps
+offer no reports.
+
+- **The tracker's user.** The token belongs to a user of its own, a member of the project with
+  a role that may add work packages, comment and attach files. That user is the author of
+  every report.
+- **A report** is one work package: the subject `[web|mobile|tv][manual|error|crash|player]`
+  and the report's title or first line, then the account's username, a table of app and device
+  details, the text (fenced for an automatic report) and any screenshot, with credentials
+  redacted.
+- **The same failure again.** An automatic report of a failure seen within the last 14 days
+  adds a *Recurred* comment (reporter, app version, count) to its work package instead of a
+  new one; if that work package was deleted, a new one opens.
+- **Limits.** A person may file 5 reports in 10 minutes, counted per `chino-api` replica and
+  reset when it restarts; each app files at most 3 by itself in a session.
 
 ## Next steps
 

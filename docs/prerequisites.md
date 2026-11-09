@@ -97,7 +97,9 @@ You bring the cluster and its supporting infrastructure; the operator renders th
   from `storage.className` (default: the cluster's default StorageClass). Use an **RWX** class (NFS,
   CephFS, etc.) if more than one media-plane pod must read the library concurrently; RWO works for a
   single-node library. To back it with a pre-created PV instead (e.g. an existing NFS export), set
-  `storage.provisionMedia: false` and bind your own PV to the `media` claim.
+  `storage.provisionMedia: false` and bind your own PV to the `media` claim. On OpenShift that is
+  the only way to an NFS export: the restricted SCC refuses inline `nfs:` volumes, and the chart
+  only ever mounts the `media` claim.
 
   > Trap: never mount the **same** NFS export twice in one pod — it hangs the kubelet. Use a single
   > parent-mount at `/var/lib/katalog`. See [troubleshooting.md](./troubleshooting.md).
@@ -149,6 +151,23 @@ the ffmpeg-nvenc ↔ driver version coupling applies to you.
   provide up front. With `identity.mode: external`, register a public OIDC client at your own provider
   and set `identity.issuer` / `identity.clientId` / `identity.audience` (see the operator contract in
   [self-hosting.md](./self-hosting.md#b-self-host-with-the-operator)).
+- **What an external provider must offer** is what the bundled realm does:
+  - `identity.issuer` exactly as the provider's discovery document names it.
+  - A public client for `identity.clientId` (authorization code, PKCE S256) that returns to
+    `https://<hostname>/auth/callback`. The portal and the catalog consoles sign in through the
+    same client in this mode, so it also returns to `/portal/auth/callback`,
+    `/katalog/auth/callback` and `/katalog-manage/auth/callback` on that origin, with the origin
+    and those base paths as post-logout redirects.
+  - The TV and phone clients, named in `identity.tvClientId` and `identity.mobileClientId`
+    ([operator.md](./operator.md#specidentity--oidc)), and a public client `zae` with the device
+    grant for the command line.
+  - `identity.audience` in the access tokens of every one of them.
+  - Roles in the access token's `realm_access.roles`, the only place the services read them:
+    `zaentrum-admin` makes an administrator, which portal-api accepts only on tokens of
+    `identity.clientId` and `zae`; `zaentrum-addon` marks an addon's service account
+    ([addon identity](./extending/identity.md)). The claim-to-role mapping of
+    [ADR-0007](./adr/0007-identity-modes.md) is not built.
+  - A person's rating cap, where you want one, as the integer claim `max_rating`.
 
 ### Network egress
 

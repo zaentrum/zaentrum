@@ -96,7 +96,10 @@ sideways, at 780 × 360.
 
 The web asks the server's ready pool for its cards first: eight titles the
 server keeps ready to start at a random scene, the same for everyone, each
-card handed out twice. Those cards carry no backdrop, no poster and no rating.
+card handed out twice. It picks them at random from every ready-made movie and
+episode, those it hasn't warmed in the last 10 minutes first, and keeps what it
+warmed for a card in its cache until the card has been handed out. Those cards
+carry no backdrop, no poster and no rating.
 The first of them are checked against the titles the person has watched only
 where that list has come in before them, and the pool's later cards aren't
 checked at all. When the pool has nothing, the web picks from its own lists:
@@ -252,6 +255,7 @@ ready-made qualities, so it starts at once.
 | Titles of 2½ minutes or less | stay on their backdrop, with “TUNING…” | left out | played from the smaller of half and one minute | the same as Android TV |
 | The scene | 10% to 80%, not the first minute or the last 1½; within intro and credits where known | the same, from the length alone | the same as the phone app | the same as the phone app |
 | The first card | from its own lists, 35% of the way in | the same title each session, 35% of the way in | the same as the phone app | random |
+| The cards ahead | the next three cards load their start while a card plays, so the next one starts at once | Android: the same; iOS: — | the same | — |
 | Learning | saving 2, watching 1.5, to the end 1, 8 s or more 0.5, 2 to 8 s −0.3, under 2 s −1; the pick by kind alone | the same | the same | none |
 | Until the first frame | the backdrop, “TUNING…” pulsing; the light in 0.7 s | the backdrop, fading out over 0.35 s; the light in 0.6 s | the backdrop | the poster, “TUNING…” pulsing |
 | A clip that can't play | the card stays, “TUNING…” pulsing on | the card keeps its backdrop | skipped, at most six in a row | meant to be skipped; stays on “TUNING…” |

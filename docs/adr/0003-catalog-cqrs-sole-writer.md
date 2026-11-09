@@ -2,6 +2,13 @@
 
 **Status:** Accepted · recorded retrospectively (decision from 2026-05)
 
+> **Status — partly ahead of the code.** The read/write split is built: katalog-api reads,
+> katalog-manager is the only writer and runs the migrations. Not built: the two database
+> roles (the chart runs both services on one login, and the migrations grant read access only
+> where an installation made a read-only role itself), the network policy and the CI check.
+> The media workers report to katalog-manager's worker protocol directly rather than through
+> the ingest scheduler, and the core keeps no wanted state.
+
 ## Context
 
 The catalog is the busiest data in the platform, and it carries two very different traffic shapes. Product backends hit it on every playback start, search, and browse — high QPS, latency-sensitive, wants horizontal scale. Library management hits it rarely — scans, ingest step updates, metadata enrichment, wanted-state changes, operator edits — low QPS, but it needs transactions and it owns the schema.

@@ -17,6 +17,7 @@ the UI is gone, and the core never knew the addon's name.
 | `addon` | Owning addon id — enables bulk removal of everything an addon contributed |
 | `slot` | Where it appears (see the catalog below) |
 | `kind` | `link` (navigate) or `action` (the client POSTs to `url`) |
+| `method` | For an `action`: `POST`, or empty, which is stored as `POST`; no other method is accepted, in a manifest's `ui.slots[]` too |
 | `label`, `icon` | Button text and a [lucide](https://lucide.dev) icon name (safe fallback if unknown) |
 | `url` | Destination. Placeholders are substituted client-side: `{q}` = the current search query |
 | `status_url` | Optional: a feed the client may poll to decorate the button with live state |
