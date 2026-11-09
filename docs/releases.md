@@ -7,7 +7,7 @@ the `stable` channel moves to the release. Between releases, `main` keeps
 publishing `latest`, which the `edge` channel serves.
 
 This page is what a release publishes, how the channels decide what an install
-runs, and how a release is cut.
+runs, how a release is cut, and how to try one before production runs it.
 
 ## The channels
 
@@ -127,11 +127,16 @@ On the tag, each repository's workflows build the release:
 | `zae` | `image`, and `release` (GoReleaser: the binaries, `checksums.txt` and the GitHub release) |
 | `zaentrum-operator` | `build-images`; `operator-bundle` (stamps the release into the CSV, then the bundle and the catalog); `all-in-one` (the appliance, then boots it once every image of the release is published, and waits for the platform to pass its own verification); `release` (once `operator:vX.Y.Z` exists, the GitHub release with `operator-install.yaml`) |
 
+A commit whose message says `[skip ci]` builds nothing on its tag either:
+GitHub applies the skip to the tag's push. `tag --push` starts such a
+repository's release workflows on the tag by hand (`gh workflow run`), and
+`finish` counts those runs like the others.
+
 **4. Finish.** Wait for every one of those builds, check that every image and
 release asset is published, then move `stable`: commit `releases.json` here
 with `stable` on the release, tag that commit, and draft the release notes —
-per repository, from its commits since its previous tag (a summary for its
-first), and one for the platform:
+per repository, from its commits since its previous release (the pre-releases
+on the way are left out; a summary for its first), and one for the platform:
 
 ```sh
 scripts/release.py finish vX.Y.Z                    # waits, checks, commits, tags, drafts
@@ -147,6 +152,44 @@ on it, a manual one reports it, an auto one moves to it.
 is fixed, if it was outside the code (`gh run rerun <id> --failed`), and run
 `finish` again. A fix in the code is a new patch release. Never move a pushed
 tag: an image built from it may already be pulled somewhere.
+
+## Trying a release before production
+
+A pre-release, `vX.Y.Z-rc.N`, is cut like a release — `check`, `tag --push`,
+`finish` — and is one in everything but `stable`: every repository is tagged,
+every image is built at the tag, and no install that follows a channel moves.
+To try a release on an install of its own before production runs it:
+
+1. **Pin a trial install to the pre-release**: `spec.version: vX.Y.Z-rc.N`. A
+   pinned version never reads a channel, so nothing else reaches that install
+   until its pin changes. Give it data like production's, and the same identity
+   and addons.
+2. **Try it**: its own verification (`status.verification`, `zae platform
+   status`), signing in and playing on each kind of device you use, and what
+   the release changes. A fix lands on `main` and goes out as the next
+   pre-release, `-rc.N+1`, tried the same way.
+3. **Release what you tried.** `main` has usually moved on by then. Tag the
+   release where the pre-release is, so it holds exactly the commits you tried:
+
+   ```sh
+   scripts/release.py check  vX.Y.Z --from vX.Y.Z-rc.N
+   scripts/release.py tag    vX.Y.Z --from vX.Y.Z-rc.N --push
+   scripts/release.py finish vX.Y.Z --push
+   ```
+
+   The release's images are built again from its tags, so their digests are
+   new; their code is the pre-release's.
+4. **Pin production to the release**: `spec.version: vX.Y.Z`. It rolls once,
+   to the code you tried. Moving the trial install to the release as well keeps
+   the two alike until the next pre-release.
+
+**One operator renders every install in a cluster.** The chart is the
+operator's own: it renders each install, at that install's version, from the
+chart it embeds. Installing a new operator therefore changes every install in
+the cluster at once, whatever each one pins — install the release's operator
+together with the release, and check every install right after. Trying a new
+operator first takes a cluster of its own, or the pre-release's appliance
+(`ghcr.io/zaentrum/appliance:vX.Y.Z-rc.N`).
 
 ## The apps
 

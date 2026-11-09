@@ -6,6 +6,12 @@
     scripts/release.py finish v0.4.0 [--push]  wait for the tags' builds, point stable at the
                                                release, tag this repository, draft the notes
 
+A release tried first as a pre-release is tagged where the pre-release is, so
+it holds exactly the commits that were tried, however far main has moved since:
+
+    scripts/release.py check  v0.5.0 --from v0.5.0-rc.1
+    scripts/release.py tag    v0.5.0 --from v0.5.0-rc.1 --push
+
 Each step checks before it acts and prints exactly what it will push. Nothing
 leaves this machine without --push. --dry-run runs every check, prints every
 step and changes nothing: no tag, no commit, no push (it fetches main, unless
@@ -18,7 +24,13 @@ channels, and the order of the steps.
 
 A component repository is ready to be tagged when it is on main, clean, in step
 with origin/main, its CI is green at that commit, the workflows that build its
-release run on the tag, and the version is newer than every tag it has.
+release run on the tag, and the version is newer than every tag it has. With
+--from, the commit is the one the pre-release's tag names instead: it must be on
+origin's main and green there; the checkout's own state does not matter.
+
+GitHub runs no push workflow for a commit whose message says [skip ci], and that
+holds for a tag pushed onto it as well: `tag --push` starts such a repository's
+release workflows on the tag by hand, and `finish` counts those runs.
 """
 import argparse
 import datetime
@@ -83,6 +95,10 @@ class Failure(Exception):
 # ── versions ──────────────────────────────────────────────────────────────────
 
 SEMVER = re.compile(r"^v(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$")
+
+# GitHub's skip instructions. A push whose commit carries one runs no push
+# workflow, and a tag pushed onto that commit builds nothing either.
+SKIP_CI = re.compile(r"\[(skip ci|ci skip|no ci|skip actions|actions skip)\]|^skip-checks: ?true\s*$", re.I | re.M)
 
 
 def version_key(tag):
@@ -219,6 +235,7 @@ class State:
         self.sha = self.subject = ""
         self.tagged = ""     # "", "local" (made, not pushed) or "pushed"
         self.ci = ""
+        self.skip_ci = False  # the commit says [skip ci]: its tag's builds start by hand
         self.errors, self.notes = [], []
 
     def error(self, msg):
@@ -229,7 +246,8 @@ class State:
 
 
 def ci_state(st):
-    """green / pending / red / unverified at the checkout's HEAD, and why."""
+    """green / pending / red / unverified at the commit to be tagged, and why."""
+    at = st.sha[:8]
     runs = gh_json("run", "list", "-R", f"{ORG}/{st.comp.name}", "--commit", st.sha, "-L", "100",
                    "--json", "workflowName,status,conclusion,createdAt,url")
     latest = {}
@@ -241,17 +259,18 @@ def ci_state(st):
         red = sorted(w for w, r in latest.items()
                      if r["status"] == "completed" and r["conclusion"] not in ("success", "skipped", "neutral"))
         if red:
-            return "red", "failed at HEAD: " + ", ".join(f"{w} ({latest[w]['url']})" for w in red)
+            return "red", f"failed at {at}: " + ", ".join(f"{w} ({latest[w]['url']})" for w in red)
         if pending:
-            return "pending", "still running at HEAD: " + ", ".join(pending)
+            return "pending", f"still running at {at}: " + ", ".join(pending)
         return "green", ", ".join(sorted(latest))
-    # Nothing ran at HEAD: path filters left the commit out, or the runs were
-    # made for commits history no longer has. Green only if each workflow HEAD
-    # defines passed its last run on main, on a commit HEAD contains.
+    # Nothing ran at the commit: path filters or [skip ci] left it out, or the
+    # runs were made for commits history no longer has. Green only if each
+    # workflow the commit defines passed its last run on main, on a commit it
+    # contains.
     defined = set()
-    for f in git(st.path, "ls-tree", "--name-only", "HEAD", ".github/workflows/").splitlines():
+    for f in git(st.path, "ls-tree", "--name-only", st.sha, ".github/workflows/").splitlines():
         if f.endswith((".yml", ".yaml")):
-            defined.add(workflow_name(git(st.path, "show", f"HEAD:{f}"), os.path.basename(f)))
+            defined.add(workflow_name(git(st.path, "show", f"{st.sha}:{f}"), os.path.basename(f)))
     runs = gh_json("run", "list", "-R", f"{ORG}/{st.comp.name}", "--branch", "main", "--event", "push",
                    "-L", "100", "--json", "workflowName,status,conclusion,createdAt,headSha")
     latest = {}
@@ -266,12 +285,14 @@ def ci_state(st):
         contained = run(["git", "-C", st.path, "merge-base", "--is-ancestor", r["headSha"], st.sha],
                         check=False).returncode == 0
         if r["conclusion"] != "success" or not contained:
-            why = "is not in HEAD's history" if not contained else f"ended {r['conclusion'] or r['status']}"
-            return "unverified", f"no run at HEAD, and {w}'s last run on main ({r['headSha'][:8]}) {why}"
-    return "green", "no run at HEAD (path filters); each workflow's last run on main passed"
+            why = f"is not in {at}'s history" if not contained else f"ended {r['conclusion'] or r['status']}"
+            return "unverified", f"no run at {at}, and {w}'s last run on main ({r['headSha'][:8]}) {why}"
+    return "green", f"no run at {at} (path filters or [skip ci]); each workflow's last run on main passed"
 
 
-def inspect(root, comp, version, fetch):
+def inspect(root, comp, version, fetch, base=None):
+    """Whether a repository is ready for the tag `version`: at its main's HEAD,
+    or, with `base` (a pre-release), at the commit that pre-release's tag names."""
     st = State(comp, os.path.join(root, comp.name))
     if not os.path.exists(os.path.join(st.path, ".git")):
         st.error(f"no checkout at {st.path}")
@@ -282,34 +303,50 @@ def inspect(root, comp, version, fetch):
             st.error(f"origin is {origin}, not {ORG}/{comp.name}")
         if fetch:
             git(st.path, "fetch", "--quiet", "origin", "main")
-        branch = git(st.path, "symbolic-ref", "--quiet", "--short", "HEAD", check=False)
-        if branch != "main":
-            st.error(f"on {branch or 'a detached HEAD'}, not main")
-        changed = git(st.path, "status", "--porcelain", "--untracked-files=no")
-        if changed:
-            st.error(f"uncommitted changes ({len(changed.splitlines())} files)")
-        untracked = [l for l in git(st.path, "status", "--porcelain").splitlines() if l.startswith("??")]
-        if untracked:
-            st.note(f"{len(untracked)} untracked paths (not part of the tag)")
-        st.sha = git(st.path, "rev-parse", "HEAD")
-        st.subject = git(st.path, "log", "-1", "--format=%s")
-        upstream = git(st.path, "rev-parse", "origin/main")
-        if st.sha != upstream:
-            ahead, behind = git(st.path, "rev-list", "--left-right", "--count", f"HEAD...origin/main").split()
-            st.error(f"not origin/main: {ahead} ahead, {behind} behind — the tag must be on a pushed commit of main")
-
         remote = remote_tags(st.path)
+        if base:
+            # The checkout's branch and state do not matter: the tag goes on
+            # the pre-release's commit, which must be on origin's main.
+            st.sha = remote.get(base, "")
+            if not st.sha:
+                st.error(f"{base} is not on origin — with --from, the release is tagged where {base} is")
+                return st
+            if run(["git", "-C", st.path, "cat-file", "-e", f"{st.sha}^{{commit}}"], check=False).returncode:
+                git(st.path, "fetch", "--quiet", "origin", f"refs/tags/{base}:refs/tags/{base}")
+            if run(["git", "-C", st.path, "merge-base", "--is-ancestor", st.sha, "origin/main"],
+                   check=False).returncode:
+                st.error(f"{base} ({st.sha[:8]}) is not on origin's main — a release is tagged on a pushed commit of main")
+            where = base
+        else:
+            branch = git(st.path, "symbolic-ref", "--quiet", "--short", "HEAD", check=False)
+            if branch != "main":
+                st.error(f"on {branch or 'a detached HEAD'}, not main")
+            changed = git(st.path, "status", "--porcelain", "--untracked-files=no")
+            if changed:
+                st.error(f"uncommitted changes ({len(changed.splitlines())} files)")
+            untracked = [l for l in git(st.path, "status", "--porcelain").splitlines() if l.startswith("??")]
+            if untracked:
+                st.note(f"{len(untracked)} untracked paths (not part of the tag)")
+            st.sha = git(st.path, "rev-parse", "HEAD")
+            upstream = git(st.path, "rev-parse", "origin/main")
+            if st.sha != upstream:
+                ahead, behind = git(st.path, "rev-list", "--left-right", "--count", "HEAD...origin/main").split()
+                st.error(f"not origin/main: {ahead} ahead, {behind} behind — the tag must be on a pushed commit of main")
+            where = "HEAD"
+        st.subject = git(st.path, "log", "-1", "--format=%s", st.sha)
+        st.skip_ci = bool(SKIP_CI.search(git(st.path, "log", "-1", "--format=%B", st.sha)))
+
         local = local_tag(st.path, version)
         if version in remote:
             if remote[version] == st.sha:
                 st.tagged = "pushed"
             else:
-                st.error(f"{version} already exists on origin, at {remote[version][:8]} — not HEAD")
+                st.error(f"{version} already exists on origin, at {remote[version][:8]} — not {where}")
         elif local:
             if local == st.sha:
                 st.tagged = "local"
             else:
-                st.error(f"a local {version} exists at {local[:8]}, not HEAD (git tag -d {version} if it is stale)")
+                st.error(f"a local {version} exists at {local[:8]}, not {where} (git tag -d {version} if it is stale)")
         known = set(remote) | set(git(st.path, "tag", "-l", "v*").split())
         newer = sorted((t for t in known if SEMVER.match(t) and t != version
                         and version_key(t) >= version_key(version)), key=version_key)
@@ -317,14 +354,20 @@ def inspect(root, comp, version, fetch):
             st.error(f"{version} is not newer than the repository's {newer[-1]}")
 
         for wf in comp.workflows:
-            show = run(["git", "-C", st.path, "show", f"HEAD:.github/workflows/{wf}"], check=False)
+            show = run(["git", "-C", st.path, "show", f"{st.sha}:.github/workflows/{wf}"], check=False)
             if show.returncode != 0:
-                st.error(f".github/workflows/{wf} is not on main")
+                st.error(f".github/workflows/{wf} is not at {where} ({st.sha[:8]})")
                 continue
             pats = push_tag_patterns(show.stdout)
             if not any(fnmatch.fnmatchcase(version, p) for p in pats):
                 st.error(f"{wf} does not build on the tag {version} (its push tags: {', '.join(pats) or 'none'}) — "
                          "merge the release pipeline first")
+            if st.skip_ci and not re.search(r"^\s*workflow_dispatch\s*:", show.stdout, re.M):
+                st.error(f"{st.sha[:8]} says [skip ci], so its tag builds nothing, and {wf} cannot be started by "
+                         "hand (no workflow_dispatch) — tag after a commit that builds")
+        if st.skip_ci:
+            st.note(f"{st.sha[:8]} says [skip ci]: GitHub builds nothing on its tag, so `tag --push` starts "
+                    f"{', '.join(comp.workflows)} on the tag by hand")
         st.ci, why = ci_state(st)
         if st.ci != "green":
             st.error(f"CI {st.ci}: {why}")
@@ -386,15 +429,38 @@ def front_door_note(args):
 
 
 def cmd_check(args):
-    states = [inspect(args.root, c, args.version, not args.no_fetch) for c in components(args)]
+    states = [inspect(args.root, c, args.version, not args.no_fetch, args.base) for c in components(args)]
     ready = report(states, args.version)
     front_door_note(args)
     print("\nready to tag." if ready else "")
     return 0 if ready else 1
 
 
+def start_skipped_builds(states, version, settle=60):
+    """Start the release workflows on the tag of each repository whose tagged
+    commit says [skip ci] — GitHub ran none for its tag's push — unless one ran
+    after all. Returns what was started."""
+    skipped = [s for s in states if s.skip_ci]
+    if not skipped:
+        return []
+    names = ", ".join(s.comp.name for s in skipped)
+    print(f"\n{names}: the tagged commit says [skip ci], which GitHub applies to its tag too. "
+          f"Waiting {settle} s for any run to show, then starting the missing ones on {version}:")
+    time.sleep(settle)
+    started = []
+    for s in skipped:
+        for wf, (name, status, _, _) in zip(s.comp.workflows, build_states(s.comp, s.path, version)):
+            if status != "missing":
+                print(f"  {s.comp.name}/{name}: runs on {version} already ({status})")
+                continue
+            run(["gh", "workflow", "run", wf, "-R", f"{ORG}/{s.comp.name}", "--ref", version])
+            started.append(f"{s.comp.name}/{name}")
+            print(f"  {s.comp.name}/{name}: started on {version}")
+    return started
+
+
 def cmd_tag(args):
-    states = [inspect(args.root, c, args.version, not args.no_fetch) for c in components(args)]
+    states = [inspect(args.root, c, args.version, not args.no_fetch, args.base) for c in components(args)]
     ready = report(states, args.version)
     front_door_note(args)
     if not ready:
@@ -402,6 +468,8 @@ def cmd_tag(args):
         return 1
     message = (f"{{repo}} {args.version}\n\nPart of the Zaentrum {args.version} release, tagged in every "
                f"repository of the platform at once: {GUIDE}")
+    if args.base:
+        message += f"\n\nTagged where {args.base} is: the commits the release was tried with."
     print()
     for s in states:
         if s.tagged:
@@ -420,11 +488,17 @@ def cmd_tag(args):
     print("\nto push — this starts every release build:")
     for s in pushes:
         print(f"  git -C {s.path} push origin refs/tags/{args.version}")
+    for s in pushes:
+        if s.skip_ci:
+            for wf in s.comp.workflows:
+                print(f"  gh workflow run {wf} -R {ORG}/{s.comp.name} --ref {args.version}"
+                      f"   (its commit says [skip ci]; started after the push unless a run shows)")
     if args.push and not args.dry_run:
         print()
         for s in pushes:
             git(s.path, "push", "--quiet", "origin", f"refs/tags/{args.version}")
             print(f"  pushed {s.comp.name} {args.version}")
+        start_skipped_builds(pushes, args.version)
         print(f"\nthen: scripts/release.py finish {args.version}")
     elif not args.dry_run:
         print("\nnot pushed (no --push).")
@@ -457,7 +531,8 @@ def build_states(comp, path, version):
         name = workflow_name(text, wf)
         runs = gh_json("run", "list", "-R", f"{ORG}/{comp.name}", "--workflow", wf, "--branch", version,
                        "-L", "20", "--json", "status,conclusion,createdAt,url,event")
-        runs = [r for r in runs if r.get("event") == "push"]
+        # The tag's push, or a run started by hand on the tag (a [skip ci] commit's)
+        runs = [r for r in runs if r.get("event") in ("push", "workflow_dispatch")]
         if not runs:
             out.append((name, "missing", "", ""))
             continue
@@ -578,10 +653,12 @@ def commits(path, rng):
 
 
 def notes_for(comp, path, version, ref, tagged):
-    """A repository's notes: its changes since its previous tag, or for its
-    first release, a summary of what it holds."""
+    """A repository's notes: its changes since its previous tag — for a release,
+    its previous release, leaving out the pre-releases tried on the way — or for
+    its first release, a summary of what it holds."""
     prev = sorted((t for t in git(path, "tag", "--merged", ref, "-l", "v*").split()
-                   if SEMVER.match(t) and t != version and version_key(t) < version_key(version)),
+                   if SEMVER.match(t) and t != version and version_key(t) < version_key(version)
+                   and (is_prerelease(version) or not is_prerelease(t))),
                   key=version_key)
     prev = prev[-1] if prev else ""
     log = commits(path, [f"{prev}..{ref}"] if prev else [ref])
@@ -830,6 +907,9 @@ def main(argv=None):
     p.add_argument("--dry-run", action="store_true", help="check and print every step, change nothing")
     p.add_argument("--no-fetch", action="store_true", help="do not fetch origin's main first")
     p.add_argument("--only", help="a comma-separated subset of the component repositories")
+    p.add_argument("--from", dest="base", metavar="PRE-RELEASE",
+                   help="check, tag: tag the release where this pre-release of it is (vX.Y.Z-rc.N), "
+                        "so it holds exactly the commits that were tried")
     p.add_argument("--no-wait", action="store_true", help="finish: do not wait for the builds, only check them")
     p.add_argument("--timeout", type=int, default=150, help="finish: minutes to wait for the builds (default 150)")
     p.add_argument("--notes-dir", help="finish: where to draft the notes (default: a new temporary directory)")
@@ -841,6 +921,13 @@ def main(argv=None):
         p.error(f"{args.version} is not vX.Y.Z or vX.Y.Z-pre")
     if args.only and args.step == "finish":
         p.error("finish takes the whole release, not --only")
+    if args.base:
+        if args.step == "finish":
+            p.error("--from is for check and tag; finish follows the tags that were pushed")
+        if is_prerelease(args.version):
+            p.error(f"--from tags a release where its pre-release is; {args.version} is a pre-release itself")
+        if not (SEMVER.match(args.base) and is_prerelease(args.base) and args.base.split("-")[0] == args.version):
+            p.error(f"--from takes a pre-release of {args.version} ({args.version}-rc.N), not {args.base}")
     try:
         run(["gh", "auth", "status"])
         return {"check": cmd_check, "tag": cmd_tag, "finish": cmd_finish}[args.step](args)
