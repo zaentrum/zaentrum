@@ -1,8 +1,8 @@
 # Architecture
 
 How zaentrum is built: every component of the platform, what runs it, what it
-connects to, the decisions behind it, and the capabilities it serves. It is the
-second layer of the specification. The [capabilities](../capabilities/README.md)
+connects to, the decisions behind it, the capabilities it serves, and what it
+cannot do yet. It is the second layer of the specification. The [capabilities](../capabilities/README.md)
 say what the platform does and for whom; this layer says which part of it does
 it, and how the parts reach each other.
 
@@ -67,6 +67,7 @@ A component's **status**:
 | runs | the operator's chart runs it, or it is the operator |
 | ships | published for people to install: the phone and TV apps, the CLI |
 | idle | built, and nothing runs it yet |
+| missing | not built: named because an [expectation](../capabilities/expectations.md) looks for it |
 | outside | not the platform's: it calls it |
 | demo | in the chart for the reference demo only, behind an option a plain install leaves off |
 | beside | part of the project, not of the running platform |
@@ -75,7 +76,8 @@ A component's **status**:
 
 Its **kind** says what it is: an `app` on a device, a `web` app the chart serves,
 a `service` that answers requests, a `worker` that does work on its own, from the
-bus or a schedule, a `job` that runs and ends, the `operator`, the `cli`, a
+bus or a schedule, a `job` that runs and ends, the `operator`, the `cli`, the
+`appliance` (one container that holds a cluster, the operator and a resource), a
 `database`, a `cache`, a `broker`, an `identity` provider, a `volume`, `docs`,
 `contracts`, an `addon`.
 
@@ -101,6 +103,12 @@ A **decision** is a record of [docs/adr](../../docs/adr/README.md).
 [decisions.csv](./decisions.csv) names the components and the capabilities each
 governs; what one record amends, supersedes or extends comes from its status line.
 
+A **limit** is something the architecture, as it is built, cannot do or does at a
+cost: “Every image is built for amd64 alone”. [limits.csv](./limits.csv) names
+the components it is of, the capabilities it holds back, and where the
+documentation or a decision record says so. A limit is no fault: it is a fact
+the next decision has to start from.
+
 ## The files
 
 | File | Written by | Holds |
@@ -108,6 +116,7 @@ governs; what one record amends, supersedes or extends comes from its status lin
 | [components.csv](./components.csv) | hand | one row a component: layer, kind, status, its code, what of the chart it runs as |
 | [connections.csv](./connections.csv) | hand | one row a connection: from, to, kind, on, via |
 | [decisions.csv](./decisions.csv) | hand | one row a decision record: the components and the capabilities it governs |
+| [limits.csv](./limits.csv) | hand | one row a limit: its components, the capabilities it holds back, where it is said |
 | [inventory.csv](../capabilities/inventory.csv) | `scripts/inventory.py` | what the code offers, and what the chart runs: workloads, services, the Ingress's paths, volumes, wires; and the repositories |
 | the tables of these pages, the picture and the routes of [the overview](../../docs/architecture.md) | `scripts/capabilities.py` | never edited by hand |
 
@@ -135,26 +144,29 @@ to render the chart.
 - a decision record has no row, or names a component or a capability that
   doesn't exist; or one record amends, supersedes or extends another, and the
   other's status line doesn't say so;
+- a limit names no component, or one or a capability that doesn't exist, or
+  doesn't say where it is written: a page or a heading of the documentation or
+  the specification, or a page of one of the organisation's repositories;
 - a table on these pages is not what the data says.
 
 ## The state of the model
 
 <!-- generated: state -->
-| Layer | Components | runs | ships | idle | outside | demo | beside | later | retired |
-|---|---|---|---|---|---|---|---|---|---|
-| the apps | 4 | 1 | 3 |  |  |  |  |  |  |
-| the portal and its consoles | 3 | 3 |  |  |  |  |  |  |  |
-| chino's services | 4 | 3 |  | 1 |  |  |  |  |  |
-| the catalog | 3 | 3 |  |  |  |  |  |  |  |
-| the pipeline | 4 | 3 |  | 1 |  |  |  |  |  |
-| bundled services | 5 | 5 |  |  |  |  |  |  |  |
-| running the platform | 2 | 1 | 1 |  |  |  |  |  |  |
-| outside the platform | 4 |  |  |  | 4 |  |  |  |  |
-| the reference demo | 1 |  |  |  |  | 1 |  |  |  |
-| beside the platform | 4 |  |  |  |  |  | 4 |  |  |
-| later products | 4 |  |  |  |  |  |  | 4 |  |
-| retired | 4 |  |  |  |  |  |  |  | 4 |
-| all | 42 | 19 | 4 | 2 | 4 | 1 | 4 | 4 | 4 |
+| Layer | Components | runs | ships | idle | missing | outside | demo | beside | later | retired |
+|---|---|---|---|---|---|---|---|---|---|---|
+| the apps | 7 | 1 | 3 |  | 3 |  |  |  |  |  |
+| the portal and its consoles | 3 | 3 |  |  |  |  |  |  |  |  |
+| chino's services | 4 | 3 |  | 1 |  |  |  |  |  |  |
+| the catalog | 3 | 3 |  |  |  |  |  |  |  |  |
+| the pipeline | 4 | 3 |  | 1 |  |  |  |  |  |  |
+| bundled services | 5 | 5 |  |  |  |  |  |  |  |  |
+| running the platform | 3 | 1 | 2 |  |  |  |  |  |  |  |
+| outside the platform | 4 |  |  |  |  | 4 |  |  |  |  |
+| the reference demo | 1 |  |  |  |  |  | 1 |  |  |  |
+| beside the platform | 4 |  |  |  |  |  |  | 4 |  |  |
+| later products | 4 |  |  |  |  |  |  |  | 4 |  |
+| retired | 4 |  |  |  |  |  |  |  |  | 4 |
+| all | 46 | 19 | 5 | 2 | 3 | 4 | 1 | 4 | 4 | 4 |
 
 | Connections | Rows | Made by the chart's wiring | Only in the code |
 |---|---|---|---|
@@ -185,8 +197,9 @@ to render the chart.
 ## What the model finds
 
 What the model shows the code doing, against a decision or against its own
-names. A finding never fails the check: each is for the owner to decide, by a
-change to the code, to a decision, or to the model.
+names, and a decision record that is accepted while nothing serves a capability
+it governs. A finding never fails the check: each is for the owner to decide, by
+a change to the code, to a decision, or to the model.
 
 <!-- generated: findings -->
 | Finding | Components | What the model shows | In the code |
@@ -203,7 +216,38 @@ change to the code, to a decision, or to the model.
 | the demo in the product | `katalog-ingest` | katalog-ingest's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-ingest KAFKA_GROUP_ID` |
 | the demo in the product | `katalog-manager` | katalog-manager's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-manager-api KAFKA_GROUP_ID` |
 | the demo in the product | `keycloak` | keycloak's DEMO_USER_PASSWORD comes from the secret zaentrum-demo-user: a name of the reference demo, set by the chart every install uses | `keycloak DEMO_USER_PASSWORD` |
+| decided, not built | `zaentrum-operator`, `keycloak`, `appliance` | ADR-0008 is accepted, and nothing serves reach-on-home-network, which it governs | — |
 <!-- end: findings -->
+
+## What the architecture cannot do yet
+
+The limits of the platform as it is built: what it cannot do, or does at a cost,
+whatever an install sets. Each names the components it is of, the capabilities
+it holds back, and where the documentation or a decision record says it. The
+[expectations](../capabilities/expectations.md) say what people look for; a
+limit says why the platform, as built, doesn't give it. Limits are written by
+hand, and a component's fact sheet lists its own beside what the model finds.
+
+<!-- generated: limits -->
+| Limit | Components | Holds back | Says so |
+|---|---|---|---|
+| Signing in from another device takes https on a name of one's own; plain http signs in on the machine itself alone. ADR-0008's profiles for a home network are accepted and cannot sign in, as its own status says | `keycloak`, `appliance`, `chino-mobile`, `chino-androidtv` | `reach-on-home-network`, `install-on-one-machine` | [0008 single origin deployment profiles](../../docs/adr/0008-single-origin-deployment-profiles.md), [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance), [DNS + TLS](../../docs/prerequisites.md#dns--tls) |
+| Every install is a Kubernetes cluster; the one-container install runs one of its own in a privileged container. The profiles without a cluster of one's own, a script and Compose, are not supported today | `zaentrum-operator`, `appliance`, `kubernetes` | `install-on-one-machine` | [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance), [D. k3s and Compose profiles](../../docs/self-hosting.md#d-k3s-and-compose-profiles), [0006 operator owned runtime](../../docs/adr/0006-operator-owned-runtime.md) |
+| Every image is built for amd64 alone | `appliance`, `zaentrum-operator` | `run-on-arm` | [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance), [Appliance](../../docs/prerequisites.md#appliance) |
+| Titles are encoded on an NVIDIA GPU or on the CPU, before they play and while they do | `transcoder`, `live-worker`, `chino-stream` | `encode-on-other-gpus`, `choose-encoder` | [GPU (NVENC)](../../docs/prerequisites.md#gpu-nvenc) |
+| A plain install runs a database server, a cache, an event broker and an identity provider beside its own services, one of each. The documentation names no smallest machine | `postgres`, `valkey`, `kafka`, `keycloak` | — | [Appliance](../../docs/prerequisites.md#appliance), [Keycloak / Replicas / Update](../../docs/self-hosting.md#keycloak--replicas--update) |
+| By default the event broker keeps its log on a volume that goes with its pod: a restart loses topics and offsets. Producers and the pipeline retry; a claim of one's own keeps the log | `kafka` | — | [Storage](../../docs/prerequisites.md#storage), [3. Enable the media pipeline and GPU (optional)](../../docs/self-hosting.md#3-enable-the-media-pipeline-and-gpu-optional) |
+| Storage, certificates, backups, databases, the encoder and identity are set in the cluster's resource alone. The portal and the CLI offer updates, the pipeline's switch, scaling and restarts | `zaentrum-operator`, `zaentrum-portal`, `zae` | `configure-storage`, `provide-certificates`, `schedule-backups`, `restore-backup`, `choose-databases`, `choose-encoder`, `choose-identity` | [Zaentrum CR spec reference](../../docs/operator.md#zaentrum-cr-spec-reference) |
+| The product never updates its operator: a cluster admin applies each new one, and the one-container install is replaced | `zaentrum-operator`, `appliance`, `portal-api` | `update-operator` | [Why the product will not do it for you](../../docs/updating-the-operator.md#why-the-product-will-not-do-it-for-you), [3. The appliance](../../docs/updating-the-operator.md#3-the-appliance) |
+| One operator renders every install of a cluster from the chart it embeds: a new operator changes them all at once | `zaentrum-operator` | — | [Trying a release before production](../../docs/releases.md#trying-a-release-before-production) |
+| The one-container install, started as documented first, loses the platform when its container is replaced. On a named volume under a fixed host name a new container finds its cluster again | `appliance` | `move-platform` | [Persistence](../../docs/self-hosting.md#persistence) |
+| Backups are dumps of the bundled databases onto a claim; the library and an external database are left to their storage. The documentation of this repository does not describe backups | `postgres`, `media`, `zaentrum-operator` | `back-up-library`, `move-platform`, `schedule-backups`, `restore-backup` | [zaentrum-operator, README.md](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#backups-of-the-bundled-postgres-specbackup) |
+| The platform sends nothing to a person or an admin outside its apps: no mail, no push. An invite link is handed over by hand; a password is reset by an admin, in the identity provider's console | `portal-api`, `keycloak`, `notifications` | `mail-person`, `alert-admins`, `reset-own-password`, `get-push-notification` | [First run](../../docs/self-hosting.md#first-run) |
+| The catalog scans one folder of one volume, when it is told to | `katalog-manager`, `media` | `add-library-folder`, `keep-several-libraries`, `scan-by-itself` | [Getting content in](../../docs/self-hosting.md#getting-content-in) |
+| Titles' details come from one outside service, with a key of the admin's own | `katalog-manager`, `metadata-service` | `enrich-without-own-key`, `read-local-metadata`, `choose-artwork` | [First run](../../docs/self-hosting.md#first-run), [Network egress](../../docs/prerequisites.md#network-egress) |
+| Where originals are retired a title is its package alone: renditions in segments, stereo and HDR10, and deleting is final. Originals are kept unless an admin sets them to go once packaged | `packager`, `katalog-manager`, `media` | `export-title`, `play-surround` | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| The apps are for the web, Android and iOS phones and tablets, Android TV and Samsung TVs, none from a public store yet | `chino-web`, `chino-mobile`, `chino-androidtv`, `chino-tizen`, `chino-tvos`, `chino-webos`, `chino-roku` | `get-app-from-store` | [The apps](../../docs/releases.md#the-apps) |
+<!-- end: limits -->
 
 ## Pages
 

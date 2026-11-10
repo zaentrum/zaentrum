@@ -25,3 +25,5 @@ pipeline,catalog,Preparing titles to play,working,,"What happens to a new title:
 install,platform,Installing and configuring,working,,"The platform as an operator installs it: identity, storage, addresses, certificates, backups, updates."
 tv,later,Live channels,stub,,"A product for live channels: registered, not built."
 musig,later,Music,stub,,"A product for music: registered, not built."
+photos,later,Photos and home videos,stub,,"What a household keeps beside its films: expected, neither registered nor built."
+books,later,"Audiobooks, podcasts and books",stub,,"Listening and reading: expected, neither registered nor built."

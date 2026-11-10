@@ -1,7 +1,8 @@
 # The platform
 
 The capabilities of installing and configuring the platform through the
-operator's resources, and the products that are only registered. The resources'
+operator's resources, and the products that are only registered, or only
+[expected](./expectations.md). The resources'
 fields are in [the operator's reference](../../docs/operator.md). The columns are
 explained in [how to read it](./README.md#how-to-read-it); every row comes from
 [capabilities.csv](./capabilities.csv).
@@ -31,6 +32,12 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 | Choose the release channel, and whether its updates apply themselves | operator | built | built | built | [operator](../../docs/operator.md), [updating](../../docs/updating.md), [releases](../../docs/releases.md) |
 | Give addons a VPN their pods reach the internet through | operator | no | no | built | — |
 | Provide the platform's secrets yourself instead of generated ones | operator | no | no | built | [operator](../../docs/operator.md), [self hosting](../../docs/self-hosting.md), [reference demo](../../docs/reference-demo.md) |
+| Install the whole platform on one machine as a single container | operator | — | — | built | [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance), [Appliance](../../docs/prerequisites.md#appliance), [0006 operator owned runtime](../../docs/adr/0006-operator-owned-runtime.md) |
+| Reach it from the home's phones and TVs with no name or certificate of one's own | operator | no | no | no | [0008 single origin deployment profiles](../../docs/adr/0008-single-origin-deployment-profiles.md), [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance) |
+| Reach it from outside the home with no router or DNS setup | operator | no | no | no | — |
+| Run the platform on an ARM machine | operator | — | — | no | [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance) |
+| Encode on an Intel or AMD graphics chip, or a Mac's | operator | no | no | no | [GPU (NVENC)](../../docs/prerequisites.md#gpu-nvenc) |
+| Move the platform to another machine with its people, settings, history and library | operator | — | no | no | — |
 
 - Pin the platform to a version, or follow its channel again: A tag pins every image; latest follows the channel. Portal shows the version and pins only the offered update
 - Turn the media pipeline on or off: Starts or stops analyzer, transcoder, packager and katalog-ingest; off, files stream as they are
@@ -50,6 +57,11 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 - Choose the release channel, and whether its updates apply themselves: stable: the newest release; edge: latest. manual reports status.availableUpdate; auto rolls to it
 - Give addons a VPN their pods reach the internet through: Pods labelled zaentrum.io/vpn reach only the cluster networks directly; addons get the proxy in their values. No platform pod uses it
 - Provide the platform's secrets yourself instead of generated ones: Off: the operator generates each Secret once and never rotates it; on: it makes, reads and reports none
+- Install the whole platform on one machine as a single container: a cluster of its own in one privileged container; amd64; answers on the machine it runs on alone
+- Reach it from the home's phones and TVs with no name or certificate of one's own: sign-in needs https on every name but localhost, and the Android apps refuse plain http
+- Run the platform on an ARM machine: every image is built for amd64 alone
+- Encode on an Intel or AMD graphics chip, or a Mac's: the encoders are NVIDIA's and the CPU's
+- Move the platform to another machine with its people, settings, history and library: a dump restores into the install that made it; nothing carries an install over
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -71,6 +83,12 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 | `choose-update-channel` | — | `Zaentrum.spec.channel`, `Zaentrum.spec.update.mode`, `zaentrum-portal PATCH /api/portal/operator` and 1 more | `release-channel`, `update-mode`, `releases-url`, `digest-pinning` |
 | `connect-vpn` | — | `Zaentrum.spec.vpn.proxy`, `Zaentrum.spec.vpn.clusterCIDRs` | `vpn-proxy`, `vpn-cluster-networks` |
 | `bring-own-secrets` | — | `Zaentrum.spec.secrets.external` | `external-secrets`, `service-tokens` |
+| `install-on-one-machine` | — | — | — |
+| `reach-on-home-network` | — | — | — |
+| `reach-from-outside` | — | — | — |
+| `run-on-arm` | — | — | — |
+| `encode-on-other-gpus` | — | — | — |
+| `move-platform` | — | — | — |
 
 ## Live channels
 
@@ -99,4 +117,28 @@ A product for music: registered, not built. Not specified yet. Depth: stub.
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
 | `play-music` | H.C9, H.C10 | `katalog-api GET /albums` | `registry-seed` |
+
+## Photos and home videos
+
+What a household keeps beside its films: expected, neither registered nor built. Not specified yet. Depth: stub.
+
+| Capability | Who | Portal | Spec |
+|---|---|---|---|
+| Look through photos and home videos | person | no | — |
+
+| Key | Changes | Served by | Settings |
+|---|---|---|---|
+| `look-at-photos` | — | — | — |
+
+## Audiobooks, podcasts and books
+
+Listening and reading: expected, neither registered nor built. Not specified yet. Depth: stub.
+
+| Capability | Who | Portal | Spec |
+|---|---|---|---|
+| Listen to audiobooks and podcasts, and read books | person | no | — |
+
+| Key | Changes | Served by | Settings |
+|---|---|---|---|
+| `listen-to-books` | — | — | — |
 <!-- end: areas -->

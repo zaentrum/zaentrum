@@ -3,6 +3,9 @@ chino-web,the web app,apps,web,runs,chino-web,workload:zaentrum-operator:chino-w
 chino-mobile,the phone and tablet app,apps,app,ships,chino-mobile,,"For Android and iOS, at the server address a person gives it"
 chino-androidtv,the Android TV app,apps,app,ships,chino-androidtv,,
 chino-tizen,the Samsung TV app,apps,app,ships,chino-tizen,,
+chino-tvos,an app for Apple TV,apps,app,missing,,,Expected of a media server; not begun
+chino-webos,an app for LG TVs,apps,app,missing,,,Expected of a media server; not begun
+chino-roku,an app for Roku players,apps,app,missing,,,Expected of a media server; not begun
 zaentrum-portal,"the portal: its launchpad, its settings and the consoles of addons",portal,web,runs,zaentrum-portal,workload:zaentrum-operator:zaentrum-portal,
 portal-api,"the portal's API: the registry, people, addons, running the platform",portal,service,runs,zaentrum-portal/server/,workload:zaentrum-operator:portal-api,"Built from the portal's repository, its server/, as an image of its own"
 katalog-manager-ui,the catalog console,portal,web,runs,katalog-manager-ui,workload:zaentrum-operator:katalog-manager-ui;workload:zaentrum-operator:katalog-manage-ui,"One image, run twice: at /katalog and at /katalog-manage"
@@ -24,6 +27,7 @@ keycloak,"the bundled identity provider, and the job that sets up its realm",bun
 media,the media volume: originals and packages,bundled,volume,runs,,volume:zaentrum-operator:media,"A claim the chart makes, or a volume of your own"
 zaentrum-operator,"the operator: the Zaentrum resource, the platform chart, addons",runtime,operator,runs,zaentrum-operator,,"Installed on its own, it runs what the chart holds"
 zae,the zae CLI; the platform's self-test runs it,runtime,cli,ships,zae,workload:zaentrum-operator:zaentrum-verify,
+appliance,"the one-container install: a cluster of its own, the operator and a resource",runtime,appliance,ships,,,"Built from zaentrum-operator's deploy/allinone; amd64; plain http, on the machine it runs on alone"
 demo-seed,"the reference demo's content: fetched, scanned and queued",demo,job,demo,,workload:zaentrum-operator:seed-demo-content;workload:zaentrum-operator:scan-catalog;workload:zaentrum-operator:enqueue-processing,"Only with jobs.seed, which the reference demo sets: a plain install runs none of it"
 kubernetes,the Kubernetes API of the cluster,outside,service,outside,,,
 issue-tracker,an issue tracker for bug reports,outside,service,outside,,,"Optional: OpenProject, when the secret zaentrum-feedback names one"

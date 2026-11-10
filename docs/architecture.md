@@ -36,7 +36,7 @@ flowchart LR
     postgres["postgres"]; valkey["valkey"]; kafka["kafka"]; keycloak["keycloak"]; media["media"]
   end
   subgraph runtime["running the platform"]
-    zaentrum_operator["zaentrum-operator"]; zae["zae"]
+    zaentrum_operator["zaentrum-operator"]; zae["zae"]; appliance["appliance"]
   end
   apps --> chino_api
   portal --> chino_api

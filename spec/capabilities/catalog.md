@@ -28,6 +28,14 @@ What the library holds, as the catalog knows it: scanning, details, metadata, th
 | See which titles break the master spec's rules, and why | admin | — | built | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
 | Read what the library holds, by catalog id or by a title's outside identity | addon | — | — | — | [holdings](../../docs/extending/holdings.md), [0012 catalog identity for addons](../../docs/adr/0012-catalog-identity-for-addons.md), [0003 catalog cqrs sole writer](../../docs/adr/0003-catalog-cqrs-sole-writer.md) |
 | Read a title's original or its subtitles straight from the catalog | system | — | — | — | — |
+| Add a folder that already holds films or shows to the library, from the console | admin | — | no | no | [Getting content in](../../docs/self-hosting.md#getting-content-in) |
+| Keep several libraries, each with its own folders, kind and audience | admin | — | no | — | — |
+| Take in new files by themselves, on a schedule or as they arrive | system | — | no | — | — |
+| Read a title's details and artwork from the files kept beside it | system | — | no | — | — |
+| Fill titles' details without a key of the admin's own | system | — | no | — | [First run](../../docs/self-hosting.md#first-run) |
+| Choose a title's poster and backdrop, or give it one's own | admin | — | no | — | — |
+| Put titles into a collection everyone sees | admin | — | no | — | — |
+| Add a subtitle file to a title from the console | admin | — | no | — | — |
 
 - Scan the library for new, moved and missing files: Never on a schedule: a scan runs when started. The console lists the last 25 scans, not the files a scan passed over
 - Hand a file on disk to the catalog as a title, by its outside identity: In-cluster only; idempotent on the path. A title the library holds already is refused (409), never relinked
@@ -43,6 +51,12 @@ What the library holds, as the catalog knows it: scanning, details, metadata, th
 - See which titles break the master spec's rules, and why: Against the rules the transcoder and packager report, checked in the background; sorted on the server, saved as CSV
 - Read what the library holds, by catalog id or by a title's outside identity: With the addon's service account; holdings are refused to a capped token (403). The apps' reads of this API are chino rows
 - Read a title's original or its subtitles straight from the catalog: Kept from an earlier service; nothing calls it: chino-stream serves playback and subtitles
+- Add a folder that already holds films or shows to the library, from the console: the catalog scans one folder of the media volume, which the resource names
+- Take in new files by themselves, on a schedule or as they arrive: a scan is started by an admin or the CLI; an addon hands its files over itself
+- Read a title's details and artwork from the files kept beside it: subtitle files beside a video are taken in; files of details and artwork are not read
+- Fill titles' details without a key of the admin's own: the published images carry no key; a file scanned without one is listed by its file name
+- Choose a title's poster and backdrop, or give it one's own: a title shows the artwork enrichment found
+- Add a subtitle file to a title from the console: a subtitle file beside the video is taken in by a scan; an addon can attach one
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -60,25 +74,35 @@ What the library holds, as the catalog knows it: scanning, details, metadata, th
 | `check-compliance` | — | `katalog-manager query pipelineRules`, `katalog-manager query libraryCompliance`, `katalog-manager mutation refreshCompliance` and 3 more | `compliance-pass`, `compliance-readers`, `compliance-nightly`, `compliance-tolerance`, `rules-report-interval`, `compliance-report-page`, `shown-languages`, `video-caps`, `audio-language-rules` |
 | `read-library-holdings` | — | `katalog-api ANY /api/v1`, `katalog-api GET /api/v1/holdings` | `holdings-page-size` |
 | `read-originals-directly` | — | `katalog-manager GET /api/play/{itemId}`, `katalog-manager GET /api/subtitles/items/{itemId}`, `katalog-manager GET /api/subtitles/{subId}` | — |
+| `add-library-folder` | — | — | — |
+| `keep-several-libraries` | — | — | — |
+| `scan-by-itself` | — | — | — |
+| `read-local-metadata` | — | — | — |
+| `enrich-without-own-key` | — | — | — |
+| `choose-artwork` | — | — | — |
+| `curate-collections` | — | — | — |
+| `add-own-subtitle` | — | — | — |
 
 ## The library and its originals
 
 The packages the apps play, and the originals they were made from: verified, then retired. Not specified yet. Depth: working.
 
-| Capability | Who | Catalog console | Spec |
-|---|---|---|---|
-| Retire an original once its package is verified and lacks nothing the spec keeps | system | no | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md), [versions](../../docs/library/versions.md), [migrating](../../docs/library/migrating.md), [record](../../docs/library/record.md) |
-| Verify each new version against its own checksums, by a reader apart from the packager | system | no | [record](../../docs/library/record.md) |
-| Retire the originals of chosen titles: a dry run first, then a run of what it found | admin | no | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
-| Hold a title's originals so that none is retired | admin | no | — |
-| Decide whether an original another file replaced may go when it gives up more | admin | no | — |
-| Give a title another file and keep its id, history, ratings and progress | addon | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
-| Encode queued titles again at a set pace and in set hours | system | partial | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
-| Queue titles that break a rule to be processed again under the current rules | admin | built | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
-| Keep a title that gets no package playable from its original in the library | system | no | — |
-| Move a platform's store into the library layout, verify it, and undo it | operator | — | [migrating](../../docs/library/migrating.md), [record](../../docs/library/record.md) |
-| Check a title's files on disk: its original, its package, and whether they match | admin | built | — |
-| Fill in what the catalog records of titles' originals: probe, size and tracks | admin | no | — |
+| Capability | Who | Portal | Catalog console | CLI | Resource | Spec |
+|---|---|---|---|---|---|---|
+| Retire an original once its package is verified and lacks nothing the spec keeps | system | — | no | — | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md), [versions](../../docs/library/versions.md), [migrating](../../docs/library/migrating.md), [record](../../docs/library/record.md) |
+| Verify each new version against its own checksums, by a reader apart from the packager | system | — | no | — | — | [record](../../docs/library/record.md) |
+| Retire the originals of chosen titles: a dry run first, then a run of what it found | admin | — | no | — | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Hold a title's originals so that none is retired | admin | — | no | — | — | — |
+| Decide whether an original another file replaced may go when it gives up more | admin | — | no | — | — | — |
+| Give a title another file and keep its id, history, ratings and progress | addon | — | — | — | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Encode queued titles again at a set pace and in set hours | system | — | partial | — | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Queue titles that break a rule to be processed again under the current rules | admin | — | built | — | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Keep a title that gets no package playable from its original in the library | system | — | no | — | — | — |
+| Move a platform's store into the library layout, verify it, and undo it | operator | — | — | — | — | [migrating](../../docs/library/migrating.md), [record](../../docs/library/record.md) |
+| Check a title's files on disk: its original, its package, and whether they match | admin | — | built | — | — | — |
+| Fill in what the catalog records of titles' originals: probe, size and tracks | admin | — | no | — | — | — |
+| Take a title out of the library again as one ordinary file | admin | — | no | no | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Back up the library's files along with the databases | operator | no | — | no | no | — |
 
 - Retire an original once its package is verified and lacks nothing the spec keeps: Off until library.originals says delete-after-package; v2 layout. Held titles stay. The console shows no retire state
 - Verify each new version against its own checksums, by a reader apart from the packager: The newest first, one at a time, every file's hash. One that fails is tried again 6 h later, then longer. Not in the console
@@ -92,6 +116,8 @@ The packages the apps play, and the originals they were made from: verified, the
 - Move a platform's store into the library layout, verify it, and undo it: A staging tool, then the catalog's routes with a service token; no zae command. library.layout v2 switches the scan and workers
 - Check a title's files on disk: its original, its package, and whether they match: Read-only: ok, no package, original missing, stale, codec mismatch, retired or lost; a show rolls up its episodes
 - Fill in what the catalog records of titles' originals: probe, size and tracks: API only, for titles packaged before the catalog kept these; running one again changes nothing
+- Take a title out of the library again as one ordinary file: matters once an original is retired: its package is renditions in segments, not a file
+- Back up the library's files along with the databases: the backups are dumps of the bundled databases; the media volume is left to its storage
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -107,6 +133,8 @@ The packages the apps play, and the originals they were made from: verified, the
 | `move-to-library` | — | `katalog-manager POST /api/library/migrations/{run}/adopt`, `katalog-manager POST /api/library/migrations/{run}/revert`, `katalog-manager POST /api/library/migrations/{run}/names` and 4 more | `library-layout` |
 | `check-title-files` | — | `katalog-manager mutation validateItem` | `small-file-threshold` |
 | `backfill-source-facts` | — | `katalog-manager mutation backfillSourceProbes`, `katalog-manager mutation backfillSourceSizes`, `katalog-manager mutation backfillSourceTracks` | — |
+| `export-title` | — | — | — |
+| `back-up-library` | — | — | — |
 
 ## Preparing titles to play
 

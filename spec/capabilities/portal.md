@@ -78,6 +78,7 @@ Adding, installing, setting up and removing addons, and what an addon may add to
 | Use the commands services and addons declare, from the CLI | operator | — | — | — | — | — | built | — | [cli](../../docs/extending/cli.md) |
 | Tell one person something, shown in the bell of every app they use | addon | built | built | built | built | built | — | — | [chapter 15](../chino/notifications.md), [notices](../../docs/extending/notices.md) |
 | Count each addon's notifications, read and unread, never what they say | admin | — | — | — | — | partial | no | — | [notices](../../docs/extending/notices.md) |
+| Look through the addons there are, and install one from the list | admin | — | — | — | — | no | no | — | — |
 
 - Add an addon deployed elsewhere by its address, or refresh it after a redeploy: checked first: app, tiles, slot rows and CLI commands from its manifest; moving it to another address needs consent
 - Install an addon from its chart, after reviewing the operator's plan: planned suspended, installed once the plan is clean, registered from its primary Service when Ready; a committed resource works too
@@ -89,6 +90,7 @@ Adding, installing, setting up and removing addons, and what an addon may add to
 - Use the commands services and addons declare, from the CLI: zae discover lists them, zae require asserts one, zae <service> <command> runs it with one's bearer; none compiled in
 - Tell one person something, shown in the bell of every app they use: its service account posts to anyone; its console posts to its own person with their bearer; plain text; TVs follow no link
 - Count each addon's notifications, read and unread, never what they say: GET /api/portal/notices answers it; no screen or command shows it
+- Look through the addons there are, and install one from the list: an addon is added by its address or its chart's; there is no list
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -102,6 +104,7 @@ Adding, installing, setting up and removing addons, and what an addon may add to
 | `run-declared-commands` | — | `zaentrum-portal GET /api/portal/cli/discovery`, `discover`, `require` and 1 more | `discovery-cache-age`, `parts-selector` |
 | `notify-person` | — | `zaentrum-portal POST /api/portal/notices`, `zaentrum-portal POST /api/portal/me/notices` | `notification-title-length`, `notification-body-length`, `notification-post-rate`, `notification-retention`, `notifications-kept`, `addon-role` |
 | `count-addon-notifications` | — | `zaentrum-portal GET /api/portal/notices` | `notification-retention`, `notifications-kept` |
+| `browse-addons` | — | — | — |
 
 ## People and roles
 
@@ -116,6 +119,12 @@ Who may use the platform: people, their roles, invites. Not specified yet. Depth
 | Change a person's name or role, or switch their account off and on | admin | — | — | — | — | built | no | [portal settings](../portal/settings.md) |
 | Keep titles rated above an age from a person, on every app | admin | built | built | built | built | built | no | — |
 | Delete a person's account, with their data in the apps | admin | — | — | — | — | built | no | [portal settings](../portal/settings.md) |
+| Say what each person may do: which libraries, downloads, quality, casting | admin | — | — | — | — | no | no | — |
+| Limit how many streams a person plays at once, and their bit rate | admin | — | — | — | — | no | no | — |
+| See who is watching what right now, and stop a stream | admin | — | — | — | — | no | no | — |
+| See what was watched over time: by title, by person, by device | admin | — | — | — | — | no | — | — |
+| Send a person a mail: an invite, a reset link, a notice | system | — | — | — | — | no | — | [First run](../../docs/self-hosting.md#first-run) |
+| Bring people, their watch history and their lists from another media server | admin | — | — | — | — | no | no | — |
 
 - See everyone who may use the platform, with role, rating cap, status and invite: with bundled identity; with an outside identity provider the page says so and links to it; the platform's own accounts left out
 - Add an account for a person, as a user or as an admin: enabled, with no password; the answer holds their first invite link, shown once
@@ -124,6 +133,9 @@ Who may use the platform: people, their roles, invites. Not specified yet. Depth
 - Change a person's name or role, or switch their account off and on: the last enabled admin stays one; nobody changes their own role or switches themselves off; an identity provider admin is changed there
 - Keep titles rated above an age from a person, on every app: an age on the account, carried in the person's token to chino-api, which serves no title above it; an admin has none
 - Delete a person's account, with their data in the apps: their app data first, then the account, its invites and notifications; without the deletion token the app data stays
+- Say what each person may do: which libraries, downloads, quality, casting: a person has a role and a rating cap, nothing finer
+- See what was watched over time: by title, by person, by device: the apps send how playback went; no page shows it
+- Send a person a mail: an invite, a reset link, a notice: the platform sends no mail; an invite link is handed over by hand
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -134,6 +146,12 @@ Who may use the platform: people, their roles, invites. Not specified yet. Depth
 | `change-person` | — | `zaentrum-portal PATCH /api/portal/people/{id}` | `user-role`, `person-name-length` |
 | `cap-person-rating` | — | `zaentrum-portal POST /api/portal/people`, `zaentrum-portal PATCH /api/portal/people/{id}` | `rating-cap-range`, `unrated-for-capped` |
 | `delete-person` | — | `zaentrum-portal DELETE /api/portal/people/{id}`, `chino-api DELETE /api/v1/admin/accounts/{sub}/data` | `admin-subjects` |
+| `set-person-rights` | — | — | — |
+| `limit-streams` | — | — | — |
+| `see-who-is-watching` | — | — | — |
+| `see-watch-statistics` | — | — | — |
+| `mail-person` | — | — | — |
+| `import-people-and-history` | — | — | — |
 
 ## Running the platform
 
@@ -154,6 +172,12 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 | Set up a fresh platform through a first-run checklist, and mark it done | admin | built | built | — | [First run](../portal/settings.md#first-run), [What an admin sees](../portal/home.md#what-an-admin-sees), [self hosting](../../docs/self-hosting.md) |
 | Sign in with the CLI by a code in any browser, see who one is, sign out | operator | — | built | — | [cli](../../docs/extending/cli.md) |
 | Report each service's liveness, readiness and metrics, and the API's description | system | — | — | — | — |
+| Tell the admins when a part fails, a volume fills or a certificate nears its end | system | no | — | — | — |
+| See how much room the library, its packages and the databases take, and what is free | admin | no | no | — | — |
+| Choose the first administrator's name and password in the browser | admin | no | — | — | [First run](../../docs/self-hosting.md#first-run) |
+| Update the operator itself, and the one-container install, from the portal or the CLI | admin | no | no | — | [updating the operator](../../docs/updating-the-operator.md) |
+| Call the platform's APIs from a script with a token of one's own | admin | no | no | — | — |
+| Tell another service when something happens: a title added, a title played | admin | no | — | — | [events](../../docs/extending/events.md) |
 
 - See the platform's parts, their versions and readiness, and why one is unhealthy: the platform's, the addons' and unclaimed parts; the operator's controller shown, never updated; direct mode without operator
 - Scale a part of the platform up or down: asked first; protected parts refused, the console's own keep one; a part the operator owns is scaled in spec.replicas
@@ -168,6 +192,11 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 - Set up a fresh platform through a first-run checklist, and mark it done: metadata key, library and a scan, media pipeline, https for devices, people; shown to admins until marked done; settings reopens it
 - Sign in with the CLI by a code in any browser, see who one is, sign out: device grant with PKCE; a session per instance, renewed by itself; logout revokes it at the issuer; ZAE_TOKEN for scripts
 - Report each service's liveness, readiness and metrics, and the API's description: for probes and scrapers; portal-api's own /healthz and /actuator/health/* are not in the inventory
+- Tell the admins when a part fails, a volume fills or a certificate nears its end: the portal shows a part's state to whoever looks; nothing is sent
+- Choose the first administrator's name and password in the browser: the first sign-in is admin, with a one-time password read from a secret of the cluster
+- Update the operator itself, and the one-container install, from the portal or the CLI: a cluster admin applies each release's manifest; the one-container install is replaced
+- Call the platform's APIs from a script with a token of one's own: the CLI signs in by a code in a browser; no token is issued to keep
+- Tell another service when something happens: a title added, a title played: events are on the bus for addons; nothing calls an address outside
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -184,4 +213,10 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 | `set-up-platform` | — | `zaentrum-portal GET /api/portal/setup`, `zaentrum-portal GET /api/portal/setup/complete`, `zaentrum-portal POST /api/portal/setup/complete` and 8 more | `stale-scan-age` |
 | `sign-in-cli` | — | `login`, `logout`, `whoami` and 2 more | `cli-config-folder` |
 | `report-health` | — | `* GET /healthz`, `* GET /readyz`, `* GET /metrics` and 4 more | — |
+| `alert-admins` | — | — | — |
+| `see-storage-use` | — | — | — |
+| `create-first-admin` | — | — | — |
+| `update-operator` | — | — | — |
+| `use-personal-token` | — | — | — |
+| `send-webhooks` | — | — | — |
 <!-- end: areas -->

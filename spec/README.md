@@ -17,10 +17,11 @@ release.
 
 The [capabilities](./capabilities/README.md) are its first layer: every
 capability of the platform, checked against the code, with the chapter that
-describes it, or none yet. The [architecture](./architecture/README.md) is its
+describes it, or none yet; and, against what people expect of a media server,
+the capabilities nothing serves yet. The [architecture](./architecture/README.md) is its
 second: every component that does them, what the operator's chart runs it as, how
-it reaches the others, and the decisions that govern it, checked against the chart
-and the code the same way.
+it reaches the others, the decisions that govern it and the limits of what is
+built, checked against the chart and the code the same way.
 
 The [documentation](../docs/README.md) is the other half: it is for the people
 who run zaentrum, extend it with addons, or build on its library format, and it
@@ -28,8 +29,8 @@ holds the decision records behind the platform.
 
 | Part | What it specifies |
 |---|---|
-| [capabilities](./capabilities/README.md) | what the platform does, for whom, where each app and console has it, what serves it, and its settings |
-| [architecture](./architecture/README.md) | the components that do it: their code, what runs them, their connections, the decisions behind them |
+| [capabilities](./capabilities/README.md) | what the platform does, for whom, where each app and console has it, what serves it, and its settings; what is expected of it and not there |
+| [architecture](./architecture/README.md) | the components that do it: their code, what runs them, their connections, the decisions behind them, their limits |
 | [chino](./chino/README.md) | the apps for watching: on the web, on a phone or a tablet, on Android TV and on Samsung TVs |
 | [portal](./portal/README.md) | the portal: its home page, and its settings and setup |
 

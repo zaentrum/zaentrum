@@ -10,21 +10,26 @@ The capabilities of the apps for watching, one area a chapter of the
 
 Reaching a server, signing in on each kind of device, keeping several accounts on one. Specified in [chapter 3](../chino/start.md). Depth: deep.
 
-| Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
-|---|---|---|---|---|---|---|
-| Connect to a server by its address | person | — | built | built | built | [3.3](../chino/start.md#33-connect-to-a-server) |
-| Connect again to a server used before, from a list of recent ones | person | — | built | built | no | [3.3.1](../chino/start.md#331-on-a-phone-held-upright) |
-| Sign in on the server's own sign-in page | person | built | built | — | — | [3.4.1](../chino/start.md#341-on-a-phone-held-upright), [3.4.4](../chino/start.md#344-on-the-web) |
-| Sign in on a TV with a code entered on a phone or a computer | person | — | — | built | partial | [3.4.3](../chino/start.md#343-on-a-tv) |
-| Stay signed in while the sign-in renews itself | system | built | built | built | partial | [3.4.4](../chino/start.md#344-on-the-web), [17.11](../chino/errors.md#1711-a-sign-in-that-expired) |
-| Come back to the page a link named, once signed in | person | partial | — | — | — | [3.4.4](../chino/start.md#344-on-the-web) |
-| Choose who's watching as the app starts on a shared device | person | — | built | built | no | [3.5](../chino/start.md#35-whos-watching) |
-| Switch to another account on this device | person | — | built | built | partial | [3.5](../chino/start.md#35-whos-watching), [16.5](../chino/settings.md#165-the-account) |
-| Add another account to this device | person | — | built | built | no | [3.5](../chino/start.md#35-whos-watching) |
-| Remove an account from this device | person | — | built | built | no | [3.5](../chino/start.md#35-whos-watching), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
-| Sign out of this server | person | built | built | no | built | [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server), [2.3](../chino/frame.md#23-the-frame-on-a-computer) |
-| Change to another server | person | — | built | built | partial | [3.3.1](../chino/start.md#331-on-a-phone-held-upright), [16.4.4](../chino/settings.md#1644-server), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
-| Add the web app to a phone's home screen | person | built | — | — | — | — |
+| Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Spec |
+|---|---|---|---|---|---|---|---|
+| Connect to a server by its address | person | — | built | built | built | — | [3.3](../chino/start.md#33-connect-to-a-server) |
+| Connect again to a server used before, from a list of recent ones | person | — | built | built | no | — | [3.3.1](../chino/start.md#331-on-a-phone-held-upright) |
+| Sign in on the server's own sign-in page | person | built | built | — | — | — | [3.4.1](../chino/start.md#341-on-a-phone-held-upright), [3.4.4](../chino/start.md#344-on-the-web) |
+| Sign in on a TV with a code entered on a phone or a computer | person | — | — | built | partial | — | [3.4.3](../chino/start.md#343-on-a-tv) |
+| Stay signed in while the sign-in renews itself | system | built | built | built | partial | — | [3.4.4](../chino/start.md#344-on-the-web), [17.11](../chino/errors.md#1711-a-sign-in-that-expired) |
+| Come back to the page a link named, once signed in | person | partial | — | — | — | — | [3.4.4](../chino/start.md#344-on-the-web) |
+| Choose who's watching as the app starts on a shared device | person | — | built | built | no | — | [3.5](../chino/start.md#35-whos-watching) |
+| Switch to another account on this device | person | — | built | built | partial | — | [3.5](../chino/start.md#35-whos-watching), [16.5](../chino/settings.md#165-the-account) |
+| Add another account to this device | person | — | built | built | no | — | [3.5](../chino/start.md#35-whos-watching) |
+| Remove an account from this device | person | — | built | built | no | — | [3.5](../chino/start.md#35-whos-watching), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
+| Sign out of this server | person | built | built | no | built | — | [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server), [2.3](../chino/frame.md#23-the-frame-on-a-computer) |
+| Change to another server | person | — | built | built | partial | — | [3.3.1](../chino/start.md#331-on-a-phone-held-upright), [16.4.4](../chino/settings.md#1644-server), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
+| Add the web app to a phone's home screen | person | built | — | — | — | — | — |
+| Find the servers on the home network without typing an address | person | — | no | no | no | — | — |
+| Get the app from the device's own store | person | — | no | no | no | — | [Publishing the apps](../../docs/releases.md#publishing-the-apps) |
+| Reset a forgotten password by oneself | person | no | no | — | — | no | [First run](../../docs/self-hosting.md#first-run) |
+| Sign in with a second factor | person | no | no | — | — | no | [First run](../../docs/self-hosting.md#first-run) |
+| Lock an account on a shared device behind a code | person | — | no | no | no | — | — |
 
 - Connect to a server by its address: checks it is chino and its sign-in answers, on a TV also sign-in by code; the web comes from its own server
 - Connect again to a server used before, from a list of recent ones: up to five, newest first; Samsung keeps no list, so it never shows
@@ -39,6 +44,11 @@ Reaching a server, signing in on each kind of device, keeping several accounts o
 - Sign out of this server: web at the sign-in service too; the phone asks where downloads go or a cast stops; Samsung asks nothing; Android TV has none
 - Change to another server: signs every account out; the phone asks first where downloads go; Samsung signs out before an address is typed, without cancel
 - Add the web app to a phone's home screen: a hint where the browser offers no install of its own; once closed it stays away
+- Find the servers on the home network without typing an address: every app asks for an address; nothing announces a server on the network
+- Get the app from the device's own store: no app is in a public store yet; each is built from its repository
+- Reset a forgotten password by oneself: the sign-in page offers it; the bundled identity provider has no mail server to send the link with
+- Sign in with a second factor: left to the identity provider's console; no app or console of the platform offers it
+- Lock an account on a shared device behind a code: switching accounts asks for nothing, so a rating cap ends at the account chooser
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -55,6 +65,11 @@ Reaching a server, signing in on each kind of device, keeping several accounts o
 | `sign-out` | 2.C1, 16.C12, 16.C13, 16.C14 | — | — |
 | `change-server` | 16.C6, 16.C14 | `chino-api GET /api/config` | — |
 | `install-web-app` | — | — | — |
+| `find-server-on-network` | — | — | — |
+| `get-app-from-store` | — | — | — |
+| `reset-own-password` | — | — | — |
+| `use-second-factor` | — | — | — |
+| `lock-account` | — | — | — |
 
 ## The frame
 
@@ -68,6 +83,7 @@ What is around every screen: the rail or tab bar, the top bar, going back. Speci
 | See which account is signed in | person | built | built | built | built | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [3.5.4](../chino/start.md#354-the-avatar), [16.5](../chino/settings.md#165-the-account) |
 | Keep what matters inside a TV's safe area | system | — | — | partial | no | [2.5](../chino/frame.md#25-the-frame-on-a-tv) |
 | Get the web app's new version with one reload | person | built | — | — | — | [17.7](../chino/errors.md#177-the-causes) |
+| Use every screen with a screen reader | person | ? | ? | ? | ? | — |
 
 - Move between home, movies, shows, watchlist, zap and settings: web: a rail, tabs below 768 px; phone: tabs, a rail from 600 dp, downloads on Android; TVs: a rail of icons that never opens
 - Open a view, a title or a list again from a link, a reload or the browser's back: titles, people, the watchlist, search and the account have addresses; movies, shows, zap, settings and an opened list don't
@@ -75,6 +91,7 @@ What is around every screen: the rail or tab bar, the top bar, going back. Speci
 - See which account is signed in: initials in the avatar, name and email on the account page; phone and Android TV fetch a picture from an outside service
 - Keep what matters inside a TV's safe area: Android TV keeps it in the player and zap only; the frame starts at the screen's edge
 - Get the web app's new version with one reload: a toast offers reload once a new version is waiting
+- Use every screen with a screen reader: not checked on any app; search is known not to say its result count
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -84,6 +101,7 @@ What is around every screen: the rail or tab bar, the top bar, going back. Speci
 | `see-who-is-signed-in` | 2.C1, 2.C9, 3.C12, 3.C13, 16.C12 | `chino-api GET /api/v1/me` | — |
 | `keep-tv-safe-area` | 2.C8 | — | — |
 | `reload-new-web-version` | 17.C15 | — | — |
+| `use-with-screen-reader` | — | — | — |
 
 ## Home
 
@@ -145,6 +163,7 @@ Every movie and every show, filtered and sorted. Specified in [chapter 5](../chi
 | See how many titles the view holds, and how many fit the filters | person | partial | partial | partial | partial | [5.8](../chino/browse.md#58-the-grid) |
 | Find movies or shows as they were left: filters, sort and place | person | no | built | partial | partial | [5.7.3](../chino/browse.md#573-where-the-view-starts) |
 | Play or resume a title from its card, without opening its page | person | partial | partial | partial | no | [5.8](../chino/browse.md#58-the-grid), [6.5.4](../chino/title-actions.md#654-nothing-on-artwork) |
+| See the collections everyone shares: a film series, a theme | person | no | no | no | no | — |
 
 - Look through every movie, or every show: more load as the end nears; Samsung loads 60 at a time with a load more button, and names shows “Series”
 - Narrow movies or shows to a genre: one genre at a time, from one list for both kinds, so some lead to nothing; the target ticks several
@@ -156,6 +175,7 @@ Every movie and every show, filtered and sorted. Specified in [chapter 5](../chi
 - See how many titles the view holds, and how many fit the filters: a total under the grid once all of it is in, “26 movies in all.”; nothing counts what the filters keep
 - Find movies or shows as they were left: filters, sort and place: web starts over on leaving; Android TV keeps them for a title's page only; Samsung only between movies and shows
 - Play or resume a title from its card, without opening its page: the card's menu; a grid's plays, never resumes; Android TV only a movie's; list cards in the apps and Samsung's have none
+- See the collections everyone shares: a film series, a theme: lists are each person's own; the catalog keeps no collection
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -169,6 +189,7 @@ Every movie and every show, filtered and sorted. Specified in [chapter 5](../chi
 | `see-filter-count` | 5.C20 | — | — |
 | `keep-view-state` | 5.C12, 5.C13 | — | — |
 | `play-from-card` | 4.C13, 5.C9, 8.C13 | — | — |
+| `see-collections` | — | — | — |
 
 ## The title page
 
@@ -186,6 +207,7 @@ A movie's or a show's page: what it is, its seasons and episodes, its extras, wh
 | See titles like this one | person | built | built | built | built | [6.8.3](../chino/title-actions.md#683-more-like-this) |
 | Like a title | person | built | built | built | no | [6.5.3](../chino/title-actions.md#653-on-and-off) |
 | Show a viewer capped at an age rating only the titles the cap allows | system | built | built | built | built | — |
+| Choose which cut of a title plays: theatrical, director's, extended | person | no | no | no | no | [versions](../../docs/library/versions.md) |
 
 - See what a title is: its picture, facts, genres and description: with its tagline and subtitle languages; Android TV cuts the description at four lines
 - See a title's age rating: a badge in the board's words, “FSK 12”, “PG-13”, “16+”
@@ -197,6 +219,7 @@ A movie's or a show's page: what it is, its seasons and episodes, its extras, wh
 - See titles like this one: titles that share genres and people, as the server ranks them
 - Like a title: the heart on the title page; the server keeps it, no screen lists what was liked
 - Show a viewer capped at an age rating only the titles the cap allows: the server holds every route to the cap; a title past it answers as one not there, and lists leave it out
+- Choose which cut of a title plays: theatrical, director's, extended: the library format records a version's cut; the apps play the current version
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -210,6 +233,7 @@ A movie's or a show's page: what it is, its seasons and episodes, its extras, wh
 | `see-similar-titles` | 6.C17 | `chino-api GET /api/v1/items/{id}/similar`, `katalog-api GET /items/{id}/similar` | `similar-size` |
 | `like-title` | 6.C9 | `chino-api PUT /api/v1/me/likes/{id}`, `chino-api DELETE /api/v1/me/likes/{id}`, `chino-api GET /api/v1/me/likes` | — |
 | `limit-to-age-cap` | 6.C24, 7.C10 | `katalog-api GET /api/v1/visible` | `unrated-for-capped` |
+| `choose-cut` | — | — | — |
 
 ## People
 
@@ -366,6 +390,8 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | Send how playback went to the server, for the people who run it | system | built | built | built | no | — |
 | Control the player with the keyboard or the remote's keys | person | built | — | built | partial | [11.3](../chino/playback.md#113-the-player-on-a-computer), [11.5](../chino/playback.md#115-the-player-on-a-tv) |
 | Choose the audio track a title plays in | person | built | built | built | built | [12.3](../chino/subtitles.md#123-the-panel-on-a-computer), [12.6](../chino/subtitles.md#126-the-audio-column), [11.14](../chino/playback.md#1114-the-audio-setting) |
+| Watch a title together from different places, in step | person | no | no | no | no | — |
+| Hear a title in surround where the device and the room play it | person | ? | ? | ? | ? | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
 
 - Play a movie or an episode: the package, or a version converted as it plays; Samsung has no top and no home; what a start shows differs per app
 - Resume a title where it stopped, or start it over: saved every 10 s; the web saves no more, Samsung not on pause, Android TV even before a resume landed; the phone keeps it offline
@@ -386,6 +412,7 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 - Send how playback went to the server, for the people who run it: events batched about every 30 s and on leaving; the server logs them and counts startup, stalls and bandwidth
 - Control the player with the keyboard or the remote's keys: Samsung: fast forward and rewind 30 s, no subtitles or audio key, down with the controls hidden does nothing
 - Choose the audio track a title plays in: no app marks the original or a described track: the catalog keeps no original language; the phone greys one it can't play
+- Hear a title in surround where the device and the room play it: a 5.1 track only where an instance turns it on; which apps play it is not checked
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -408,6 +435,8 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | `report-playback-quality` | — | `chino-api POST /api/v1/play/events` | — |
 | `use-player-keys` | 11.C12, 11.C13 | — | `seek-step` |
 | `choose-audio` | 11.C2, 11.C4, 11.C30, 12.C1, 12.C10 | `chino-api GET /api/v1/items/{id}/play/info`, `chino-api GET /api/v1/items/{id}/play/audio/*`, `chino-stream GET /audio/*` and 2 more | `audio-language` |
+| `watch-together` | — | — | — |
+| `play-surround` | — | — | `surround-audio` |
 
 ## Subtitles
 
@@ -509,11 +538,13 @@ What the server tells a person, in the bell. Specified in [chapter 15](../chino/
 | Open the title a notification is about, marking it read | person | built | built | built | partial | [15.6.2](../chino/notifications.md#1562-where-it-leads) |
 | Follow a notification's link where it stays on this server | person | built | built | — | — | [15.6.2](../chino/notifications.md#1562-where-it-leads) |
 | Mark every notification read, or delete one | person | built | built | built | built | [15.6.3](../chino/notifications.md#1563-asking-the-server) |
+| Be told on the phone while the app is closed | person | — | no | — | — | — |
 
 - See the notifications addons left, with the number unread: no bell where the server offers none; the phone hides it offline; Android TV's screen shows the bell's last answer
 - Open the title a notification is about, marking it read: Samsung opens an episode's own page, not its show's at that episode
 - Follow a notification's link where it stays on this server: the web in the same tab, the phone in its browser, offered beside the title too; a TV follows no link
 - Mark every notification read, or delete one: shown at once, the list read again where the server refuses; Android TV shows a change only once the server made it
+- Be told on the phone while the app is closed: the bell fills while the app is open; the push service is a scaffold nothing runs
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -521,21 +552,24 @@ What the server tells a person, in the bell. Specified in [chapter 15](../chino/
 | `open-notification` | 15.C4, 15.C11, 15.C12 | `chino-api POST /api/v1/notices/{noticeId}/read`, `zaentrum-portal POST /api/portal/me/notices/{id}/read` | — |
 | `follow-notification-link` | 15.C4 | — | — |
 | `clear-notifications` | 15.C3, 15.C8, 15.C11 | `chino-api POST /api/v1/notices/read-all`, `chino-api DELETE /api/v1/notices/{noticeId}`, `zaentrum-portal POST /api/portal/me/notices/read-all` and 1 more | — |
+| `get-push-notification` | — | — | — |
 
 ## Settings and account
 
 A person's settings, reporting a problem, and the account itself. Specified in [chapter 16](../chino/settings.md). Depth: deep.
 
-| Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
-|---|---|---|---|---|---|---|
-| Set the audio and subtitle languages titles start in | person | built | built | built | partial | [16.4.1](../chino/settings.md#1641-language), [11.14](../chino/playback.md#1114-the-audio-setting), [12.10](../chino/subtitles.md#1210-the-setting) |
-| Set how episodes follow one another: auto-skip, auto-play next, the countdown | person | built | partial | built | built | [16.4.2](../chino/settings.md#1642-binge-watching) |
-| Set every setting back to its first value at once | person | built | — | — | — | [16.2.1](../chino/settings.md#1621-the-web) |
-| See the app's version, to tell the people who run the server | person | no | no | no | no | [16.4.6](../chino/settings.md#1646-about) |
-| Report a bug to the people who run the server | person | built | built | built | partial | [16.4.5](../chino/settings.md#1645-report-a-bug), [17.13](../chino/errors.md#1713-when-an-action-fails) |
-| Report a bug from the player's error, with what the player knows of it | person | built | built | built | no | [11.17](../chino/playback.md#1117-states), [16.4.5](../chino/settings.md#1645-report-a-bug) |
-| File a bug report by itself when the app crashes | system | built | partial | built | built | [16.4.5](../chino/settings.md#1645-report-a-bug) |
-| Delete one's account and what the server keeps of it | person | built | built | built | built | [16.5.6](../chino/settings.md#1656-delete-account) |
+| Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Catalog console | Spec |
+|---|---|---|---|---|---|---|---|---|
+| Set the audio and subtitle languages titles start in | person | built | built | built | partial | — | — | [16.4.1](../chino/settings.md#1641-language), [11.14](../chino/playback.md#1114-the-audio-setting), [12.10](../chino/subtitles.md#1210-the-setting) |
+| Set how episodes follow one another: auto-skip, auto-play next, the countdown | person | built | partial | built | built | — | — | [16.4.2](../chino/settings.md#1642-binge-watching) |
+| Set every setting back to its first value at once | person | built | — | — | — | — | — | [16.2.1](../chino/settings.md#1621-the-web) |
+| See the app's version, to tell the people who run the server | person | no | no | no | no | — | — | [16.4.6](../chino/settings.md#1646-about) |
+| Report a bug to the people who run the server | person | built | built | built | partial | — | — | [16.4.5](../chino/settings.md#1645-report-a-bug), [17.13](../chino/errors.md#1713-when-an-action-fails) |
+| Report a bug from the player's error, with what the player knows of it | person | built | built | built | no | — | — | [11.17](../chino/playback.md#1117-states), [16.4.5](../chino/settings.md#1645-report-a-bug) |
+| File a bug report by itself when the app crashes | system | built | partial | built | built | — | — | [16.4.5](../chino/settings.md#1645-report-a-bug) |
+| Delete one's account and what the server keeps of it | person | built | built | built | built | — | — | [16.5.6](../chino/settings.md#1656-delete-account) |
+| Use the apps and the consoles in one's own language | person | no | no | no | no | no | no | — |
+| See the devices one is signed in on, and sign one out from afar | person | no | no | no | no | — | — | — |
 
 - Set the audio and subtitle languages titles start in: Samsung: Original and eight fixed languages with texts of its own, not the server's subtitle languages
 - Set how episodes follow one another: auto-skip, auto-play next, the countdown: the phone app has no countdown, and its player reads only auto-play next; the phone and the TVs add auto-skip credits
@@ -545,6 +579,8 @@ A person's settings, reporting a problem, and the account itself. Specified in [
 - Report a bug from the player's error, with what the player knows of it: Android TV: report this problem, with its list of choices; Samsung's failure screen offers no report
 - File a bug report by itself when the app crashes: iOS files none
 - Delete one's account and what the server keeps of it: offered on every server, also one that deletes none; the web asks to type DELETE; the TVs show a screen of their own
+- Use the apps and the consoles in one's own language: every app and console is in English alone
+- See the devices one is signed in on, and sign one out from afar: signing out is done on the device itself
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -556,4 +592,6 @@ A person's settings, reporting a problem, and the account itself. Specified in [
 | `report-playback-bug` | 11.C45, 16.C10 | `chino-api POST /api/v1/feedback` | `report-rate-limit`, `report-dedup-window`, `bug-report-target` |
 | `report-crash` | — | `chino-api POST /api/v1/feedback` | `auto-report-limit`, `report-dedup-window`, `bug-report-target` |
 | `delete-account` | 16.C15, 16.C16, 16.C17 | `chino-api DELETE /api/v1/me`, `zaentrum-portal DELETE /api/portal/me` | — |
+| `choose-interface-language` | — | — | — |
+| `see-own-devices` | — | — | — |
 <!-- end: areas -->

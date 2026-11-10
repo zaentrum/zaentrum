@@ -2,19 +2,27 @@
 """capabilities.py [--check] : the capability model of spec/capabilities and the
 architecture of spec/architecture, checked, and their tables written into the pages.
 
-The capability model is four files in spec/capabilities/:
+The capability model is five files in spec/capabilities/:
   areas.csv         the areas, each with its part, depth and chapter
   capabilities.csv  one row a capability: who, where each app and face has it,
                     what serves it, its settings, where the spec says it, its changes
   settings.csv      one row a setting: who changes it, where, its default, a proposal
+  expectations.csv  one row a thing people expect of a media server: the capabilities
+                    and components that meet it, or the decision record that rules it out
   inventory.csv     what the code offers, written by scripts/inventory.py
+The inventory keeps the model complete against the code; the expectations keep it
+complete against what the platform is expected to do. A capability nothing serves (no
+app or face has it, and no screen, route, command, field or setting is its) is in the
+model because a change or an expectation names it, never on its own.
 
-The architecture is three files in spec/architecture/, on the same inventory:
+The architecture is four files in spec/architecture/, on the same inventory:
   components.csv    one row a component: its layer, kind and status, its code, and
                     the workloads and volumes of the operator's chart it runs as
   connections.csv   one row a connection: from, to, its kind, what it is on (a path,
                     a database, topics), and what in the code makes it (via)
   decisions.csv     one row a decision record: the components and capabilities it governs
+  limits.csv        one row a limit of the architecture as it is built: its components,
+                    the capabilities it holds back, and where the documentation says so
 It checks that every repository of the organisation is a component's code, every
 workload and volume of the chart one component's; that every wire of the chart that
 leads to another component, and every address an environment variable names, is a
@@ -31,6 +39,10 @@ It checks, and fails on the first kind of problem it finds in each row:
     catalog setting by exactly one setting;
   - every reference into the spec leads to a page and a heading that exist, every
     change named is a numbered change of the spec;
+  - every expectation names a capability, a component or a decision record that
+    exists, and every capability nothing serves is named by a change or an expectation;
+  - every limit names its components, and where the documentation or a decision
+    record says it;
   - the pages' generated blocks are what the model says (--check), else they are
     written. A block is the text between "<!-- generated: name -->" and
     "<!-- end: name -->"; everything outside the blocks is written by hand.
@@ -78,6 +90,13 @@ CAP_COLS = ['key', 'area', 'capability', 'who'] + [a for a, _ in APPS] + [f for 
     ['screens', 'served_by', 'settings', 'spec', 'changes', 'note']
 SET_COLS = ['key', 'capability', 'setting', 'kind', 'who', 'where', 'ids', 'default', 'values', 'proposal', 'note']
 AREA_COLS = ['key', 'part', 'area', 'depth', 'spec', 'intro']
+# what people expect of a media server, group by group, and what the model says of each
+EXPECT_GROUPS = [('start', 'Getting it running'), ('library', 'The library'), ('watch', 'Watching'),
+                 ('people', 'People and sharing'), ('run', 'Keeping it running'), ('extend', 'Extending it')]
+EXPECT_COLS = ['key', 'group', 'expectation', 'capabilities', 'components', 'decided', 'note']
+EXPECT_STATES = ['there', 'partly', 'not there', 'not checked', 'decided otherwise']
+# a component whose status says the platform has it, has it built and unused, or lacks it
+COMP_THERE = {'runs': 'built', 'ships': 'built', 'idle': 'partial'}
 
 problems = []
 
@@ -312,6 +331,81 @@ def check(areas, caps, settings, inventory):
     return area_keys, changes
 
 
+# ------------------------------------------------------------- what is expected
+def absent(c):
+    """nothing of the platform does it: no app or face has it, and no screen, route,
+    command, field or setting is its. One nobody has checked yet is not known to be"""
+    return not any(c[k] in ('built', 'partial', '?') for k, _ in APPS + FACES) and \
+        not (split(c['screens']) or split(c['served_by']) or split(c['settings']))
+
+
+def cap_state(c):
+    """a capability in one word, over every app and face meant to have it: built where
+    each has it, ? where none is checked, no where none has it, partial otherwise.
+    Where none has it and it is not a person's, it is partial when something serves
+    it all the same: the platform's own work, or an admin's by the API alone. One
+    that no app or face is meant for is built by what serves it."""
+    meant = [c[k] for k, _ in APPS + FACES if c[k] != '—']
+    if not meant:
+        return 'built' if split(c['served_by']) else 'no'
+    if all(s == 'built' for s in meant):
+        return 'built'
+    if all(s == '?' for s in meant):
+        return '?'
+    if all(s == 'no' for s in meant) and (absent(c) or c['who'] == 'person'):
+        return 'no'
+    return 'partial'
+
+
+def expectation_state(e, caps_by_key, comps_by_key):
+    """what the model says of an expectation, from what meets it: there when every
+    capability and component named is built, not there when none is, not checked when
+    none was looked at, decided otherwise when a decision record rules it out and
+    nothing is named, partly else"""
+    states = [cap_state(caps_by_key[k]) for k in split(e['capabilities']) if k in caps_by_key]
+    states += [COMP_THERE.get(comps_by_key[k]['status'], 'no') for k in split(e['components']) if k in comps_by_key]
+    if not states:
+        return 'decided otherwise'
+    for word, s in (('there', 'built'), ('not there', 'no'), ('not checked', '?')):
+        if all(x == s for x in states):
+            return word
+    return 'partly'
+
+
+def check_expectations(expectations, caps, comps_by_key, adrs):
+    caps_by_key = {c['key']: c for c in caps}
+    groups = [g for g, _ in EXPECT_GROUPS]
+    seen, named = set(), set()
+    for e in expectations:
+        w = f'expectations.csv {e.get("key")}'
+        if not KEY.match(e['key']) or len(e['key']) > 32:
+            problem(w, 'key is not kebab-case of at most 32 characters')
+        if e['key'] in seen:
+            problem(w, 'key twice')
+        seen.add(e['key'])
+        if e['group'] not in groups:
+            problem(w, f'group {e["group"]!r} is none of {groups}')
+        if not e['expectation'] or len(e['expectation']) > 90 or e['expectation'].endswith('.'):
+            problem(w, 'expectation is empty, longer than 90 characters or ends with a full stop')
+        for k in split(e['capabilities']):
+            if k not in caps_by_key:
+                problem(w, f'capabilities: {k} is not in capabilities.csv')
+            named.add(k)
+        for k in split(e['components']):
+            if k not in comps_by_key:
+                problem(w, f'components: {k} is not in components.csv')
+        if e['decided'] and e['decided'] not in adrs:
+            problem(w, f'decided: {e["decided"]} is no decision record of docs/adr/')
+        if not (split(e['capabilities']) or split(e['components']) or e['decided']):
+            problem(w, 'names no capability, no component and no decision record')
+        if len(e['note']) > 140:
+            problem(w, 'note is longer than 140 characters')
+    for c in caps:
+        if absent(c) and not split(c['changes']) and c['key'] not in named:
+            problem(f'capabilities.csv {c["key"]}', 'nothing serves it, and no change and no expectation names it')
+    return caps_by_key
+
+
 # ------------------------------------------------------------------- pages
 def cell(v):
     return str(v).replace('|', '\\|').replace('\n', ' ')
@@ -378,13 +472,15 @@ def overview(areas, caps, settings, inventory, changes):
     def described(sel):
         chapter = [c for c in sel if any(not r.startswith('docs/') for r in split(c['spec']))]
         docs = [c for c in sel if split(c['spec']) and c not in chapter]
-        return [len(chapter), len(docs), len(sel) - len(chapter) - len(docs), sum(1 for c in sel if split(c['changes']))]
+        return [len(chapter), len(docs), len(sel) - len(chapter) - len(docs), sum(1 for c in sel if split(c['changes'])),
+                sum(1 for c in sel if absent(c))]
     for p, label, page in PARTS:
         part_caps = [c for c in caps if next(a['part'] for a in areas if a['key'] == c['area']) == p]
         if part_caps:
             rows.append([f'[{label}](./{page})', len(part_caps)] + described(part_caps))
     rows.append(['all', len(caps)] + described(caps))
-    lines.append(table(rows, ['Part', 'Capabilities', 'In a chapter', 'Only in the docs', 'Nowhere', 'With a change']))
+    lines.append(table(rows, ['Part', 'Capabilities', 'In a chapter', 'Only in the docs', 'Nowhere', 'With a change',
+                              'Served by nothing']))
     lines.append('')
     rows = []
     for k, label in APPS + FACES:
@@ -399,6 +495,54 @@ def overview(areas, caps, settings, inventory, changes):
     lines.append(table([[len(changes), len(mapped), len(changes) - len(mapped)] + [st.get(s, 0) for s in ('proposed', 'approved', 'built', 'verified')]],
                        ['Numbered changes', 'Named by a capability', 'Not yet', 'Proposed', 'Approved', 'Built', 'Verified']))
     return '\n'.join(lines) + '\n'
+
+
+STATE_WORD = {'built': 'built', 'partial': 'partial', 'no': 'no', '?': 'not checked'}
+
+
+def expectations_blocks(expectations, caps, areas, comps_by_key, adrs):
+    """-> (the page's tables, the README's counts, {expectation: its state})"""
+    caps_by_key = {c['key']: c for c in caps}
+    area_of = {a['key']: a for a in areas}
+    layer_label = dict(LAYERS)
+    state = {e['key']: expectation_state(e, caps_by_key, comps_by_key) for e in expectations}
+
+    def cap_link(k):
+        a = area_of[caps_by_key[k]['area']]
+        page = next(pg for p, _, pg in PARTS if p == a['part'])
+        return f'[`{k}`](./{page}#{slug(a["area"])}) {STATE_WORD[cap_state(caps_by_key[k])]}'
+
+    def comp_link(k):
+        label = layer_label[comps_by_key[k]['layer']]
+        return f'[`{k}`](../architecture/components.md#{slug(label)}) {comps_by_key[k]["status"]}'
+    out = []
+    for g, label in EXPECT_GROUPS:
+        sel = [e for e in expectations if e['group'] == g]
+        if not sel:
+            continue
+        out.append(f'## {label}\n')
+        rows = []
+        for e in sel:
+            # a key the check has already named as unknown is left out here
+            met = [cap_link(k) for k in split(e['capabilities']) if k in caps_by_key] + \
+                [comp_link(k) for k in split(e['components']) if k in comps_by_key]
+            if e['decided'] in adrs:
+                met.append(f'[ADR-{e["decided"]}](../../{adrs[e["decided"]]["file"]})')
+            rows.append([e['expectation'], state[e['key']], ', '.join(met), e['note'] or '—'])
+        out.append(table(rows, ['Expected', 'State', 'Met by', 'Note']) + '\n')
+    rows = []
+    for g, label in EXPECT_GROUPS:
+        sel = [e for e in expectations if e['group'] == g]
+        if sel:
+            n = Counter(state[e['key']] for e in sel)
+            rows.append([f'[{label}](./expectations.md#{slug(label)})', len(sel)] + [n[s] for s in EXPECT_STATES])
+    n = Counter(state.values())
+    rows.append(['all', len(expectations)] + [n[s] for s in EXPECT_STATES])
+    gone = sum(1 for c in caps if absent(c))
+    counts = table(rows, ['Expected of it', 'Expectations'] + EXPECT_STATES) + \
+        f'\n\nNothing serves {gone} of the {len(caps)} capabilities yet: no app or face has them, and no screen, ' \
+        f'route, command, field or setting is theirs.\n'
+    return '\n'.join(out).rstrip() + '\n', counts, state
 
 
 def inventory_block(inventory, caps, settings):
@@ -463,7 +607,7 @@ def configuration_blocks(caps, settings, areas):
     return out
 
 
-def export(areas, caps, settings, inventory, path, arch=None):
+def export(areas, caps, settings, inventory, path, arch=None, expectations=(), expect_state=None):
     """the model, resolved, as one JSON file (see the docstring)"""
     by_id = {r['id']: r for r in inventory}
     keep = ('id', 'kind', 'repo', 'name', 'value', 'note', 'where')
@@ -496,7 +640,13 @@ def export(areas, caps, settings, inventory, path, arch=None):
             'status': {k: c[k] for k, _ in APPS + FACES},
             'screens': rows(split(c['screens'])), 'served_by': rows(split(c['served_by'])),
             'settings': split(c['settings']), 'spec': refs(c['spec']), 'changes': split(c['changes']),
+            # nothing serves it: it is in the model because a change or an expectation names it
+            'absent': absent(c), 'expected': [e['key'] for e in expectations if c['key'] in split(e['capabilities'])],
         } for c in caps],
+        'expectationGroups': [{'key': g, 'label': label} for g, label in EXPECT_GROUPS],
+        'expectations': [{'key': e['key'], 'group': e['group'], 'expectation': e['expectation'], 'note': e['note'],
+                          'capabilities': split(e['capabilities']), 'components': split(e['components']),
+                          'decided': e['decided'], 'state': (expect_state or {}).get(e['key'])} for e in expectations],
         'settings': [{**{k: s[k] for k in SET_COLS if k not in ('capability', 'ids')},
                       'capability': split(s['capability']), 'ids': rows(split(s['ids']))} for s in settings],
         'changes': [{'number': n, 'named': n in named, **row} for n, row in change_rows().items()],
@@ -516,13 +666,17 @@ LAYERS = [('apps', 'the apps'), ('portal', 'the portal and its consoles'), ('chi
           ('runtime', 'running the platform'), ('outside', 'outside the platform'),
           ('demo', 'the reference demo'), ('beside', 'beside the platform'), ('later', 'later products'),
           ('retired', 'retired')]
-COMP_KINDS = ['app', 'web', 'service', 'worker', 'job', 'operator', 'cli', 'database', 'cache', 'broker',
+COMP_KINDS = ['app', 'web', 'service', 'worker', 'job', 'operator', 'cli', 'appliance', 'database', 'cache', 'broker',
               'identity', 'volume', 'docs', 'contracts', 'addon']
-COMP_STATUS = ['runs', 'ships', 'idle', 'outside', 'demo', 'beside', 'later', 'retired']
+COMP_STATUS = ['runs', 'ships', 'idle', 'missing', 'outside', 'demo', 'beside', 'later', 'retired']
 CONN_KINDS = ['calls', 'signs in', 'manages', 'links', 'publishes', 'consumes', 'writes', 'reads']
 COMP_COLS = ['key', 'component', 'layer', 'kind', 'status', 'code', 'runs', 'note']
 CONN_COLS = ['from', 'to', 'kind', 'on', 'via', 'note']
 DEC_COLS = ['adr', 'components', 'capabilities', 'note']
+LIMIT_COLS = ['key', 'limit', 'components', 'capabilities', 'says', 'note']
+# where a limit may say it is written, beside the pages of docs/ and spec/: a page of
+# one of the organisation's repositories
+SAYS_URL = re.compile(r'^https://github\.com/zaentrum/[A-Za-z0-9._-]+/(?:blob|tree)/main/\S+$')
 STORE_KINDS = {'database', 'cache', 'volume'}
 # the components nobody has to connect to: a person or the operator uses them, or they
 # take their work from the bus or a schedule
@@ -568,8 +722,8 @@ def read_adrs():
 class Arch:
     """the architecture, read and checked, and what it derives from the inventory"""
 
-    def __init__(self, comps, conns, decisions, inventory, caps, settings):
-        self.comps, self.conns, self.decisions = comps, conns, decisions
+    def __init__(self, comps, conns, decisions, inventory, caps, settings, limits=()):
+        self.comps, self.conns, self.decisions, self.limits = comps, conns, decisions, list(limits)
         self.inventory, self.caps, self.settings = inventory, caps, settings
         self.by_id = {r['id']: r for r in inventory}
         self.comp = {c['key']: c for c in comps}
@@ -774,6 +928,31 @@ class Arch:
                     problem(a['file'], f'{verb} ADR-{other}, which is no record')
                 elif (INVERSE[verb], num) not in b['relations']:
                     problem(b['file'], f'ADR-{num} {verb} it, and its status line doesn\'t say "{INVERSE[verb]} ADR-{num}"')
+        seen = set()
+        for x in self.limits:
+            w = f'limits.csv {x.get("key")}'
+            if not KEY.match(x['key']) or len(x['key']) > 32:
+                problem(w, 'key is not kebab-case of at most 32 characters')
+            if x['key'] in seen:
+                problem(w, 'key twice')
+            seen.add(x['key'])
+            if not x['limit'] or len(x['limit']) > 140 or x['limit'].endswith('.'):
+                problem(w, 'limit is empty, longer than 140 characters or ends with a full stop')
+            if not split(x['components']):
+                problem(w, 'components is empty: name the components the limit is of')
+            for k in split(x['components']):
+                if k not in self.comp:
+                    problem(w, f'components: {k} is not in components.csv')
+            for k in split(x['capabilities']):
+                if k not in cap_keys:
+                    problem(w, f'capabilities: {k} is not in capabilities.csv')
+            if not split(x['says']):
+                problem(w, 'says is empty: name where the documentation or a decision record says it')
+            for ref in split(x['says']):
+                if not (SAYS_URL.match(ref) or resolve_ref(ref)):
+                    problem(w, f'says: {ref} leads to no page or heading')
+            if len(x['note']) > 140:
+                problem(w, 'note is longer than 140 characters')
 
     # ---------------------------------------------------------------- derived
     def derive(self):
@@ -906,6 +1085,15 @@ class Arch:
                 out.append({'kind': 'the demo in the product', 'about': [k],
                             'what': f'{k}\'s {env} {said}: a name of the reference demo, set by the chart every install uses',
                             'via': [r['id']]})
+        # a decision record that is accepted, and governs a capability nothing serves
+        caps_by_key = {c['key']: c for c in self.caps}
+        for d in self.decisions:
+            a = self.adrs.get(d['adr'])
+            gone = [k for k in split(d['capabilities']) if k in caps_by_key and absent(caps_by_key[k])]
+            if a and a['state'] == 'Accepted' and gone:
+                out.append({'kind': 'decided, not built', 'about': [k for k in split(d['components']) if k in self.comp],
+                            'what': f'ADR-{d["adr"]} is accepted, and nothing serves {" and ".join(gone)}, which it governs',
+                            'via': []})
         return out
 
     # ------------------------------------------------------------------ pages
@@ -960,8 +1148,25 @@ class Arch:
     def findings_block(self):
         if not self.found:
             return 'Nothing.\n'
-        rows = [[f['kind'], ', '.join(f'`{k}`' for k in f['about']), f['what'], code_list(f['via'], 2)] for f in self.found]
+        rows = [[f['kind'], ', '.join(f'`{k}`' for k in f['about']), f['what'], code_list(f['via'], 2) or '—'] for f in self.found]
         return table(rows, ['Finding', 'Components', 'What the model shows', 'In the code']) + '\n'
+
+    def says(self, ref):
+        """where a limit says it is written, as a link from spec/architecture/"""
+        if SAYS_URL.match(ref):
+            repo, path = ref.split('/')[4], ref.split('/main/', 1)[1]
+            return f'[{repo}, {path.split("#")[0].split("/")[-1]}]({ref})'
+        r = resolve_spec(ref)
+        return f'[{r[1]}]({r[0]})' if r else ref
+
+    def limits_block(self):
+        if not self.limits:
+            return 'None.\n'
+        rows = [[x['limit'] + (f'. {x["note"]}' if x['note'] else ''),
+                 ', '.join(f'`{k}`' for k in split(x['components'])),
+                 ', '.join(f'`{k}`' for k in split(x['capabilities'])) or '—',
+                 ', '.join(self.says(ref) for ref in split(x['says']))] for x in self.limits]
+        return table(rows, ['Limit', 'Components', 'Holds back', 'Says so']) + '\n'
 
     def components_block(self):
         out = []
@@ -1096,7 +1301,13 @@ class Arch:
                            'components': split(d['components']), 'capabilities': split(d['capabilities']), 'note': d['note']}
                           for d in self.decisions if d['adr'] in self.adrs],
             'builtBy': dict(self.built_by), 'capabilityDecisions': dict(self.cap_decided),
-            'findings': self.found,
+            'limits': [{'key': x['key'], 'limit': x['limit'], 'note': x['note'], 'components': split(x['components']),
+                        'capabilities': split(x['capabilities']),
+                        'says': [{'url': ref} if SAYS_URL.match(ref) else resolve_ref(ref) for ref in split(x['says'])]}
+                       for x in self.limits],
+            # a component's fact sheet lists its limits with what the model finds of it
+            'findings': self.found + [{'kind': 'limit', 'about': split(x['components']), 'what': x['limit'], 'via': []}
+                                      for x in self.limits],
         }
 
 
@@ -1123,29 +1334,35 @@ def main():
     settings = read('settings.csv', SET_COLS)
     inventory = read('inventory.csv', ['id', 'kind', 'repo', 'name', 'value', 'note', 'where'])
     area_keys, changes = check(areas, caps, settings, inventory)
+    expectations = read('expectations.csv', EXPECT_COLS)
     arch = Arch(read('components.csv', COMP_COLS, ARCH), read('connections.csv', CONN_COLS, ARCH),
-                read('decisions.csv', DEC_COLS, ARCH), inventory, caps, settings)
+                read('decisions.csv', DEC_COLS, ARCH), inventory, caps, settings, read('limits.csv', LIMIT_COLS, ARCH))
     arch.check({c['key'] for c in caps})
+    check_expectations(expectations, caps, arch.comp, arch.adrs)
     arch.derive()
+    expected_tables, expected_counts, expect_state = expectations_blocks(expectations, caps, areas, arch.comp, arch.adrs)
     if '--json' in sys.argv:
         at = sys.argv.index('--json') + 1
         if at >= len(sys.argv):
             sys.exit('--json needs the file to write')
-        export(areas, caps, settings, inventory, sys.argv[at], arch)
+        export(areas, caps, settings, inventory, sys.argv[at], arch, expectations, expect_state)
         print(f'{len(problems)} problems; {len(caps)} capabilities, {len(settings)} settings, '
               f'{len(arch.comps)} components, {len(arch.conns)} connections written to {sys.argv[at]}')
         return
     settings_by_key = {s['key']: s for s in settings}
     fill(os.path.join(CAP, 'README.md'), {
         'overview': overview(areas, caps, settings, inventory, changes),
+        'expected': expected_counts,
         'inventory': inventory_block(inventory, caps, settings),
     }, write)
+    fill(os.path.join(CAP, 'expectations.md'), {'expectations': expected_tables}, write)
     for p, _, page in PARTS:
         if p == 'later':
             continue
         fill(os.path.join(CAP, page), {'areas': area_blocks(p, areas, caps, settings_by_key)}, write)
     fill(os.path.join(CAP, 'configuration.md'), configuration_blocks(caps, settings, areas), write)
-    fill(os.path.join(ARCH, 'README.md'), {'state': arch.state_block(), 'findings': arch.findings_block()}, write)
+    fill(os.path.join(ARCH, 'README.md'), {'state': arch.state_block(), 'findings': arch.findings_block(),
+                                           'limits': arch.limits_block()}, write)
     fill(os.path.join(ARCH, 'components.md'), {'components': arch.components_block()}, write)
     fill(os.path.join(ARCH, 'connections.md'), {'connections': arch.connections_block()}, write)
     fill(os.path.join(ARCH, 'decisions.md'), {'decisions': arch.decisions_block()}, write)
@@ -1153,8 +1370,9 @@ def main():
     for p in problems:
         print(p)
     print(f'{len(problems)} problems; {len(caps)} capabilities in {len(areas)} areas, {len(settings)} settings, '
-          f'{len(inventory)} inventory rows; {len(arch.comps)} components, {len(arch.conns)} connections, '
-          f'{len(arch.decisions)} decisions, {len(arch.found)} findings')
+          f'{len(expectations)} expectations, {len(inventory)} inventory rows; {len(arch.comps)} components, '
+          f'{len(arch.conns)} connections, {len(arch.decisions)} decisions, {len(arch.found)} findings, '
+          f'{len(arch.limits)} limits')
     sys.exit(1 if problems else 0)
 
 

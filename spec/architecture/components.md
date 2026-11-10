@@ -15,9 +15,15 @@ columns is on the [front page](./README.md#how-to-read-it).
 | `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 100 | 25 | — |
 | `chino-androidtv` | the Android TV app | app | ships | [chino-androidtv](https://github.com/zaentrum/chino-androidtv) | — | 87 | 21 | — |
 | `chino-tizen` | the Samsung TV app | app | ships | [chino-tizen](https://github.com/zaentrum/chino-tizen) | — | 74 | 20 | — |
+| `chino-tvos` | an app for Apple TV | app | missing | — | — | — | — | — |
+| `chino-webos` | an app for LG TVs | app | missing | — | — | — | — | — |
+| `chino-roku` | an app for Roku players | app | missing | — | — | — | — | — |
 
 - `chino-web`: Served at /chino, signed in at /auth/callback
 - `chino-mobile`: For Android and iOS, at the server address a person gives it
+- `chino-tvos`: Expected of a media server; not begun
+- `chino-webos`: Expected of a media server; not begun
+- `chino-roku`: Expected of a media server; not begun
 
 ## The portal and its consoles
 
@@ -88,8 +94,10 @@ columns is on the [front page](./README.md#how-to-read-it).
 |---|---|---|---|---|---|---|---|---|
 | `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 23 | 70 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011 |
 | `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011 |
+| `appliance` | the one-container install: a cluster of its own, the operator and a resource | appliance | ships | — | — | — | — | ADR-0006, ADR-0008 |
 
 - `zaentrum-operator`: Installed on its own, it runs what the chart holds
+- `appliance`: Built from zaentrum-operator's deploy/allinone; amd64; plain http, on the machine it runs on alone
 
 ## Outside the platform
 
