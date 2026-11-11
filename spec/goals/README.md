@@ -25,6 +25,12 @@ Everything else in the specification follows from that, one step at a time:
 So a capability is there because a goal needs it, and a goal is met when what
 is expected of it is there and its qualities reach their targets.
 
+On the site the goals are also a [map](https://zaentrum.github.io/spec/goals/map/):
+a band for each kind of goal, a card for each goal, and in it a tile for each
+group of capabilities that is for it, coloured by how much of it is built,
+whether it holds a capability nothing serves yet, or how deep it is specified.
+Pointing at a goal draws the goals it needs and the goals that need it.
+
 > **Written by hand, counted by a program.** The goals are
 > [goals.csv](./goals.csv) and their qualities [qualities.csv](./qualities.csv);
 > the picture, the tables and the numbers on this page are computed from them

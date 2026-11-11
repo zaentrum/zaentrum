@@ -813,6 +813,8 @@ def export(areas, caps, settings, inventory, path, arch=None, expectations=(), e
             'status': {k: c[k] for k, _ in APPS + FACES},
             'screens': rows(split(c['screens'])), 'served_by': rows(split(c['served_by'])),
             'settings': split(c['settings']), 'spec': refs(c['spec']), 'changes': split(c['changes']),
+            # one word over every app and face meant to have it: built, partial, no or ?
+            'state': cap_state(c),
             # nothing serves it: it is in the model because a change or an expectation names it
             'absent': absent(c), 'expected': [e['key'] for e in expectations if c['key'] in split(e['capabilities'])],
         } for c in caps],
