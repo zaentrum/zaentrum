@@ -118,18 +118,6 @@ A product for music: registered, not built. Not specified yet. Depth: stub. For 
 |---|---|---|---|
 | `play-music` | H.C9, H.C10 | `katalog-api GET /albums` | `registry-seed` |
 
-## Photos and home videos
-
-What a household keeps beside its films: expected, neither registered nor built. Not specified yet. Depth: stub. For the goal [Look at photos and home videos](../goals/README.md#look-at-photos-and-home-videos).
-
-| Capability | Who | Portal | Spec |
-|---|---|---|---|
-| Look through photos and home videos | person | no | — |
-
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `look-at-photos` | — | — | — |
-
 ## Audiobooks, podcasts and books
 
 Listening and reading: expected, neither registered nor built. Not specified yet. Depth: stub. For the goal [Listen to books and podcasts](../goals/README.md#listen-to-books-and-podcasts).

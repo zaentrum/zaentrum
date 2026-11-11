@@ -75,14 +75,6 @@ For the goal [Watch live channels](../goals/README.md#watch-live-channels).
 |---|---|---|---|
 | Live channels and recordings | not there | [`watch-live-channels`](./platform.md#live-channels) no | — |
 
-## Look at photos and home videos
-
-For the goal [Look at photos and home videos](../goals/README.md#look-at-photos-and-home-videos).
-
-| Expected | State | Met by | Note |
-|---|---|---|---|
-| Photos and home videos | not there | [`look-at-photos`](./platform.md#photos-and-home-videos) no | — |
-
 ## Listen to books and podcasts
 
 For the goal [Listen to books and podcasts](../goals/README.md#listen-to-books-and-podcasts).

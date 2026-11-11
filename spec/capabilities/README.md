@@ -134,19 +134,19 @@ model, each reference, change and id resolved, written by the same program.
 | [the portal](./portal.md) | 54 | 22 | 13 | 19 | 10 | 13 |
 | [the catalog and the pipeline](./catalog.md) | 50 | 8 | 23 | 19 | 3 | 10 |
 | [the platform](./platform.md) | 24 | 0 | 19 | 5 | 0 | 5 |
-| [later products](./platform.md) | 4 | 2 | 0 | 2 | 2 | 2 |
-| all | 274 | 156 | 60 | 58 | 137 | 43 |
+| [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
+| all | 273 | 156 | 60 | 57 | 137 | 42 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
-| Web | 84 | 14 | 18 | 156 | 2 |
-| Phone | 77 | 32 | 24 | 139 | 2 |
-| Android TV | 79 | 20 | 21 | 152 | 2 |
-| Samsung TV | 44 | 30 | 46 | 152 | 2 |
-| Portal | 37 | 7 | 36 | 194 | 0 |
-| Catalog console | 14 | 7 | 22 | 231 | 0 |
-| CLI | 21 | 2 | 42 | 209 | 0 |
-| Resource | 30 | 1 | 7 | 236 | 0 |
+| Web | 84 | 14 | 18 | 155 | 2 |
+| Phone | 77 | 32 | 24 | 138 | 2 |
+| Android TV | 79 | 20 | 21 | 151 | 2 |
+| Samsung TV | 44 | 30 | 46 | 151 | 2 |
+| Portal | 37 | 7 | 35 | 194 | 0 |
+| Catalog console | 14 | 7 | 22 | 230 | 0 |
+| CLI | 21 | 2 | 42 | 208 | 0 |
+| Resource | 30 | 1 | 7 | 235 | 0 |
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
@@ -168,15 +168,14 @@ a decision record rules it out.
 | [Watch films and shows](./expectations.md#watch-films-and-shows) | 14 | 0 | 9 | 4 | 1 | 0 |
 | [Listen to music](./expectations.md#listen-to-music) | 1 | 0 | 0 | 1 | 0 | 0 |
 | [Watch live channels](./expectations.md#watch-live-channels) | 1 | 0 | 0 | 1 | 0 | 0 |
-| [Look at photos and home videos](./expectations.md#look-at-photos-and-home-videos) | 1 | 0 | 0 | 1 | 0 | 0 |
 | [Listen to books and podcasts](./expectations.md#listen-to-books-and-podcasts) | 1 | 0 | 0 | 1 | 0 | 0 |
 | [Keep the library](./expectations.md#keep-the-library) | 12 | 1 | 5 | 5 | 0 | 1 |
 | [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 5 | 5 | 0 | 0 |
 | [Run it oneself](./expectations.md#run-it-oneself) | 12 | 2 | 6 | 4 | 0 | 0 |
 | [Make it one's own](./expectations.md#make-it-ones-own) | 4 | 2 | 1 | 1 | 0 | 0 |
-| all | 57 | 6 | 26 | 23 | 1 | 1 |
+| all | 56 | 6 | 26 | 22 | 1 | 1 |
 
-Nothing serves 43 of the 274 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 42 of the 273 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
