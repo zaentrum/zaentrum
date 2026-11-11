@@ -10,7 +10,7 @@ explained in [how to read it](./README.md#how-to-read-it); every row comes from
 <!-- generated: areas -->
 ## The catalog
 
-What the library holds, as the catalog knows it: scanning, details, metadata, the rules a title must meet. Not specified yet. Depth: working.
+What the library holds, as the catalog knows it: scanning, details, metadata, the rules a title must meet. Not specified yet. Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
 
 | Capability | Who | Portal | Catalog console | CLI | Spec |
 |---|---|---|---|---|---|
@@ -85,7 +85,7 @@ What the library holds, as the catalog knows it: scanning, details, metadata, th
 
 ## The library and its originals
 
-The packages the apps play, and the originals they were made from: verified, then retired. Not specified yet. Depth: working.
+The packages the apps play, and the originals they were made from: verified, then retired. Not specified yet. Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
 
 | Capability | Who | Portal | Catalog console | CLI | Resource | Spec |
 |---|---|---|---|---|---|---|
@@ -138,7 +138,7 @@ The packages the apps play, and the originals they were made from: verified, the
 
 ## Preparing titles to play
 
-What happens to a new title: analysed, encoded, packaged, given subtitles; and encoding while it plays. Not specified yet. Depth: working.
+What happens to a new title: analysed, encoded, packaged, given subtitles; and encoding while it plays. Not specified yet. Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
 
 | Capability | Who | Catalog console | Resource | Spec |
 |---|---|---|---|---|

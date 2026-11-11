@@ -10,7 +10,7 @@ explained in [how to read it](./README.md#how-to-read-it); every row comes from
 <!-- generated: areas -->
 ## Installing and configuring
 
-The platform as an operator installs it: identity, storage, addresses, certificates, backups, updates. Not specified yet. Depth: working.
+The platform as an operator installs it: identity, storage, addresses, certificates, backups, updates. Not specified yet. Depth: working. For the goal [Run it oneself](../goals/README.md#run-it-oneself).
 
 | Capability | Who | Portal | CLI | Resource | Spec |
 |---|---|---|---|---|---|
@@ -92,7 +92,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 
 ## Live channels
 
-A product for live channels: registered, not built. Not specified yet. Depth: stub.
+A product for live channels: registered, not built. Not specified yet. Depth: stub. For the goal [Watch live channels](../goals/README.md#watch-live-channels).
 
 | Capability | Who | Portal | Spec |
 |---|---|---|---|
@@ -106,7 +106,7 @@ A product for live channels: registered, not built. Not specified yet. Depth: st
 
 ## Music
 
-A product for music: registered, not built. Not specified yet. Depth: stub.
+A product for music: registered, not built. Not specified yet. Depth: stub. For the goal [Listen to music](../goals/README.md#listen-to-music).
 
 | Capability | Who | Portal | Spec |
 |---|---|---|---|
@@ -120,7 +120,7 @@ A product for music: registered, not built. Not specified yet. Depth: stub.
 
 ## Photos and home videos
 
-What a household keeps beside its films: expected, neither registered nor built. Not specified yet. Depth: stub.
+What a household keeps beside its films: expected, neither registered nor built. Not specified yet. Depth: stub. For the goal [Look at photos and home videos](../goals/README.md#look-at-photos-and-home-videos).
 
 | Capability | Who | Portal | Spec |
 |---|---|---|---|
@@ -132,7 +132,7 @@ What a household keeps beside its films: expected, neither registered nor built.
 
 ## Audiobooks, podcasts and books
 
-Listening and reading: expected, neither registered nor built. Not specified yet. Depth: stub.
+Listening and reading: expected, neither registered nor built. Not specified yet. Depth: stub. For the goal [Listen to books and podcasts](../goals/README.md#listen-to-books-and-podcasts).
 
 | Capability | Who | Portal | Spec |
 |---|---|---|---|

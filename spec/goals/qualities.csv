@@ -1,0 +1,22 @@
+key,goal,characteristic,quality,measure,today,target,says
+starts-soon,watch,performance efficiency,A title starts soon after it is chosen,"seconds from play to the first picture, on each kind of device",not measured,,
+plays-through,watch,reliability,A title plays through without stalling,stalls in an hour of playing,"not measured; the apps send how playback went, and no page shows it",,
+on-our-screens,watch,compatibility,It plays on the screens a household owns,"the kinds of device with an app, and where each is had","the web, Android and iOS phones and tablets, Android TV and Samsung TVs; none from a public store",,docs/releases#The apps
+in-our-language,watch,interaction capability,It speaks the household's languages,the languages of the apps and the consoles,English,,
+for-everyone,watch,interaction capability,People who see or hear less can use it,the accessibility level the apps meet,"none is stated, and no app is checked with a screen reader",,
+ready-without-work,library,functional suitability,A new file is ready to watch without work,steps by hand from a file's arrival to a title that plays,"one: a scan, started by hand",,docs/self-hosting#Getting content in
+known-rightly,library,functional suitability,A title is recognised for what it is,the share of titles matched without a hand,not measured,,
+nothing-lost,library,reliability,Nothing of the library is lost,what a dead disk costs,"the bundled databases: up to a day, by their daily dumps; the files: what their storage keeps",,https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#backups-of-the-bundled-postgres-specbackup
+true-to-the-original,library,functional suitability,A title keeps the picture and the sound that matter,what a package keeps of its original,"every track in stereo, 5.1 where turned on, HDR10 or HLG; originals stay unless set to go",,docs/adr/0015-the-package-is-the-master
+child-safe,people,security,A child sees only what it may,ways around a rating cap,one: switching accounts on a shared device asks for nothing,,
+back-in-soon,people,interaction capability,Someone who forgot a password is back in soon,"who resets it, and how","an admin, in the identity provider's console",,docs/self-hosting#First run
+in-an-evening,run,flexibility,Someone who has not seen it installs it in an evening,time from nothing to a film on the TV,not measured; a TV or a phone needs a name and an https certificate of one's own first,,docs/self-hosting#A. One-command appliance
+household-machine,run,flexibility,It runs on the machine a household has,"the processors it runs on, and the memory it takes",amd64 alone; no smallest machine is named,,docs/prerequisites#Appliance
+safe-update,run,reliability,An update never leaves it broken,what follows an update that fails,the platform checks itself after each update; nothing says how one is undone,,docs/updating
+back-after-loss,run,reliability,"After a dead disk it is back, with little lost",time and loss to a working platform on another machine,the bundled databases restore into the install that made them; there is no way to another machine,,https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#backups-of-the-bundled-postgres-specbackup
+told-first,run,reliability,Whoever runs it learns of a failure before the household does,how a failure reaches them,it is shown in the portal to whoever looks; nothing is sent,,
+stays-as-built-on,extend,compatibility,What an addon builds on stays as it is,the promise on the platform's interfaces,"none: the platform is at version 0, its resource at v1alpha1",,docs/releases
+report-in-private,trust,security,A security hole can be reported in private,a policy that says where and how,none in any repository,,
+traced-to-source,trust,security,Every image can be traced to the source it was built from,"signatures, a record of each build, a list of what an image holds",none of the three,,
+stays-with-the-server,trust,security,What the apps send stays with whoever runs the server,what leaves the apps for anyone else,"nothing to their publisher; an avatar service, a font service and Google Cast are called",,docs/releases#What the apps send
+changed-by-a-stranger,trust,maintainability,A stranger can change it and have the change taken in,"a guide to contributing, and tests that run on every change",tests in the services' repositories; a guide in the operator's alone,,

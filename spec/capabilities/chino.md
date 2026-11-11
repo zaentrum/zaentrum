@@ -8,7 +8,7 @@ The capabilities of the apps for watching, one area a chapter of the
 <!-- generated: areas -->
 ## Connecting and signing in
 
-Reaching a server, signing in on each kind of device, keeping several accounts on one. Specified in [chapter 3](../chino/start.md). Depth: deep.
+Reaching a server, signing in on each kind of device, keeping several accounts on one. Specified in [chapter 3](../chino/start.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Spec |
 |---|---|---|---|---|---|---|---|
@@ -73,7 +73,7 @@ Reaching a server, signing in on each kind of device, keeping several accounts o
 
 ## The frame
 
-What is around every screen: the rail or tab bar, the top bar, going back. Specified in [chapter 2](../chino/frame.md). Depth: deep.
+What is around every screen: the rail or tab bar, the top bar, going back. Specified in [chapter 2](../chino/frame.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -105,7 +105,7 @@ What is around every screen: the rail or tab bar, the top bar, going back. Speci
 
 ## Home
 
-The first screen: the hero and the rows. Specified in [chapter 4](../chino/home.md). Depth: deep.
+The first screen: the hero and the rows. Specified in [chapter 4](../chino/home.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -149,7 +149,7 @@ The first screen: the hero and the rows. Specified in [chapter 4](../chino/home.
 
 ## Movies and shows
 
-Every movie and every show, filtered and sorted. Specified in [chapter 5](../chino/browse.md). Depth: deep.
+Every movie and every show, filtered and sorted. Specified in [chapter 5](../chino/browse.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -193,7 +193,7 @@ Every movie and every show, filtered and sorted. Specified in [chapter 5](../chi
 
 ## The title page
 
-A movie's or a show's page: what it is, its seasons and episodes, its extras, what can be done with it. Specified in [chapter 6](../chino/title-actions.md). Depth: deep.
+A movie's or a show's page: what it is, its seasons and episodes, its extras, what can be done with it. Specified in [chapter 6](../chino/title-actions.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -237,7 +237,7 @@ A movie's or a show's page: what it is, its seasons and episodes, its extras, wh
 
 ## People
 
-Cast and crew: a person's page and what they were in. Specified in [chapter 7](../chino/person.md). Depth: deep.
+Cast and crew: a person's page and what they were in. Specified in [chapter 7](../chino/person.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -254,7 +254,7 @@ Cast and crew: a person's page and what they were in. Specified in [chapter 7](.
 
 ## Watchlist and lists
 
-What a person keeps to watch, in lists of their own, and what they watched. Specified in [chapter 8](../chino/watchlist.md). Depth: deep.
+What a person keeps to watch, in lists of their own, and what they watched. Specified in [chapter 8](../chino/watchlist.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -298,7 +298,7 @@ What a person keeps to watch, in lists of their own, and what they watched. Spec
 
 ## Search
 
-Finding a title or a person by name. Specified in [chapter 9](../chino/search.md). Depth: deep.
+Finding a title or a person by name. Specified in [chapter 9](../chino/search.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -329,7 +329,7 @@ Finding a title or a person by name. Specified in [chapter 9](../chino/search.md
 
 ## Zap
 
-Titles one after the other, playing from their middle, to find something to watch. Specified in [chapter 10](../chino/zap.md). Depth: deep.
+Titles one after the other, playing from their middle, to find something to watch. Specified in [chapter 10](../chino/zap.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -367,7 +367,7 @@ Titles one after the other, playing from their middle, to find something to watc
 
 ## The player
 
-Playing a title: resume, quality, audio, skipping, the next episode, the picture. Specified in [chapter 11](../chino/playback.md). Depth: deep.
+Playing a title: resume, quality, audio, skipping, the next episode, the picture. Specified in [chapter 11](../chino/playback.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -440,7 +440,7 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 
 ## Subtitles
 
-Choosing subtitles and how they look, in every kind of subtitle the library holds. Specified in [chapter 12](../chino/subtitles.md). Depth: deep.
+Choosing subtitles and how they look, in every kind of subtitle the library holds. Specified in [chapter 12](../chino/subtitles.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -478,7 +478,7 @@ Choosing subtitles and how they look, in every kind of subtitle the library hold
 
 ## Downloads and offline
 
-Keeping a title on a phone to watch without a connection. Specified in [chapter 13](../chino/downloads.md). Depth: deep.
+Keeping a title on a phone to watch without a connection. Specified in [chapter 13](../chino/downloads.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Phone | Spec |
 |---|---|---|---|
@@ -504,7 +504,7 @@ Keeping a title on a phone to watch without a connection. Specified in [chapter 
 
 ## Casting
 
-Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/casting.md). Depth: deep.
+Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/casting.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Phone | Spec |
 |---|---|---|---|
@@ -530,7 +530,7 @@ Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/c
 
 ## Notifications
 
-What the server tells a person, in the bell. Specified in [chapter 15](../chino/notifications.md). Depth: deep.
+What the server tells a person, in the bell. Specified in [chapter 15](../chino/notifications.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
@@ -556,7 +556,7 @@ What the server tells a person, in the bell. Specified in [chapter 15](../chino/
 
 ## Settings and account
 
-A person's settings, reporting a problem, and the account itself. Specified in [chapter 16](../chino/settings.md). Depth: deep.
+A person's settings, reporting a problem, and the account itself. Specified in [chapter 16](../chino/settings.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Catalog console | Spec |
 |---|---|---|---|---|---|---|---|---|

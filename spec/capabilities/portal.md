@@ -9,7 +9,7 @@ row comes from [capabilities.csv](./capabilities.csv).
 <!-- generated: areas -->
 ## The portal's home
 
-Where everyone signs in: the spaces, their tiles, the search across them, an app opened in place. Specified in [portal home](../portal/home.md). Depth: deep.
+Where everyone signs in: the spaces, their tiles, the search across them, an app opened in place. Specified in [portal home](../portal/home.md). Depth: deep. For the goal [Run it oneself](../goals/README.md#run-it-oneself).
 
 | Capability | Who | Portal | Spec |
 |---|---|---|---|
@@ -38,7 +38,7 @@ Where everyone signs in: the spaces, their tiles, the search across them, an app
 
 ## Apps, spaces, tiles and extensions
 
-What the home page shows and where: the registry admins edit. Specified in [portal settings](../portal/settings.md). Depth: deep.
+What the home page shows and where: the registry admins edit. Specified in [portal settings](../portal/settings.md). Depth: deep. For the goal [Run it oneself](../goals/README.md#run-it-oneself).
 
 | Capability | Who | Portal | CLI | Spec |
 |---|---|---|---|---|
@@ -64,7 +64,7 @@ What the home page shows and where: the registry admins edit. Specified in [port
 
 ## Addons
 
-Adding, installing, setting up and removing addons, and what an addon may add to the platform. Specified in [portal settings](../portal/settings.md). Depth: deep.
+Adding, installing, setting up and removing addons, and what an addon may add to the platform. Specified in [portal settings](../portal/settings.md). Depth: deep. For the goal [Make it one's own](../goals/README.md#make-it-ones-own).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | CLI | Resource | Spec |
 |---|---|---|---|---|---|---|---|---|---|
@@ -108,7 +108,7 @@ Adding, installing, setting up and removing addons, and what an addon may add to
 
 ## People and roles
 
-Who may use the platform: people, their roles, invites. Not specified yet. Depth: deep.
+Who may use the platform: people, their roles, invites. Not specified yet. Depth: deep. For the goal [Share it with a household](../goals/README.md#share-it-with-a-household).
 
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | CLI | Spec |
 |---|---|---|---|---|---|---|---|---|
@@ -155,7 +155,7 @@ Who may use the platform: people, their roles, invites. Not specified yet. Depth
 
 ## Running the platform
 
-Keeping it running: its parts, updates, checks, logs, events, its database, a support bundle, the first-run checklist. Not specified yet. Depth: deep.
+Keeping it running: its parts, updates, checks, logs, events, its database, a support bundle, the first-run checklist. Not specified yet. Depth: deep. For the goal [Run it oneself](../goals/README.md#run-it-oneself).
 
 | Capability | Who | Portal | CLI | Resource | Spec |
 |---|---|---|---|---|---|

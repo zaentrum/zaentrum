@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
-"""capabilities.py [--check] : the capability model of spec/capabilities and the
-architecture of spec/architecture, checked, and their tables written into the pages.
+"""capabilities.py [--check] : the goals of spec/goals, the capability model of
+spec/capabilities and the architecture of spec/architecture, checked, and their tables
+written into the pages.
+
+What zaentrum is for is two files in spec/goals/:
+  goals.csv         one row a goal: what people want of it, what that takes, what being
+                    open adds; and the goals each needs
+  qualities.csv     one row a quality a goal has to be met with: what measures it, what
+                    it is today, and its target
+Every area of the capability model and every expectation is for one goal, so each
+capability leads up to a goal, and each goal down to the components that serve it.
 
 The capability model is five files in spec/capabilities/:
   areas.csv         the areas, each with its part, depth and chapter
@@ -43,6 +52,8 @@ It checks, and fails on the first kind of problem it finds in each row:
     exists, and every capability nothing serves is named by a change or an expectation;
   - every limit names its components, and where the documentation or a decision
     record says it;
+  - every goal, area, expectation and quality names a goal that exists, no goal needs
+    itself by way of others, and every goal has an area, an expectation or a quality;
   - the pages' generated blocks are what the model says (--check), else they are
     written. A block is the text between "<!-- generated: name -->" and
     "<!-- end: name -->"; everything outside the blocks is written by hand.
@@ -64,6 +75,7 @@ from collections import Counter, defaultdict
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 CAP = os.path.join(ROOT, 'spec', 'capabilities')
+GOALS = os.path.join(ROOT, 'spec', 'goals')
 ARCH = os.path.join(ROOT, 'spec', 'architecture')
 SPEC = os.path.join(ROOT, 'spec')
 DOCS = os.path.join(ROOT, 'docs')
@@ -89,11 +101,16 @@ KEY = re.compile(r'^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$')
 CAP_COLS = ['key', 'area', 'capability', 'who'] + [a for a, _ in APPS] + [f for f, _ in FACES] + \
     ['screens', 'served_by', 'settings', 'spec', 'changes', 'note']
 SET_COLS = ['key', 'capability', 'setting', 'kind', 'who', 'where', 'ids', 'default', 'values', 'proposal', 'note']
-AREA_COLS = ['key', 'part', 'area', 'depth', 'spec', 'intro']
-# what people expect of a media server, group by group, and what the model says of each
-EXPECT_GROUPS = [('start', 'Getting it running'), ('library', 'The library'), ('watch', 'Watching'),
-                 ('people', 'People and sharing'), ('run', 'Keeping it running'), ('extend', 'Extending it')]
-EXPECT_COLS = ['key', 'group', 'expectation', 'capabilities', 'components', 'decided', 'note']
+AREA_COLS = ['key', 'part', 'goal', 'area', 'depth', 'spec', 'intro']
+# what zaentrum is for: what people want of it, what that takes, what being open adds
+GOAL_KINDS = [('use', 'what people want'), ('enable', 'what that takes'), ('open', 'what being open adds')]
+GOAL_COLS = ['key', 'goal', 'kind', 'needs', 'why']
+# how well a goal has to be met: a quality, by the characteristics of ISO/IEC 25010
+CHARACTERISTICS = ['functional suitability', 'performance efficiency', 'compatibility', 'interaction capability',
+                   'reliability', 'security', 'maintainability', 'flexibility', 'safety']
+QUALITY_COLS = ['key', 'goal', 'characteristic', 'quality', 'measure', 'today', 'target', 'says']
+# what people expect of a media server, goal by goal, and what the model says of each
+EXPECT_COLS = ['key', 'goal', 'expectation', 'capabilities', 'components', 'decided', 'note']
 EXPECT_STATES = ['there', 'partly', 'not there', 'not checked', 'decided otherwise']
 # a component whose status says the platform has it, has it built and unused, or lacks it
 COMP_THERE = {'runs': 'built', 'ships': 'built', 'idle': 'partial'}
@@ -372,9 +389,8 @@ def expectation_state(e, caps_by_key, comps_by_key):
     return 'partly'
 
 
-def check_expectations(expectations, caps, comps_by_key, adrs):
+def check_expectations(expectations, caps, comps_by_key, adrs, goal_keys):
     caps_by_key = {c['key']: c for c in caps}
-    groups = [g for g, _ in EXPECT_GROUPS]
     seen, named = set(), set()
     for e in expectations:
         w = f'expectations.csv {e.get("key")}'
@@ -383,8 +399,8 @@ def check_expectations(expectations, caps, comps_by_key, adrs):
         if e['key'] in seen:
             problem(w, 'key twice')
         seen.add(e['key'])
-        if e['group'] not in groups:
-            problem(w, f'group {e["group"]!r} is none of {groups}')
+        if e['goal'] not in goal_keys:
+            problem(w, f'goal {e["goal"]!r} is not in goals.csv')
         if not e['expectation'] or len(e['expectation']) > 90 or e['expectation'].endswith('.'):
             problem(w, 'expectation is empty, longer than 90 characters or ends with a full stop')
         for k in split(e['capabilities']):
@@ -404,6 +420,72 @@ def check_expectations(expectations, caps, comps_by_key, adrs):
         if absent(c) and not split(c['changes']) and c['key'] not in named:
             problem(f'capabilities.csv {c["key"]}', 'nothing serves it, and no change and no expectation names it')
     return caps_by_key
+
+
+# ------------------------------------------------------------- what it is for
+SAYS_URL = re.compile(r'^https://github\.com/zaentrum/[A-Za-z0-9._-]+/(?:blob|tree)/main/\S+$')
+
+
+def check_goals(goals, qualities, areas, expectations):
+    kinds = [k for k, _ in GOAL_KINDS]
+    keys = {}
+    for g in goals:
+        w = f'goals.csv {g.get("key")}'
+        if not KEY.match(g['key']) or len(g['key']) > 32:
+            problem(w, 'key is not kebab-case of at most 32 characters')
+        if g['key'] in keys:
+            problem(w, 'key twice')
+        keys[g['key']] = g
+        if not g['goal'] or len(g['goal']) > 60 or g['goal'].endswith('.') or '"' in g['goal']:
+            problem(w, 'goal is empty, longer than 60 characters, ends with a full stop or holds a double quote')
+        if g['kind'] not in kinds:
+            problem(w, f'kind {g["kind"]!r} is none of {kinds}')
+        if not g['why'] or len(g['why']) > 220:
+            problem(w, 'why is empty or longer than 220 characters')
+    for g in goals:
+        for k in split(g['needs']):
+            if k not in keys:
+                problem(f'goals.csv {g["key"]}', f'needs: {k} is not in goals.csv')
+
+    def reaches(k, seen):
+        for n in split(keys[k]['needs']):
+            if n in keys and (n in seen or reaches(n, seen | {n})):
+                return True
+        return False
+    for g in goals:
+        if reaches(g['key'], {g['key']}):
+            problem(f'goals.csv {g["key"]}', 'needs itself, by way of the goals it needs')
+    for a in areas:
+        if a['goal'] not in keys:
+            problem(f'areas.csv {a.get("key")}', f'goal {a["goal"]!r} is not in goals.csv')
+    seen = set()
+    for q in qualities:
+        w = f'qualities.csv {q.get("key")}'
+        if not KEY.match(q['key']) or len(q['key']) > 32:
+            problem(w, 'key is not kebab-case of at most 32 characters')
+        if q['key'] in seen:
+            problem(w, 'key twice')
+        seen.add(q['key'])
+        if q['goal'] not in keys:
+            problem(w, f'goal {q["goal"]!r} is not in goals.csv')
+        if q['characteristic'] not in CHARACTERISTICS:
+            problem(w, f'characteristic {q["characteristic"]!r} is none of {CHARACTERISTICS}')
+        if not q['quality'] or len(q['quality']) > 90 or q['quality'].endswith('.'):
+            problem(w, 'quality is empty, longer than 90 characters or ends with a full stop')
+        if not q['measure'] or len(q['measure']) > 90:
+            problem(w, 'measure is empty or longer than 90 characters')
+        if not q['today'] or len(q['today']) > 160:
+            problem(w, 'today is empty or longer than 160 characters: say what it is, or that it is not measured')
+        if len(q['target']) > 160:
+            problem(w, 'target is longer than 160 characters')
+        for ref in split(q['says']):
+            if not (SAYS_URL.match(ref) or resolve_ref(ref)):
+                problem(w, f'says: {ref} leads to no page or heading')
+    used = {a['goal'] for a in areas} | {e['goal'] for e in expectations} | {q['goal'] for q in qualities}
+    for g in goals:
+        if g['key'] not in used:
+            problem(f'goals.csv {g["key"]}', 'no area, no expectation and no quality is for it')
+    return keys
 
 
 # ------------------------------------------------------------------- pages
@@ -439,7 +521,7 @@ def faces_used(caps):
     return [(k, label) for k, label in APPS + FACES if any(c[k] != '—' for c in caps)]
 
 
-def area_blocks(part, areas, caps, settings_by_key):
+def area_blocks(part, areas, caps, settings_by_key, goal_names=None):
     out = []
     for a in [a for a in areas if a['part'] == part or (part == 'platform' and a['part'] == 'later')]:
         rows = [c for c in caps if c['area'] == a['key']]
@@ -448,6 +530,8 @@ def area_blocks(part, areas, caps, settings_by_key):
         r = resolve_spec(a['spec']) if a['spec'] else None
         bits.append(f'Specified in [{r[1]}]({r[0]}).' if r else 'Not specified yet.')
         bits.append(f'Depth: {a["depth"]}.')
+        if goal_names and a['goal'] in goal_names:
+            bits.append(f'For the goal [{goal_names[a["goal"]]}](../goals/README.md#{slug(goal_names[a["goal"]])}).')
         out.append(' '.join(bits) + '\n')
         if not rows:
             out.append('No capability yet.\n')
@@ -500,7 +584,7 @@ def overview(areas, caps, settings, inventory, changes):
 STATE_WORD = {'built': 'built', 'partial': 'partial', 'no': 'no', '?': 'not checked'}
 
 
-def expectations_blocks(expectations, caps, areas, comps_by_key, adrs):
+def expectations_blocks(expectations, caps, areas, comps_by_key, adrs, goals):
     """-> (the page's tables, the README's counts, {expectation: its state})"""
     caps_by_key = {c['key']: c for c in caps}
     area_of = {a['key']: a for a in areas}
@@ -515,34 +599,123 @@ def expectations_blocks(expectations, caps, areas, comps_by_key, adrs):
     def comp_link(k):
         label = layer_label[comps_by_key[k]['layer']]
         return f'[`{k}`](../architecture/components.md#{slug(label)}) {comps_by_key[k]["status"]}'
-    out = []
-    for g, label in EXPECT_GROUPS:
-        sel = [e for e in expectations if e['group'] == g]
+    out, rows = [], []
+    for g in goals:
+        sel = [e for e in expectations if e['goal'] == g['key']]
         if not sel:
             continue
-        out.append(f'## {label}\n')
-        rows = []
+        out.append(f'## {g["goal"]}\n')
+        out.append(f'For the goal [{g["goal"]}](../goals/README.md#{slug(g["goal"])}).\n')
+        body = []
         for e in sel:
             # a key the check has already named as unknown is left out here
             met = [cap_link(k) for k in split(e['capabilities']) if k in caps_by_key] + \
                 [comp_link(k) for k in split(e['components']) if k in comps_by_key]
             if e['decided'] in adrs:
                 met.append(f'[ADR-{e["decided"]}](../../{adrs[e["decided"]]["file"]})')
-            rows.append([e['expectation'], state[e['key']], ', '.join(met), e['note'] or '—'])
-        out.append(table(rows, ['Expected', 'State', 'Met by', 'Note']) + '\n')
-    rows = []
-    for g, label in EXPECT_GROUPS:
-        sel = [e for e in expectations if e['group'] == g]
-        if sel:
-            n = Counter(state[e['key']] for e in sel)
-            rows.append([f'[{label}](./expectations.md#{slug(label)})', len(sel)] + [n[s] for s in EXPECT_STATES])
+            body.append([e['expectation'], state[e['key']], ', '.join(met), e['note'] or '—'])
+        out.append(table(body, ['Expected', 'State', 'Met by', 'Note']) + '\n')
+        n = Counter(state[e['key']] for e in sel)
+        rows.append([f'[{g["goal"]}](./expectations.md#{slug(g["goal"])})', len(sel)] + [n[x] for x in EXPECT_STATES])
     n = Counter(state.values())
-    rows.append(['all', len(expectations)] + [n[s] for s in EXPECT_STATES])
+    rows.append(['all', len(expectations)] + [n[x] for x in EXPECT_STATES])
     gone = sum(1 for c in caps if absent(c))
-    counts = table(rows, ['Expected of it', 'Expectations'] + EXPECT_STATES) + \
+    counts = table(rows, ['Expected, for the goal', 'Expectations'] + EXPECT_STATES) + \
         f'\n\nNothing serves {gone} of the {len(caps)} capabilities yet: no app or face has them, and no screen, ' \
         f'route, command, field or setting is theirs.\n'
     return '\n'.join(out).rstrip() + '\n', counts, state
+
+
+def goals_blocks(goals, qualities, areas, caps, expectations, expect_state, arch):
+    """the pages of spec/goals: the cascade as a picture, the goals as a table, and each
+    goal with what is expected of it, the areas and components that serve it, and its
+    qualities"""
+    by_key = {g['key']: g for g in goals}
+    kind_label = dict(GOAL_KINDS)
+    area_page = {a['key']: next(pg for p, _, pg in PARTS if p == a['part']) for a in areas}
+
+    def link(k):
+        return f'[{by_key[k]["goal"]}](#{slug(by_key[k]["goal"])})'
+
+    def expected(g):
+        sel = [e for e in expectations if e['goal'] == g['key']]
+        n = Counter(expect_state[e['key']] for e in sel)
+        said = ', '.join(f'{n[x]} {x}' for x in EXPECT_STATES if n[x])
+        return (len(sel), said)
+
+    def served(g):
+        sel = [a for a in areas if a['goal'] == g['key']]
+        its = [c for c in caps if c['area'] in {a['key'] for a in sel}]
+        return sel, its
+    # the picture: a box a kind, an arrow from a goal to each goal it needs; an arrow
+    # every goal of a kind has is drawn once, from the kind
+    pic = ['```mermaid', 'flowchart TD']
+    nid = {g['key']: 'g_' + g['key'].replace('-', '_') for g in goals}
+    for kind, label in GOAL_KINDS:
+        sel = [g for g in goals if g['kind'] == kind]
+        if sel:
+            pic.append(f'  subgraph k_{kind}["{label}"]')
+            pic.append('    ' + '; '.join(f'{nid[g["key"]]}["{g["goal"]}"]' for g in sel))
+            pic.append('  end')
+    edges = [(g['key'], n) for g in goals for n in split(g['needs']) if n in by_key]
+    for kind, _ in GOAL_KINDS:
+        members = [g['key'] for g in goals if g['kind'] == kind]
+        if len(members) < 2:
+            continue
+        for n in sorted({n for _, n in edges}, key=lambda k: list(by_key).index(k)):
+            if n not in members and all((m, n) in edges for m in members):
+                pic.append(f'  k_{kind} --> {nid[n]}')
+                edges = [e for e in edges if not (e[0] in members and e[1] == n)]
+    pic += [f'  {nid[a]} --> {nid[b]}' for a, b in edges] + ['```']
+    rows = []
+    for g in goals:
+        n, said = expected(g)
+        sel, its = served(g)
+        gone = sum(1 for c in its if absent(c))
+        qs = [q for q in qualities if q['goal'] == g['key']]
+        rows.append([link(g['key']), kind_label.get(g['kind'], g['kind']),
+                     ', '.join(link(k) for k in split(g['needs']) if k in by_key) or '—',
+                     f'{n}: {said}' if n else '—',
+                     (f'{len(its)} in {len(sel)} {"area" if len(sel) == 1 else "areas"}' +
+                      (f', {gone} served by nothing' if gone else '')) if its else '—',
+                     (f'{len(qs)}, {sum(1 for q in qs if q["target"])} with a target') if qs else '—'])
+    out = []
+    for g in goals:
+        out.append(f'## {g["goal"]}\n')
+        needs = [link(k) for k in split(g['needs']) if k in by_key]
+        needed = [link(o['key']) for o in goals if g['key'] in split(o['needs'])]
+        out.append(g['why'] + (f' It needs: {", ".join(needs)}.' if needs else '') +
+                   (f' Needed by: {", ".join(needed)}.' if needed else '') + '\n')
+        n, said = expected(g)
+        sel, its = served(g)
+        lines = []
+        lines.append(f'- **Expected of it:** [{n} {"expectation" if n == 1 else "expectations"}]'
+                     f'(../capabilities/expectations.md#{slug(g["goal"])}): {said}.'
+                     if n else '- **Expected of it:** nothing is listed yet.')
+        if sel:
+            lines.append('- **Capabilities:** ' + ', '.join(
+                f'[{a["area"]}](../capabilities/{area_page[a["key"]]}#{slug(a["area"])}) '
+                f'({sum(1 for c in caps if c["area"] == a["key"])})' for a in sel) + '.')
+            comps = []
+            for c in its:
+                for k in arch.built_by.get(c['key'], []):
+                    if k not in comps:
+                        comps.append(k)
+            comps.sort(key=lambda k: (arch.order[arch.comp[k]['layer']], [x['key'] for x in arch.comps].index(k)))
+            lines.append('- **Served by:** ' + (', '.join(f'`{k}`' for k in comps) + '.' if comps else 'no component yet.'))
+        else:
+            lines.append('- **Capabilities:** no area of the capability model is for it yet.')
+        out.append('\n'.join(lines) + '\n')
+        qs = [q for q in qualities if q['goal'] == g['key']]
+        if qs:
+            body = [[q['quality'], q['characteristic'], q['measure'], q['today'], q['target'] or 'not set',
+                     ', '.join(arch.says(ref) for ref in split(q['says'])) or '—'] for q in qs]
+            out.append(table(body, ['It has to', 'Quality', 'Measured by', 'Today', 'Target', 'Says so']) + '\n')
+        else:
+            out.append('No quality is stated for it yet.\n')
+    return {'cascade': '\n'.join(pic) + '\n',
+            'goals': table(rows, ['Goal', 'Is', 'Needs', 'Expected of it', 'Capabilities', 'Qualities']) + '\n',
+            'by-goal': '\n'.join(out).rstrip() + '\n'}
 
 
 def inventory_block(inventory, caps, settings):
@@ -607,7 +780,7 @@ def configuration_blocks(caps, settings, areas):
     return out
 
 
-def export(areas, caps, settings, inventory, path, arch=None, expectations=(), expect_state=None):
+def export(areas, caps, settings, inventory, path, arch=None, expectations=(), expect_state=None, goals=(), qualities=()):
     """the model, resolved, as one JSON file (see the docstring)"""
     by_id = {r['id']: r for r in inventory}
     keep = ('id', 'kind', 'repo', 'name', 'value', 'note', 'where')
@@ -643,8 +816,15 @@ def export(areas, caps, settings, inventory, path, arch=None, expectations=(), e
             # nothing serves it: it is in the model because a change or an expectation names it
             'absent': absent(c), 'expected': [e['key'] for e in expectations if c['key'] in split(e['capabilities'])],
         } for c in caps],
-        'expectationGroups': [{'key': g, 'label': label} for g, label in EXPECT_GROUPS],
-        'expectations': [{'key': e['key'], 'group': e['group'], 'expectation': e['expectation'], 'note': e['note'],
+        # what it is for: each goal with the goals it needs; an expectation's group is its goal
+        'goalKinds': [{'key': k, 'label': label} for k, label in GOAL_KINDS],
+        'goals': [{'key': g['key'], 'goal': g['goal'], 'kind': g['kind'], 'needs': split(g['needs']), 'why': g['why'],
+                   'areas': [a['key'] for a in areas if a['goal'] == g['key']]} for g in goals],
+        'qualities': [{**{k: q[k] for k in QUALITY_COLS if k != 'says'},
+                       'says': [{'url': r} if SAYS_URL.match(r) else resolve_ref(r) for r in split(q['says'])]} for q in qualities],
+        'expectationGroups': [{'key': g['key'], 'label': g['goal']} for g in goals
+                              if any(e['goal'] == g['key'] for e in expectations)],
+        'expectations': [{'key': e['key'], 'group': e['goal'], 'expectation': e['expectation'], 'note': e['note'],
                           'capabilities': split(e['capabilities']), 'components': split(e['components']),
                           'decided': e['decided'], 'state': (expect_state or {}).get(e['key'])} for e in expectations],
         'settings': [{**{k: s[k] for k in SET_COLS if k not in ('capability', 'ids')},
@@ -675,8 +855,7 @@ CONN_COLS = ['from', 'to', 'kind', 'on', 'via', 'note']
 DEC_COLS = ['adr', 'components', 'capabilities', 'note']
 LIMIT_COLS = ['key', 'limit', 'components', 'capabilities', 'says', 'note']
 # where a limit may say it is written, beside the pages of docs/ and spec/: a page of
-# one of the organisation's repositories
-SAYS_URL = re.compile(r'^https://github\.com/zaentrum/[A-Za-z0-9._-]+/(?:blob|tree)/main/\S+$')
+# one of the organisation's repositories (SAYS_URL)
 STORE_KINDS = {'database', 'cache', 'volume'}
 # the components nobody has to connect to: a person or the operator uses them, or they
 # take their work from the bus or a schedule
@@ -1335,17 +1514,22 @@ def main():
     inventory = read('inventory.csv', ['id', 'kind', 'repo', 'name', 'value', 'note', 'where'])
     area_keys, changes = check(areas, caps, settings, inventory)
     expectations = read('expectations.csv', EXPECT_COLS)
+    goals = read('goals.csv', GOAL_COLS, GOALS)
+    qualities = read('qualities.csv', QUALITY_COLS, GOALS)
+    goal_keys = check_goals(goals, qualities, areas, expectations)
     arch = Arch(read('components.csv', COMP_COLS, ARCH), read('connections.csv', CONN_COLS, ARCH),
                 read('decisions.csv', DEC_COLS, ARCH), inventory, caps, settings, read('limits.csv', LIMIT_COLS, ARCH))
     arch.check({c['key'] for c in caps})
-    check_expectations(expectations, caps, arch.comp, arch.adrs)
+    check_expectations(expectations, caps, arch.comp, arch.adrs, goal_keys)
     arch.derive()
-    expected_tables, expected_counts, expect_state = expectations_blocks(expectations, caps, areas, arch.comp, arch.adrs)
+    known = [g for g in goals if g['key'] in goal_keys]
+    expected_tables, expected_counts, expect_state = expectations_blocks(
+        [e for e in expectations if e['goal'] in goal_keys], caps, areas, arch.comp, arch.adrs, known)
     if '--json' in sys.argv:
         at = sys.argv.index('--json') + 1
         if at >= len(sys.argv):
             sys.exit('--json needs the file to write')
-        export(areas, caps, settings, inventory, sys.argv[at], arch, expectations, expect_state)
+        export(areas, caps, settings, inventory, sys.argv[at], arch, expectations, expect_state, goals, qualities)
         print(f'{len(problems)} problems; {len(caps)} capabilities, {len(settings)} settings, '
               f'{len(arch.comps)} components, {len(arch.conns)} connections written to {sys.argv[at]}')
         return
@@ -1356,10 +1540,14 @@ def main():
         'inventory': inventory_block(inventory, caps, settings),
     }, write)
     fill(os.path.join(CAP, 'expectations.md'), {'expectations': expected_tables}, write)
+    fill(os.path.join(GOALS, 'README.md'), goals_blocks(
+        known, [q for q in qualities if q['goal'] in goal_keys], [a for a in areas if a['goal'] in goal_keys], caps,
+        [e for e in expectations if e['goal'] in goal_keys], expect_state, arch), write)
     for p, _, page in PARTS:
         if p == 'later':
             continue
-        fill(os.path.join(CAP, page), {'areas': area_blocks(p, areas, caps, settings_by_key)}, write)
+        fill(os.path.join(CAP, page), {'areas': area_blocks(p, areas, caps, settings_by_key,
+                                                            {g['key']: g['goal'] for g in goals})}, write)
     fill(os.path.join(CAP, 'configuration.md'), configuration_blocks(caps, settings, areas), write)
     fill(os.path.join(ARCH, 'README.md'), {'state': arch.state_block(), 'findings': arch.findings_block(),
                                            'limits': arch.limits_block()}, write)
@@ -1369,7 +1557,8 @@ def main():
     fill(os.path.join(DOCS, 'architecture.md'), {'diagram': arch.diagram_block(), 'routes': arch.routes_block()}, write)
     for p in problems:
         print(p)
-    print(f'{len(problems)} problems; {len(caps)} capabilities in {len(areas)} areas, {len(settings)} settings, '
+    print(f'{len(problems)} problems; {len(goals)} goals, {len(qualities)} qualities; '
+          f'{len(caps)} capabilities in {len(areas)} areas, {len(settings)} settings, '
           f'{len(expectations)} expectations, {len(inventory)} inventory rows; {len(arch.comps)} components, '
           f'{len(arch.conns)} connections, {len(arch.decisions)} decisions, {len(arch.found)} findings, '
           f'{len(arch.limits)} limits')

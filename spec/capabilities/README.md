@@ -77,7 +77,9 @@ catalog console, which doesn't offer it.
 
 Capabilities are grouped in areas, the areas in parts: chino, the portal, the
 catalog and the pipeline, the platform. Only a capability is counted, linked and
-checked; an area is a heading. Each area says how deep it is modelled:
+checked; an area is a heading. A part is where a capability is built; what it
+is there for is its area's **goal**, one of the goals of
+[what zaentrum is for](../goals/README.md). Each area says how deep it is modelled:
 
 | Depth | Means |
 |---|---|
@@ -93,7 +95,7 @@ does. Chapters and changes refer to capabilities by their keys.
 
 | File | Written by | Holds |
 |---|---|---|
-| [areas.csv](./areas.csv) | hand | the areas: part, depth, chapter |
+| [areas.csv](./areas.csv) | hand | the areas: part, goal, depth, chapter |
 | [capabilities.csv](./capabilities.csv) | hand | one row a capability |
 | [settings.csv](./settings.csv) | hand | one row a setting |
 | [expectations.csv](./expectations.csv) | hand | one row a thing people expect of a media server: the capabilities and components that meet it, or the decision record that rules it out |
@@ -118,6 +120,7 @@ model, each reference, change and id resolved, written by the same program.
   named is no numbered change of the specification;
 - an expectation names no capability, no component and no decision record, or
   one that doesn't exist;
+- an area or an expectation is for no goal of [goals.csv](../goals/goals.csv);
 - a capability nothing serves is named by no change and no expectation;
 - a value is none of those the model allows;
 - a table on these pages is not what the data says.
@@ -152,7 +155,7 @@ model, each reference, change and id resolved, written by the same program.
 
 ## What is expected of it
 
-What people expect of a media server they run themselves, group by group, and
+What people expect of a media server they run themselves, goal by goal, and
 what the model says of each: [expectations](./expectations.md) has every one with
 the capabilities that meet it. An expectation is **there** when every capability
 and component it names is built, **partly** when some are, **not there** when
@@ -160,14 +163,17 @@ none is, **not checked** when none was looked at, and **decided otherwise** when
 a decision record rules it out.
 
 <!-- generated: expected -->
-| Expected of it | Expectations | there | partly | not there | not checked | decided otherwise |
+| Expected, for the goal | Expectations | there | partly | not there | not checked | decided otherwise |
 |---|---|---|---|---|---|---|
-| [Getting it running](./expectations.md#getting-it-running) | 8 | 1 | 4 | 3 | 0 | 0 |
-| [The library](./expectations.md#the-library) | 10 | 1 | 4 | 5 | 0 | 0 |
-| [Watching](./expectations.md#watching) | 18 | 0 | 9 | 7 | 1 | 1 |
-| [People and sharing](./expectations.md#people-and-sharing) | 11 | 1 | 5 | 5 | 0 | 0 |
-| [Keeping it running](./expectations.md#keeping-it-running) | 5 | 1 | 3 | 1 | 0 | 0 |
-| [Extending it](./expectations.md#extending-it) | 5 | 2 | 1 | 2 | 0 | 0 |
+| [Watch films and shows](./expectations.md#watch-films-and-shows) | 14 | 0 | 9 | 4 | 1 | 0 |
+| [Listen to music](./expectations.md#listen-to-music) | 1 | 0 | 0 | 1 | 0 | 0 |
+| [Watch live channels](./expectations.md#watch-live-channels) | 1 | 0 | 0 | 1 | 0 | 0 |
+| [Look at photos and home videos](./expectations.md#look-at-photos-and-home-videos) | 1 | 0 | 0 | 1 | 0 | 0 |
+| [Listen to books and podcasts](./expectations.md#listen-to-books-and-podcasts) | 1 | 0 | 0 | 1 | 0 | 0 |
+| [Keep the library](./expectations.md#keep-the-library) | 12 | 1 | 5 | 5 | 0 | 1 |
+| [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 5 | 5 | 0 | 0 |
+| [Run it oneself](./expectations.md#run-it-oneself) | 12 | 2 | 6 | 4 | 0 | 0 |
+| [Make it one's own](./expectations.md#make-it-ones-own) | 4 | 2 | 1 | 1 | 0 | 0 |
 | all | 57 | 6 | 26 | 23 | 1 | 1 |
 
 Nothing serves 43 of the 274 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.

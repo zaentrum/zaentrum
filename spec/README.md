@@ -15,6 +15,10 @@ release.
 > form; its settings page shows the target only, and nothing in it is built
 > until a change to it is approved.
 
+Above both layers stands [what zaentrum is for](./goals/README.md): what people
+want of it, what that takes, how well each has to be met, and how every
+capability and component follows from it.
+
 The [capabilities](./capabilities/README.md) are its first layer: every
 capability of the platform, checked against the code, with the chapter that
 describes it, or none yet; and, against what people expect of a media server,
@@ -29,6 +33,7 @@ holds the decision records behind the platform.
 
 | Part | What it specifies |
 |---|---|
+| [what it is for](./goals/README.md) | the goals: what people want, what that takes, what being open adds; the qualities each has to be met with |
 | [capabilities](./capabilities/README.md) | what the platform does, for whom, where each app and console has it, what serves it, and its settings; what is expected of it and not there |
 | [architecture](./architecture/README.md) | the components that do it: their code, what runs them, their connections, the decisions behind them, their limits |
 | [chino](./chino/README.md) | the apps for watching: on the web, on a phone or a tablet, on Android TV and on Samsung TVs |
