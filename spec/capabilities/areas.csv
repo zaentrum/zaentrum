@@ -24,5 +24,4 @@ library,catalog,library,The library and its originals,working,,"The packages the
 pipeline,catalog,library,Preparing titles to play,working,,"What happens to a new title: analysed, encoded, packaged, given subtitles; and encoding while it plays."
 install,platform,run,Installing and configuring,working,,"The platform as an operator installs it: identity, storage, addresses, certificates, backups, updates."
 tv,later,live,Live channels,stub,,"A product for live channels: registered, not built."
-musig,later,listen,Music,stub,,"A product for music: registered, not built."
-books,later,books,"Audiobooks, podcasts and books",stub,,"Listening and reading: expected, neither registered nor built."
+musig,later,listen,"Music, audiobooks and podcasts",stub,,"One product for listening, musig: music is registered and not built; audiobooks and podcasts are expected of it, and nothing is registered or built for them."

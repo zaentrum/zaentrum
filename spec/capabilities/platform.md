@@ -104,29 +104,20 @@ A product for live channels: registered, not built. Not specified yet. Depth: st
 |---|---|---|---|
 | `watch-live-channels` | H.C9, H.C10 | — | `registry-seed` |
 
-## Music
+## Music, audiobooks and podcasts
 
-A product for music: registered, not built. Not specified yet. Depth: stub. For the goal [Listen to music](../goals/README.md#listen-to-music).
+One product for listening, musig: music is registered and not built; audiobooks and podcasts are expected of it, and nothing is registered or built for them. Not specified yet. Depth: stub. For the goal [Listen to music, audiobooks and podcasts](../goals/README.md#listen-to-music-audiobooks-and-podcasts).
 
 | Capability | Who | Portal | Spec |
 |---|---|---|---|
 | Listen to music | person | no | [As deployed](../portal/home.md#as-deployed), [Spaces](../portal/home.md#spaces) |
+| Listen to audiobooks and podcasts | person | no | — |
 
 - Listen to music: registered only: a seeded app and tile, switched off, badged soon; nothing behind them
+- Listen to audiobooks and podcasts: in the same app as music; nothing is registered or built for it
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
 | `play-music` | H.C9, H.C10 | `katalog-api GET /albums` | `registry-seed` |
-
-## Audiobooks, podcasts and books
-
-Listening and reading: expected, neither registered nor built. Not specified yet. Depth: stub. For the goal [Listen to books and podcasts](../goals/README.md#listen-to-books-and-podcasts).
-
-| Capability | Who | Portal | Spec |
-|---|---|---|---|
-| Listen to audiobooks and podcasts, and read books | person | no | — |
-
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `listen-to-books` | — | — | — |
+| `listen-to-audiobooks` | — | — | — |
 <!-- end: areas -->

@@ -137,8 +137,8 @@ columns is on the [front page](./README.md#how-to-read-it).
 |---|---|---|---|---|---|---|---|---|
 | `tv-api` | the tv product's API | service | later | [tv-api](https://github.com/zaentrum/tv-api) | — | — | — | — |
 | `tv-stream` | the tv product's stream origin | service | later | [tv-stream](https://github.com/zaentrum/tv-stream) | — | — | — | ADR-0004 |
-| `musig-api` | the music product's API | service | later | [musig-api](https://github.com/zaentrum/musig-api) | — | — | — | — |
-| `musig-stream` | the music product's stream origin | service | later | [musig-stream](https://github.com/zaentrum/musig-stream) | — | — | — | ADR-0004 |
+| `musig-api` | the musig product's API: music, audiobooks and podcasts | service | later | [musig-api](https://github.com/zaentrum/musig-api) | — | — | — | — |
+| `musig-stream` | the musig product's stream origin | service | later | [musig-stream](https://github.com/zaentrum/musig-stream) | — | — | — | ADR-0004 |
 
 ## Retired
 

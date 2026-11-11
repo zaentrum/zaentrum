@@ -271,4 +271,4 @@ encode-on-other-gpus,install,"Encode on an Intel or AMD graphics chip, or a Mac'
 move-platform,install,"Move the platform to another machine with its people, settings, history and library",operator,—,—,—,—,—,—,no,no,,,,,,a dump restores into the install that made it; nothing carries an install over
 watch-live-channels,tv,Watch live channels,person,—,—,—,—,no,—,—,—,,,registry-seed,portal/home#As deployed ; portal/home#Spaces,H.C9 ; H.C10,"registered only: a seeded app and tile, switched off, badged soon; nothing behind them"
 play-music,musig,Listen to music,person,—,—,—,—,no,—,—,—,,route:katalog-api:GET /albums,registry-seed,portal/home#As deployed ; portal/home#Spaces,H.C9 ; H.C10,"registered only: a seeded app and tile, switched off, badged soon; nothing behind them"
-listen-to-books,books,"Listen to audiobooks and podcasts, and read books",person,—,—,—,—,no,—,—,—,,,,,,
+listen-to-audiobooks,musig,Listen to audiobooks and podcasts,person,—,—,—,—,no,—,—,—,,,,,,in the same app as music; nothing is registered or built for it

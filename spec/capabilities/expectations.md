@@ -59,13 +59,14 @@ For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 | Usable with a screen reader and the device's accessibility settings | partly | [`use-with-screen-reader`](./chino.md#the-frame) not checked, [`hear-result-count`](./chino.md#search) no, [`follow-caption-preferences`](./chino.md#subtitles) partial | — |
 | Suggestions of what to watch | partly | [`see-similar-titles`](./chino.md#the-title-page) built, [`see-top-rated`](./chino.md#home) built, [`zap-through-titles`](./chino.md#zap) partial | — |
 
-## Listen to music
+## Listen to music, audiobooks and podcasts
 
-For the goal [Listen to music](../goals/README.md#listen-to-music).
+For the goal [Listen to music, audiobooks and podcasts](../goals/README.md#listen-to-music-audiobooks-and-podcasts).
 
 | Expected | State | Met by | Note |
 |---|---|---|---|
-| Music | not there | [`play-music`](./platform.md#music) no | — |
+| Music | not there | [`play-music`](./platform.md#music-audiobooks-and-podcasts) no | — |
+| Audiobooks and podcasts | not there | [`listen-to-audiobooks`](./platform.md#music-audiobooks-and-podcasts) no | — |
 
 ## Watch live channels
 
@@ -74,14 +75,6 @@ For the goal [Watch live channels](../goals/README.md#watch-live-channels).
 | Expected | State | Met by | Note |
 |---|---|---|---|
 | Live channels and recordings | not there | [`watch-live-channels`](./platform.md#live-channels) no | — |
-
-## Listen to books and podcasts
-
-For the goal [Listen to books and podcasts](../goals/README.md#listen-to-books-and-podcasts).
-
-| Expected | State | Met by | Note |
-|---|---|---|---|
-| Audiobooks, podcasts and books | not there | [`listen-to-books`](./platform.md#audiobooks-podcasts-and-books) no | — |
 
 ## Keep the library
 

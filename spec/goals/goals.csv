@@ -1,8 +1,7 @@
 key,goal,kind,needs,why
 watch,Watch films and shows,use,library ; people ; run,"A household watches the films and shows it owns, on every screen it has."
-listen,Listen to music,use,library ; people ; run,It listens to the music it owns.
+listen,"Listen to music, audiobooks and podcasts",use,library ; people ; run,"It listens to its music, audiobooks and podcasts, in one app."
 live,Watch live channels,use,library ; people ; run,"It watches live channels, and what it recorded of them."
-books,Listen to books and podcasts,use,library ; people ; run,"It listens to audiobooks and podcasts, and reads books."
 library,Keep the library,enable,run,"To watch or listen, the platform has to know what the household owns: take it in, describe it, and make it ready to play on every device."
 people,Share it with a household,enable,run,"A household is several people: each signs in, sees what they may, and keeps a place, lists and a history of their own."
 run,Run it oneself,enable,trust,"Somebody runs it: installs it, makes it reachable, keeps it up to date, backs it up, and learns when it fails."

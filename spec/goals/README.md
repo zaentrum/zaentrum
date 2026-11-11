@@ -4,8 +4,12 @@ zaentrum is for a household that owns films, shows and music and wants to enjoy
 them on every screen it has, from a server it runs itself. And it is open:
 anyone can run it, look into it, change it and add to it.
 
-It is for what a household owns, not for what it made itself: its own photos
-and home videos are not a goal, and nothing in the platform is built for them.
+Two things are not goals, and nothing in the platform is built for them:
+
+- **A household's own photos and home videos.** zaentrum is for what a
+  household owns, not for what it made itself.
+- **Books to read.** zaentrum plays what is watched or listened to; a book has
+  its place in it as an audiobook.
 
 Everything else in the specification follows from that, one step at a time:
 
@@ -65,7 +69,7 @@ until then nothing says whether today is good enough.
 ```mermaid
 flowchart TD
   subgraph k_use["what people want"]
-    g_watch["Watch films and shows"]; g_listen["Listen to music"]; g_live["Watch live channels"]; g_books["Listen to books and podcasts"]
+    g_watch["Watch films and shows"]; g_listen["Listen to music, audiobooks and podcasts"]; g_live["Watch live channels"]
   end
   subgraph k_enable["what that takes"]
     g_library["Keep the library"]; g_people["Share it with a household"]; g_run["Run it oneself"]
@@ -89,9 +93,8 @@ flowchart TD
 | Goal | Is | Needs | Expected of it | Capabilities | Qualities |
 |---|---|---|---|---|---|
 | [Watch films and shows](#watch-films-and-shows) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 14: 9 partly, 4 not there, 1 not checked | 142 in 15 areas, 13 served by nothing | 5, 0 with a target |
-| [Listen to music](#listen-to-music) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 1: 1 not there | 1 in 1 area | — |
+| [Listen to music, audiobooks and podcasts](#listen-to-music-audiobooks-and-podcasts) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 2: 2 not there | 2 in 1 area, 1 served by nothing | — |
 | [Watch live channels](#watch-live-channels) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 1: 1 not there | 1 in 1 area | — |
-| [Listen to books and podcasts](#listen-to-books-and-podcasts) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 1: 1 not there | 1 in 1 area, 1 served by nothing | — |
 | [Keep the library](#keep-the-library) | what that takes | [Run it oneself](#run-it-oneself) | 12: 1 there, 5 partly, 5 not there, 1 decided otherwise | 50 in 3 areas, 10 served by nothing | 4, 0 with a target |
 | [Share it with a household](#share-it-with-a-household) | what that takes | [Run it oneself](#run-it-oneself) | 11: 1 there, 5 partly, 5 not there | 13 in 1 area, 6 served by nothing | 2, 0 with a target |
 | [Run it oneself](#run-it-oneself) | what that takes | [Trust it](#trust-it) | 12: 2 there, 6 partly, 4 not there | 54 in 4 areas, 11 served by nothing | 5, 0 with a target |
@@ -116,12 +119,12 @@ A household watches the films and shows it owns, on every screen it has. It need
 | It speaks the household's languages | interaction capability | the languages of the apps and the consoles | English | not set | — |
 | People who see or hear less can use it | interaction capability | the accessibility level the apps meet | none is stated, and no app is checked with a screen reader | not set | — |
 
-## Listen to music
+## Listen to music, audiobooks and podcasts
 
-It listens to the music it owns. It needs: [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself).
+It listens to its music, audiobooks and podcasts, in one app. It needs: [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself).
 
-- **Expected of it:** [1 expectation](../capabilities/expectations.md#listen-to-music): 1 not there.
-- **Capabilities:** [Music](../capabilities/platform.md#music) (1).
+- **Expected of it:** [2 expectations](../capabilities/expectations.md#listen-to-music-audiobooks-and-podcasts): 2 not there.
+- **Capabilities:** [Music, audiobooks and podcasts](../capabilities/platform.md#music-audiobooks-and-podcasts) (2).
 - **Served by:** `katalog-api`.
 
 No quality is stated for it yet.
@@ -136,19 +139,9 @@ It watches live channels, and what it recorded of them. It needs: [Keep the libr
 
 No quality is stated for it yet.
 
-## Listen to books and podcasts
-
-It listens to audiobooks and podcasts, and reads books. It needs: [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself).
-
-- **Expected of it:** [1 expectation](../capabilities/expectations.md#listen-to-books-and-podcasts): 1 not there.
-- **Capabilities:** [Audiobooks, podcasts and books](../capabilities/platform.md#audiobooks-podcasts-and-books) (1).
-- **Served by:** no component yet.
-
-No quality is stated for it yet.
-
 ## Keep the library
 
-To watch or listen, the platform has to know what the household owns: take it in, describe it, and make it ready to play on every device. It needs: [Run it oneself](#run-it-oneself). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music](#listen-to-music), [Watch live channels](#watch-live-channels), [Listen to books and podcasts](#listen-to-books-and-podcasts).
+To watch or listen, the platform has to know what the household owns: take it in, describe it, and make it ready to play on every device. It needs: [Run it oneself](#run-it-oneself). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music, audiobooks and podcasts](#listen-to-music-audiobooks-and-podcasts), [Watch live channels](#watch-live-channels).
 
 - **Expected of it:** [12 expectations](../capabilities/expectations.md#keep-the-library): 1 there, 5 partly, 5 not there, 1 decided otherwise.
 - **Capabilities:** [The catalog](../capabilities/catalog.md#the-catalog) (22), [The library and its originals](../capabilities/catalog.md#the-library-and-its-originals) (14), [Preparing titles to play](../capabilities/catalog.md#preparing-titles-to-play) (14).
@@ -163,7 +156,7 @@ To watch or listen, the platform has to know what the household owns: take it in
 
 ## Share it with a household
 
-A household is several people: each signs in, sees what they may, and keeps a place, lists and a history of their own. It needs: [Run it oneself](#run-it-oneself). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music](#listen-to-music), [Watch live channels](#watch-live-channels), [Listen to books and podcasts](#listen-to-books-and-podcasts).
+A household is several people: each signs in, sees what they may, and keeps a place, lists and a history of their own. It needs: [Run it oneself](#run-it-oneself). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music, audiobooks and podcasts](#listen-to-music-audiobooks-and-podcasts), [Watch live channels](#watch-live-channels).
 
 - **Expected of it:** [11 expectations](../capabilities/expectations.md#share-it-with-a-household): 1 there, 5 partly, 5 not there.
 - **Capabilities:** [People and roles](../capabilities/portal.md#people-and-roles) (13).
@@ -176,7 +169,7 @@ A household is several people: each signs in, sees what they may, and keeps a pl
 
 ## Run it oneself
 
-Somebody runs it: installs it, makes it reachable, keeps it up to date, backs it up, and learns when it fails. It needs: [Trust it](#trust-it). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music](#listen-to-music), [Watch live channels](#watch-live-channels), [Listen to books and podcasts](#listen-to-books-and-podcasts), [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Make it one's own](#make-it-ones-own).
+Somebody runs it: installs it, makes it reachable, keeps it up to date, backs it up, and learns when it fails. It needs: [Trust it](#trust-it). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music, audiobooks and podcasts](#listen-to-music-audiobooks-and-podcasts), [Watch live channels](#watch-live-channels), [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Make it one's own](#make-it-ones-own).
 
 - **Expected of it:** [12 expectations](../capabilities/expectations.md#run-it-oneself): 2 there, 6 partly, 4 not there.
 - **Capabilities:** [The portal's home](../capabilities/portal.md#the-portals-home) (6), [Apps, spaces, tiles and extensions](../capabilities/portal.md#apps-spaces-tiles-and-extensions) (5), [Running the platform](../capabilities/portal.md#running-the-platform) (19), [Installing and configuring](../capabilities/platform.md#installing-and-configuring) (24).

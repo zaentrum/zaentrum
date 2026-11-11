@@ -39,8 +39,8 @@ schemas,the event contracts,beside,contracts,beside,schemas,,"Records of an earl
 sample-addon,the reference addon,beside,addon,beside,sample-addon,,
 tv-api,the tv product's API,later,service,later,tv-api,,
 tv-stream,the tv product's stream origin,later,service,later,tv-stream,,
-musig-api,the music product's API,later,service,later,musig-api,,
-musig-stream,the music product's stream origin,later,service,later,musig-stream,,
+musig-api,"the musig product's API: music, audiobooks and podcasts",later,service,later,musig-api,,
+musig-stream,the musig product's stream origin,later,service,later,musig-stream,,
 api-gateway,an edge gateway,retired,service,retired,api-gateway,,
 artwork,an image service,retired,service,retired,artwork,,katalog-manager serves the pictures now
 katalog-manager-api,the catalog's writer before katalog-manager,retired,service,retired,katalog-manager-api,,Its successor's workload kept the name

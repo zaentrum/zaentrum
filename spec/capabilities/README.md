@@ -166,9 +166,8 @@ a decision record rules it out.
 | Expected, for the goal | Expectations | there | partly | not there | not checked | decided otherwise |
 |---|---|---|---|---|---|---|
 | [Watch films and shows](./expectations.md#watch-films-and-shows) | 14 | 0 | 9 | 4 | 1 | 0 |
-| [Listen to music](./expectations.md#listen-to-music) | 1 | 0 | 0 | 1 | 0 | 0 |
+| [Listen to music, audiobooks and podcasts](./expectations.md#listen-to-music-audiobooks-and-podcasts) | 2 | 0 | 0 | 2 | 0 | 0 |
 | [Watch live channels](./expectations.md#watch-live-channels) | 1 | 0 | 0 | 1 | 0 | 0 |
-| [Listen to books and podcasts](./expectations.md#listen-to-books-and-podcasts) | 1 | 0 | 0 | 1 | 0 | 0 |
 | [Keep the library](./expectations.md#keep-the-library) | 12 | 1 | 5 | 5 | 0 | 1 |
 | [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 5 | 5 | 0 | 0 |
 | [Run it oneself](./expectations.md#run-it-oneself) | 12 | 2 | 6 | 4 | 0 | 0 |
