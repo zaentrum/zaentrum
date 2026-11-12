@@ -247,6 +247,7 @@ hand, and a component's fact sheet lists its own beside what the model finds.
 | Titles' details come from one outside service, with a key of the admin's own | `katalog-manager`, `metadata-service` | `enrich-without-own-key`, `read-local-metadata`, `choose-artwork` | [First run](../../docs/self-hosting.md#first-run), [Network egress](../../docs/prerequisites.md#network-egress) |
 | Where originals are retired a title is its package alone: renditions in segments, stereo and HDR10, and deleting is final. Originals are kept unless an admin sets them to go once packaged | `packager`, `katalog-manager`, `media` | `export-title`, `play-surround` | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
 | The apps are for the web, Android and iOS phones and tablets, Android TV and Samsung TVs, none from a public store yet | `chino-web`, `chino-mobile`, `chino-androidtv`, `chino-tizen`, `chino-tvos`, `chino-webos`, `chino-roku` | `get-app-from-store` | [The apps](../../docs/releases.md#the-apps) |
+| A title is sent to a Google Cast device or an AirPlay screen alone: the TV apps can't be reached from a phone or a computer. The server keeps no list of the screens signed in; the phone and TV apps hold no connection to it | `chino-api`, `chino-mobile`, `chino-web`, `chino-androidtv`, `chino-tizen` | `find-tv-app` | [14.2.2](../chino/casting.md#1422-feature-by-feature) |
 <!-- end: limits -->
 
 ## Pages

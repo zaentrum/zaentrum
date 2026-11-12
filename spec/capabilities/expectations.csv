@@ -29,7 +29,7 @@ surround,watch,Surround sound where the room has it,play-surround,,,
 as-the-original,library,Lossless sound and Dolby Vision as the original has them,,,0015,"The master is stereo, 5.1 where turned on, and HDR10; an instance may keep its originals"
 player-comforts,watch,"Skip the intro, set the speed, picture in picture, a still while seeking",skip-intro ; set-volume-speed ; play-in-background ; seek-title,,,
 offline,watch,Download to watch without a connection,download-titles ; play-downloads-offline,,,
-play-on-a-tv,watch,Play on a TV from a phone or a computer,cast-title ; control-cast,,,
+play-on-a-tv,watch,Play on a TV from a phone or a computer,cast-title ; control-cast ; find-tv-app,,,
 together,watch,Watch together from different places,watch-together,,,
 own-language,watch,The interface in one's own language,choose-interface-language,,,
 accessible,watch,Usable with a screen reader and the device's accessibility settings,use-with-screen-reader ; hear-result-count ; follow-caption-preferences,,,

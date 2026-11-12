@@ -53,7 +53,7 @@ For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 | Surround sound where the room has it | not checked | [`play-surround`](./chino.md#the-player) not checked | — |
 | Skip the intro, set the speed, picture in picture, a still while seeking | partly | [`skip-intro`](./chino.md#the-player) built, [`set-volume-speed`](./chino.md#the-player) partial, [`play-in-background`](./chino.md#the-player) partial, [`seek-title`](./chino.md#the-player) partial | — |
 | Download to watch without a connection | partly | [`download-titles`](./chino.md#downloads-and-offline) partial, [`play-downloads-offline`](./chino.md#downloads-and-offline) partial | — |
-| Play on a TV from a phone or a computer | partly | [`cast-title`](./chino.md#casting) partial, [`control-cast`](./chino.md#casting) partial | — |
+| Play on a TV from a phone or a computer | partly | [`cast-title`](./chino.md#casting) partial, [`control-cast`](./chino.md#casting) partial, [`find-tv-app`](./chino.md#casting) no | — |
 | Watch together from different places | not there | [`watch-together`](./chino.md#the-player) no | — |
 | The interface in one's own language | not there | [`choose-interface-language`](./chino.md#settings-and-account) no | — |
 | Usable with a screen reader and the device's accessibility settings | partly | [`use-with-screen-reader`](./chino.md#the-frame) not checked, [`hear-result-count`](./chino.md#search) no, [`follow-caption-preferences`](./chino.md#subtitles) partial | — |

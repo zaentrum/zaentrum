@@ -506,19 +506,21 @@ Keeping a title on a phone to watch without a connection. Specified in [chapter 
 
 Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/casting.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
-| Capability | Who | Phone | Spec |
-|---|---|---|---|
-| Cast a title to a TV on the network, going on where the phone was | person | partial | [14.3](../chino/casting.md#143-the-cast-button), [14.4.4](../chino/casting.md#1444-handing-over), [11.12](../chino/playback.md#1112-picture-in-picture-airplay-and-the-lock-screen) |
-| Control the TV from the phone while casting, also from the lock screen | person | partial | [14.4.1](../chino/casting.md#1441-the-bar), [14.4.2](../chino/casting.md#1442-the-full-controls), [14.4.3](../chino/casting.md#1443-outside-the-app) |
-| Show the title's subtitles on the TV while casting, every kind | system | partial | [14.4.2](../chino/casting.md#1442-the-full-controls) |
-| Say when the TV can't play a title, after one more try where that can help | system | partial | [14.5](../chino/casting.md#145-when-the-tv-cant-play-a-title) |
-| Stop casting when the account signs out or changes, keeping its place | system | partial | [14.4.5](../chino/casting.md#1445-changing-accounts) |
+| Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
+|---|---|---|---|---|---|---|
+| Cast a title to a TV on the network, going on where the phone was | person | — | partial | — | — | [14.3](../chino/casting.md#143-the-cast-button), [14.4.4](../chino/casting.md#1444-handing-over), [11.12](../chino/playback.md#1112-picture-in-picture-airplay-and-the-lock-screen) |
+| Control the TV from the phone while casting, also from the lock screen | person | — | partial | — | — | [14.4.1](../chino/casting.md#1441-the-bar), [14.4.2](../chino/casting.md#1442-the-full-controls), [14.4.3](../chino/casting.md#1443-outside-the-app) |
+| Show the title's subtitles on the TV while casting, every kind | system | — | partial | — | — | [14.4.2](../chino/casting.md#1442-the-full-controls) |
+| Say when the TV can't play a title, after one more try where that can help | system | — | partial | — | — | [14.5](../chino/casting.md#145-when-the-tv-cant-play-a-title) |
+| Stop casting when the account signs out or changes, keeping its place | system | — | partial | — | — | [14.4.5](../chino/casting.md#1445-changing-accounts) |
+| See the TVs where chino is open and signed in, and play a title on one in its own app | person | no | no | no | no | — |
 
 - Cast a title to a TV on the network, going on where the phone was: the Android app with Google Cast, not yet tried on a real Cast device; iOS sends to a screen with AirPlay from the player
 - Control the TV from the phone while casting, also from the lock screen: the Android app only: the bar, the full controls, the notification; the TV's audio tracks by the stream's names
 - Show the title's subtitles on the TV while casting, every kind: text subtitles only, as WebVTT: picture subtitles are left out, and a styled one goes as its plain copy
 - Say when the TV can't play a title, after one more try where that can help: the Android app only; a warning in the bar's place, with details; casting stops, the title stays paused on the phone
 - Stop casting when the account signs out or changes, keeping its place: the Android app only; the questions before signing out say casting stops; a switch says so after, in a toast
+- See the TVs where chino is open and signed in, and play a title on one in its own app: none of it: a phone finds Google Cast devices and AirPlay screens alone; the TV's own app would show every kind of subtitle
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
@@ -527,6 +529,7 @@ Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/c
 | `show-cast-subtitles` | 14.C4 | `chino-api GET /api/v1/play/subs/{id}.vtt` | — |
 | `report-cast-failure` | 14.C3 | — | — |
 | `stop-cast-on-account-change` | 13.C5, 16.C14 | `chino-api POST /api/v1/items/{id}/progress` | — |
+| `find-tv-app` | — | — | — |
 
 ## Notifications
 

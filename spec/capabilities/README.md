@@ -130,23 +130,23 @@ model, each reference, change and id resolved, written by the same program.
 <!-- generated: overview -->
 | Part | Capabilities | In a chapter | Only in the docs | Nowhere | With a change | Served by nothing |
 |---|---|---|---|---|---|---|
-| [chino](./chino.md) | 142 | 124 | 5 | 13 | 122 | 13 |
+| [chino](./chino.md) | 143 | 124 | 5 | 14 | 122 | 14 |
 | [the portal](./portal.md) | 54 | 22 | 13 | 19 | 10 | 13 |
 | [the catalog and the pipeline](./catalog.md) | 50 | 8 | 23 | 19 | 3 | 10 |
 | [the platform](./platform.md) | 24 | 0 | 19 | 5 | 0 | 5 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 273 | 156 | 60 | 57 | 137 | 42 |
+| all | 274 | 156 | 60 | 58 | 137 | 43 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
-| Web | 84 | 14 | 18 | 155 | 2 |
-| Phone | 77 | 32 | 24 | 138 | 2 |
-| Android TV | 79 | 20 | 21 | 151 | 2 |
-| Samsung TV | 44 | 30 | 46 | 151 | 2 |
-| Portal | 37 | 7 | 35 | 194 | 0 |
-| Catalog console | 14 | 7 | 22 | 230 | 0 |
-| CLI | 21 | 2 | 42 | 208 | 0 |
-| Resource | 30 | 1 | 7 | 235 | 0 |
+| Web | 84 | 14 | 19 | 155 | 2 |
+| Phone | 77 | 32 | 25 | 138 | 2 |
+| Android TV | 79 | 20 | 22 | 151 | 2 |
+| Samsung TV | 44 | 30 | 47 | 151 | 2 |
+| Portal | 37 | 7 | 35 | 195 | 0 |
+| Catalog console | 14 | 7 | 22 | 231 | 0 |
+| CLI | 21 | 2 | 42 | 209 | 0 |
+| Resource | 30 | 1 | 7 | 236 | 0 |
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
@@ -174,7 +174,7 @@ a decision record rules it out.
 | [Make it one's own](./expectations.md#make-it-ones-own) | 4 | 2 | 1 | 1 | 0 | 0 |
 | all | 56 | 6 | 26 | 22 | 1 | 1 |
 
-Nothing serves 42 of the 273 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 43 of the 274 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
