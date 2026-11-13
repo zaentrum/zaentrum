@@ -513,14 +513,14 @@ Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/c
 | Show the title's subtitles on the TV while casting, every kind | system | — | partial | — | — | [14.4.2](../chino/casting.md#1442-the-full-controls) |
 | Say when the TV can't play a title, after one more try where that can help | system | — | partial | — | — | [14.5](../chino/casting.md#145-when-the-tv-cant-play-a-title) |
 | Stop casting when the account signs out or changes, keeping its place | system | — | partial | — | — | [14.4.5](../chino/casting.md#1445-changing-accounts) |
-| See the TVs where chino is open and signed in, and play a title on one in its own app | person | no | no | no | no | — |
+| See the TVs on the same network signed in to the same account, and play a title on one | person | no | no | no | no | — |
 
 - Cast a title to a TV on the network, going on where the phone was: the Android app with Google Cast, not yet tried on a real Cast device; iOS sends to a screen with AirPlay from the player
 - Control the TV from the phone while casting, also from the lock screen: the Android app only: the bar, the full controls, the notification; the TV's audio tracks by the stream's names
 - Show the title's subtitles on the TV while casting, every kind: text subtitles only, as WebVTT: picture subtitles are left out, and a styled one goes as its plain copy
 - Say when the TV can't play a title, after one more try where that can help: the Android app only; a warning in the bar's place, with details; casting stops, the title stays paused on the phone
 - Stop casting when the account signs out or changes, keeping its place: the Android app only; the questions before signing out say casting stops; a switch says so after, in a toast
-- See the TVs where chino is open and signed in, and play a title on one in its own app: none of it: a phone finds Google Cast devices and AirPlay screens alone; the TV's own app would show every kind of subtitle
+- See the TVs on the same network signed in to the same account, and play a title on one: shown by itself, no pairing, played in the TV's own app; none of it: a phone finds Google Cast devices and AirPlay screens alone
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
