@@ -192,7 +192,11 @@ current space.
 1. **The product's name**, zaentrum, led by the design system's chevron, in
    the design system's top bar. It holds still, as everything in the bar does,
    and leads to the home page's first space.
-2. **The search**, the design system's search field, “search apps…”. It finds
+2. **The search**, the design system's search field, “search apps…”, just
+   before the bell: the start of the bar holds the product's name, and an
+   app's name beside it once an app is open. (In chino, where a rail says
+   where people are, the search leads the bar instead;
+   [chapter 2](../chino/frame.md) has the rule.) It finds
    tiles in every space, as the section Search across spaces sets out, and the
    / key puts the focus in it from anywhere on the page, except while the
    person types in another field.

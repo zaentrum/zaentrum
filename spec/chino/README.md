@@ -73,7 +73,8 @@ order:
    shows and does.
 4. **Changes**: every difference between the two, one numbered change per row
    (11.C1, 11.C2 …), with the apps it's built in and its status: proposed,
-   approved, built, verified. Only an approved change is built, one at a time;
+   approved, built, verified, or withdrawn, with the reason, where the owner
+   decided against it. Only an approved change is built, one at a time;
    anything no change names stays as it is deployed.
 5. **States**: loading, empty, couldn't load and offline, with figures for the
    ones that matter.

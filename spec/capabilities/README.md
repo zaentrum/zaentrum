@@ -150,7 +150,7 @@ model, each reference, change and id resolved, written by the same program.
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
-| 288 | 275 | 13 | 285 | 3 | 0 | 0 |
+| 288 | 274 | 14 | 285 | 2 | 0 | 0 |
 <!-- end: overview -->
 
 ## What is expected of it

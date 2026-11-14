@@ -319,7 +319,7 @@ Finding a title or a person by name. Specified in [chapter 9](../chino/search.md
 
 | Key | Changes | Served by | Settings |
 |---|---|---|---|
-| `search-titles` | 2.C12, 9.C2, 9.C4, 9.C7, 9.C8, 9.C9, 9.C10, 9.C15 | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/items`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
+| `search-titles` | 9.C2, 9.C4, 9.C7, 9.C8, 9.C9, 9.C10, 9.C15 | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/items`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
 | `search-people` | 9.C2, 9.C3 | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/people`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
 | `search-episodes` | 9.C5 | `chino-api GET /api/v1/search`, `katalog-api GET /search` | — |
 | `search-as-you-type` | 9.C1, 9.C6, 9.C11, 9.C13 | `chino-api GET /api/v1/search` | `search-debounce` |
