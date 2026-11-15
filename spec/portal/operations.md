@@ -242,7 +242,8 @@ values:
 | `spec.mail.encryption` | `starttls`, `tls`, `none` | `starttls` |
 | `spec.mail.from` | the sender's address | none; the resource is refused when `host` is set and this is not |
 | `spec.mail.fromName` | the sender's name as a mail program shows it, at most 60 characters | `zaentrum` |
-| `spec.mail.secretName` | a Secret in the platform's namespace with the keys `username` and `password` | none: the platform signs in to the server with no name |
+| `spec.mail.user` | the name the platform signs in to the server with | none: it signs in with no name |
+| `spec.mail.secretName` | a Secret in the platform's namespace with the key `password`, the password of `user` | none; needed only when `user` is set |
 | `spec.mail.alertsTo` | at most 10 addresses that get every alert mail | none |
 
 Mail is **set up** when `host` and `from` are set. The operator then:
@@ -250,7 +251,9 @@ Mail is **set up** when `host` and `from` are set. The operator then:
 1. gives portal-api the settings as environment variables
    (`PORTAL_MAIL_HOST`, `PORTAL_MAIL_PORT`, `PORTAL_MAIL_ENCRYPTION`,
    `PORTAL_MAIL_FROM`, `PORTAL_MAIL_FROM_NAME`, `PORTAL_MAIL_ALERTS_TO`,
-   `PORTAL_MAIL_USERNAME` and `PORTAL_MAIL_PASSWORD` from the Secret) and the
+   `PORTAL_MAIL_USERNAME` from `user`, `PORTAL_MAIL_PASSWORD` from the Secret,
+   and `PORTAL_MAIL_SECRET`, the Secret's name, so that portal-api can tell a
+   password that changed without reading any Secret) and the
    platform's public address (`PORTAL_PUBLIC_URL`), which the links in a mail
    start with;
 2. with the bundled identity provider, has the realm job write the server,
@@ -258,7 +261,13 @@ Mail is **set up** when `host` and `from` are set. The operator then:
    realm's mail settings, and switch the realm's password reset on; without
    mail the job clears them and switches the reset off;
 3. says in the condition `Mail` where it stands: `NotSetUp`, `SecretMissing`
-   when the Secret named is not there or lacks a key, `Configured`.
+   when the Secret named is not there or lacks its key, `Configured`. While
+   the Secret is missing the realm's mail settings stay as they were.
+
+The user's name is in the resource, where an admin can read it; the password
+alone is in the Secret, which portal-api writes and never reads. So a change
+of the user keeps the password that is there, and a change of the password is
+a new Secret with a new name.
 
 Mail is **ready** once the condition is `Configured` and the portal-api that
 answers runs with the settings.
@@ -290,6 +299,12 @@ are in the section Words.
   against the authorities the image trusts; there is no setting to skip the
   check.
 - portal-api signs in when a user is set, and only then.
+- The identity provider sends its own mails, the password reset among them,
+  through the same server. With `tls` they are encrypted as the platform's
+  are. With `starttls` the identity provider asks for encryption and goes on
+  without it where the server offers none: it cannot be told to refuse. The
+  mail page says so beside “STARTTLS”, and “TLS from the start” is the value
+  to choose where the mail server has it.
 - An invite and a test mail are sent while the admin waits: the answer says
   whether the server took the mail, and why not. An alert mail that fails is
   tried again after 5 minutes, three times in all, and then given up.
@@ -344,6 +359,10 @@ which opens `/portal/mail`. The page is a form in four parts:
    system's select: “STARTTLS”, “TLS from the start”, “none”), **user** and
    **password**. The password is never shown: once one is kept the field is
    empty with “A password is kept. Type a new one to replace it.” under it.
+   While “STARTTLS” is chosen and the platform runs the identity provider,
+   the hint under **encryption** reads “A password reset mail goes out
+   unencrypted if the mail server offers no encryption. Choose TLS from the
+   start where the server has it.”
 2. **sender**: the fields **address** and **name**.
 3. **what is sent**: three rows, “Invite links”, “Password reset links” and
    “Alerts”, each with one sentence, and the design system's switch **mail
@@ -363,7 +382,8 @@ in a dialog with a danger button.
 written into a new Secret, which the resource then names, the way an addon's
 secret values are kept. portal-api labels that Secret `zaentrum.io/mail`, and
 the operator removes one with the label that the resource has not named for
-10 minutes. The page says “Applying the settings…” until mail is ready,
+10 minutes, counted from when the operator first sees it unnamed; a restart of
+the operator starts the count again. The page says “Applying the settings…” until mail is ready,
 about a minute.
 
 | Route | Does |
@@ -944,7 +964,7 @@ starts with “Recommended” holds a choice that is the owner's.
 
 | No. | Change | Where | Today | Target | Status |
 |---|---|---|---|---|---|
-| R.C1 | Mail settings in the platform's resource | Operator | the resource has no field for a mail server; the bundled realm has no mail settings; portal-api is given none | section Mail, The settings: `spec.mail.host`, `.port`, `.encryption`, `.from`, `.fromName`, `.secretName` and `.alertsTo`, with the same names in the chart's values and in every copy of the resource's schema ([adding a field](../../docs/updating.md#adding-a-new-cr-spec-field)); the operator gives them to portal-api as environment variables, has the realm job write them into the bundled realm, and says `NotSetUp`, `SecretMissing` or `Configured` in the condition `Mail`; it removes a mail Secret portal-api made once the resource names another | approved |
+| R.C1 | Mail settings in the platform's resource | Operator | the resource has no field for a mail server; the bundled realm has no mail settings; portal-api is given none | section Mail, The settings: `spec.mail.host`, `.port`, `.encryption`, `.from`, `.fromName`, `.user`, `.secretName` and `.alertsTo`, with the same names in the chart's values and in every copy of the resource's schema ([adding a field](../../docs/updating.md#adding-a-new-cr-spec-field)); the operator gives them to portal-api as environment variables, has the realm job write them into the bundled realm, and says `NotSetUp`, `SecretMissing` or `Configured` in the condition `Mail`; it removes a mail Secret portal-api made once the resource names another | approved |
 | R.C2 | portal-api sends mail | Server | no component sends mail | portal-api: sections Mail, What is sent, Sending and The mail page: an SMTP client with the three encryptions; plain-text mails with the words of the section Words; `GET`, `PUT` and `DELETE /api/portal/mail` and `POST /api/portal/mail/test`; a new password goes into a new Secret, which the resource then names; while mail is not set up nothing is sent and every answer says so | approved |
 | R.C3 | The mail page | Portal | no page; mail cannot be set up | section Mail, The mail page: the tile mail in the settings group and the page at `/portal/mail`, with the form of the server and the sender, **save**, **send test mail**, **remove mail settings**, what is sent with the switch **mail alerts**, and who alerts go to with **change your address** and **further addresses**; its states and its words as the sections States and Words have them | approved |
 | R.C4 | An address, and the invite by mail | Server, Portal | a person is added with a name, a username, a role and a rating cap; the invite link is shown once, to copy and hand over | portal-api: section Mail, People and addresses: `POST /api/portal/people` and `PATCH /api/portal/people/{id}` take `email`, one address for one account; `POST /api/portal/people` takes `sendInvite`, `POST /api/portal/people/{id}/invite` takes `send`, and both answer `mail`. The people page: the field **email**, the switch **send the link by mail**, and the link's dialog saying whether the mail was sent | approved |
@@ -1100,6 +1120,7 @@ is filled in. Dates are written as “15 November 2026, 00:00”.
 | The page | mail · server · sender · what is sent · alerts go to |
 | Fields | server · port · encryption · user · password · address · name · further addresses |
 | Encryption | “STARTTLS” · “TLS from the start” · “none” |
+| Under encryption, with STARTTLS and the bundled identity provider | “A password reset mail goes out unencrypted if the mail server offers no encryption. Choose TLS from the start where the server has it.” |
 | Under the fields | server: “The name of your mail provider's SMTP server.” · user: “Leave it empty if the server asks for none.” · password: “It is kept as a secret of the platform and never shown again.” · a password is kept: “A password is kept. Type a new one to replace it.” · further addresses: “Up to 10. They get every alert mail.” |
 | Buttons | save · send test mail · remove mail settings · send · cancel · remove |
 | Not set up | “Mail is not set up. Invite links are handed over by hand, a forgotten password needs an admin, and alerts show in the bell only.” · with an external identity provider: “Mail is not set up. Alerts show in the bell only.” |
