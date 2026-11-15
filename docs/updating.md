@@ -121,18 +121,31 @@ so it only takes effect after the operator is rebuilt and rolled.
 
 ### Adding a new CR spec field
 
-The CRD (the OpenAPI schema the API server validates against) is stored in **three
-copies**. If you add a field to `api/v1alpha1/zaentrum_types.go`, it must be present
-in the schema of **all three** or the API server **prunes** the value on apply (the
-CR looks accepted but the field silently vanishes):
+The CRD (the OpenAPI schema the API server validates against) is stored in **four
+copies**. A field added to `api/v1alpha1/zaentrum_types.go` goes into three of them
+with the change. The fourth, the direct install, serves the schema of the operator
+image it pins, so it takes the field at its next re-pin:
 
-| Copy | Consumed by |
-|---|---|
-| `operator/config/crd/zaentrum.io_zaentrums.yaml` | the operator’s own CRD source |
-| `operator/bundle/manifests/zaentrum.io_zaentrums.yaml` | the OLM bundle (OperatorHub install) |
-| `deploy/operator-install.yaml` | the direct `oc apply` install (embeds the CRD inline) |
+| Copy | Consumed by | Takes a new field |
+|---|---|---|
+| `operator/config/crd/zaentrum.io_zaentrums.yaml` | the operator’s own CRD source, controller-gen output | with the change |
+| `operator/bundle/manifests/zaentrum.io_zaentrums.yaml` | the OLM bundle (OperatorHub install) | with the change |
+| `deploy/allinone/manifests/10-operator.yaml` | the all-in-one container, whose k3s applies it on boot | with the change |
+| `deploy/operator-install.yaml` | the direct `oc apply` install (embeds the CRD inline, and pins the operator image) | at its next re-pin (flow B, step 3), which splices the operator’s CRD in |
 
-Regenerate/mirror the field into all three, then follow the flow B steps above so the
+The operator's test `TestEveryCRDCopyServesTheSameSchema` (`install_bundles_test.go`)
+holds them so. Each copy serves the canonical schema, except for the fields that
+`sinceThePin` lists, which the pinned install does not serve yet. The test fails
+when a copy differs, when the pinned install serves a listed field early, or when
+it lacks a field the list does not name. The re-pin empties the list.
+
+Until the re-pin, `kubectl apply` on a pinned install refuses a resource with the new
+field as an unknown field, and a client that does not validate strictly gets only a
+warning while the API server stores the resource without the field, so the pinned
+operator never sees it.
+
+Regenerate the canonical CRD, mirror the field into the bundle and the all-in-one
+copy, and add it to `sinceThePin`. Then follow the flow B steps above, so that the
 API server sees the new schema before any CR references the field.
 
 ---
