@@ -54,8 +54,8 @@ the targets, and the decision records the changes rest on.
 |---|---|
 | Numbered changes | 445 |
 | proposed | 0 |
-| approved | 444 |
-| built | 0 |
+| approved | 443 |
+| built | 1 |
 | verified | 0 |
 | withdrawn | 1 |
 

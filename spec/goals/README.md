@@ -206,7 +206,7 @@ Anyone can see what it does, check it, change it, and count on it staying open. 
 
 | It has to | Quality | Measured by | Today | Target | Says so |
 |---|---|---|---|---|---|
-| A security hole can be reported in private | security | a policy that says where and how | none in any repository | a security policy in every repository, with private reporting on and an answer within 7 days | — |
+| A security hole can be reported in private | security | a policy that says where and how | a security policy in every repository, private reporting on, an answer within 7 days | a security policy in every repository, with private reporting on and an answer within 7 days | — |
 | Every image can be traced to the source it was built from | security | signatures, a record of each build, a list of what an image holds | none of the three | every released image signed, with the record of its build and the list of what it holds published | — |
 | What the apps send stays with whoever runs the server | security | what leaves the apps for anyone else | nothing to their publisher; an avatar service, a font service and Google Cast are called | nothing but to the server, and to what the person starts themselves, such as casting; avatars and fonts come from the server | [What the apps send](../../docs/releases.md#what-the-apps-send) |
 | A stranger can change it and have the change taken in | maintainability | a guide to contributing, and tests that run on every change | tests in the services' repositories; a guide in the operator's alone | a guide to contributing in every repository, and its tests run on every change | — |
