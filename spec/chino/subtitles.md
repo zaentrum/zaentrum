@@ -714,6 +714,6 @@ between:
 | The panel's close button, for a screen reader | close |
 | The audio rows | “English”, “English (original)”, “English (audio description)”, “English (5.1)”, “English (stereo)”, “English (original, 5.1)”, “English (Commentary)”, “English (2)”, “No dialogue”, “Unknown” |
 | The subtitles column's first row | off |
-| The subtitles rows | “English”, “English (CC)”, “German (AI)”, “English (CC, AI)”, “Chinese (Simplified) (AI)”, “English (Commentary)” |
+| The subtitles rows | “English”, “English (CC)”, “German (AI)”, “English (CC, AI)”, “Chinese (Simplified) (AI)”, “English (Commentary)”, “English (Commentary) (CC)”: a track's own words first, then its tags |
 | The timing, in the player's settings menu | subtitle timing · − · + · “0.00s”, “+0.25s”, “−0.50s” · reset ([chapter 11](./playback.md)) |
 | The setting | the text of section 12.10; its first choice “off” |

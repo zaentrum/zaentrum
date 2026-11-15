@@ -104,7 +104,9 @@ PROPOSAL = ['', 'keep', 'setting', 'shared', 'person', 'constant']
 CLAIMED_BY_CAPABILITY = {'route', 'graphql', 'screen', 'tab', 'command'}
 CLAIMED_BY_SETTING = {'field', 'env', 'setting'}
 SCREEN_KINDS = {'screen', 'tab'}
-SERVE_KINDS = {'route', 'graphql', 'command', 'field'}
+# what serves a capability: an interface of the code, or, for what no app or face offers (a
+# policy, a guide, how releases are built), the repository that holds it
+SERVE_KINDS = {'route', 'graphql', 'command', 'field', 'repo'}
 SETTING_KINDS = {'field', 'env', 'setting', 'constant'}
 KEY = re.compile(r'^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$')
 CAP_COLS = ['key', 'area', 'capability', 'who'] + [a for a, _ in APPS] + [f for f, _ in FACES] + \

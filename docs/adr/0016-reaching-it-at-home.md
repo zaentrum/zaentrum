@@ -82,3 +82,15 @@ The trial does by hand what the changes will do: the container on the machine's 
 | 8 | Where they are at hand: an iPhone, a Samsung TV, a screen a title is cast to | each adds the server by its address, signs in and plays; a title cast from the phone plays | iOS: the private ranges are listed as exceptions, which iOS takes from version 17; Samsung TV: the access rule the chapter names, and without it the Samsung TV app needs https; casting: chino's casting chapter gets a change that says a title can't be cast from a plain-http server |
 
 Two things stay unproved after the trial and are checked as their changes are built: that the machine's address, once changed and set again, leaves a working platform; and that a newer Keycloak still behaves as part 3 says.
+
+### Shown on 15 November 2026
+
+On one machine, with the chart's realm on Keycloak 26.0.7 at a plain-http origin that is not `localhost`, in three browser engines:
+
+- The identity provider sets its cookies without `Secure` and with `SameSite=Lax`, and a sign-in runs through to the access token.
+- The portal as shipped stops at `crypto.subtle`. It signs in in all three engines once the page itself provides the one function the sign-in library needs there, a SHA-256 digest.
+- A public address is refused by the realm's rule for outside requests; a private one gets the sign-in page.
+- A client outside that names a home address in a header of its own is refused behind an ingress that replaces that header, and let in behind one that appends to it. Change N.C2 says which the platform needs.
+- The chart with an address as its host renders an Ingress whose rule Kubernetes refuses, as change N.C1 expects.
+
+Not shown yet, and still a condition of this record: the one-machine install on the machine's own network, the Android phone, the TV apps, announcing on the home network, and casting from a plain-http server. They need a Linux machine and the devices.

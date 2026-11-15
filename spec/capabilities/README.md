@@ -60,7 +60,9 @@ operator's resources), as deployed:
 | ? | not checked yet |
 
 **Served by** names the routes, GraphQL operations, CLI commands and resource
-fields that serve it, as the [inventory](./inventory.csv) lists them. **Spec**
+fields that serve it, as the [inventory](./inventory.csv) lists them; for what
+no app or face offers, such as a policy or how releases are built, it names the
+repository that holds it. **Spec**
 names the chapter and section that describe it; a dash means the specification
 doesn't describe it yet. **Changes** names the specification's numbered changes
 that touch it. **Next** says what becomes of a capability that is not built:

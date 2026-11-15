@@ -75,3 +75,9 @@ Short trials, before the changes that depend on them are built.
 2. **The account page.** That on a running installation the page opens on the public host as the person signed in, and offers a new password, an authenticator app and the list of devices, in the version the platform ships. And what that list shows of a TV or a phone, whose sign-in outlives the browser's: if it shows none, or signs them out only all at once, the capability of signing one device out from afar stays partly met, and the chapter's words for the entry stay as they are.
 3. **A fresh sign-in.** That the access tokens of the bundled identity provider carry the time of the sign-in (`auth_time`), and that the web and the phone app can ask for a sign-in with the password again. If not, a forgotten code is cleared by an admin alone, and an installation with an outside provider has no way but the server's own route.
 4. **A capped height.** That a title packaged at 2160p starts within a few seconds, and plays without stalling, for a person held to 1080p on a machine without a graphics card. If it does not, the highest quality is offered only where the platform's live encoder runs.
+
+### Shown on 15 November 2026
+
+With the chart's realm on Keycloak 26.0.7: the four attributes, declared for admins alone, are kept, and one that is not declared is dropped. In the token the libraries arrive as a list, the switch as a boolean and the two limits as numbers. A sign-in that is asked for again moves the time of the sign-in. The tokens carry no time of the sign-in as the realm is imported today: the client scope that holds it is missing, and change P.C1 adds it.
+
+Not shown yet: the identity provider's account page and its list of devices, and a title packaged at 2160p played by a person held to 1080p.

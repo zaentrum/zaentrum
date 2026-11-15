@@ -79,3 +79,9 @@ The chapter [Running the platform](../../spec/portal/operations.md) sets out the
 - **A set of the release before restores into the current one**: every part starts and brings its database forward, the identity provider included, and the self-check passes.
 - **On the one-container install**, sets copied into the new container's claim are listed after “look again” and restore.
 - **A restore of an older set over a library that changed since**: what the catalog console's check reports for a title packaged again and for one deleted, so that the documentation can say what an admin does then.
+
+### Shown on 15 November 2026
+
+With the identity provider alone, Keycloak 26.0.7: the database of one install, started under another install's Secrets, refuses that install's admin password and client secret and takes the first install's. The provider's own recovery command makes a temporary admin from the database alone. With it the admin's password and the client's secret were set to the second install's and the temporary admin deleted; the second install's Secrets then worked, the first one's were refused, and people's passwords held.
+
+Not shown yet: the platform's own jobs and its check after such a restore, a set of the release before, the copy on a one-machine install, and an older set over a library that has changed since.
