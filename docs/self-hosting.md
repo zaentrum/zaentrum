@@ -268,10 +268,14 @@ spec:
 
 **https is required** on any hostname but a `localhost` name: Keycloak marks its login cookies
 `Secure`, which browsers send only over https or to `localhost`, and the Android phone and TV
-apps refuse plain http and trust public certificate authorities only. The chart's Ingress
-carries no TLS section, so terminate TLS in front of it — your ingress controller's default
-certificate, or a proxy — with a certificate your devices trust, and set
-`network.issuerHostAliasIP` so in-cluster token validation reaches the https issuer (see
+apps refuse plain http and trust public certificate authorities only. Give the platform a
+certificate your devices trust in one of two ways. With `spec.tls`, the platform carries it
+itself: name a `kubernetes.io/tls` Secret you bring (`tls.secretName`), or a cert-manager
+issuer that writes it (`tls.issuerRef`); the Ingress and the Routes then serve it, and every
+address the platform derives is https ([operator.md](./operator.md#spectls)). Or terminate
+TLS in front of the Ingress, with your ingress controller's default certificate or a proxy,
+and set `identity.issuerScheme: https`. Either way, set `network.issuerHostAliasIP` so
+in-cluster token validation reaches the https issuer (see
 [prerequisites.md](./prerequisites.md#split-horizon-issuer-resolution)).
 
 ```bash

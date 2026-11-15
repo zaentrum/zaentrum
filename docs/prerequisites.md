@@ -137,9 +137,11 @@ the ffmpeg-nvenc ↔ driver version coupling applies to you.
 - **TLS is not optional** for any hostname but a `localhost` name. Keycloak marks its login cookies
   `Secure` (`SameSite=None`), and a browser stores and sends those over https only, or to `localhost`
   — over plain http, sign-in fails with "Cookie not found". The Android phone and TV apps refuse plain
-  http and trust public certificate authorities only, so give them a certificate from one. The
-  chart's `Ingress` has no TLS section: terminate TLS at your ingress controller (its default
-  certificate) or a proxy in front of it, and set `identity.issuerScheme: https`.
+  http and trust public certificate authorities only, so give them a certificate from one.
+  Either the platform carries the certificate itself (`spec.tls`: a Secret you bring, or a
+  cert-manager issuer that writes it; see [operator.md](./operator.md#spectls)), or you
+  terminate TLS at your ingress controller (its default certificate) or a proxy in front of it
+  and set `identity.issuerScheme: https`.
 - Set `routing.provisionIngress: true` for a plain-k8s `Ingress` (single-origin paths), or
   `routing.provisionRoutes: true` on OpenShift.
 - If you terminate TLS at the edge (`identity.issuerScheme: https`), you need **split-horizon issuer

@@ -251,8 +251,10 @@ What a store's data-safety form asks, as the apps are built today:
 - The server keeps progress, watched marks, likes, lists and history.
 - App events go to the server's event log, which records each with the
   account. The phone and Android TV apps add the device's model, maker, system
-  version, the app's version and the account's id to theirs; their playback
-  quality reports and the web's events carry no device details.
+  version, the app's version and the account's id to theirs. Reports of how
+  playback went (startup, stalls, bandwidth) come from the web and the Android
+  TV app and carry no device details; the phone app and the Samsung TV app
+  send none.
 - Bug reports go only where the server takes them ([bug reports from the
   apps](./self-hosting.md#bug-reports-from-the-apps-optional)). They hold the
   person's words, the same app and device details, the account's username,

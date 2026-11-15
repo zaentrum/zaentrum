@@ -208,6 +208,21 @@ validate (`identity.audience`).
 | `routing.provisionIngress` | \*bool | `true` | Render a plain-Kubernetes `Ingress` (single-origin paths). |
 | `routing.provisionRoutes` | \*bool | `false` | Render OpenShift `Route`s (single-origin paths). Enable on OKD/OpenShift. |
 
+### `spec.tls`
+
+The platform's own certificate. With `spec.tls` set, the `Ingress` and the `Route`s serve it and
+every address the platform derives is https (the issuer, the identity provider's host name, the
+address its checks use), whatever `identity.issuerScheme` says. Without it the platform serves
+plain http and leaves TLS to whatever stands in front of it. The `TLS` condition of the status
+says how the hosts are served.
+
+| Field | Type | Default | Meaning |
+|---|---|---|---|
+| `tls.secretName` | string | `zaentrum-tls` | A `kubernetes.io/tls` Secret in the platform's namespace, with `tls.crt` (the certificate and its chain) and `tls.key`, for the public host and, with subdomain routing, chino's host. Bring it yourself, or let cert-manager write it (`tls.issuerRef`). |
+| `tls.issuerRef.name` | string | — | The cert-manager `Issuer` (in the platform's namespace) or `ClusterIssuer` that signs a certificate for those hosts into the Secret. It needs cert-manager's resource definitions in the cluster; without them nothing is issued, and the `TLS` condition says so. |
+| `tls.issuerRef.kind` | enum `Issuer` \| `ClusterIssuer` | `Issuer` | The issuer's kind. |
+| `tls.issuerRef.group` | string | `cert-manager.io` | The issuer's API group, for an issuer from outside cert-manager. |
+
 ### `spec.secrets`
 
 | Field | Type | Default | Meaning |
