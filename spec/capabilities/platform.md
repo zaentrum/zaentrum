@@ -117,7 +117,7 @@ What an open product owes the people who run it, check it and build on it. Speci
 | Check that an image is the project's, and see what it was built from and what it holds | operator | — | — | — | — | — | — | [platform trust](../platform/trust.md) |
 | Call nothing but the server one was given, unless the person starts it | system | partial | partial | partial | partial | partial | partial | [platform trust](../platform/trust.md) |
 
-- Report a security hole in private, and get an answer: no repository has a security policy
+- Report a security hole in private, and get an answer: one security policy, in the organisation's shared repository; private reporting on in every repository
 - Change the platform and have the change taken in: a guide, and tests on every change: a guide in the operator's repository alone; most repositories run their tests on pull requests
 - Check that an image is the project's, and see what it was built from and what it holds: no image is signed, and none carries a list of what it holds
 - Call nothing but the server one was given, unless the person starts it: the web apps load their typefaces from a public font service; the phone and Android TV apps an avatar from an outside service
