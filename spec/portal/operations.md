@@ -243,7 +243,7 @@ values:
 | `spec.mail.from` | the sender's address | none; the resource is refused when `host` is set and this is not |
 | `spec.mail.fromName` | the sender's name as a mail program shows it, at most 60 characters | `zaentrum` |
 | `spec.mail.user` | the name the platform signs in to the server with | none: it does not sign in |
-| `spec.mail.secretName` | a Secret in the platform's namespace with the key `password`, the password of `user` | none; needed only when `user` is set |
+| `spec.mail.secretName` | a Secret in the platform's namespace with the key `password`, the password of `user` | none; the resource is refused when `user` is set and this is not |
 | `spec.mail.alertsTo` | at most 10 addresses that get every alert mail | none |
 
 Mail is **set up** when `host` and `from` are set. The operator then:
@@ -1133,7 +1133,7 @@ is filled in. Dates are written as “15 November 2026, 00:00”.
 | **send test mail** refused | not an address: “This is not an e-mail address.” · the placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” · mail not set up: “Mail is not set up.” · mail set up and not ready yet: the last two reasons of Why a mail failed |
 | Removing | remove mail settings? · “The platform stops sending mail: no invite, no password reset link and no alert leaves it. The settings and the password are deleted.” |
 | Why a mail failed | “Can't reach the mail server. Check its name and its port.” · “The mail server doesn't offer this encryption. Choose another.” · “The mail server's certificate could not be checked.” · “The mail server refused the user or the password.” · “The mail server refused the sender's address.” · “The mail server refused the address {address}.” · “The mail server didn't answer in time.” · “The mail server answered: {its words}” · “The mail settings are still being applied.” · “The mail server's password is missing.” |
-| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept: “A user needs a password. Type it, or leave the user empty.” |
+| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept, under the password: “Type the password of this user.” |
 | The cluster refused | reading the settings: “The portal is not allowed to read the platform's settings. Update the operator, which gives the portal that right.” · changing them: “The portal is not allowed to change the mail settings. Update the operator, which gives the portal that right.” · the settings refused as invalid: “The cluster refused the mail settings.” · any other failure: “The cluster did not answer as expected.” · each with the cluster's own words under **details** |
 | Not run by the operator | “This platform is not run by the operator. Mail is set in its chart's values.” |
 | Couldn't load | couldn't load mail · try again |
@@ -1143,7 +1143,9 @@ the error banner where portal-api answers it. The refusals of **send test
 mail** and the cluster's are shown in the error banner; a refusal to read is
 also the reason of couldn't load mail. portal-api answers a sentence and the
 cluster's own words apart, so that the page shows the sentence as the banner's
-message and the rest under **details**. Where the platform is not run by the
+message and the rest under **details**, as part 4 of
+[ADR-0023](../../docs/adr/0023-languages-and-accessibility.md) has it for
+everything a server passes on. Where the platform is not run by the
 operator, portal-api answers **save** and **remove** with the sentence of Not
 run by the operator.
 
@@ -1187,10 +1189,10 @@ comes from the resource; a password is never in them.
 
 | Where | Text |
 |---|---|
-| The resource refused: `host` without `from` | “from is required when host is set” |
+| The resource refused | `host` without `from`: “from is required when host is set” · `user` without `secretName`: “secretName is required when user is set” |
 | The condition `Mail`, `NotSetUp` | no server: “mail is not set up: spec.mail names no server, so the platform sends no mail” · a server and no sender, where the resource's rule did not run: “mail is not set up: spec.mail names the server {host} and no sender (from), so the platform sends no mail” |
 | The condition `Mail`, `SecretMissing` | the Secret is not there: “there is no Secret {secretName}: create it with the mail server's password under the key password” · it has no key `password`: “Secret {secretName} has no key password: put the mail server's password under it” |
-| The condition `Mail`, `Configured` | “the platform sends its mail through {host} ({encryption}), signing in as {user} with the password in Secret {secretName}” · a user and no Secret: “the platform sends its mail through {host} ({encryption}), signing in as {user} with no password” · no user: “the platform sends its mail through {host} ({encryption}), without signing in” |
+| The condition `Mail`, `Configured` | “the platform sends its mail through {host} ({encryption}), signing in as {user} with the password in Secret {secretName}” · no user: “the platform sends its mail through {host} ({encryption}), without signing in” |
 | The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” |
 | The realm job's summary: the password reset | switched on: “the sign-in page offers a password reset now” · switched off: “the sign-in page offers no password reset now: the realm sends no mail” · a realm without an email theme given the chart's: “the realm's email theme is {theme} now” |
 | A failed run of the realm job | “cannot read the mail settings of realm {realm}: {kcadm's last line}” · “cannot clear the mail settings of realm {realm}: {kcadm's last line}” · “cannot set the mail settings of realm {realm}: {kcadm's last line}” · “cannot read realm {realm}: {kcadm's last line}” · “cannot set the email theme of realm {realm}: {kcadm's last line}” · “cannot switch the password reset of realm {realm}: {kcadm's last line}” · from the chart's values alone: “mail.encryption is {value}: use starttls, tls or none” |
