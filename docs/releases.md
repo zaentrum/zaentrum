@@ -66,7 +66,7 @@ updated by whatever installed it — see
 
 | From | At the tag `vX.Y.Z` |
 |---|---|
-| every service repository (`chino-*`, `katalog-*`, `zaentrum-portal`, the pipeline's `analyzer`, `transcoder`, `packager`, `sample-addon`) | its images, `ghcr.io/zaentrum/<image>:vX.Y.Z` and `:X.Y` |
+| every service repository (`chino-*`, `katalog-*`, `zaentrum-portal`, `live-worker`, the pipeline's `analyzer`, `transcoder`, `packager`, `sample-addon`) | its images, `ghcr.io/zaentrum/<image>:vX.Y.Z` and `:X.Y` |
 | [`zaentrum-operator`](https://github.com/zaentrum/zaentrum-operator) | `operator`, `admin` and `keycloak` images; the GitHub release with `operator-install.yaml` (the CRDs, the cluster RBAC and the controller on `operator:vX.Y.Z`); the appliance `appliance:vX.Y.Z`, which bakes `operator:vX.Y.Z` and a `Zaentrum` pinned to `vX.Y.Z`; the OLM `operator-bundle:vX.Y.Z` (`zaentrum-operator.vX.Y.Z`) and `operator-catalog:vX.Y.Z`, which serves it on its `stable` channel |
 | [`zae`](https://github.com/zaentrum/zae) | the CLI for Linux, macOS and Windows on amd64 and arm64, with `checksums.txt`, on its GitHub release; the image `zae:vX.Y.Z`, which the platform's own check runs |
 | this repository | the tag, on the commit that moves `stable` to the release |
@@ -123,7 +123,7 @@ On the tag, each repository's workflows build the release:
 
 | Repository | Runs on the tag |
 |---|---|
-| each service, `sample-addon` | `image` (`zaentrum-portal`: `image` and `image-api`) |
+| each service, `sample-addon` | `image` (`zaentrum-portal`: `image` and `image-api`; `live-worker`: `ci`, which tests it and then builds its image) |
 | `zae` | `image`, and `release` (GoReleaser: the binaries, `checksums.txt` and the GitHub release) |
 | `zaentrum-operator` | `build-images`; `operator-bundle` (stamps the release into the CSV, then the bundle and the catalog); `all-in-one` (the appliance, then boots it once every image of the release is published, and waits for the platform to pass its own verification); `release` (once `operator:vX.Y.Z` exists, the GitHub release with `operator-install.yaml`) |
 

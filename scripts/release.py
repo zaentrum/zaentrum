@@ -77,6 +77,8 @@ COMPONENTS = [
     Component("analyzer", ["analyzer"], ["image.yml"]),
     Component("transcoder", ["transcoder"], ["image.yml"]),
     Component("packager", ["packager"], ["image.yml"]),
+    # the live worker's one workflow tests it and then builds its image
+    Component("live-worker", ["live-worker"], ["ci.yml"]),
     Component("zae", ["zae"], ["image.yml", "release.yml"], ZAE_ASSETS),
     Component("sample-addon", ["sample-addon"], ["image.yml"]),
     Component(
