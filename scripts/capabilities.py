@@ -1016,14 +1016,19 @@ def inventory_block(inventory, caps, settings):
         for r in match(split(s['ids']), inventory, SETTING_KINDS, 'inventory', 'ids'):
             in_settings.add(r['id'])
     n = Counter(r['kind'] for r in inventory)
-    repos = len({r['repo'] for r in inventory})
+    # the repositories the code was read from are the sources file's; the organisation's
+    # repositories, read or not, are rows of the inventory too (kind repo)
+    sources = os.path.join(CAP, 'inventory-sources.csv')
+    repos = sum(1 for _ in csv.DictReader(open(sources, encoding='utf-8', newline=''))) if os.path.exists(sources) else 0
+    org = n['repo']
     rows = []
     for k in kinds:
         claim = 'a capability' if k in CLAIMED_BY_CAPABILITY else 'a setting' if k in CLAIMED_BY_SETTING else 'listed'
         note = f'{sum(1 for r in inventory if r["kind"] == k and r["id"] in in_settings)} in a setting' if k == 'constant' else ''
         rows.append([labels[k], n[k], claim, note])
     return table(rows, ['What the code offers', 'Rows', 'Claimed by', '']) + \
-        f'\n\nFrom the main branch of {repos} repositories, as [inventory-sources.csv](./inventory-sources.csv) names them.\n'
+        f'\n\nFrom the main branch of {repos} repositories, as [inventory-sources.csv](./inventory-sources.csv) names them; ' \
+        f'the organisation has {org}, each listed as well.\n'
 
 
 def configuration_blocks(caps, settings, areas):

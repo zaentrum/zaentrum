@@ -198,7 +198,7 @@ Nothing serves 70 of the 306 capabilities yet: no app or face has them, and no s
 | the catalog's settings | 41 | a setting |  |
 | constants in the code | 858 | listed | 279 in a setting |
 
-From the main branch of 32 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them.
+From the main branch of 18 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them; the organisation has 32, each listed as well.
 <!-- end: inventory -->
 
 Constants are listed, not claimed: the ones a person notices, or that an admin
