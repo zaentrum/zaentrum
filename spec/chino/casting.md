@@ -1,7 +1,7 @@
 # 14 Casting
 
 Section 14.2 describes casting as it is deployed today. The sections after it
-are the target, casting as it is meant to be, and section 14.6 lists every
+are the target, casting as it is meant to be, and section 14.7 lists every
 difference between the two as a numbered change. Only a change the owner has
 approved is built, one change at a time; anything no change names stays as it
 is deployed.
@@ -21,7 +21,8 @@ Google Cast's own widgets, in chino's colours.
 
 Casting exists only in the phone app, on phones and tablets. The web and the TV
 apps don't cast, so the screens of this chapter are drawn at the phone's size
-only, held upright and sideways. Google Cast is the Android app's; the iOS app
+only, held upright and sideways. Section 14.6 adds the TV that chino itself
+runs on, and the other senders. Google Cast is the Android app's; the iOS app
 sends a title to a screen with AirPlay, from the player
 ([chapter 11](./playback.md)), and has no cast button. This chapter calls the
 device that plays “the TV”, whatever it is.
@@ -147,6 +148,7 @@ doesn't have; only the phone app casts.
 | When the TV can't play | — | the warning in the bar's place, **details** after the line, a 28 dp close button; casting stops | — | — |
 | The device's name | — | its name on the network, else its model, else “the device” | — | — |
 | A TV with Google Cast built in | — | — | plays what the phone casts with Google's own receiver, not with this app | — |
+| Starting chino on a TV from the phone | — | — | no: the TV app takes nothing from another device; it has no cast library and no media session, and it is signed in to with a code typed on another device | no: the same |
 | Checked on a real Cast device | — | not yet | — | — |
 
 ## 14.3 The cast button
@@ -325,7 +327,62 @@ Figure 14.8: When the TV can't play a title, on a phone held sideways, at
 1. **The line and details**, on one row.
 2. **dismiss**, at the banner's right end.
 
-## 14.6 Changes
+## 14.6 Starting chino on a TV
+
+A TV that is on, and on the same network as the phone, is in the cast button's
+chooser like any other device. Choosing it starts chino on the TV by itself:
+the app need not be open there, and nobody need be signed in on it. The TV then
+plays the title with the TV app's own player, so the picture is fitted as
+[chapter 11](./playback.md) says, every subtitle is drawn as
+[chapter 12](./subtitles.md) says, and the TV's remote works as in the app. The
+phone shows the bar and the full controls of section 14.4, and is the remote as
+well. [ADR-0022](../../docs/adr/0022-casting-starts-the-tv-app.md) says why it is
+built on the TV's own system and not on a list the server keeps.
+
+**Which TVs.** A TV or a box with Android TV or Google TV on which chino is
+installed. The TV app is a receiver of Google Cast for the product's own Cast
+application: the phone asks the TV for that application, and the TV's system
+starts the app. A TV without the app, and any other Google Cast device, loads
+the product's receiver page instead (change 14.C4) and plays there. A Samsung
+TV is not started from the phone in this step; it plays what an AirPlay sender
+or a cast device plugged into it gives it.
+
+**As the person who sent it.** The TV plays as the person who is signed in on
+the phone, whoever is signed in on the TV, and also when nobody is:
+
+1. Before it asks the TV, the phone asks the server for a **cast pass** for the
+   title: a value that can be used once, within 60 seconds.
+2. The phone hands the pass to the TV with the request to start.
+3. The TV app gives the pass to the server and gets back a session of the
+   sender's: the title's details and tracks, its streams, the sender's resume
+   point, and the right to write the sender's position back. It can open
+   nothing else of the sender's, and it lasts until casting stops, 6 hours at
+   most.
+4. The sender's rights hold on the TV as on the phone: a title above the
+   sender's age-rating cap is refused by the server.
+5. When casting stops, the TV app forgets the session and shows what it showed
+   before: the screen of whoever is signed in on the TV, or its sign-in screen.
+   The sender was never signed in on the TV: no account is added to the TV's
+   accounts, and nothing of the sender's is kept on it.
+
+**What the TV shows.** The player of chapter 11, with one line added over the
+controls while it is cast to: “from Alex's phone”, the name of the sending
+device as the network gives it. Back on the TV's remote stops casting, after
+the question “Stop playing from Alex's phone?” with **stop** and **keep
+playing**. Someone using the TV app when a cast arrives sees the title start;
+what they were doing is where the app returns to.
+
+**Where the pass is refused.** If the server refuses the pass (it was used, it
+is older than 60 seconds, or the sender may not play the title), the TV app
+plays nothing and returns to what it showed, and the phone shows the banner of
+section 14.5 with the reason under **details**.
+
+**The other senders.** The iOS app and the web get the same cast button, where
+the system offers Google Cast: in the iOS app beside AirPlay, on the web in the
+browsers that have Google Cast built in. They hand over a cast pass the same
+way.
+
+## 14.7 Changes
 
 Every difference between section 14.2 and the target is one change in the
 table. A change names the apps it is built in, what they do today and the
@@ -342,8 +399,13 @@ chapter 11 as well.
 | 14.C2 | The audio tracks named as the player names them on the TV | Phone app (Android) | Google's chooser of the TV's tracks names the subtitles as the phone's player does, and the audio tracks by the names the stream gives them | the audio tracks too as the player names them, “English (5.1)” (figure 14.5, part 4) | proposed |
 | 14.C3 | When the TV can't play: the design system's error banner | Phone app (Android) | a warning banner drawn like the design system's: the warning's glyph and its edge, **details** with its caret, and a 28 dp square with a cross to put it away, whose touch area is no larger | the design system's error banner, as every action that failed has it ([chapter 17](./errors.md)): the line, **details** and dismiss, the dismiss drawn 28 dp as the banner draws it, with a 48 dp touch area around it (figures 14.7 and 14.8) | proposed |
 | 14.C4 | Subtitles on the TV as the apps draw them | Phone app (Android) | the phone casts to Google's default receiver, which draws only WebVTT, and sends it the text subtitles alone: a title whose subtitles are only pictures, PGS or VobSub, shows none of them on the TV, and a styled subtitle, ASS, shows as its plain copy, without its styles | the receiver draws every subtitle the phone's player lists as the apps draw them ([chapter 12](./subtitles.md)): PGS and VobSub on the picture, ASS as it was made, as [ADR-0015](../../docs/adr/0015-the-package-is-the-master.md) decides (figure 14.5, part 4) | proposed |
+| 14.C5 | A cast pass, used once | Server | chino-api gives a signed-in app a stream pass for the person's media, good for 6 hours, which the phone hands to Google's receiver inside the stream's address; nothing lets another device play as the person | chino-api gives the sender a cast pass for one title, good once and for 60 seconds, and gives the TV app that brings it a session of the sender's for that title alone: its details and tracks, its streams, the resume point, writing the position back, the playback events; the sender's age-rating cap holds; the session ends when the TV says casting stopped, and after 6 hours at most (section 14.6) | proposed |
+| 14.C6 | The Android TV app is started by a cast, and plays as the sender | Android TV | the app takes nothing from another device: no cast library, no media session; it plays for whoever signed in to it with a code | the app is a Google Cast receiver for the product's Cast application: the TV's system starts it when a sender asks; it brings the cast pass to the server, plays the title in its own player with the line “from Alex's phone”, obeys the sender's play, pause, seek, audio and subtitle choices and reports its state back; back asks “Stop playing from Alex's phone?”; when casting stops it forgets the session and shows what it showed before; nobody is signed in by a cast (section 14.6). Needs the owner: the product's Cast application, registered once with Google | proposed |
+| 14.C7 | The phone asks for chino on the TV | Phone app (Android) | the phone casts to Google's default receiver | the phone asks the TV for the product's Cast application and hands it a cast pass: a TV with the app starts it (14.C6); every other device loads the product's receiver page (14.C4); the chooser, the bar and the full controls stay as they are (section 14.6) | proposed |
+| 14.C8 | The cast button in the iOS app | Phone app (iOS) | the iOS app has no cast button; its player sends a title to a screen with AirPlay | Recommended: the cast button of section 14.3 in the iOS app too, beside AirPlay in the player, with the bar and the full controls of section 14.4, handing over a cast pass as the Android app does; the other choice is AirPlay alone, as today, and then a person with an iPhone can't start chino on a TV | proposed |
+| 14.C9 | The cast button on the web | Web, Server | the web doesn't cast | Recommended: in a browser that has Google Cast built in, on a server reached over https, the cast button in the player's bar and on a title's page, starting chino on the TV with a cast pass as the phone does, the player showing “playing on Living Room TV” with play, pause, seek and **stop casting**; in any other browser no button; the server lets the receiver page and the TV app fetch from the web's origin as it does for the phone; the other choice is no casting from the web | proposed |
 
-## 14.7 States
+## 14.8 States
 
 | State | What the phone shows |
 |---|---|
@@ -354,8 +416,9 @@ chapter 11 as well.
 | The TV can't play the title | Figures 14.7 and 14.8; casting stops |
 | An account change while casting | The question says “Casting on Living Room TV stops.”; after a switch, the toast |
 | The server can't be reached while a TV is connected | A downloaded title plays on the phone, with the toast |
+| The TV app refuses the cast pass | The banner of section 14.5; the TV shows what it showed before |
 
-## 14.8 Words
+## 14.9 Words
 
 - The device's name comes from the network, as people named it, or else the
   model the device says it is. A device with neither is “the device”, and
@@ -374,4 +437,5 @@ chapter 11 as well.
 | The questions before signing out, removing an account or changing the server | Casting on Living Room TV stops. |
 | After switching accounts | Stopped casting on Living Room TV. |
 | A download without the server | Playing on this phone: the server can't be reached. |
-| When the TV can't play a title | Living Room TV can't play this title. · The device can't play this title. · details · the server no longer accepts this phone's sign-in (HTTP 401) · the server doesn't let this account play it (HTTP 403) |
+| On the TV, while it is cast to | from Alex's phone · Stop playing from Alex's phone? · stop · keep playing |
+| When the TV can't play a title | Living Room TV can't play this title. · The device can't play this title. · details · the server no longer accepts this phone's sign-in (HTTP 401) · the server doesn't let this account play it (HTTP 403) · the TV's pass was used or is too old (HTTP 401) |

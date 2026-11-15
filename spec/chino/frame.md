@@ -1,7 +1,7 @@
 # 2 The frame
 
 Section 2.2 describes the frame as it is deployed today. The sections after it
-are the target, the frame as it is meant to be, and section 2.6 lists every
+are the target, the frame as it is meant to be, and section 2.7 lists every
 difference between the two as a numbered change. Only a change the owner has
 approved is built, one change at a time; anything no change names stays as it
 is deployed.
@@ -223,6 +223,11 @@ doesn't have.
 | A focused item in the rail | — | — | the focus ring outside it, 5 % larger | the blue ring outside it; nothing grows |
 | The safe area | — | — | none for the frame; the player and zap keep 48 × 27 dp | none |
 | A view's address | only the watchlist and the search; a reload elsewhere opens home. A title's page, a person's page, the account, the player and a trailer each have one of their own | — | — | — |
+| The app's language | English alone; the page says so | English alone; on Android only English resources are built in | English alone | English alone; the page says so |
+| A card for the keyboard | a click on the card opens the title; the card's menu button is its only stop for the Tab key | — | — | — |
+| The window's title | “chino” on every screen | — | — | — |
+| Where the focus is, for a screen reader | on the control, as the browser has it | on the control, as the phone has it | on the control, as the TV has it | nowhere: the app marks its focused control itself and gives none the browser's focus |
+| Less motion | honoured by the hero, the picture's layers, the subtitle line and one menu | no setting read by the app | no setting read by the app | no setting read |
 
 ## 2.3 The frame on a computer
 
@@ -440,7 +445,99 @@ Figure 2.12: The rail opened, on a TV.
 2. **The items** keep their order: search, the five views, then notifications
    and settings at the foot. The avatar sits at the top with the person's name.
 
-## 2.6 Changes
+## 2.6 Words, screen readers and text size
+
+What this section sets out holds for every screen of chino, in every chapter.
+[ADR-0023](../../docs/adr/0023-languages-and-accessibility.md) has the reasons.
+
+### 2.6.1 Words
+
+Every text an app shows, and every name a screen reader says, comes from the
+message catalogue by its key: one file a language, the same keys in all four
+apps. No text is typed into a screen's code. The catalogue's English is this
+specification's: each chapter's Words section, and [chapter 18](./words.md).
+English and German ship, complete, and a further language is one more file.
+
+- **The app speaks the person's language**: the language chosen in settings
+  ([chapter 16](./settings.md)), else the first of the device's languages the
+  app has, else English. Before anyone is signed in it is the device's. On the
+  web and on a Samsung TV the page says which language it is in.
+- **A text is whole.** A sentence is never put together from parts, and one
+  that counts has a form for each number the language tells apart: “1 title”,
+  “4 titles”. Where a sentence names the device, each device has its own
+  sentence: “from this phone”, “from this tablet”, “from this TV”.
+- **Numbers and dates follow the language.** “2,500” in English is “2.500” in
+  German, and “12.4 GB” is “12,4 GB”. A date is written as the language writes
+  it, in lowercase where it stands in the monospace voice.
+- **Names from the library.** A language, a script and a country have the name
+  the device gives them in the app's language, the language first and its
+  region or script in brackets ([chapter 18](./words.md)). A genre the
+  message catalogue knows has its name from there; any other shows as the
+  library has it. A title's name and description, a person's name and a list's
+  name are the library's, and are not translated.
+- **Two voices in every language**, as the design system's
+  [content and voice](https://nalet.github.io/design-system/foundations/content-voice/)
+  has them: the monospace voice in lowercase, a name inside it with its
+  capitals; sentences by the language's own rules, in German with a capital
+  for every noun.
+
+### 2.6.2 Screen readers and the keyboard
+
+Every screen, in every state, can be used with the device's screen reader:
+TalkBack on an Android phone and on Android TV, VoiceOver on an iPhone and an
+iPad, the voice guide on a Samsung TV, and a screen reader in the browser on
+the web. The level is the design system's
+[accessibility](https://nalet.github.io/design-system/foundations/accessibility/)
+baseline, WCAG 2.2 at level AA; the phone and TV apps meet its criteria as far
+as they apply to an app.
+
+- **Every control has a name, a kind and a state.** A control with words is
+  named by its words. One that is an icon alone has the name its chapter's
+  Words give it, and the name says what it acts on: “actions for Sintel”. The
+  screen reader also says what kind of control it is, and whether it is on,
+  open, current or busy. A poster is named by its title; a picture that only
+  decorates is passed over.
+- **The order of focus is the order of reading**: the frame first, then the
+  page from its heading down. A layer that opens, a menu, a dialog or a panel,
+  takes the focus and keeps it until it closes; then the focus is back on what
+  opened it.
+- **What changes away from the focus is said**: that a screen is loading, how
+  many results a search has ([chapter 9](./search.md)), a toast, a banner that
+  appears.
+- **On the web, a keyboard alone does everything.** Tab reaches every control
+  in the order of reading, and nothing holds it. Its first stop on every
+  screen is **skip to content**, which shows while it has the focus and moves
+  the focus past the bar and the rail. Whatever opens something is a link or a
+  button: a card is a link to its title. Enter and Space press, the arrow keys
+  move inside a group, and Esc closes the layer on top. The focus always
+  shows, in the design system's outline, and is never hidden under the bar.
+  The window's title names the screen and then the product: “movies · chino”,
+  “Sintel · chino”.
+- **On a TV, the remote does everything**, as each chapter's TV section sets
+  out. The control with the focus is the one the screen reader says: its name,
+  its kind and its state.
+
+Each repository checks this by program with every change, and a person walks a
+changed chapter's screens with the screen reader before the change is verified
+([ADR-0023](../../docs/adr/0023-languages-and-accessibility.md), part 7).
+
+### 2.6.3 Text size and motion
+
+- **Text follows the device's text size**, up to 200 %: on a phone and on
+  Android TV the size set in the device's settings, on the web the browser's
+  zoom, down to a window 320 px wide. Every text stays whole and every control
+  can still be used: a line wraps and its row grows, and nothing overlaps or
+  is cut off. A Samsung TV gives an app no text size to follow.
+- **Motion follows the device.** Where the device asks for less motion,
+  nothing moves on its way: a change shows its end state at once. That holds
+  for the hero's change of title ([chapter 4](./home.md)), a menu, a panel and
+  the TV's rail opening, the growth of a focused card, and zap's change of
+  card ([chapter 10](./zap.md)). A film that plays is not motion in this
+  sense.
+- **Subtitles take the look set on the device**, as
+  [chapter 12](./subtitles.md) sets out.
+
+## 2.7 Changes
 
 Every difference between section 2.2 and the target is one change in the
 table. A change names the apps it is built in, what they do today and the
@@ -463,12 +560,15 @@ words to [chapter 9](./search.md), the avatar's look to
 | 2.C6 | Web: an address for every view | Web | only the watchlist and the search have an address of their own; a reload on movies, shows, zap or settings opens home | each view and settings with its own address, the rail's items links to them, so a reload, a link or back brings the person to it (section 2.3) | proposed |
 | 2.C7 | The TV's rail holds the frame, and opens | Android TV, Samsung TV | a rail of icons alone, with the logo at its top, the five views and settings at its foot, which never opens, and a top bar with the search field, the bell and the avatar; shows named “Series” for a screen reader. Android TV: a focused item has the ring outside it, 5 % larger. Samsung TV: the arrow keys move to the nearest item, and the avatar opens settings | figures 2.11 and 2.12: one rail and no top bar, with the avatar at its top, then search, home, movies, shows, watchlist and zap, the bell and settings at its foot; moving the focus into it opens it with the names, the focused row filled in the focus colour with the ring inside, 2 % larger; up and down move, OK opens, right or back closes it; the current view keeps a blue bar; the avatar opens who's watching (3.C11) | proposed |
 | 2.C8 | The TV keeps to the safe area | Android TV, Samsung TV | the rail starts at the screen's left edge and the bar at its top; Android TV keeps the safe area only in the player and zap, the Samsung TV nowhere | everything that matters inside the safe area, 48 dp from the left and right edges and 27 dp from the top and bottom (figure 2.11, part 5) | proposed |
-| 2.C9 | The avatar's name for a screen reader | Web, Phone app, Android TV, Samsung TV | Web: the button “Account”, the initials inside it named by the account's name. Phone app, Android TV: no name of its own. Samsung TV: the account's name | “Alex Urban, user menu” on a computer and a phone; on a TV the account's name, “Alex Urban” (section 2.7) | proposed |
+| 2.C9 | The avatar's name for a screen reader | Web, Phone app, Android TV, Samsung TV | Web: the button “Account”, the initials inside it named by the account's name. Phone app, Android TV: no name of its own. Samsung TV: the account's name | “Alex Urban, user menu” on a computer and a phone; on a TV the account's name, “Alex Urban” (section 2.8) | proposed |
 | 2.C10 | help in the avatar's menu | Web, Phone app | no help | Recommended: help between settings and sign out, as the design system's top bar has it, once there is a guide for the people watching; until then none, so the menu never offers something with nothing behind it | proposed |
 | 2.C11 | The apps take the design system's components | Web, Phone app, Android TV, Samsung TV | Web: its own controls, built by hand on Tailwind, with the design system's colours and faces copied into its Tailwind setup. Phone app, Android TV, Samsung TV: their own controls in the design system's colours | Web: the package `@nalet/design-system` 0.4.0, its stylesheet and its components for every part [section 1.5](./README.md) lists, the same version as the portal's. Phone app, Android TV, Samsung TV: those parts drawn as the package draws them, in its sizes and states. The frame of this chapter stays chino's own | proposed |
 | 2.C12 | The search just before the bell | Web | the search field at the left of the top bar, right after the mark, up to 576 px wide | withdrawn on 14 November 2026: the search stays at the start of the bar, as built (figure 2.6). The design system places a search by its frame: it leads the bar where a rail says where people are, and sits just before the bell in the portal | withdrawn |
+| 2.C13 | Every text from the message catalogue | Web, Phone app, Android TV, Samsung TV | no app has a message catalogue, and each is in English whatever the device's language: Web about 350 texts typed into its screens and its library's constants; Phone app about 370 typed into its code and one string resource, its Android build keeping English resources alone; Android TV 24 string resources and about 275 texts typed; Samsung TV about 240 typed; each app makes its plurals by hand and has its own English lists of months and of language names | section 2.6.1 and [ADR-0023](../../docs/adr/0023-languages-and-accessibility.md), parts 1, 2 and 5: every text the app shows or a screen reader says comes from the message catalogue by its key, in the generated file `scripts/words.py export` writes into the repository (Web, Samsung TV: `src/words/`, compiled by the build; Android TV: `res/values/strings.xml` and one for each language; Phone app: `composeResources/values/strings.xml` and one for each language, for Android and iOS, the languages named in the iOS app's property list, and the Android build's resource filter naming the shipped languages instead of English alone); plurals by the language's rule, numbers and dates by the platform's formats in the app's language, a language and a country by the device's name for it; the web's and the Samsung TV's page says its language in `lang`; a test in the repository fails on a text typed into a screen's code. The texts move as they are: a chapter's change brings its new words. Built once the message catalogue and its check are in this repository | proposed |
+| 2.C14 | Every screen works with the device's screen reader, and on the web with a keyboard | Web, Phone app, Android TV, Samsung TV | no app was tried with a screen reader. Web: a poster card opens its title by pointer alone, as it is neither a link nor a button; the search field has no name but its placeholder; the window's title is “chino” on every screen; the report dialog is no dialog to a screen reader and keeps no focus. Phone app: the avatar has no name; nothing was looked at on iOS. Android TV: the avatar has no name. Samsung TV: the app keeps its own focus as a mark on the page, gives no control the browser's focus and draws its controls as plain blocks, so the TV's voice guide has nothing to follow | section 2.6.2 and ADR-0023, parts 6 and 7: on every screen and in every state each control has a name, a kind and a state, the order of focus is the order of reading, what changes away from the focus is said, and every action can be done with TalkBack (Phone app, Android TV), VoiceOver (Phone app on iOS), the voice guide (Samsung TV) and, on the Web, a screen reader in the browser and a keyboard alone: **skip to content** as the Tab key's first stop, a link or a button for whatever opens something, Esc closing the layer on top with the focus back where it was, and a window's title that names the screen, “movies · chino”. Samsung TV: the control with the app's focus also has the browser's focus, a kind and its name. Each repository gets the program's check: Web, Samsung TV the accessibility checker and the keys on every page and state; Phone app, Android TV a test of every screen's names, kinds and states. A changed chapter's screens are walked with the screen reader before the change is verified. The single names stay with their changes (2.C2, 2.C9, 9.C14, 11.C18) | proposed |
+| 2.C15 | Text follows the device's text size, and motion the device's setting | Web, Phone app, Android TV, Samsung TV | no app was tried at a larger text size. Web: its sizes follow the browser's text size and zoom; less motion is honoured by the hero, the picture's layers, the subtitle line and one menu, and by nothing else. Phone app: its sizes follow the phone's text size, in boxes of a fixed height in places; its code reads no setting for less motion. Android TV: its sizes follow the TV's text scale; its code reads no setting for less motion. Samsung TV: a fixed size, and no setting read | section 2.6.3 and ADR-0023, part 6: at a text size of 200 % (Web: the browser's zoom, down to a window 320 px wide; Phone app, Android TV: the device's setting) every text is whole and every control can be used: a line wraps, its row grows, nothing overlaps or is cut off; where the device asks for less motion nothing moves on its way, and a change shows its end state at once (Web, Samsung TV: the browser engine's setting, where it has one; Phone app, Android TV: the system's). A Samsung TV has no text size to follow | proposed |
 
-## 2.7 Words
+## 2.8 Words
 
 | Where | Text |
 |---|---|
@@ -485,3 +585,5 @@ words to [chapter 9](./search.md), the avatar's look to
 | The avatar on a TV, for screen readers | Alex Urban |
 | The avatar's menu | account · settings · sign out |
 | The TV's rail | search · home · movies · shows · watchlist · zap · notifications · settings |
+| The Tab key's first stop on the web | skip to content |
+| The window's title on the web | the screen's name, then the product's: “home · chino”, “movies · chino”, “Sintel · chino” |

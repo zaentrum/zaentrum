@@ -32,13 +32,44 @@ Where an app opens depends on what the device has:
 | Two accounts or more | who's watching (section 3.5) |
 | A server that doesn't answer (phone app) | downloads ([chapter 13](./downloads.md)), after who's watching when the phone has several accounts |
 
+### 3.1.1 Getting the app
+
+The web needs no installing. The phone and TV apps come from the store of their device,
+each under the name chino.
+
+| Store | Holds | Its id |
+|---|---|---|
+| Google Play | the phone app for Android phones and tablets and the Android TV app, in one listing: the store gives each device the build that fits it | `io.github.zaentrum.chino` |
+| Apple's App Store | the phone app for iPhone and iPad | `io.github.zaentrum.chino` |
+| Samsung's TV store | the Samsung TV app | `zaentrumio.Chino` |
+
+A listing says what chino is: an app for a server of the person's own. It names no server
+and no other media product, and its screenshots show only the reference demo's openly
+licensed titles ([releases](../../docs/releases.md#publishing-the-apps)). The App Store's
+listing names no other platform either. What a listing needs:
+
+| Needed | Google Play | App Store | Samsung's TV store |
+|---|---|---|---|
+| The store's graphics | an icon of 512 × 512 px, a feature graphic of 1024 × 500 px, and for Android TV a banner of 1280 × 720 px | the app's icon, in the build | a logo on a transparent ground and a background picture |
+| Screenshots | two or more, one or more of them of Android TV | one or more of an iPhone, and one or more of an iPad's 13-inch display, as the app runs on an iPad, at the sizes the store lists | four, JPEG, under 500 kB each, 1280 × 720 or 1920 × 1080 px |
+| The texts | the name, a short and a full description | the name, a description, keywords and a support address | the title and a description in each language offered, and a contact address |
+| A privacy statement at a public address, and a page that says how to delete an account | a link in the listing, and the store's form on what the app collects | a link in the listing and one inside the app, the store's answers on what the app collects, and a privacy manifest in the build | a link in the listing |
+| A way in for the store's reviewers | the address of a demo server and an account on it | the same, in the notes for the review, on a server that answers while the review runs | the same, and Samsung's description of the app's screens, flows and remote keys, renewed with every update |
+| Signing | one upload key for both Android apps | Apple's distribution signing | an author certificate that stays the same for every update |
+| The build's own facts | version codes that never meet between the two apps | a build number that rises with every upload, and the answer that the app brings no encryption of its own | the version in the package |
+
+The stores are done one at a time, in the order Google Play, App Store, Samsung's TV
+store. The store accounts, the signing keys and the reviewers' account belong to the owner
+and are in no repository.
+
 ## 3.2 As deployed
 
 This section says what the four apps do before the first title as of
 6 November 2026: the web as the public demo showed it that day, on the same
 build as production, and the apps as their code had them that day. The phone
 app, Android TV and the Samsung TV are described from their code until
-screenshots of them are taken. The Samsung TV app isn't released yet.
+screenshots of them are taken. The Samsung TV app isn't released yet. No app
+is in a public store: the phone and TV apps are built from their repositories.
 
 ### 3.2.1 The web
 
@@ -220,6 +251,7 @@ doesn't have.
 | Removing an account | — | the ✕, a 28 dp square; it always asks | holding OK; it always asks | — |
 | add account | — | **Add account**, then **Signing in…** | **add account**, to sign in | **Add account** goes to home without signing in |
 | The avatar | a square: the sign-in's picture, or the initials in capitals, blue on grey | a square: the initials in capitals on one of twelve colours, a picture from an outside service over them | a circle, as the phone app | a square: one capital letter, dark on blue |
+| Servers found on the network | — | none: the address is typed | none | none |
 
 ## 3.3 Connect to a server
 
@@ -311,6 +343,88 @@ When the check passes, the app keeps the server, adds it to recent, and opens
 sign in: figure 3.5 on a phone, figure 3.7 on a TV. A change of server first
 asks what [chapter 16](./settings.md) describes, where accounts or downloads
 would go.
+
+### 3.3.5 Servers on this network
+
+A server installed on one machine at home announces itself on the home network
+([reaching it at home](../platform/home.md#finding-the-server),
+[ADR-0016](../../docs/adr/0016-reaching-it-at-home.md)): as a service of the type
+`_zaentrum._tcp`, under the name `zaentrum`, with its origin and its path in the service's
+text record. While connect to a server is open, the phone app and the Android TV app look
+for these announcements and list the servers they find above **Server address**, under the
+heading **on this network**.
+
+- **A row** is a standard button across the width, like a row of **recent**: the server's
+  name, then the host of its origin in the quieter colour, “zaentrum” and “192.168.1.50”,
+  with the path after the host where it isn't `/`. A name too long for the row is cut
+  with “…”. A press puts the origin, followed by the path, in the field and checks it as
+  **connect** does (section 3.3.4). From there nothing differs from an address that was
+  typed, a check that fails included.
+- **The address** is the text record's `origin`, followed by its `path`, never the host
+  and the port the service itself is announced at. The rule of home addresses holds for
+  it as for a typed address ([reaching it at home](../platform/home.md#home-addresses)):
+  an origin over plain http that is no home address isn't listed, nor is a record without
+  an origin.
+- **An announcement proves nothing**: anyone on the network can send one. So a row shows
+  where it leads, the person chooses, and the check and the sign-in are those of any
+  address.
+- **One row a server.** Two announcements of one origin are one row. The rows stand in
+  the alphabetical order of their names, then of their addresses, five at most. A server
+  in the list is left out of **recent** while it is found.
+- **The list follows the network** while the screen is open: a row comes when its server is
+  found and goes when its announcement does. The app stops looking when the screen closes.
+- **Nothing found** shows nothing: no heading, no loader and no sentence, and the screen is
+  figure 3.2 as it is. While a check runs, the rows are dimmed with the field (figure 3.11).
+- **change server**, the same screen opened from settings, has the list as well, without
+  the server the app is connected to.
+- **On a phone** the field keeps the focus as the screen opens, with the keyboard up. The
+  list stands above the field, clear of the keyboard, and the column scrolls where the list
+  makes it taller than the room. Held sideways the list is in the right half, above the
+  field (figure 3.3, part 2). A tablet has the phone's screen.
+- **On a TV** the list stands above the field in the column of figure 3.4, each row with
+  the design system's TV focus for a row. The focus starts on the field. When the first
+  server is found before a key was pressed on this screen, the focus moves to its row, once,
+  so that one press of OK connects. After a key press the focus is the person's, and a row
+  that comes later never takes it. Up from the field reaches the list.
+
+**Asking first.** Whether an app may look at the network is the person's to say wherever
+the device's system asks.
+
+- **Android**, on a phone and on a TV, asks nothing as the apps are built today: at the
+  Android level they target (36 for the phone app, 35 for Android TV) an app may look for
+  services on the network without a question. Both apps look as the screen opens. A build
+  that targets level 37 or later needs Android's permission for the local network before
+  it connects to a home address ([reaching it at home](../platform/home.md#what-each-system-needs));
+  such a build asks for it before it looks, in the way the iOS app does.
+- **iOS** asks once for each app, in a question of its own, whether the app may find and
+  connect to devices on the local network, and shows the app's reason in it, the sentence
+  the home chapter sets: “chino uses the local network to find your server and to play
+  from it.” So that the question never opens over a screen nobody has read, the iOS app
+  doesn't look by itself the first time. In the list's place it shows “chino can look for
+  servers on this network.” with **look for servers**, a standard button. A press starts
+  looking, and iOS asks.
+  - After a yes, the design system's small loader with “Looking for servers” takes the
+    line's place until the first server is found, for 5 seconds at most. With nothing found
+    by then it reads “No server found on this network. Type the server's address.” until
+    the screen closes; the app goes on looking, and a server found later brings the list.
+  - From then on the app looks by itself whenever the screen opens, and shows nothing while
+    nothing is found, as the Android app does.
+  - After a no, the line reads “chino may not use this network, so it can't find a server
+    on it or connect to one. To allow it, switch on Local Network for chino in Settings.”,
+    without a button: iOS doesn't ask twice, and it holds back the app's connections to a
+    server on the same network as well. The app keeps that it has asked. iOS gives an app
+    no way to read the answer, so the app learns it each time it looks: looking is refused,
+    or it isn't.
+
+The iOS build names the service type it looks for in its Info.plist, `NSBonjourServices`
+with `_zaentrum._tcp`; the reason, `NSLocalNetworkUsageDescription`, is the home chapter's.
+The Android apps use Android's network service discovery and need no new permission.
+
+**The web and the Samsung TV** have no such list. A browser is already at its server. The
+Samsung TV app is a web app, and a web app on a Samsung TV can't ask for the services
+announced on the network, nor open the connections their announcements travel on. Its
+connect to a server keeps the field, and **recent** (3.C5) saves the typing from the second
+time on.
 
 ## 3.4 Sign in
 
@@ -422,7 +536,7 @@ Figure 3.8: Who's watching, on a phone held upright, at 360 × 780 dp.
 3. **add account** opens the server's sign-in page, as sign in does in figure
    3.5. Once the person has signed in, the new account opens home.
 
-A switch asks nothing. When the account switched from is casting, the cast
+A switch asks nothing, unless the account has a code (section 3.5.5). When the account switched from is casting, the cast
 stops and a toast says so ([chapter 14](./casting.md)).
 
 ### 3.5.2 On a phone held sideways
@@ -465,6 +579,64 @@ name when it has none, the same way in every app, so an account keeps its
 colour on every device. The avatar shows no picture: no app asks an outside
 service for one (3.C13).
 
+### 3.5.5 An account with a code
+
+A person may guard their account with a code of 4 to 8 digits, which they set on the account page
+([chapter 16](./settings.md), section 16.5.7). Where a device holds two accounts or more, choosing an
+account that has a code asks for it before the account opens: on who's watching, and in the Samsung TV's
+list of accounts until 3.C11 gives it who's watching.
+
+The question is the design system's dialog, over who's watching:
+
+1. **enter code**, its title, with the account's avatar and name under it, so that it is plain whose code
+   is asked.
+2. **Code**, the design system's field around its text input: digits only, each shown as a dot, with the
+   hint “4 to 8 digits.” On a phone the number keyboard comes up with the dialog.
+3. **unlock**, the emphasized button, busy while the server checks. **cancel**, the quiet one, goes back
+   to who's watching.
+4. **On a TV** the dialog holds a pad of the ten digits, **delete** and **unlock**, with the focus on the
+   pad's first digit. A remote's own digit keys type as well. The dialog has no ✕: Back closes it.
+
+The server checks the code, never the app ([people](../portal/people.md#account-lock)). The app keeps no
+code and no copy of one.
+
+| The server's answer | The dialog |
+|---|---|
+| The code is right | closes, and the account opens on home |
+| The code is wrong | the field is emptied and says, as its error, “That isn't the code. 4 tries left.”, down to “1 try left.” |
+| 5 wrong codes | the field and **unlock** go: “Too many wrong codes. Try again in 15 minutes.”, the minutes counted down to “in 1 minute” and “in less than a minute”; **cancel** reads **close** |
+| No answer | the error banner “The server checks this code, and it can't be reached.”, with **try again** |
+
+Under the field a quieter line says what to do without the code: “Forgot it? Set a new one in chino in a
+browser, or ask an admin of this server.”
+
+- An account without a code opens as today. A device with one account asks for nothing.
+- Without the server an account with a code can't be chosen. Who's watching then shows such an account
+  dimmed, with “needs the server” under its name; the phone app stays in the account that was open and
+  shows its downloads ([chapter 13](./downloads.md)).
+- Where an account on the device has a code, the app opens on who's watching every time it starts, and
+  every time it comes back to the front after 15 minutes or more away, with the account that was open
+  first. A cast and a download that run are not stopped by it.
+- Whether an account has a code, the app asks the server as each account when who's watching opens, and
+  keeps the last answer with the account.
+- The web keeps one account in a browser and has no who's watching, so it asks for no code.
+
+### 3.5.6 A code where a child shares the device
+
+A rating cap holds only as long as a child can't open somebody else's account. So when an account that
+has neither a cap nor a code is opened on a device that also holds an account with a cap, the app asks
+its person once, before home, in the design system's dialog:
+
+1. **set a code**, its title.
+2. “Mia's account on this TV has an age limit. Without a code on your account, anyone using this TV can
+   switch to it.” On a phone it says “this phone”, on a tablet “this tablet”. With several capped
+   accounts it starts “2 accounts on this TV have an age limit.”
+3. **not now**, the quiet button, and **set a code**, the emphasized one, which opens the dialog of
+   section 16.5.7 for a new code. On a TV the focus starts on set a code.
+
+The app asks once for each account on each device, whatever the answer. After that the account page is
+where a code is set. The app learns which accounts have a cap from the server, never from a token.
+
 ## 3.6 Turning the phone
 
 The three screens turn with the phone, and turning it loses nothing: the
@@ -503,6 +675,11 @@ what happens when the server refuses a sign-in later, to
 | 3.C11 | Samsung TV: who's watching | Samsung TV | nothing opens it: with two accounts or more the app opens on the active one's home, and settings' **Switch account** lists the accounts over the page, its **Add account** going to home without signing in | figure 3.10, at the start with two accounts or more and from the avatar at the top of the rail ([chapter 2](./frame.md)); **add account** opens sign in with a code (figure 3.7) | proposed |
 | 3.C12 | The avatar's look | Web, Phone app, Android TV, Samsung TV | Web: the initials in capitals, blue on grey. Phone app: the initials in capitals on one of twelve colours. Android TV: the same in a circle. Samsung TV: the name's first letter in capitals, dark on blue for every account | section 3.5.4: a square, the initials lowercase in the monospace face, dark on one of twelve colours from the email address, the same way in every app | proposed |
 | 3.C13 | No picture in the avatar | Web, Phone app, Android TV | Web: the picture the sign-in gives the account. Phone app, Android TV: a picture looked up from an outside service by a hash of the email address, over the initials | Recommended: initials only, so that no app tells an outside service which accounts it has (section 3.5.4) | proposed |
+| 3.C14 | Servers found on the network | Phone app | connect to a server offers the address field, **Connect** and “Recent” alone; no code looks for a server on the network, and the iOS build names no service to look for | section 3.3.5: above **Server address** the list **on this network**, a row for each server that announces itself as `_zaentrum._tcp`, showing its name and the host of the origin in its text record; a press checks the origin, with its path, as a typed address (section 3.3.4); an origin over plain http that is no home address isn't listed; nothing found, no list; the Android app looks as the screen opens and asks nothing; the iOS app first shows “chino can look for servers on this network.” with **look for servers**, then iOS asks, showing the reason the home chapter sets (N.C8), and after a no the screen says where to allow it; the iOS build names `_zaentrum._tcp` in `NSBonjourServices` | proposed |
+| 3.C15 | Android TV: servers found on the network | Android TV | the same screen with the field, **connect** and **recent** alone; no code looks for a server | section 3.3.5 on a TV: the list **on this network** above the field in the column of figure 3.4, looked for as the screen opens, with nothing asked; the focus starts on the field and moves once to the first server found, unless a key was pressed before; OK on a row checks its origin | proposed |
+| 3.C16 | A code before an account opens | Phone app, Android TV, Samsung TV | choosing an account, on who's watching and in the Samsung TV's list over settings, makes it the active one at once; nothing is asked and no server is asked; an app that was not closed comes back in the account it was in | section 3.5.5: choosing an account that has a code opens the design system's dialog **enter code** over who's watching, with the account's avatar and name, the field Code, digits shown as dots, **cancel** and **unlock**; the server checks the code (P.C13) and the account opens only then; a wrong code is the field's error, “That isn't the code. 4 tries left.”; after 5 wrong codes “Too many wrong codes. Try again in 15 minutes.” and no field; without the server an account with a code can't be chosen; on a TV a pad of the ten digits; where an account on the device has a code, the app opens on who's watching at every start and whenever it comes back to the front after 15 minutes or more away; an account without a code, and a device with one account, as today; the web keeps one account and asks for no code | proposed |
+| 3.C17 | A request to set a code where a capped account shares the device | Phone app, Android TV, Samsung TV | no app knows whether an account has a rating cap, and none asks anything when accounts share a device | section 3.5.6: when an account that has neither a rating cap nor a code is opened on a device that also holds an account with a rating cap, the app asks once, before home, in the design system's dialog **set a code**: “Mia's account on this TV has an age limit. Without a code on your account, anyone using this TV can switch to it.”, **not now** and **set a code**, which opens the dialog of section 16.5.7; asked once for each account on each device, whatever the answer; the app learns the caps and the codes from the server (P.C4) | proposed |
+| 3.C18 | The apps in their devices' stores (needs the owner) | Phone app, Android TV, Samsung TV | no app is in a public store: each is built from its repository, the Android apps signed for release only where the key's secrets are set, the iOS app by hand on a Mac, the Samsung package with Tizen Studio's own distributor certificate; no listing's graphics, texts, privacy statement or reviewers' account exist | Recommended: section 3.1.1: each app is had from its device's own store under the name chino: Google Play, in one listing for the phone app and Android TV, Apple's App Store, and Samsung's TV store, one store at a time, each once what the section's table lists is there: the store's graphics, screenshots of the demo's titles, the texts, a privacy statement at a public address with a page on deleting an account, an account on a demo server for the store's reviewers, and release signing; the store accounts, the signing keys and the reviewers' account are the owner's, so every step needs the owner; the other choice is to go on handing out builds from the repositories, which only people who build an app can install | proposed |
 
 ## 3.8 States
 
@@ -563,6 +740,16 @@ A sign-in that fails says why, by cause, in every app:
 | The sign-in failed | Figure 3.13 on a phone. On a TV, “couldn't sign you in”, the reason and **try again** in place of the codes, with the focus on try again. On the web, “couldn't sign you in”, the reason and **sign in** |
 | Switching to another account | The account's tile shows the design system's loader until the switch is done |
 | The phone app can't reach the server | Who's watching works without it, and opens the account's downloads ([chapter 13](./downloads.md)) |
+| Looking, nothing found yet | Nothing: the heading and the list come with the first server found |
+| Servers found | The list **on this network** above **Server address** |
+| A found server pressed | Its origin in the field, and figure 3.11, the rows dimmed |
+| iOS hasn't asked yet | “chino can look for servers on this network.” and **look for servers**, in the list's place |
+| iOS, after the press | The small loader with “Looking for servers”, 5 seconds at most; then the list, or “No server found on this network. Type the server's address.” |
+| iOS: not allowed | “chino may not use this network, so it can't find a server on it or connect to one. To allow it, switch on Local Network for chino in Settings.” |
+| The code is being checked | **unlock** is busy; the field waits |
+| A wrong code | the field's error, with the tries left |
+| 5 wrong codes | the sentence with the minutes, and **close** |
+| The server can't be reached, and the account has a code | the error banner in the dialog; on who's watching the account dimmed, “needs the server” |
 
 ## 3.9 Words
 
@@ -578,3 +765,15 @@ A sign-in that fails says why, by cause, in every app:
 | Who's watching | who's watching? · add account · Hold OK on an account to remove it from this TV. |
 | The ✕ on a phone, for screen readers | remove account |
 | An account's tile, for screen readers | its name: Alex Urban |
+| Servers found on the network | on this network · a row: zaentrum · 192.168.1.50 |
+| A row, for screen readers | its name and its address: zaentrum, 192.168.1.50 |
+| Before iOS asks | chino can look for servers on this network. · look for servers |
+| The app's reason inside iOS's question | the home chapter's: chino uses the local network to find your server and to play from it. |
+| After the press (iOS) | Looking for servers · No server found on this network. Type the server's address. |
+| Not allowed (iOS) | chino may not use this network, so it can't find a server on it or connect to one. To allow it, switch on Local Network for chino in Settings. |
+| The code's dialog | enter code · Code · 4 to 8 digits. · unlock · cancel · close · delete (the TV's pad) |
+| A wrong code | That isn't the code. 4 tries left. · That isn't the code. 1 try left. · Too many wrong codes. Try again in 15 minutes. · Too many wrong codes. Try again in 1 minute. · Too many wrong codes. Try again in less than a minute. |
+| Without the server | The server checks this code, and it can't be reached. · try again · needs the server |
+| Without the code | Forgot it? Set a new one in chino in a browser, or ask an admin of this server. |
+| The dialog, for screen readers | Enter the code for Alex Urban |
+| The request to set a code | set a code · Mia's account on this TV has an age limit. Without a code on your account, anyone using this TV can switch to it. · 2 accounts on this TV have an age limit. Without a code on your account, anyone using this TV can switch to it. · not now |

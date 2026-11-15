@@ -11,10 +11,10 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `chino-web` | the web app | web | runs | [chino-web](https://github.com/zaentrum/chino-web) | `chino-web` | 88 | 24 | — |
-| `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 100 | 25 | — |
-| `chino-androidtv` | the Android TV app | app | ships | [chino-androidtv](https://github.com/zaentrum/chino-androidtv) | — | 87 | 21 | — |
-| `chino-tizen` | the Samsung TV app | app | ships | [chino-tizen](https://github.com/zaentrum/chino-tizen) | — | 74 | 20 | — |
+| `chino-web` | the web app | web | runs | [chino-web](https://github.com/zaentrum/chino-web) | `chino-web` | 88 | 24 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 100 | 25 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-androidtv` | the Android TV app | app | ships | [chino-androidtv](https://github.com/zaentrum/chino-androidtv) | — | 87 | 21 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-tizen` | the Samsung TV app | app | ships | [chino-tizen](https://github.com/zaentrum/chino-tizen) | — | 74 | 20 | ADR-0023, ADR-0016, ADR-0018 |
 | `chino-tvos` | an app for Apple TV | app | missing | — | — | — | — | — |
 | `chino-webos` | an app for LG TVs | app | missing | — | — | — | — | — |
 | `chino-roku` | an app for Roku players | app | missing | — | — | — | — | — |
@@ -29,9 +29,9 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `zaentrum-portal` | the portal: its launchpad, its settings and the consoles of addons | web | runs | [zaentrum-portal](https://github.com/zaentrum/zaentrum-portal) | `zaentrum-portal` | 42 | 9 | ADR-0001, ADR-0010 |
-| `portal-api` | the portal's API: the registry, people, addons, running the platform | service | runs | [zaentrum-portal/server/](https://github.com/zaentrum/zaentrum-portal/tree/main/server) | `portal-api` | 51 | 46 | ADR-0001, ADR-0009, ADR-0010, ADR-0011 |
-| `katalog-manager-ui` | the catalog console | web | runs | [katalog-manager-ui](https://github.com/zaentrum/katalog-manager-ui) | `katalog-manager-ui`, `katalog-manage-ui` | 21 | 4 | — |
+| `zaentrum-portal` | the portal: its launchpad, its settings and the consoles of addons | web | runs | [zaentrum-portal](https://github.com/zaentrum/zaentrum-portal) | `zaentrum-portal` | 42 | 9 | ADR-0001, ADR-0010, ADR-0023, ADR-0016, ADR-0017, ADR-0018, ADR-0019, ADR-0020 |
+| `portal-api` | the portal's API: the registry, people, addons, running the platform | service | runs | [zaentrum-portal/server/](https://github.com/zaentrum/zaentrum-portal/tree/main/server) | `portal-api` | 51 | 46 | ADR-0001, ADR-0009, ADR-0010, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0018, ADR-0019, ADR-0020 |
+| `katalog-manager-ui` | the catalog console | web | runs | [katalog-manager-ui](https://github.com/zaentrum/katalog-manager-ui) | `katalog-manager-ui`, `katalog-manage-ui` | 21 | 4 | ADR-0023, ADR-0016, ADR-0021 |
 
 - `portal-api`: Built from the portal's repository, its server/, as an image of its own
 - `katalog-manager-ui`: One image, run twice: at /katalog and at /katalog-manage
@@ -40,10 +40,10 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `chino-api` | chino's API, for every app | service | runs | [chino-api](https://github.com/zaentrum/chino-api) | `chino-api` | 88 | 24 | ADR-0001, ADR-0005 |
-| `chino-stream` | the stream origin: packages and the renditions made while playing | service | runs | [chino-stream](https://github.com/zaentrum/chino-stream) | `chino-stream` | 12 | 15 | ADR-0002, ADR-0004, ADR-0013 |
-| `live-worker` | warm GPU workers for the renditions made while playing | service | runs | [live-worker](https://github.com/zaentrum/live-worker) | `live-worker` | 2 | 15 | ADR-0013 |
-| `notifications` | push to the apps | service | idle | [notifications](https://github.com/zaentrum/notifications) | — | — | — | — |
+| `chino-api` | chino's API, for every app | service | runs | [chino-api](https://github.com/zaentrum/chino-api) | `chino-api` | 88 | 24 | ADR-0001, ADR-0005, ADR-0022, ADR-0023, ADR-0018, ADR-0021 |
+| `chino-stream` | the stream origin: packages and the renditions made while playing | service | runs | [chino-stream](https://github.com/zaentrum/chino-stream) | `chino-stream` | 12 | 15 | ADR-0002, ADR-0004, ADR-0013, ADR-0018 |
+| `live-worker` | warm GPU workers for the renditions made while playing | service | runs | [live-worker](https://github.com/zaentrum/live-worker) | `live-worker` | 2 | 15 | ADR-0013, ADR-0017 |
+| `notifications` | push to the apps | service | idle | [notifications](https://github.com/zaentrum/notifications) | — | — | — | ADR-0019 |
 
 - `live-worker`: With liveWorker.enabled (ADR-0013)
 - `notifications`: A scaffold: built once the phone apps take pushes
@@ -52,8 +52,8 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `katalog-api` | the catalog's read side | service | runs | [katalog-api](https://github.com/zaentrum/katalog-api) | `katalog-api` | 32 | 8 | ADR-0003, ADR-0012 |
-| `katalog-manager` | the catalog's only writer: scan, ingest, enrichment, the management API | service | runs | [katalog-manager](https://github.com/zaentrum/katalog-manager) | `katalog-manager-api` | 37 | 75 | ADR-0001, ADR-0003, ADR-0005, ADR-0012, ADR-0015 |
+| `katalog-api` | the catalog's read side | service | runs | [katalog-api](https://github.com/zaentrum/katalog-api) | `katalog-api` | 32 | 8 | ADR-0003, ADR-0012, ADR-0021 |
+| `katalog-manager` | the catalog's only writer: scan, ingest, enrichment, the management API | service | runs | [katalog-manager](https://github.com/zaentrum/katalog-manager) | `katalog-manager-api` | 37 | 75 | ADR-0001, ADR-0003, ADR-0005, ADR-0012, ADR-0015, ADR-0023, ADR-0021 |
 | `katalog-ingest` | the ingest scheduler | worker | runs | [katalog-ingest](https://github.com/zaentrum/katalog-ingest) | `katalog-ingest` | 1 | 3 | — |
 
 - `katalog-manager`: Runs as katalog-manager-api, the name of the service it replaced
@@ -64,7 +64,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
 | `analyzer` | analysis: intro and credits, chapters, the picture area | worker | runs | [analyzer](https://github.com/zaentrum/analyzer) | `analyzer` | — | 24 | ADR-0005 |
-| `transcoder` | the transcode to the package's rules | worker | runs | [transcoder](https://github.com/zaentrum/transcoder) | `transcoder` | — | 22 | ADR-0002, ADR-0005, ADR-0015 |
+| `transcoder` | the transcode to the package's rules | worker | runs | [transcoder](https://github.com/zaentrum/transcoder) | `transcoder` | — | 22 | ADR-0002, ADR-0005, ADR-0015, ADR-0017 |
 | `packager` | HLS and CMAF packaging | worker | runs | [packager](https://github.com/zaentrum/packager) | `packager` | — | 21 | ADR-0002, ADR-0005, ADR-0015 |
 | `subtitler` | subtitles where a title has none | worker | idle | [subtitler](https://github.com/zaentrum/subtitler) | — | — | 6 | ADR-0014 |
 
@@ -77,10 +77,10 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `postgres` | the bundled database server: chino, katalog, keycloak, portal | database | runs | — | `postgres`, `zaentrum-backup`, `postgres-data`, `backups` | — | — | ADR-0003 |
+| `postgres` | the bundled database server: chino, katalog, keycloak, portal | database | runs | — | `postgres`, `zaentrum-backup`, `postgres-data`, `backups` | — | — | ADR-0003, ADR-0020 |
 | `valkey` | the bundled cache | cache | runs | — | `valkey` | — | — | — |
 | `kafka` | the bundled event broker | broker | runs | — | `kafka` | — | — | ADR-0001, ADR-0005 |
-| `keycloak` | the bundled identity provider, and the job that sets up its realm | identity | runs | — | `keycloak`, `zaentrum-realm` | — | — | ADR-0007, ADR-0008 |
+| `keycloak` | the bundled identity provider, and the job that sets up its realm | identity | runs | — | `keycloak`, `zaentrum-realm` | — | — | ADR-0007, ADR-0008, ADR-0023, ADR-0016, ADR-0018, ADR-0019 |
 | `media` | the media volume: originals and packages | volume | runs | — | `media` | — | — | ADR-0002, ADR-0015 |
 
 - `postgres`: Not with databases.mode external; its databases are dumped every day
@@ -92,9 +92,9 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 23 | 70 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011 |
-| `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011 |
-| `appliance` | the one-container install: a cluster of its own, the operator and a resource | appliance | ships | — | — | — | — | ADR-0006, ADR-0008 |
+| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 23 | 70 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
+| `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011, ADR-0016, ADR-0017, ADR-0020, ADR-0021 |
+| `appliance` | the one-container install: a cluster of its own, the operator and a resource | appliance | ships | — | — | — | — | ADR-0006, ADR-0008, ADR-0016, ADR-0017 |
 
 - `zaentrum-operator`: Installed on its own, it runs what the chart holds
 - `appliance`: Built from zaentrum-operator's deploy/allinone; amd64; plain http, on the machine it runs on alone
@@ -137,8 +137,8 @@ columns is on the [front page](./README.md#how-to-read-it).
 |---|---|---|---|---|---|---|---|---|
 | `tv-api` | the tv product's API | service | later | [tv-api](https://github.com/zaentrum/tv-api) | — | — | — | — |
 | `tv-stream` | the tv product's stream origin | service | later | [tv-stream](https://github.com/zaentrum/tv-stream) | — | — | — | ADR-0004 |
-| `musig-api` | the musig product's API: music, audiobooks and podcasts | service | later | [musig-api](https://github.com/zaentrum/musig-api) | — | — | — | — |
-| `musig-stream` | the musig product's stream origin | service | later | [musig-stream](https://github.com/zaentrum/musig-stream) | — | — | — | ADR-0004 |
+| `musig-api` | the musig product's API: music, audiobooks and podcasts | service | later | [musig-api](https://github.com/zaentrum/musig-api) | — | — | — | ADR-0024 |
+| `musig-stream` | the musig product's stream origin | service | later | [musig-stream](https://github.com/zaentrum/musig-stream) | — | — | — | ADR-0004, ADR-0024 |
 
 ## Retired
 

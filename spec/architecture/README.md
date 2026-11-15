@@ -191,7 +191,7 @@ to render the chart.
 
 | Decision records | Accepted | Proposed |
 |---|---|---|
-| 15 | 13 | 2 |
+| 24 | 14 | 10 |
 <!-- end: state -->
 
 ## What the model finds
@@ -217,6 +217,7 @@ a change to the code, to a decision, or to the model.
 | the demo in the product | `katalog-manager` | katalog-manager's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-manager-api KAFKA_GROUP_ID` |
 | the demo in the product | `keycloak` | keycloak's DEMO_USER_PASSWORD comes from the secret zaentrum-demo-user: a name of the reference demo, set by the chart every install uses | `keycloak DEMO_USER_PASSWORD` |
 | decided, not built | `zaentrum-operator`, `keycloak`, `appliance` | ADR-0008 is accepted, and nothing serves reach-on-home-network, which it governs | — |
+| decided, not built | `musig-api`, `musig-stream` | ADR-0024 is accepted, and nothing serves listen-to-audiobooks, which it governs | — |
 <!-- end: findings -->
 
 ## What the architecture cannot do yet
@@ -248,6 +249,7 @@ hand, and a component's fact sheet lists its own beside what the model finds.
 | Where originals are retired a title is its package alone: renditions in segments, stereo and HDR10, and deleting is final. Originals are kept unless an admin sets them to go once packaged | `packager`, `katalog-manager`, `media` | `export-title`, `play-surround` | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
 | The apps are for the web, Android and iOS phones and tablets, Android TV and Samsung TVs, none from a public store yet | `chino-web`, `chino-mobile`, `chino-androidtv`, `chino-tizen`, `chino-tvos`, `chino-webos`, `chino-roku` | `get-app-from-store` | [The apps](../../docs/releases.md#the-apps) |
 | A title is sent to a Google Cast device or an AirPlay screen alone: the TV apps can't be reached from a phone or a computer. The TV apps take nothing from another device: none is a cast receiver, none announces itself, and the server keeps no list of screens | `chino-api`, `chino-mobile`, `chino-web`, `chino-androidtv`, `chino-tizen` | `find-tv-app` | [14.2.2](../chino/casting.md#1422-feature-by-feature) |
+| A Samsung TV app can't look for servers on the home network. It is a web app, and the TV's system offers the search for services to other kinds of app alone | `chino-tizen` | `find-server-on-network` | [3.3.5](../chino/start.md#335-servers-on-this-network) |
 <!-- end: limits -->
 
 ## Pages

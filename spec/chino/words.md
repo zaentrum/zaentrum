@@ -38,6 +38,7 @@ words as a numbered change: the subtitle and audio tags are change 12.C3 of
 | “cast & crew” | The people of a title, on its page | “credits” |
 | “in the library” | What of a person's work the library holds, on their page ([chapter 7](./person.md)) | “filmography” |
 | “the people who run this server” | Who receives a bug report | “the dev backlog” |
+| “collection” | A set of titles everyone on the server shares, made by the catalog or by the people who run the library: the films of a series, a theme ([chapter 5](./browse.md)). A list is a person's own | “box set”, “franchise”, “saga”, “list” |
 
 “Original” names two things, told apart by where it stands: in the player's
 settings menu it is the picture, in the audio setting and on an audio row the

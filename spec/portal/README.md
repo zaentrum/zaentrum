@@ -33,3 +33,5 @@ nothing on it is built until a change to it is approved.
 |---|---|
 | [Home page](./home.md) | As deployed, then the target: the spaces bar under the top bar, the spaces and their tiles, the search across spaces, who sees what, and the changes between the two |
 | [Settings and setup](./settings.md) | Where each kind of setting lives, and an addon's setup checklist |
+| [People and what they may do](./people.md) | The people worklist and a person's page, the rights of each person, the account's code, sign-in and security, who is watching now, and streams at once; as built, then the target, and the changes between the two |
+| [Running the platform](./operations.md) | Mail, alerts, backups, restoring, moving to another machine, and storage; as built, then the target, and the changes between the two |

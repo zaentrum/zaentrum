@@ -1,0 +1,34 @@
+key,package,needs,changes,note
+groundwork,Groundwork in every repository,,T.C1-T.C4,"Each repository says how it is built, tested and changed, runs its tests on every change, and signs what it releases; the message catalogue and its check, and a browser in each web repository's tests, come with it. Nothing is built before it."
+design-system,The design system's missing parts,,,"The parts the target screens draw and the design system lacks (chino, chapter 1, section 1.5), and a count and a date that follow the page's language, are added to the design system and released, so that every app takes them from one place."
+frame,"The frame, and the design system in the apps",groundwork ; design-system,2.*,"The rail, the bar, the tabs and the avatar's menu at every size, and the apps taking the design system's components. Every screen sits in it."
+words,"Every text from the message catalogue, in the person's language",frame,2.C13 ; 16.C23 ; 16.C24 ; 17.C17 ; N.C15,"The message catalogue in chino's apps, the app's language kept with the account, the server answering with codes, and the sign-in pages in the person's language. It comes before the pages, so their new words go straight into the catalogue."
+access,"Screen readers, the keyboard, text size and motion",frame,2.C14 ; 2.C15,"Every screen of chino works with the device's screen reader and, on the web, a keyboard; text follows the device's size and motion its setting. Each repository gets the check that keeps it so."
+errors,When something goes wrong,frame,17.*,"What a screen says when it can't do its job, by cause. Every page uses it."
+start,Getting started,frame ; errors ; words,3.*,"Adding a server, signing in, who's watching."
+home,Home,frame ; errors ; words,4.*,The first screen after signing in.
+browse,Movies and shows,frame ; errors ; words,5.*,"The library by kind, with its filters."
+title-page,The title page,frame ; errors ; words,6.*,"A film or a show, and what can be done with it."
+people-pages,People,frame ; errors ; words,7.*,A person and what of theirs the library has.
+lists,Watchlist and lists,frame ; errors ; words,8.*,The watchlist and named lists.
+search,Search,frame ; errors ; words,9.*,The one search and its results.
+zap,Zap,frame ; errors ; words,10.*,Zapping through scenes of the library.
+player,The player,frame ; errors ; words,11.*,"Watching, and the player's controls and menus; what the player tells the server; a title's 5.1 track."
+subtitles,Subtitles,player,12.*,"The audio and subtitles panel, how subtitles look, and what switches on by itself."
+downloads,Downloads and offline,title-page,13.*,Taking titles along on a phone or a tablet.
+casting,Casting,player ; subtitles,14.*,"Watching on a TV from the phone: the receiver page, the TV app started by a cast, the other senders."
+notifications,Notifications,frame ; errors ; words,15.*,The bell and what it holds.
+settings,Settings and account,frame ; errors ; words,16.*,"Settings, the account, signing out, reporting a bug."
+stores,The apps in their devices' stores,frame,3.C18,"Each app from its device's own public store. The store accounts, the signing keys and the reviewers' account are the owner's, so every step needs the owner."
+portal-home,The portal's home page,groundwork ; design-system,H.*,"The spaces bar, the spaces and their tiles, the search across spaces, and what the server answers for them."
+home-network,Reaching it at home,groundwork,N.* ; 3.C14 ; 3.C15,"A phone and a TV on the home network reach the platform and sign in with no name and no certificate of one's own, and the apps find it by themselves. The trial of ADR-0016 comes first."
+household-machine,The household's machine: installing and updating,groundwork,I.*,"Images for both processors, encoders for Intel and AMD chips, the smallest machine, the first administrator made in the browser, and an install on one machine that updates itself. The trials of ADR-0017 come first."
+running,"Running the platform: mail, alerts, backups, storage",groundwork,R.* ; H.C19,"Mail through a server the admin names, alerts to the admins, backups and restores from the portal and the command line, and how much room the library takes."
+restore-at-first-run,"A restore at the first run, and backups off one machine",running ; household-machine,R.C17 ; R.C19,"The first-run page offers a restore from a backup, and a one-machine install copies its backups to a folder outside it: how a platform moves to another machine."
+library,The library,groundwork,L.C1-L.C8 ; L.C12 ; L.C13 ; L.C16-L.C19,"Several libraries with their folders, scans that run by themselves, collections kept by the catalog, a title back as one file, the command line and the documentation."
+catalog-console,The catalog console,library ; design-system,K.*,"The console's screens: titles and a title's page, collections, libraries, scans, settings, and what the catalog has to offer for them."
+details-beside-files,Details and artwork beside the files,catalog-console,L.C9-L.C11,The catalog reads the details and pictures kept beside a title; it rests on the source each field and picture has in the console's part.
+collections,Collections in the apps,library ; browse ; title-page,L.C14 ; L.C15 ; 5.C21 ; 5.C22 ; 6.C26,"Collections on the read side and in chino: a view under movies, a collection's page, and a title's collections on its page."
+people-and-rights,People and what they may do,running ; library ; portal-home ; start ; settings,P.* ; 3.C16 ; 3.C17 ; 16.C21 ; 16.C22 ; 17.C16,"Rights for each person, the account's code on a shared device, sign-in and security, who is watching now, and streams at once. P.C16 mends a leak that is there today and waits for nothing."
+consoles-words,The portal and the consoles in the person's language,words ; portal-home ; catalog-console,H.C18 ; K.C26 ; K.C27,"Every text of the portal and the catalog console from the message catalogue, their servers answering with codes, a key for every genre, and both to WCAG 2.2 AA."
+open-product,What an open product owes,groundwork,T.C5 ; T.C6,"The typefaces in the apps' own bundles, and the addon interfaces listed with a version each."

@@ -1,0 +1,58 @@
+key,scope,status,why
+find-tv-app,later,proposed,Samsung TVs: their own way to start an app from a phone has to be tried on a real TV before anything is promised
+refresh-on-library-change,later,proposed,"the web follows the catalog's changes as they happen; a phone or a TV asks again when a screen opens, which is enough there"
+choose-cut,later,proposed,"a library seldom holds two cuts of one film, and it needs the library to keep several versions playable side by side"
+watch-together,later,proposed,a feature with a design of its own; nothing else waits for it
+show-dvb-subtitles,later,proposed,"they come with recordings of broadcasts, so they wait for live channels"
+get-push-notification,later,proposed,"a push to a phone needs keys of the app's publisher, which an open server can't carry: it needs a relay somebody runs, and a decision record of its own"
+register-app,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+limit-tile-audience,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+edit-slot-rows,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+arrange-spaces,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+place-tiles,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+check-addon-setup,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+see-people,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+add-person,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+invite-person,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+change-person,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+cap-person-rating,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+delete-person,later,proposed,the portal has it; the CLI gets it once a script can sign in with a token of its own
+count-addon-notifications,later,proposed,the count is served; no screen needs it until addons send more than a few notifications
+browse-addons,later,proposed,there are too few addons for a list; one is added by its address or its chart's
+see-watch-statistics,later,proposed,the apps send how playback went and the server counts it; a page over time comes after the page of who is watching now
+watch-events,later,proposed,"the portal shows the bus; the CLI lists its events, and a live tail there can wait"
+browse-database,later,proposed,a look into the tables is the portal's; a script reads the APIs
+use-personal-token,later,proposed,needs a way to issue and check tokens that every service accepts: a decision record of its own; until then the CLI signs in with a code in a browser
+enrich-without-own-key,later,proposed,"needs a key of the project's in the images, or sources that ask for none: a decision record of its own; until then the first-run checklist asks for a key"
+retire-list,later,proposed,whoever runs the platform retires chosen originals through the API; a screen for it comes after the files tab shows what happened to an original
+decide-superseded,later,proposed,whoever runs the platform retires chosen originals through the API; a screen for it comes after the files tab shows what happened to an original
+reencode-queue,later,proposed,the rules view shows the queue's counts and pace; clearing it stays with the API
+take-in-title,later,proposed,the platform's own work; the console needs no screen for it beyond what a title's files tab shows
+measure-picture-area,later,proposed,the platform's own work; the console needs no screen for it beyond what a title's files tab shows
+package-extras,later,proposed,the platform's own work; the console needs no screen for it beyond what a title's files tab shows
+backfill-source-facts,later,proposed,a repair run once through the API; it needs no screen
+read-chapters,later,proposed,"the chapters tab lists a title's chapters; how far the reading is, and settling a title that can't be read, stay with the API"
+settle-chapter-reads,later,proposed,"the chapters tab lists a title's chapters; how far the reading is, and settling a title that can't be read, stay with the API"
+pin-version,later,proposed,"the CLI and the resource pin any version; the portal offers the update at hand, which is what an admin needs there"
+expose-identity-console,later,proposed,"a choice of whoever installs the platform, made in its resource"
+set-public-host,later,proposed,"a choice of whoever installs the platform, made in its resource"
+configure-storage,later,proposed,"a choice of whoever installs the platform, made in its resource"
+configure-event-streaming,later,proposed,"a choice of whoever installs the platform, made in its resource"
+enable-live-worker,later,proposed,"a choice of whoever installs the platform, made in its resource"
+connect-vpn,later,proposed,"a choice of whoever installs the platform, made in its resource"
+bring-own-secrets,later,proposed,"a choice of whoever installs the platform, made in its resource"
+play-music,later,proposed,the listening product is designed once watching is complete; the changes named only tidy its tile on the home page
+listen-to-audiobooks,later,proposed,"with the listening product, which is designed once watching is complete"
+watch-live-channels,later,proposed,"live channels are a product of their own, designed once watching is complete; the changes named only tidy its tile on the home page"
+chino-tvos,later,proposed,an app for a further TV system is a product of its own; Android TV and Samsung TVs come first
+chino-webos,later,proposed,an app for a further TV system is a product of its own; Android TV and Samsung TVs come first
+chino-roku,later,proposed,an app for a further TV system is a product of its own; Android TV and Samsung TVs come first
+notifications,later,proposed,the push service waits for the decision on how a push reaches a phone
+import-people-and-history,addon,proposed,an importer reads the other server and writes through the platform's interfaces: the platform stays free of other products' formats
+send-webhooks,addon,proposed,events are on the bus for addons; one that calls addresses outside the platform is an addon
+reach-from-outside,addon,proposed,"reaching it from outside without a name of one's own needs a tunnel or a relay somebody runs; an addon brings one, the platform runs no service of its own"
+back-up-library,out,proposed,"the library's files are large and on storage with tools of its own; the platform backs up what only it can restore, and the documentation says what to copy"
+find-server-on-network,out,proposed,the Samsung TV: a web app there can't look for services on the network; it keeps the typed address and the recent ones
+update-operator,out,proposed,"in a cluster a cluster admin updates the operator, with the release's manifest: the portal and the CLI hold no rights over the cluster"
+rebuild-catalog-from-library,later,proposed,the records the files carry leave out the age rating and what a hand locked; a rebuild from them comes once they are complete
+match-catalog-to-library,later,proposed,it follows the rebuild of the catalog from the library's files

@@ -395,6 +395,28 @@ scrolled to; the tiles take the columns the new width holds. The spaces bar
 stays under the top bar either way, sharing the width while the screen is less
 than 600 px wide and standing from the left when it is wider.
 
+## Language
+
+The portal, the consoles it holds and the invite page speak the person's
+language, as chino does ([chino, chapter 2](../chino/frame.md),
+[ADR-0023](../../docs/adr/0023-languages-and-accessibility.md)): the language
+chosen in chino's settings, which the server gives with the account, else the
+first of the browser's languages the portal has, else English. The portal has
+no language setting of its own. Every text comes from the message catalogue:
+none is typed into a page's code, and none is a sentence the server sent.
+
+- **The tiles and the spaces.** The platform's own tiles and spaces are named
+  from the message catalogue, in the person's language, for as long as their
+  words in the registry are the platform's own. Words an admin wrote, and an addon's,
+  show as they are.
+- **A console the portal hosts** is handed the language, so it speaks as the
+  shell does.
+- **What the server refuses**, such as a username that is taken or a password
+  the policy doesn't take, arrives as a code with its values, and the page has
+  the sentence. The server's own line goes under **details**.
+- **Numbers and dates** follow the language: “2,500” and “2.500”, “12 oct
+  2026” and “12. okt. 2026”.
+
 ## For the keyboard and screen readers
 
 - The spaces bar is a navigation landmark named “spaces”. Each space is a link,
@@ -410,6 +432,14 @@ than 600 px wide and standing from the left when it is wider.
 - The product's name is a link named “zaentrum, home”, the avatar a button named
   after the person and what it opens, “Alex Urban, user menu”, and the bell
   keeps its name, “Notices, 2 unread”.
+- Every page of the portal and of its consoles meets the design system's
+  accessibility baseline, WCAG 2.2 at level AA; what this section says of the
+  home page holds for each of them in its own parts.
+- The Tab key's first stop on every page is **skip to content**, which shows
+  while it has the focus and moves the focus past the bars.
+- The page tells the browser which language it is in.
+- Every text is whole at a zoom of 200 % and in a window 320 px wide, and
+  nothing moves on its way where the browser asks for less motion.
 
 ## Changes
 
@@ -440,6 +470,8 @@ or takes away something the portal has today.
 | H.C15 | Couldn't load: say why | Web | “couldn’t load your launchpad:” and the raw error, in red, such as “Failed to fetch”; no way to try again (figure 5) | figure 14: the design system's empty state of its error kind, large, “couldn't load your apps”, the reason by cause, **try again**, and the status under **details** | proposed |
 | H.C16 | Nothing to open | Server, Web | for an account that may see no tile, the server writes the list of spaces as null, and the page goes blank, top bar included (figure 6) | the server writes an empty list, and the page shows figure 15 under the top bar | proposed |
 | H.C17 | An addon's setup in the settings space | Server, Web | an addon's setup is only a checklist in settings → registry → addons, inside the registry console; nothing in the settings group shows it | Recommended: settings' third group, addons: one tile for each installed addon that declares setup sections in its manifest, its name, the state the addon reports (a warning badge counting the sections that aren't ready, “2 sections need setup” in its description), opening its setup checklist; the server's answer carries these tiles (H.C4); the values stay in the addon (ADR-0010) (figure 9) | proposed |
+| H.C18 | The portal in the person's language, and to WCAG 2.2 AA | Portal, Server | about 480 texts typed into the code of the portal and its consoles, in English, the page saying `lang="en"`; one and many by a helper written three times, dates fixed to British English; the pages show the text portal-api sends for a refusal or a failure, about 100 sentences; the tiles' and spaces' words are the registry's, seeded in English; no test draws a page: a harness draws each view against recorded answers when started by hand | the sections Language and For the keyboard and screen readers, and ADR-0023: every text of the portal, its consoles and the invite page from the message catalogue (`src/words/`), plurals, numbers and dates by the language's rules; the language as in chino: the account's choice, which portal-api reads from chino-api and answers as `language` in `GET /api/portal/me`, else the browser's, else English, with no setting of its own; the shell hands each console it hosts the language (`language`); portal-api answers a refusal or a failure with a code and its values; the launchpad's answer names the key of each tile and space whose words are still the platform's own (`titleKey`, `descriptionKey`), and an admin's and an addon's words show as they are; every page meets WCAG 2.2 AA, and a test in the repository opens every view and state from the harness's recorded answers in a browser, in English and German, 1280 px and 360 px wide, and fails on any finding of the accessibility checker or of its keys | proposed |
+| H.C19 | Tiles for mail, alerts, backups and storage | Server | none: the four consoles do not exist | in the settings space's group platform, after operator: **mail**, **alerts**, **backups** and **storage**, each built with its page and with the words that page gives its tile ([running the platform](./operations.md), changes R.C3, R.C9, R.C15 and R.C21); shown to admins alone, as the group is | proposed |
 
 ## States
 
@@ -520,3 +552,4 @@ page can change it.
 | Couldn't load | couldn't load your apps · Can't reach the server. · The server ran into a problem. · The server is busy. · The server didn't accept the request. Check for an app update. · try again · details · “HTTP 500 Internal Server Error” |
 | Nothing to open | no apps to open · An admin decides which apps each account can open. |
 | The registry, refusing a space | A home page has five spaces at most, settings included. · A space's name is one word of eight letters at most. |
+| The Tab key's first stop | skip to content |

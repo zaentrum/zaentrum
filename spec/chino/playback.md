@@ -228,6 +228,13 @@ qualities.
 | Picture in picture, AirPlay, the lock screen | the browser's own picture in picture | iOS: picture in picture, AirPlay, sound in the background, the lock screen's controls; Android: none | — | — |
 | What it tells the server it decodes | where hls.js plays, what the browser says it plays through Media Source Extensions; where the browser plays the stream itself, what its video element says, marked as the browser's own; nothing where it decodes none, and the server's default set applies | Android: each video format with the tallest picture its hardware decoder takes, “hvc:1080”, a format decoded only in software without a height; iOS: H.264, HEVC and AV1 where the hardware decodes them, marked as the system's own player | the same as Android phones | what the TV's web engine says it decodes, HEVC and AV1 up to the panel's height, H.264 up to 2160; E-AC-3 also where the TV's own player plays it |
 | Playback info | a dialog: how it plays, the source file, the stream now, its quality changes, what the browser can decode | the dialog without the quality changes | a card at the top right that closes after 8 s | — |
+| What it tells the server of how playback went | first_frame, startup_timeout, rebuffer, bandwidth and level_switch, sent together every 30 s and on leaving | picks, retries, skips and failures, one a request, with the device's details; none of the five but iOS's startup_timeout | first_frame, rebuffer, bandwidth and level_switch, sent together 30 s after the first and on leaving | nothing |
+| A 5.1 track | asked for where the browser says it decodes the codec; “English 5.1” beside “English”; it starts on the 5.1 one; where the browser plays the stream itself, one row and the browser picks | Android: asked for where a decoder or the output plays the codec; both listed; the player picks which starts. iOS: asked for where iOS plays the codec; one row a track; the system's player picks | asked for where the TV decodes E-AC-3 or its output takes it; both listed; it starts on the 5.1 one only where the output takes it | asked for on every TV its own player plays on; “English 5.1” beside “English”; it starts on the 5.1 one |
+
+### 11.2.6 A 5.1 track, device by device
+
+| Device | Says it plays | Started on | Heard |
+|---|---|---|---|
 
 ## 11.3 The player on a computer
 
@@ -773,6 +780,43 @@ get it going again before it says anything went wrong:
 Whatever the player loads again goes on from the same position. When nothing
 helps, it gives up, with the screen of section 11.17.
 
+### 11.13.2 What the player tells the server
+
+While a title plays, the player measures how it goes and tells the server, for the people
+who run it: how long the title took to show its first picture, each wait in the middle of
+playing and how long it lasted, the bandwidth the player sees, and each change of the
+quality on the screen. The server counts them and writes each to its log with the account
+that sent it. No viewer sees them, and nothing on the screen changes.
+
+Every app sends the same five events to chino-api's `POST /api/v1/play/events`, in one
+body, `{"sessionId": "…", "events": [{"ts": …, "kind": "…", "itemId": "…", "payload": {…}}]}`:
+
+| Event | Sent when | What the server reads |
+|---|---|---|
+| `first_frame` | the first picture of a start shows, or of **try again** | `startup_ms`, the time since the player opened; `mode`, how the title plays, as playback info names it; `resume`, whether it started past its first second; `hidden`, whether the app was out of sight meanwhile; `click_to_play`, whether the person had to press play |
+| `startup_timeout` | a start is given up without a picture (section 11.17) | `mode`; `phase`, what the player still waited for: `request`, `playlist`, `init`, `first_segment` or `decode` |
+| `rebuffer` | a wait that began while the title was playing ends; never the start, nor the wait after a seek or a pick of quality | `duration_ms`; `mode` |
+| `bandwidth` | at the first picture, then at most every 30 seconds while the title plays | `bps`, the player's own estimate; `frag_ttfb_ms`, how long the last piece of video took to its first byte; `client`, the app's name |
+| `level_switch` | the quality on the screen changes, after the first | the heights and bit rates before and after, and `manual`, whether the person picked it |
+
+- The other fields are the web's (`chino-web`, `src/lib/qoe.ts`), under the same names. An
+  app leaves out a field its player can't tell.
+- A session is one opening of the player. It sends at most 10 `first_frame`, 10
+  `startup_timeout`, 100 `rebuffer`, 100 `level_switch` and 1000 `bandwidth` events.
+- The events wait in the app and go together: 30 seconds after the first one waits, and at
+  once when the player closes or the app is left. Sending is best effort and never shows on
+  the screen.
+- An app names itself in `client`: `chino-androidtv`, `chino-tizen`, `chino-mobile-android`,
+  `chino-mobile-ios`. The quality events carry nothing else of the device.
+- A trailer sends none of them.
+
+**On the Samsung TV** the TV's own player says less than a browser's: it doesn't say how
+long a piece took, so the fields about pieces are left out; `bps` is the player's own
+figure for the bandwidth now; `phase` is `request` until the stream is asked for,
+`playlist` until it is prepared and `first_segment` after; and a `level_switch` goes when
+the player reports another bit rate or picture size. Where the app plays through its
+browser engine instead, it sends what the web sends.
+
 ## 11.14 The audio setting
 
 Settings has one audio language, “Original” or a language, with this text under
@@ -781,6 +825,107 @@ it, the same in every app:
 > Titles play with audio in the language you pick here, where they have it.
 > With Original, each title plays in the language it was made in. A choice in
 > the player applies only to what's playing now.
+
+### 11.14.1 A title's 5.1 track
+
+Where an installation turns surround sound on for its packages (`pipeline.surroundAudio`,
+off unless it is set), a title whose original had more than two channels keeps a 5.1
+version of such a track beside its stereo one
+([ADR-0015](../../docs/adr/0015-the-package-is-the-master.md)): Dolby Digital Plus
+(E-AC-3), or Dolby Digital (AC-3) where the installation asks for that. An original's own
+5.1 E-AC-3 track is copied unchanged; anything else is made into 5.1 at 448 kbit/s, a 7.1
+track folded down to it. The first surround track of each language gets one; a commentary
+and a described track get none. The stereo version stays the package's own: folded down
+from the same track, with quiet mixes lifted.
+
+**Where it is listed.** The server hands a title's 5.1 tracks only to a device that says
+it plays their codec, and the app says so only where the device's own system does:
+
+| App | It names the codec where |
+|---|---|
+| Web | the browser says it decodes it |
+| Phone app (Android), Android TV | the device has a decoder for it, or the output the sound goes to takes it as it is: a receiver or a sound bar on HDMI |
+| Phone app (iOS) | iOS says it plays it |
+| Samsung TV | for E-AC-3, the TV's own player plays the title: Samsung's specifications list the codec for the TVs the app runs on, and the TV can't be asked; for AC-3, the TV's browser engine says it decodes it |
+
+In the audio column ([chapter 12](./subtitles.md)) the 5.1 track and its stereo twin are
+two rows, “English (5.1)” and “English (stereo)”, the 5.1 one first. In the iOS app, and
+on the web where the browser plays the stream itself, the system's player lists a track
+once and plays its 5.1 or its stereo version by where the sound goes: there the track is
+one row, “English”.
+
+**Where it starts.** A title starts in the language the audio setting names (section
+11.14). Of that language's two versions it starts on the 5.1 one where the device says its
+sound goes out in more than two channels, and on the stereo one everywhere else: two
+speakers get the package's own stereo, not a device's fold-down of the 5.1.
+
+| App | It starts on the 5.1 track where |
+|---|---|
+| Android TV | the output the sound goes to takes the track's codec as it is |
+| Phone app (Android) | the same; or, on Android 12L and later, the phone's spatial sound is on for the output and can play 5.1 |
+| Phone app (iOS); the web where the browser plays the stream itself | the system's player says so, by the output |
+| The web's own player; Samsung TV | always where the track is listed: neither can say where its sound goes, and the device folds the 5.1 down for two speakers itself |
+
+- Without a 5.1 version in the starting language, the title starts on that language's
+  stereo track, never on another language's 5.1.
+- The app decides as each playback starts. A track picked in the panel plays whatever the
+  output, and the pick holds while the title plays, across a seek, a pick of quality and
+  **try again**.
+- Zap's previews ask for stereo alone in the Android phone app, on Android TV and on the
+  Samsung TV, as today: a preview starts faster that way.
+
+### 11.14.2 The check on real devices
+
+Which device really plays a 5.1 track can't be read from code. Before surround sound is
+called built, each kind of device below plays a test title, and what is heard is written
+down.
+
+**The test title** is made for the check: in its 5.1 track a voice names one speaker at a
+time, front left, front right, centre, the low channel, surround left, surround right,
+then all six together, and a clap with a flash follows for the timing of sound and
+picture. Its stereo track is the package's fold-down of the same. It is packaged twice,
+on an installation that makes E-AC-3 tracks and on one that makes AC-3 tracks.
+
+| Device | How the sound leaves it |
+|---|---|
+| An Android TV box or stick | HDMI to a receiver or a sound bar that takes Dolby Digital Plus; then the same with the receiver off, through the TV's own speakers; and the receiver switched on and off in the middle of the title |
+| A TV with Android TV built in | its own speakers; a sound bar on its HDMI return; its optical output |
+| A Samsung TV | its own speakers; a sound bar or a receiver on its HDMI return; its optical output |
+| An Android phone with a decoder for the codec | its speaker; headphones, with the phone's spatial sound off and on |
+| An Android phone without one | its speaker |
+| An iPhone, and an iPad | its speaker; headphones with spatial sound; a TV over AirPlay |
+| A computer, in a browser that says it decodes the codec | two speakers; a 5.1 output |
+| A computer, in a browser that doesn't | two speakers |
+| The web on a phone | an iPhone, where the browser plays the stream itself; an Android phone |
+| A phone casting to a TV ([chapter 14](./casting.md)) | a Google Cast device on a receiver |
+
+On each, looked at and listened for:
+
+1. **What is offered**: whether playback info's list of what the device decodes names the
+   codec, and whether the panel lists “English (5.1)” and “English (stereo)”, one row, or
+   the stereo track alone. The Samsung TV has no playback info until 11.C48 is built:
+   there the panel alone.
+2. **What starts**: the track with the panel's check as the title starts.
+3. **On a sound system**: each of the six voices from its own speaker, the low channel
+   from the subwoofer, and the receiver's display naming the format and 5.1.
+4. **On two speakers**: all six voices heard, the centre no quieter than the same words on
+   the stereo track.
+5. **A pick of the other track**: the sound changes within 2 seconds while the picture
+   goes on, and the pick holds after a seek, a pick of quality and **try again**.
+6. **Sound and picture together**: the clap on the flash, on both tracks, at the start,
+   after a seek and after ten minutes.
+7. **No silence**: sound within a second of the first picture, and again after a pause and
+   after a seek.
+8. **Whether the device can say where its sound goes**: the number of channels a browser
+   gives for its output, and the audio output a Samsung TV reports, each against the sound
+   system really connected.
+
+Each device's result is a row of the table in section 11.2.6: the device, what it said it
+plays, the track that started, and what was heard under points 3 to 7. A kind of device
+that names the codec and then plays silence, the wrong channels, or sound out of step with
+the picture stops naming it, so it gets the stereo tracks, until a change of its own fixes
+it. What point 8 finds for the web's own player and the Samsung TV is written into section
+11.14.1; a rule for them is a change of its own.
 
 ## 11.15 Playback info
 
@@ -864,6 +1009,10 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C46 | The automatic report, with its number | Phone app, Android TV, Samsung TV | Phone app: one for each failure shown, nothing on the screen. Android TV: one for every player error, recovered ones too, nothing on the screen. Samsung TV: none | one when the player gives up, “Reported automatically as #12.” on the screen (section 11.17) | proposed |
 | 11.C47 | A title that isn't there anymore | Phone app, Android TV, Samsung TV | Phone app, Android TV: “This title isn't available to stream yet.” Samsung TV: the error's own text | “this title isn't in the library anymore”, with back ([chapter 17](./errors.md)) | proposed |
 | 11.C48 | Playback info | Web, Phone app, Android TV, Samsung TV | Web: the title as it is kept under “Source file”. Phone app: the web's dialog without the quality changes. Android TV: a card at the top right that closes after 8 seconds. Samsung TV: none | section 11.15, the title as it is kept under **the package** | proposed |
+| 11.C49 | Samsung TV: how playback went, to the server | Samsung TV | the app tells the server nothing of how a title played: no first picture, no wait, no bandwidth; the web and Android TV send them in batches to `POST /api/v1/play/events` | section 11.13.2: the five playback quality events with the web's names and fields, as far as the TV's own player can tell them: `first_frame`, `startup_timeout` once 11.C44 is built, `rebuffer`, `bandwidth` at the first picture and then at most every 30 seconds, and `level_switch`, each within a session's limits, named `chino-tizen`, sent together 30 seconds after the first one waits and at once when the player closes | proposed |
+| 11.C50 | A 5.1 track: where it is listed and where it starts | Phone app (Android), Android TV | every app has code that asks the server for a title's 5.1 tracks and lists them beside the stereo ones; where it asks and which track starts differ. Web: asks where the browser says it decodes the codec, and starts on the 5.1 one; where the browser plays the stream itself, the browser picks. Phone app (Android): asks where a decoder or the output plays the codec; its player picks which starts. Phone app (iOS): asks where iOS says it plays the codec; the system's player picks, by where the sound goes. Android TV: asks where the TV decodes E-AC-3 or its output takes it as it is, and starts on the 5.1 one only where the output takes it, else on the stereo one; it asks the output about E-AC-3 alone, also where the tracks are AC-3. Samsung TV: asks on every TV its own player plays on, without asking the TV, and starts on the 5.1 one | Recommended: section 11.14.1: a 5.1 track is listed where the device plays its codec, and a title starts on it only where the device says its sound goes out in more than two channels, else on the stereo track, as Android TV has it today. Phone app (Android): the 5.1 track first where the output takes it as it is, or the phone's spatial sound is on for the output, and the stereo one otherwise, by a rule of the app's own. Android TV: the output asked about the codec the tracks are in, AC-3 as well as E-AC-3. The web's own player and the Samsung TV, which can't say where their sound goes, start on the 5.1 track as today. The rows' names are section 12.6's (11.C30). The other choice is the 5.1 track first wherever the device decodes it, which leaves folding it down to the device | proposed |
+| 11.C51 | A 5.1 track checked on real devices | Web, Phone app, Android TV, Samsung TV | which apps play a 5.1 track, and how it sounds, is known from their code alone: no device has been listened to | section 11.14.2: the test title, a channel named in turn, plays on each device of the section's table, with E-AC-3 tracks and with AC-3 ones; what the device offered, which track started and what was heard goes into section 11.2.6, one row a device; an app stops naming the codec on a kind of device that claims it and plays silence, the wrong channels, or sound out of step with the picture; done when every row is filled | proposed |
+| 11.C52 | Phone app: how playback went, to the server | Phone app | the phone app tells the server of picks, retries, skips and failures, one event a request, with the device's details; of the five kinds that measure playback it sends none, but on iOS a `startup_timeout` without its mode and phase | section 11.13.2, as Android TV has it: the five events with the web's names and fields, within a session's limits, sent together, named `chino-mobile-android` or `chino-mobile-ios`, without the device's details | proposed |
 
 ## 11.17 States
 

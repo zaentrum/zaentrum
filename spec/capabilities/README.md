@@ -63,7 +63,9 @@ operator's resources), as deployed:
 fields that serve it, as the [inventory](./inventory.csv) lists them. **Spec**
 names the chapter and section that describe it; a dash means the specification
 doesn't describe it yet. **Changes** names the specification's numbered changes
-that touch it.
+that touch it. **Next** says what becomes of a capability that is not built:
+build, where a numbered change builds it, or the answer [scope](./scope.md)
+gives it: later, an addon's, ruled out.
 
 A capability **nothing serves** is one no app or face has, with no screen, route,
 command, field or setting of its own: the platform doesn't do it at all. It is
@@ -99,6 +101,7 @@ does. Chapters and changes refer to capabilities by their keys.
 | [capabilities.csv](./capabilities.csv) | hand | one row a capability |
 | [settings.csv](./settings.csv) | hand | one row a setting |
 | [expectations.csv](./expectations.csv) | hand | one row a thing people expect of a media server: the capabilities and components that meet it, or the decision record that rules it out |
+| [scope.csv](./scope.csv) | hand | one row a capability or component that is not built and that no numbered change builds: later, an addon's, ruled out, or to be built with its change still to write; and why |
 | [inventory.csv](./inventory.csv) | `scripts/inventory.py` | what the code offers, one row a route, operation, screen, tab, command, field, environment variable, catalog setting or constant |
 | the tables of these pages | `scripts/capabilities.py` | never edited by hand |
 
@@ -122,6 +125,8 @@ model, each reference, change and id resolved, written by the same program.
   one that doesn't exist;
 - an area or an expectation is for no goal of [goals.csv](../goals/goals.csv);
 - a capability nothing serves is named by no change and no expectation;
+- a capability is not built, no numbered change names it, and
+  [scope.csv](./scope.csv) has no row for it;
 - a value is none of those the model allows;
 - a table on these pages is not what the data says.
 
@@ -130,27 +135,27 @@ model, each reference, change and id resolved, written by the same program.
 <!-- generated: overview -->
 | Part | Capabilities | In a chapter | Only in the docs | Nowhere | With a change | Served by nothing |
 |---|---|---|---|---|---|---|
-| [chino](./chino.md) | 143 | 124 | 5 | 14 | 122 | 14 |
-| [the portal](./portal.md) | 54 | 22 | 13 | 19 | 10 | 13 |
-| [the catalog and the pipeline](./catalog.md) | 50 | 8 | 23 | 19 | 3 | 10 |
-| [the platform](./platform.md) | 24 | 0 | 19 | 5 | 0 | 5 |
+| [chino](./chino.md) | 150 | 135 | 3 | 12 | 143 | 17 |
+| [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 23 |
+| [the catalog and the pipeline](./catalog.md) | 54 | 22 | 18 | 14 | 22 | 14 |
+| [the platform](./platform.md) | 35 | 18 | 15 | 2 | 25 | 15 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 274 | 156 | 60 | 58 | 137 | 43 |
+| all | 306 | 217 | 46 | 43 | 228 | 70 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
-| Web | 84 | 14 | 19 | 155 | 2 |
-| Phone | 77 | 32 | 25 | 138 | 2 |
-| Android TV | 79 | 20 | 22 | 151 | 2 |
-| Samsung TV | 44 | 30 | 47 | 151 | 2 |
-| Portal | 37 | 7 | 35 | 195 | 0 |
-| Catalog console | 14 | 7 | 22 | 231 | 0 |
-| CLI | 21 | 2 | 42 | 209 | 0 |
-| Resource | 30 | 1 | 7 | 236 | 0 |
+| Web | 84 | 18 | 23 | 179 | 2 |
+| Phone | 76 | 36 | 29 | 163 | 2 |
+| Android TV | 79 | 23 | 26 | 176 | 2 |
+| Samsung TV | 44 | 31 | 52 | 177 | 2 |
+| Portal | 37 | 8 | 45 | 212 | 4 |
+| Catalog console | 14 | 8 | 27 | 253 | 4 |
+| CLI | 21 | 2 | 51 | 232 | 0 |
+| Resource | 30 | 1 | 14 | 261 | 0 |
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
-| 288 | 274 | 14 | 285 | 2 | 0 | 0 |
+| 445 | 429 | 16 | 442 | 2 | 0 | 0 |
 <!-- end: overview -->
 
 ## What is expected of it
@@ -171,10 +176,11 @@ a decision record rules it out.
 | [Keep the library](./expectations.md#keep-the-library) | 12 | 1 | 5 | 5 | 0 | 1 |
 | [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 5 | 5 | 0 | 0 |
 | [Run it oneself](./expectations.md#run-it-oneself) | 12 | 2 | 6 | 4 | 0 | 0 |
-| [Make it one's own](./expectations.md#make-it-ones-own) | 4 | 2 | 1 | 1 | 0 | 0 |
-| all | 56 | 6 | 26 | 22 | 1 | 1 |
+| [Make it one's own](./expectations.md#make-it-ones-own) | 5 | 2 | 1 | 2 | 0 | 0 |
+| [Trust it](./expectations.md#trust-it) | 4 | 0 | 1 | 3 | 0 | 0 |
+| all | 61 | 6 | 27 | 26 | 1 | 1 |
 
-Nothing serves 43 of the 274 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 70 of the 306 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
@@ -211,4 +217,5 @@ claims those.
 | [the catalog and the pipeline](./catalog.md) | the catalog, the library and its originals, preparing titles |
 | [the platform](./platform.md) | installing and configuring; the products that are only registered, or only expected |
 | [expectations](./expectations.md) | what people expect of a media server, and what of it is there |
+| [scope](./scope.md) | what becomes of everything that is not built: built by a change, later, an addon's, ruled out; and whether the specification is ready to build from |
 | [configuration](./configuration.md) | every setting: who changes it, where, its default, a proposal |

@@ -28,7 +28,8 @@ the first row of settings.
 A setting applies the moment it changes, as the design system's
 [forms and settings](https://nalet.github.io/design-system/patterns/forms-and-settings/)
 has it for switches: there is no save button. Settings are kept on the device,
-for everyone who watches on it.
+for everyone who watches on it, but one: the app's language is the account's,
+and goes with it to every device (section 16.4.1).
 
 ## 16.2 As deployed
 
@@ -351,6 +352,8 @@ doesn't have.
 | A report not sent | “Couldn't file the report.” and the reason | “Couldn't send the report. Check your connection and try again.”, and two others | the phone app's sentences | the phone app's sentences |
 | Remove account's question | — | always; without downloads “This removes Anna from this phone. You'll need to sign in again to use the account.” | always: “You'll need to sign in again to use this account on this TV.” | — |
 | Change server | — | asks once the new server has answered, where downloads go or a cast stops; then every account signed out | asks nothing; a new server signs every account out | signs every account out at once, before an address is typed; asks nothing |
+| A crash | an error nobody caught files a report at once, of the kind error; the page goes on | Android: written as the app ends, sent at the next start once signed in, at most 5 kept; iOS: none | written as the app ends, sent at the next start once signed in, at most 5 kept | kept in the app's storage, at most 10, sent at once where it can and else at the next start |
+| The app's own language | English alone; no setting | the same | the same | the same |
 
 ## 16.3 Settings
 
@@ -472,8 +475,28 @@ a phone.
 
 ### 16.4.1 Language
 
-Two settings, one for the audio and one for the subtitles. Each has a text
-under it that is the same in every app.
+Three settings: the app's own language, and one each for the audio and the
+subtitles. Each has a text under it that is the same in every app.
+
+**App language**, the first field of the group, is the design system's select.
+It offers “Same as the phone”, then each language the app has, by its own name
+and in alphabetical order: “Deutsch”, “English”. The first option names the
+device: “Same as the tablet”, “Same as the TV”, and on the web “Same as the
+browser”. With it the app speaks the first of the device's languages it has,
+and English where it has none of them. A choice applies at once, on every
+screen. Its text:
+
+> The language of chino's menus and messages. Your choice goes with your
+> account, to every device you sign in on.
+
+The choice is kept with the account, on the server; every other setting stays
+on the device. An app asks for it when it starts and when it comes back to the
+front, and until the server has answered it speaks the language it spoke last
+for that account. On a TV, each account's language holds while that account is
+watching. A server that keeps no language for an account leaves the choice on
+the device, and the text ends after its first sentence. Titles keep the
+language the library has them in; their audio and their subtitles have the two
+settings below.
 
 **Audio** offers “Original”, then every language by name, as no server names
 the languages of its audio. With “Original”, each title plays in the language
@@ -503,6 +526,19 @@ progress](https://nalet.github.io/design-system/patterns/loading-and-progress/)
 has it for a field. When they couldn't load, the design system's empty state for
 an error takes the box's place, with the reason and **try again** (figure
 16.21).
+
+chino-api keeps one setting for each account, the app's language.
+
+| Request | Answer |
+|---|---|
+| `GET /api/v1/me/settings` | 200 `{"language": "de"}`; `{"language": null}` while the person has chosen nothing |
+| `PATCH /api/v1/me/settings` with `{"language": "de"}` | 200 with the settings as kept; `{"language": null}` clears the choice |
+| the same with a value that is no language tag, or one longer than 35 characters | 400 `{"error": "language_invalid"}` |
+
+A language tag is a BCP 47 tag: `de`, `de-CH`, `zh-Hans`. chino-api keeps any
+tag of that form, also one no app has yet: each app speaks the nearest
+language it has. The setting is kept by the account's subject and goes with
+the account's data when the account is deleted.
 
 ### 16.4.2 Binge watching
 
@@ -582,6 +618,35 @@ won't start**, **video stutters or freezes**, **audio out of sync**,
 **subtitles wrong or missing**, **the app is slow** and **something else**; OK
 on one sends the report, with that as its title, and the toast of figure 16.23
 says it went.
+
+**Crashes.** An app that ends on an error nobody caught files one report by itself, where
+the server takes reports. The phone app and Android TV are ending when it happens, so
+they write the report into their own storage first and send it the next time they start,
+once someone is signed in; a report that couldn't be sent stays for the start after that.
+They keep at most 5 such reports, the oldest going first. The Samsung TV app keeps its
+report the same way, at most 10, and tries to send it at once as well. The report is of
+the kind `crash`. It holds the error and where in the code it happened, the details of the
+app and the device that every report carries, and a fingerprint of the error, and it has
+no screenshot. The server adds a report with a fingerprint it has seen in the last 14 days
+to the earlier one, and names as its reporter the account that is signed in when the
+report is sent. The web has no crash of this kind: an error nobody caught files its report
+at once, and the page goes on.
+
+The iOS app does this as the Android app does:
+
+- It catches two kinds of error on their way out: a Kotlin error that reaches the edge of
+  the shared code, and an Objective-C exception from the system's own frameworks. After the
+  report is written, the app ends as it does today.
+- The reports are files in the app's own folder, one a crash, named by the time.
+- The fingerprint is made from the error's kind, its message without its numbers, and the
+  three places in the code nearest to it, each by its function's name alone: without the
+  memory address and the counter iOS writes before each, and without the error's own
+  constructors, so that the same crash has the same fingerprint at every start.
+- The details are the device's model, the system's name and version, the app's version and
+  build and the app's name, `chino-mobile-ios`. The device's name isn't among them: it can
+  hold a person's name.
+- A crash without such an error isn't caught: the system ending the app for memory or for
+  not answering, and a fault in native code.
 
 ### 16.4.6 About
 
@@ -751,9 +816,57 @@ too, and the focus starts on cancel. The server's answer decides what follows:
 | The server | The dialog |
 |---|---|
 | Deleted the account | It closes, and the account is signed out. The web says so on a screen of its own, “account deleted”, with **sign in**; the phone and TV apps open who's watching or sign in, with the toast “Account deleted”. |
-| Refused, with its reason | The reason in the design system's error banner in the dialog. **delete account** goes, and **cancel** becomes **close**. |
+| Refused, with a code that says why | The code's sentence ([chapter 17](./errors.md)) in the design system's error banner in the dialog. **delete account** goes, and **cancel** becomes **close**. |
 | Doesn't delete accounts from the apps | Figure 16.22, with **close**. |
 | Didn't answer, or failed | “Couldn't delete the account, so nothing was deleted.” and the reason in the error banner, with **delete account** to try again. |
+
+### 16.5.7 Account lock
+
+The account page has a group **account lock**, the design system's card with that title, under who is
+signed in, in every app. A code is the account's, not the device's: set here, it is asked on every phone
+and TV that holds several accounts ([chapter 3](./start.md), section 3.5.5).
+
+| The account has | The group shows |
+|---|---|
+| no code | “No code. On a device with several accounts, anyone can switch to this account.” and **set a code**, a button |
+| a code | “A code is asked before this account opens on a device with several accounts.”, and **change code** and **remove code**, buttons |
+
+Each button opens the design system's dialog, its title the action:
+
+| Dialog | Fields | Buttons |
+|---|---|---|
+| **set a code** | New code · New code again | **cancel** · **set code** |
+| **change code** | Current code · New code · New code again | **cancel** · **change code** |
+| **remove code** | Current code | **cancel** · **remove code** |
+
+- A code has 4 to 8 digits. The fields take digits only and show each as a dot; New code has the hint
+  “4 to 8 digits.” A code of another length is the field's error, “A code has 4 to 8 digits.”, and two
+  that differ “The two codes differ.”
+- The server keeps the code and checks the current one ([people](../portal/people.md#account-lock)). A
+  wrong current code is that field's error, “That isn't the code. 4 tries left.”, and after 5 wrong codes
+  the dialog says “Too many wrong codes. Try again in 15 minutes.”, as section 3.5.5 has it.
+- When it is done the dialog closes, and the design system's toast says “Code set”, “Code changed” or
+  “Code removed”. When it couldn't be done, the error banner in the dialog says so and why, as
+  [chapter 17](./errors.md) has it for an action: “Couldn't set the code. Can't reach the server.”
+- **forgot code?**, a quiet button in change code and remove code, on the web and in the phone app. It
+  says “Sign in again to set a new code.”, with **sign in**. The app signs the person in again, with
+  their password, and then opens set a code, which the server takes without the current code for 5
+  minutes after a sign-in.
+- On a TV the dialogs have the pad of section 3.5.5 and no forgot code?; they say “Forgot it? Set a new
+  one in chino in a browser, or ask an admin of this server.”
+
+### 16.5.8 Sign-in and security
+
+A password, a second step at sign-in and the list of one's sign-ins are kept by the server's sign-in
+service, which chino doesn't draw ([chapter 3](./start.md)). On the web and in the phone app the account
+page has **sign-in and security**, a button, with a line under it: “Change your password, add a second
+step to your sign-in, and see where you're signed in. This opens the server's sign-in service.” It opens
+the address the server names in its configuration: on the web in a new tab, in the phone app in the
+phone's browser. The page there has the sign-in service's look and words, not chino's.
+
+The button is not shown on a server that names no address; in the phone app while the phone holds two
+accounts or more, because the browser's sign-in may be another person's; and on a TV, which has no
+browser.
 
 ## 16.6 Turning the phone
 
@@ -778,7 +891,7 @@ Where settings and the account open from belongs to [chapter 2](./frame.md)
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
 | 16.C1 | The groups, their order and their headings | Web, Phone app, Android TV, Samsung TV | Web: binge watching, audio, subtitles, feedback, then reset to defaults, the first three with a line under the heading. Phone app: Account, Binge watching, Downloads, Server, Support, Audio, Subtitles, in mixed case. Android TV: binge watching, audio, subtitles, account, server, feedback, each with a line under its controls. Samsung TV: Binge watching, Audio, Subtitles, Account, Server, Feedback, in mixed case, each with a line | figures 16.7 to 16.11: language, binge watching, downloads (phone), server (phone and TV), feedback, about, lowercase, without a line of a group's own; each group the design system's card with its name as the title, on a TV a section under the design system's heading; on a TV the account row first; on a computer and on a phone held sideways, two columns. The phone app's Account group goes with 16.C12 | proposed |
-| 16.C2 | The language settings: their names, texts and menus | Web, Phone app, Android TV, Samsung TV | Web: the groups audio and subtitles, their texts above the cards, each field named “Preferred language”, the browser's own list; a server's few subtitle languages a row of buttons. Phone app: a field opens its menu under it, in the page, the chosen language blue with a small square before it. Android TV: rows named “Language”, their menus headed “audio language” and “subtitle language”. Samsung TV: buttons, each language in its own words, “Deutsch”, “日本語”, and texts of its own, “Default audio language. …” | figures 16.7, 16.8 and 16.11: one group, language, with Audio and Subtitles, each the design system's select in a field with its label and its text as the hint (section 16.4.1); on the web and the phone its list is the browser's or the phone's own; on a TV the TV's own list over the page, in the look of the player's menus, the chosen language blue with the small square, as the design system has no list for a TV | proposed |
+| 16.C2 | The language settings: their names, texts and menus | Web, Phone app, Android TV, Samsung TV | Web: the groups audio and subtitles, their texts above the cards, each field named “Preferred language”, the browser's own list; a server's few subtitle languages a row of buttons. Phone app: a field opens its menu under it, in the page, the chosen language blue with a small square before it. Android TV: rows named “Language”, their menus headed “audio language” and “subtitle language”. Samsung TV: buttons, each language in its own words, “Deutsch”, “日本語”, and texts of its own, “Default audio language. …” | figures 16.7, 16.8 and 16.11: one group, language, with Audio and Subtitles after App language (16.C23), each the design system's select in a field with its label and its text as the hint (section 16.4.1); on the web and the phone its list is the browser's or the phone's own; on a TV the TV's own list over the page, in the look of the player's menus, the chosen language blue with the small square, as the design system has no list for a TV | proposed |
 | 16.C3 | The languages offered, and their order | Web, Phone app, Samsung TV | Web: Original or off, then every language in alphabetical order. Phone app: Original and eight languages for the audio. Samsung TV: Original or Off and the same eight, for both | section 16.4.1: Original, then the person's own languages, the one set and the device's or the browser's, then every other in alphabetical order, each named as the player's menus name it; for the subtitles off, then the server's subtitle languages, or every language where it names none | proposed |
 | 16.C4 | Binge watching: three settings with their lines | Web, Phone app, Android TV, Samsung TV | Web: Auto-skip intros' line without the recap; the countdown a slider, “Countdown before auto-skip”, “3s”, over “Seconds between the countdown appearing and the player skipping.” Phone app: “Auto-skip intros & recaps”, “Auto-skip credits” and “Auto-play next episode”, without lines, and no countdown. Android TV: the same three as on and off buttons with lines of their own, and “Countdown before auto-skip”, 5 s at first. Samsung TV: the same as one ON or OFF button each, the countdown 10 s at first | the table in section 16.4.2: Auto-skip intros and Auto-play next episode as the design system's switches, Countdown as its select, 1 s to 15 s, 3 s at first, each with its line as the hint; no Auto-skip credits. The player's side is chapter 11's (11.C20, 11.C22, 11.C27) | proposed |
 | 16.C5 | Downloads: the picked quality | Phone app | the chosen quality's row blue, with a check mark | the design system's select (figure 16.9): its list the phone's own, each quality with what an hour takes at it, in the words of [chapter 13](./downloads.md); the field shows the picked quality's name, and its hint what an hour takes at it, “About 932 MB an hour.” | proposed |
@@ -792,10 +905,15 @@ Where settings and the account open from belongs to [chapter 2](./frame.md)
 | 16.C13 | The account on a TV | Android TV, Samsung TV | Android TV: settings' account group with **see your account**, **switch account** and **delete account**; the account page without buttons; nothing signs out. Samsung TV: settings' Account group with the name, **Switch account**, **Sign out** and **Delete Account**; no account page and no watch history; after a sign-out another account becomes active and settings stays | figures 16.11 and 16.16: the account row first in settings; the account page with **sign out**, a button, focused, **delete account**, the danger button, and the watch history; switching from the avatar ([chapter 3](./start.md)); after a sign-out, who's watching or sign in (section 16.5.5) | proposed |
 | 16.C14 | The questions before an account leaves a device | Phone app, Android TV, Samsung TV | Phone app: remove account without downloads, “This removes Anna from this phone. You'll need to sign in again to use the account.”; change server asked only where downloads go or a cast stops, with “Your 31 downloads, 15 GB, are deleted from this phone.”, and nothing of the other accounts. Android TV: remove account, “You'll need to sign in again to use this account on this TV.”; change server asks nothing. Samsung TV: change server signs every account out at once, before an address is typed, and asks nothing | the table in section 16.5.5, each question the design system's dialog, its confirming button the danger button and **cancel** the quiet one before it: “This removes Anna from this phone. Signing in again brings the account back.”, on a TV without the ✕ and with the focus on cancel (figure 16.18); change server from the screen of [chapter 3](./start.md), asked once the new server has answered, where downloads, a cast or another account's sign-in would go (figure 16.19). One change with 13.C5 | proposed |
 | 16.C15 | Delete account: one dialog, by name, with nothing to type | Web, Phone app, Android TV, Samsung TV | Web: headed “Delete Account”, the account by its email address “on this server”, “Type DELETE to confirm”, the button filled red. Phone app: only in settings. Android TV, Samsung TV: a screen of its own without the frame, ending in “Press BACK to keep your account.”, the Samsung TV's headed “Delete Account”. The apps: a deleted account goes without a word | figure 16.20: the design system's dialog **delete account**, the account and the server by name, what goes, its amber-outline danger button, nothing to type; on a TV a dialog without the ✕, with the focus on cancel; after a deletion the toast “Account deleted” in the apps (section 16.5.6) | proposed |
-| 16.C16 | Delete account's answers | Web, Phone app, Android TV, Samsung TV | each answer under a heading of its own: “Not Deleted” with the server's reason or “This server won't delete your account.”; “Not Available” with “Deleting your account isn't available on this server — ask its administrator.”; “Try Again Later” with the server's message, “Your account couldn't be deleted right now (HTTP 500).”, “The server couldn't be reached.” or “Another account is signed in now. Open Delete Account again.” | the table in section 16.5.6: the reason in the design system's error banner in the dialog; “This server doesn't delete accounts from the apps. Ask the people who run it.” (figure 16.22); “Couldn't delete the account, so nothing was deleted.” and the reason by cause ([chapter 17](./errors.md)) | proposed |
+| 16.C16 | Delete account's answers | Web, Phone app, Android TV, Samsung TV | each answer under a heading of its own: “Not Deleted” with the server's reason or “This server won't delete your account.”; “Not Available” with “Deleting your account isn't available on this server — ask its administrator.”; “Try Again Later” with the server's message, “Your account couldn't be deleted right now (HTTP 500).”, “The server couldn't be reached.” or “Another account is signed in now. Open Delete Account again.” | the table in section 16.5.6: the code's sentence (17.C17) in the design system's error banner in the dialog; “This server doesn't delete accounts from the apps. Ask the people who run it.” (figure 16.22); “Couldn't delete the account, so nothing was deleted.” and the reason by cause ([chapter 17](./errors.md)) | proposed |
 | 16.C17 | delete account only where the server deletes accounts | Web, Phone app, Android TV, Samsung TV, the server | delete account is offered on every server; a server says it deletes none only when it is asked to delete one | Recommended: the server says in its configuration whether it deletes accounts, as it says whether it takes reports, and the apps offer delete account only where it does | proposed |
 | 16.C18 | The settings' first values | Web, Phone app, Android TV, Samsung TV, the server | until the person picks: Web: audio English, subtitles English. Phone app, Android TV: audio English, subtitles off. Samsung TV: audio Original, subtitles off. The server has no data for Original: the catalog keeps no original language per title, and package.json has only a per-track “original” flag, the file's own mark, which releases rarely set; so Original plays the track the file marks as its default, which in a release with two languages is often the dub | Recommended: audio **Original**, and subtitles in the device's or the browser's language where the server offers it, else **off**, in every app; so a title made in another language comes with subtitles, and one in the person's language without (section 16.4.1, [chapter 12](./subtitles.md)). Original goes by the title's original language, which the server keeps and marks on its audio tracks (change 12.C10 of chapter 12) | proposed |
 | 16.C19 | Loading and couldn't load | Web, Phone app, Android TV | Web: the subtitle languages load under the loader with “Loading the subtitle languages…”; the watch history loads under the loader, and one that couldn't load reads as nothing watched; nothing watched is a line without a heading. Phone app: the history under a spinner, and one that couldn't load reads as nothing watched. Android TV: “Loading your account…”, and “Nothing watched yet. Watched items appear here once you finish a movie or episode (or mark one watched on a detail page).” | the table in section 16.8: grey blocks in the shape of the history while it loads, the design system's small loader in the Subtitles field while its languages load; the design system's empty states: **nothing watched yet** over “A movie or an episode shows here once you finish it, or mark it as watched.”, and for an error “couldn't load your watch history”, the reason and **try again** | proposed |
+| 16.C20 | iOS: a crash files a report | Phone app (iOS) | the iOS app files no report when it ends on an error nobody caught: it has no handler for one and nowhere to keep a report; the Android app, Android TV, the Samsung TV and the web each file one | section 16.4.5: the iOS app writes one report of the kind `crash` before it ends, for a Kotlin error and for an Objective-C exception nobody caught, keeps at most 5 in its own storage and sends them at the next start once someone is signed in, as the Android app does; its fingerprint names the three nearest places in the code by their functions, without addresses, and its details leave out the device's name | proposed |
+| 16.C21 | Account lock: setting, changing and removing one's code | Web, Phone app, Android TV, Samsung TV | no app has a code, and the account page says nothing of one | section 16.5.7: on the account page the group **account lock**: without a code “No code. On a device with several accounts, anyone can switch to this account.” and **set a code**; with one “A code is asked before this account opens on a device with several accounts.”, **change code** and **remove code**; each a dialog of the design system with New code and New code again, 4 to 8 digits, and Current code while a code is set; the server keeps and checks it (P.C13), wrong codes counted as in section 3.5.5; **forgot code?** on the web and in the phone app signs the person in again and then asks for a new code alone; on a TV the pad of section 3.5.5; the toasts “Code set”, “Code changed”, “Code removed” | proposed |
+| 16.C22 | sign-in and security | Web, Phone app | no app leads to the server's own page for a password, a second factor and one's sign-ins; a password is changed there alone, and nothing says so | section 16.5.8: on the account page **sign-in and security**, a button, over “Change your password, add a second step to your sign-in, and see where you're signed in. This opens the server's sign-in service.”; it opens the address the server names in its configuration, `accountUrl` (P.C15), on the web in a new tab and in the phone app in the phone's browser; not shown on a server that names none, in the phone app while the phone holds two accounts or more, and on a TV | proposed |
+| 16.C23 | The app's language | Web, Phone app, Android TV, Samsung TV | no setting: every app is in English whatever the device's language; the group language is to hold Audio and Subtitles alone, and every setting is kept on the device | section 16.4.1: **App language**, the first field of the group language, the design system's select: “Same as the phone” (the tablet, the TV, on the web the browser), then each language the app has by its own name, “Deutsch”, “English”; the app speaks the choice, else the first of the device's languages it has, else English, and before anyone is signed in the device's; a choice applies at once and is kept with the account (16.C24), so the next device speaks it; the app names its language when it opens the sign-in page (`ui_locales`) and first in `Accept-Language`; on a server that keeps no language the choice stays on the device. Built after 2.C13 and 16.C24 | proposed |
+| 16.C24 | chino-api keeps the app's language and answers with codes | Server | chino-api keeps nothing of a person's settings, and `GET /api/v1/me` answers the subject alone. `DELETE /api/v1/me` answers a refusal or a failure with a sentence for the person in `message`, portal-api's among them. Every other failure is a line of English text, and two are read for a word: `POST /api/v1/me/watchlists` and `PATCH /api/v1/me/watchlists/{listId}` (“name exists” and “too many lists”, both 409), and the sign-in check of every route (“invalid token: …”); `POST /api/v1/feedback` says “feedback not configured” with 503 | chino-api: `GET /api/v1/me/settings` answers `{"language": "de"}`, with `null` while nothing is chosen; `PATCH /api/v1/me/settings` sets it or, with `null`, clears it, and answers the settings; any language tag of at most 35 characters is kept, another value is 400 `language_invalid`; kept by the account's subject, deleted with its data. A failure that is a case of its own answers `{"error": code, "values": {…}, "detail": "…"}` and no `message` (ADR-0023, part 4): `list_name_taken` with `name`, `list_limit` with `limit`, `account_last_admin`, `account_identity_admin`, `account_deletion_unavailable`, `feedback_off`, `token_audience`. portal-api names why it refuses to delete an account (`DELETE /api/portal/me`: `last_admin`, `identity_admin`), and chino-api passes that on. The codes are listed in chino-api's `openapi.yaml`. Every other failure keeps its status and its line | proposed |
 
 ## 16.8 States
 
@@ -845,16 +963,19 @@ Figure 16.23: The report was sent, on a computer.
 | A report couldn't be sent | “Couldn't send the report.” and the reason in an error banner; the words stay |
 | The server stopped taking reports | “Bug reporting is switched off on this server, so this report can't be sent.” in an error banner in the dialog |
 | The account is deleted | Section 16.5.6: “account deleted” on the web, the toast “Account deleted” in the phone and TV apps |
-| The server refused to delete it | Its reason in an error banner, and **close** |
+| The server refused to delete it | The code's sentence in an error banner, and **close** |
 | The server doesn't delete accounts | Figure 16.22 |
 | Deleting failed | “Couldn't delete the account, so nothing was deleted.” and the reason, with **delete account** |
+| The app's language is being saved | The select is busy, and shows the choice |
+| It couldn't be saved | The design system's error banner under the field: “Couldn't save the language.” and the cause's sentence ([chapter 17](./errors.md)); the select and the app go back to the language as it was |
+| The server keeps no language for an account | The choice is kept on the device, and the text under the field ends after its first sentence |
 
 ## 16.9 Words
 
 | Where | Text |
 |---|---|
 | Settings | settings · account (TV) · language · binge watching · downloads · server · feedback · about |
-| Language | Audio · Original · Subtitles · off · the two texts in section 16.4.1 |
+| Language | Audio · Original · Subtitles · off · their two texts in section 16.4.1 |
 | Binge watching | Auto-skip intros · Skips the intro and the recap on every episode after the first one you watch in a row. · Auto-play next episode · Starts the next episode when the credits roll. Off, the up next card waits until you play it. · Countdown · Seconds the player counts down before it skips the intro or the recap, or starts the next episode. · 1 s to 15 s · 3 s |
 | Downloads | Download quality · Medium (720p) · About 932 MB an hour. · in the phone's list: Medium (720p) · about 932 MB an hour · Download over Wi-Fi only ([chapter 13](./downloads.md)) |
 | Server | Connected to media.example.com. · change server |
@@ -870,4 +991,9 @@ Figure 16.23: The report was sent, on a computer.
 | Report a bug on a TV | What's going wrong? Pick the closest match. · playback won't start · video stutters or freezes · audio out of sync · subtitles wrong or missing · the app is slow · something else |
 | The questions | sign out · remove account · change server · cancel · the sentences in section 16.5.5 · Casting on Living Room TV stops. |
 | Delete account | delete account · This deletes the account alex@example.com on media.example.com, and with it: · your watch progress · your lists · your likes · your watch history · your sign-in: you can't sign in with this account again · This can't be undone. · close |
-| Its answers | This server doesn't delete accounts from the apps. Ask the people who run it. · Couldn't delete the account, so nothing was deleted. · Account deleted · account deleted · Your account is deleted, with everything this server kept of you, and you're signed out. · sign in |
+| Its answers | This server doesn't delete accounts from the apps. Ask the people who run it. · Couldn't delete the account, so nothing was deleted. · Account deleted · account deleted · Your account is deleted, with everything this server kept of you, and you're signed out. · sign in · You are this server's last admin. Make someone else an admin first. · This account also administers the server's sign-in service. Delete it in that service's own console. |
+| App language | App language · Same as the phone · Same as the tablet · Same as the TV · Same as the browser · each language by its own name: Deutsch · English · The language of chino's menus and messages. Your choice goes with your account, to every device you sign in on. · Couldn't save the language. |
+| Account lock | account lock · No code. On a device with several accounts, anyone can switch to this account. · A code is asked before this account opens on a device with several accounts. · set a code · change code · remove code |
+| Its dialogs | New code · New code again · Current code · 4 to 8 digits. · set code · change code · remove code · cancel · A code has 4 to 8 digits. · The two codes differ. · forgot code? · Sign in again to set a new code. · sign in |
+| Its toasts and failures | Code set · Code changed · Code removed · Couldn't set the code. · Couldn't change the code. · Couldn't remove the code. |
+| Sign-in and security | sign-in and security · Change your password, add a second step to your sign-in, and see where you're signed in. This opens the server's sign-in service. |

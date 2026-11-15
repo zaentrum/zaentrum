@@ -10,26 +10,28 @@ The capabilities of the apps for watching, one area a chapter of the
 
 Reaching a server, signing in on each kind of device, keeping several accounts on one. Specified in [chapter 3](../chino/start.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
-| Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Spec |
-|---|---|---|---|---|---|---|---|
-| Connect to a server by its address | person | — | built | built | built | — | [3.3](../chino/start.md#33-connect-to-a-server) |
-| Connect again to a server used before, from a list of recent ones | person | — | built | built | no | — | [3.3.1](../chino/start.md#331-on-a-phone-held-upright) |
-| Sign in on the server's own sign-in page | person | built | built | — | — | — | [3.4.1](../chino/start.md#341-on-a-phone-held-upright), [3.4.4](../chino/start.md#344-on-the-web) |
-| Sign in on a TV with a code entered on a phone or a computer | person | — | — | built | partial | — | [3.4.3](../chino/start.md#343-on-a-tv) |
-| Stay signed in while the sign-in renews itself | system | built | built | built | partial | — | [3.4.4](../chino/start.md#344-on-the-web), [17.11](../chino/errors.md#1711-a-sign-in-that-expired) |
-| Come back to the page a link named, once signed in | person | partial | — | — | — | — | [3.4.4](../chino/start.md#344-on-the-web) |
-| Choose who's watching as the app starts on a shared device | person | — | built | built | no | — | [3.5](../chino/start.md#35-whos-watching) |
-| Switch to another account on this device | person | — | built | built | partial | — | [3.5](../chino/start.md#35-whos-watching), [16.5](../chino/settings.md#165-the-account) |
-| Add another account to this device | person | — | built | built | no | — | [3.5](../chino/start.md#35-whos-watching) |
-| Remove an account from this device | person | — | built | built | no | — | [3.5](../chino/start.md#35-whos-watching), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
-| Sign out of this server | person | built | built | no | built | — | [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server), [2.3](../chino/frame.md#23-the-frame-on-a-computer) |
-| Change to another server | person | — | built | built | partial | — | [3.3.1](../chino/start.md#331-on-a-phone-held-upright), [16.4.4](../chino/settings.md#1644-server), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
-| Add the web app to a phone's home screen | person | built | — | — | — | — | — |
-| Find the servers on the home network without typing an address | person | — | no | no | no | — | — |
-| Get the app from the device's own store | person | — | no | no | no | — | [Publishing the apps](../../docs/releases.md#publishing-the-apps) |
-| Reset a forgotten password by oneself | person | no | no | — | — | no | [First run](../../docs/self-hosting.md#first-run) |
-| Sign in with a second factor | person | no | no | — | — | no | [First run](../../docs/self-hosting.md#first-run) |
-| Lock an account on a shared device behind a code | person | — | no | no | no | — | — |
+| Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Catalog console | Spec |
+|---|---|---|---|---|---|---|---|---|
+| Connect to a server by its address | person | — | built | built | built | — | — | [3.3](../chino/start.md#33-connect-to-a-server) |
+| Connect again to a server used before, from a list of recent ones | person | — | built | built | no | — | — | [3.3.1](../chino/start.md#331-on-a-phone-held-upright) |
+| Sign in on the server's own sign-in page | person | built | built | — | — | — | — | [3.4.1](../chino/start.md#341-on-a-phone-held-upright), [3.4.4](../chino/start.md#344-on-the-web) |
+| Sign in on a TV with a code entered on a phone or a computer | person | — | — | built | partial | — | — | [3.4.3](../chino/start.md#343-on-a-tv) |
+| Stay signed in while the sign-in renews itself | system | built | built | built | partial | — | — | [3.4.4](../chino/start.md#344-on-the-web), [17.11](../chino/errors.md#1711-a-sign-in-that-expired) |
+| Come back to the page a link named, once signed in | person | partial | — | — | — | — | — | [3.4.4](../chino/start.md#344-on-the-web) |
+| Choose who's watching as the app starts on a shared device | person | — | built | built | no | — | — | [3.5](../chino/start.md#35-whos-watching) |
+| Switch to another account on this device | person | — | built | built | partial | — | — | [3.5](../chino/start.md#35-whos-watching), [16.5](../chino/settings.md#165-the-account) |
+| Add another account to this device | person | — | built | built | no | — | — | [3.5](../chino/start.md#35-whos-watching) |
+| Remove an account from this device | person | — | built | built | no | — | — | [3.5](../chino/start.md#35-whos-watching), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
+| Sign out of this server | person | built | built | no | built | — | — | [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server), [2.3](../chino/frame.md#23-the-frame-on-a-computer) |
+| Change to another server | person | — | built | built | partial | — | — | [3.3.1](../chino/start.md#331-on-a-phone-held-upright), [16.4.4](../chino/settings.md#1644-server), [16.5.5](../chino/settings.md#1655-sign-out-remove-account-and-change-server) |
+| Add the web app to a phone's home screen | person | built | — | — | — | — | — | — |
+| Find the servers on the home network without typing an address | person | — | no | no | no | — | — | [platform home](../platform/home.md) |
+| Get the app from the device's own store | person | — | no | no | no | — | — | [Publishing the apps](../../docs/releases.md#publishing-the-apps) |
+| Reset a forgotten password by oneself | person | no | no | — | — | no | — | [First run](../../docs/self-hosting.md#first-run), [portal operations](../portal/operations.md) |
+| Sign in with a second factor | person | no | no | — | — | no | — | [First run](../../docs/self-hosting.md#first-run), [portal people](../portal/people.md) |
+| Lock an account on a shared device behind a code | person | — | no | no | no | — | — | [portal people](../portal/people.md) |
+| Refuse a server over plain http unless its address is a home address | system | no | partial | partial | no | no | no | [platform home](../platform/home.md) |
+| Sign in on a page in one's own language | person | no | no | no | no | — | — | [platform home](../platform/home.md) |
 
 - Connect to a server by its address: checks it is chino and its sign-in answers, on a TV also sign-in by code; the web comes from its own server
 - Connect again to a server used before, from a list of recent ones: up to five, newest first; Samsung keeps no list, so it never shows
@@ -49,41 +51,48 @@ Reaching a server, signing in on each kind of device, keeping several accounts o
 - Reset a forgotten password by oneself: the sign-in page offers it; the bundled identity provider has no mail server to send the link with
 - Sign in with a second factor: left to the identity provider's console; no app or console of the platform offers it
 - Lock an account on a shared device behind a code: switching accounts asks for nothing, so a rating cap ends at the account chooser
+- Refuse a server over plain http unless its address is a home address: the Android apps refuse plain http altogether; the Samsung TV app tries it for any address; none knows a home address
+- Sign in on a page in one's own language: the sign-in pages are in English whatever the device or the app says
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `connect-server` | 3.C1, 3.C2, 3.C3, 3.C4 | `chino-api GET /api/config` | `server-check-timeout` |
-| `reconnect-recent-server` | 3.C5 | — | — |
-| `sign-in` | 3.C6, 3.C8 | `chino-api GET /api/config` | `server-check-timeout` |
-| `sign-in-with-code` | 3.C7, 3.C8 | `chino-api GET /api/config` | `server-check-timeout` |
-| `stay-signed-in` | 17.C11 | — | — |
-| `return-after-sign-in` | 3.C9 | — | — |
-| `choose-account-at-start` | 3.C4, 3.C10, 3.C11 | — | — |
-| `switch-account` | 3.C11, 16.C12, 16.C13 | — | — |
-| `add-account` | 3.C10, 3.C11 | — | — |
-| `remove-account` | 3.C10, 16.C14 | — | — |
-| `sign-out` | 2.C1, 16.C12, 16.C13, 16.C14 | — | — |
-| `change-server` | 16.C6, 16.C14 | `chino-api GET /api/config` | — |
-| `install-web-app` | — | — | — |
-| `find-server-on-network` | — | — | — |
-| `get-app-from-store` | — | — | — |
-| `reset-own-password` | — | — | — |
-| `use-second-factor` | — | — | — |
-| `lock-account` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `connect-server` | 3.C1, 3.C2, 3.C3, 3.C4 | — | `chino-api GET /api/config` | `server-check-timeout` |
+| `reconnect-recent-server` | 3.C5 | build | — | — |
+| `sign-in` | 3.C6, 3.C8 | — | `chino-api GET /api/config` | `server-check-timeout` |
+| `sign-in-with-code` | 3.C7, 3.C8 | build | `chino-api GET /api/config` | `server-check-timeout` |
+| `stay-signed-in` | 17.C11 | build | — | — |
+| `return-after-sign-in` | 3.C9 | build | — | — |
+| `choose-account-at-start` | 3.C4, 3.C10, 3.C11 | build | — | — |
+| `switch-account` | 3.C11, 16.C12, 16.C13 | build | — | — |
+| `add-account` | 3.C10, 3.C11 | build | — | — |
+| `remove-account` | 3.C10, 16.C14 | build | — | — |
+| `sign-out` | 2.C1, 16.C12, 16.C13, 16.C14 | build | — | — |
+| `change-server` | 16.C6, 16.C14 | build | `chino-api GET /api/config` | — |
+| `install-web-app` | — | — | — | — |
+| `find-server-on-network` | N.C12, 3.C14, 3.C15 | build, the rest ruled out | — | — |
+| `get-app-from-store` | 3.C18 | build | — | — |
+| `reset-own-password` | R.C1, R.C5, P.C14, P.C15 | build | — | — |
+| `use-second-factor` | P.C14, P.C15, 16.C22 | build | — | — |
+| `lock-account` | P.C13, P.C14, 3.C16, 3.C17, 16.C21 | build | — | — |
+| `refuse-plain-http-elsewhere` | N.C3, N.C4, N.C5, N.C7, N.C8, N.C9, N.C10 | build | — | — |
+| `sign-in-in-own-language` | N.C15, 16.C23 | build | — | — |
 
 ## The frame
 
 What is around every screen: the rail or tab bar, the top bar, going back. Specified in [chapter 2](../chino/frame.md). Depth: deep. For the goal [Watch films and shows](../goals/README.md#watch-films-and-shows).
 
-| Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
-|---|---|---|---|---|---|---|
-| Move between home, movies, shows, watchlist, zap and settings | person | built | built | built | built | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [2.4](../chino/frame.md#24-the-frame-on-a-phone), [2.5](../chino/frame.md#25-the-frame-on-a-tv) |
-| Open a view, a title or a list again from a link, a reload or the browser's back | person | partial | — | — | — | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [5.7.3](../chino/browse.md#573-where-the-view-starts), [8.6](../chino/watchlist.md#86-a-list) |
-| Go back to the screen before, as it was left | person | partial | built | built | partial | [2.1](../chino/frame.md#21-purpose), [4.5](../chino/home.md#45-home-on-a-tv), [5.7.3](../chino/browse.md#573-where-the-view-starts), [6.3.5](../chino/title-actions.md#635-on-a-tv) |
-| See which account is signed in | person | built | built | built | built | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [3.5.4](../chino/start.md#354-the-avatar), [16.5](../chino/settings.md#165-the-account) |
-| Keep what matters inside a TV's safe area | system | — | — | partial | no | [2.5](../chino/frame.md#25-the-frame-on-a-tv) |
-| Get the web app's new version with one reload | person | built | — | — | — | [17.7](../chino/errors.md#177-the-causes) |
-| Use every screen with a screen reader | person | ? | ? | ? | ? | — |
+| Capability | Who | Web | Phone | Android TV | Samsung TV | Portal | Catalog console | Spec |
+|---|---|---|---|---|---|---|---|---|
+| Move between home, movies, shows, watchlist, zap and settings | person | built | built | built | built | — | — | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [2.4](../chino/frame.md#24-the-frame-on-a-phone), [2.5](../chino/frame.md#25-the-frame-on-a-tv) |
+| Open a view, a title or a list again from a link, a reload or the browser's back | person | partial | — | — | — | — | — | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [5.7.3](../chino/browse.md#573-where-the-view-starts), [8.6](../chino/watchlist.md#86-a-list) |
+| Go back to the screen before, as it was left | person | partial | built | built | partial | — | — | [2.1](../chino/frame.md#21-purpose), [4.5](../chino/home.md#45-home-on-a-tv), [5.7.3](../chino/browse.md#573-where-the-view-starts), [6.3.5](../chino/title-actions.md#635-on-a-tv) |
+| See which account is signed in | person | built | built | built | built | — | — | [2.3](../chino/frame.md#23-the-frame-on-a-computer), [3.5.4](../chino/start.md#354-the-avatar), [16.5](../chino/settings.md#165-the-account) |
+| Keep what matters inside a TV's safe area | system | — | — | partial | no | — | — | [2.5](../chino/frame.md#25-the-frame-on-a-tv) |
+| Get the web app's new version with one reload | person | built | — | — | — | — | — | [17.7](../chino/errors.md#177-the-causes) |
+| Use every screen with a screen reader | person | ? | ? | ? | ? | ? | ? | — |
+| Read every screen at the text size set on the device, up to 200 % | person | partial | partial | partial | — | ? | ? | — |
+| See nothing move on its way where the device asks for less motion | system | partial | no | no | no | ? | ? | — |
+| Use every screen of the web apps with a keyboard alone | person | partial | — | — | — | ? | ? | — |
 
 - Move between home, movies, shows, watchlist, zap and settings: web: a rail, tabs below 768 px; phone: tabs, a rail from 600 dp, downloads on Android; TVs: a rail of icons that never opens
 - Open a view, a title or a list again from a link, a reload or the browser's back: titles, people, the watchlist, search and the account have addresses; movies, shows, zap, settings and an opened list don't
@@ -92,16 +101,22 @@ What is around every screen: the rail or tab bar, the top bar, going back. Speci
 - Keep what matters inside a TV's safe area: Android TV keeps it in the player and zap only; the frame starts at the screen's edge
 - Get the web app's new version with one reload: a toast offers reload once a new version is waiting
 - Use every screen with a screen reader: not checked on any app; search is known not to say its result count
+- Read every screen at the text size set on the device, up to 200 %: not tried at a larger size on any app; a Samsung TV has no text size to follow
+- See nothing move on its way where the device asks for less motion: the web honours it in a few places; the phone and TV apps read no such setting
+- Use every screen of the web apps with a keyboard alone: on the web a poster card opens its title by pointer alone; the portal and the console were not checked
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `switch-view` | 2.C2, 2.C3, 2.C4, 2.C5, 2.C7, 4.C16, 6.C1, 7.C1 | — | — |
-| `open-view-by-address` | 2.C6, 5.C12, 8.C14 | — | — |
-| `go-back` | 4.C18, 5.C12, 6.C23, 8.C14 | — | — |
-| `see-who-is-signed-in` | 2.C1, 2.C9, 3.C12, 3.C13, 16.C12 | `chino-api GET /api/v1/me` | — |
-| `keep-tv-safe-area` | 2.C8 | — | — |
-| `reload-new-web-version` | 17.C15 | — | — |
-| `use-with-screen-reader` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `switch-view` | 2.C2, 2.C3, 2.C4, 2.C5, 2.C7, 4.C16, 6.C1, 7.C1 | — | — | — |
+| `open-view-by-address` | 2.C6, 5.C12, 8.C14 | build | — | — |
+| `go-back` | 4.C18, 5.C12, 6.C23, 8.C14 | build | — | — |
+| `see-who-is-signed-in` | 2.C1, 2.C9, 3.C12, 3.C13, 16.C12 | — | `chino-api GET /api/v1/me` | — |
+| `keep-tv-safe-area` | 2.C8 | build | — | — |
+| `reload-new-web-version` | 17.C15 | — | — | — |
+| `use-with-screen-reader` | 2.C14, H.C18, K.C26 | build | — | — |
+| `follow-text-size` | 2.C15, H.C18, K.C26 | build | — | — |
+| `follow-less-motion` | 2.C15, H.C18, K.C26 | build | — | — |
+| `use-with-keyboard` | 2.C14, H.C18, K.C26 | build | — | — |
 
 ## Home
 
@@ -133,19 +148,19 @@ The first screen: the hero and the rows. Specified in [chapter 4](../chino/home.
 - See how much is left of a title or an episode begun: only an episode row says it, “Resume · 30m left”, no card does; Samsung's rows show neither the bar nor the time
 - Show new and changed titles without a reload: the web follows the catalog's changes as they happen; the apps ask again only when a screen loads
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `start-featured-title` | 4.C1, 4.C2, 4.C3, 4.C4, 4.C5, 4.C6, 4.C7, 4.C8, 4.C9, 4.C17 | `chino-api GET /api/v1/items`, `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/backdrop` and 2 more | `hero-pool-size`, `hero-candidates`, `hero-rotation`, `hero-refresh` |
-| `play-hero-trailer` | 4.C6, 4.C7 | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/extras/*` | `hero-trailer-autoplay` |
-| `continue-watching` | 4.C10, 4.C11 | `chino-api GET /api/v1/me/continue-watching` | `resume-floor`, `watched-rule` |
-| `remove-from-continue-watching` | 4.C13 | `chino-api POST /api/v1/items/{id}/progress` | — |
-| `see-next-up` | 4.C10, 4.C11 | `chino-api GET /api/v1/me/continue-watching` | — |
-| `see-new-titles` | 4.C10, 4.C19, 4.C20, 4.C21, 4.C22 | `chino-api GET /api/v1/items`, `katalog-api GET /movies`, `katalog-api GET /series` | `home-row-size` |
-| `see-top-rated` | 4.C10 | `chino-api GET /api/v1/items`, `katalog-api GET /movies` | `home-row-size`, `top-rated-floor` |
-| `see-genre-rows` | 4.C12 | `chino-api GET /api/v1/items` | `genre-rows` |
-| `open-row-in-full` | 4.C13, 4.C14, 4.C15 | — | — |
-| `see-time-left` | 4.C11, 6.C18 | `chino-api GET /api/v1/items/{id}/progress`, `chino-api GET /api/v1/me/continue-watching` | `resume-floor` |
-| `refresh-on-library-change` | — | `chino-api GET /api/v1/events` | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `start-featured-title` | 4.C1, 4.C2, 4.C3, 4.C4, 4.C5, 4.C6, 4.C7, 4.C8, 4.C9, 4.C17 | build | `chino-api GET /api/v1/items`, `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/backdrop` and 2 more | `hero-pool-size`, `hero-candidates`, `hero-rotation`, `hero-refresh` |
+| `play-hero-trailer` | 4.C6, 4.C7 | build | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/extras/*` | `hero-trailer-autoplay` |
+| `continue-watching` | 4.C10, 4.C11 | — | `chino-api GET /api/v1/me/continue-watching` | `resume-floor`, `watched-rule` |
+| `remove-from-continue-watching` | 4.C13 | build | `chino-api POST /api/v1/items/{id}/progress` | — |
+| `see-next-up` | 4.C10, 4.C11 | — | `chino-api GET /api/v1/me/continue-watching` | — |
+| `see-new-titles` | 4.C10, 4.C19, 4.C20, 4.C21, 4.C22 | — | `chino-api GET /api/v1/items`, `katalog-api GET /movies`, `katalog-api GET /series` | `home-row-size` |
+| `see-top-rated` | 4.C10 | — | `chino-api GET /api/v1/items`, `katalog-api GET /movies` | `home-row-size`, `top-rated-floor` |
+| `see-genre-rows` | 4.C12 | build | `chino-api GET /api/v1/items` | `genre-rows` |
+| `open-row-in-full` | 4.C13, 4.C14, 4.C15 | build | — | — |
+| `see-time-left` | 4.C11, 6.C18 | build | `chino-api GET /api/v1/items/{id}/progress`, `chino-api GET /api/v1/me/continue-watching` | `resume-floor` |
+| `refresh-on-library-change` | — | later | `chino-api GET /api/v1/events` | — |
 
 ## Movies and shows
 
@@ -163,7 +178,7 @@ Every movie and every show, filtered and sorted. Specified in [chapter 5](../chi
 | See how many titles the view holds, and how many fit the filters | person | partial | partial | partial | partial | [5.8](../chino/browse.md#58-the-grid) |
 | Find movies or shows as they were left: filters, sort and place | person | no | built | partial | partial | [5.7.3](../chino/browse.md#573-where-the-view-starts) |
 | Play or resume a title from its card, without opening its page | person | partial | partial | partial | no | [5.8](../chino/browse.md#58-the-grid), [6.5.4](../chino/title-actions.md#654-nothing-on-artwork) |
-| See the collections everyone shares: a film series, a theme | person | no | no | no | no | — |
+| See the collections everyone shares: a film series, a theme | person | no | no | no | no | [catalog library](../catalog/library.md) |
 
 - Look through every movie, or every show: more load as the end nears; Samsung loads 60 at a time with a load more button, and names shows “Series”
 - Narrow movies or shows to a genre: one genre at a time, from one list for both kinds, so some lead to nothing; the target ticks several
@@ -177,19 +192,19 @@ Every movie and every show, filtered and sorted. Specified in [chapter 5](../chi
 - Play or resume a title from its card, without opening its page: the card's menu; a grid's plays, never resumes; Android TV only a movie's; list cards in the apps and Samsung's have none
 - See the collections everyone shares: a film series, a theme: lists are each person's own; the catalog keeps no collection
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `browse-library` | 5.C6, 5.C7, 5.C10, 5.C11, 5.C14, 5.C15, 5.C16, 5.C17, 5.C18, 5.C19 | `chino-api GET /api/v1/items`, `chino-api GET /api/v1/items/{id}/poster`, `katalog-api GET /movies` and 1 more | `browse-page-size` |
-| `filter-by-genre` | 5.C1, 5.C3 | `chino-api GET /api/v1/genres`, `katalog-api GET /genres`, `chino-api GET /api/v1/items` | — |
-| `filter-by-decade` | 5.C1, 5.C2, 5.C5 | `chino-api GET /api/v1/items` | — |
-| `filter-by-rating` | 5.C1 | `chino-api GET /api/v1/items` | — |
-| `sort-titles` | 5.C1, 5.C5 | `chino-api GET /api/v1/items` | — |
-| `clear-filters` | 5.C4, 5.C5, 5.C16 | — | — |
-| `search-in-view` | 5.C1 | — | — |
-| `see-filter-count` | 5.C20 | — | — |
-| `keep-view-state` | 5.C12, 5.C13 | — | — |
-| `play-from-card` | 4.C13, 5.C9, 8.C13 | — | — |
-| `see-collections` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `browse-library` | 5.C6, 5.C7, 5.C10, 5.C11, 5.C14, 5.C15, 5.C16, 5.C17, 5.C18, 5.C19 | — | `chino-api GET /api/v1/items`, `chino-api GET /api/v1/items/{id}/poster`, `katalog-api GET /movies` and 1 more | `browse-page-size` |
+| `filter-by-genre` | 5.C1, 5.C3 | — | `chino-api GET /api/v1/genres`, `katalog-api GET /genres`, `chino-api GET /api/v1/items` | — |
+| `filter-by-decade` | 5.C1, 5.C2, 5.C5 | build | `chino-api GET /api/v1/items` | — |
+| `filter-by-rating` | 5.C1 | build | `chino-api GET /api/v1/items` | — |
+| `sort-titles` | 5.C1, 5.C5 | build | `chino-api GET /api/v1/items` | — |
+| `clear-filters` | 5.C4, 5.C5, 5.C16 | build | — | — |
+| `search-in-view` | 5.C1 | build | — | — |
+| `see-filter-count` | 5.C20 | build | — | — |
+| `keep-view-state` | 5.C12, 5.C13 | build | — | — |
+| `play-from-card` | 4.C13, 5.C9, 8.C13 | build | — | — |
+| `see-collections` | L.C14, L.C15, 5.C21, 5.C22, 6.C26 | build | — | — |
 
 ## The title page
 
@@ -221,19 +236,19 @@ A movie's or a show's page: what it is, its seasons and episodes, its extras, wh
 - Show a viewer capped at an age rating only the titles the cap allows: the server holds every route to the cap; a title past it answers as one not there, and lists leave it out
 - Choose which cut of a title plays: theatrical, director's, extended: the library format records a version's cut; the apps play the current version
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `see-title-details` | 6.C1, 6.C2, 6.C3, 6.C4, 6.C5, 6.C6, 6.C11, 6.C12, 6.C24 | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/poster`, `chino-api GET /api/v1/items/{id}/backdrop` and 1 more | — |
-| `see-age-rating` | 6.C6 | `chino-api GET /api/v1/items/{id}`, `katalog-api GET /items/{id}` | — |
-| `play-show-episode` | 6.C9, 6.C21 | `chino-api GET /api/v1/me/continue-watching`, `chino-api GET /api/v1/series/{id}/next-episode`, `chino-api GET /api/v1/series/{id}/episodes` | — |
-| `play-trailer` | 6.C7, 6.C9 | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/extras/*`, `katalog-api GET /api/v1/extras/{extraId}/playback` and 9 more | — |
-| `browse-episodes` | 6.C15, 6.C16, 6.C18, 6.C19, 6.C20, 6.C25 | `chino-api GET /api/v1/series/{id}/episodes`, `katalog-api GET /series/{id}/episodes` | — |
-| `open-episode-in-show` | 6.C21, 6.C22, 8.C12 | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/series/{id}/episodes` | — |
-| `see-analyzed-parts` | 6.C14 | `chino-api GET /api/v1/items/{id}`, `katalog-api GET /items/{id}` | — |
-| `see-similar-titles` | 6.C17 | `chino-api GET /api/v1/items/{id}/similar`, `katalog-api GET /items/{id}/similar` | `similar-size` |
-| `like-title` | 6.C9 | `chino-api PUT /api/v1/me/likes/{id}`, `chino-api DELETE /api/v1/me/likes/{id}`, `chino-api GET /api/v1/me/likes` | — |
-| `limit-to-age-cap` | 6.C24, 7.C10 | `katalog-api GET /api/v1/visible` | `unrated-for-capped` |
-| `choose-cut` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `see-title-details` | 6.C1, 6.C2, 6.C3, 6.C4, 6.C5, 6.C6, 6.C11, 6.C12, 6.C24 | — | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/poster`, `chino-api GET /api/v1/items/{id}/backdrop` and 1 more | — |
+| `see-age-rating` | 6.C6 | build | `chino-api GET /api/v1/items/{id}`, `katalog-api GET /items/{id}` | — |
+| `play-show-episode` | 6.C9, 6.C21 | — | `chino-api GET /api/v1/me/continue-watching`, `chino-api GET /api/v1/series/{id}/next-episode`, `chino-api GET /api/v1/series/{id}/episodes` | — |
+| `play-trailer` | 6.C7, 6.C9 | — | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/extras/*`, `katalog-api GET /api/v1/extras/{extraId}/playback` and 9 more | — |
+| `browse-episodes` | 6.C15, 6.C16, 6.C18, 6.C19, 6.C20, 6.C25 | build | `chino-api GET /api/v1/series/{id}/episodes`, `katalog-api GET /series/{id}/episodes` | — |
+| `open-episode-in-show` | 6.C21, 6.C22, 8.C12 | build | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/series/{id}/episodes` | — |
+| `see-analyzed-parts` | 6.C14 | build | `chino-api GET /api/v1/items/{id}`, `katalog-api GET /items/{id}` | — |
+| `see-similar-titles` | 6.C17 | — | `chino-api GET /api/v1/items/{id}/similar`, `katalog-api GET /items/{id}/similar` | `similar-size` |
+| `like-title` | 6.C9 | build | `chino-api PUT /api/v1/me/likes/{id}`, `chino-api DELETE /api/v1/me/likes/{id}`, `chino-api GET /api/v1/me/likes` | — |
+| `limit-to-age-cap` | 6.C24, 7.C10 | — | `katalog-api GET /api/v1/visible` | `unrated-for-capped` |
+| `choose-cut` | — | later | — | — |
 
 ## People
 
@@ -247,10 +262,10 @@ Cast and crew: a person's page and what they were in. Specified in [chapter 7](.
 - See who someone is and what of theirs the library holds: photo or initials, known for, born, the biography in full, and their titles with their roles
 - See who is in a title and who made it, and open their pages: on a title's page; the TVs show every actor as a card of initials, never a photo
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `see-person` | 7.C1, 7.C2, 7.C3, 7.C4, 7.C5, 7.C6, 7.C7, 7.C8, 7.C9, 7.C10, 7.C11 | `chino-api GET /api/v1/people/{id}`, `chino-api GET /api/v1/people/{id}/profile`, `katalog-api GET /people/{id}` | `person-titles-limit` |
-| `see-cast-and-crew` | 6.C12, 6.C13 | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/people/{id}/profile`, `katalog-api GET /items/{id}` | `cast-preview`, `credits-cap` |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `see-person` | 7.C1, 7.C2, 7.C3, 7.C4, 7.C5, 7.C6, 7.C7, 7.C8, 7.C9, 7.C10, 7.C11 | — | `chino-api GET /api/v1/people/{id}`, `chino-api GET /api/v1/people/{id}/profile`, `katalog-api GET /people/{id}` | `person-titles-limit` |
+| `see-cast-and-crew` | 6.C12, 6.C13 | build | `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/people/{id}/profile`, `katalog-api GET /items/{id}` | `cast-preview`, `credits-cap` |
 
 ## Watchlist and lists
 
@@ -282,19 +297,19 @@ What a person keeps to watch, in lists of their own, and what they watched. Spec
 - See what was watched, newest first: on the account page; web and phone take a title off with its watched mark; Android TV opens the title
 - See on a poster whether a title is on the Watchlist, watched or begun: the bar shows only in continue watching; the phone's more like this has no marks; Samsung shows the watched check alone
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `keep-on-watchlist` | 6.C8, 6.C9, 6.C20 | `chino-api PUT /api/v1/me/watchlist/{id}`, `chino-api DELETE /api/v1/me/watchlist/{id}`, `chino-api GET /api/v1/me/watchlist` and 2 more | — |
-| `see-lists` | 8.C1, 8.C2, 8.C3, 8.C9, 8.C10, 8.C11, 8.C12, 8.C15, 8.C16 | `chino-api GET /api/v1/me/watchlists`, `chino-api GET /api/v1/me/watchlists/{listId}` | `watchlist-shelf-size` |
-| `put-title-in-lists` | 6.C8, 6.C9, 6.C10 | `chino-api PUT /api/v1/me/watchlists/{listId}/items/{itemId}`, `chino-api DELETE /api/v1/me/watchlists/{listId}/items/{itemId}`, `chino-api GET /api/v1/me/watchlists/memberships` | — |
-| `create-list` | 8.C4, 8.C5, 8.C17 | `chino-api POST /api/v1/me/watchlists` | `list-name-length`, `lists-per-account` |
-| `create-list-from-title` | 6.C10 | `chino-api POST /api/v1/me/watchlists`, `chino-api PUT /api/v1/me/watchlists/{listId}/items/{itemId}` | `list-name-length`, `lists-per-account` |
-| `rename-list` | 8.C5, 8.C6, 8.C7, 8.C9, 8.C17 | `chino-api PATCH /api/v1/me/watchlists/{listId}` | `list-name-length` |
-| `delete-list` | 8.C8, 8.C9 | `chino-api DELETE /api/v1/me/watchlists/{listId}` | — |
-| `mark-watched` | 5.C9, 6.C9, 6.C19, 6.C20, 8.C13 | `chino-api POST /api/v1/me/items/{id}/watched`, `chino-api DELETE /api/v1/me/items/{id}/watched` | `watched-rule` |
-| `count-as-watched` | 11.C39 | `chino-api POST /api/v1/me/items/{id}/watched`, `chino-api POST /api/v1/items/{id}/progress` | `watched-rule` |
-| `see-watch-history` | 16.C12, 16.C13, 16.C19 | `chino-api GET /api/v1/me/watched` | `watch-history-size` |
-| `see-title-marks` | 4.C13, 5.C8, 6.C17 | `chino-api GET /api/v1/me/watchlists/memberships`, `chino-api GET /api/v1/me/watchlist` | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `keep-on-watchlist` | 6.C8, 6.C9, 6.C20 | — | `chino-api PUT /api/v1/me/watchlist/{id}`, `chino-api DELETE /api/v1/me/watchlist/{id}`, `chino-api GET /api/v1/me/watchlist` and 2 more | — |
+| `see-lists` | 8.C1, 8.C2, 8.C3, 8.C9, 8.C10, 8.C11, 8.C12, 8.C15, 8.C16 | — | `chino-api GET /api/v1/me/watchlists`, `chino-api GET /api/v1/me/watchlists/{listId}` | `watchlist-shelf-size` |
+| `put-title-in-lists` | 6.C8, 6.C9, 6.C10 | build | `chino-api PUT /api/v1/me/watchlists/{listId}/items/{itemId}`, `chino-api DELETE /api/v1/me/watchlists/{listId}/items/{itemId}`, `chino-api GET /api/v1/me/watchlists/memberships` | — |
+| `create-list` | 8.C4, 8.C5, 8.C17 | — | `chino-api POST /api/v1/me/watchlists` | `list-name-length`, `lists-per-account` |
+| `create-list-from-title` | 6.C10 | build | `chino-api POST /api/v1/me/watchlists`, `chino-api PUT /api/v1/me/watchlists/{listId}/items/{itemId}` | `list-name-length`, `lists-per-account` |
+| `rename-list` | 8.C5, 8.C6, 8.C7, 8.C9, 8.C17 | — | `chino-api PATCH /api/v1/me/watchlists/{listId}` | `list-name-length` |
+| `delete-list` | 8.C8, 8.C9 | build | `chino-api DELETE /api/v1/me/watchlists/{listId}` | — |
+| `mark-watched` | 5.C9, 6.C9, 6.C19, 6.C20, 8.C13 | — | `chino-api POST /api/v1/me/items/{id}/watched`, `chino-api DELETE /api/v1/me/items/{id}/watched` | `watched-rule` |
+| `count-as-watched` | 11.C39 | — | `chino-api POST /api/v1/me/items/{id}/watched`, `chino-api POST /api/v1/items/{id}/progress` | `watched-rule` |
+| `see-watch-history` | 16.C12, 16.C13, 16.C19 | build | `chino-api GET /api/v1/me/watched` | `watch-history-size` |
+| `see-title-marks` | 4.C13, 5.C8, 6.C17 | build | `chino-api GET /api/v1/me/watchlists/memberships`, `chino-api GET /api/v1/me/watchlist` | — |
 
 ## Search
 
@@ -317,15 +332,15 @@ Finding a title or a person by name. Specified in [chapter 9](../chino/search.md
 - Come back to the results as they were after opening one: the phone runs the search again; Android TV keeps them but focuses the field; Samsung forgets the words
 - Use what an addon offers when a search finds nothing: the search.empty slot's buttons, with the words typed; nothing shows on a server without such an addon
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `search-titles` | 9.C2, 9.C4, 9.C7, 9.C8, 9.C9, 9.C10, 9.C15 | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/items`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
-| `search-people` | 9.C2, 9.C3 | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/people`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
-| `search-episodes` | 9.C5 | `chino-api GET /api/v1/search`, `katalog-api GET /search` | — |
-| `search-as-you-type` | 9.C1, 9.C6, 9.C11, 9.C13 | `chino-api GET /api/v1/search` | `search-debounce` |
-| `return-to-results` | 9.C12 | — | — |
-| `hear-result-count` | 9.C14 | — | — |
-| `act-on-empty-search` | 9.C7 | `chino-api GET /api/v1/extensions` | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `search-titles` | 9.C2, 9.C4, 9.C7, 9.C8, 9.C9, 9.C10, 9.C15 | — | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/items`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
+| `search-people` | 9.C2, 9.C3 | — | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/people`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
+| `search-episodes` | 9.C5 | build | `chino-api GET /api/v1/search`, `katalog-api GET /search` | — |
+| `search-as-you-type` | 9.C1, 9.C6, 9.C11, 9.C13 | build | `chino-api GET /api/v1/search` | `search-debounce` |
+| `return-to-results` | 9.C12 | build | — | — |
+| `hear-result-count` | 9.C14 | build | — | — |
+| `act-on-empty-search` | 9.C7 | — | `chino-api GET /api/v1/extensions` | — |
 
 ## Zap
 
@@ -353,17 +368,17 @@ Titles one after the other, playing from their middle, to find something to watc
 - Turn zap's sound off and on from the remote: Samsung mutes the TV's own sound and leaves it muted after zap; a computer or a phone uses its own volume
 - Skip a title that can't be played, at most six in a row: Samsung means to skip but stays on the poster until down is pressed; on a computer or a phone the card stays
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `zap-through-titles` | 10.C1, 10.C2, 10.C3, 10.C4, 10.C6, 10.C7, 10.C15, 10.C16, 10.C17, 10.C18, 10.C19, 10.C20, 10.C21, 17.C9 | `chino-api GET /api/v1/play/zap-feed`, `chino-stream GET /api/play/zap-feed`, `chino-api POST /api/v1/items/{id}/play/prewarm` and 4 more | `zap-ready-pool`, `zap-warm-slots`, `zap-info-linger` |
-| `pick-zap-titles` | 10.C8, 10.C9, 10.C10 | `chino-api GET /api/v1/items`, `chino-api GET /api/v1/me/watched`, `chino-api GET /api/v1/play/packaged-ids` and 6 more | `zap-list-size`, `zap-watched-check`, `zap-ready-pool` |
-| `pick-zap-scene` | 10.C10, 10.C11, 10.C12 | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments`, `chino-api GET /api/v1/play/zap-feed` | `zap-scene-window`, `zap-first-card` |
-| `learn-from-zapping` | 10.C13 | — | `zap-dwell`, `zap-exploration`, `zap-weights` |
-| `watch-from-zap` | 10.C6, 10.C14 | — | — |
-| `return-to-zap-session` | 10.C14 | — | — |
-| `go-back-zap-card` | 10.C5 | — | — |
-| `mute-zap` | 10.C18 | — | — |
-| `skip-unplayable-channel` | 10.C18 | — | `zap-dead-channels` |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `zap-through-titles` | 10.C1, 10.C2, 10.C3, 10.C4, 10.C6, 10.C7, 10.C15, 10.C16, 10.C17, 10.C18, 10.C19, 10.C20, 10.C21, 17.C9 | build | `chino-api GET /api/v1/play/zap-feed`, `chino-stream GET /api/play/zap-feed`, `chino-api POST /api/v1/items/{id}/play/prewarm` and 4 more | `zap-ready-pool`, `zap-warm-slots`, `zap-info-linger` |
+| `pick-zap-titles` | 10.C8, 10.C9, 10.C10 | build | `chino-api GET /api/v1/items`, `chino-api GET /api/v1/me/watched`, `chino-api GET /api/v1/play/packaged-ids` and 6 more | `zap-list-size`, `zap-watched-check`, `zap-ready-pool` |
+| `pick-zap-scene` | 10.C10, 10.C11, 10.C12 | build | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments`, `chino-api GET /api/v1/play/zap-feed` | `zap-scene-window`, `zap-first-card` |
+| `learn-from-zapping` | 10.C13 | build | — | `zap-dwell`, `zap-exploration`, `zap-weights` |
+| `watch-from-zap` | 10.C6, 10.C14 | — | — | — |
+| `return-to-zap-session` | 10.C14 | build | — | — |
+| `go-back-zap-card` | 10.C5 | build | — | — |
+| `mute-zap` | 10.C18 | build | — | — |
+| `skip-unplayable-channel` | 10.C18 | build | — | `zap-dead-channels` |
 
 ## The player
 
@@ -387,11 +402,12 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | See how a title plays and reaches the screen | person | built | partial | partial | no | [11.15](../chino/playback.md#1115-playback-info) |
 | Say why a title couldn't play, also when no picture comes within 20 seconds | system | built | partial | partial | partial | [11.17](../chino/playback.md#1117-states), [17.7](../chino/errors.md#177-the-causes), [17.9](../chino/errors.md#179-a-removed-title-or-person) |
 | File a bug report by itself when a title won't play, showing its number | system | built | partial | partial | no | [11.17](../chino/playback.md#1117-states) |
-| Send how playback went to the server, for the people who run it | system | built | built | built | no | — |
+| Send how playback went to the server, for the people who run it | system | built | partial | built | no | — |
 | Control the player with the keyboard or the remote's keys | person | built | — | built | partial | [11.3](../chino/playback.md#113-the-player-on-a-computer), [11.5](../chino/playback.md#115-the-player-on-a-tv) |
 | Choose the audio track a title plays in | person | built | built | built | built | [12.3](../chino/subtitles.md#123-the-panel-on-a-computer), [12.6](../chino/subtitles.md#126-the-audio-column), [11.14](../chino/playback.md#1114-the-audio-setting) |
 | Watch a title together from different places, in step | person | no | no | no | no | — |
 | Hear a title in surround where the device and the room play it | person | ? | ? | ? | ? | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Keep a session for every stream: who plays what, on which device | system | — | — | — | — | [portal people](../portal/people.md) |
 
 - Play a movie or an episode: the package, or a version converted as it plays; Samsung has no top and no home; what a start shows differs per app
 - Resume a title where it stopped, or start it over: saved every 10 s; the web saves no more, Samsung not on pause, Android TV even before a resume landed; the phone keeps it offline
@@ -409,34 +425,36 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 - See how a title plays and reaches the screen: for the people who fix things; the phone's dialog lacks the quality changes; Android TV's card closes after 8 s
 - Say why a title couldn't play, also when no picture comes within 20 seconds: iOS gives up after 20 s too, Android never; Android TV shows the raw error without try again; Samsung the error's text
 - File a bug report by itself when a title won't play, showing its number: the phone app files one for each failure shown, Android TV one for every player error; neither shows the number
-- Send how playback went to the server, for the people who run it: events batched about every 30 s and on leaving; the server logs them and counts startup, stalls and bandwidth
+- Send how playback went to the server, for the people who run it: web and Android TV: batched about every 30 s and on leaving; the phone sends none of the quality events, the Samsung TV nothing
 - Control the player with the keyboard or the remote's keys: Samsung: fast forward and rewind 30 s, no subtitles or audio key, down with the controls hidden does nothing
 - Choose the audio track a title plays in: no app marks the original or a described track: the catalog keeps no original language; the phone greys one it can't play
 - Hear a title in surround where the device and the room play it: a 5.1 track only where an instance turns it on; which apps play it is not checked
+- Keep a session for every stream: who plays what, on which device: no server keeps one: the streams playing now and a limit on them rest on it
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `play-title` | 11.C1, 11.C7, 11.C8, 11.C9, 11.C11, 11.C14, 11.C42, 11.C43 | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/play/info` and 17 more | `stream-token-lifetime`, `controls-hide` |
-| `resume-title` | 11.C39, 11.C40 | `chino-api GET /api/v1/items/{id}/progress`, `chino-api POST /api/v1/items/{id}/progress` | `progress-save-interval`, `restart-near-end`, `resume-floor`, `watched-rule` |
-| `seek-title` | 11.C15, 11.C16, 11.C17, 11.C18 | `chino-api GET /api/v1/items/{id}/play/trickplay/*`, `chino-stream GET /trickplay/*`, `chino-api GET /api/v1/items/{id}/segments` and 1 more | `seek-step` |
-| `skip-intro` | 11.C19 | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments` | — |
-| `auto-skip-intro` | 11.C20, 11.C21, 11.C27 | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments` | `auto-skip-intros`, `binge-countdown`, `binge-window`, `auto-skip-credits` |
-| `play-next-episode` | 11.C22, 11.C23, 11.C24, 11.C25, 11.C26, 11.C28 | `chino-api GET /api/v1/series/{id}/next-episode`, `katalog-api GET /series/{id}/episodes`, `chino-api GET /api/v1/items/{id}/segments` and 3 more | `auto-play-next`, `binge-countdown`, `up-next-trigger`, `next-episode-guard`, `next-episode-warm`, `zap-warm-slots` |
-| `step-episodes` | 11.C5, 11.C11 | `chino-api GET /api/v1/series/{id}/episodes`, `chino-api GET /api/v1/series/{id}/next-episode` | — |
-| `choose-quality` | 11.C3, 11.C29, 11.C31, 11.C32 | `chino-api GET /api/v1/items/{id}/play/info`, `chino-api GET /api/v1/items/{id}/play/master.m3u8`, `chino-api GET /api/v1/items/{id}/play/{quality}/*` | — |
-| `recover-faltering-stream` | 11.C34, 11.C35, 11.C36, 11.C43 | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}/play/master.m3u8` | `stall-recovery`, `stream-token-lifetime` |
-| `set-volume-speed` | 11.C6, 11.C11, 11.C29 | — | — |
-| `fit-picture` | — | `chino-api GET /api/v1/items/{id}/play/info` | `fill-carry-limit` |
-| `play-in-background` | 11.C10, 11.C37 | — | — |
-| `keep-screen-awake` | 11.C38 | — | — |
-| `show-playback-info` | 11.C48 | `chino-api GET /api/v1/items/{id}/play/info` | — |
-| `explain-playback-failure` | 11.C44, 11.C45, 11.C47 | — | `startup-deadline` |
-| `report-playback-failure` | 11.C46 | `chino-api POST /api/v1/feedback` | `auto-report-limit`, `report-dedup-window`, `report-rate-limit` |
-| `report-playback-quality` | — | `chino-api POST /api/v1/play/events` | — |
-| `use-player-keys` | 11.C12, 11.C13 | — | `seek-step` |
-| `choose-audio` | 11.C2, 11.C4, 11.C30, 12.C1, 12.C10 | `chino-api GET /api/v1/items/{id}/play/info`, `chino-api GET /api/v1/items/{id}/play/audio/*`, `chino-stream GET /audio/*` and 2 more | `audio-language` |
-| `watch-together` | — | — | — |
-| `play-surround` | — | — | `surround-audio` |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `play-title` | 11.C1, 11.C7, 11.C8, 11.C9, 11.C11, 11.C14, 11.C42, 11.C43 | — | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/play/info` and 17 more | `stream-token-lifetime`, `controls-hide` |
+| `resume-title` | 11.C39, 11.C40 | build | `chino-api GET /api/v1/items/{id}/progress`, `chino-api POST /api/v1/items/{id}/progress` | `progress-save-interval`, `restart-near-end`, `resume-floor`, `watched-rule` |
+| `seek-title` | 11.C15, 11.C16, 11.C17, 11.C18 | build | `chino-api GET /api/v1/items/{id}/play/trickplay/*`, `chino-stream GET /trickplay/*`, `chino-api GET /api/v1/items/{id}/segments` and 1 more | `seek-step` |
+| `skip-intro` | 11.C19 | — | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments` | — |
+| `auto-skip-intro` | 11.C20, 11.C21, 11.C27 | build | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments` | `auto-skip-intros`, `binge-countdown`, `binge-window`, `auto-skip-credits` |
+| `play-next-episode` | 11.C22, 11.C23, 11.C24, 11.C25, 11.C26, 11.C28 | build | `chino-api GET /api/v1/series/{id}/next-episode`, `katalog-api GET /series/{id}/episodes`, `chino-api GET /api/v1/items/{id}/segments` and 3 more | `auto-play-next`, `binge-countdown`, `up-next-trigger`, `next-episode-guard`, `next-episode-warm`, `zap-warm-slots` |
+| `step-episodes` | 11.C5, 11.C11 | build | `chino-api GET /api/v1/series/{id}/episodes`, `chino-api GET /api/v1/series/{id}/next-episode` | — |
+| `choose-quality` | 11.C3, 11.C29, 11.C31, 11.C32 | build | `chino-api GET /api/v1/items/{id}/play/info`, `chino-api GET /api/v1/items/{id}/play/master.m3u8`, `chino-api GET /api/v1/items/{id}/play/{quality}/*` | — |
+| `recover-faltering-stream` | 11.C34, 11.C35, 11.C36, 11.C43 | build | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}/play/master.m3u8` | `stall-recovery`, `stream-token-lifetime` |
+| `set-volume-speed` | 11.C6, 11.C11, 11.C29 | build | — | — |
+| `fit-picture` | — | — | `chino-api GET /api/v1/items/{id}/play/info` | `fill-carry-limit` |
+| `play-in-background` | 11.C10, 11.C37 | build | — | — |
+| `keep-screen-awake` | 11.C38 | build | — | — |
+| `show-playback-info` | 11.C48 | build | `chino-api GET /api/v1/items/{id}/play/info` | — |
+| `explain-playback-failure` | 11.C44, 11.C45, 11.C47 | build | — | `startup-deadline` |
+| `report-playback-failure` | 11.C46 | build | `chino-api POST /api/v1/feedback` | `auto-report-limit`, `report-dedup-window`, `report-rate-limit` |
+| `report-playback-quality` | 11.C49, 11.C52 | build | `chino-api POST /api/v1/play/events` | — |
+| `use-player-keys` | 11.C12, 11.C13 | build | — | `seek-step` |
+| `choose-audio` | 11.C2, 11.C4, 11.C30, 12.C1, 12.C10 | — | `chino-api GET /api/v1/items/{id}/play/info`, `chino-api GET /api/v1/items/{id}/play/audio/*`, `chino-stream GET /audio/*` and 2 more | `audio-language` |
+| `watch-together` | — | later | — | — |
+| `play-surround` | 11.C50, 11.C51 | build | — | `surround-audio` |
+| `keep-play-sessions` | P.C7, P.C9, P.C12 | build | — | — |
 
 ## Subtitles
 
@@ -464,17 +482,17 @@ Choosing subtitles and how they look, in every kind of subtitle the library hold
 - Follow the caption preferences set on the device: a web page can't read them; iOS draws its own overlay without them; Samsung: not found in its code
 - Move the subtitles earlier or later while a title plays: the web, in its subtitles menu, for subtitles made as text
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `choose-subtitles` | 11.C2, 11.C4, 11.C41, 12.C1, 12.C2, 12.C3, 12.C5 | `chino-api GET /api/v1/items/{id}/subtitles`, `chino-api GET /api/v1/play/subs/{id}.vtt`, `chino-api GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt` and 6 more | `subtitle-language` |
-| `switch-on-subtitles` | 12.C4 | `chino-api GET /api/v1/items/{id}/subtitles` | `subtitle-language` |
-| `show-pgs-subtitles` | 12.C7 | `chino-api GET /api/v1/play/subs/{id}.vtt`, `chino-stream GET /api/play/subs/{subID}.sup`, `katalog-api GET /api/v1/subtitles/{id}/asset` | — |
-| `show-vobsub-subtitles` | 12.C9 | `chino-stream GET /api/play/subs/{subID}.idx`, `chino-stream GET /api/play/subs/{subID}.sub`, `katalog-api GET /api/v1/subtitles/{id}/asset` | — |
-| `show-dvb-subtitles` | — | `chino-stream GET /api/play/subs/{subID}.dvb` | — |
-| `show-styled-subtitles` | 12.C8 | `chino-api GET /api/v1/play/subs/{id}.ass`, `chino-api GET /api/v1/play/fonts/{id}.`, `chino-stream GET /api/play/subs/{subID}.ass` and 2 more | — |
-| `keep-subtitles-readable` | 12.C6, 11.C33 | — | `subtitle-look` |
-| `follow-caption-preferences` | 12.C6 | — | — |
-| `time-subtitles` | 11.C3 | — | `subtitle-timing-step` |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `choose-subtitles` | 11.C2, 11.C4, 11.C41, 12.C1, 12.C2, 12.C3, 12.C5 | — | `chino-api GET /api/v1/items/{id}/subtitles`, `chino-api GET /api/v1/play/subs/{id}.vtt`, `chino-api GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt` and 6 more | `subtitle-language` |
+| `switch-on-subtitles` | 12.C4 | — | `chino-api GET /api/v1/items/{id}/subtitles` | `subtitle-language` |
+| `show-pgs-subtitles` | 12.C7 | build | `chino-api GET /api/v1/play/subs/{id}.vtt`, `chino-stream GET /api/play/subs/{subID}.sup`, `katalog-api GET /api/v1/subtitles/{id}/asset` | — |
+| `show-vobsub-subtitles` | 12.C9 | build | `chino-stream GET /api/play/subs/{subID}.idx`, `chino-stream GET /api/play/subs/{subID}.sub`, `katalog-api GET /api/v1/subtitles/{id}/asset` | — |
+| `show-dvb-subtitles` | — | later | `chino-stream GET /api/play/subs/{subID}.dvb` | — |
+| `show-styled-subtitles` | 12.C8 | build | `chino-api GET /api/v1/play/subs/{id}.ass`, `chino-api GET /api/v1/play/fonts/{id}.`, `chino-stream GET /api/play/subs/{subID}.ass` and 2 more | — |
+| `keep-subtitles-readable` | 12.C6, 11.C33 | build | — | `subtitle-look` |
+| `follow-caption-preferences` | 12.C6, 12.C11 | build | — | — |
+| `time-subtitles` | 11.C3 | build | — | `subtitle-timing-step` |
 
 ## Downloads and offline
 
@@ -494,13 +512,13 @@ Keeping a title on a phone to watch without a connection. Specified in [chapter 
 - Keep each account's downloads to itself, deleting them when it leaves the phone: the Android app only; two accounts share one copy; sign out, remove account and change server ask first
 - Delete downloads the account may no longer watch, and say so once: the Android app only; after two answers at least an hour apart, a day where an answer leaves out every title
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `download-titles` | 13.C1, 13.C2, 13.C6, 16.C5 | `chino-api GET /api/config`, `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}/play/info` and 5 more | `downloads-switch`, `download-quality`, `download-wifi-only`, `stream-token-lifetime` |
-| `manage-downloads` | 13.C2, 13.C3, 13.C6 | — | — |
-| `play-downloads-offline` | 10.C21, 13.C4, 13.C6 | `chino-api POST /api/v1/items/{id}/progress` | `download-check-age`, `server-recheck` |
-| `keep-downloads-per-account` | 13.C5, 16.C14 | — | — |
-| `remove-unavailable-downloads` | — | `chino-api POST /api/v1/me/available`, `katalog-api GET /api/v1/visible` | `download-removal-gap`, `download-check-age` |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `download-titles` | 13.C1, 13.C2, 13.C6, 16.C5 | build | `chino-api GET /api/config`, `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}/play/info` and 5 more | `downloads-switch`, `download-quality`, `download-wifi-only`, `stream-token-lifetime` |
+| `manage-downloads` | 13.C2, 13.C3, 13.C6 | build | — | — |
+| `play-downloads-offline` | 10.C21, 13.C4, 13.C6 | build | `chino-api POST /api/v1/items/{id}/progress` | `download-check-age`, `server-recheck` |
+| `keep-downloads-per-account` | 13.C5, 16.C14 | build | — | — |
+| `remove-unavailable-downloads` | 13.C6 | build | `chino-api POST /api/v1/me/available`, `katalog-api GET /api/v1/visible` | `download-removal-gap`, `download-check-age` |
 
 ## Casting
 
@@ -513,7 +531,7 @@ Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/c
 | Show the title's subtitles on the TV while casting, every kind | system | — | partial | — | — | [14.4.2](../chino/casting.md#1442-the-full-controls) |
 | Say when the TV can't play a title, after one more try where that can help | system | — | partial | — | — | [14.5](../chino/casting.md#145-when-the-tv-cant-play-a-title) |
 | Stop casting when the account signs out or changes, keeping its place | system | — | partial | — | — | [14.4.5](../chino/casting.md#1445-changing-accounts) |
-| Start chino on a TV on the same network from a phone, playing as the person who sent it | person | no | no | no | no | — |
+| Start chino on a TV on the same network from a phone, playing as the person who sent it | person | no | no | no | no | [14.6](../chino/casting.md#146-starting-chino-on-a-tv) |
 
 - Cast a title to a TV on the network, going on where the phone was: the Android app with Google Cast, not yet tried on a real Cast device; iOS sends to a screen with AirPlay from the player
 - Control the TV from the phone while casting, also from the lock screen: the Android app only: the bar, the full controls, the notification; the TV's audio tracks by the stream's names
@@ -522,14 +540,14 @@ Playing on a TV from a phone or a computer. Specified in [chapter 14](../chino/c
 - Stop casting when the account signs out or changes, keeping its place: the Android app only; the questions before signing out say casting stops; a switch says so after, in a toast
 - Start chino on a TV on the same network from a phone, playing as the person who sent it: the TV is on; chino need not be open or signed in there; none of it: a phone finds Google Cast devices and AirPlay screens alone
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `cast-title` | 11.C10, 14.C1 | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}/play/master.m3u8`, `chino-api GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/*` and 1 more | `stream-token-lifetime` |
-| `control-cast` | 14.C2 | `chino-api POST /api/v1/items/{id}/progress` | `progress-save-interval`, `seek-step` |
-| `show-cast-subtitles` | 14.C4 | `chino-api GET /api/v1/play/subs/{id}.vtt` | — |
-| `report-cast-failure` | 14.C3 | — | — |
-| `stop-cast-on-account-change` | 13.C5, 16.C14 | `chino-api POST /api/v1/items/{id}/progress` | — |
-| `find-tv-app` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `cast-title` | 11.C10, 14.C1, 14.C8, 14.C9 | build | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}/play/master.m3u8`, `chino-api GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/*` and 1 more | `stream-token-lifetime` |
+| `control-cast` | 14.C2, 14.C8 | build | `chino-api POST /api/v1/items/{id}/progress` | `progress-save-interval`, `seek-step` |
+| `show-cast-subtitles` | 14.C4 | build | `chino-api GET /api/v1/play/subs/{id}.vtt` | — |
+| `report-cast-failure` | 14.C3 | build | — | — |
+| `stop-cast-on-account-change` | 13.C5, 16.C14 | build | `chino-api POST /api/v1/items/{id}/progress` | — |
+| `find-tv-app` | 14.C5, 14.C6, 14.C7, 14.C8, 14.C9 | build, the rest later | — | — |
 
 ## Notifications
 
@@ -549,13 +567,13 @@ What the server tells a person, in the bell. Specified in [chapter 15](../chino/
 - Mark every notification read, or delete one: shown at once, the list read again where the server refuses; Android TV shows a change only once the server made it
 - Be told on the phone while the app is closed: the bell fills while the app is open; the push service is a scaffold nothing runs
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `see-notifications` | 15.C1, 15.C2, 15.C3, 15.C5, 15.C6, 15.C7, 15.C8, 15.C9, 15.C10, 15.C13 | `chino-api GET /api/v1/notices`, `zaentrum-portal GET /api/portal/me/notices` | `notice-poll` |
-| `open-notification` | 15.C4, 15.C11, 15.C12 | `chino-api POST /api/v1/notices/{noticeId}/read`, `zaentrum-portal POST /api/portal/me/notices/{id}/read` | — |
-| `follow-notification-link` | 15.C4 | — | — |
-| `clear-notifications` | 15.C3, 15.C8, 15.C11 | `chino-api POST /api/v1/notices/read-all`, `chino-api DELETE /api/v1/notices/{noticeId}`, `zaentrum-portal POST /api/portal/me/notices/read-all` and 1 more | — |
-| `get-push-notification` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `see-notifications` | 15.C1, 15.C2, 15.C3, 15.C5, 15.C6, 15.C7, 15.C8, 15.C9, 15.C10, 15.C13 | — | `chino-api GET /api/v1/notices`, `zaentrum-portal GET /api/portal/me/notices` | `notice-poll` |
+| `open-notification` | 15.C4, 15.C11, 15.C12 | build | `chino-api POST /api/v1/notices/{noticeId}/read`, `zaentrum-portal POST /api/portal/me/notices/{id}/read` | — |
+| `follow-notification-link` | 15.C4 | — | — | — |
+| `clear-notifications` | 15.C3, 15.C8, 15.C11 | — | `chino-api POST /api/v1/notices/read-all`, `chino-api DELETE /api/v1/notices/{noticeId}`, `zaentrum-portal POST /api/portal/me/notices/read-all` and 1 more | — |
+| `get-push-notification` | — | later | — | — |
 
 ## Settings and account
 
@@ -572,7 +590,8 @@ A person's settings, reporting a problem, and the account itself. Specified in [
 | File a bug report by itself when the app crashes | system | built | partial | built | built | — | — | [16.4.5](../chino/settings.md#1645-report-a-bug) |
 | Delete one's account and what the server keeps of it | person | built | built | built | built | — | — | [16.5.6](../chino/settings.md#1656-delete-account) |
 | Use the apps and the consoles in one's own language | person | no | no | no | no | no | no | — |
-| See the devices one is signed in on, and sign one out from afar | person | no | no | no | no | — | — | — |
+| See the devices one is signed in on, and sign one out from afar | person | no | no | no | no | — | — | [portal people](../portal/people.md) |
+| See what one's account is limited to: the quality and the streams | person | no | no | no | no | — | — | [portal people](../portal/people.md) |
 
 - Set the audio and subtitle languages titles start in: Samsung: Original and eight fixed languages with texts of its own, not the server's subtitle languages
 - Set how episodes follow one another: auto-skip, auto-play next, the countdown: the phone app has no countdown, and its player reads only auto-play next; the phone and the TVs add auto-skip credits
@@ -585,16 +604,17 @@ A person's settings, reporting a problem, and the account itself. Specified in [
 - Use the apps and the consoles in one's own language: every app and console is in English alone
 - See the devices one is signed in on, and sign one out from afar: signing out is done on the device itself
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `set-play-languages` | 12.C10, 16.C1, 16.C2, 16.C3, 16.C18, 16.C19 | `chino-api GET /api/v1/subtitles/languages` | `audio-language`, `subtitle-language` |
-| `set-binge-watching` | 16.C1, 16.C4 | — | `auto-skip-intros`, `auto-skip-credits`, `auto-play-next`, `binge-countdown` |
-| `reset-settings` | 16.C9 | — | — |
-| `see-app-version` | 16.C8 | — | — |
-| `report-bug` | 16.C7, 16.C10, 16.C11, 17.C14 | `chino-api POST /api/v1/feedback`, `chino-api GET /api/config` | `report-rate-limit`, `report-dedup-window`, `bug-report-target` |
-| `report-playback-bug` | 11.C45, 16.C10 | `chino-api POST /api/v1/feedback` | `report-rate-limit`, `report-dedup-window`, `bug-report-target` |
-| `report-crash` | — | `chino-api POST /api/v1/feedback` | `auto-report-limit`, `report-dedup-window`, `bug-report-target` |
-| `delete-account` | 16.C15, 16.C16, 16.C17 | `chino-api DELETE /api/v1/me`, `zaentrum-portal DELETE /api/portal/me` | — |
-| `choose-interface-language` | — | — | — |
-| `see-own-devices` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `set-play-languages` | 12.C10, 16.C1, 16.C2, 16.C3, 16.C18, 16.C19 | build | `chino-api GET /api/v1/subtitles/languages` | `audio-language`, `subtitle-language` |
+| `set-binge-watching` | 16.C1, 16.C4 | build | — | `auto-skip-intros`, `auto-skip-credits`, `auto-play-next`, `binge-countdown` |
+| `reset-settings` | 16.C9 | — | — | — |
+| `see-app-version` | 16.C8 | build | — | — |
+| `report-bug` | 16.C7, 16.C10, 16.C11, 17.C14 | build | `chino-api POST /api/v1/feedback`, `chino-api GET /api/config` | `report-rate-limit`, `report-dedup-window`, `bug-report-target` |
+| `report-playback-bug` | 11.C45, 16.C10 | build | `chino-api POST /api/v1/feedback` | `report-rate-limit`, `report-dedup-window`, `bug-report-target` |
+| `report-crash` | 16.C20 | build | `chino-api POST /api/v1/feedback` | `auto-report-limit`, `report-dedup-window`, `bug-report-target` |
+| `delete-account` | 16.C15, 16.C16, 16.C17 | — | `chino-api DELETE /api/v1/me`, `zaentrum-portal DELETE /api/portal/me` | — |
+| `choose-interface-language` | 2.C13, 16.C23, 16.C24, 17.C17, H.C18, K.C26, K.C27, N.C15 | build | — | — |
+| `see-own-devices` | P.C15, 16.C22 | build | — | — |
+| `see-own-limits` | P.C4, 17.C16 | build | — | — |
 <!-- end: areas -->

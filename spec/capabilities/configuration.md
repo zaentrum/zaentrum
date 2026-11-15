@@ -305,7 +305,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 - `pipeline-switch`: Admins switch it in the setup checklist and with zae setup pipeline
 - `encoder`: cpu: what cannot pass through costs an x265 encode, hours a title
 - `rendition-ladder`: Every rung is stored beside the library
-- `surround-audio`: Left off until chino-stream keeps it from players that cannot decode it
+- `surround-audio`: Off by default; chino-stream hands the 5.1 rendition only to a player that says it decodes its codec
 - `playlist-subtitles`: Off: the apps draw the subtitle files themselves
 - `live-worker-mode`: shadow asks for the same segments and drops them; a session keeps the pipeline it began on
 - `live-worker-slots`: The pods sharing a GPU, the transcoder's included, stay within its encode-session limit

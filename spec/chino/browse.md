@@ -193,6 +193,7 @@ doesn't have.
 | see all on home | the view in the order by title | the same | the same | — |
 | A phone held sideways | the computer's layout: the chips fill the screen, three posters a line | the rail; four posters a line | — | — |
 | Without the server | — | the banner over the last grid for those filters | — | — |
+| Collections | — | — | — | — |
 
 ## 5.3 Movies on a computer
 
@@ -438,6 +439,67 @@ titles show among the row's.
   Screen readers name the button after the card's title: “actions for
   Sintel”. On a TV, holding OK opens the menu.
 
+### 5.8.1 Collections
+
+A collection is a set of titles that everyone on the server shares: the films of a series
+of films, or a theme somebody put together ([the library](../catalog/library.md#collections),
+[ADR-0021](../../docs/adr/0021-libraries-folders-and-scans.md)). It has a name, a
+description, a poster, and its titles, movies and shows, in
+an order of its own. The catalog and its admins make collections; the apps show them. The
+server gives a person a collection only when they may see two or more of its titles, and
+counts the titles they may see.
+
+- **collections**, the design system's standard button, stands at the end of the movies
+  heading's line, where the watchlist has **create list** (figure 8.5, part 1), at the
+  large size, 42 dp, on a phone and a TV. On a TV it is inside the safe area, and up from
+  the filter bar reaches it. It is there while the server gives the account at least one
+  collection, so it never leads to an empty screen. Shows has no such button: a
+  collection that holds shows is found from movies, and from the shows' own pages
+  ([chapter 6](./title-actions.md)).
+- It opens **collections**, a screen opened from a view ([chapter 2](./frame.md)): on a
+  computer the back arrow, the design system's quiet icon button, stands before the
+  heading, as on a list of the watchlist (figure 8.9, part 1); on a phone the bar shows the
+  back arrow and the name; on a TV the remote's back leaves it. Under the heading stands how
+  many there are: “12 collections”, “1 collection”.
+- The collections stand in the grid of movies (section 5.8), in the alphabetical order of
+  their names, as the server gives them, and more load, 50 at a time, as the person nears
+  the end.
+- **A card** shows the collection's poster, its name on one line, cut with “…”, and where
+  a movie has its year, how many titles it holds: “5 titles”, “2 titles”. Where a
+  collection has no poster, its name stands on the poster's surface in the poster's place,
+  so the grid never shows an empty frame. A card has no status marks and no menu, and
+  holding OK on a TV does what OK does. Choosing it opens the collection (section 5.8.2).
+  Screen readers name it by its name and its count: “Open movies, 5 titles”.
+- The screen has no filter bar: no search, no filters and no sort.
+- Back returns to movies as it was, its search, its filters and its place kept; on a TV the
+  focus is on **collections**. Back from a collection returns to the collections, scrolled
+  as they were, and on a TV the focus is on its card.
+- On the web the screen has an address of its own, so back, a reload and a shared link
+  open it.
+
+### 5.8.2 A collection's page
+
+A collection opens from its card in **collections** and from a title's page
+([chapter 6](./title-actions.md)). It is a screen opened from a view, like a list of the
+watchlist (figure 8.9).
+
+- **The heading** is the collection's name as the catalog writes it, with the back arrow
+  before it on a computer; on a phone the bar shows the back arrow and the name. Under it
+  stands how many titles the collection holds: “5 titles”, “2 titles”.
+- **The description** follows. A long one is cut after six lines on a computer and a
+  phone and after five on a TV, with **read more** and **show less**, as a person's
+  biography is ([chapter 7](./person.md)). A collection without one has none, and nothing
+  says so.
+- **The grid** holds the collection's titles, movies and shows, in the collection's own
+  order, laid out as the grid of movies, each card with its status marks, its name, its
+  year and its menu (section 5.8). There is no filter bar and no sort: the order is the
+  collection's.
+- The titles and the count are those the account may see.
+- On a TV the focus starts on the first title, with the page at its top, and up from the
+  first line reaches **read more** where the description is cut.
+- Back returns to where the person came from: the collections, or the title's page.
+- On the web the page has an address of its own.
+
 ## 5.9 Changes
 
 Every difference between section 5.2 and the target is one change in the
@@ -473,6 +535,8 @@ the tabs are [chapter 2](./frame.md)'s.
 | 5.C18 | Couldn't load, under the view's name | Android TV, Samsung TV | Android TV: over the whole page, the chips too. Samsung TV: “Couldn’t load the library” in red and the error's text, no try again | figure 5.14: the design system's empty state, its couldn't-load kind, in the grid's place, the heading and the filter bar staying; the reason by cause, try again and details | proposed |
 | 5.C19 | More couldn't load | Phone app, Android TV, Samsung TV | Phone app: “Couldn't load more movies.” with try again. Android TV: the grid ends there. Samsung TV: couldn't load takes the grid's place | under the cards loaded, the design system's empty state at its small size, its couldn't-load kind: “couldn't load more movies”, the reason and try again (section 5.10) | proposed |
 | 5.C20 | The count in the filter bar | Web, Phone app, Android TV, Samsung TV | Web, Phone app: “26 movies in all.” under the grid, once all of it is in. Android TV: “You've reached the end — 10 movies.”, “1 movies” for one. Samsung TV: “You’ve reached the end — 10 movies.” | the filter bar's count, in the design system's words: “10” while nothing filters, “9 of 10” while the filters leave nine, from the first page on, with the totals the server gives with it; no line under the last card (figure 5.6, part 4; section 5.8) | proposed |
+| 5.C21 | Collections, from movies | Web, Phone app, Android TV, Samsung TV | no app shows a collection: movies holds the grid of every movie and its filters alone, and the server hands the apps none | Recommended: section 5.8.1: **collections**, the design system's standard button at the end of the movies heading's line, there while the server gives the account at least one collection; it opens **collections**, a screen of its own with the back arrow, “12 collections” under its heading and the collections as cards in the grid of movies, by name, each with its poster, its name and “5 titles”, without status marks and without a menu; a card opens the collection (5.C22); the other choice is a choice inside the movies filter bar, which a phone folds away behind **filters** | proposed |
+| 5.C22 | A collection's page | Web, Phone app, Android TV, Samsung TV | there is no such page | section 5.8.2: the back arrow, the collection's name as the heading, “5 titles” under it, then its description, cut after six lines with **read more** as a person's biography is (section 7.6.3), then its titles, movies and shows, in the collection's own order in the grid of movies, with their status marks and menus, without filters and without a sort; loading, couldn't load and removed as the table of section 5.10 has them | proposed |
 
 ## 5.10 States
 
@@ -533,6 +597,13 @@ Figure 5.14: Movies when they couldn't load, on a phone.
 | No movies in the library | The design system's empty state, its nothing-yet kind, in the grid's place: “no movies yet”, without the filter bar and with nothing to press, as on home ([chapter 4](./home.md)) |
 | Asking again failed | The grid stays as it was, under the design system's warning banner, as [chapter 17](./errors.md) has it: “Couldn't refresh the movies; it shows what was loaded 4 minutes ago.”, with **try again** |
 | The phone app can't reach the server | The banner of [chapter 13](./downloads.md), with the titles the phone loaded under it as they were; with none, figure 5.14 without the sentence, which the banner already says |
+| The collections loading | Nothing for the first 0.4 seconds, then grey cards in the grid's shape under the heading, as in figure 5.12 |
+| The collections couldn't load | The design system's empty state, its couldn't-load kind, under the heading: “couldn't load the collections”, the reason by cause, **try again** and **details**, as in figure 5.14 |
+| No collection for the account | movies has no **collections** button; the screen opened by its address shows the empty state's nothing-yet kind: “no collections yet” |
+| A collection loading | Grey blocks in the shape of the heading, the description and the grid |
+| A collection couldn't load | “couldn't load this collection”, the reason by cause, **try again** and **details** |
+| The collection is gone, or the account may see fewer than two of its titles | The design system's empty state with its empty picture, as in figure 6.22: “this collection isn't in the library anymore” and **back** |
+| Collections: The phone app can't reach the server | The banner of [chapter 13](./downloads.md), with the collections or the collection as the phone loaded them under it; with none, the couldn't-load state without its sentence |
 
 ## 5.11 Words
 
@@ -554,3 +625,11 @@ Figure 5.14: Movies when they couldn't load, on a phone.
 | More couldn't load | couldn't load more movies · couldn't load more shows |
 | Asking again failed | Couldn't refresh the movies; it shows what was loaded 4 minutes ago. · Couldn't refresh the shows; it shows what was loaded 4 minutes ago. · try again |
 | No titles of the kind | no movies yet · no shows yet |
+| The way to the collections, and their heading | collections |
+| Under the heading | 12 collections · 1 collection |
+| A collection's card | its name: Open movies · 5 titles · 2 titles |
+| A collection's card, for screen readers | Open movies, 5 titles |
+| A collection's page | the back arrow, named “back” for screen readers · Open movies · 5 titles · read more · show less |
+| Collections: Couldn't load | couldn't load the collections · couldn't load this collection · try again · details |
+| No collections | no collections yet |
+| Gone | this collection isn't in the library anymore · back |

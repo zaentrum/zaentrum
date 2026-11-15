@@ -1,0 +1,1229 @@
+# Running the platform
+
+This page specifies how the people who run zaentrum are told that something
+is wrong, how the platform sends mail, how its databases are backed up,
+restored and moved to another machine, and how an admin sees what takes the
+room on its volumes. It covers the platform's resource, the operator,
+portal-api, the catalog's writer, the portal's pages and the CLI. The pages
+for the platform's parts, its logs, its events, its database and the support
+bundle stay as they are built.
+
+The section As built describes what the platform does today. The sections after it are
+the target, and the section Changes lists every difference between the two as a numbered
+change. Only a change the owner has approved is built, one change at a time; anything no
+change names stays as it is built.
+
+## Purpose
+
+Somebody runs zaentrum for a household: most often one person, an admin, who
+is seldom a developer of any part of it. This page is for what that person
+needs once the platform is installed: to learn of a failure without looking
+for it, to have the platform send the few mails a household needs, to know
+that the databases are backed up and how to get them back, to take the
+platform to another machine, and to see what fills its volumes.
+
+It serves the goal [Run it oneself](../goals/README.md#run-it-oneself), and
+through it every goal that needs a platform that runs. Four qualities of the
+goals are measured by what this page specifies:
+
+| The platform has to | Today | With this page |
+|---|---|---|
+| tell whoever runs it of a failure before the household notices | a failure is shown in the portal to whoever looks; nothing is sent | five alerts, in the portal's bell for admins and by mail |
+| be back after a dead disk, with little lost | the bundled databases restore into the install that made them | a backup restores into any install of its version or a newer one, from the portal and the CLI |
+| lose nothing of the library | the databases: up to a day; the files: what their storage keeps | the same, said on a page: where the backups are, how old the newest is, and what only the library's own storage keeps |
+| never be left broken by an update | it checks itself after each update; nothing says how an update is undone | an alert when an update fails; in a cluster a backup before each update, and the way back in the documentation. On one machine the updater of [Installing and updating](../platform/install.md) undoes it |
+
+It answers five [expectations](../capabilities/expectations.md#run-it-oneself):
+to back up and restore, to move the server to another machine, to be told when
+something is wrong, to see how much room the library takes and, in part, to
+reach people outside the app. Two decision records carry the reasons:
+[ADR-0019](../../docs/adr/0019-mail-and-alerts.md), mail and alerts, and
+[ADR-0020](../../docs/adr/0020-backup-restore-and-moving.md), backup, restore
+and moving.
+
+## As built
+
+This section says what the platform does as of 15 November 2026, as the code
+of each repository's main branch has it.
+
+### The pages and commands for running the platform
+
+The portal's settings group has seven tiles, for admins alone
+([home page](./home.md)). Five of them are for running the platform:
+
+| Page | Address | What it does | Its routes in portal-api |
+|---|---|---|---|
+| operator | `/portal/operator` | the platform's version, phase, channel and update mode; every part with its image, replicas, state and restarts; scale and restart; apply an update; the self-check's result and **verify now**; the operator's own controller | `GET` and `PATCH /api/portal/operator`, `POST /api/portal/operator/apply-update`, `POST /api/portal/operator/verify`, `POST /api/portal/operator/instances/{name}/scale`, `POST /api/portal/operator/instances/{name}/restart` |
+| logs | `/portal/logs` | a part's container logs, credentials scrubbed, as they come or as a file | `GET /api/portal/debug/pods`, `GET /api/portal/debug/logs` |
+| events | `/portal/events` | the event bus's topics and consumers, and the latest events | `GET /api/portal/debug/kafka/topology`, `GET /api/portal/debug/kafka/events` |
+| database | `/portal/database` | seven chosen tables of the catalog's and the portal's databases, read-only | `GET /api/portal/debug/db/tables`, `GET /api/portal/debug/db/rows` |
+| export | `/portal/export` | a support bundle as one file, credentials scrubbed | `GET /api/portal/debug/support-bundle` |
+
+The first-run checklist, “Set Up Your Server”, stands on the home page for
+admins until one marks it done. It has five steps: Metadata, Library,
+Processing, Devices and People. The bell in the top bar holds notices: what an
+addon tells one person.
+
+The CLI, `zae`, does the same from a terminal: `zae platform status`,
+`controller`, `update`, `restart`, `scale` and `verify`, `zae setup`,
+`zae debug logs`, `events` and `bundle`, and `zae doctor`, which checks an
+instance from outside. It reaches the platform through portal-api's routes
+with a sign-in of its own; it never talks to the cluster.
+
+None of these pages or commands shows a backup, a volume or a certificate, and
+none sends anything.
+
+### No mail is sent
+
+- **Nothing sends mail.** No repository holds code that talks to a mail
+  server, and the platform's resource has no field for one.
+- **An invite is handed over by hand.** An admin adds a person on the People
+  page with a name, a username, a role and a rating cap; no address is asked
+  for. The page then shows the person's invite link once, in a dialog, with
+  “Send Mia this link: with it they choose their own password, then sign in on
+  any app with their username.” and **Copy Invite Link**. The link works once,
+  for 7 days (`PORTAL_INVITE_TTL`).
+- **A forgotten password needs an admin.** The bundled identity provider's
+  realm is made with password reset allowed, so its sign-in page shows “Forgot
+  password?”. The realm has no mail server, so the link that page promises
+  cannot be sent. The person asks an admin, who makes them a new invite link
+  on the People page, or resets the password in the identity provider's own
+  console.
+- **The first admin has a placeholder address**, at the domain
+  `zaentrum.local`, from the realm's import.
+- **The repository `notifications` is an idle scaffold.** Its README calls it
+  a service that hands pushes to Apple's and Google's push services and to
+  browsers. Its server answers a health check and a metrics route and nothing
+  else; every sender in it returns “not implemented”. The operator's chart
+  does not hold it, and no other repository names it.
+
+### What is known, and who is told
+
+The operator writes what it knows into the status of the platform's resource,
+every 30 seconds:
+
+| In the status | Says |
+|---|---|
+| `phase` | `Reconciling`, `Progressing`, `Ready`, `Degraded` when a rollout has given up, `Restoring`, `Error` |
+| `components[]` | each part's name and image and whether it is ready; not since when |
+| the condition `Ready` | why not: `ComponentsNotReady`, `RolloutStalled` with the parts' names, `Restoring` |
+| `verification` and the condition `Verified` | the self-check after each update and on request: the checks of `zae doctor` from outside. Its check `tls` warns when the certificate it is served ends within 14 days |
+| the condition `TLS` | how the hosts are served. With a certificate of the platform's own, the date it ends on is inside the sentence |
+| `backup` and the conditions `Backup` and `Restore` | the newest dump, the last failure, the dumps kept, and where a restore stands |
+| `currentVersion`, `availableUpdate` | the version applied, and a newer one on the channel |
+
+The portal's operator page shows the phase, the parts and the self-check.
+portal-api reads neither the backups nor the certificate from the status.
+Nothing compares any of it with a limit, and nothing is sent: an admin learns
+of a failure by opening the page. The platform itself puts nothing into the
+bell: a notice comes from an installed addon, is for one person, and cannot
+be addressed to the admins.
+
+What the operator may read in a cluster is what its role gives it: it reads
+and writes Deployments, Jobs, CronJobs, Secrets, ConfigMaps and claims, and
+it reads pods. So it knows the size a claim asks for and the size it is bound
+to, and it reads the certificate's Secret on every pass. It holds no
+permission on nodes. How full a volume is, only its node knows, and the
+operator cannot ask it.
+
+### Backups and restoring today
+
+- **What is backed up.** Where the bundled Postgres keeps its data on a
+  claim, as every new install does, a scheduled job dumps the four platform
+  databases while the platform serves: `chino` (watch progress, history,
+  watchlists and likes), `katalog` (the catalog), `keycloak` (the bundled
+  identity provider: accounts, password hashes, roles, clients) and `portal`
+  (the registry, addons, invites, notices, the setup mark).
+- **When.** Every day at midnight (`spec.backup.schedule`, `@daily`), in the
+  time zone of the cluster. A run that was missed while the cluster was down
+  still runs within six hours.
+- **Where.** A dump is a directory on the claim `backups` (`spec.backup.size`,
+  5Gi; or an existing claim named in `spec.backup.claimName`), named after the
+  moment it began, in UTC, such as `2026-11-15T00-00-05Z`. It holds
+  `globals.sql` (the database's roles but the superuser), one file for each
+  database in pg_dump's custom format, and `SHA256SUMS`. The newest 7 stay
+  (`spec.backup.retention`). The claim is kept when the platform is deleted.
+- **What a dump does not say.** Nothing in it names the platform or the
+  version that made it, and it does not hold the platform's resource.
+- **What the status says.** `status.backup` has `lastSuccess`, `lastDump`,
+  `lastFailure`, the names of the `dumps` and the last `job`. The condition
+  `Backup` is `Succeeded` with the dump's size and the claim's free space,
+  `Failed` with the run's reason, `Disabled`, or `Scheduled` before the first
+  run.
+- **Where nothing is backed up.** An install whose Postgres still runs on a
+  volume that goes with its pod, and an install with external databases
+  (`databases.mode: external`).
+- **Restoring.** The annotation `zaentrum.io/restore-request` on the
+  platform's resource, with a dump's name, asks for one restore. The operator
+  stops every part that uses the database, portal-api and the identity
+  provider among them, and suspends the backups; a job makes sure the dump is
+  whole and refuses it otherwise, changing nothing; it recreates each
+  database; the parts start again and the realm job runs over the restored
+  realm. The phase is `Restoring` meanwhile and the platform is down.
+  `status.backup.restore` and the condition `Restore` say where it stands:
+  `Stopping`, `Running`, `Succeeded`, `Failed` or `Refused`. The restore
+  refuses a dump that holds any file besides the roles, the four databases
+  and the checksums.
+- **Who can do it.** Whoever may change the resource with `kubectl`. The
+  portal and the CLI show no backup and start no restore.
+- **What a dump leaves out.** The platform's Secrets, the library's files,
+  the event broker's log and the cache.
+
+### Another machine
+
+The operator's README describes one way, by hand: keep the platform's six
+generated Secrets as a file, apply them in the new namespace before the
+resource, bring the claim with the dumps along, name it in
+`spec.backup.claimName`, and restore with the annotation. Without the old
+Secrets the restored identity database does not fit the new install: it
+holds the old password of the identity provider's own admin, which the
+operator's jobs sign in with, and the old secret of the `zaentrum-manager`
+client.
+
+The one-container install keeps all three claims in one Docker volume. Its
+documentation tells the admin to copy the dumps and the Secrets off the
+machine by hand. A container that is replaced starts an empty platform,
+unless it was started on a named volume under a fixed host name
+([persistence](../../docs/self-hosting.md#persistence)).
+
+Neither the portal nor the CLI has a part in any of it.
+
+### Room
+
+- The catalog keeps, for each title, the size of its originals on disk and
+  the size of its package, and for each extra the size of its file and of its
+  package. The catalog console's list shows a title's two sizes, and its
+  rules report adds them up for the titles that break a rule. No query adds
+  up the library, and no screen shows a total.
+- No part asks a filesystem how much room is left, but the packager for its
+  temporary folder, and the backup's run for the backups' claim: the `Backup`
+  condition repeats that figure in its sentence.
+- The first-run checklist names the claim and the folder of the library, not
+  their size.
+
+### The library's files and the catalog
+
+- A library is in one of two layouts, by the catalog's setting
+  `library.layout`: `legacy`, the default, or `v2`. Only in the `v2` layout
+  does each title's folder carry its record: its identity, its texts and
+  images as the catalog last wrote them, its sources, versions and packages,
+  each with checksums ([the record](../../docs/library/record.md)).
+- A scan reads no record. It walks one folder, the arrivals in the `v2`
+  layout, and takes every video and audio file it does not know by its path
+  or its size and hash as a new title. Over an empty catalog it brings back
+  the titles whose originals are still in that folder, as new titles to be
+  packaged again; it finds no package.
+- A rebuild of the catalog from the records is a tool of the schemas
+  repository, which the migration to the `v2` layout uses to compare a tree
+  with the catalog. Nothing in the platform starts it: no command, no route,
+  no screen.
+- What the record does not hold, by the catalog's code: a title's age rating,
+  the single fields a person locked, a hold on an original, track languages
+  set by hand, a chosen subtitle default, the catalog's settings and rules,
+  and the log of what was deleted. The accounts, the watch history and the
+  lists are in other databases and in no file of the library.
+
+## Mail
+
+Mail is the platform's one way to reach somebody outside its apps. It goes
+through an SMTP server the admin names. Without one the platform sends
+nothing, everything else works as today, and each screen that would have sent
+a mail says so.
+
+### The settings
+
+Mail is set in the platform's resource, with the same names in the chart's
+values:
+
+| Field | Values | Default |
+|---|---|---|
+| `spec.mail.host` | the name of an SMTP server | none: no mail is sent |
+| `spec.mail.port` | 1 to 65535 | 587 with `starttls`, 465 with `tls`, 25 with `none` |
+| `spec.mail.encryption` | `starttls`, `tls`, `none` | `starttls` |
+| `spec.mail.from` | the sender's address | none; the resource is refused when `host` is set and this is not |
+| `spec.mail.fromName` | the sender's name as a mail program shows it, at most 60 characters | `zaentrum` |
+| `spec.mail.secretName` | a Secret in the platform's namespace with the keys `username` and `password` | none: the platform signs in to the server with no name |
+| `spec.mail.alertsTo` | at most 10 addresses that get every alert mail | none |
+
+Mail is **set up** when `host` and `from` are set. The operator then:
+
+1. gives portal-api the settings as environment variables
+   (`PORTAL_MAIL_HOST`, `PORTAL_MAIL_PORT`, `PORTAL_MAIL_ENCRYPTION`,
+   `PORTAL_MAIL_FROM`, `PORTAL_MAIL_FROM_NAME`, `PORTAL_MAIL_ALERTS_TO`,
+   `PORTAL_MAIL_USERNAME` and `PORTAL_MAIL_PASSWORD` from the Secret) and the
+   platform's public address (`PORTAL_PUBLIC_URL`), which the links in a mail
+   start with;
+2. with the bundled identity provider, has the realm job write the server,
+   the port, the encryption, the sender, the user and the password into the
+   realm's mail settings, and switch the realm's password reset on; without
+   mail the job clears them and switches the reset off;
+3. says in the condition `Mail` where it stands: `NotSetUp`, `SecretMissing`
+   when the Secret named is not there or lacks a key, `Configured`.
+
+Mail is **ready** once the condition is `Configured` and the portal-api that
+answers runs with the settings.
+
+### What is sent
+
+| Mail | Sent by | To | When |
+|---|---|---|---|
+| an invite | portal-api | the address of the person's account | an admin adds the person, or makes them a new invite link, with **send the link by mail** on |
+| a password reset link | the bundled identity provider | the address of the person's account | the person asks for it on the sign-in page |
+| an alert, and its end | portal-api | every admin who has an address, and the addresses of `spec.mail.alertsTo` | an alert starts or ends (section Alerts) |
+| a test mail | portal-api | the address the admin names | **send test mail** on the mail page |
+
+Nothing else is sent. What an addon tells a person stays in the bell.
+
+Every mail is plain text in UTF-8, to one address, with the headers `From`,
+`To`, `Subject`, `Date`, `Message-ID` and `Auto-Submitted: auto-generated`. It
+carries no picture and nothing that reports whether it was opened. The words
+are in the section Words.
+
+### Sending
+
+- portal-api opens one connection for each mail: 10 seconds to connect, 30
+  seconds in all.
+- With `starttls` the server has to offer encryption after the greeting; a
+  server that does not is refused, never spoken to in the clear. With `tls`
+  the connection is encrypted from the start. With `none` nothing is
+  encrypted, and the mail page warns. The server's certificate is checked
+  against the authorities the image trusts; there is no setting to skip the
+  check.
+- portal-api signs in when a user is set, and only then.
+- An invite and a test mail are sent while the admin waits: the answer says
+  whether the server took the mail, and why not. An alert mail that fails is
+  tried again after 5 minutes, three times in all, and then given up.
+- portal-api writes into its log that a mail of a kind was sent or refused,
+  never an address and never the text.
+
+### People and addresses
+
+A person's address is the address of their account in the identity provider.
+One address belongs to one account.
+
+- **On the people page** the form to add or change a person has the field
+  **email**, optional. portal-api refuses an address another account has, and
+  one that is not an address. An account that administers the identity
+  provider itself is changed in the provider's console, as today, its address
+  included.
+- **A person's own address** is theirs to set on the identity provider's
+  account page ([people](./people.md)). The mail page links the admin who is
+  signed in to it. An account the people page does not change, such as the
+  first admin's of an install made with one, gets its address there.
+- **The placeholder address** that the realm's import gave the first admin
+  counts as no address: nothing is mailed to it.
+- **With an external identity provider** the platform keeps no addresses.
+  Invites and password resets are the provider's own, and alert mail goes to
+  `spec.mail.alertsTo` alone.
+
+When an admin adds a person, or makes them a new invite link, the dialog has
+the switch **send the link by mail**. It is shown when mail is ready and the
+person has an address, and it is on at first. portal-api then sends the
+invite and still answers the link, which the page shows once, as today.
+
+| Route | Takes | Answers |
+|---|---|---|
+| `POST /api/portal/people` | as today, and `email` (optional), `sendInvite` (true or false, default false) | as today, and `mail`: `sent`, `not-set-up`, `no-address` or `failed`, with `mailError`, a sentence, when it failed |
+| `PATCH /api/portal/people/{id}` | as today, and `email`; an empty one removes the address | the person |
+| `POST /api/portal/people/{id}/invite` | `send` (true or false, default false) | the link as today, and `mail` and `mailError` as above |
+
+### The sign-in page
+
+With mail ready and the bundled identity provider, the sign-in page shows
+“Forgot password?” as today. It leads to the identity provider's own page,
+which mails a link that works for 5 minutes, the realm's time for such a
+link today. Without mail the page shows no link, and under the form:
+“Forgot your password? Ask an admin for a new invite link.”
+
+### The mail page
+
+The settings group gets a tile, **mail**, “Mail server, and what is sent”,
+which opens `/portal/mail`. The page is a form in four parts:
+
+1. **server**: the fields **server**, **port**, **encryption** (the design
+   system's select: “STARTTLS”, “TLS from the start”, “none”), **user** and
+   **password**. The password is never shown: once one is kept the field is
+   empty with “A password is kept. Type a new one to replace it.” under it.
+2. **sender**: the fields **address** and **name**.
+3. **what is sent**: three rows, “Invite links”, “Password reset links” and
+   “Alerts”, each with one sentence, and the design system's switch **mail
+   alerts** on the third (`spec.alerts.mail`).
+4. **alerts go to**: a table with the columns **who** and **address**: every
+   admin with their address or “no address”, then the further addresses.
+   Under it are the link **change your address**, which opens the identity
+   provider's account page for the admin signed in, and the field **further
+   addresses**, which takes up to 10.
+
+The buttons are **save** (emphasized), **send test mail** (standard) and
+**remove mail settings** (quiet). **send test mail** asks for an address in a
+dialog, with the admin's own filled in. **remove mail settings** asks first,
+in a dialog with a danger button.
+
+**save** writes the settings into the platform's resource. A new password is
+written into a new Secret, which the resource then names, the way an addon's
+secret values are kept. portal-api labels that Secret `zaentrum.io/mail`, and
+the operator removes one with the label that the resource has not named for
+10 minutes. The page says “Applying the settings…” until mail is ready,
+about a minute.
+
+| Route | Does |
+|---|---|
+| `GET /api/portal/mail` | the settings without the password, `passwordSet`, `setUp`, `ready`, `identity` (`bundled` or `external`), `alertMail`, and `recipients`: each admin's name and address, and the further addresses |
+| `PUT /api/portal/mail` | takes `host`, `port`, `encryption`, `from`, `fromName`, `user`, `password` (left out: the one kept stays) and `alertsTo`; answers the resource's new generation |
+| `DELETE /api/portal/mail` | removes `spec.mail` |
+| `POST /api/portal/mail/test` | takes `to`; sends the test mail; 200, or 502 with the reason as a sentence |
+
+All four are for admins.
+
+## Alerts
+
+An alert says that one of five things is wrong. The list is fixed. Each alert
+shows in the portal's bell for admins, and where mail is set up it is mailed
+when it starts and when it ends.
+
+### The five alerts
+
+| Alert | It starts when | Its setting | Default | Values |
+|---|---|---|---|---|
+| A part is not ready | a part of the platform has not been ready for this many minutes | `spec.alerts.partNotReadyMinutes` | 10 | 1 to 1440 |
+| A volume is almost full | a volume is at least this full, in per cent | `spec.alerts.volumeFullPercent` | 90 | 50 to 99 |
+| The certificate ends soon | the platform's certificate ends within this many days, or has ended | `spec.alerts.certificateDays` | 14 | 1 to 90 |
+| No good backup | the last backup failed, or the newest good one is older than this many days | `spec.alerts.backupAgeDays` | 2 | 1 to 30 |
+| An update failed | a rollout has given up, or the self-check after an update failed; on one machine, the updater went back or could not start | none | | |
+
+`spec.alerts.mail` (true or false, default true) says whether alerts are
+mailed. Every alert shows in the bell whatever it says.
+
+### Where each fact comes from
+
+Every fact is in the status of the platform's resource, which portal-api
+reads as itself; on a one-machine install one more is in the updater's
+report, which portal-api reads the same way. portal-api asks no other
+service: it reaches the catalog's writer only with the sign-in of an admin,
+and an alert is checked while nobody is signed in.
+
+| Alert | The status it reads | Who writes it |
+|---|---|---|
+| A part is not ready | `status.components[]`: `ready` and `notReadySince` | the operator, from the parts' Deployments, on every pass |
+| A volume is almost full | `status.storage.volumes[]`: `sizeBytes`, `freeBytes`, `filesystem` | the operator, from the measuring jobs (below) |
+| The certificate ends soon | `status.certificate.notAfter` | the operator, from the Secret of `spec.tls`, on every pass |
+| No good backup | `status.backup.lastSuccess`, the condition `Backup` | the operator, from the backups' runs, as today |
+| An update failed | the condition `Ready` with the reason `RolloutStalled`; `status.verification`; on a one-machine install the updater's report ([Installing and updating](../platform/install.md), I.C17) | the operator, as today; the updater |
+
+The operator adds three things to the status:
+
+- **`status.components[].notReadySince`**: the time a part was first seen
+  not ready; empty while it is ready.
+- **`status.certificate`**: `notAfter`, the time the certificate ends, and
+  `names`, the names it is for. It is there when the platform has a
+  certificate of its own (`spec.tls`) that can be read, and absent otherwise.
+- **`status.storage`**: what the measuring jobs found.
+
+### Measuring
+
+The operator cannot see how full a volume is. So each volume is measured by a
+short job that mounts it:
+
+- The chart has one measuring job for each claim the platform uses: the
+  library's (`media`), the backups', and the event broker's where it has a
+  claim. Each runs every hour, one at a time, mounts its claim read-only, and
+  reports the filesystem's size, what is free, and the filesystem's id.
+- The library's job also asks the bundled Postgres for the size of each
+  platform database, and for the size, the free space and the filesystem id
+  of the volume its data is on: the database server reads those itself, for
+  its superuser.
+- The backups' job also lists the dumps on the claim, the newest 30 with
+  their size, the version in their `backup.json`, whether they are whole (the
+  checksums file is there) and whether this platform made them.
+- The operator reads each job's result as it reads a backup's, and writes:
+
+  | Field | Holds |
+  |---|---|
+  | `status.storage.volumes[]` | `name` (`media`, `postgres-data`, `backups`, `kafka`), `claim`, `sizeBytes`, `freeBytes`, `filesystem`, `measuredAt` |
+  | `status.storage.databases[]` | `name`, `bytes` |
+  | `status.storage.request` | the last `zaentrum.io/storage-request` answered |
+  | `status.backup.sets[]` | `name`, `bytes`, `version`, `whole`, `own`, newest first |
+  | the condition `StorageMeasured` | `Measured`, or `Failed` with the job's reason; the figures before it stay, with their time |
+
+- The annotation `zaentrum.io/storage-request` on the resource, with a value
+  the operator has not answered, starts every measuring job at once. The
+  operator also measures the backups' claim when a backup has ended.
+- No measuring job starts while a restore runs.
+
+Two volumes that report the same filesystem id are on one disk: they have one
+size and one free space, and they are one alert.
+
+### When an alert starts and ends
+
+portal-api reads the status every 60 seconds and keeps each alert in a table
+of its own: its kind, what it is about, when it started, when it ended, and
+what was mailed. One alert of a kind can be active for one subject. Where
+portal-api runs more than once, the write that starts or ends an alert
+decides which of them sends its mail.
+
+| Alert | About | Starts | Ends |
+|---|---|---|---|
+| A part is not ready | the part | `ready` is false and `notReadySince` is older than the setting. Not counted: a part the admin scaled to 0 (`spec.replicas`), and every part while the phase is `Restoring` | the part is ready |
+| A volume is almost full | the disk: every volume with that filesystem id | size less free, over size, is at or above the setting | it is below the setting |
+| The certificate ends soon | the certificate | `notAfter` is within the setting, or past | `notAfter` is later than that |
+| No good backup | the backups | the condition `Backup` is `Failed`; or `lastSuccess` is older than the setting; or there is none and the platform is older than the setting. Not where backups are off or the databases are external | a backup has succeeded within the setting |
+| An update failed | the update | `Ready` is false with `RolloutStalled`; or the last self-check was started by an update and ended `Failed` or `Error`; or, on a one-machine install whose updater reports to the platform, its last update went back or did not start | none of the three holds |
+
+While an alert is active its text is written from the status at each check,
+so the figures in it are current; once it has ended it keeps its last text.
+
+A platform whose resource is younger than 1 hour raises no alert. A platform
+that the operator does not run has no status to read: it raises none, and the
+alerts page says so.
+
+### In the bell
+
+The portal's bell shows an admin the alerts above the notices, under the
+heading **alerts**, with the notices under **notices** when there are both.
+An alert has its title, its text, how long ago it started or ended, and
+**open**, which leads to the page that explains it:
+
+| Alert | **open** leads to |
+|---|---|
+| A part is not ready, An update failed | the operator page |
+| A volume is almost full | the storage page |
+| The certificate ends soon | the alerts page |
+| No good backup | the backups page |
+
+- An alert that has ended stays in the bell for 7 days, its title starting
+  with “Ended:”, and then leaves it.
+- The bell's number counts the unread notices and the alerts the admin has
+  not seen since they last changed. Opening an alert, or the bell's “Mark All
+  Read”, marks it seen.
+- An alert cannot be deleted from the bell.
+- The bells of the chino apps do not show alerts.
+
+### By mail
+
+- When an alert starts, portal-api sends one mail to every admin who has an
+  address and to every address of `spec.mail.alertsTo`. When it ends, it
+  sends one more to the same addresses.
+- For the same alert about the same subject, a start mail is sent at most
+  once in 24 hours. An alert that starts again sooner shows in the bell and
+  is not mailed, and neither is its end. So one alert sends two mails a day
+  at most: that it started, and that it ended.
+- No mail is sent while mail is not set up, while `spec.alerts.mail` is
+  false, or when nobody has an address. The alerts page says which.
+
+### The alerts page
+
+The settings group gets a tile, **alerts**, “What is watched, and what is
+wrong”, which opens `/portal/alerts`. The page has two parts.
+
+**what is watched** is a table of the five alerts with the columns **alert**,
+**when** and **now**. **when** holds the threshold in a number field, **now**
+what the status says at the moment, such as “all 17 parts are ready” or “the
+fullest is at 62 %”, or why an alert is not watched. **save** writes the
+thresholds.
+
+**alerts** is the design system's table of the alerts of the last 90 days,
+the active ones first, then the newest: **state** (“active”, “ended”),
+**alert** (its title, with its text under it), **started**, **ended** and
+**mail**, which says what was sent or why nothing was. The design system's
+filter bar above it has **active** and **last 90 days**; it opens on
+**active** when an alert is active, and on **last 90 days** otherwise.
+
+| Route | Does |
+|---|---|
+| `GET /api/portal/alerts` | the alerts of the last 90 days, each with `id`, `kind`, `about`, `title`, `text`, `link`, `startedAt`, `endedAt`, `mail` and `seen`; `unseen`, their number; `watched`, the five with their setting and what the status says now |
+| `PATCH /api/portal/alerts/settings` | takes any of the four thresholds and `mail`; writes `spec.alerts` |
+| `POST /api/portal/alerts/{id}/read`, `POST /api/portal/alerts/read-all` | marks one alert, or all, seen by the admin who asks |
+
+All are for admins.
+
+### What a one-machine install sees
+
+On one machine every claim is a folder of one disk. The measuring jobs then
+report one disk three times, and the platform shows and alerts it once. It
+sees its own parts, its own certificate where it has one, its backups and
+its updates.
+
+It does not see: the machine's other folders and its other disks, the disk's
+health, the machine's memory and processor, a certificate that a proxy in
+front of the platform serves, and itself being switched off. An alert is
+raised by portal-api: while portal-api, the operator or the whole machine is
+down, none is raised.
+
+## Backups
+
+### The set
+
+A backup is one set, a directory on the backups' claim, that restores into
+any install of the same version or a newer one. It holds what it holds today
+and one file more:
+
+| File | Holds |
+|---|---|
+| `backup.json` | what made the set: `v` (1), `createdAt`, `platform` (`name`, `uid`, `version`, `operator`), `databases` (each with its tables and bytes), `resource` (the `spec` of the platform's resource as it was), `secrets` (the names of the Secrets the resource refers to, never a value), `addons` (each addon's name, chart and version) |
+| `globals.sql` | the database's roles but the superuser, as today |
+| `chino.dump`, `katalog.dump`, `keycloak.dump`, `portal.dump` | the four databases, as today |
+| `SHA256SUMS` | the checksum of every file above, `backup.json` included |
+
+The operator keeps what a job cannot know (the platform, the resource, the
+Secrets' names, the addons) in a ConfigMap, which the backup's job reads; the
+job adds the time and the databases.
+
+A set does not hold:
+
+- **The platform's Secrets.** An install into which a set is restored keeps
+  its own (section Restoring).
+- **The library's files.** They are backed up with the storage they are on
+  (section Moving to another machine).
+- **An addon's own data**, the event broker's log and the cache.
+
+### When a backup is made
+
+- **On its schedule**, as today: `spec.backup.schedule`, every day at
+  midnight by default, the newest `spec.backup.retention` kept, 7 by default.
+- **On request.** The annotation `zaentrum.io/backup-request` on the
+  resource, with a value the operator has not answered, starts one backup at
+  once from the schedule's own job. It is not started while another backup
+  or a restore runs, and it is refused where backups are off.
+  `status.backup.request` is the value answered.
+- **Before an update.** Before the operator applies another version than the
+  one that runs, where backups are on, it makes a backup and applies the
+  update when the backup has ended, after 30 minutes at the latest. A backup
+  that fails does not stop the update; the `Backup` condition says that it
+  failed. Not on a one-machine install: there the updater keeps a copy of
+  the databases' files itself while it updates
+  ([Installing and updating](../platform/install.md)).
+
+### Where the backups are
+
+The backups are on the claim the resource names, as today: the platform's own
+claim `backups`, or an existing one in `spec.backup.claimName`. The
+documentation tells admins to put that claim on storage apart from the
+databases, and on a one-machine install to copy the sets off the machine.
+
+### The backups page
+
+The settings group gets a tile, **backups**, “Backups of the databases, and
+restoring”, which opens `/portal/backups`. The page is the design system's
+worklist, from top to bottom:
+
+1. **The summary**, four fields at the top: **last backup** (when, and its
+   size), **where** (the claim, its size and what is free), **schedule** and
+   **kept**.
+2. **Warnings**, each one of the design system's banners above the table:
+   - an error banner when the last backup failed, or when no good backup is
+     newer than `spec.alerts.backupAgeDays` days;
+   - a warning banner when the backups' claim and the databases' are on one
+     disk;
+   - an information banner when backups are off.
+3. **The buttons**: **back up now** (standard), **settings** (quiet) and
+   **look again** (quiet), which has the operator list what the claim holds.
+4. **The table** of the backups, newest first, with the columns **made**,
+   **size**, **version** and **state** (“whole”, “incomplete”), and
+   **restore** in each row. A set another platform made says so under its
+   date.
+5. **The last restore**, under the table: what was restored, when, and how
+   it ended.
+
+**settings** opens a dialog: the switch **back up on a schedule**; the
+select **how often** (“every day”, “every 12 hours”, “every 6 hours”, “every
+week”, “another schedule”, which shows a field for a cron schedule); the
+number field **keep** (1 to 365); and the field **claim**, empty for the
+platform's own. The claim's size and its storage class are set in the
+resource alone.
+
+### The backups' interface
+
+| Route | Does |
+|---|---|
+| `GET /api/portal/backups` | `available` and, when not, `reason` (`no-operator`, `external-databases`); `platform`, the name to type; `version`; `enabled`, `schedule`, `retention`; `claim` (`name`, `sizeBytes`, `freeBytes`, `withDatabases`, `measuredAt`); `state` (`ok`, `failed`, `old`, `none-yet`, `off`, `running`); `last` (`name`, `at`, `bytes`); `failure` (`at`, `reason`); `backups[]` (`name`, `madeAt`, `bytes`, `version`, `whole`, `own`, `restorable`: `yes`, `newer`, `unknown-version`, `incomplete`); `restore`, the last one, as `status.backup.restore` has it |
+| `PATCH /api/portal/backups` | takes any of `enabled`, `schedule`, `retention`, `claimName`; writes `spec.backup` |
+| `POST /api/portal/backups` | a backup now: sets `zaentrum.io/backup-request`; 202, or 409 with the reason |
+| `POST /api/portal/backups/look` | sets `zaentrum.io/storage-request`; 202 |
+| `POST /api/portal/backups/{name}/restore` | takes `confirm`, the platform's name as typed, and `anyVersion` (true or false); sets the restore's annotations; 202 with the request's value; 400 when the name is not the platform's; 404 for a set the claim does not hold; 409 while a restore runs or when the version rule refuses it |
+
+All are for admins. The CLI has the same:
+
+| Command | Does |
+|---|---|
+| `zae backup list [--look] [--json] [--setup-code CODE]` | the summary and the table; `--look` has the claim read first |
+| `zae backup now [--wait]` | a backup now; `--wait` follows it to its end |
+| `zae backup set [--on\|--off] [--schedule CRON] [--keep N] [--claim NAME]` | the settings |
+| `zae backup restore <name> [--claim NAME] [--any-version] [--yes] [--wait] [--timeout 30m] [--setup-code CODE]` | a restore (section Restoring) |
+
+With `--setup-code`, `list --look` and `restore` use the first-run page's
+routes (section Moving to another machine), for an install nobody has an
+account on yet.
+
+## Restoring
+
+A restore sets the four databases back to a set. Everything written since
+the set was made is lost. The library's files are not touched.
+
+### What a restore does
+
+The operator does what it does today, with two steps more, the second and
+the sixth:
+
+1. It reads the request: `zaentrum.io/restore-request` with the set's name
+   and, after a `#`, a value of its own so that one set can be restored
+   twice.
+2. **It checks the version**, before anything stops (below). It reads the
+   set's version from `status.backup.sets[]`; for a set that is not listed
+   there it has the backups' claim measured first. A set the claim does not
+   hold is refused at this step, with nothing stopped.
+3. It stops every part that uses the database and suspends the backups and
+   the measuring.
+4. The restore's job makes sure the set is whole: its files are those its
+   checksums list, every checksum matches, and every database can be read.
+   `backup.json` may be there or not. A set that is not whole is refused, and
+   nothing is changed.
+5. It recreates each database from the set.
+6. **It brings the identity provider in step with this install**, where the
+   provider is the bundled one: the provider's own admin signs in with this
+   install's Secret again, and the `zaentrum-manager` client has this
+   install's secret. The operator regains the admin with the provider's own
+   recovery, run against the restored database while the provider is
+   stopped, and removes what the recovery made.
+7. It starts the parts. The realm job runs as after every restore: it writes
+   the sign-in addresses of this install's name, the people client's secret
+   and, where mail is set up, the mail settings.
+
+### The version rule
+
+| The set's version | The platform's version | The restore |
+|---|---|---|
+| a release | the same release or a newer one | goes on |
+| a release | an older release | is refused |
+| a moving tag, such as `latest` | the same moving tag | goes on |
+| anything else: no `backup.json`, or a release on one side and a moving tag on the other | | is refused, unless the annotation `zaentrum.io/restore-any-version` holds the set's name |
+
+Releases are compared as their numbers. A set of an older version is brought
+up to date by the parts themselves: each brings its database to its own
+version when it starts, as after an update.
+
+### From the portal
+
+**restore** in a row of the backups page opens the design system's dialog:
+
+- the title names the set by its date;
+- three sentences say what happens: the platform goes down for a few
+  minutes; the databases are set back and everything written since is lost;
+  the library's files are not set back;
+- a sentence says who signs in again;
+- a set another platform made says so, and that the accounts afterwards are
+  that platform's;
+- a set whose version cannot be compared has a checkbox to restore it all
+  the same; a set of a newer version cannot be restored, and the dialog says
+  to update first;
+- the admin types the platform's name into a field. **restore**, a danger
+  button, stays off until the name matches.
+
+A restore stops portal-api with the other parts, so the page cannot follow
+it. From the moment the restore is accepted the page shows “restoring” and
+asks portal-api every 10 seconds. While nothing answers, it stays. When
+portal-api answers again, the page says that the restore has ended and
+offers **sign in**: a sign-in made after the set was made is gone with what
+was written since. After signing in, the backups page shows how the restore
+ended under **the last restore**.
+
+### From the CLI
+
+`zae backup restore <name>` shows the same sentences and asks for the
+platform's name, unless `--yes` is given. With `--wait` it follows the
+restore: it prints one line while the platform is down, and when portal-api
+answers again it prints the result. Where its own sign-in is gone with the
+restore it says so, asks to sign in again, and ends with the exit code for
+“could not find out”.
+
+### What a restore leaves as it is
+
+- **The platform's resource.** A restore changes no setting of the install.
+- **The Secrets** of the install.
+- **The library's files.** A title added, packaged again or deleted after
+  the set was made is on the volume as it is now, and in the catalog as it
+  was then. The catalog console's check of a title's files finds one that no
+  longer matches.
+
+## Moving to another machine
+
+A platform moves by a restore into a new install. The new install has its
+own Secrets; the set brings the databases, and with them the accounts; the
+library's files are brought by the admin.
+
+```mermaid
+sequenceDiagram
+    participant A as Admin
+    participant O as Old machine
+    participant N as New machine
+    A->>O: back up now, if it still runs
+    A->>N: install zaentrum, the same version or a newer one
+    A->>N: bring the sets, and the library's files
+    A->>N: restore from a backup, on the first run, with the platform's name typed
+    N->>N: stop, check, restore, bring the identity provider in step, start
+    A->>N: sign in with an account of the old platform
+```
+
+1. **The newest set is what moves.** If the old machine still runs, the
+   admin presses **back up now** first.
+2. **A new install**, of the same version or a newer one, on the new
+   machine, with its own generated Secrets.
+3. **The sets come along.** Either the new install is pointed at the claim
+   that holds them (**claim** on the first-run page and in the backups'
+   settings, `--claim` on the CLI, `spec.backup.claimName`), or the sets'
+   directories are copied into the new install's own claim. On one machine
+   `zae machine restore` copies them from a folder.
+4. **The first run offers it**: the first-run page, before anybody has an
+   account, and the setup checklist, for an admin who is signed in (below).
+5. **The restore**, as the section Restoring has it. It refuses a set of a
+   newer version.
+6. **Afterwards** the accounts are the old platform's, and whoever restored
+   signs in with theirs. An account made on the new install before the
+   restore is gone with its databases.
+
+### The first run
+
+- **The setup checklist** ends with the line “Moving from another machine?”
+  and **restore from a backup**, which opens the backups page. **look
+  again** lists what the claim holds, also on an install that has made no
+  backup yet.
+- **The first-run page**, where an install has one
+  ([Installing and updating](../platform/install.md), I.C14), has the same
+  line and the quiet button **restore from a backup** under its form. The
+  button puts a second form in the place of the first: **setup code**,
+  **claim** (empty for the platform's own) and the standard button **look
+  for backups**. The sets are then listed as on the backups page, each with
+  **restore**, which opens the restore's dialog. **back** brings the first
+  form again.
+
+The first-run page's two routes for it work without a sign-in, as its own
+do:
+
+| Route | Takes | Answers |
+|---|---|---|
+| `POST /api/portal/first-run/backups` | `code`; `claimName` (optional) | names the claim where one is given, and has it read: `{"looking": true}` until that is done, 2 minutes at most, then `platform`, `version` and `backups[]` as `GET /api/portal/backups` has them. Asked again with the same body, it answers where it stands |
+| `POST /api/portal/first-run/restore` | `code`; `name`, the set; `confirm`, the platform's name as typed; `anyVersion` | as `POST /api/portal/backups/{name}/restore` |
+
+Both answer 404 where the first-run page is not open. A wrong code is
+counted with the first-run page's own tries, and locks both. After the
+restore the page is closed, because the restored platform has
+administrators; a restore that was refused leaves it open.
+
+### On one machine
+
+On a one-machine install the sets are folders inside the container's volume.
+Two commands of `zae machine`
+([Installing and updating](../platform/install.md), I.C9) carry them off the
+machine and onto it:
+
+| Command | Does |
+|---|---|
+| `zae machine backup <folder>` | makes a backup now, waits for it, and copies every set the claim holds into the folder, leaving out the sets that are there already; prints what it copied |
+| `zae machine restore <folder> [--name NAME] [--any-version] [--yes]` | copies the sets of the folder into the install's backups claim; restores the newest, or the one named; asks for the platform's name unless `--yes` is given; waits for the platform to be ready, and prints where it answers |
+
+They run on the machine itself, with the rights `zae machine install` needs,
+and reach the platform's resource through the container, as the updater
+does: they ask for no sign-in and no setup code. The documentation shows how
+a timer runs `zae machine backup` every night, to another disk or a share.
+
+### What comes over
+
+| | With the set | By the admin |
+|---|---|---|
+| The accounts, their passwords, roles and rating caps | yes | |
+| Watch progress, history, watchlists and likes | yes | |
+| The catalog, with every edit made by hand | yes | |
+| The portal's registry, invites, notices and alerts | yes | |
+| The library's files | | copied to the new `media` volume, in the same folders |
+| The certificate, the mail server's password, the metadata key where it is a Secret | | brought again; `backup.json` names each Secret |
+| The settings of the resource: the pipeline's rules, the schedule, the thresholds | | set again; `backup.json` holds them as they were |
+| Addons | | installed again; their own data is theirs to move |
+| The name the platform is reached at | | under a new name every app is pointed to it and everyone signs in again |
+
+### The library's files
+
+The library's files are not in a set, and the platform does not back them up
+([ADR-0020](../../docs/adr/0020-backup-restore-and-moving.md)). They are
+backed up, and moved, with the tools of the storage they are on. The
+documentation says what to copy: the whole `media` volume; of it the folders
+`.work/trash`, `.work/staging`, `.work/inbox` and `.work/quarantine` may be
+left out.
+
+What a rebuild of the catalog from the library's files brings back, and what
+only a set brings back:
+
+| | From the files, in the `v2` layout | From a set |
+|---|---|---|
+| Titles with their texts, images and credits as the catalog last wrote them; the people in them | yes | yes |
+| Sources, versions, packages, extras and the marks of a version | yes | yes |
+| The accounts and their passwords | no | yes |
+| Watch progress, history, watchlists and likes | no | yes |
+| The portal's registry, invites and notices | no | yes |
+| An age rating, single locked fields, a hold on an original, track languages set by hand, a chosen subtitle default | no | yes |
+| The catalog's settings and rules, and the log of what was deleted | no | yes |
+
+A library in the `legacy` layout carries no record: nothing of its catalog
+comes back from its files. This page builds no rebuild: it is a tool of the
+schemas repository today.
+
+## Storage
+
+The settings group gets a tile, **storage**, “Volumes, and what takes the
+room”, which opens `/portal/storage`. The page has four parts, each a table
+of the design system.
+
+### The volumes
+
+One row for each disk: a volume, or the volumes that share a filesystem id,
+named together.
+
+| Column | Holds |
+|---|---|
+| **volume** | “library”, “databases”, “backups”, “event broker”; several on one disk as “one disk: library, databases, backups” |
+| **size** | the filesystem's size |
+| **used** | size less free, and its share in per cent, with the design system's status: critical at or above `spec.alerts.volumeFullPercent`, a warning from 10 points below it |
+| **free** | what is free |
+| **measured** | how long ago |
+
+**measure now** (quiet) has the operator measure at once
+(`POST /api/portal/storage/measure`). A volume that could not be measured
+shows the size its claim asks for and “not measured”.
+
+Sizes are written as the catalog console writes them: in decimal units, in
+MB below 1 GB, then in GB with one decimal and no trailing zero, and in TB
+from 1,000 GB.
+
+### The library
+
+Four rows with their size and their share of what is used on the library's
+disk:
+
+| Row | Is |
+|---|---|
+| **packages** | the sum of every title's package |
+| **originals kept** | the sum of every title's originals that are on disk |
+| **extras** | the sum of every extra's package, and of its file while it waits to be packaged |
+| **everything else** | what is used on the library's disk and is none of the three, nor a database or a backup where those are on the same disk: arrivals, the trash, the records and their images, files the catalog does not know and, on a disk the library shares, whatever else is on it |
+
+The catalog's writer answers the three sums and the largest titles in one
+query, `libraryStorage`, for admins:
+
+| Field | Holds |
+|---|---|
+| `packagesBytes`, `originalsBytes`, `extrasBytes` | the three sums |
+| `titles` | how many movies and shows have a file or a package |
+| `largest(limit, offset)` | the movies and shows ordered by what they take, the largest first: `id`, `title`, `type` (`movie`, `series`), `year`, `packageBytes`, `originalBytes`, `totalBytes`. A show is one row with the sum of its episodes; a title's extras count with it. `limit` is 50 by default and 200 at most |
+
+### The databases
+
+One row for each platform database, with its size: “catalog”, “apps”,
+“identity”, “portal”. With external databases the part is not shown.
+
+### The largest titles
+
+The 50 titles that take the most, with the columns **title**, **kind**
+(“movie”, “show”), **package**, **original** and **total**. A title leads to
+its page in the catalog console. **show more** adds 50.
+
+### The storage interface
+
+| Route | Does |
+|---|---|
+| `GET /api/portal/storage` | `volumes[]` as `status.storage.volumes[]` has them, joined by disk; `databases[]`; `library` (`packagesBytes`, `originalsBytes`, `extrasBytes`, `titles`) and `largest[]`, asked of the catalog's writer with the admin's own sign-in, and `otherBytes`, which portal-api works out and never lets fall below 0; `libraryError`, a sentence, when the catalog did not answer. It takes `limit` and `offset` for the titles |
+| `POST /api/portal/storage/measure` | sets `zaentrum.io/storage-request`; 202 |
+
+Both are for admins. `zae storage [--json]` prints the volumes, the
+library's four rows, the databases and the 10 largest titles.
+
+## Changes
+
+Every difference between the section As built and the target is one change
+in the table. A change names where it is built, what is there today and the
+target, with the section that sets it out; it is built as its row says, and
+nothing else changes with it. Each change starts as proposed. A target that
+starts with “Recommended” holds a choice that is the owner's.
+
+| No. | Change | Where | Today | Target | Status |
+|---|---|---|---|---|---|
+| R.C1 | Mail settings in the platform's resource | Operator | the resource has no field for a mail server; the bundled realm has no mail settings; portal-api is given none | section Mail, The settings: `spec.mail.host`, `.port`, `.encryption`, `.from`, `.fromName`, `.secretName` and `.alertsTo`, with the same names in the chart's values and in every copy of the resource's schema ([adding a field](../../docs/updating.md#adding-a-new-cr-spec-field)); the operator gives them to portal-api as environment variables, has the realm job write them into the bundled realm, and says `NotSetUp`, `SecretMissing` or `Configured` in the condition `Mail`; it removes a mail Secret portal-api made once the resource names another | proposed |
+| R.C2 | portal-api sends mail | Server | no component sends mail | portal-api: sections Mail, What is sent, Sending and The mail page: an SMTP client with the three encryptions; plain-text mails with the words of the section Words; `GET`, `PUT` and `DELETE /api/portal/mail` and `POST /api/portal/mail/test`; a new password goes into a new Secret, which the resource then names; while mail is not set up nothing is sent and every answer says so | proposed |
+| R.C3 | The mail page | Portal | no page; mail cannot be set up | section Mail, The mail page: the tile mail in the settings group and the page at `/portal/mail`, with the form of the server and the sender, **save**, **send test mail**, **remove mail settings**, what is sent with the switch **mail alerts**, and who alerts go to with **change your address** and **further addresses**; its states and its words as the sections States and Words have them | proposed |
+| R.C4 | An address, and the invite by mail | Server, Portal | a person is added with a name, a username, a role and a rating cap; the invite link is shown once, to copy and hand over | portal-api: section Mail, People and addresses: `POST /api/portal/people` and `PATCH /api/portal/people/{id}` take `email`, one address for one account; `POST /api/portal/people` takes `sendInvite`, `POST /api/portal/people/{id}/invite` takes `send`, and both answer `mail`. The people page: the field **email**, the switch **send the link by mail**, and the link's dialog saying whether the mail was sent | proposed |
+| R.C5 | “Forgot password?” only where mail is ready | Operator | the bundled realm allows a password reset and the sign-in page shows “Forgot password?”, with no mail server to send the link | section Mail, The sign-in page: the realm job switches the realm's password reset on with mail and off without; the chart's sign-in page shows “Forgot password?” with it, and “Forgot your password? Ask an admin for a new invite link.” without; the chart's theme gives the reset mail the words of the section Words | proposed |
+| R.C6 | The status says since when, and until when | Operator | `status.components[]` says whether a part is ready, not since when; the certificate's end is a date inside the `TLS` condition's sentence; the resource has no thresholds | section Alerts: `status.components[].notReadySince`; `status.certificate` with `notAfter` and `names`, where the platform has a certificate of its own; `spec.alerts.partNotReadyMinutes`, `.volumeFullPercent`, `.certificateDays`, `.backupAgeDays` and `.mail`, with the defaults and the ranges of The five alerts, refused outside them | proposed |
+| R.C7 | The volumes are measured | Operator | nothing measures a volume; a backup's run reports the free space of the backups' claim inside the `Backup` condition's sentence | section Alerts, Measuring: one measuring job for each claim, every hour, on the annotation `zaentrum.io/storage-request` and, for the backups' claim, after each backup; the library's also asks the bundled Postgres; the operator writes `status.storage.volumes[]`, `status.storage.databases[]`, `status.storage.request`, `status.backup.sets[]` and the condition `StorageMeasured`; proven first as [ADR-0019](../../docs/adr/0019-mail-and-alerts.md#to-prove-first) says | proposed |
+| R.C8 | Alerts are raised | Server | portal-api reads the phase, the parts and the self-check from the status when an admin opens the operator page; it compares nothing and keeps nothing | portal-api: section Alerts: every 60 seconds it reads the status, starts and ends the five alerts by the rules of When an alert starts and ends, keeps them in a table of its own for 90 days, mails them by the rules of By mail with the words of the section Words, and serves `GET /api/portal/alerts`, `PATCH /api/portal/alerts/settings`, `POST /api/portal/alerts/{id}/read` and `POST /api/portal/alerts/read-all` | proposed |
+| R.C9 | Alerts in the bell and on a page | Portal | the bell shows what addons told the person; no page shows what is wrong | section Alerts, In the bell and The alerts page: the bell lists an admin's alerts above the notices, under **alerts**, each with **open**, and counts the unseen ones; the tile alerts in the settings group and the page at `/portal/alerts`, with what is watched, its thresholds and **save**, and the alerts of the last 90 days | proposed |
+| R.C10 | A backup says what made it, and a restore checks it | Operator | a dump holds the roles, the four databases and their checksums; nothing in it names the platform or the version that made it; the restore refuses a dump with any other file | sections Backups, The set, and Restoring, The version rule: each set also holds `backup.json`, listed in `SHA256SUMS`, written from a ConfigMap the operator keeps; the restore takes a set with or without it; the operator applies the version rule before it stops anything and refuses with the words of the section Words; the annotation `zaentrum.io/restore-any-version`, holding the set's name, lifts the rule for a version that cannot be compared, never for a newer release | proposed |
+| R.C11 | A backup on request | Operator | a backup runs on its schedule alone | section Backups, When a backup is made: the annotation `zaentrum.io/backup-request`, with a value not yet answered, starts one backup from the schedule's own job, unless a backup or a restore runs; `status.backup.request` holds the value answered; where backups are off it is refused and the `Backup` condition says so | proposed |
+| R.C12 | A backup before an update | Operator | an update is applied at once; the newest dump is up to a day old | Recommended: section Backups, When a backup is made: before the operator applies another version than the one that runs, where backups are on, it makes a backup and applies the update when that has ended, after 30 minutes at the latest; a failure does not stop the update and shows in the `Backup` condition; not on a one-machine install, whose updater keeps its own copy; the other choice is no backup before an update, with **back up now** left to the admin | proposed |
+| R.C13 | A restore brings the identity provider in step | Operator | after a restore the realm job writes the sign-in addresses and the people client's secret; the identity provider's own admin and the `zaentrum-manager` client keep the password and the secret of the dump, so a dump of another install locks the operator's jobs out | Recommended: section Restoring, What a restore does, step 6: after every restore, with the bundled identity provider, the provider's own admin signs in with this install's Secret `zaentrum-keycloak-admin` and the `zaentrum-manager` client has the secret of Secret `zaentrum-keycloak`; then the realm job runs as today; proven first as [ADR-0020](../../docs/adr/0020-backup-restore-and-moving.md#to-prove-first) says; the other choice is the platform's Secrets in every set, sealed with a passphrase the admin keeps | proposed |
+| R.C14 | Backups through portal-api | Server | portal-api reads nothing of `status.backup`; a backup is set, and a restore asked for, in the resource with `kubectl` | portal-api: section Backups, The backups' interface: `GET /api/portal/backups`, `PATCH /api/portal/backups`, `POST /api/portal/backups`, `POST /api/portal/backups/look` and `POST /api/portal/backups/{name}/restore`, which takes the platform's name as typed and sets the operator's annotations | proposed |
+| R.C15 | The backups page | Portal | no page shows a backup | sections Backups, The backups page, and Restoring, From the portal: the tile backups in the settings group and the page at `/portal/backups`, with the summary, the warnings, **back up now**, **settings**, **look again**, the table of the backups with **restore**, the restore's dialog with the platform's name typed, the page while the platform restores, and the last restore | proposed |
+| R.C16 | The setup checklist offers a restore | Portal | the first-run checklist has five steps and no way to bring a platform over | section Moving to another machine, The first run: the checklist ends with the line “Moving from another machine?” and **restore from a backup**, which opens the backups page | proposed |
+| R.C17 | The first-run page offers a restore | Server, Portal | the first page a browser opens is the sign-in page; nothing can be restored before somebody has signed in | once I.C13 and I.C14 of [Installing and updating](../platform/install.md) are built: section Moving to another machine, The first run: portal-api serves `POST /api/portal/first-run/backups` and `POST /api/portal/first-run/restore`, without a sign-in, the setup code counted and locked with the first-run page's own tries; the first-run page gets the line, **restore from a backup**, the second form with **setup code**, **claim** and **look for backups**, the list of the sets and the restore's dialog | proposed |
+| R.C18 | Backups and storage from the CLI | CLI | `zae` has no command for backups or for storage | sections Backups, The backups' interface, Restoring, From the CLI, and Storage: `zae backup list`, `zae backup now`, `zae backup set`, `zae backup restore` and `zae storage`, each through portal-api's routes, with `--json` on the two that list and, once R.C17 is built, `--setup-code` on `list` and `restore`; their words and exit codes as the sections States and Words have them | proposed |
+| R.C19 | Sets onto and off one machine | CLI | on a one-machine install the sets are copied off the machine, and onto a new one, with the container runtime's own commands, as the image's README shows | once I.C9 of [Installing and updating](../platform/install.md) is built: section Moving to another machine, On one machine: `zae machine backup <folder>` and `zae machine restore <folder>`, on the machine itself, through the container, with no sign-in | proposed |
+| R.C20 | The catalog adds up what the library takes | Server | the catalog keeps each title's and each extra's sizes; no query adds up the library, and titles are ordered by size in the rules report alone | katalog-manager: section Storage, The library: the query `libraryStorage`, for admins, with the sums of the packages, of the originals kept and of the extras, and the movies and shows ordered by what they take, a show as one row | proposed |
+| R.C21 | The storage page | Server, Portal | no page shows a volume's size, what is free, or what the library takes | section Storage: portal-api serves `GET /api/portal/storage`, which joins `status.storage` with the catalog's `libraryStorage`, asked with the admin's own sign-in, and `POST /api/portal/storage/measure`; the portal gets the tile storage in the settings group and the page at `/portal/storage`, with the volumes, the library, the databases and the largest titles | proposed |
+| R.C22 | The documentation of running the platform | Docs | backups and restoring are described in the operator's README alone; this repository's documentation describes neither them nor moving | pages in `docs/`: mail and alerts; backups and restoring, with the claim on storage apart from the databases and, on a one-machine install, the sets copied off it; moving to another machine, on a cluster and with the one-container install, with the commands that bring the sets and the library over, and a timer that copies the sets off one machine every night; what to copy of the library, and what a set brings back that its files do not; how an update is undone with the backup made before it; the resource's reference gains `spec.mail`, `spec.alerts` and the new fields of the status | proposed |
+
+## States
+
+### On the mail page
+
+| State | What the page shows |
+|---|---|
+| Loading | nothing for 0.4 seconds, then grey blocks in the shape of the form |
+| Mail is not set up | the information banner; the form empty, with port 587 and STARTTLS; **send test mail** off |
+| Saved, not ready yet | the toast, and “Applying the settings…” under the form; **send test mail** off |
+| Ready | “Mail is ready.” under the form |
+| The Secret is missing | an error banner: the password has to be typed again |
+| The encryption is “none” | a warning banner under the field |
+| A test mail was sent | the toast with the address |
+| A test mail failed, or the settings could not be saved | an error banner with the reason as a sentence |
+| Nobody has an address | a warning banner in **alerts go to** |
+| An external identity provider | “Password reset links” says the provider sends its own; **alerts go to** lists the further addresses alone, with a sentence that says why |
+| The platform is not run by the operator | a warning banner; the form is read-only |
+| Couldn't load | the design system's empty state of its error kind, with the reason and **try again** |
+
+### On the people page and the sign-in page
+
+| State | What it shows |
+|---|---|
+| Mail is ready and the person has an address | the switch **send the link by mail**, on |
+| The link was sent | the link's dialog says to which address; the link is there as today |
+| The mail failed | an error banner in the dialog with the reason; the link is there |
+| Mail is not set up | no switch; a sentence under the link, with **set up mail** |
+| The person has no address | no switch; a sentence under the link |
+| The address belongs to another account, or is no address | the field's error |
+| Sign-in page, mail ready | “Forgot password?” |
+| Sign-in page, no mail | the sentence under the form |
+| An account without an address asks for a reset | the identity provider's page answers as for any account, and no mail is sent; the people page shows who has no address |
+
+### In the bell and on the alerts page
+
+| State | What is shown |
+|---|---|
+| Bell, no alert | the notices as today |
+| Bell, alerts | **alerts** above **notices**; active ones first |
+| Alerts page, loading | grey blocks in the shape of the two tables |
+| Nothing is wrong | the design system's empty state of its nothing-yet kind in the place of the second table |
+| An alert cannot be watched | its row in **what is watched** says why, in the column **now** |
+| The thresholds were saved | the toast |
+| A threshold outside its range | the field's error |
+| The platform is not run by the operator | a warning banner; both tables empty |
+| Couldn't load | the empty state of its error kind, with the reason and **try again** |
+
+### On the backups page
+
+| State | What the page shows |
+|---|---|
+| Loading | grey blocks in the shape of the summary and the table |
+| No backup yet | the empty state of its nothing-yet kind, with when the first one runs, and the sentence for somebody who is moving |
+| A backup runs | **last backup** says so; **back up now** is off |
+| The last backup failed | the error banner with the run's reason and the date of the newest good one |
+| No good backup for too long | the error banner with the date of the newest |
+| Backups and databases on one disk | the warning banner, with **how** leading to the documentation |
+| Backups are off | the information banner with **turn on**; the table stays |
+| The databases are not on a volume of their own | the information banner that says when backups start |
+| External databases | the empty state alone |
+| **look again** was pressed | the button turns to a loader until the claim has been read, 2 minutes at most |
+| The restore's dialog | as the section Restoring has it, by the set: this platform's, another's, of an unknown version, of a newer one |
+| The name typed is not the platform's | **restore** stays off |
+| Restoring | the whole page: the title, the two sentences, a loader |
+| The restore has ended and the sign-in is gone | the sentence and **sign in** |
+| The restore was refused, or failed | **the last restore** says so with the operator's reason |
+| The platform is not run by the operator | a warning banner; nothing else |
+| Couldn't load | the empty state of its error kind, with the reason and **try again** |
+
+### On the first-run page
+
+| State | What the page shows |
+|---|---|
+| The restore's form | **setup code**, **claim** and **look for backups**; **back** |
+| Looking | the button turns to a loader, 2 minutes at most |
+| A wrong code, or too many | the first-run page's own words, and its count of tries |
+| No claim of that name | an error banner under the field |
+| No set on the claim | the empty state of its nothing-yet kind, with what to do |
+| Sets were found | the table of the backups page, with **restore** in each row |
+| Restoring | as on the backups page |
+| The restore has ended | the sign-in page, and above its form the sentence that says whose accounts these are now |
+| The restore was refused, or failed | an error banner with the operator's reason; the form stays, with its sets |
+
+### On the storage page
+
+| State | What the page shows |
+|---|---|
+| Loading | grey blocks in the shape of the four tables |
+| Not measured yet | each volume with the size its claim asks for and “not measured”; **measure now** |
+| Measuring | **measure now** turns to a loader, 2 minutes at most |
+| The measuring failed | an error banner with the reason; the figures before it stay, with their time |
+| The catalog did not answer | the volumes and the databases; an error banner in the place of the library and the largest titles |
+| No title yet | **the library** with zeros; the empty state in the place of the largest titles |
+| The platform is not run by the operator | a warning banner; the library and the largest titles alone |
+| Couldn't load | the empty state of its error kind, with the reason and **try again** |
+
+### In the CLI
+
+| State | What `zae` does |
+|---|---|
+| Done | prints the result; exit code 0 |
+| The platform refused, or a backup or a restore failed | prints the reason; exit code 1 |
+| A wrong flag, or no name | prints the usage; exit code 2 |
+| An older platform has no such route | “This platform does not offer this command yet. Update it.”; exit code 3 |
+| The result could not be read, as after a restore that took the sign-in with it | prints what to do; exit code 4 |
+| Not an admin | exit code 5 |
+| `--wait` and the time is up | prints where it stood; exit code 4 |
+| `zae machine backup`, the folder cannot be written | the sentence; nothing is made; exit code 1 |
+| `zae machine backup`, nothing new | says so; exit code 0 |
+| `zae machine restore`, no set in the folder | the sentence; nothing is changed; exit code 1 |
+| `zae machine restore`, the platform did not come back in 30 minutes | says so, and names `zae machine status`; exit code 1 |
+
+## Words
+
+Labels are in lowercase; sentences end with a full stop. A value in braces
+is filled in. Dates are written as “15 November 2026, 00:00”.
+
+### The tiles
+
+| Tile | Description |
+|---|---|
+| mail | “Mail server, and what is sent” |
+| alerts | “What is watched, and what is wrong” |
+| backups | “Backups of the databases, and restoring” |
+| storage | “Volumes, and what takes the room” |
+
+### Words of the mail page
+
+| Where | Text |
+|---|---|
+| The page | mail · server · sender · what is sent · alerts go to |
+| Fields | server · port · encryption · user · password · address · name · further addresses |
+| Encryption | “STARTTLS” · “TLS from the start” · “none” |
+| Under the fields | server: “The name of your mail provider's SMTP server.” · user: “Leave it empty if the server asks for none.” · password: “It is kept as a secret of the platform and never shown again.” · a password is kept: “A password is kept. Type a new one to replace it.” · further addresses: “Up to 10. They get every alert mail.” |
+| Buttons | save · send test mail · remove mail settings · send · cancel · remove |
+| Not set up | “Mail is not set up. Invite links are handed over by hand, a forgotten password needs an admin, and alerts show in the bell only.” · with an external identity provider: “Mail is not set up. Alerts show in the bell only.” |
+| No encryption | “Without encryption the password and every mail cross the network readable.” |
+| After **save** | “Saved.” · “Applying the settings…” · “Mail is ready.” |
+| The Secret is missing | “The mail server's password is missing. Type it again.” |
+| What is sent | “Invite links” “When an admin adds a person or makes them a new link, to the person's address.” · “Password reset links” “When somebody asks on the sign-in page, to their address.” · with an external identity provider: “Your identity provider sends its own.” · “Alerts” “When one starts and when it ends, to the addresses below.” · mail alerts |
+| Alerts go to | who · address · “no address” · change your address · “No admin has an address, so alerts are not mailed. Add yours on your account page, or others' on the people page.” · with an external identity provider: “The platform cannot see who the admins are with your identity provider. Alert mail goes to the further addresses.” |
+| The test mail's dialog | send test mail · to · “A test mail was sent to {address}.” |
+| Removing | remove mail settings? · “The platform stops sending mail: no invite, no password reset link and no alert leaves it. The settings and the password are deleted.” |
+| Why a mail failed | “Can't reach the mail server. Check its name and its port.” · “The mail server doesn't offer this encryption. Choose another.” · “The mail server's certificate could not be checked.” · “The mail server refused the user or the password.” · “The mail server refused the sender's address.” · “The mail server refused the address {address}.” · “The mail server didn't answer in time.” · “The mail server answered: {its words}” |
+| Not run by the operator | “This platform is not run by the operator. Mail is set in its chart's values.” |
+| Couldn't load | couldn't load mail · try again |
+
+### Words of the people page and the sign-in page
+
+| Where | Text |
+|---|---|
+| The field | email · “For their invite, and for a forgotten password. Optional.” |
+| The field's errors | “Another person already has this address.” · “This is not an e-mail address.” |
+| The switch | send the link by mail |
+| The link's dialog, sent | “The link was sent to {address}. It is also here, and shown only now.” |
+| The link's dialog, failed | “The mail to {address} could not be sent. {why} Hand the link over yourself.” |
+| The link's dialog, no mail | “Mail is not set up, so the link is not sent. Hand it over yourself.” · set up mail |
+| The link's dialog, no address | “{name} has no address, so the link is not sent. Hand it over yourself.” |
+| The sign-in page | “Forgot password?” · “Forgot your password? Ask an admin for a new invite link.” |
+
+### The mails
+
+| Mail | Subject | Text |
+|---|---|---|
+| An invite | “Your account on {host}” | “Hello {name},” · “{admin} made an account for you on {host}. Your username is {username}.” · “Open this link to choose your password:” · “{link}” · “The link works once, until {date}. After that, ask {admin} for a new one.” · “If you did not expect this mail, ignore it.” |
+| A new invite link | “A new link for your account on {host}” | “Hello {name},” · “{admin} made a new link for your account {username} on {host}.” · “Open it to choose a new password:” · “{link}” · “The link works once, until {date}. Your password stays as it is until you use the link.” · “If you did not expect this mail, ignore it.” |
+| A password reset | “Reset your password” | “Somebody asked to reset the password of your account.” · “If it was you, open this link and choose a new password:” · “{link}” · “The link works for 5 minutes.” · “If it was not you, ignore this mail. Your password stays as it is.” |
+| An alert starts | the alert's title | the alert's text · “See it: {link}” · “You get this mail because you are an admin of {host}, or your address is in its alert settings.” |
+| An alert ends | “Ended: {the alert's title}” | the sentence of its end · “It started on {date} and ended on {date}.” · “You get this mail because you are an admin of {host}, or your address is in its alert settings.” |
+| A test mail | “Test mail from {host}” | “This mail was sent from the mail page of {host}, to check that mail works. Nothing else needs doing.” |
+
+Times in a mail are in UTC and say so: “15 November 2026, 14:02 UTC”.
+
+### The alerts
+
+A title has at most 80 characters and a text at most 280.
+
+| Alert | Title | Text | When it ends |
+|---|---|---|---|
+| A part is not ready | “A part is not ready: {part}” | “{part} has not been ready for more than {minutes} minutes. Open operator to see why.” | “{part} is ready again.” |
+| A volume is almost full | “A volume is almost full: {volumes}” | “The {volumes} volume is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” · on one disk: “The disk of {volumes} is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” | “The {volumes} volume is at {percent} %.” · “The disk of {volumes} is at {percent} %.” |
+| The certificate ends soon | “The certificate ends in {days} days” · “The certificate has ended” | “The platform's certificate ends on {date}. After that browsers warn and the apps stop connecting. Renew it.” · “The platform's certificate ended on {date}. Browsers warn and the apps do not connect. Renew it.” | “The certificate now ends on {date}.” |
+| No good backup | “The last backup failed” · “No backup for {days} days” | “The backup of {date} failed: {reason} The newest good one is from {date}.” · with none: “The backup of {date} failed: {reason} There is no good backup yet.” · “The newest backup is from {date}. Open backups to see why none was made since.” | “A backup was made on {date}.” |
+| An update failed | “The update to {version} did not finish” · “The check after the update to {version} failed” · on one machine: “The update to {version} was undone” · “The update to {version} did not start” | “These parts could not start: {parts}. The version before keeps running where it can. Open operator to see why.” · “{the self-check's sentence} Open operator to see the checks.” · “The update to {version} did not pass its check, so the machine went back to {version}. Open operator to see the checks.” · “{the updater's reason} Open operator to see more.” | “The update to {version} has finished.” · “The check has passed.” · “The update to {version} is done.” |
+
+The volumes' names in an alert are “library”, “databases”, “backups” and
+“event broker”, joined with commas and “and”.
+
+| Where | Text |
+|---|---|
+| The bell | alerts · notices · open · “Ended: {title}” · “Mark All Read”, as today, now for alerts too |
+| The alerts page | alerts · what is watched · alert · when · now · state · started · ended · mail · active · last 90 days · save |
+| **when** | “for {n} minutes” · “at {n} % full” · “within {n} days” · “for {n} days, or when the last one failed” · “when a rollout gives up, or the check after an update fails” |
+| **now** | “all {n} parts are ready” · “{n} parts are not ready” · “the fullest is at {n} %” · “not measured yet” · “it ends on {date}” · “not watched: the platform serves no certificate of its own” · “the newest is from {date}” · “not watched: backups are off” · “not watched: the databases are not the platform's” · “{version} runs” |
+| **state** | “active” · “ended” |
+| **mail** | “sent to {n} addresses” · “not sent: mail is not set up” · “not sent: alert mail is off” · “not sent: nobody has an address” · “not sent: one was sent less than a day ago” · “could not be sent: {why}” |
+| Nothing is wrong | nothing is wrong · “No alert is active.” |
+| Saved | “Saved.” |
+| A threshold outside its range | “A number from {least} to {most}.” |
+| Not run by the operator | “This platform is not run by the operator, so nothing watches it from here.” |
+| Couldn't load | couldn't load the alerts · try again |
+
+### Words of backups and restoring
+
+| Where | Text |
+|---|---|
+| The page | backups · last backup · where · schedule · kept · made · size · version · state · the last restore |
+| The summary | “{date} · {size}” · “a backup runs” · “none yet” · “claim {name} · {size}, {free} free” · “every day at 00:00” · “every 12 hours” · “every 6 hours” · “every week” · “{cron}, the cluster's time” · “the newest {n}” |
+| Buttons | back up now · settings · look again · restore · turn on · how · save · cancel · sign in |
+| **state** | “whole” · “incomplete” |
+| Under a date | “from another platform” · “version unknown” |
+| The last backup failed | “The last backup failed: {reason} The newest good one is from {date}.” |
+| No good backup for too long | “No backup for {days} days. The newest is from {date}.” |
+| On one disk | “The backups are on the same disk as the databases: a dead disk takes both. Keep them on other storage.” |
+| Backups are off | “Backups are off. No new backup is made.” |
+| No volume of their own | “The databases are not on a volume of their own yet. Backups start once they are.” |
+| External databases | not the platform's to back up · “The databases run outside the platform. Back them up where they run.” |
+| No backup yet | no backups yet · “The first backup runs at {time}.” · “Moving from another machine? Copy its backups into this claim, then look again.” |
+| The settings' dialog | backup settings · back up on a schedule · how often · “every day” · “every 12 hours” · “every 6 hours” · “every week” · “another schedule” · schedule · “A cron schedule, in the cluster's time zone.” · keep · “The newest backups are kept. Older ones are deleted.” · claim · “The claim that holds the backups. Empty: the platform's own.” |
+| **back up now** | “A backup was made: {size}.” · “The backup failed: {reason}” · “A backup already runs.” |
+| The restore's dialog | restore from {date}? · “The platform goes down for a few minutes.” · “Its databases are set back to this backup: the accounts, the watch history, the lists, the catalog and the portal's settings as they were then. Everything written since is lost.” · “The library's files are not set back.” · “Whoever signed in after this backup was made signs in again.” · another platform's: “This backup is from another platform. Afterwards, sign in with an account of that platform.” · “Restore although its version is unknown.” · “This backup was made by {version}, which is newer than this platform ({version}). Update the platform first.” · “type the platform's name, {name}, to restore” |
+| Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
+| The restore has ended | “The restore has ended. Sign in to see how it went.” |
+| **the last restore** | “Restored from {date}, on {date}.” · “The restore from {date} was refused: {reason} Nothing was changed.” · “The restore from {date} failed: {reason} Restore again.” · “none” |
+| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): ask again with zaentrum.io/restore-any-version; nothing was changed” |
+| Not run by the operator | “This platform is not run by the operator, so its backups cannot be read from here.” |
+| Couldn't load | couldn't load the backups · try again |
+| The setup checklist, and the first-run page | “Moving from another machine?” · restore from a backup |
+| The first-run page's second form | setup code · claim · “The claim that holds the backups. Empty: the platform's own.” · look for backups · back |
+| No claim of that name | “There is no claim {name} beside this platform.” |
+| No set on the claim | no backups here · “Copy the old platform's backups into this claim, then look again.” |
+| After a restore from the first-run page | “The restore has ended. Sign in with an account of the platform the backup is from.” |
+
+### Words of the storage page
+
+| Where | Text |
+|---|---|
+| The page | storage · volumes · library · databases · largest titles |
+| The volumes | volume · size · used · free · measured · “library” · “databases” · “backups” · “event broker” · “one disk: {volumes}” · “not measured” · measure now |
+| The library | packages · originals kept · extras · everything else · “Arrivals, the trash, the records and their images, and whatever else is on this disk.” |
+| The databases | “catalog” · “apps” · “identity” · “portal” |
+| The largest titles | title · kind · package · original · total · “movie” · “show” · show more |
+| The measuring failed | “The volumes could not be measured: {reason}” |
+| The catalog did not answer | “The catalog did not answer, so the library's figures are missing.” · try again |
+| No title yet | no titles yet · “Scan the library to add some.” |
+| Not run by the operator | “This platform is not run by the operator, so its volumes cannot be measured from here.” |
+| Couldn't load | couldn't load storage · try again |
+
+### Words of the CLI
+
+| Command | Text |
+|---|---|
+| `zae backup list` | “backups of {name} · {schedule} · the newest {n} kept · claim {claim}, {free} free” · the columns “MADE”, “SIZE”, “VERSION”, “STATE” · “last backup: {name}, {age} ago” · “no backup yet: the first runs at {time}” · “backups are off” |
+| `zae backup now` | “a backup was asked for” · “a backup was made: {name}, {size}” · “the backup failed: {reason}” |
+| `zae backup set` | “backups: {on or off} · {schedule} · the newest {n} kept · claim {claim}” |
+| `zae backup restore` | “This restores {name} into {platform}. The platform goes down for a few minutes. Everything written since {date} is lost. The library's files are not set back.” · “Type the platform's name to go on:” · “the restore was asked for” · “the platform is down while it restores…” · “restored from {name}” · “the restore was refused: {reason}” · “the restore failed: {reason}” · “The platform is back, and this sign-in is gone with the restore. Sign in again with zae login, then run zae backup list to see how it went.” |
+| `zae storage` | the columns “VOLUME”, “SIZE”, “USED”, “FREE”, “MEASURED” · “library: packages {size} · originals kept {size} · extras {size} · everything else {size}” · “databases: catalog {size} · apps {size} · identity {size} · portal {size}” · the columns “TITLE”, “KIND”, “TOTAL” |
+| `zae machine backup` | “a backup was made: {name}, {size}” · “copied {n} backups to {folder}” · “nothing new to copy” · “{folder} is not a folder this command can write” |
+| `zae machine restore` | “copied {n} backups from {folder}” · “no backup in {folder}” · the question of `zae backup restore` · “restored from {name}” · “the platform answers at {address}” · “The platform did not come back in 30 minutes. Run zae machine status.” |
+| An older platform | “This platform does not offer this command yet. Update it.” |

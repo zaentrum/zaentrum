@@ -18,6 +18,11 @@ The capability model is five files in spec/capabilities/:
   settings.csv      one row a setting: who changes it, where, its default, a proposal
   expectations.csv  one row a thing people expect of a media server: the capabilities
                     and components that meet it, or the decision record that rules it out
+  scope.csv         one row a capability, or a component, that is not built and that no
+                    numbered change builds: left for later, left to an addon, ruled out,
+                    or to be built with its change still to write; and why
+  packages.csv      one row a work package: the numbered changes built together, and
+                    the packages that have to be built before it
   inventory.csv     what the code offers, written by scripts/inventory.py
 The inventory keeps the model complete against the code; the expectations keep it
 complete against what the platform is expected to do. A capability nothing serves (no
@@ -50,6 +55,10 @@ It checks, and fails on the first kind of problem it finds in each row:
     change named is a numbered change of the spec;
   - every expectation names a capability, a component or a decision record that
     exists, and every capability nothing serves is named by a change or an expectation;
+  - every capability that is not built is named by a numbered change or has a row of
+    scope.csv that says what becomes of it, so nothing is left without an answer;
+  - every numbered change that is not withdrawn is in exactly one work package, and no
+    package waits for itself;
   - every limit names its components, and where the documentation or a decision
     record says it;
   - every goal, area, expectation and quality names a goal that exists, no goal needs
@@ -108,10 +117,19 @@ GOAL_COLS = ['key', 'goal', 'kind', 'needs', 'why']
 # how well a goal has to be met: a quality, by the characteristics of ISO/IEC 25010
 CHARACTERISTICS = ['functional suitability', 'performance efficiency', 'compatibility', 'interaction capability',
                    'reliability', 'security', 'maintainability', 'flexibility', 'safety']
-QUALITY_COLS = ['key', 'goal', 'characteristic', 'quality', 'measure', 'today', 'target', 'says']
+QUALITY_COLS = ['key', 'goal', 'characteristic', 'quality', 'measure', 'today', 'target', 'status', 'says']
+# a target, and a row of scope.csv, is a proposal until the owner approves it
+PROPOSAL_STATUS = ['proposed', 'approved']
 # what people expect of a media server, goal by goal, and what the model says of each
 EXPECT_COLS = ['key', 'goal', 'expectation', 'capabilities', 'components', 'decided', 'note']
 EXPECT_STATES = ['there', 'partly', 'not there', 'not checked', 'decided otherwise']
+# what becomes of a capability that is not built and that no numbered change builds
+SCOPE_COLS = ['key', 'scope', 'status', 'why']
+SCOPES = [('build', 'to be built, its change still to write'), ('later', 'left for later'),
+          ('addon', 'left to an addon'), ('out', 'ruled out')]
+SCOPE_WORD = {'build': 'build', 'later': 'later', 'addon': "an addon's", 'out': 'ruled out'}
+# the order of the work: packages of numbered changes, each after the packages it needs
+PACKAGE_COLS = ['key', 'package', 'needs', 'changes', 'note']
 # a component whose status says the platform has it, has it built and unused, or lacks it
 COMP_THERE = {'runs': 'built', 'ships': 'built', 'idle': 'partial'}
 
@@ -422,6 +440,173 @@ def check_expectations(expectations, caps, comps_by_key, adrs, goal_keys):
     return caps_by_key
 
 
+# ------------------------------------------------------------- what becomes of it
+def live_changes(c, changes):
+    """the numbered changes a capability names that the owner has not withdrawn"""
+    return [n for n in split(c['changes']) if changes.get(n) != 'withdrawn']
+
+
+def check_scope(rows, caps, comps_by_key, changes):
+    """-> {key: row}. A row is for a capability that is not built, or for a component the
+    platform lacks; one that says build is for a capability no change names yet"""
+    caps_by_key = {c['key']: c for c in caps}
+    words = [s for s, _ in SCOPES]
+    out = {}
+    for r in rows:
+        w = f'scope.csv {r.get("key")}'
+        k = r['key']
+        if k in out:
+            problem(w, 'key twice')
+        out[k] = r
+        if r['scope'] not in words:
+            problem(w, f'scope {r["scope"]!r} is none of {words}')
+        if r['status'] not in PROPOSAL_STATUS:
+            problem(w, f'status {r["status"]!r} is none of {PROPOSAL_STATUS}')
+        if not r['why'] or len(r['why']) > 200 or r['why'].endswith('.'):
+            problem(w, 'why is empty, longer than 200 characters or ends with a full stop')
+        if k in caps_by_key and k in comps_by_key:
+            problem(w, 'is a capability and a component: the key has to name one')
+        elif k in caps_by_key:
+            c = caps_by_key[k]
+            if cap_state(c) == 'built':
+                problem(w, 'the capability is built: it needs no row')
+            if r['scope'] == 'build' and live_changes(c, changes):
+                problem(w, f'says build, and {", ".join(live_changes(c, changes))} names it now: take the row out')
+        elif k in comps_by_key:
+            if comps_by_key[k]['status'] not in ('missing', 'later', 'idle'):
+                problem(w, f'the component is {comps_by_key[k]["status"]}: a row is for one that is missing, later or idle')
+            if r['scope'] == 'build':
+                problem(w, 'a component is built by the changes of its capabilities, not by a row here')
+        else:
+            problem(w, 'is no capability and no component')
+    for c in caps:
+        if cap_state(c) != 'built' and not live_changes(c, changes) and c['key'] not in out:
+            problem(f'capabilities.csv {c["key"]}',
+                    'is not built, no numbered change names it and scope.csv has no row for it: nothing says what becomes of it')
+    return out
+
+
+def becomes(c, scope, changes):
+    """what becomes of a capability, in one word: built, change (a numbered change builds
+    it), or its row's scope; with a change AND a row, the row speaks for what the changes
+    leave open"""
+    if cap_state(c) == 'built':
+        return 'built'
+    row = scope.get(c['key'])
+    if live_changes(c, changes):
+        return 'change'
+    return row['scope'] if row else 'undecided'
+
+
+# ------------------------------------------------------------- the order of the work
+def number_key(n):
+    chapter, _, no = n.partition('.C')
+    return (0, int(chapter), int(no)) if chapter.isdigit() else (1, ord(chapter[0]), int(no))
+
+
+def check_packages(rows, changes):
+    """-> {package key: its numbered changes, in order}. A package names changes one by
+    one (11.C30), as a run (3.C1-3.C13) or as a chapter (11.*): a change named one by one
+    or in a run is that package's, and a chapter gives a package the changes of it that
+    no other package names. Every change that is not withdrawn is in exactly one"""
+    live = {n for n, st in changes.items() if st != 'withdrawn'}
+    keys = {}
+    named, chapters = {}, {}
+    for r in rows:
+        w = f'packages.csv {r.get("key")}'
+        if not KEY.match(r['key']) or len(r['key']) > 32:
+            problem(w, 'key is not kebab-case of at most 32 characters')
+        if r['key'] in keys:
+            problem(w, 'key twice')
+        keys[r['key']] = r
+        if not r['package'] or len(r['package']) > 70 or r['package'].endswith('.'):
+            problem(w, 'package is empty, longer than 70 characters or ends with a full stop')
+        if not r['note'] or len(r['note']) > 260:
+            problem(w, 'note is empty or longer than 260 characters: say what the package is for')
+        for item in split(r['changes']):
+            run = re.match(r'^((?:\d+|[A-Z])\.C)(\d+)-(?:\1)?(\d+)$', item)
+            if item.endswith('.*'):
+                chapter = item[:-2]
+                if chapter in chapters:
+                    problem(w, f'{item}: {chapters[chapter]} takes that chapter too')
+                if not any(n.partition('.C')[0] == chapter for n in live):
+                    problem(w, f'{item}: no numbered change of that chapter')
+                chapters[chapter] = r['key']
+                continue
+            numbers = [f'{run.group(1)}{i}' for i in range(int(run.group(2)), int(run.group(3)) + 1)] if run else [item]
+            for n in numbers:
+                if n not in changes:
+                    problem(w, f'{n} is no numbered change of the spec')
+                elif changes[n] == 'withdrawn':
+                    problem(w, f'{n} is withdrawn')
+                elif n in named:
+                    problem(w, f'{n} is in {named[n]} too')
+                named[n] = r['key']
+    for r in rows:
+        for k in split(r['needs']):
+            if k not in keys:
+                problem(f'packages.csv {r["key"]}', f'needs: {k} is no package')
+
+    def reaches(k, seen):
+        for n in split(keys[k]['needs']):
+            if n in keys and (n in seen or reaches(n, seen | {n})):
+                return True
+        return False
+    for k in keys:
+        if reaches(k, {k}):
+            problem(f'packages.csv {k}', 'waits for itself, by way of the packages it needs')
+    out = {k: [] for k in keys}
+    for n in sorted(live, key=number_key):
+        k = named.get(n) or chapters.get(n.partition('.C')[0])
+        if k is None:
+            if rows:
+                problem(f'packages.csv', f'{n} is in no package')
+        elif k in out:
+            out[k].append(n)
+    return out
+
+
+def packages_blocks(rows, members, changes):
+    """the page spec/capabilities/packages.md: the packages as a picture and a table, in an
+    order that builds each after what it needs, and each package with its changes"""
+    by_key = {r['key']: r for r in rows}
+    order, placed = [], set()
+    while len(order) < len(rows):          # each after the packages it needs, else as written
+        ready = [r for r in rows if r['key'] not in placed and all(n in placed or n not in by_key for n in split(r['needs']))]
+        if not ready:
+            ready = [r for r in rows if r['key'] not in placed]
+        order.append(ready[0])
+        placed.add(ready[0]['key'])
+    detail = change_rows()
+    nid = {r['key']: 'p_' + r['key'].replace('-', '_') for r in rows}
+    pic = ['```mermaid', 'flowchart LR']
+    pic += [f'  {nid[r["key"]]}["{r["package"]}"]' for r in order]
+    pic += [f'  {nid[n]} --> {nid[r["key"]]}' for r in order for n in split(r['needs']) if n in nid] + ['```']
+    states = ['proposed', 'approved', 'built', 'verified']
+    body, out = [], []
+    for i, r in enumerate(order, 1):
+        its = members.get(r['key'], [])
+        n = Counter(changes.get(x) for x in its)
+        body.append([i, f'[{r["package"]}](#{slug(r["package"])})',
+                     ', '.join(by_key[k]['package'] for k in split(r['needs']) if k in by_key) or '—', len(its) or '—'] +
+                    [n.get(s, 0) if its else '—' for s in states])
+        out.append(f'## {r["package"]}\n')
+        needs = [f'[{by_key[k]["package"]}](#{slug(by_key[k]["package"])})' for k in split(r['needs']) if k in by_key]
+        out.append(r['note'] + (f' After: {", ".join(needs)}.' if needs else '') + '\n')
+        if its:
+            rows_ = []
+            for x in its:
+                d = detail.get(x, {})
+                link = f'../{d["file"][len("spec/"):]}' + (f'#{d["anchor"]}' if d.get('anchor') else '') if d.get('file') else ''
+                rows_.append([f'[{x}]({link})' if link else x, d.get('title', ''), d.get('apps', ''), changes.get(x, '')])
+            out.append(table(rows_, ['No.', 'Change', 'Where', 'Status']) + '\n')
+        else:
+            out.append('No numbered change: work that comes before the changes.\n')
+    return {'order': '\n'.join(pic) + '\n',
+            'packages': table(body, ['', 'Package', 'After', 'Changes'] + states) + '\n',
+            'by-package': '\n'.join(out).rstrip() + '\n'}
+
+
 # ------------------------------------------------------------- what it is for
 SAYS_URL = re.compile(r'^https://github\.com/zaentrum/[A-Za-z0-9._-]+/(?:blob|tree)/main/\S+$')
 
@@ -478,6 +663,10 @@ def check_goals(goals, qualities, areas, expectations):
             problem(w, 'today is empty or longer than 160 characters: say what it is, or that it is not measured')
         if len(q['target']) > 160:
             problem(w, 'target is longer than 160 characters')
+        if q['target'] and q['status'] not in PROPOSAL_STATUS:
+            problem(w, f'status {q["status"]!r} is none of {PROPOSAL_STATUS}: a target is proposed until the owner approves it')
+        if q['status'] and not q['target']:
+            problem(w, 'has a status and no target')
         for ref in split(q['says']):
             if not (SAYS_URL.match(ref) or resolve_ref(ref)):
                 problem(w, f'says: {ref} leads to no page or heading')
@@ -521,7 +710,18 @@ def faces_used(caps):
     return [(k, label) for k, label in APPS + FACES if any(c[k] != '—' for c in caps)]
 
 
-def area_blocks(part, areas, caps, settings_by_key, goal_names=None):
+def next_cell(c, scope, changes):
+    """what becomes of a capability, for a table: — where it is built"""
+    b = becomes(c, scope, changes)
+    if b == 'built':
+        return '—'
+    if b == 'change':
+        row = scope.get(c['key'])
+        return 'build' + (f', the rest {SCOPE_WORD[row["scope"]]}' if row and row['scope'] in SCOPE_WORD else '')
+    return SCOPE_WORD.get(b, b)
+
+
+def area_blocks(part, areas, caps, settings_by_key, goal_names=None, scope=None, changes=None):
     out = []
     for a in [a for a in areas if a['part'] == part or (part == 'platform' and a['part'] == 'later')]:
         rows = [c for c in caps if c['area'] == a['key']]
@@ -543,9 +743,10 @@ def area_blocks(part, areas, caps, settings_by_key, goal_names=None):
         notes = [f'- {c["capability"]}: {c["note"]}' for c in rows if c['note']]
         if notes:
             out.append('\n'.join(notes) + '\n')
-        body = [[f'`{c["key"]}`', ', '.join(split(c['changes'])) or '—', code_list(split(c['served_by'])) or '—',
+        body = [[f'`{c["key"]}`', ', '.join(split(c['changes'])) or '—', next_cell(c, scope or {}, changes or {}),
+                 code_list(split(c['served_by'])) or '—',
                  ', '.join(f'`{s}`' for s in split(c['settings'])) or '—'] for c in rows]
-        out.append(table(body, ['Key', 'Changes', 'Served by', 'Settings']) + '\n')
+        out.append(table(body, ['Key', 'Changes', 'Next', 'Served by', 'Settings']) + '\n')
     return '\n'.join(out).rstrip() + '\n'
 
 
@@ -584,7 +785,32 @@ def overview(areas, caps, settings, inventory, changes):
 STATE_WORD = {'built': 'built', 'partial': 'partial', 'no': 'no', '?': 'not checked'}
 
 
-def expectations_blocks(expectations, caps, areas, comps_by_key, adrs, goals):
+def expectation_next(e, state, caps_by_key, comps_by_key, scope, changes):
+    """what becomes of an expectation that is not there, from what becomes of each
+    capability and component it names that is not built: build where a numbered change
+    builds it, else its row of scope.csv. The first word is what most of it is"""
+    if state == 'there':
+        return '—'
+    if state == 'decided otherwise':
+        return 'ruled out'
+    words = {}
+    for k in split(e['capabilities']):
+        c = caps_by_key.get(k)
+        if c and cap_state(c) != 'built':
+            b = becomes(c, scope, changes)
+            words.setdefault('build' if b == 'change' else b, []).append(k)
+    for k in split(e['components']):
+        comp = comps_by_key.get(k)
+        if comp and COMP_THERE.get(comp['status']) != 'built':
+            words.setdefault(scope[k]['scope'] if k in scope else 'undecided', []).append(k)
+    present = [w for w in ['build', 'later', 'addon', 'out', 'undecided'] if w in words]
+    if not present:
+        return '—'
+    rest = [f'{SCOPE_WORD.get(w, w)}: ' + ', '.join(f'`{k}`' for k in words[w]) for w in present[1:]]
+    return '; '.join([SCOPE_WORD.get(present[0], present[0])] + rest)
+
+
+def expectations_blocks(expectations, caps, areas, comps_by_key, adrs, goals, scope=None, changes=None):
     """-> (the page's tables, the README's counts, {expectation: its state})"""
     caps_by_key = {c['key']: c for c in caps}
     area_of = {a['key']: a for a in areas}
@@ -613,8 +839,10 @@ def expectations_blocks(expectations, caps, areas, comps_by_key, adrs, goals):
                 [comp_link(k) for k in split(e['components']) if k in comps_by_key]
             if e['decided'] in adrs:
                 met.append(f'[ADR-{e["decided"]}](../../{adrs[e["decided"]]["file"]})')
-            body.append([e['expectation'], state[e['key']], ', '.join(met), e['note'] or '—'])
-        out.append(table(body, ['Expected', 'State', 'Met by', 'Note']) + '\n')
+            body.append([e['expectation'], state[e['key']],
+                         expectation_next(e, state[e['key']], caps_by_key, comps_by_key, scope or {}, changes or {}),
+                         ', '.join(met), e['note'] or '—'])
+        out.append(table(body, ['Expected', 'State', 'Next', 'Met by', 'Note']) + '\n')
         n = Counter(state[e['key']] for e in sel)
         rows.append([f'[{g["goal"]}](./expectations.md#{slug(g["goal"])})', len(sel)] + [n[x] for x in EXPECT_STATES])
     n = Counter(state.values())
@@ -678,7 +906,8 @@ def goals_blocks(goals, qualities, areas, caps, expectations, expect_state, arch
                      f'{n}: {said}' if n else '—',
                      (f'{len(its)} in {len(sel)} {"area" if len(sel) == 1 else "areas"}' +
                       (f', {gone} served by nothing' if gone else '')) if its else '—',
-                     (f'{len(qs)}, {sum(1 for q in qs if q["target"])} with a target') if qs else '—'])
+                     (f'{len(qs)}, {sum(1 for q in qs if q["target"])} with a target, '
+                      f'{sum(1 for q in qs if q["status"] == "approved")} approved') if qs else '—'])
     out = []
     for g in goals:
         out.append(f'## {g["goal"]}\n')
@@ -708,7 +937,8 @@ def goals_blocks(goals, qualities, areas, caps, expectations, expect_state, arch
         out.append('\n'.join(lines) + '\n')
         qs = [q for q in qualities if q['goal'] == g['key']]
         if qs:
-            body = [[q['quality'], q['characteristic'], q['measure'], q['today'], q['target'] or 'not set',
+            body = [[q['quality'], q['characteristic'], q['measure'], q['today'],
+                     (q['target'] + (' (proposed)' if q['status'] == 'proposed' else '')) if q['target'] else 'not set',
                      ', '.join(arch.says(ref) for ref in split(q['says'])) or '—'] for q in qs]
             out.append(table(body, ['It has to', 'Quality', 'Measured by', 'Today', 'Target', 'Says so']) + '\n')
         else:
@@ -716,6 +946,64 @@ def goals_blocks(goals, qualities, areas, caps, expectations, expect_state, arch
     return {'cascade': '\n'.join(pic) + '\n',
             'goals': table(rows, ['Goal', 'Is', 'Needs', 'Expected of it', 'Capabilities', 'Qualities']) + '\n',
             'by-goal': '\n'.join(out).rstrip() + '\n'}
+
+
+def scope_blocks(caps, areas, scope, changes, comps_by_key, qualities, adrs):
+    """the page spec/capabilities/scope.md: whether the specification says, for everything
+    that is not built, what becomes of it; and what is left out, with the reason"""
+    area_of = {a['key']: a for a in areas}
+    caps_by_key = {c['key']: c for c in caps}
+    opened = [c for c in caps if cap_state(c) != 'built']
+    n = Counter(becomes(c, scope, changes) for c in opened)
+    st = Counter(changes.values())
+    rows_n = Counter(r['status'] for r in scope.values())
+    with_target = [q for q in qualities if q['target']]
+    proposed = sorted(num for num, a in adrs.items() if a['state'].lower() == 'proposed')
+    ready = table([
+        ['Capabilities that are not built', len(opened)],
+        ['a numbered change builds them', n['change']],
+        ['to be built, the change still to write', n['build']],
+        ['left for later', n['later']],
+        ['left to an addon', n['addon']],
+        ['ruled out', n['out']],
+        ['nothing says', n['undecided']],
+    ], ['Of the capabilities', '']) + '\n\n' + table([
+        ['Numbered changes', len(changes)],
+        ['proposed', st.get('proposed', 0)], ['approved', st.get('approved', 0)], ['built', st.get('built', 0)],
+        ['verified', st.get('verified', 0)], ['withdrawn', st.get('withdrawn', 0)],
+    ], ['Of the changes', '']) + '\n\n' + table([
+        ['Rows of scope.csv', len(scope)],
+        ['proposed', rows_n.get('proposed', 0)], ['approved', rows_n.get('approved', 0)],
+        ['Qualities', len(qualities)],
+        ['with a target', len(with_target)],
+        ['with an approved target', sum(1 for q in with_target if q['status'] == 'approved')],
+        ['Decision records still proposed', ', '.join(f'[{num}](../../{adrs[num]["file"]})' for num in proposed) or 'none'],
+    ], ['Of the proposals', '']) + '\n'
+    out = {'ready': ready}
+
+    def named(k):
+        if k in caps_by_key:
+            c = caps_by_key[k]
+            a = area_of[c['area']]
+            page = next(pg for p, _, pg in PARTS if p == a['part'])
+            also = ', '.join(live_changes(c, changes))
+            return [c['capability'] + (f' (what {also} leave open)' if also else ''), f'`{k}`', f'[{a["area"]}](./{page}#{slug(a["area"])})']
+        comp = comps_by_key[k]
+        return [f'The component {comp["component"]}', f'`{k}`', '[components](../architecture/components.md)']
+    for word, _ in SCOPES:
+        sel = [r for r in scope.values() if r['scope'] == word and (r['key'] in caps_by_key or r['key'] in comps_by_key)]
+        sel.sort(key=lambda r: (0, [a['key'] for a in areas].index(caps_by_key[r['key']]['area']),
+                                [c['key'] for c in caps].index(r['key'])) if r['key'] in caps_by_key else (1, 0, 0))
+        out[word] = (table([named(r['key']) + [r['why'], r['status']] for r in sel],
+                           ['What', 'Key', 'Area', 'Why', 'Status']) if sel else 'None.') + '\n'
+    # the changes whose target holds a choice: it starts with "Recommended"
+    rows = change_rows()
+    sel = [n for n in sorted(rows, key=number_key)
+           if rows[n]['target'].lstrip().lower().startswith('recommended') and rows[n]['status'] != 'withdrawn']
+    out['choices'] = (table([[f'[{n}](../{rows[n]["file"][len("spec/"):]}' + (f'#{rows[n]["anchor"]}' if rows[n]['anchor'] else '') + ')',
+                              rows[n]['title'], rows[n]['apps'], rows[n]['status']] for n in sel],
+                            ['No.', 'Change', 'Where', 'Status']) if sel else 'None.') + '\n'
+    return out
 
 
 def inventory_block(inventory, caps, settings):
@@ -780,7 +1068,8 @@ def configuration_blocks(caps, settings, areas):
     return out
 
 
-def export(areas, caps, settings, inventory, path, arch=None, expectations=(), expect_state=None, goals=(), qualities=()):
+def export(areas, caps, settings, inventory, path, arch=None, expectations=(), expect_state=None, goals=(), qualities=(),
+           scope=None, changes=None, packages=None, members=None):
     """the model, resolved, as one JSON file (see the docstring)"""
     by_id = {r['id']: r for r in inventory}
     keep = ('id', 'kind', 'repo', 'name', 'value', 'note', 'where')
@@ -803,6 +1092,7 @@ def export(areas, caps, settings, inventory, path, arch=None, expectations=(), e
         with open(path_sources, encoding='utf-8', newline='') as fh:
             sources = {r['repo']: r['commit'] for r in csv.DictReader(fh)}
     named = {ch for c in caps for ch in split(c['changes'])}
+    package_of = {n: k for k, ns in (members or {}).items() for n in ns}
     model = {
         'parts': [{'key': p, 'label': label, 'page': f'spec/capabilities/{page}'} for p, label, page in PARTS],
         'faces': [{'key': k, 'label': label, 'app': True} for k, label in APPS] +
@@ -817,6 +1107,10 @@ def export(areas, caps, settings, inventory, path, arch=None, expectations=(), e
             'state': cap_state(c),
             # nothing serves it: it is in the model because a change or an expectation names it
             'absent': absent(c), 'expected': [e['key'] for e in expectations if c['key'] in split(e['capabilities'])],
+            # what becomes of it: built, change (a numbered change builds it), build, later, addon, out
+            # or undecided; and its row of scope.csv, if it has one
+            'becomes': becomes(c, scope or {}, changes or {}),
+            'scope': ({k: scope[c['key']][k] for k in ('scope', 'status', 'why')} if scope and c['key'] in scope else None),
         } for c in caps],
         # what it is for: each goal with the goals it needs; an expectation's group is its goal
         'goalKinds': [{'key': k, 'label': label} for k, label in GOAL_KINDS],
@@ -828,10 +1122,17 @@ def export(areas, caps, settings, inventory, path, arch=None, expectations=(), e
                               if any(e['goal'] == g['key'] for e in expectations)],
         'expectations': [{'key': e['key'], 'group': e['goal'], 'expectation': e['expectation'], 'note': e['note'],
                           'capabilities': split(e['capabilities']), 'components': split(e['components']),
-                          'decided': e['decided'], 'state': (expect_state or {}).get(e['key'])} for e in expectations],
+                          'decided': e['decided'], 'state': (expect_state or {}).get(e['key']),
+                          'next': expectation_next(e, (expect_state or {}).get(e['key']), {c['key']: c for c in caps},
+                                                   arch.comp if arch else {}, scope or {}, changes or {})}
+                         for e in expectations],
         'settings': [{**{k: s[k] for k in SET_COLS if k not in ('capability', 'ids')},
                       'capability': split(s['capability']), 'ids': rows(split(s['ids']))} for s in settings],
-        'changes': [{'number': n, 'named': n in named, **row} for n, row in change_rows().items()],
+        'changes': [{'number': n, 'named': n in named, 'package': package_of.get(n), **row}
+                    for n, row in change_rows().items()],
+        # the order of the work: each package with the packages it needs and its changes
+        'packages': [{'key': r['key'], 'package': r['package'], 'needs': split(r['needs']), 'note': r['note'],
+                      'changes': (members or {}).get(r['key'], [])} for r in (packages or [])],
         'sources': sources,
         'architecture': arch.export(rows) if arch else None,
         'problems': list(problems),
@@ -1523,15 +1824,24 @@ def main():
                 read('decisions.csv', DEC_COLS, ARCH), inventory, caps, settings, read('limits.csv', LIMIT_COLS, ARCH))
     arch.check({c['key'] for c in caps})
     check_expectations(expectations, caps, arch.comp, arch.adrs, goal_keys)
+    scope = check_scope(read('scope.csv', SCOPE_COLS), caps, arch.comp, changes)
+    for e in expectations:
+        for k in split(e['components']):
+            if k in arch.comp and COMP_THERE.get(arch.comp[k]['status']) != 'built' and k not in scope:
+                problem(f'expectations.csv {e["key"]}', f'names the component {k}, which is {arch.comp[k]["status"]}, '
+                                                        'and scope.csv has no row for it')
     arch.derive()
+    packages = read('packages.csv', PACKAGE_COLS)
+    members = check_packages(packages, changes)
     known = [g for g in goals if g['key'] in goal_keys]
     expected_tables, expected_counts, expect_state = expectations_blocks(
-        [e for e in expectations if e['goal'] in goal_keys], caps, areas, arch.comp, arch.adrs, known)
+        [e for e in expectations if e['goal'] in goal_keys], caps, areas, arch.comp, arch.adrs, known, scope, changes)
     if '--json' in sys.argv:
         at = sys.argv.index('--json') + 1
         if at >= len(sys.argv):
             sys.exit('--json needs the file to write')
-        export(areas, caps, settings, inventory, sys.argv[at], arch, expectations, expect_state, goals, qualities)
+        export(areas, caps, settings, inventory, sys.argv[at], arch, expectations, expect_state, goals, qualities,
+               scope, changes, packages, members)
         print(f'{len(problems)} problems; {len(caps)} capabilities, {len(settings)} settings, '
               f'{len(arch.comps)} components, {len(arch.conns)} connections written to {sys.argv[at]}')
         return
@@ -1542,6 +1852,8 @@ def main():
         'inventory': inventory_block(inventory, caps, settings),
     }, write)
     fill(os.path.join(CAP, 'expectations.md'), {'expectations': expected_tables}, write)
+    fill(os.path.join(CAP, 'scope.md'), scope_blocks(caps, areas, scope, changes, arch.comp, qualities, arch.adrs), write)
+    fill(os.path.join(CAP, 'packages.md'), packages_blocks(packages, members, changes), write)
     fill(os.path.join(GOALS, 'README.md'), goals_blocks(
         known, [q for q in qualities if q['goal'] in goal_keys], [a for a in areas if a['goal'] in goal_keys], caps,
         [e for e in expectations if e['goal'] in goal_keys], expect_state, arch), write)
@@ -1549,7 +1861,7 @@ def main():
         if p == 'later':
             continue
         fill(os.path.join(CAP, page), {'areas': area_blocks(p, areas, caps, settings_by_key,
-                                                            {g['key']: g['goal'] for g in goals})}, write)
+                                                            {g['key']: g['goal'] for g in goals}, scope, changes)}, write)
     fill(os.path.join(CAP, 'configuration.md'), configuration_blocks(caps, settings, areas), write)
     fill(os.path.join(ARCH, 'README.md'), {'state': arch.state_block(), 'findings': arch.findings_block(),
                                            'limits': arch.limits_block()}, write)

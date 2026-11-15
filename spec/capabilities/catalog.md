@@ -10,32 +10,34 @@ explained in [how to read it](./README.md#how-to-read-it); every row comes from
 <!-- generated: areas -->
 ## The catalog
 
-What the library holds, as the catalog knows it: scanning, details, metadata, the rules a title must meet. Not specified yet. Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
+What the library holds, as the catalog knows it: scanning, details, metadata, the rules a title must meet. Specified in [catalog console](../catalog/console.md). Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
 
 | Capability | Who | Portal | Catalog console | CLI | Spec |
 |---|---|---|---|---|---|
-| Scan the library for new, moved and missing files | admin | built | partial | built | [self hosting](../../docs/self-hosting.md), [extras](../../docs/extending/extras.md), [First run](../portal/settings.md#first-run) |
+| Scan the library for new, moved and missing files | admin | built | partial | built | [self hosting](../../docs/self-hosting.md), [extras](../../docs/extending/extras.md), [First run](../portal/settings.md#first-run), [catalog library](../catalog/library.md) |
 | Hand a file on disk to the catalog as a title, by its outside identity | addon | — | — | — | [ingest](../../docs/extending/ingest.md), [0012 catalog identity for addons](../../docs/adr/0012-catalog-identity-for-addons.md) |
-| Add a trailer or other extra to a title, remove one, or package them again | admin | — | no | — | [extras](../../docs/extending/extras.md) |
+| Add a trailer or other extra to a title, remove one, or package them again | admin | — | no | — | [extras](../../docs/extending/extras.md), [catalog console](../catalog/console.md) |
 | Set the metadata key the catalog looks titles up with | admin | built | built | built | [self hosting](../../docs/self-hosting.md), [First run](../portal/settings.md#first-run) |
 | Fill titles' texts, artwork, cast and crew and age ratings from a reference database | system | — | partial | — | [metadata](../../docs/library/metadata.md), [self hosting](../../docs/self-hosting.md) |
 | Match a title by hand: search again by a corrected title, or pin its TMDB id | admin | — | built | — | — |
-| Edit a title's texts, genres, tags and age rating by hand, kept from enrichment | admin | — | partial | — | [metadata](../../docs/library/metadata.md) |
+| Edit a title's texts, genres, tags and age rating by hand, kept from enrichment | admin | — | partial | — | [metadata](../../docs/library/metadata.md), [catalog console](../catalog/console.md) |
 | Remove a title from the catalog, and its files and package when asked | admin | — | built | — | [record](../../docs/library/record.md) |
 | Correct the language of a title's audio or subtitle track | admin | — | built | — | — |
-| Browse every title with its state and files, its episodes, and each person's credits | admin | — | partial | — | [architecture](../../docs/architecture.md) |
-| Change the catalog's settings | admin | — | partial | — | — |
+| Browse every title with its state and files, its episodes, and each person's credits | admin | — | partial | — | [architecture](../../docs/architecture.md), [catalog console](../catalog/console.md) |
+| Change the catalog's settings | admin | — | partial | — | [catalog console](../catalog/console.md) |
 | See which titles break the master spec's rules, and why | admin | — | built | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
 | Read what the library holds, by catalog id or by a title's outside identity | addon | — | — | — | [holdings](../../docs/extending/holdings.md), [0012 catalog identity for addons](../../docs/adr/0012-catalog-identity-for-addons.md), [0003 catalog cqrs sole writer](../../docs/adr/0003-catalog-cqrs-sole-writer.md) |
 | Read a title's original or its subtitles straight from the catalog | system | — | — | — | — |
-| Add a folder that already holds films or shows to the library, from the console | admin | — | no | no | [Getting content in](../../docs/self-hosting.md#getting-content-in) |
-| Keep several libraries, each with its own folders, kind and audience | admin | — | no | — | — |
-| Take in new files by themselves, on a schedule or as they arrive | system | — | no | — | — |
-| Read a title's details and artwork from the files kept beside it | system | — | no | — | — |
+| Add a folder that already holds films or shows to the library, from the console | admin | — | no | no | [Getting content in](../../docs/self-hosting.md#getting-content-in), [catalog library](../catalog/library.md) |
+| Keep several libraries, each with its own folders, kind and audience | admin | — | no | — | [catalog library](../catalog/library.md) |
+| Take in new files by themselves, on a schedule or as they arrive | system | — | no | — | [catalog library](../catalog/library.md) |
+| Read a title's details and artwork from the files kept beside it | system | — | no | — | [catalog library](../catalog/library.md) |
 | Fill titles' details without a key of the admin's own | system | — | no | — | [First run](../../docs/self-hosting.md#first-run) |
-| Choose a title's poster and backdrop, or give it one's own | admin | — | no | — | — |
-| Put titles into a collection everyone sees | admin | — | no | — | — |
-| Add a subtitle file to a title from the console | admin | — | no | — | — |
+| Choose a title's poster and backdrop, or give it one's own | admin | — | no | — | [catalog console](../catalog/console.md) |
+| Put titles into a collection everyone sees | admin | — | no | — | [catalog library](../catalog/library.md) |
+| Add a subtitle file to a title from the console | admin | — | no | — | [catalog console](../catalog/console.md) |
+| List the titles enrichment could not match, and describe one by hand | admin | — | no | — | [catalog console](../catalog/console.md) |
+| Move a title into another library | admin | — | no | — | [catalog library](../catalog/library.md) |
 
 - Scan the library for new, moved and missing files: Never on a schedule: a scan runs when started. The console lists the last 25 scans, not the files a scan passed over
 - Hand a file on disk to the catalog as a title, by its outside identity: In-cluster only; idempotent on the path. A title the library holds already is refused (409), never relinked
@@ -58,34 +60,36 @@ What the library holds, as the catalog knows it: scanning, details, metadata, th
 - Choose a title's poster and backdrop, or give it one's own: a title shows the artwork enrichment found
 - Add a subtitle file to a title from the console: a subtitle file beside the video is taken in by a scan; an addon can attach one
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `scan-library` | — | `katalog-manager mutation triggerScan`, `katalog-manager query scanJobs`, `katalog-manager query scanJob` and 2 more | `extras-scan`, `step-timeouts`, `scan-report-limit`, `episodes-per-file`, `catalog-events` |
-| `hand-over-file` | — | `katalog-manager POST /api/ingest` | `episodes-per-file` |
-| `manage-extras` | — | `katalog-manager mutation addExtra`, `katalog-manager POST /api/extras`, `katalog-manager mutation removeExtra` and 2 more | `removed-extra-grace`, `extras-scan` |
-| `set-metadata-key` | — | `katalog-manager mutation setSecretSetting`, `katalog-manager mutation clearSecretSetting`, `zaentrum-portal POST /api/portal/setup/metadata` and 1 more | `metadata-key`, `key-check-timeout`, `metadata-keys` |
-| `enrich-titles` | 12.C10 | `katalog-manager mutation enrichOne`, `katalog-manager mutation enrichPending`, `katalog-manager mutation retryNotFound` and 9 more | `ratings-countries`, `credit-roles`, `metadata-language`, `metadata-refresh`, `keyframe-artwork`, `fallback-metadata-key`, `artwork-source-keys`, `credit-caps`, `metadata-key`, `catalog-events`, `metadata-keys` |
-| `match-title` | — | `katalog-manager mutation identify` | — |
-| `edit-title` | — | `katalog-manager mutation updateItem`, `katalog-manager mutation createItem`, `katalog-manager mutation setItemGenres` and 2 more | `ratings-countries` |
-| `remove-title` | — | `katalog-manager mutation deleteItem`, `katalog-manager query deletedItems` | — |
-| `set-track-language` | — | `katalog-manager mutation setTrackLanguage` | — |
-| `browse-catalog` | — | `katalog-manager query items`, `katalog-manager query movies`, `katalog-manager query series` and 14 more | `series-episodes-page` |
-| `change-catalog-settings` | — | `katalog-manager query settings`, `katalog-manager mutation createSetting`, `katalog-manager mutation updateSetting` and 2 more | — |
-| `check-compliance` | — | `katalog-manager query pipelineRules`, `katalog-manager query libraryCompliance`, `katalog-manager mutation refreshCompliance` and 3 more | `compliance-pass`, `compliance-readers`, `compliance-nightly`, `compliance-tolerance`, `rules-report-interval`, `compliance-report-page`, `shown-languages`, `video-caps`, `audio-language-rules` |
-| `read-library-holdings` | — | `katalog-api ANY /api/v1`, `katalog-api GET /api/v1/holdings` | `holdings-page-size` |
-| `read-originals-directly` | — | `katalog-manager GET /api/play/{itemId}`, `katalog-manager GET /api/subtitles/items/{itemId}`, `katalog-manager GET /api/subtitles/{subId}` | — |
-| `add-library-folder` | — | — | — |
-| `keep-several-libraries` | — | — | — |
-| `scan-by-itself` | — | — | — |
-| `read-local-metadata` | — | — | — |
-| `enrich-without-own-key` | — | — | — |
-| `choose-artwork` | — | — | — |
-| `curate-collections` | — | — | — |
-| `add-own-subtitle` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `scan-library` | L.C6, K.C21, K.C22 | build | `katalog-manager mutation triggerScan`, `katalog-manager query scanJobs`, `katalog-manager query scanJob` and 2 more | `extras-scan`, `step-timeouts`, `scan-report-limit`, `episodes-per-file`, `catalog-events` |
+| `hand-over-file` | — | — | `katalog-manager POST /api/ingest` | `episodes-per-file` |
+| `manage-extras` | K.C17, K.C18 | build | `katalog-manager mutation addExtra`, `katalog-manager POST /api/extras`, `katalog-manager mutation removeExtra` and 2 more | `removed-extra-grace`, `extras-scan` |
+| `set-metadata-key` | — | — | `katalog-manager mutation setSecretSetting`, `katalog-manager mutation clearSecretSetting`, `zaentrum-portal POST /api/portal/setup/metadata` and 1 more | `metadata-key`, `key-check-timeout`, `metadata-keys` |
+| `enrich-titles` | 12.C10 | build | `katalog-manager mutation enrichOne`, `katalog-manager mutation enrichPending`, `katalog-manager mutation retryNotFound` and 9 more | `ratings-countries`, `credit-roles`, `metadata-language`, `metadata-refresh`, `keyframe-artwork`, `fallback-metadata-key`, `artwork-source-keys`, `credit-caps`, `metadata-key`, `catalog-events`, `metadata-keys` |
+| `match-title` | K.C8, K.C9 | — | `katalog-manager mutation identify` | — |
+| `edit-title` | K.C6, K.C7, K.C8, K.C9 | build | `katalog-manager mutation updateItem`, `katalog-manager mutation createItem`, `katalog-manager mutation setItemGenres` and 2 more | `ratings-countries` |
+| `remove-title` | — | — | `katalog-manager mutation deleteItem`, `katalog-manager query deletedItems` | — |
+| `set-track-language` | — | — | `katalog-manager mutation setTrackLanguage` | — |
+| `browse-catalog` | K.C2, K.C3, K.C4, K.C5, K.C25 | build | `katalog-manager query items`, `katalog-manager query movies`, `katalog-manager query series` and 14 more | `series-episodes-page` |
+| `change-catalog-settings` | K.C23, K.C24 | build | `katalog-manager query settings`, `katalog-manager mutation createSetting`, `katalog-manager mutation updateSetting` and 2 more | — |
+| `check-compliance` | — | — | `katalog-manager query pipelineRules`, `katalog-manager query libraryCompliance`, `katalog-manager mutation refreshCompliance` and 3 more | `compliance-pass`, `compliance-readers`, `compliance-nightly`, `compliance-tolerance`, `rules-report-interval`, `compliance-report-page`, `shown-languages`, `video-caps`, `audio-language-rules` |
+| `read-library-holdings` | — | — | `katalog-api ANY /api/v1`, `katalog-api GET /api/v1/holdings` | `holdings-page-size` |
+| `read-originals-directly` | — | — | `katalog-manager GET /api/play/{itemId}`, `katalog-manager GET /api/subtitles/items/{itemId}`, `katalog-manager GET /api/subtitles/{subId}` | — |
+| `add-library-folder` | L.C4, L.C5, L.C18, L.C19, K.C20 | build | — | — |
+| `keep-several-libraries` | L.C1, L.C2, L.C3, K.C3, K.C4, K.C20, K.C21, P.C5 | build | — | — |
+| `scan-by-itself` | L.C7, L.C8, K.C20, K.C21 | build | — | — |
+| `read-local-metadata` | L.C9, L.C10, L.C11 | build | — | — |
+| `enrich-without-own-key` | — | later | — | — |
+| `choose-artwork` | K.C10, K.C11 | build | — | — |
+| `curate-collections` | L.C12, L.C13, K.C10, K.C19 | build | — | — |
+| `add-own-subtitle` | K.C15, K.C16 | build | — | — |
+| `find-unmatched-titles` | K.C3, K.C4, K.C8, K.C9 | build | — | — |
+| `move-title-library` | L.C3, K.C7 | build | — | — |
 
 ## The library and its originals
 
-The packages the apps play, and the originals they were made from: verified, then retired. Not specified yet. Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
+The packages the apps play, and the originals they were made from: verified, then retired. Specified in [catalog library](../catalog/library.md). Depth: working. For the goal [Keep the library](../goals/README.md#keep-the-library).
 
 | Capability | Who | Portal | Catalog console | CLI | Resource | Spec |
 |---|---|---|---|---|---|---|
@@ -101,8 +105,10 @@ The packages the apps play, and the originals they were made from: verified, the
 | Move a platform's store into the library layout, verify it, and undo it | operator | — | — | — | — | [migrating](../../docs/library/migrating.md), [record](../../docs/library/record.md) |
 | Check a title's files on disk: its original, its package, and whether they match | admin | — | built | — | — | — |
 | Fill in what the catalog records of titles' originals: probe, size and tracks | admin | — | no | — | — | — |
-| Take a title out of the library again as one ordinary file | admin | — | no | no | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md) |
+| Take a title out of the library again as one ordinary file | admin | — | no | no | — | [0015 the package is the master](../../docs/adr/0015-the-package-is-the-master.md), [catalog library](../catalog/library.md) |
 | Back up the library's files along with the databases | operator | no | — | no | no | — |
+| Rebuild the catalog from the library's files after the database is lost | operator | — | no | no | — | — |
+| Find titles whose files and catalog disagree after a restore, and put them in step | admin | — | no | no | — | — |
 
 - Retire an original once its package is verified and lacks nothing the spec keeps: Off until library.originals says delete-after-package; v2 layout. Held titles stay. The console shows no retire state
 - Verify each new version against its own checksums, by a reader apart from the packager: The newest first, one at a time, every file's hash. One that fails is tried again 6 h later, then longer. Not in the console
@@ -118,23 +124,26 @@ The packages the apps play, and the originals they were made from: verified, the
 - Fill in what the catalog records of titles' originals: probe, size and tracks: API only, for titles packaged before the catalog kept these; running one again changes nothing
 - Take a title out of the library again as one ordinary file: matters once an original is retired: its package is renditions in segments, not a file
 - Back up the library's files along with the databases: the backups are dumps of the bundled databases; the media volume is left to its storage
+- Rebuild the catalog from the library's files after the database is lost: a tool outside the platform reads the records of the id-named layout; nothing in the platform starts it
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `retire-originals` | — | — | `originals-policy`, `retire-delay`, `retire-rate`, `trash-grace`, `verify-mode`, `verify-max-age`, `verify-reads`, `library-layout` |
-| `verify-versions` | — | — | `verify-new`, `verify-mode`, `verify-max-age`, `verify-reads`, `verify-retry` |
-| `retire-list` | — | `katalog-manager mutation retireOriginals`, `katalog-manager mutation stopRetireRun`, `katalog-manager query retireRun` | `retire-list-mode`, `retire-list-max-age`, `retire-rate`, `retire-list-size`, `retire-list-tries`, `library-layout` |
-| `hold-originals` | — | `katalog-manager mutation holdOriginal` | — |
-| `decide-superseded` | — | `katalog-manager query supersededOriginals`, `katalog-manager mutation decideSupersededOriginal` | `superseded-accept`, `superseded-delay`, `retire-rate` |
-| `replace-title-file` | — | `katalog-manager mutation replaceSource`, `katalog-manager query replaceSourceDone` | `replace-clients`, `superseded-delay`, `superseded-accept`, `superseded-grace`, `library-layout` |
-| `reencode-queue` | — | `katalog-manager POST /api/library/reencode`, `katalog-manager GET /api/library/reencode`, `katalog-manager mutation clearReencodeQueue` and 1 more | `reencode-rate`, `reencode-inflight`, `reencode-window`, `retry-interval` |
-| `queue-rework` | — | `katalog-manager mutation queueRework`, `katalog-manager mutation queueReworkMatching` | — |
-| `take-in-title` | — | `katalog-manager POST /api/items/{id}/takein` | `library-layout` |
-| `move-to-library` | — | `katalog-manager POST /api/library/migrations/{run}/adopt`, `katalog-manager POST /api/library/migrations/{run}/revert`, `katalog-manager POST /api/library/migrations/{run}/names` and 4 more | `library-layout` |
-| `check-title-files` | — | `katalog-manager mutation validateItem` | `small-file-threshold` |
-| `backfill-source-facts` | — | `katalog-manager mutation backfillSourceProbes`, `katalog-manager mutation backfillSourceSizes`, `katalog-manager mutation backfillSourceTracks` | — |
-| `export-title` | — | — | — |
-| `back-up-library` | — | — | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `retire-originals` | K.C13 | build | — | `originals-policy`, `retire-delay`, `retire-rate`, `trash-grace`, `verify-mode`, `verify-max-age`, `verify-reads`, `library-layout` |
+| `verify-versions` | K.C12, K.C13 | build | — | `verify-new`, `verify-mode`, `verify-max-age`, `verify-reads`, `verify-retry` |
+| `retire-list` | — | later | `katalog-manager mutation retireOriginals`, `katalog-manager mutation stopRetireRun`, `katalog-manager query retireRun` | `retire-list-mode`, `retire-list-max-age`, `retire-rate`, `retire-list-size`, `retire-list-tries`, `library-layout` |
+| `hold-originals` | K.C13 | build | `katalog-manager mutation holdOriginal` | — |
+| `decide-superseded` | — | later | `katalog-manager query supersededOriginals`, `katalog-manager mutation decideSupersededOriginal` | `superseded-accept`, `superseded-delay`, `retire-rate` |
+| `replace-title-file` | — | — | `katalog-manager mutation replaceSource`, `katalog-manager query replaceSourceDone` | `replace-clients`, `superseded-delay`, `superseded-accept`, `superseded-grace`, `library-layout` |
+| `reencode-queue` | — | later | `katalog-manager POST /api/library/reencode`, `katalog-manager GET /api/library/reencode`, `katalog-manager mutation clearReencodeQueue` and 1 more | `reencode-rate`, `reencode-inflight`, `reencode-window`, `retry-interval` |
+| `queue-rework` | — | — | `katalog-manager mutation queueRework`, `katalog-manager mutation queueReworkMatching` | — |
+| `take-in-title` | — | later | `katalog-manager POST /api/items/{id}/takein` | `library-layout` |
+| `move-to-library` | — | — | `katalog-manager POST /api/library/migrations/{run}/adopt`, `katalog-manager POST /api/library/migrations/{run}/revert`, `katalog-manager POST /api/library/migrations/{run}/names` and 4 more | `library-layout` |
+| `check-title-files` | — | — | `katalog-manager mutation validateItem` | `small-file-threshold` |
+| `backfill-source-facts` | — | later | `katalog-manager mutation backfillSourceProbes`, `katalog-manager mutation backfillSourceSizes`, `katalog-manager mutation backfillSourceTracks` | — |
+| `export-title` | L.C16, L.C17, L.C18, K.C14 | build | — | — |
+| `back-up-library` | — | ruled out | — | — |
+| `rebuild-catalog-from-library` | — | later | — | — |
+| `match-catalog-to-library` | — | later | — | — |
 
 ## Preparing titles to play
 
@@ -172,20 +181,20 @@ What happens to a new title: analysed, encoded, packaged, given subtitles; and e
 - See which steps failed and why, and retry one or every one: Each step's titles by state; the failed ones with their last error, the latest first, 100 at most in the console
 - Follow what the pipeline does to each title, as it happens: A feed of step changes, in plain words or technical, pushed live by the catalog's stream
 
-| Key | Changes | Served by | Settings |
-|---|---|---|---|
-| `find-intro-credits` | 11.C39 | `katalog-manager PUT /api/segments/items/{itemId}`, `katalog-manager DELETE /api/segments/items/{itemId}`, `katalog-manager GET /api/analyze/items/{id}` and 6 more | `intro-times-lookup`, `analyzer-error-wait`, `step-heartbeat`, `intro-search-window`, `credits-search-window`, `intro-sibling-agreement`, `segment-max-share`, `worker-poll-interval` |
-| `read-chapters` | — | `katalog-manager PUT /api/chapters/items/{itemId}`, `katalog-manager GET /api/chapters/items/{itemId}`, `katalog-manager DELETE /api/chapters/items/{itemId}` and 2 more | `chapters-backfill`, `chapters-backfill-window`, `chapters-backfill-inflight`, `chapters-backfill-rate`, `chapters-backfill-records`, `chapters-backfill-lease`, `chapter-backfill-claims`, `chapter-read-timeout`, `chapter-read-failures` |
-| `settle-chapter-reads` | — | `katalog-manager mutation acceptChapterReads`, `katalog-manager mutation revertChapterReplacement` | `chapter-read-failures` |
-| `measure-picture-area` | — | `katalog-manager GET /api/picture/items/{id}`, `katalog-manager PUT /api/picture/items/{id}`, `katalog-manager GET /api/picture/extras/{id}` and 3 more | `picture-backfill`, `picture-backfill-window`, `picture-backfill-inflight`, `picture-backfill-rate`, `picture-backfill-lease`, `picture-on-arrival`, `picture-backfill-claims`, `picture-nice`, `picture-threads`, `picture-pass-deadline`, `picture-measure-again` |
-| `transcode-title` | — | `katalog-manager GET /api/analyze/items/{id}`, `katalog-manager PUT /api/analyze/items/{id}/steps/{step}` | `video-caps`, `decoder`, `x264-preset`, `x264-crf`, `x265-preset`, `x265-crf`, `encode-stall-timeout`, `worker-poll-interval`, `rules-report-interval` |
-| `package-title` | — | `katalog-manager POST /api/items/{id}/packaging-complete`, `katalog-manager GET /api/analyze/items/{id}`, `katalog-manager PUT /api/analyze/items/{id}/steps/{step}` and 1 more | `shown-languages`, `keep-single-language`, `surround-bitrate`, `old-package-grace`, `packager-error-wait`, `stereo-loudness`, `trickplay-interval`, `trickplay-size`, `superseded-grace`, `worker-poll-interval`, `rules-report-interval`, `audio-language-rules` |
-| `package-extras` | — | `katalog-manager GET /api/analyze/extras/{id}`, `katalog-manager PUT /api/analyze/extras/{id}/steps/{step}`, `katalog-manager POST /api/extras/{id}/packaging-complete` | `extra-step-timeouts` |
-| `process-again` | — | `katalog-manager mutation packageItem`, `katalog-manager mutation reencodeItem`, `katalog-manager POST /api/items/{id}/package` and 2 more | `superseded-grace`, `old-package-grace` |
-| `make-subtitles` | 12.C3 | `katalog-manager POST /api/library/items/{itemId}/subtitles`, `katalog-manager GET /api/library/subtitles/languages` | `subtitle-languages`, `subtitler-languages`, `asr-threads`, `shown-languages`, `subtitle-fullness` |
-| `attach-subtitle` | — | `katalog-manager GET /api/library/items/{itemId}/subtitles`, `katalog-manager POST /api/library/items/{itemId}/subtitles`, `katalog-manager DELETE /api/library/items/{itemId}/subtitles/{subtitleId}` and 1 more | `subtitle-languages` |
-| `encode-while-playing` | — | `live-worker POST /v1/segment`, `live-worker POST /v1/init`, `live-worker POST /v1/subtitle` and 3 more | `live-queue`, `live-deadlines`, `live-attempts`, `live-watchdog`, `live-circuit-breaker`, `live-threads`, `live-tonemap`, `live-hw-frames`, `live-process-timeouts`, `live-audio-bitrate`, `live-diagnostics` |
-| `heal-failed-steps` | — | `katalog-manager query retryPolicy` | `retry-attempts`, `retry-backoff`, `retry-backoff-max`, `retry-interval`, `step-timeouts`, `step-heartbeat` |
-| `retry-steps` | — | `katalog-manager query processingOverview`, `katalog-manager mutation retryStep`, `katalog-manager mutation retryFailed` and 1 more | `failed-steps-shown` |
-| `follow-activity` | — | `katalog-manager query activity`, `katalog-manager GET /api/manage/stream` | — |
+| Key | Changes | Next | Served by | Settings |
+|---|---|---|---|---|
+| `find-intro-credits` | 11.C39 | — | `katalog-manager PUT /api/segments/items/{itemId}`, `katalog-manager DELETE /api/segments/items/{itemId}`, `katalog-manager GET /api/analyze/items/{id}` and 6 more | `intro-times-lookup`, `analyzer-error-wait`, `step-heartbeat`, `intro-search-window`, `credits-search-window`, `intro-sibling-agreement`, `segment-max-share`, `worker-poll-interval` |
+| `read-chapters` | — | later | `katalog-manager PUT /api/chapters/items/{itemId}`, `katalog-manager GET /api/chapters/items/{itemId}`, `katalog-manager DELETE /api/chapters/items/{itemId}` and 2 more | `chapters-backfill`, `chapters-backfill-window`, `chapters-backfill-inflight`, `chapters-backfill-rate`, `chapters-backfill-records`, `chapters-backfill-lease`, `chapter-backfill-claims`, `chapter-read-timeout`, `chapter-read-failures` |
+| `settle-chapter-reads` | — | later | `katalog-manager mutation acceptChapterReads`, `katalog-manager mutation revertChapterReplacement` | `chapter-read-failures` |
+| `measure-picture-area` | — | later | `katalog-manager GET /api/picture/items/{id}`, `katalog-manager PUT /api/picture/items/{id}`, `katalog-manager GET /api/picture/extras/{id}` and 3 more | `picture-backfill`, `picture-backfill-window`, `picture-backfill-inflight`, `picture-backfill-rate`, `picture-backfill-lease`, `picture-on-arrival`, `picture-backfill-claims`, `picture-nice`, `picture-threads`, `picture-pass-deadline`, `picture-measure-again` |
+| `transcode-title` | — | — | `katalog-manager GET /api/analyze/items/{id}`, `katalog-manager PUT /api/analyze/items/{id}/steps/{step}` | `video-caps`, `decoder`, `x264-preset`, `x264-crf`, `x265-preset`, `x265-crf`, `encode-stall-timeout`, `worker-poll-interval`, `rules-report-interval` |
+| `package-title` | — | — | `katalog-manager POST /api/items/{id}/packaging-complete`, `katalog-manager GET /api/analyze/items/{id}`, `katalog-manager PUT /api/analyze/items/{id}/steps/{step}` and 1 more | `shown-languages`, `keep-single-language`, `surround-bitrate`, `old-package-grace`, `packager-error-wait`, `stereo-loudness`, `trickplay-interval`, `trickplay-size`, `superseded-grace`, `worker-poll-interval`, `rules-report-interval`, `audio-language-rules` |
+| `package-extras` | — | later | `katalog-manager GET /api/analyze/extras/{id}`, `katalog-manager PUT /api/analyze/extras/{id}/steps/{step}`, `katalog-manager POST /api/extras/{id}/packaging-complete` | `extra-step-timeouts` |
+| `process-again` | — | — | `katalog-manager mutation packageItem`, `katalog-manager mutation reencodeItem`, `katalog-manager POST /api/items/{id}/package` and 2 more | `superseded-grace`, `old-package-grace` |
+| `make-subtitles` | 12.C3 | build | `katalog-manager POST /api/library/items/{itemId}/subtitles`, `katalog-manager GET /api/library/subtitles/languages` | `subtitle-languages`, `subtitler-languages`, `asr-threads`, `shown-languages`, `subtitle-fullness` |
+| `attach-subtitle` | — | — | `katalog-manager GET /api/library/items/{itemId}/subtitles`, `katalog-manager POST /api/library/items/{itemId}/subtitles`, `katalog-manager DELETE /api/library/items/{itemId}/subtitles/{subtitleId}` and 1 more | `subtitle-languages` |
+| `encode-while-playing` | — | — | `live-worker POST /v1/segment`, `live-worker POST /v1/init`, `live-worker POST /v1/subtitle` and 3 more | `live-queue`, `live-deadlines`, `live-attempts`, `live-watchdog`, `live-circuit-breaker`, `live-threads`, `live-tonemap`, `live-hw-frames`, `live-process-timeouts`, `live-audio-bitrate`, `live-diagnostics` |
+| `heal-failed-steps` | — | — | `katalog-manager query retryPolicy` | `retry-attempts`, `retry-backoff`, `retry-backoff-max`, `retry-interval`, `step-timeouts`, `step-heartbeat` |
+| `retry-steps` | — | — | `katalog-manager query processingOverview`, `katalog-manager mutation retryStep`, `katalog-manager mutation retryFailed` and 1 more | `failed-steps-shown` |
+| `follow-activity` | — | — | `katalog-manager query activity`, `katalog-manager GET /api/manage/stream` | — |
 <!-- end: areas -->

@@ -359,8 +359,9 @@ Figure 17.7: A page that couldn't load, on a TV, at 960 × 540 dp.
 
 ## 17.7 The causes
 
-The app tells the cases apart by the server's answer, its HTTP status, never by
-the words of an error.
+The app tells the cases apart by the server's answer: its HTTP status and,
+where the server names the case, its code. It never reads the words of an
+answer, to show them or to tell cases apart.
 
 | What went wrong | The server's answer | The sentence |
 |---|---|---|
@@ -389,6 +390,27 @@ the words of an error.
 - The player says the same sentences where a request for the stream fails.
   What only playback has, such as a stream that stops before the title is done,
   is in [chapter 11](./playback.md).
+
+Where the status leaves two cases open, or a screen has a sentence of its own
+for a case, the server's answer names the case with a code and gives the
+values the sentence needs
+([ADR-0023](../../docs/adr/0023-languages-and-accessibility.md), part 4). The
+app has the sentence, in the person's language:
+
+| The server's code | Comes with | The app says | Where |
+|---|---|---|---|
+| `list_name_taken`, with the name | 409, creating or renaming a list | “You already have a list called Sunday nights.” | under the field ([chapter 8](./watchlist.md)) |
+| `list_limit` | 409, creating a list | “You have as many lists as an account can have. Delete one first.” | the error banner in the dialog ([chapter 8](./watchlist.md)) |
+| `account_last_admin` | 409, deleting the account | “You are this server's last admin. Make someone else an admin first.” | the error banner in the dialog ([chapter 16](./settings.md)) |
+| `account_identity_admin` | 409, deleting the account | “This account also administers the server's sign-in service. Delete it in that service's own console.” | the same |
+| `account_deletion_unavailable` | 501, deleting the account | “This server doesn't delete accounts from the apps. Ask the people who run it.” | the same |
+| `feedback_off` | 503, sending a report | “Bug reporting is switched off on this server, so this report can't be sent.” | the error banner in the dialog ([chapter 16](./settings.md)) |
+| `token_audience` | 401, any request | nothing: the app asks the server for its sign-in again, then signs in (section 17.11) | — |
+
+- A code the app doesn't know reads as the cause of its status in the table
+  above, so an app older than its server still says something true.
+- The code goes under **details**, after the status: “HTTP 409 Conflict ·
+  list_name_taken”. The server's own line of text is never shown.
 
 ## 17.8 A page, a list, a part of a page
 
@@ -482,6 +504,46 @@ Figure 17.12: No access, on a TV.
 2. **back**, with the focus on it on a TV. A part of a page has no back: its
    error banner says “You don't have access to this.” alone, without a button.
 
+### 17.10.1 When an account's limits refuse
+
+An admin may limit what an account sees and plays ([people](../portal/people.md#rights)). The server
+decides; the apps say what it decided, the same way everywhere. None of these cases is a failure: the
+player files no report for them and offers no **try again** where trying again changes nothing.
+
+| The limit | What the app shows |
+|---|---|
+| The title is in a library the account doesn't see | what it shows for a title above the account's age limit: the title is in no list, and its page and its player read “this title isn't in the library anymore”, with **back** (section 17.9). Nothing says that the title exists |
+| Downloads are switched off for the account | what it shows when the server has turned downloads off ([chapter 13](./downloads.md)): a title's page offers no download and settings have no downloads group; what is on the phone stays. A download under way stops with the reason “Downloads are switched off for this account.”, without **try again** |
+| The highest quality | nothing is refused. The player's quality menu lists the qualities the account may play, and under them, quieter, “This account plays up to High (1080p).” Auto stays within it, and the phone's download qualities end at it |
+| Too many streams | the dialog below, before the title starts |
+| A stream an admin stopped, or one stopped from another of the account's devices | the screen below, in the player's place |
+
+**Too many streams.** When the account already plays on as many devices as it may, the title doesn't
+start, and the design system's dialog says where it plays:
+
+1. **playing elsewhere**, its title.
+2. “This account plays on 2 devices at once, and both are playing.” With one: “This account plays on 1
+   device at a time, and it is playing.” With three or more: “… on 3 devices at once, and all 3 are
+   playing.”
+3. **The streams**, one row each: the device's name, the title, and “since 18:42”, or “paused since
+   18:42”. Each row has **stop**, a button.
+4. **cancel**, the quiet button, closes the dialog and the player. On a TV the focus starts on cancel.
+
+**stop** ends that stream, busy while it does; then the dialog closes and the title starts here. A stream
+that couldn't be stopped is said in the error banner in the dialog: “Couldn't stop that stream.” and the
+cause. Zap and a cast ask the same way.
+
+**A stream that was stopped.** The player stops, and in its place the design system's empty state shows,
+with the error drawing, as no access has it (section 17.10):
+
+| Who stopped it | The title | The sentence |
+|---|---|---|
+| An admin | this stream was stopped | “Alex Urban, an admin of this server, stopped it.”, or “An admin of this server stopped it.” where the server gives no name |
+| The person, from another device | this stream was stopped | “It was stopped from another device of this account.” |
+
+Its one button is **back**. A session that ran out only because the player's signs of life didn't reach
+the server is opened again without a word, and the title plays on.
+
 ## 17.11 A sign-in that expired
 
 A sign-in doesn't last for ever. When the server no longer accepts it, the app
@@ -574,6 +636,8 @@ server to [chapter 13](./downloads.md).
 | 17.C13 | A refresh that fails keeps the screen, under a warning | Web, Phone app, Android TV, Samsung TV | Web: a title's page keeps what it shows, without a word. Phone app: home's rows keep what the phone had, without a word. Android TV: home after a filter change and the watchlists after a change show the couldn't-load in place of what they showed; a title's page keeps it, without a word. Samsung TV: every screen loads again when opened, and a failure replaces it | section 17.14: what the screen showed stays, under the design system's warning banner, “Couldn't refresh the movies; it shows what was loaded 4 minutes ago.”, with **try again** | proposed |
 | 17.C14 | A failed action in an error banner, by cause | Web, Phone app, Android TV, Samsung TV | Web: in its dialog, the error's own message, or “Could not create list”, “Could not rename list”, “Could not delete list”. Phone app: “Couldn't save the list. Try again.” Android TV: a list's create, rename or delete that fails says nothing; a report that couldn't be sent says “Couldn't send the report. Check your connection and try again.” in red. Samsung TV: “Couldn't create that list.” in red on the watchlist, after the dialog closed | section 17.13: the screen stays with what was typed, under the design system's error banner, which can be dismissed, with the action's sentence and the cause's, “Couldn't create the list. Can't reach the server.”, the status under its details; the lists' own words in chapter 8, the report's in chapter 16 | proposed |
 | 17.C15 | The web's not-accepted sentence | Web | “The server didn't accept the request.”, without “Check for an app update.”, which the design system's table has | Recommended: keep it so, the first part alone, because a web page updates itself and has no app update to check for (section 17.7); once approved, nothing needs building | proposed |
+| 17.C16 | What the apps say when an account's limits refuse | Web, Phone app, Android TV, Samsung TV | an account has one limit, the rating cap, and a title above it reads as removed; a play request the server refuses reads as any other failure: on the web 403 and 409 “The server didn't accept the request.”, in the phone app 403 “you don't have access to this”, on Android TV “Playback failed:” with the player's error code, on the Samsung TV “Playback failed” with “chino-api 403”; downloads are offered by the server's switch alone | the new section When an account's limits refuse, by limit: a title of a library the account doesn't see reads as removed, as one above its cap (section 17.9); downloads switched off for the account: no download offered, as when the server has turned them off, and one under way stops with “Downloads are switched off for this account.”; the highest quality: nothing refused, the quality menu ends at it, over “This account plays up to High (1080p).”; too many streams: before the title starts the dialog **playing elsewhere**, with the streams that play, **stop** on each and **cancel**; a stream stopped by an admin or from another device: in the player's place “this stream was stopped”, who stopped it and **back**; no report is filed for any of them | proposed |
+| 17.C17 | A failure's sentence by the server's code | Web, Phone app, Android TV, Samsung TV | Phone app: tells a taken list name from a list too many by the word “name” in the server's line, and a sign-in made for another server by the word “audience”. Web: a failed list action shows “request failed (409)”. All four: a deletion the server refused or could not do shows the server's own sentence | section 17.7: the case by the status and, where the server names one, by its code; the sentence from the message catalogue under the code's key, in the place its chapter gives it: “You already have a list called Sunday nights.” and “You have as many lists as an account can have. Delete one first.” (chapter 8); “You are this server's last admin. Make someone else an admin first.”, “This account also administers the server's sign-in service. Delete it in that service's own console.” and “This server doesn't delete accounts from the apps. Ask the people who run it.” (chapter 16); “Bug reporting is switched off on this server, so this report can't be sent.” (chapter 16); `token_audience` says nothing: the app asks the server for its sign-in again; a code the app doesn't know reads as the cause of its status; the code stands under **details** after the status, “HTTP 409 Conflict · list_name_taken”; no app reads the words of an answer. Built after 16.C24 | proposed |
 
 ## 17.16 States
 
@@ -604,7 +668,11 @@ Every case, and what each place shows.
 | Removed | this title isn't in the library anymore · this person isn't in the library anymore |
 | No access | you don't have access to this · You don't have access to this. (in a part of a page) |
 | The buttons | try again · back |
-| Details | details · “HTTP 500 Internal Server Error”, the status and its reason phrase · an answer that couldn't be read |
+| Details | details · “HTTP 500 Internal Server Error”, the status and its reason phrase · an answer that couldn't be read · “HTTP 409 Conflict · list_name_taken”, the status and the server's code |
 | A refresh that failed | Couldn't refresh the movies; it shows what was loaded 4 minutes ago. · try again |
 | An action that failed | its own sentence, “Couldn't create the list.” or “Couldn't rename the list.”, then the cause's · details |
 | The web app at its start | couldn't load the app · No chino server answers at this address. |
+| Downloads switched off | Downloads are switched off for this account. |
+| The quality menu | This account plays up to High (1080p). |
+| Too many streams | playing elsewhere · This account plays on 2 devices at once, and both are playing. · This account plays on 1 device at a time, and it is playing. · This account plays on 3 devices at once, and all 3 are playing. · since 18:42 · paused since 18:42 · stop · cancel · Couldn't stop that stream. |
+| A stream that was stopped | this stream was stopped · Alex Urban, an admin of this server, stopped it. · An admin of this server stopped it. · It was stopped from another device of this account. · back |

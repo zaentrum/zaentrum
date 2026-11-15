@@ -272,6 +272,7 @@ doesn't have.
 | Not there, no access | “this title isn't in the library anymore”, “you don't have access to this”, each with back | the same | the same, but “you don't have access to this title” | the red line with “chino-api 404”, “chino-api 403” |
 | The episodes couldn't load | “couldn't load the episodes”, the reason, a quiet try again | nothing: the episodes are left out | nothing | nothing |
 | Without a connection | — | a downloaded title's page from the phone, under “Can't reach the server. Your downloads still play.”; any other title couldn't load | — | — |
+| The collections a title is part of | — | — | — | — |
 
 ## 6.3 A movie's page
 
@@ -744,6 +745,28 @@ Back on the page from the player, the page doesn't load again. It keeps what
 it shows and quietly brings up to date what playing changed: the first
 button, the bars and the watched marks.
 
+### 6.8.5 The collections a title is part of
+
+A title that is in a collection ([chapter 5](./browse.md)) shows the collection's other
+titles in a row of their own, after the people or a show's episodes and before **more like
+this**. A title in several collections has a row for each, in the order the server gives
+them, three at most.
+
+- **The heading** is **part of** and the collection's name, then, quieter, the title's
+  place in it: “part of Open movies · 2 of 5”. It is lowercase in the monospace face, the
+  name keeping its capitals. Choosing it opens the collection's page.
+- **The row** holds the collection's other titles, without this one, in the collection's
+  order, up to 12, as posters with their status marks (section 6.5.4), each with its name
+  and its year. Its last card is **see all**, as a row of the watchlist ends
+  ([chapter 8](./watchlist.md)), and it opens the collection's page too.
+- The row scrolls sideways as **more like this** does. On a TV it is a row of cards that
+  runs past the safe area, and the focus moves down from the people or the episodes to it,
+  then on to **more like this**.
+- A title in no collection has no such row. Where a row's titles couldn't load, the row
+  is left out.
+- The page built from the phone while the server can't be reached leaves the rows out, as
+  it leaves out the people ([chapter 13](./downloads.md)).
+
 ## 6.9 Changes
 
 Every difference between section 6.2 and the target is one change in the
@@ -784,6 +807,7 @@ has today. The frame itself, the top bar, the tabs and the rail, belongs to
 | 6.C23 | TV: where the focus starts and where it comes back | Android TV, Samsung TV | Android TV: the code sets no first focus. Samsung TV: back from another page or from the player loads the page again, the focus on play | the focus starts on **play** or **resume**; back puts it on the card or the name that opened a page, the page scrolled as it was; back from the player keeps the page (sections 6.3.5, 6.8.4) | proposed |
 | 6.C24 | Couldn't load, removed and no access, by cause | Web, Android TV, Samsung TV | Web: a quiet back beside try again. Android TV: no access says “you don't have access to this title”. Samsung TV: one red line, “Could not load this title: chino-api 503.”, also for 404 and 403; no button | figures 6.20 to 6.22 and the table of section 6.10, the design system's empty state: its error picture, the reason by cause, try again alone and details; its empty picture with “this title isn't in the library anymore” or “you don't have access to this”, each with back | proposed |
 | 6.C25 | The episodes that couldn't load say so | Phone app, Android TV, Samsung TV | the episodes are left out without a word | the design system's empty state at its small size in their place: “couldn't load the episodes”, the reason and **try again**, the rest of the page as it is (section 6.10) | proposed |
+| 6.C26 | The collections a title is part of | Web, Phone app, Android TV, Samsung TV | a title's page says nothing of a collection: “More like this” follows the people and a show's episodes | section 6.8.5: for each collection a title is in, three at most, a row headed **part of** and the collection's name, with the title's place after it, “2 of 5”, after the people or a show's episodes and before **more like this**: the collection's other titles in its order, up to 12, as posters with their status marks, with **see all** as the last card; the heading and **see all** open the collection's page (5.C22); a title in no collection has no such row | proposed |
 
 ## 6.10 States
 
@@ -845,6 +869,7 @@ Figure 6.22: A title that isn't in the library anymore, on a computer.
 | A show's episodes couldn't load | The rest of the page; in the episodes' place, the empty state at its small size: “couldn't load the episodes”, the reason and **try again** |
 | No description, no people, nothing like it | Each part is left out, and nothing says it's missing |
 | The phone app can't reach the server | A downloaded title's page is built from what is on the phone, with the banner on top ([chapter 13](./downloads.md)); any other title's page is figure 6.20 without the sentence, which the banner says |
+| A collection's other titles couldn't load | Its row is left out, and nothing says it's missing |
 
 ## 6.11 Words
 
@@ -867,3 +892,4 @@ Figure 6.22: A title that isn't in the library anymore, on a computer.
 | The episodes couldn't load | couldn't load the episodes |
 | Removed | this title isn't in the library anymore · back |
 | No access | you don't have access to this · back |
+| The collections a title is part of | part of Open movies · 2 of 5 · see all |

@@ -13,7 +13,9 @@ release.
 > Only a change the owner approved is built, one at a time, and anything no
 > change names stays as it is deployed. The portal's home page has the same
 > form; its settings page shows the target only, and nothing in it is built
-> until a change to it is approved.
+> until a change to it is approved. The pages of the portal's consoles, of the
+> catalog and of the platform have the form too, with what is built read from
+> the code and no figures yet.
 
 Above both layers stands [what zaentrum is for](./goals/README.md): what people
 want of it, what that takes, how well each has to be met, and how every
@@ -34,10 +36,12 @@ holds the decision records behind the platform.
 | Part | What it specifies |
 |---|---|
 | [what it is for](./goals/README.md) | the goals: what people want, what that takes, what being open adds; the qualities each has to be met with |
-| [capabilities](./capabilities/README.md) | what the platform does, for whom, where each app and console has it, what serves it, and its settings; what is expected of it and not there |
+| [capabilities](./capabilities/README.md) | what the platform does, for whom, where each app and console has it, what serves it, and its settings; what is expected of it and not there; [what becomes](./capabilities/scope.md) of everything that is not built; and the [order of the work](./capabilities/packages.md) |
 | [architecture](./architecture/README.md) | the components that do it: their code, what runs them, their connections, the decisions behind them, their limits |
 | [chino](./chino/README.md) | the apps for watching: on the web, on a phone or a tablet, on Android TV and on Samsung TVs |
-| [portal](./portal/README.md) | the portal: its home page, and its settings and setup |
+| [portal](./portal/README.md) | the portal: its home page, its settings and setup, people and what they may do, and running the platform |
+| [catalog](./catalog/README.md) | the library and the console an admin looks after it in |
+| [platform](./platform/README.md) | reaching the platform at home, installing and updating it, and releases one can trust |
 
 Both follow the [nalet design system](https://nalet.github.io/design-system/),
 which holds the rules every product shares, and don't repeat them. A part
