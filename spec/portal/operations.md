@@ -339,7 +339,7 @@ invite and still answers the link, which the page shows once, as today.
 
 | Route | Takes | Answers |
 |---|---|---|
-| `POST /api/portal/people` | as today, and `email` (optional), `sendInvite` (true or false, default false) | as today, and `mail`: `sent`, `not-set-up`, `no-address` or `failed`, with `mailError`, a sentence, when it failed |
+| `POST /api/portal/people` | as today, and `email` (optional), `sendInvite` (true or false, default false) | as today, and `mail`: `sent`, `not-set-up`, `no-address` or `failed`, with `mailError`, the reason: its code, its values and its sentence, when it failed |
 | `PATCH /api/portal/people/{id}` | as today, and `email`; an empty one removes the address | the person |
 | `POST /api/portal/people/{id}/invite` | `send` (true or false, default false) | the link as today, and `mail` and `mailError` as above |
 
