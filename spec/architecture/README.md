@@ -163,10 +163,10 @@ to render the chart.
 | running the platform | 3 | 1 | 2 |  |  |  |  |  |  |  |
 | outside the platform | 4 |  |  |  |  | 4 |  |  |  |  |
 | the reference demo | 1 |  |  |  |  |  | 1 |  |  |  |
-| beside the platform | 4 |  |  |  |  |  |  | 4 |  |  |
+| beside the platform | 5 |  |  |  |  |  |  | 5 |  |  |
 | later products | 4 |  |  |  |  |  |  |  | 4 |  |
 | retired | 4 |  |  |  |  |  |  |  |  | 4 |
-| all | 46 | 19 | 5 | 2 | 3 | 4 | 1 | 4 | 4 | 4 |
+| all | 47 | 19 | 5 | 2 | 3 | 4 | 1 | 5 | 4 | 4 |
 
 | Connections | Rows | Made by the chart's wiring | Only in the code |
 |---|---|---|---|
@@ -187,7 +187,7 @@ to render the chart.
 | services | 18 | listed: each leads to a workload |
 | paths of the Ingress | 11 | listed: each leads to a workload |
 | wires | 242 | 44 lead to another component, each a connection's via |
-| repositories of the organisation | 31 | a component: 27 active, 4 archived |
+| repositories of the organisation | 32 | a component: 28 active, 4 archived |
 
 | Decision records | Accepted | Proposed |
 |---|---|---|

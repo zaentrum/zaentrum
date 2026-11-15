@@ -126,6 +126,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 |---|---|---|---|---|---|---|---|---|
 | `zaentrum` | the front door: the docs, the specification, the releases | docs | beside | [zaentrum](https://github.com/zaentrum/zaentrum) | — | — | — | ADR-0006 |
 | `zaentrum-site` | the site: the product page, the docs and the specification | docs | beside | [zaentrum.github.io](https://github.com/zaentrum/zaentrum.github.io) | — | — | — | — |
+| `shared-files` | the files every repository shares: the security policy and the guide to contributing | docs | beside | [.github](https://github.com/zaentrum/.github) | — | — | — | — |
 | `schemas` | the event contracts | contracts | beside | [schemas](https://github.com/zaentrum/schemas) | — | — | — | ADR-0005 |
 | `sample-addon` | the reference addon | addon | beside | [sample-addon](https://github.com/zaentrum/sample-addon) | — | — | — | ADR-0001 |
 

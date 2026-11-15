@@ -1336,6 +1336,7 @@ path:zaentrum-operator:/chino,path,zaentrum-operator,/chino,chino-web,"service c
 path:zaentrum-operator:/katalog,path,zaentrum-operator,/katalog,katalog-manager-ui,"service katalog-manager-ui:80, Prefix",operator/platform/chart/templates/ingress.yaml:41
 path:zaentrum-operator:/katalog-manage,path,zaentrum-operator,/katalog-manage,katalog-manage-ui,"service katalog-manage-ui:80, Prefix",operator/platform/chart/templates/ingress.yaml:41
 path:zaentrum-operator:/portal,path,zaentrum-operator,/portal,zaentrum-portal,"service zaentrum-portal:80, Prefix",operator/platform/chart/templates/ingress.yaml:66
+repo:.github:.github,repo,.github,.github,active,Files every repository of zaentrum shares,
 repo:analyzer:analyzer,repo,analyzer,analyzer,active,"analyzer — media analysis (intro/credit detection, trickplay, fingerprinting) for the zaentrum platform",
 repo:api-gateway:api-gateway,repo,api-gateway,api-gateway,archived,api-gateway — Envoy + oauth2-proxy edge gateway for the zaentrum platform,
 repo:artwork:artwork,repo,artwork,artwork,archived,"Image-pipeline service for the stube value stream — serves resized, cached cover art, posters, and thumbnails from S3-compatible storage via libvips.",
