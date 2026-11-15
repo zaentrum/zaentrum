@@ -124,7 +124,7 @@ What an open product owes the people who run it, check it and build on it. Speci
 
 | Key | Changes | Next | Served by | Settings |
 |---|---|---|---|---|
-| `report-security-hole` | T.C1 | build | — | — |
+| `report-security-hole` | T.C1 | — | `.github` | — |
 | `contribute-change` | T.C2, T.C3 | build | — | — |
 | `trace-image-to-source` | T.C4 | build | — | — |
 | `call-only-the-server` | T.C5, 3.C13 | build | — | — |

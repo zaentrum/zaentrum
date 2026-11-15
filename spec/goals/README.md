@@ -100,7 +100,7 @@ flowchart TD
 | [Share it with a household](#share-it-with-a-household) | what that takes | [Run it oneself](#run-it-oneself) | 11: 1 there, 5 partly, 5 not there | 17 in 1 area, 10 served by nothing | 2, 2 with a target, 2 approved |
 | [Run it oneself](#run-it-oneself) | what that takes | [Trust it](#trust-it) | 12: 2 there, 6 partly, 4 not there | 66 in 4 areas, 23 served by nothing | 5, 5 with a target, 5 approved |
 | [Make it one's own](#make-it-ones-own) | what being open adds | [Run it oneself](#run-it-oneself) | 5: 2 there, 1 partly, 2 not there | 12 in 1 area, 2 served by nothing | 1, 1 with a target, 1 approved |
-| [Trust it](#trust-it) | what being open adds | — | 4: 1 partly, 3 not there | 4 in 1 area, 3 served by nothing | 4, 4 with a target, 4 approved |
+| [Trust it](#trust-it) | what being open adds | — | 4: 1 there, 1 partly, 2 not there | 4 in 1 area, 2 served by nothing | 4, 4 with a target, 4 approved |
 <!-- end: goals -->
 
 <!-- generated: by-goal -->
@@ -200,9 +200,9 @@ The platform leaves things out on purpose; anyone adds them as an addon, without
 
 Anyone can see what it does, check it, change it, and count on it staying open. Needed by: [Run it oneself](#run-it-oneself).
 
-- **Expected of it:** [4 expectations](../capabilities/expectations.md#trust-it): 1 partly, 3 not there.
+- **Expected of it:** [4 expectations](../capabilities/expectations.md#trust-it): 1 there, 1 partly, 2 not there.
 - **Capabilities:** [Releases one can trust](../capabilities/platform.md#releases-one-can-trust) (4).
-- **Served by:** no component yet.
+- **Served by:** `shared-files`.
 
 | It has to | Quality | Measured by | Today | Target | Says so |
 |---|---|---|---|---|---|

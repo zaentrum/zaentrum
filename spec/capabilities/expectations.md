@@ -154,7 +154,7 @@ For the goal [Trust it](../goals/README.md#trust-it).
 
 | Expected | State | Next | Met by | Note |
 |---|---|---|---|---|
-| Report a security hole in private | not there | build | [`report-security-hole`](./platform.md#releases-one-can-trust) no | — |
+| Report a security hole in private | there | — | [`report-security-hole`](./platform.md#releases-one-can-trust) built | — |
 | Check where an image comes from and what it holds | not there | build | [`trace-image-to-source`](./platform.md#releases-one-can-trust) no | — |
 | The apps send nothing to anyone but the server | partly | build | [`call-only-the-server`](./platform.md#releases-one-can-trust) partial | — |
 | Change it and have the change taken in | not there | build | [`contribute-change`](./platform.md#releases-one-can-trust) no | — |
