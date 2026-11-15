@@ -140,9 +140,9 @@ model, each reference, change and id resolved, written by the same program.
 | [chino](./chino.md) | 150 | 135 | 3 | 12 | 143 | 17 |
 | [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 23 |
 | [the catalog and the pipeline](./catalog.md) | 54 | 22 | 18 | 14 | 22 | 14 |
-| [the platform](./platform.md) | 35 | 18 | 15 | 2 | 25 | 15 |
+| [the platform](./platform.md) | 35 | 18 | 15 | 2 | 25 | 14 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 306 | 217 | 46 | 43 | 228 | 70 |
+| all | 306 | 217 | 46 | 43 | 228 | 69 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
@@ -179,10 +179,10 @@ a decision record rules it out.
 | [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 5 | 5 | 0 | 0 |
 | [Run it oneself](./expectations.md#run-it-oneself) | 12 | 2 | 6 | 4 | 0 | 0 |
 | [Make it one's own](./expectations.md#make-it-ones-own) | 5 | 2 | 1 | 2 | 0 | 0 |
-| [Trust it](./expectations.md#trust-it) | 4 | 0 | 1 | 3 | 0 | 0 |
-| all | 61 | 6 | 27 | 26 | 1 | 1 |
+| [Trust it](./expectations.md#trust-it) | 4 | 1 | 1 | 2 | 0 | 0 |
+| all | 61 | 7 | 27 | 25 | 1 | 1 |
 
-Nothing serves 70 of the 306 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 69 of the 306 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
