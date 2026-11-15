@@ -259,11 +259,17 @@ Mail is **set up** when `host` and `from` are set. The operator then:
 2. with the bundled identity provider, has the realm job write the server,
    the port, the encryption, the sender, the user and the password into the
    realm's mail settings, and switch the realm's password reset on; without
-   mail the job clears them and switches the reset off;
+   mail the job clears them and switches the reset off. The job reads the
+   realm's mail settings as they are after that step and switches by them: on
+   while they name a server, off while they name none. The chart's realm is
+   made with the reset off, so a new platform offers none before the job has
+   run;
 3. says in the condition `Mail` where it stands: `NotSetUp`, `SecretMissing`
    when the Secret named is not there or lacks its key, or a user has none
    named where the resource's rule did not run, `Configured`. While the Secret
-   is missing the realm's mail settings stay as they were.
+   is missing the realm's mail settings stay as they were, and the password
+   reset with them: on where a server is still in the realm, off where none
+   is.
 
 The user's name is in the resource, where an admin can read it; the password
 alone is in the Secret, which portal-api writes and never reads. So a change
@@ -284,10 +290,14 @@ answers runs with the settings.
 
 Nothing else is sent. What an addon tells a person stays in the bell.
 
-Every mail is plain text in UTF-8, to one address, with the headers `From`,
-`To`, `Subject`, `Date`, `Message-ID` and `Auto-Submitted: auto-generated`. It
-carries no picture and nothing that reports whether it was opened. The words
-are in the section Words.
+Every mail portal-api sends is plain text in UTF-8, to one address, with the
+headers `From`, `To`, `Subject`, `Date`, `Message-ID` and
+`Auto-Submitted: auto-generated`. The password reset has the identity
+provider's form: one mail to one address, with a text part and an HTML part
+that carry the same lines, a paragraph each, the link in the HTML part marked
+`rel="nofollow"`, and no `Auto-Submitted` header. No mail carries a picture
+or anything that reports whether it was opened. The words are in the section
+Words.
 
 ### Sending
 
@@ -347,9 +357,16 @@ invite and still answers the link, which the page shows once, as today.
 
 With mail ready and the bundled identity provider, the sign-in page shows
 “Forgot password?” as today. It leads to the identity provider's own page,
-which mails a link that works for 5 minutes, the realm's time for such a
-link today. Without mail the page shows no link, and under the form:
-“Forgot your password? Ask an admin for a new invite link.”
+which mails a link that works for the realm's time for such a link: 5
+minutes today. The mail names the time the realm has, so it stays true where
+somebody changes it. Without mail the page shows no link, and under the
+form: “Forgot your password? Ask an admin for a new invite link.”
+
+The pages after “Forgot password?” are the identity provider's own, in its
+words and under the realm's name: the one that asks for the username or the
+address, and the one that answers “You should receive an email shortly with
+further instructions.” for every account. The chart words the sign-in page
+and the mail, not them.
 
 ### The mail page
 
@@ -969,7 +986,7 @@ starts with “Recommended” holds a choice that is the owner's.
 | R.C2 | portal-api sends mail | Server | no component sends mail | portal-api: sections Mail, What is sent, Sending and The mail page: an SMTP client with the three encryptions; plain-text mails with the words of the section Words; `GET`, `PUT` and `DELETE /api/portal/mail` and `POST /api/portal/mail/test`; a new password goes into a new Secret, which the resource then names; while mail is not set up nothing is sent and every answer says so | approved |
 | R.C3 | The mail page | Portal | no page; mail cannot be set up | section Mail, The mail page: the tile mail in the settings group and the page at `/portal/mail`, with the form of the server and the sender, **save**, **send test mail**, **remove mail settings**, what is sent with the switch **mail alerts**, and who alerts go to with **change your address** and **further addresses**; its states and its words as the sections States and Words have them | approved |
 | R.C4 | An address, and the invite by mail | Server, Portal | a person is added with a name, a username, a role and a rating cap; the invite link is shown once, to copy and hand over | portal-api: section Mail, People and addresses: `POST /api/portal/people` and `PATCH /api/portal/people/{id}` take `email`, one address for one account; `POST /api/portal/people` takes `sendInvite`, `POST /api/portal/people/{id}/invite` takes `send`, and both answer `mail`. The people page: the field **email**, the switch **send the link by mail**, and the link's dialog saying whether the mail was sent | approved |
-| R.C5 | “Forgot password?” only where mail is ready | Operator | the bundled realm allows a password reset and the sign-in page shows “Forgot password?”, with no mail server to send the link | section Mail, The sign-in page: the realm job switches the realm's password reset on with mail and off without; the chart's sign-in page shows “Forgot password?” with it, and “Forgot your password? Ask an admin for a new invite link.” without; the chart's theme gives the reset mail the words of the section Words | approved |
+| R.C5 | “Forgot password?” only where mail is ready | Operator | the bundled realm allows a password reset and the sign-in page shows “Forgot password?”, with no mail server to send the link | section Mail, The sign-in page: the chart's realm is made with the password reset off; the realm job switches it on with mail and off without; the chart's sign-in page shows “Forgot password?” with it, and “Forgot your password? Ask an admin for a new invite link.” without; the chart's theme gives the reset mail the words of the section Words | approved |
 | R.C6 | The status says since when, and until when | Operator | `status.components[]` says whether a part is ready, not since when; the certificate's end is a date inside the `TLS` condition's sentence; the resource has no thresholds | section Alerts: `status.components[].notReadySince`; `status.certificate` with `notAfter` and `names`, where the platform has a certificate of its own; `spec.alerts.partNotReadyMinutes`, `.volumeFullPercent`, `.certificateDays`, `.backupAgeDays` and `.mail`, with the defaults and the ranges of The five alerts, refused outside them | approved |
 | R.C7 | The volumes are measured | Operator | nothing measures a volume; a backup's run reports the free space of the backups' claim inside the `Backup` condition's sentence | section Alerts, Measuring: one measuring job for each claim, every hour, on the annotation `zaentrum.io/storage-request` and, for the backups' claim, after each backup; the library's also asks the bundled Postgres; the operator writes `status.storage.volumes[]`, `status.storage.databases[]`, `status.storage.request`, `status.backup.sets[]` and the condition `StorageMeasured`; proven first as [ADR-0019](../../docs/adr/0019-mail-and-alerts.md#to-prove-first) says | approved |
 | R.C8 | Alerts are raised | Server | portal-api reads the phase, the parts and the self-check from the status when an admin opens the operator page; it compares nothing and keeps nothing | portal-api: section Alerts: every 60 seconds it reads the status, starts and ends the five alerts by the rules of When an alert starts and ends, keeps them in a table of its own for 90 days, mails them by the rules of By mail with the words of the section Words, and serves `GET /api/portal/alerts`, `PATCH /api/portal/alerts/settings`, `POST /api/portal/alerts/{id}/read` and `POST /api/portal/alerts/read-all` | approved |
@@ -1019,6 +1036,9 @@ starts with “Recommended” holds a choice that is the owner's.
 | The address belongs to another account, or is no address | the field's error |
 | Sign-in page, mail ready | “Forgot password?” |
 | Sign-in page, no mail | the sentence under the form |
+| Sign-in page, a new platform before the realm job's first run | the sentence under the form: the realm is made with the reset off |
+| Sign-in page, the Secret is missing | as it was before: “Forgot password?” where a server is still in the realm's mail settings, the sentence under the form where none is |
+| After “Forgot password?” | the identity provider's own pages, in its words |
 | An account without an address asks for a reset | the identity provider's page answers as for any account, and no mail is sent; the people page shows who has no address |
 
 ### In the bell and on the alerts page
@@ -1174,12 +1194,14 @@ the link's dialog gives them as its {why}.
 |---|---|---|
 | An invite | “Your account on {host}” | “Hello {name},” · “{admin} made an account for you on {host}. Your username is {username}.” · “Open this link to choose your password:” · “{link}” · “The link works once, until {date}. After that, ask {admin} for a new one.” · “If you did not expect this mail, ignore it.” |
 | A new invite link | “A new link for your account on {host}” | “Hello {name},” · “{admin} made a new link for your account {username} on {host}.” · “Open it to choose a new password:” · “{link}” · “The link works once, until {date}. Your password stays as it is until you use the link.” · “If you did not expect this mail, ignore it.” |
-| A password reset | “Reset your password” | “Somebody asked to reset the password of your account.” · “If it was you, open this link and choose a new password:” · “{link}” · “The link works for 5 minutes.” · “If it was not you, ignore this mail. Your password stays as it is.” |
+| A password reset | “Reset your password” | “Somebody asked to reset the password of your account.” · “If it was you, open this link and choose a new password:” · “{link}” · “The link works for {time}.” · “If it was not you, ignore this mail. Your password stays as it is.” |
 | An alert starts | the alert's title | the alert's text · “See it: {link}” · “You get this mail because you are an admin of {host}, or your address is in its alert settings.” |
 | An alert ends | “Ended: {the alert's title}” | the sentence of its end · “It started on {date} and ended on {date}.” · “You get this mail because you are an admin of {host}, or your address is in its alert settings.” |
 | A test mail | “Test mail from {host}” | “This mail was sent from the mail page of {host}, to check that mail works. Nothing else needs doing.” |
 
 Times in a mail are in UTC and say so: “15 November 2026, 14:02 UTC”.
+{time} in the password reset is the realm's time for such a link, as the
+identity provider words it: “5 minutes” today.
 
 ### Words of the resource and the realm job
 
