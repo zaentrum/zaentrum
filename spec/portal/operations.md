@@ -415,7 +415,8 @@ which opens `/portal/mail`. The page is a form in four parts:
    “Alerts”, each with one sentence, and the design system's switch **mail
    alerts** on the third (`spec.alerts.mail`).
 4. **alerts go to**: a table with the columns **who** and **address**: every
-   admin with their address or “no address”, then the further addresses.
+   admin whose account is enabled, with their address or “no address”, then
+   the further addresses.
    Under it are the link **change your address**, which opens the identity
    provider's account page for the admin signed in, and the field **further
    addresses**, which takes up to 10.
@@ -449,6 +450,11 @@ refuses one in every mail field, and portal-api refuses it before it writes.
 Where the cluster does not know mail settings, as under an operator from
 before them, **save** writes nothing, keeps no Secret and says so.
 
+A code has one sentence. Where two pages word the same case differently, each
+has a code of its own that starts with the page's name (`mail_`, `alerts_`,
+`backups_`, `storage_`); a case worded the same everywhere keeps one code. A
+refusal's values are numbers and names as they are, not all of them strings.
+
 ## Alerts
 
 An alert says that one of five things is wrong. The list is fixed. Each alert
@@ -466,7 +472,9 @@ when it starts and when it ends.
 | An update failed | a rollout has given up, or the self-check after an update failed; on one machine, the updater went back or could not start | none | | |
 
 `spec.alerts.mail` (true or false, default true) says whether alerts are
-mailed. Every alert shows in the bell whatever it says.
+mailed. Every alert shows in the bell whatever it says. The resource holds
+no defaults: a setting left out means its default, which portal-api applies.
+A value outside its range is refused by the cluster, in the cluster's words.
 
 ### Where each fact comes from
 
@@ -474,7 +482,9 @@ Every fact is in the status of the platform's resource, which portal-api
 reads as itself; on a one-machine install one more is in the updater's
 report, which portal-api reads the same way. portal-api asks no other
 service: it reaches the catalog's writer only with the sign-in of an admin,
-and an alert is checked while nobody is signed in.
+and an alert is checked while nobody is signed in. The addresses an alert is
+mailed to it reads from the identity provider with its own client, as the
+people page does.
 
 | Alert | The status it reads | Who writes it |
 |---|---|---|
@@ -487,10 +497,14 @@ and an alert is checked while nobody is signed in.
 The operator adds three things to the status:
 
 - **`status.components[].notReadySince`**: the time a part was first seen
-  not ready; empty while it is ready.
+  not ready while it is meant to run. It is absent while the part is ready,
+  and while the part is meant to run at 0: one an admin stopped, and every
+  part the operator keeps stopped for a restore.
 - **`status.certificate`**: `notAfter`, the time the certificate ends, and
   `names`, the names it is for. It is there when the platform has a
   certificate of its own (`spec.tls`) that can be read, and absent otherwise.
+  It is there whenever the Secret holds a certificate that can be read,
+  whatever else the condition `TLS` says of it.
 - **`status.storage`**: what the measuring jobs found.
 
 ### Measuring
@@ -500,32 +514,50 @@ short job that mounts it:
 
 - The chart has one measuring job for each claim the platform uses: the
   library's (`media`), the backups', and the event broker's where it has a
-  claim. Each runs every hour, one at a time, mounts its claim read-only, and
-  reports the filesystem's size, what is free, and the filesystem's id.
+  claim. Each runs every hour, never two runs of one job at once, mounts its
+  claim read-only, and reports the filesystem's size, what an ordinary
+  writer can still use of it, and the filesystem's id. The backups' hourly
+  run is skipped while a backup runs.
 - The library's job also asks the bundled Postgres for the size of each
   platform database, and for the size, the free space and the filesystem id
   of the volume its data is on: the database server reads those itself, for
-  its superuser.
-- The backups' job also lists the dumps on the claim, the newest 30 with
+  its superuser. A database server without a claim of its own has no volume
+  listed, and with external databases nothing is asked.
+- The backups' job also lists the sets on the claim, the newest 30 with
   their size, the version in their `backup.json`, whether they are whole (the
-  checksums file is there) and whether this platform made them.
+  checksums file is there) and whether this platform made them: the `uid` in
+  the set's `backup.json` is this resource's. A set without `backup.json` has
+  no version, and nothing says who made it. A report holds 4096 bytes at
+  most: where 30 sets do not fit, the job lists fewer, and it always says how
+  many the claim holds. Asked for one set by name, it reports that set as
+  well, however old it is. The backups' claim is measured where backups are
+  on, and for a restore.
 - The operator reads each job's result as it reads a backup's, and writes:
 
   | Field | Holds |
   |---|---|
-  | `status.storage.volumes[]` | `name` (`media`, `postgres-data`, `backups`, `kafka`), `claim`, `sizeBytes`, `freeBytes`, `filesystem`, `measuredAt` |
-  | `status.storage.databases[]` | `name`, `bytes` |
+  | `status.storage.volumes[]` | `name` (`media`, `postgres-data`, `backups`, `kafka`), `claim`, `requestBytes` (the size the claim asks for, there for every claim, measured or not), `sizeBytes`, `freeBytes`, `filesystem`, `measuredAt` |
+  | `status.storage.databases[]` | `name` (the database's key: `chino`, `katalog`, `keycloak`, `portal`), `bytes` |
   | `status.storage.request` | the last `zaentrum.io/storage-request` answered |
-  | `status.backup.sets[]` | `name`, `bytes`, `version`, `whole`, `own`, newest first |
-  | the condition `StorageMeasured` | `Measured`, or `Failed` with the job's reason; the figures before it stay, with their time |
+  | `status.backup.sets[]` | `name`, `bytes`, `version`, `whole`, `own`, `versionRule` (what the version rule says of the set now: `ok`, `newer` or `not-comparable`), newest first |
+  | the condition `StorageMeasured` | `Measured`, or `Failed` with the job's reason; absent until the first job has ended. What a failed run did measure is written, and the other figures stay, with their time |
 
 - The annotation `zaentrum.io/storage-request` on the resource, with a value
   the operator has not answered, starts every measuring job at once. The
-  operator also measures the backups' claim when a backup has ended.
-- No measuring job starts while a restore runs.
+  operator also measures the backups' claim when a backup has ended. A
+  request is answered, in `status.storage.request`, once every job it
+  started has ended.
+- No measuring job starts while a restore runs, and a restore waits for one
+  that still runs on the backups' claim. A request made meanwhile is
+  answered after the restore.
 
 Two volumes that report the same filesystem id are on one disk: they have one
-size and one free space, and they are one alert.
+size and one free space, and they are one alert. The id is the filesystem's
+own, with the node it was measured on in front; a filesystem that reports
+none, as a network share does, joins nothing. Volumes with different ids can
+still share their free space, as the volumes of one storage pool do: they are
+measured and alerted apart. A volume whose job cannot run, such as a claim
+that only one pod may mount, is not measured, and the condition says why.
 
 ### When an alert starts and ends
 
@@ -537,18 +569,39 @@ decides which of them sends its mail.
 
 | Alert | About | Starts | Ends |
 |---|---|---|---|
-| A part is not ready | the part | `ready` is false and `notReadySince` is older than the setting. Not counted: a part the admin scaled to 0 (`spec.replicas`), and every part while the phase is `Restoring` | the part is ready |
-| A volume is almost full | the disk: every volume with that filesystem id | size less free, over size, is at or above the setting | it is below the setting |
-| The certificate ends soon | the certificate | `notAfter` is within the setting, or past | `notAfter` is later than that |
-| No good backup | the backups | the condition `Backup` is `Failed`; or `lastSuccess` is older than the setting; or there is none and the platform is older than the setting. Not where backups are off or the databases are external | a backup has succeeded within the setting |
-| An update failed | the update | `Ready` is false with `RolloutStalled`; or the last self-check was started by an update and ended `Failed` or `Error`; or, on a one-machine install whose updater reports to the platform, its last update went back or did not start | none of the three holds |
+| A part is not ready | the part | `notReadySince` is older than the setting. Not counted: a part that is meant to run at 0, which has none; every part while the phase is `Restoring`; and every part while a rollout has given up, which An update failed names | the part is ready, or it was stopped or is no part of the platform any more |
+| A volume is almost full | the disk: every volume with that filesystem id | size less free, over size, is at or above the setting | it is below the setting, or the volume is no longer measured |
+| The certificate ends soon | the certificate | `notAfter` is within the setting, or past | `notAfter` is later than that, or the platform serves no certificate of its own any more |
+| No good backup | the backups | the condition `Backup` is `Failed`; or `lastSuccess` is older than the setting; or there is none and the platform is older than the setting. Not where backups are off or the databases are external | none of the three holds, or backups were switched off or the databases made external |
+| An update failed | the update | `Ready` is false with `RolloutStalled`; or the last self-check was started by an update and ended `Failed` or `Error`; or, on a one-machine install whose updater reports to the platform, its last update went back or did not start | none of the three holds; after a failed check, only once a later check has passed, whatever started it |
 
-While an alert is active its text is written from the status at each check,
-so the figures in it are current; once it has ended it keeps its last text.
+While an alert is active its title and its text are written from the status
+at each check, so the figures in them are current; once it has ended it keeps
+its last. An alert changes when it starts and when it ends, not when its
+figures do. A percentage is rounded down, and compared before it is rounded;
+the days until a certificate ends are rounded up, the days since a backup
+down; sizes are written as the storage page writes them. A date in a title or
+a text is written as a mail writes it, in UTC. The routes answer the values
+beside the sentences.
+
+An alert whose subject stops being watched while it is active ends at the
+next check, with a sentence that says so: a part that was stopped or is gone,
+a certificate the platform no longer serves, backups switched off, a volume
+no longer measured.
+
+A rollout that has given up is raised whatever started it, an update or a
+restart, and names the parts that are not ready though they are meant to run.
+The updater's report of a one-machine install is read once portal-api can
+read it (I.C17).
+
+An alert is kept until 90 days after it ended. portal-api keeps two tables:
+the alerts, and which admin has seen which.
 
 A platform whose resource is younger than 1 hour raises no alert. A platform
 that the operator does not run has no status to read: it raises none, and the
-alerts page says so.
+alerts page says so. Under an operator that is older than a fact, the alert
+that needs the fact is not watched, and the alerts page says to update the
+operator.
 
 ### In the bell
 
@@ -574,13 +627,23 @@ An alert has its title, its text, how long ago it started or ended, and
 
 ### By mail
 
-- When an alert starts, portal-api sends one mail to every admin who has an
-  address and to every address of `spec.mail.alertsTo`. When it ends, it
-  sends one more to the same addresses.
+- When an alert starts, portal-api sends one mail to every admin whose
+  account is enabled and has an address, and to every address of
+  `spec.mail.alertsTo`: the addresses the mail page lists under **alerts go
+  to**. When it ends, it sends one more, to the addresses the first reached.
+  The start mail carries the title and the text as they were then, the end
+  mail's subject the last title.
+- Where the admins cannot be read when an alert starts, the further addresses
+  get the mail, and the admins' are tried again.
 - For the same alert about the same subject, a start mail is sent at most
   once in 24 hours. An alert that starts again sooner shows in the bell and
   is not mailed, and neither is its end. So one alert sends two mails a day
-  at most: that it started, and that it ended.
+  at most: that it started, and that it ended. The 24 hours count from the
+  last start whose mail the mail server took for at least one address.
+- A mail the server does not take is tried again after 5 minutes, three times
+  in all for each address, by whichever portal-api runs then; so is one held
+  back while mail is set up and not ready. An alert that ends while its start
+  mail still waits sends neither.
 - No mail is sent while mail is not set up, while `spec.alerts.mail` is
   false, or when nobody has an address. The alerts page says which.
 
@@ -610,6 +673,24 @@ filter bar above it has **active** and **last 90 days**; it opens on
 
 All are for admins.
 
+`kind` is `part-not-ready`, `volume-full`, `certificate-ends`,
+`no-good-backup` or `update-failed`. `about` is the part's name, the disk's
+filesystem id, `certificate`, `backups` or `update`. `link` is a path of the
+portal, which a mail completes with the public address. `title` and `text`
+come with `values`, what filled them in. `mail` has a `state`, one for each
+sentence of the **mail** column (`sent`, `sending`, `not-set-up`, `off`,
+`no-address`, `sent-recently`, `failed`), the number of `addresses`, and with
+`failed` the reason as a refusal. Each of `watched` has its `kind`, its
+`setting` with `least` and `most`, and `now`: a `state`, one for each
+sentence of the **now** column, with its values. `unseen` counts what the bell
+shows: the active alerts and those that ended within 7 days. Where the
+operator does not run the platform, the answer has `available` false with the
+`reason` `no-operator`, and nothing else.
+
+`PATCH` answers the resource's new generation. It checks the ranges itself,
+and where the cluster does not know alert settings it writes nothing and says
+so, as **save** on the mail page does.
+
 ### What a one-machine install sees
 
 On one machine every claim is a folder of one disk. The measuring jobs then
@@ -633,14 +714,18 @@ and one file more:
 
 | File | Holds |
 |---|---|
-| `backup.json` | what made the set: `v` (1), `createdAt`, `platform` (`name`, `uid`, `version`, `operator`), `databases` (each with its tables and bytes), `resource` (the `spec` of the platform's resource as it was), `secrets` (the names of the Secrets the resource refers to, never a value), `addons` (each addon's name, chart and version) |
+| `backup.json` | what made the set: `v` (1), `createdAt`, `platform` (`name`, `uid`, `version`, `operator`), `databases` (each with its tables and bytes), `resource` (the `spec` of the platform's resource as it was), `secrets` (the names of the Secrets the resource refers to, and of those the platform reads by a fixed name where they exist, the metadata key's among them; never a value), `addons` (each addon's name, chart and version) |
 | `globals.sql` | the database's roles but the superuser, as today |
 | `chino.dump`, `katalog.dump`, `keycloak.dump`, `portal.dump` | the four databases, as today |
 | `SHA256SUMS` | the checksum of every file above, `backup.json` included |
 
 The operator keeps what a job cannot know (the platform, the resource, the
-Secrets' names, the addons) in a ConfigMap, which the backup's job reads; the
-job adds the time and the databases.
+Secrets' names, the addons) in a ConfigMap, `zaentrum-backup`, which the
+backup's job reads; the job adds the time and the databases. `platform` is the
+file's first field: `name` and `uid` are the resource's, `version` is the
+version that runs, as `status.currentVersion` has it, and `createdAt` is when
+the run began. Where the ConfigMap is missing, as in an install without the
+operator, the set is made without `backup.json` and the job's log says so.
 
 A set does not hold:
 
@@ -709,7 +794,7 @@ resource alone.
 
 | Route | Does |
 |---|---|
-| `GET /api/portal/backups` | `available` and, when not, `reason` (`no-operator`, `external-databases`); `platform`, the name to type; `version`; `enabled`, `schedule`, `retention`; `claim` (`name`, `sizeBytes`, `freeBytes`, `withDatabases`, `measuredAt`); `state` (`ok`, `failed`, `old`, `none-yet`, `off`, `running`); `last` (`name`, `at`, `bytes`); `failure` (`at`, `reason`); `backups[]` (`name`, `madeAt`, `bytes`, `version`, `whole`, `own`, `restorable`: `yes`, `newer`, `unknown-version`, `incomplete`); `restore`, the last one, as `status.backup.restore` has it |
+| `GET /api/portal/backups` | `available` and, when not, `reason` (`no-operator`, `external-databases`); `platform`, the name to type, the one the platform is reached at; `version`; `enabled`, `schedule`, `retention`; `claim` (`name`, `sizeBytes`, `freeBytes`, `withDatabases`, `measuredAt`); `state` (`ok`, `failed`, `old`, `none-yet`, `off`, `running`); `last` (`name`, `at`, `bytes`); `failure` (`at`, `reason`); `backups[]` (`name`, `madeAt`, `bytes`, `version`, `whole`, `own`, `restorable`: `yes`, `newer`, `not-comparable`, `incomplete`); `restore`, the last one, as `status.backup.restore` has it |
 | `PATCH /api/portal/backups` | takes any of `enabled`, `schedule`, `retention`, `claimName`; writes `spec.backup` |
 | `POST /api/portal/backups` | a backup now: sets `zaentrum.io/backup-request`; 202, or 409 with the reason |
 | `POST /api/portal/backups/look` | sets `zaentrum.io/storage-request`; 202 |
@@ -743,14 +828,17 @@ the sixth:
    twice.
 2. **It checks the version**, before anything stops (below). It reads the
    set's version from `status.backup.sets[]`; for a set that is not listed
-   there it has the backups' claim measured first. A set the claim does not
-   hold is refused at this step, with nothing stopped.
+   there it has the backups' claim measured first, with the set's name, and
+   waits 2 minutes at most for the answer. A set the claim does not hold, a
+   claim that is not there and a claim that could not be read are refused at
+   this step, with nothing stopped.
 3. It stops every part that uses the database and suspends the backups and
    the measuring.
-4. The restore's job makes sure the set is whole: its files are those its
-   checksums list, every checksum matches, and every database can be read.
-   `backup.json` may be there or not. A set that is not whole is refused, and
-   nothing is changed.
+4. The restore's job makes sure the set is whole: its files are the roles,
+   the four databases and the checksums, with `backup.json` or without, each
+   is listed in the checksums, every checksum matches, and every database can
+   be read. A set that is not whole, or that holds any other file, is
+   refused, and nothing is changed.
 5. It recreates each database from the set.
 6. **It brings the identity provider in step with this install**, where the
    provider is the bundled one: the provider's own admin signs in with this
@@ -768,10 +856,23 @@ the sixth:
 |---|---|---|
 | a release | the same release or a newer one | goes on |
 | a release | an older release | is refused |
-| a moving tag, such as `latest` | the same moving tag | goes on |
-| anything else: no `backup.json`, or a release on one side and a moving tag on the other | | is refused, unless the annotation `zaentrum.io/restore-any-version` holds the set's name |
+| any other tag, such as `latest`, `0.5` or a build's | the same tag | goes on |
+| anything else: no `backup.json`, a release on one side and another tag on the other, or two different tags | | is refused, unless the annotation `zaentrum.io/restore-any-version` holds the set's name |
 
-Releases are compared as their numbers. A set of an older version is brought
+A version is the tag the operator renders, `status.currentVersion`, on both
+sides, not `spec.version`. A release is `v` and a version number, a
+pre-release included. Releases are compared as such numbers are: `v0.10.0` is
+newer than `v0.9.0`, and `v0.5.0-rc.2` is older than `v0.5.0`. A set made
+before sets held `backup.json` has no version, so it needs the annotation.
+
+The operator writes what the rule says of each listed set into its
+`versionRule`, on every pass, and portal-api reads it there. The operator
+reads the annotation and never writes or removes it. A refusal names its cause
+as the reason of the condition `Restore`: `NewerVersion`,
+`VersionNotComparable`, `NotOnClaim` or `ClaimUnreadable`, and `Refused` for
+what the restore's job refuses.
+
+A set of an older version is brought
 up to date by the parts themselves: each brings its database to its own
 version when it starts, as after an update.
 
@@ -789,8 +890,12 @@ version when it starts, as after an update.
 - a set whose version cannot be compared has a checkbox to restore it all
   the same; a set of a newer version cannot be restored, and the dialog says
   to update first;
-- the admin types the platform's name into a field. **restore**, a danger
-  button, stays off until the name matches.
+- the admin types the platform's name, the one it is reached at, into a
+  field. **restore**, a danger button, stays off until the name matches.
+
+portal-api tells why the operator refused a restore by the reason of the
+condition `Restore`, and the page shows a sentence of its own with the
+operator's under **details**.
 
 A restore stops portal-api with the other parts, so the page cannot follow
 it. From the moment the restore is accepted the page shows “restoring” and
@@ -1256,6 +1361,7 @@ comes from the resource; a password is never in them.
 | The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” · a user and no Secret: “the realm's mail settings stay as they were until spec.mail names a Secret for the password of {user}” |
 | The realm job's summary: the password reset | switched on: “the sign-in page offers a password reset now” · switched off: “the sign-in page offers no password reset now: the realm sends no mail” · a realm without an email theme given the chart's: “the realm's email theme is {theme} now” |
 | A failed run of the realm job | “cannot read the mail settings of realm {realm}: {kcadm's last line}” · “cannot clear the mail settings of realm {realm}: {kcadm's last line}” · “cannot set the mail settings of realm {realm}: {kcadm's last line}” · “cannot read realm {realm}: {kcadm's last line}” · “cannot set the email theme of realm {realm}: {kcadm's last line}” · “cannot switch the password reset of realm {realm}: {kcadm's last line}” · from the chart's values alone: “mail.encryption is {value}: use starttls, tls or none” |
+| The condition `StorageMeasured` | `Measured`: “{claim} {free} free of {size}” for each disk, claims on one disk as “{claim} and {claim} on one disk: {free} free of {size}”, then “the databases take {size}”, then “{n} sets on {claim}” or “{n} sets on {claim}, the newest {m} listed”, joined by “; ” · `Failed`: “{job} failed: {reason}; the figures of {time} stay” · nothing measured before: “{job} failed: {reason}; nothing is measured yet” |
 
 {encryption} is `starttls`, `tls` or `none` as the resource has it, and
 `starttls` where it has none. The realm job's summary is the message of the
@@ -1272,27 +1378,32 @@ A title has at most 80 characters and a text at most 280.
 
 | Alert | Title | Text | When it ends |
 |---|---|---|---|
-| A part is not ready | “A part is not ready: {part}” | “{part} has not been ready for more than {minutes} minutes. Open operator to see why.” | “{part} is ready again.” |
-| A volume is almost full | “A volume is almost full: {volumes}” | “The {volumes} volume is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” · on one disk: “The disk of {volumes} is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” | “The {volumes} volume is at {percent} %.” · “The disk of {volumes} is at {percent} %.” |
-| The certificate ends soon | “The certificate ends in {days} days” · “The certificate has ended” | “The platform's certificate ends on {date}. After that browsers warn and the apps stop connecting. Renew it.” · “The platform's certificate ended on {date}. Browsers warn and the apps do not connect. Renew it.” | “The certificate now ends on {date}.” |
-| No good backup | “The last backup failed” · “No backup for {days} days” | “The backup of {date} failed: {reason} The newest good one is from {date}.” · with none: “The backup of {date} failed: {reason} There is no good backup yet.” · “The newest backup is from {date}. Open backups to see why none was made since.” | “A backup was made on {date}.” |
-| An update failed | “The update to {version} did not finish” · “The check after the update to {version} failed” · on one machine: “The update to {version} was undone” · “The update to {version} did not start” | “These parts could not start: {parts}. The version before keeps running where it can. Open operator to see why.” · “{the self-check's sentence} Open operator to see the checks.” · “The update to {version} did not pass its check, so the machine went back to {version}. Open operator to see the checks.” · “{the updater's reason} Open operator to see more.” | “The update to {version} has finished.” · “The check has passed.” · “The update to {version} is done.” |
+| A part is not ready | “A part is not ready: {part}” | “{part} has not been ready for more than {minutes} minutes. Open operator to see why.” | “{part} is ready again.” · “{part} was stopped, so it is not watched now.” · “{part} is no longer a part of the platform.” |
+| A volume is almost full | “A volume is almost full: {volumes}” | “The {volumes} volume is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” · on one disk: “The disk of {volumes} is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” | “The {volumes} volume is at {percent} %.” · “The disk of {volumes} is at {percent} %.” · “The {volumes} volume is not measured any more.” |
+| The certificate ends soon | “The certificate ends in {days} days” · “The certificate has ended” | “The platform's certificate ends on {date}. After that browsers warn and the apps stop connecting. Renew it.” · “The platform's certificate ended on {date}. Browsers warn and the apps do not connect. Renew it.” | “The certificate now ends on {date}.” · “The platform serves no certificate of its own now.” |
+| No good backup | “The last backup failed” · “No backup for {days} days” | “The backup of {date} failed. The newest good one is from {date}. Open backups to see why.” · with none: “The backup of {date} failed. There is no good backup yet. Open backups to see why.” · “The newest backup is from {date}. Open backups to see why none was made since.” · none was ever made: “No backup has been made since the platform was installed on {date}. Open backups to see why.” | “A backup was made on {date}.” · “Backups are off, so they are not watched now.” · “The databases run outside the platform now, so their backups are not watched here.” |
+| An update failed | “The update to {version} did not finish” · where the version is the one last checked: “The rollout of {version} did not finish” · “The check after the update to {version} failed” · on one machine: “The update to {version} was undone” · “The update to {version} did not start” | “These parts could not start: {parts}. What ran before keeps running where it can. Open operator to see why.” · more parts than fit: “These parts could not start: {parts} and {n} more. What ran before keeps running where it can. Open operator to see why.” · “{failed} of {total} checks failed: {checks}. Open operator to see the checks.” · a check without a result: “The check could not reach a result. Open operator to see why.” · “The update to {version} did not pass its check, so the machine went back to {version}. Open operator to see the checks.” · “{the updater's reason} Open operator to see more.” | “The update to {version} has finished.” · “The rollout of {version} has finished.” · “The check has passed.” · “The update to {version} is done.” |
 
 The volumes' names in an alert are “library”, “databases”, “backups” and
-“event broker”, joined with commas and “and”.
+“event broker”, joined with commas and “and”. {minutes} is the setting, and
+{parts} are named as the status names them. A count of one is written in the
+singular: “1 day”, “1 minute”, “1 part is not ready”, “1 address”. A value
+that would take a title past 80 characters or a text past 280 is cut, and ends
+with “…”.
 
 | Where | Text |
 |---|---|
 | The bell | alerts · notices · open · “Ended: {title}” · “Mark All Read”, as today, now for alerts too |
 | The alerts page | alerts · what is watched · alert · when · now · state · started · ended · mail · active · last 90 days · save |
 | **when** | “for {n} minutes” · “at {n} % full” · “within {n} days” · “for {n} days, or when the last one failed” · “when a rollout gives up, or the check after an update fails” |
-| **now** | “all {n} parts are ready” · “{n} parts are not ready” · “the fullest is at {n} %” · “not measured yet” · “it ends on {date}” · “not watched: the platform serves no certificate of its own” · “the newest is from {date}” · “not watched: backups are off” · “not watched: the databases are not the platform's” · “{version} runs” |
+| **now** | “all {n} parts are ready” · “{n} parts are not ready” · “the fullest is at {n} %” · “not measured yet” · “it ends on {date}” · “not watched: the platform serves no certificate of its own” · “the newest is from {date}” · “not watched: backups are off” · “not watched: the databases are not the platform's” · “{version} runs” · “no backup yet” · “not watched: the platform's certificate cannot be read” · “not watched: the databases are not on a volume of their own yet” · under an older operator: “not watched: update the operator, which says since when a part is not ready” · “not watched: update the operator, which measures the volumes” · “not watched: update the operator, which reads when the certificate ends” |
 | **state** | “active” · “ended” |
-| **mail** | “sent to {n} addresses” · “not sent: mail is not set up” · “not sent: alert mail is off” · “not sent: nobody has an address” · “not sent: one was sent less than a day ago” · “could not be sent: {why}” |
+| **mail** | “sent to {n} addresses” · “not sent: mail is not set up” · “not sent: alert mail is off” · “not sent: nobody has an address” · “not sent: one was sent less than a day ago” · “could not be sent: {why}” · “not sent yet: tried again within 5 minutes” · “sent to {n} of {m} addresses; could not be sent to the others: {why}” |
 | Nothing is wrong | nothing is wrong · “No alert is active.” |
 | Saved | “Saved.” |
 | A threshold outside its range | “A number from {least} to {most}.” |
 | Not run by the operator | “This platform is not run by the operator, so nothing watches it from here.” |
+| **save** refused by the cluster | “The portal is not allowed to change the alert settings. Update the operator, which gives the portal that right.” · “The cluster refused the alert settings.” · “The cluster does not know alert settings. Update the operator, which brings them.” · reading, and any other failure: as on the mail page |
 | Couldn't load | couldn't load the alerts · try again |
 
 ### Words of backups and restoring
@@ -1303,7 +1414,7 @@ The volumes' names in an alert are “library”, “databases”, “backups”
 | The summary | “{date} · {size}” · “a backup runs” · “none yet” · “claim {name} · {size}, {free} free” · “every day at 00:00” · “every 12 hours” · “every 6 hours” · “every week” · “{cron}, the cluster's time” · “the newest {n}” |
 | Buttons | back up now · settings · look again · restore · turn on · how · save · cancel · sign in |
 | **state** | “whole” · “incomplete” |
-| Under a date | “from another platform” · “version unknown” |
+| Under a date | “from another platform” · “version unknown” · a version that cannot be compared: “made by {version}” |
 | The last backup failed | “The last backup failed: {reason} The newest good one is from {date}.” |
 | No good backup for too long | “No backup for {days} days. The newest is from {date}.” |
 | On one disk | “The backups are on the same disk as the databases: a dead disk takes both. Keep them on other storage.” |
@@ -1313,11 +1424,11 @@ The volumes' names in an alert are “library”, “databases”, “backups”
 | No backup yet | no backups yet · “The first backup runs at {time}.” · “Moving from another machine? Copy its backups into this claim, then look again.” |
 | The settings' dialog | backup settings · back up on a schedule · how often · “every day” · “every 12 hours” · “every 6 hours” · “every week” · “another schedule” · schedule · “A cron schedule, in the cluster's time zone.” · keep · “The newest backups are kept. Older ones are deleted.” · claim · “The claim that holds the backups. Empty: the platform's own.” |
 | **back up now** | “A backup was made: {size}.” · “The backup failed: {reason}” · “A backup already runs.” |
-| The restore's dialog | restore from {date}? · “The platform goes down for a few minutes.” · “Its databases are set back to this backup: the accounts, the watch history, the lists, the catalog and the portal's settings as they were then. Everything written since is lost.” · “The library's files are not set back.” · “Whoever signed in after this backup was made signs in again.” · another platform's: “This backup is from another platform. Afterwards, sign in with an account of that platform.” · “Restore although its version is unknown.” · “This backup was made by {version}, which is newer than this platform ({version}). Update the platform first.” · “type the platform's name, {name}, to restore” |
+| The restore's dialog | restore from {date}? · “The platform goes down for a few minutes.” · “Its databases are set back to this backup: the accounts, the watch history, the lists, the catalog and the portal's settings as they were then. Everything written since is lost.” · “The library's files are not set back.” · “Whoever signed in after this backup was made signs in again.” · another platform's: “This backup is from another platform. Afterwards, sign in with an account of that platform.” · “Restore although its version is unknown.” · “Restore although its version, {version}, cannot be compared with this platform's.” · “This backup was made by {version}, which is newer than this platform ({version}). Update the platform first.” · “type the platform's name, {name}, to restore” |
 | Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
 | The restore has ended | “The restore has ended. Sign in to see how it went.” |
-| **the last restore** | “Restored from {date}, on {date}.” · “The restore from {date} was refused: {reason} Nothing was changed.” · “The restore from {date} failed: {reason} Restore again.” · “none” |
-| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): ask again with zaentrum.io/restore-any-version; nothing was changed” |
+| **the last restore** | “Restored from {date}, on {date}.” · “The restore from {date} was refused: {reason} Nothing was changed.”, where {reason} is by the condition's reason “It was made by {version}, which is newer than this platform ({version}).”, “Its version cannot be compared with this platform's.”, “The backups' claim does not hold it.”, “The backups' claim could not be read.” or “It did not pass the restore's check.” · “The restore from {date} failed: {reason} Restore again.” · “none” |
+| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): to restore it all the same, set zaentrum.io/restore-any-version to {name} and ask again with a new value; nothing was changed” · “refused: there is no set {name} on the claim {claim} (it holds: {newest names}); nothing was changed” · “refused: the claim {claim} could not be read, so the version of {name} is not known: {reason}; nothing was changed” · while the claim is read: “the restore of {name} starts once the claim {claim} has been read: its version is checked before anything stops” |
 | Not run by the operator | “This platform is not run by the operator, so its backups cannot be read from here.” |
 | Couldn't load | couldn't load the backups · try again |
 | The setup checklist, and the first-run page | “Moving from another machine?” · restore from a backup |
@@ -1335,7 +1446,7 @@ The volumes' names in an alert are “library”, “databases”, “backups”
 | The library | packages · originals kept · extras · everything else · “Arrivals, the trash, the records and their images, and whatever else is on this disk.” |
 | The databases | “catalog” · “apps” · “identity” · “portal” |
 | The largest titles | title · kind · package · original · total · “movie” · “show” · show more |
-| The measuring failed | “The volumes could not be measured: {reason}” |
+| The measuring failed | “The volumes could not be measured.”, with the operator's reason under **details** |
 | The catalog did not answer | “The catalog did not answer, so the library's figures are missing.” · try again |
 | No title yet | no titles yet · “Scan the library to add some.” |
 | Not run by the operator | “This platform is not run by the operator, so its volumes cannot be measured from here.” |

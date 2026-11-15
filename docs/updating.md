@@ -137,7 +137,9 @@ The operator's test `TestEveryCRDCopyServesTheSameSchema` (`install_bundles_test
 holds them so. Each copy serves the canonical schema, except for the fields that
 `sinceThePin` lists, which the pinned install does not serve yet. The test fails
 when a copy differs, when the pinned install serves a listed field early, or when
-it lacks a field the list does not name. The re-pin empties the list.
+it lacks a field the list does not name. The re-pin empties the list. A new status
+field takes the same route as a spec field, and so does one inside a list, which the
+list names by its path, as in `status.components.notReadySince`.
 
 Until the re-pin, `kubectl apply` on a pinned install refuses a resource with the new
 field as an unknown field, and a client that does not validate strictly gets only a
