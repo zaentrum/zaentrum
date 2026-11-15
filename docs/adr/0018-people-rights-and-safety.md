@@ -1,6 +1,6 @@
 # ADR-0018: One account per person; rights travel in the token, a code guards an account on a shared device, and the identity provider keeps passwords
 
-**Status:** Proposed · 2026-11-15, for the owner's review. Design ahead of the code: nothing of it is built.
+**Status:** Accepted · 2026-11-15 by the owner, with the recommendations of the changes that rest on it. Design ahead of the code: nothing of it is built; what the section To prove first names is shown before the changes that depend on it are built.
 
 ## Context
 

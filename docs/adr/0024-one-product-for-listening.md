@@ -1,6 +1,6 @@
 # ADR-0024: One product for listening: musig plays music, audiobooks and podcasts; books to read and a household's own photos and videos are not goals
 
-**Status:** Accepted · 2026-11-11, parts 1, 3 and 4, decided by the owner; parts 2 and 5 are proposed, for the owner's review. Design ahead of the code: no part of musig is built.
+**Status:** Accepted · 2026-11-11 for parts 1, 3 and 4, 2026-11-15 for parts 2 and 5, by the owner. Design ahead of the code: no part of musig is built.
 
 ## Context
 

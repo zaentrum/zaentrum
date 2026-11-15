@@ -1,6 +1,6 @@
 # ADR-0020: A backup is one set that restores into any install of its version or a newer one; the library's files stay with their storage
 
-**Status:** Proposed · 2026-11-15, for the owner's review. Design ahead of the code: nothing of it is built.
+**Status:** Accepted · 2026-11-15 by the owner, with the recommendations of the changes that rest on it. Design ahead of the code: nothing of it is built; what the section To prove first names is shown before the changes that depend on it are built.
 
 ## Context
 

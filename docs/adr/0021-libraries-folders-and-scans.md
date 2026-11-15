@@ -1,6 +1,6 @@
 # ADR-0021: The catalog keeps several libraries with their own folders, scans them by itself, reads what lies beside a title, keeps collections, and gives a title back as one file
 
-**Status:** Proposed · 2026-11-15, for the owner's review. Design ahead of the code: nothing of it is built.
+**Status:** Accepted · 2026-11-15 by the owner, with the recommendations of the changes that rest on it. Design ahead of the code: nothing of it is built; what the section To prove first names is shown before the changes that depend on it are built.
 
 ## Context
 

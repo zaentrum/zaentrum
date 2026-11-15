@@ -1,6 +1,6 @@
 # ADR-0019: Mail is the platform's one way out; portal-api sends it, and five alerts reach the admins in the bell and by mail
 
-**Status:** Proposed · 2026-11-15, for the owner's review. Design ahead of the code: nothing of it is built.
+**Status:** Accepted · 2026-11-15 by the owner, with the recommendations of the changes that rest on it. Design ahead of the code: nothing of it is built; what the section To prove first names is shown before the changes that depend on it are built.
 
 ## Context
 
