@@ -255,7 +255,8 @@ Mail is **set up** when `host` and `from` are set. The operator then:
    and `PORTAL_MAIL_SECRET`, the Secret's name, so that portal-api can tell a
    password that changed without reading any Secret) and the
    platform's public address (`PORTAL_PUBLIC_URL`), which the links in a mail
-   start with;
+   start with, and starts portal-api again when one of them changes or the
+   Secret named appears;
 2. with the bundled identity provider, has the realm job write the server,
    the port, the encryption, the sender, the user and the password into the
    realm's mail settings, and switch the realm's password reset on; without
@@ -277,7 +278,8 @@ of the user keeps the password that is there, and a change of the password is
 a new Secret with a new name.
 
 Mail is **ready** once the condition is `Configured` and the portal-api that
-answers runs with the settings and with the public address. A link in a mail
+answers runs with the settings, with the password where a user is set, and
+with the public address. A link in a mail
 and the platform's name in it come from the public address alone, never from
 the request that asked for the mail: a portal-api without a full public
 address, a scheme and a host, sends none. Where portal-api cannot read the
@@ -308,6 +310,12 @@ that carry the same lines, a paragraph each, the link in the HTML part marked
 or anything that reports whether it was opened. The words are in the section
 Words.
 
+An **address**, wherever one is typed or set, is one bare address of at most
+254 characters: no name, no angle brackets, no line break, and a domain that
+is a host name of at least two parts. Its letters are ASCII. An address with
+accented or non-Latin letters is refused, because not every mail server
+carries one.
+
 ### Sending
 
 - portal-api opens one connection for each mail: 10 seconds to connect, 30
@@ -319,6 +327,10 @@ Words.
   against the authorities the image trusts; there is no setting to skip the
   check.
 - portal-api signs in when a user is set, and only then.
+- An admin may name any server portal-api can reach, one on the home network
+  or inside the cluster among them. portal-api speaks SMTP to it and nothing
+  else, and of its answer it repeats only an SMTP reply, 300 characters at
+  most.
 - The identity provider sends its own mails, the password reset among them,
   through the same server. With `tls` they are encrypted as the platform's
   are. With `starttls` the identity provider asks for encryption and goes on
@@ -417,12 +429,19 @@ about a minute.
 
 | Route | Does |
 |---|---|
-| `GET /api/portal/mail` | the settings without the password, `passwordSet`, `setUp`, `ready`, `identity` (`bundled` or `external`), `alertMail`, and `recipients`: each admin's name and address, and the further addresses |
+| `GET /api/portal/mail` | the settings without the password, `passwordSet`, `setUp`, `ready`, `secretMissing` (the condition `Mail` says so), `runByOperator` (false where the operator does not run the platform), `identity` (`bundled` or `external`), `alertMail`, and `recipients`: each admin's name and address, and the further addresses |
 | `PUT /api/portal/mail` | takes `host`, `port`, `encryption`, `from`, `fromName`, `user`, `password` (left out: the one kept stays) and `alertsTo`; answers the resource's new generation |
 | `DELETE /api/portal/mail` | removes `spec.mail` |
 | `POST /api/portal/mail/test` | takes `to`; sends the test mail; 200, or 502 with the reason as a sentence |
 
 All four are for admins.
+
+A value of the wrong kind in a body, a port that is no whole number for
+instance, is refused with its field's sentence and code like any other value,
+and a port of 0 is no port. No setting takes a control character: the resource
+refuses one in every mail field, and portal-api refuses it before it writes.
+Where the cluster does not know mail settings, as under an operator from
+before them, **save** writes nothing, keeps no Secret and says so.
 
 ## Alerts
 
@@ -1162,11 +1181,11 @@ is filled in. Dates are written as “15 November 2026, 00:00”.
 | What is sent | “Invite links” “When an admin adds a person or makes them a new link, to the person's address.” · “Password reset links” “When somebody asks on the sign-in page, to their address.” · with an external identity provider: “Your identity provider sends its own.” · “Alerts” “When one starts and when it ends, to the addresses below.” · mail alerts |
 | Alerts go to | who · address · “no address” · change your address · “No admin has an address, so alerts are not mailed. Add yours on your account page, or others' on the people page.” · with an external identity provider: “The platform cannot see who the admins are with your identity provider. Alert mail goes to the further addresses.” |
 | The test mail's dialog | send test mail · to · “A test mail was sent to {address}.” |
-| **send test mail** refused | not an address: “This is not an e-mail address.” · the placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” · mail not set up: “Mail is not set up.” · mail set up and not ready yet: the last two reasons of Why a mail failed |
+| **send test mail** refused | not an address: “This is not an e-mail address.” · accented or non-Latin letters: “Addresses with accented or non-Latin letters are not supported.” · the placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” · mail not set up: “Mail is not set up.” · mail set up and not ready yet: the last two reasons of Why a mail failed |
 | Removing | remove mail settings? · “The platform stops sending mail: no invite, no password reset link and no alert leaves it. The settings and the password are deleted.” |
 | Why a mail failed | “Can't reach the mail server. Check its name and its port.” · “The mail server doesn't offer this encryption. Choose another.” · “The mail server's certificate could not be checked.” · “The mail server refused the user or the password.” · “The mail server refused the sender's address.” · “The mail server refused the address {address}.” · “The mail server didn't answer in time.” · “The mail server answered: {its words}” · “The mail settings are still being applied.” · “The mail server's password is missing.” |
-| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept, under the password: “Type the password of this user.” |
-| The cluster refused | reading the settings: “The portal is not allowed to read the platform's settings. Update the operator, which gives the portal that right.” · changing them: “The portal is not allowed to change the mail settings. Update the operator, which gives the portal that right.” · the settings refused as invalid: “The cluster refused the mail settings.” · any other failure: “The cluster did not answer as expected.” · each with the cluster's own words under **details** |
+| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept, under the password: “Type the password of this user.” · an address with accented or non-Latin letters, the sender's or a further one: “Addresses with accented or non-Latin letters are not supported.” · a control character, from a client of the API: “The mail settings hold a character that cannot be used.” |
+| The cluster refused | reading the settings: “The portal is not allowed to read the platform's settings. Update the operator, which gives the portal that right.” · changing them: “The portal is not allowed to change the mail settings. Update the operator, which gives the portal that right.” · the settings refused as invalid: “The cluster refused the mail settings.” · the cluster does not know mail settings: “The cluster does not know mail settings. Update the operator, which brings them.” · any other failure: “The cluster did not answer as expected.” · each with the cluster's own words under **details** |
 | Not run by the operator | “This platform is not run by the operator. Mail is set in its chart's values.” |
 | Couldn't load | couldn't load mail · try again |
 
@@ -1192,7 +1211,7 @@ could not be read, the dialog's {why} is the sentence of The cluster refused.
 | Where | Text |
 |---|---|
 | The field | email · “For their invite, and for a forgotten password. Optional.” |
-| The field's errors | “Another account already has this address.” · “This is not an e-mail address.” · a placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” |
+| The field's errors | “Another account already has this address.” · “This is not an e-mail address.” · a placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” · accented or non-Latin letters: “Addresses with accented or non-Latin letters are not supported.” |
 | The switch | send the link by mail |
 | The link's dialog, sent | “The link was sent to {address}. It is also here, and shown only now.” |
 | The link's dialog, failed | “The mail to {address} could not be sent. {why} Hand the link over yourself.” |
@@ -1224,7 +1243,7 @@ comes from the resource; a password is never in them.
 
 | Where | Text |
 |---|---|
-| The resource refused | `host` without `from`: “from is required when host is set” · `user` without `secretName`: “secretName is required when user is set” |
+| The resource refused | `host` without `from`: “from is required when host is set” · `user` without `secretName`: “secretName is required when user is set” · a control character in a mail field: “{field} must not hold a control character” |
 | The condition `Mail`, `NotSetUp` | no server: “mail is not set up: spec.mail names no server, so the platform sends no mail” · a server and no sender, where the resource's rule did not run: “mail is not set up: spec.mail names the server {host} and no sender (from), so the platform sends no mail” |
 | The condition `Mail`, `SecretMissing` | the Secret is not there: “there is no Secret {secretName}: create it with the mail server's password under the key password” · it has no key `password`: “Secret {secretName} has no key password: put the mail server's password under it” · a user and no Secret, where the resource's rule did not run: “spec.mail names no Secret for the password of {user}: name it in secretName” |
 | The condition `Mail`, `Configured` | “the platform sends its mail through {host} ({encryption}), signing in as {user} with the password in Secret {secretName}” · no user: “the platform sends its mail through {host} ({encryption}), without signing in” |
