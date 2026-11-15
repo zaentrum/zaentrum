@@ -35,6 +35,7 @@ metadata-service,an outside metadata service,outside,service,outside,,,"TMDB, wi
 chapters-service,an outside database of chapter names,outside,service,outside,,,"ChaptersDB, when CHAPTERSDB_ENABLED is on: the chart has it off"
 zaentrum,"the front door: the docs, the specification, the releases",beside,docs,beside,zaentrum,,
 zaentrum-site,"the site: the product page, the docs and the specification",beside,docs,beside,zaentrum.github.io,,
+shared-files,the files every repository shares: the security policy and the guide to contributing,beside,docs,beside,.github,,
 schemas,the event contracts,beside,contracts,beside,schemas,,"Records of an earlier design: the item events are JSON today (ADR-0005)"
 sample-addon,the reference addon,beside,addon,beside,sample-addon,,
 tv-api,the tv product's API,later,service,later,tv-api,,
