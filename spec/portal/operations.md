@@ -277,7 +277,16 @@ of the user keeps the password that is there, and a change of the password is
 a new Secret with a new name.
 
 Mail is **ready** once the condition is `Configured` and the portal-api that
-answers runs with the settings.
+answers runs with the settings and with the public address. A link in a mail
+and the platform's name in it come from the public address alone, never from
+the request that asked for the mail: a portal-api without a full public
+address, a scheme and a host, sends none. Where portal-api cannot read the
+resource it sends no mail either, and gives the cluster's refusal as the
+reason.
+
+A platform that the operator does not run has no resource. There mail is set
+up when the server, the sender and the public address are in portal-api's own
+settings, and it is ready with that.
 
 ### What is sent
 
@@ -336,8 +345,10 @@ One address belongs to one account.
   account page ([people](./people.md)). The mail page links the admin who is
   signed in to it. An account the people page does not change, such as the
   first admin's of an install made with one, gets its address there.
-- **The placeholder address** that the realm's import gave the first admin
-  counts as no address: nothing is mailed to it.
+- **A placeholder address**, one at the domain `zaentrum.local` as the
+  realm's import gave the first admin, counts as no address: nothing is
+  mailed to it, the people routes answer its account without an address, and
+  the form refuses one that is typed.
 - **With an external identity provider** the platform keeps no addresses.
   Invites and password resets are the provider's own, and alert mail goes to
   `spec.mail.alertsTo` alone.
@@ -349,9 +360,9 @@ invite and still answers the link, which the page shows once, as today.
 
 | Route | Takes | Answers |
 |---|---|---|
-| `POST /api/portal/people` | as today, and `email` (optional), `sendInvite` (true or false, default false) | as today, and `mail`: `sent`, `not-set-up`, `no-address` or `failed`, with `mailError`, the reason: its code, its values and its sentence, when it failed |
+| `POST /api/portal/people` | as today, and `email` (optional), `sendInvite` (true or false, default false) | as today, and where `sendInvite` is true `mail`: `sent`, `not-set-up`, `no-address` or `failed`, with `mailError`, the reason: its code, its values and its sentence, when it failed |
 | `PATCH /api/portal/people/{id}` | as today, and `email`; an empty one removes the address | the person |
-| `POST /api/portal/people/{id}/invite` | `send` (true or false, default false) | the link as today, and `mail` and `mailError` as above |
+| `POST /api/portal/people/{id}/invite` | `send` (true or false, default false) | the link as today, and where `send` is true `mail` and `mailError` as above |
 
 ### The sign-in page
 
@@ -1033,7 +1044,7 @@ starts with “Recommended” holds a choice that is the owner's.
 | The mail failed | an error banner in the dialog with the reason; the link is there |
 | Mail is not set up | no switch; a sentence under the link, with **set up mail** |
 | The person has no address | no switch; a sentence under the link |
-| The address belongs to another account, or is no address | the field's error |
+| The address belongs to another account, is no address, or is a placeholder | the field's error |
 | Sign-in page, mail ready | “Forgot password?” |
 | Sign-in page, no mail | the sentence under the form |
 | Sign-in page, a new platform before the realm job's first run | the sentence under the form: the realm is made with the reset off |
@@ -1173,14 +1184,15 @@ run by the operator.
 The last two reasons of Why a mail failed say why nothing was sent while mail
 is set up and not ready yet: the settings are still being applied, or the
 condition `Mail` says `SecretMissing`. A test mail is refused with them, and
-the link's dialog gives them as its {why}.
+the link's dialog gives them as its {why}. Where the platform's settings
+could not be read, the dialog's {why} is the sentence of The cluster refused.
 
 ### Words of the people page and the sign-in page
 
 | Where | Text |
 |---|---|
 | The field | email · “For their invite, and for a forgotten password. Optional.” |
-| The field's errors | “Another account already has this address.” · “This is not an e-mail address.” |
+| The field's errors | “Another account already has this address.” · “This is not an e-mail address.” · a placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” |
 | The switch | send the link by mail |
 | The link's dialog, sent | “The link was sent to {address}. It is also here, and shown only now.” |
 | The link's dialog, failed | “The mail to {address} could not be sent. {why} Hand the link over yourself.” |
