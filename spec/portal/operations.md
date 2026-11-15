@@ -243,7 +243,7 @@ values:
 | `spec.mail.from` | the sender's address | none; the resource is refused when `host` is set and this is not |
 | `spec.mail.fromName` | the sender's name as a mail program shows it, at most 60 characters | `zaentrum` |
 | `spec.mail.user` | the name the platform signs in to the server with | none: it does not sign in |
-| `spec.mail.secretName` | a Secret in the platform's namespace with the key `password`, the password of `user` | none; the resource is refused when `user` is set and this is not |
+| `spec.mail.secretName` | a Secret in the platform's namespace with the key `password`, the password of `user`; a name a Secret can have | none; the resource is refused when `user` is set and this is not |
 | `spec.mail.alertsTo` | at most 10 addresses that get every alert mail | none |
 
 Mail is **set up** when `host` and `from` are set. The operator then:
@@ -264,7 +264,11 @@ Mail is **set up** when `host` and `from` are set. The operator then:
    realm's mail settings as they are after that step and switches by them: on
    while they name a server, off while they name none. The chart's realm is
    made with the reset off, so a new platform offers none before the job has
-   run;
+   run. The job runs again when the mail settings change and when the Secret
+   named appears. Each of its writes changes what it names and leaves every
+   other setting of the realm at the value it had, one set in the identity
+   provider's console among them. The realm's mail settings alone are the
+   platform's: a write replaces them whole;
 3. says in the condition `Mail` where it stands: `NotSetUp`, `SecretMissing`
    when the Secret named is not there or lacks its key, or a user has none
    named where the resource's rule did not run, `Configured`. While the Secret
@@ -360,7 +364,9 @@ One address belongs to one account.
 - **A placeholder address**, one at the domain `zaentrum.local` as the
   realm's import gave the first admin, counts as no address: nothing is
   mailed to it, the people routes answer its account without an address, and
-  the form refuses one that is typed.
+  the form refuses one that is typed. The identity provider does not know it
+  for one: a password reset asked for such an account is handed to the mail
+  server, which cannot deliver it.
 - **With an external identity provider** the platform keeps no addresses.
   Invites and password resets are the provider's own, and alert mail goes to
   `spec.mail.alertsTo` alone.
@@ -1243,7 +1249,7 @@ comes from the resource; a password is never in them.
 
 | Where | Text |
 |---|---|
-| The resource refused | `host` without `from`: “from is required when host is set” · `user` without `secretName`: “secretName is required when user is set” · a control character in a mail field: “{field} must not hold a control character” |
+| The resource refused | `host` without `from`: “from is required when host is set” · `user` without `secretName`: “secretName is required when user is set” · a control character in a mail field: “{field} must not hold a control character” · a `secretName` that no Secret can have: “secretName must be a name a Secret can have: lowercase letters, digits, hyphens and dots” |
 | The condition `Mail`, `NotSetUp` | no server: “mail is not set up: spec.mail names no server, so the platform sends no mail” · a server and no sender, where the resource's rule did not run: “mail is not set up: spec.mail names the server {host} and no sender (from), so the platform sends no mail” |
 | The condition `Mail`, `SecretMissing` | the Secret is not there: “there is no Secret {secretName}: create it with the mail server's password under the key password” · it has no key `password`: “Secret {secretName} has no key password: put the mail server's password under it” · a user and no Secret, where the resource's rule did not run: “spec.mail names no Secret for the password of {user}: name it in secretName” |
 | The condition `Mail`, `Configured` | “the platform sends its mail through {host} ({encryption}), signing in as {user} with the password in Secret {secretName}” · no user: “the platform sends its mail through {host} ({encryption}), without signing in” |
@@ -1257,7 +1263,8 @@ condition `RealmConfigured`, joined with the run's other parts, and a line of
 the job's log; a run that finds mail not set up and no mail settings in the
 realm says nothing of mail. A failed run's text is the {reason} of “{job}
 failed: {reason}; it runs again after {time}”, as for every failure of the
-job.
+job. Should kcadm's last line hold the password, the password is taken out
+before the line is printed.
 
 ### The alerts
 
