@@ -261,8 +261,9 @@ Mail is **set up** when `host` and `from` are set. The operator then:
    realm's mail settings, and switch the realm's password reset on; without
    mail the job clears them and switches the reset off;
 3. says in the condition `Mail` where it stands: `NotSetUp`, `SecretMissing`
-   when the Secret named is not there or lacks its key, `Configured`. While
-   the Secret is missing the realm's mail settings stay as they were.
+   when the Secret named is not there or lacks its key, or a user has none
+   named where the resource's rule did not run, `Configured`. While the Secret
+   is missing the realm's mail settings stay as they were.
 
 The user's name is in the resource, where an admin can read it; the password
 alone is in the Secret, which portal-api writes and never reads. So a change
@@ -1191,9 +1192,9 @@ comes from the resource; a password is never in them.
 |---|---|
 | The resource refused | `host` without `from`: “from is required when host is set” · `user` without `secretName`: “secretName is required when user is set” |
 | The condition `Mail`, `NotSetUp` | no server: “mail is not set up: spec.mail names no server, so the platform sends no mail” · a server and no sender, where the resource's rule did not run: “mail is not set up: spec.mail names the server {host} and no sender (from), so the platform sends no mail” |
-| The condition `Mail`, `SecretMissing` | the Secret is not there: “there is no Secret {secretName}: create it with the mail server's password under the key password” · it has no key `password`: “Secret {secretName} has no key password: put the mail server's password under it” |
+| The condition `Mail`, `SecretMissing` | the Secret is not there: “there is no Secret {secretName}: create it with the mail server's password under the key password” · it has no key `password`: “Secret {secretName} has no key password: put the mail server's password under it” · a user and no Secret, where the resource's rule did not run: “spec.mail names no Secret for the password of {user}: name it in secretName” |
 | The condition `Mail`, `Configured` | “the platform sends its mail through {host} ({encryption}), signing in as {user} with the password in Secret {secretName}” · no user: “the platform sends its mail through {host} ({encryption}), without signing in” |
-| The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” |
+| The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” · a user and no Secret: “the realm's mail settings stay as they were until spec.mail names a Secret for the password of {user}” |
 | The realm job's summary: the password reset | switched on: “the sign-in page offers a password reset now” · switched off: “the sign-in page offers no password reset now: the realm sends no mail” · a realm without an email theme given the chart's: “the realm's email theme is {theme} now” |
 | A failed run of the realm job | “cannot read the mail settings of realm {realm}: {kcadm's last line}” · “cannot clear the mail settings of realm {realm}: {kcadm's last line}” · “cannot set the mail settings of realm {realm}: {kcadm's last line}” · “cannot read realm {realm}: {kcadm's last line}” · “cannot set the email theme of realm {realm}: {kcadm's last line}” · “cannot switch the password reset of realm {realm}: {kcadm's last line}” · from the chart's values alone: “mail.encryption is {value}: use starttls, tls or none” |
 
