@@ -242,7 +242,7 @@ values:
 | `spec.mail.encryption` | `starttls`, `tls`, `none` | `starttls` |
 | `spec.mail.from` | the sender's address | none; the resource is refused when `host` is set and this is not |
 | `spec.mail.fromName` | the sender's name as a mail program shows it, at most 60 characters | `zaentrum` |
-| `spec.mail.user` | the name the platform signs in to the server with | none: it signs in with no name |
+| `spec.mail.user` | the name the platform signs in to the server with | none: it does not sign in |
 | `spec.mail.secretName` | a Secret in the platform's namespace with the key `password`, the password of `user` | none; needed only when `user` is set |
 | `spec.mail.alertsTo` | at most 10 addresses that get every alert mail | none |
 
@@ -1130,17 +1130,34 @@ is filled in. Dates are written as “15 November 2026, 00:00”.
 | What is sent | “Invite links” “When an admin adds a person or makes them a new link, to the person's address.” · “Password reset links” “When somebody asks on the sign-in page, to their address.” · with an external identity provider: “Your identity provider sends its own.” · “Alerts” “When one starts and when it ends, to the addresses below.” · mail alerts |
 | Alerts go to | who · address · “no address” · change your address · “No admin has an address, so alerts are not mailed. Add yours on your account page, or others' on the people page.” · with an external identity provider: “The platform cannot see who the admins are with your identity provider. Alert mail goes to the further addresses.” |
 | The test mail's dialog | send test mail · to · “A test mail was sent to {address}.” |
+| **send test mail** refused | not an address: “This is not an e-mail address.” · the placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” · mail not set up: “Mail is not set up.” · mail set up and not ready yet: the last two reasons of Why a mail failed |
 | Removing | remove mail settings? · “The platform stops sending mail: no invite, no password reset link and no alert leaves it. The settings and the password are deleted.” |
-| Why a mail failed | “Can't reach the mail server. Check its name and its port.” · “The mail server doesn't offer this encryption. Choose another.” · “The mail server's certificate could not be checked.” · “The mail server refused the user or the password.” · “The mail server refused the sender's address.” · “The mail server refused the address {address}.” · “The mail server didn't answer in time.” · “The mail server answered: {its words}” |
+| Why a mail failed | “Can't reach the mail server. Check its name and its port.” · “The mail server doesn't offer this encryption. Choose another.” · “The mail server's certificate could not be checked.” · “The mail server refused the user or the password.” · “The mail server refused the sender's address.” · “The mail server refused the address {address}.” · “The mail server didn't answer in time.” · “The mail server answered: {its words}” · “The mail settings are still being applied.” · “The mail server's password is missing.” |
+| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept: “A user needs a password. Type it, or leave the user empty.” |
+| The cluster refused | reading the settings: “The portal is not allowed to read the platform's settings. Update the operator, which gives the portal that right.” · changing them: “The portal is not allowed to change the mail settings. Update the operator, which gives the portal that right.” · the settings refused as invalid: “The cluster refused the mail settings.” · any other failure: “The cluster did not answer as expected.” · each with the cluster's own words under **details** |
 | Not run by the operator | “This platform is not run by the operator. Mail is set in its chart's values.” |
 | Couldn't load | couldn't load mail · try again |
+
+A refusal of **save** is shown under its field where the page finds it, and in
+the error banner where portal-api answers it. The refusals of **send test
+mail** and the cluster's are shown in the error banner; a refusal to read is
+also the reason of couldn't load mail. portal-api answers a sentence and the
+cluster's own words apart, so that the page shows the sentence as the banner's
+message and the rest under **details**. Where the platform is not run by the
+operator, portal-api answers **save** and **remove** with the sentence of Not
+run by the operator.
+
+The last two reasons of Why a mail failed say why nothing was sent while mail
+is set up and not ready yet: the settings are still being applied, or the
+condition `Mail` says `SecretMissing`. A test mail is refused with them, and
+the link's dialog gives them as its {why}.
 
 ### Words of the people page and the sign-in page
 
 | Where | Text |
 |---|---|
 | The field | email · “For their invite, and for a forgotten password. Optional.” |
-| The field's errors | “Another person already has this address.” · “This is not an e-mail address.” |
+| The field's errors | “Another account already has this address.” · “This is not an e-mail address.” |
 | The switch | send the link by mail |
 | The link's dialog, sent | “The link was sent to {address}. It is also here, and shown only now.” |
 | The link's dialog, failed | “The mail to {address} could not be sent. {why} Hand the link over yourself.” |
@@ -1160,6 +1177,31 @@ is filled in. Dates are written as “15 November 2026, 00:00”.
 | A test mail | “Test mail from {host}” | “This mail was sent from the mail page of {host}, to check that mail works. Nothing else needs doing.” |
 
 Times in a mail are in UTC and say so: “15 November 2026, 14:02 UTC”.
+
+### Words of the resource and the realm job
+
+These are read with `kubectl`: in the resource, in its status and in the realm
+job's log. They are written as the operator's other conditions are: lowercase,
+without a full stop, the parts of one message joined by “; ”. A value in braces
+comes from the resource; a password is never in them.
+
+| Where | Text |
+|---|---|
+| The resource refused: `host` without `from` | “from is required when host is set” |
+| The condition `Mail`, `NotSetUp` | no server: “mail is not set up: spec.mail names no server, so the platform sends no mail” · a server and no sender, where the resource's rule did not run: “mail is not set up: spec.mail names the server {host} and no sender (from), so the platform sends no mail” |
+| The condition `Mail`, `SecretMissing` | the Secret is not there: “there is no Secret {secretName}: create it with the mail server's password under the key password” · it has no key `password`: “Secret {secretName} has no key password: put the mail server's password under it” |
+| The condition `Mail`, `Configured` | “the platform sends its mail through {host} ({encryption}), signing in as {user} with the password in Secret {secretName}” · a user and no Secret: “the platform sends its mail through {host} ({encryption}), signing in as {user} with no password” · no user: “the platform sends its mail through {host} ({encryption}), without signing in” |
+| The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” |
+| The realm job's summary: the password reset | switched on: “the sign-in page offers a password reset now” · switched off: “the sign-in page offers no password reset now: the realm sends no mail” · a realm without an email theme given the chart's: “the realm's email theme is {theme} now” |
+| A failed run of the realm job | “cannot read the mail settings of realm {realm}: {kcadm's last line}” · “cannot clear the mail settings of realm {realm}: {kcadm's last line}” · “cannot set the mail settings of realm {realm}: {kcadm's last line}” · “cannot read realm {realm}: {kcadm's last line}” · “cannot set the email theme of realm {realm}: {kcadm's last line}” · “cannot switch the password reset of realm {realm}: {kcadm's last line}” · from the chart's values alone: “mail.encryption is {value}: use starttls, tls or none” |
+
+{encryption} is `starttls`, `tls` or `none` as the resource has it, and
+`starttls` where it has none. The realm job's summary is the message of the
+condition `RealmConfigured`, joined with the run's other parts, and a line of
+the job's log; a run that finds mail not set up and no mail settings in the
+realm says nothing of mail. A failed run's text is the {reason} of “{job}
+failed: {reason}; it runs again after {time}”, as for every failure of the
+job.
 
 ### The alerts
 
