@@ -66,3 +66,63 @@ decision record the chapter names, if any. Then:
 - Push to a main branch. A change is a branch and a pull request named by its
   number; it is merged when its checks pass and it has been reviewed.
 - Change a running installation.
+
+## This repository
+
+This repository holds the specification (`spec/`), the documentation
+(`docs/`), the scripts that check them and write their generated tables
+(`scripts/`), the release script, and end-to-end tests that use a running
+instance (`e2e/`). The [site](https://github.com/zaentrum/zaentrum.github.io)
+builds the docs and the specification into its pages.
+
+### Build
+
+Nothing is compiled. What is generated is written by a script and committed:
+
+```sh
+python3 scripts/capabilities.py      # the tables between <!-- generated: … --> and <!-- end: … -->
+python3 scripts/inventory.py --src <a folder of clones> --fetch   # spec/capabilities/inventory.csv
+npx -p playwright@1.63.0 node scripts/render-mockups.mjs chino    # a section's drawings, as PNGs
+```
+
+`inventory.py` reads every repository's main and renders the operator's chart
+with `helm template`, so it needs `helm` on the PATH and the network.
+`render-mockups.mjs` needs Playwright's Chromium and the network.
+
+### Test
+
+What `docs-check.yml` runs on every pull request and on main:
+
+```sh
+python3 scripts/check-docs.py              # every relative link and every anchor resolves
+python3 scripts/check-spec.py              # the chapters' numbers, captions and legends
+python3 scripts/capabilities.py --check    # the model, and its tables as written
+```
+
+It also builds the site from the pull request's `docs/` and `spec/`, which
+fails on a link or a heading that leads nowhere.
+
+### Run it
+
+The end-to-end tests sign in to an instance as a person does and change
+nothing on it. They run against the reference demo
+([how it is deployed](./docs/reference-demo.md)) or any instance with the same
+open-licensed titles, with one ordinary account and one administrator.
+[e2e/README.md](./e2e/README.md) names the variables:
+
+```sh
+cd e2e && npm ci && npx playwright install chromium
+E2E_ENV_FILE=/path/to/e2e.env npm test
+```
+
+`e2e.yml` runs them on request, from the Actions tab, with the repository's
+variables and secrets.
+
+### What the checks leave unchecked
+
+- Whether the text is true of the code. The checks hold the structure and the
+  model together; the model meets the code only through the inventory, which
+  is refreshed by hand.
+- The end-to-end tests run only on request, against a live instance.
+- The drawings are not compared with the screens that are built.
+- `release.py` talks to GitHub and the registry only when a release is cut.
