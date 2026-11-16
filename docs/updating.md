@@ -139,7 +139,10 @@ holds them so. Each copy serves the canonical schema, except for the fields that
 when a copy differs, when the pinned install serves a listed field early, or when
 it lacks a field the list does not name. The re-pin empties the list. A new status
 field takes the same route as a spec field, and so does one inside a list, which the
-list names by its path, as in `status.components.notReadySince`.
+list names by its path, as in `status.components.notReadySince`. A rule added to a
+field the pinned install already serves is listed as the field's path and the rule's
+keyword, `path:keyword`, as in `spec.databases.external.sslmode:enum`: the pinned
+install serves the field without that keyword until the re-pin.
 
 Until the re-pin, `kubectl apply` on a pinned install refuses a resource with the new
 field as an unknown field, and a client that does not validate strictly gets only a
