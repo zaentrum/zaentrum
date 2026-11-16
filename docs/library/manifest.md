@@ -45,6 +45,28 @@ types gives values identical to the original version 2 manifests.
 | `trickplay`, `trailers[]` | Unchanged. |
 | `seriesTitle`, `seasonNumber`, `episodeNumber`, `episodeCode` | Episodes only, aired order. |
 
+## Fields
+
+A package made from a source the transcoder examined for fields says what
+its pictures hold and what was done with them, in `scan` at the manifest's
+top level, beside the renditions. The transcoder writes it into its
+contract and the packager copies it as it is.
+
+| Field | Meaning |
+|---|---|
+| `scan.found` | What the source's pictures hold: `fields` (video in fields), `film` (a film carried in fields), `telecine` (a film in a 3:2 cadence), `mixed` (film and video, or whole frames with fields seen among them), `progressive` (whole frames: the whole title, the whole frame, read through and nothing found), `unexamined` (whole frames on a partial basis: a sample, or a read with a stretch it could not see), `unknown` (the pictures could not tell) or `field-pictures` (HEVC coded one field per picture). |
+| `scan.done` | What the package's video is: `inverse-telecine` (the film's own frames), `field-matched` (the fields put back into whole frames, every frame kept), `deinterlaced-field` (deinterlaced at the field rate: every moment kept), `deinterlaced-frame` (deinterlaced at the frame rate: every second moment dropped), `progressive` (whole frames, as found), `fields-kept` (field pictures copied as they are), `fields-left` (too few fields to make over, left as they were), `unexamined` (nothing the pictures could tell: put back into whole frames where it can) or `none` (whole frames, not marked as fields). |
+| `scan.frameRate` | The package's frame rate. |
+| `scan.verified` | Where the whole title was read through: whether it bore the sample's word out (`ok`, `why`, `complete`) and what the sample said; `null` where no read was needed. |
+| `sourceFields` | For a package with a copied video rendition: the field mark the original's container gives (no packet carries it) and its field order. |
+
+The record says what was found and what was done, for playback and for the
+people who read it. It releases nothing: an original marked as fields, or
+found to hold them, is not retired, whatever its package's `scan` says or
+whether it has one (ADR-0015). See
+[the package's timeline](./versions.md#the-packages-timeline) and
+[fields](./versions.md#fields).
+
 The document is compatible; the **location** of episodes is not. A version 2
 reader finds a package in today's store at `shows/<aa>/<episodeId>/`, while this format nests the
 episode under its series. See
