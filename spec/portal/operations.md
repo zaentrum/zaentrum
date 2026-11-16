@@ -715,7 +715,7 @@ first volume as the status names it (`media`, `postgres-data`, `backups` or
 portal, which a mail completes with the public address. `title` and `text`
 come with `values`, what filled them in. `mail` has a `state`, one for each
 sentence of the **mail** column (`sent`, `sending`, `not-set-up`, `off`,
-`no-address`, `sent-recently`, `failed`), the number of `addresses`, and with
+`no-address`, `sent-recently`, `ended-before-mail`, `failed`), the number of `addresses`, and with
 `failed` the reason as a refusal. Each of `watched` has its `kind`, its
 `setting` with `least` and `most`, and `now`: a `state`, one for each
 sentence of the **now** column, with its values. `unseen` counts what the bell
