@@ -640,8 +640,8 @@ An alert has its title, its text, how long ago it started or ended, and
 
 - When an alert starts, portal-api sends one mail to every admin whose
   account is enabled and has an address, and to every address of
-  `spec.mail.alertsTo`: the addresses the mail page lists under **alerts go
-  to**. When it ends, it sends one more, to the addresses the first reached.
+  `spec.mail.alertsTo` that is no placeholder: the addresses the mail page
+  lists under **alerts go to**. When it ends, it sends one more, to the addresses the first reached.
   The start mail carries the title and the text as they were then, the end
   mail's subject the last title.
 - Where the admins cannot be read when an alert starts, the further addresses
@@ -649,12 +649,22 @@ An alert has its title, its text, how long ago it started or ended, and
 - For the same alert about the same subject, a start mail is sent at most
   once in 24 hours. An alert that starts again sooner shows in the bell and
   is not mailed, and neither is its end. So one alert sends two mails a day
-  at most: that it started, and that it ended. The 24 hours count from the
-  last start whose mail the mail server took for at least one address.
+  at most: that it started, and that it ended. The 24 hours count from when
+  the mail server first took the mail of the last start for an address.
 - A mail the server does not take is tried again after 5 minutes, three times
   in all for each address, by whichever portal-api runs then; so is one held
-  back while mail is set up and not ready. An alert that ends while its start
-  mail still waits sends neither.
+  back while mail is set up and not ready, and one whose mail settings could
+  not be read, with the cluster's refusal as its reason. An alert that ends
+  while its start mail still waits sends neither.
+- An address gets a start mail once and an end mail once, however many
+  portal-apis run. What became of a mail is kept after each address, so a
+  portal-api that stops while it sends repeats the mail to one address at
+  most; a try it left is made again by another.
+- The **mail** column says what happened: once the server took a mail for an
+  address it is sent, to so many of so many, whatever changes afterwards, and
+  a mail that failed always has its reason.
+- portal-api keeps the addresses an alert was mailed to until its end mail is
+  done, and their number after that.
 - No mail is sent while mail is not set up, while `spec.alerts.mail` is
   false, or when nobody has an address. The alerts page says which.
 
@@ -678,7 +688,7 @@ filter bar above it has **active** and **last 90 days**; it opens on
 
 | Route | Does |
 |---|---|
-| `GET /api/portal/alerts` | the alerts of the last 90 days, each with `id`, `kind`, `about`, `title`, `text`, `link`, `startedAt`, `endedAt`, `mail` and `seen`; `unseen`, their number; `watched`, the five with their setting and what the status says now |
+| `GET /api/portal/alerts` | every active alert and the newest 500 that ended in the last 90 days (`more` where older ones are kept), each with `id`, `kind`, `about`, `title`, `text`, `link`, `startedAt`, `endedAt`, `mail` and `seen`; `unseen`, their number; `watched`, the five with their setting and what the status says now |
 | `PATCH /api/portal/alerts/settings` | takes any of the four thresholds and `mail`; writes `spec.alerts` |
 | `POST /api/portal/alerts/{id}/read`, `POST /api/portal/alerts/read-all` | marks one alert, or all, seen by the admin who asks |
 
@@ -1306,7 +1316,7 @@ is filled in. Dates are written as “15 November 2026, 00:00”.
 | **send test mail** refused | not an address: “This is not an e-mail address.” · accented or non-Latin letters: “Addresses with accented or non-Latin letters are not supported.” · the placeholder address: “This address is a placeholder: nothing is sent to it. Type another.” · mail not set up: “Mail is not set up.” · mail set up and not ready yet: the last two reasons of Why a mail failed |
 | Removing | remove mail settings? · “The platform stops sending mail: no invite, no password reset link and no alert leaves it. The settings and the password are deleted.” |
 | Why a mail failed | “Can't reach the mail server. Check its name and its port.” · “The mail server doesn't offer this encryption. Choose another.” · “The mail server's certificate could not be checked.” · “The mail server refused the user or the password.” · “The mail server refused the sender's address.” · “The mail server refused the address {address}.” · “The mail server didn't answer in time.” · “The mail server answered: {its words}” · “The mail settings are still being applied.” · “The mail server's password is missing.” |
-| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept, under the password: “Type the password of this user.” · an address with accented or non-Latin letters, the sender's or a further one: “Addresses with accented or non-Latin letters are not supported.” · a control character, from a client of the API: “The mail settings hold a character that cannot be used.” · a value of the wrong kind in a field that has no sentence of its own, from a client of the API: “{field} has a value of the wrong kind.” |
+| **save** refused | no server: “Type the name of the mail server.” · not a server's name: “The server is not a host name or an IP address.” · the port: “The port is a number from 1 to 65535.” · the encryption, from a client of the API: “Encryption is starttls, tls or none.” · no sender: “Type the sender's address.” · not an address: “The sender's address is not an e-mail address.” · the name: “The sender's name has at most 60 characters.” · the further addresses: “One of the further addresses is not an e-mail address.” · “There are more than 10 further addresses. Keep up to 10.” · a user, and no password typed or kept, under the password: “Type the password of this user.” · an address with accented or non-Latin letters, the sender's or a further one: “Addresses with accented or non-Latin letters are not supported.” · a placeholder address, the sender's or a further one: “This address is a placeholder: nothing is sent to it. Type another.” · a control character, from a client of the API: “The mail settings hold a character that cannot be used.” · a value of the wrong kind in a field that has no sentence of its own, from a client of the API: “{field} has a value of the wrong kind.” |
 | The cluster refused | reading the settings: “The portal is not allowed to read the platform's settings. Update the operator, which gives the portal that right.” · changing them: “The portal is not allowed to change the mail settings. Update the operator, which gives the portal that right.” · the settings refused as invalid: “The cluster refused the mail settings.” · the cluster does not know mail settings: “The cluster does not know mail settings. Update the operator, which brings them.” · any other failure: “The cluster did not answer as expected.” · each with the cluster's own words under **details** |
 | Not run by the operator | “This platform is not run by the operator. Mail is set in its chart's values.” |
 | Couldn't load | couldn't load mail · try again |
@@ -1403,7 +1413,8 @@ The volumes' names in an alert are “library”, “databases”, “backups”
 {parts} are named as the status names them. A count of one is written in the
 singular: “1 day”, “1 minute”, “1 part is not ready”, “1 address”. A value
 that would take a title past 80 characters or a text past 280 is cut, and ends
-with “…”.
+with “…”. A control character in a value, a line break among them, is written
+as a space, in a title, a text and a log line alike.
 
 | Where | Text |
 |---|---|
@@ -1412,7 +1423,7 @@ with “…”.
 | **when** | “for {n} minutes” · “at {n} % full” · “within {n} days” · “for {n} days, or when the last one failed” · “when a rollout gives up, or the check after an update fails” |
 | **now** | “all {n} parts are ready” · “{n} parts are not ready” · “the fullest is at {n} %” · “not measured yet” · “it ends on {date}” · “not watched: the platform serves no certificate of its own” · “the newest is from {date}” · “not watched: backups are off” · “not watched: the databases are not the platform's” · “{version} runs” · “no backup yet” · “not watched: the platform's certificate cannot be read” · “not watched: the databases are not on a volume of their own yet” · under an older operator: “not watched: update the operator, which says since when a part is not ready” · “not watched: update the operator, which measures the volumes” · “not watched: update the operator, which reads when the certificate ends” |
 | **state** | “active” · “ended” |
-| **mail** | “sent to {n} addresses” · “not sent: mail is not set up” · “not sent: alert mail is off” · “not sent: nobody has an address” · “not sent: one was sent less than a day ago” · “could not be sent: {why}” · “not sent yet: tried again within 5 minutes” · “sent to {n} of {m} addresses; could not be sent to the others: {why}” |
+| **mail** | “sent to {n} addresses” · “not sent: mail is not set up” · “not sent: alert mail is off” · “not sent: nobody has an address” · “not sent: one was sent less than a day ago” · “could not be sent: {why}” · “not sent yet: tried again within 5 minutes” · “sent to {n} of {m} addresses; the others are tried again within 5 minutes” · “sent to {n} of {m} addresses; could not be sent to the others: {why}” |
 | Nothing is wrong | nothing is wrong · “No alert is active.” |
 | Saved | “Saved.” |
 | A threshold outside its range | “A number from {least} to {most}.” |
