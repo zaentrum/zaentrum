@@ -34,7 +34,7 @@ flowchart LR
    | Rate | No target bit rate. An encode runs at constant quality (CQ 23 on NVENC) with the cap as its maxrate, so a package's size follows its source under one ceiling for the whole library |
    | Bit depth | The source's: Main 10 above 8 bits |
    | HDR | HDR10 and HLG as they are. Dolby Vision as the HDR it carries: profile 7 and 8 keep an HDR10 or HLG base layer, profile 5 is reshaped to HDR10. *Ahead of the code:* a profile 7 or 8 source on an SDR base is mapped to HDR10 with its Dolby Vision metadata, so no master of an HDR title is SDR |
-   | 3D, interlacing | 2D (the base view), progressive |
+   | 3D, interlacing | 2D (the base view), progressive. *Ahead of the code:* a source in fields is not made progressive yet (Found on 16 November 2026, below) |
    | Closed captions | In the video, as they are |
    | Audio | Every track, commentaries and audio descriptions included, as AAC stereo at 192 kbit/s, quiet mixes lifted and surround folded down. A 5.1 companion is made only where an instance turns it on (`pipeline.surroundAudio`, off by default) |
    | Subtitles | Every track as it is. Text as WebVTT. Pictures (PGS, VobSub) as pictures. Forced and SDH flags as the source's. Styled subtitles (ASS/SSA) as their ASS script with the fonts the original carries, and a WebVTT copy for clients that can't draw ASS (since 2026-11-03) |
@@ -70,6 +70,8 @@ flowchart LR
    - **Chapters.** An original whose chapters the catalog lacks stays until they are read again.
    - **The picture area.** An original whose frame could hold black bars stays until its picture area is measured from the original itself (a full 16:9 or 4:3 frame, or a standard-definition one). The players fit that area to the screen. A package's keyframes alone, an IDR every few seconds and none at the cuts, can't tell a letterbox from picture.
 
+   An original in fields stays as well, until its package is progressive in fact (Found on 16 November 2026, below).
+
    Nothing is kept for ever. A source that can't meet the spec (an audio track whose channel layout can't be known, say) is acquired again into the same title, which keeps its id, history and ratings.
 3. **The players play everything the master carries.** The subtitles stay as they are, so each client draws pictures and styled subtitles itself. A subtitle is never turned into text to suit a client: no text recognition.
 
@@ -96,3 +98,13 @@ flowchart LR
 - **Text recognition of picture subtitles.** The pictures are kept, and the players draw them.
 - **A styled subtitle kept only as plain text.** Its WebVTT copy sits beside the ASS, never instead of it.
 - **Lossless, object-based or Dolby Vision tracks in the master.** The master is AAC stereo (a 5.1 companion where an instance turns it on) and HDR10.
+
+### Found on 16 November 2026
+
+The master's row says progressive. Measured on packages of sources in fields, that does not hold: nothing in the pipeline deinterlaces.
+
+- A source in fields that is copied keeps its fields, and one that is encoded has them woven into its frames.
+- In both cases the package's stream no longer says that it holds fields. No player deinterlaces it, and moving edges show combing.
+- A source that is only marked as fields and holds whole frames is not affected.
+
+Until the transcoder makes such a source progressive, an original in fields is not retired: the deletion gate keeps it, and so does any run in front of the gate. Proposed for the fix: a source in fields is always encoded, never copied; video is deinterlaced at its field rate, so that no motion is dropped; a telecined film is brought back to the film's own frames; and a source is judged by its pictures, not by its mark alone. A package made before the fix is made again from its original.
