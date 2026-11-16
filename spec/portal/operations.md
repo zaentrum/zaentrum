@@ -536,9 +536,10 @@ short job that mounts it:
   no version, and nothing says who made it. A report holds 4096 bytes at
   most: where 30 sets do not fit, the job lists fewer, and it always says how
   many the claim holds. Asked for one set by name, it reports that set as
-  well, however old it is. The backups' claim is measured where backups are
-  on, and for a restore. Where backups are off it is not listed among the
-  volumes, and the sets stay as they were last read.
+  well, however old it is. The backups' claim is measured wherever it is
+  there, with backups on or off; where there is none, it is not among the
+  volumes and no set is listed. A set whose `backup.json` cannot be read, or
+  names a version of more than 128 characters, is listed without a version.
 - A claim that is not bound yet is not measured: measuring never decides
   where a volume is made. It is listed with the size it asks for.
 - The operator reads each job's result as it reads a backup's, and writes:
@@ -555,7 +556,8 @@ short job that mounts it:
   the operator has not answered, starts every measuring job at once. The
   operator also measures the backups' claim when a backup has ended. A
   request is answered, in `status.storage.request`, once every job it
-  started has ended.
+  started has ended and been read; a pass that cannot read a claim or a run
+  answers nothing and reads again.
 - No measuring job starts while a restore runs, and a restore waits for one
   that still runs on the backups' claim. A request made meanwhile is
   answered after the restore.
@@ -1392,7 +1394,7 @@ comes from the resource; a password is never in them.
 | The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” · a user and no Secret: “the realm's mail settings stay as they were until spec.mail names a Secret for the password of {user}” |
 | The realm job's summary: the password reset | switched on: “the sign-in page offers a password reset now” · switched off: “the sign-in page offers no password reset now: the realm sends no mail” · a realm without an email theme given the chart's: “the realm's email theme is {theme} now” |
 | A failed run of the realm job | “cannot read the mail settings of realm {realm}: {kcadm's last line}” · “cannot clear the mail settings of realm {realm}: {kcadm's last line}” · “cannot set the mail settings of realm {realm}: {kcadm's last line}” · “cannot read realm {realm}: {kcadm's last line}” · “cannot set the email theme of realm {realm}: {kcadm's last line}” · “cannot switch the password reset of realm {realm}: {kcadm's last line}” · from the chart's values alone: “mail.encryption is {value}: use starttls, tls or none” |
-| The condition `StorageMeasured` | `Measured`: “{claim} {free} free of {size}” for each disk, claims on one disk as “{claim} and {claim} on one disk: {free} free of {size}”, then “the databases take {size}”, then “{n} sets on {claim}”, “1 set on {claim}” or “{n} sets on {claim}, the newest {m} listed”, joined by “; ”, and where the database server may not read its own volume “the databases' volume is not measured: {psql's ERROR line}” · `Failed`: “{job} failed: {reason}; the figures of {time} stay” · nothing measured before: “{job} failed: {reason}; nothing is measured yet” |
+| The condition `StorageMeasured` | `Measured`: “{claim} {free} free of {size}” for each disk, claims on one disk as “{claim} and {claim} on one disk: {free} free of {size}”, then “the databases take {size}”, then “{n} sets on {claim}”, “1 set on {claim}” or “{n} sets on {claim}, the newest {m} listed”, joined by “; ”, and where the database server may not read its own volume “the databases' volume is not measured: {psql's ERROR line}” · `Failed`: “{job} failed: {reason}; the figures of {time} stay” · where the status holds no figure of that job's at all: “{job} failed: {reason}; nothing is measured yet” · where the run measured a part and nothing is kept from before for the rest: “{job} failed: {reason}” · the ending is kept whole however long the reason is |
 | The {reason} of a measuring that failed | “{dir} is not a directory this measuring can read” · “cannot read the filesystem at {dir}” · “the Postgres at {host} does not answer” · “Secret zaentrum-db holds no user and password” · “the Postgres has no database {db}” · “the measuring stopped at line {n} of measure-volume.sh; the Job log says why” · where the job left none: “there is no claim {claim}” · “{job} has not started: {why}” · “{job} is gone before it was read” · “{job} left no report the operator can read” |
 | The measuring job's log | “measure: {dir}: {size} bytes, {free} free, filesystem {id}” · “measure: the databases take {bytes} bytes” · “measure: {n} sets, the newest {m} reported” |
 
