@@ -746,7 +746,7 @@ and one file more:
 
 | File | Holds |
 |---|---|
-| `backup.json` | what made the set: `v` (1), `createdAt`, `platform` (`name`, `uid`, `version`, `operator`), `databases` (each with its tables and bytes), `resource` (the `spec` of the platform's resource as it was), `secrets` (the names of the Secrets the resource refers to, and of those an admin provides under a fixed name where they exist, the metadata key's among them; never one the operator makes itself, and never a value), `addons` (each addon's name, chart and version) |
+| `backup.json` | what made the set: `v` (1), `createdAt`, `platform` (`name`, `uid`, `version`, `operator`), `databases` (each with its tables and bytes), `resource` (the `spec` of the platform's resource as it was), `secrets` (the names of the Secrets the resource refers to, and of those an admin provides under a fixed name where they exist, the metadata key's among them, and with `spec.secrets.external` every one of the platform's; never one the operator makes itself, and never a value), `addons` (each addon's name, its chart and the version installed, else the one asked for) |
 | `globals.sql` | the database's roles but the superuser, as today |
 | `chino.dump`, `katalog.dump`, `keycloak.dump`, `portal.dump` | the four databases, as today |
 | `SHA256SUMS` | the checksum of every file above, `backup.json` included |
@@ -756,7 +756,9 @@ Secrets' names, the addons) in a ConfigMap, `zaentrum-backup`, which the
 backup's job reads; the job adds the time and the databases. `platform` is the
 file's first field: `name` and `uid` are the resource's, `version` is the
 version that runs, as `status.currentVersion` has it, and `createdAt` is when
-the run began. Where the ConfigMap is missing, as in an install without the
+the run began. A URL in the file, an addon's chart or one in the resource, is
+written without its user, its password and its query, so that no credential
+kept in a URL reaches a set. Where the ConfigMap is missing, as in an install without the
 operator, the set is made without `backup.json` and the job's log says so.
 
 A set does not hold:
@@ -861,7 +863,11 @@ the sixth:
 2. **It checks the version**, before anything stops (below). It reads the
    set's version from `status.backup.sets[]`; for a set that is not listed
    there it has the backups' claim measured first, with the set's name, and
-   waits 2 minutes at most for the answer. A set the claim does not hold, a
+   waits 2 minutes at most for that run's answer, and 15 minutes at most in
+   all where another run has to end first or the run cannot be made. What is
+   listed counts only for the claim the restore reads from: after a change of
+   the claim, nothing listed before is trusted. A request that is taken away
+   while the operator waits takes the wait's condition with it. A set the claim does not hold, a
    claim that is not there and a claim that could not be read are refused at
    this step, with nothing stopped.
 3. It stops every part that uses the database and suspends the backups and
@@ -1477,7 +1483,7 @@ words it. No line holds an address, a title or a text.
 | Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
 | The restore has ended | “The restore has ended. Sign in to see how it went.” |
 | **the last restore** | “Restored from {date}, on {date}.” · “The restore from {date} was refused: {reason} Nothing was changed.”, where {reason} is by the condition's reason “It was made by {version}, which is newer than this platform ({version}).”, “Its version cannot be compared with this platform's.”, “There is no backups' claim to restore from.”, “The backups' claim does not hold it.”, “The backups' claim could not be read.” or “It did not pass the restore's check.” · “The restore from {date} failed: {reason} Restore again.” · “none” |
-| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): to restore it all the same, set zaentrum.io/restore-any-version to {name} and ask again with a new value; nothing was changed” · “refused: there is no set {name} on the claim {claim} (it holds: {newest names}); nothing was changed” · “refused: there is no claim {claim} to restore from; nothing was changed”, as today · “refused: the claim {claim} is not bound to a volume yet; nothing was changed” · “refused: the claim {claim} could not be read, so the version of {name} is not known: {reason}; nothing was changed”, where {reason} is the measuring's or “{job} has not ended in 2 minutes” · {newest names} are up to 10 names joined by “, ”, or “none” · while the claim is read: “the restore of {name} starts once the claim {claim} has been read: its version is checked before anything stops” |
+| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): to restore it all the same, set zaentrum.io/restore-any-version to {name} and ask again with a new value; nothing was changed” · “refused: there is no set {name} on the claim {claim} (it holds: {newest names}); nothing was changed” · “refused: there is no claim {claim} to restore from; nothing was changed”, as today · “refused: the claim {claim} is not bound to a volume yet; nothing was changed” · “refused: the claim {claim} could not be read, so the version of {name} is not known: {reason}; nothing was changed”, where {reason} is the measuring's or “{job} has not ended in 2 minutes” · {newest names} are up to 10 names joined by “, ”, or “none” · the ending “; nothing was changed” is kept whole however long a {reason} is · while the claim is read: “the restore of {name} starts once the claim {claim} has been read: its version is checked before anything stops” |
 | Not run by the operator | “This platform is not run by the operator, so its backups cannot be read from here.” |
 | Couldn't load | couldn't load the backups · try again |
 | The setup checklist, and the first-run page | “Moving from another machine?” · restore from a backup |
