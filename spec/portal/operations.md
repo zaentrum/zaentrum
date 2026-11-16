@@ -1419,6 +1419,16 @@ with “…”.
 | Not run by the operator | “This platform is not run by the operator, so nothing watches it from here.” |
 | **save** refused by the cluster | “The portal is not allowed to change the alert settings. Update the operator, which gives the portal that right.” · “The cluster refused the alert settings.” · “The cluster does not know alert settings. Update the operator, which brings them.” · reading, and any other failure: as on the mail page |
 | Couldn't load | couldn't load the alerts · try again |
+| portal-api's log | at the start: “alerts: the platform's status is read every 60s; an alert is kept 90 days after it ends” · once, while it is so: “alerts: the platform is not run by the operator, so no alert is raised” · “alerts: the platform's resource could not be read, so no alert starts or ends: {the cluster's words}” · “alerts: the resource is younger than 1 hour, so no alert is raised yet” · an alert: “alerts: {kind} about {about} started” · “alerts: {kind} about {about} ended” · the settings: “alerts: {who} saved the alert settings” · “alerts: the settings were not saved: {the cluster's words}” · the sweep: “alerts: {n} that ended more than 90 days ago went” · the mails: “mail: {an alert} was sent” · “mail: {an alert} was refused ({reason}); it is tried again in 5 minutes” · “mail: {an alert} was given up after 3 tries ({reason})” · “mail: an alert was not sent: one was sent less than a day ago” · “mail: the admins could not be read, so an alert went to the further addresses alone: {error}” · the portal's own database or the cluster failing: “alerts: the active alerts could not be read, so none starts or ends: {error}” · “alerts: {kind} about {about} could not be started: {error}” · “alerts: {kind} about {about} could not be ended: {error}” · “alerts: {kind} about {about} could not be written again: {error}” · “alerts: the tries of the alerts' mails could not be read: {error}” · “alerts: what became of an alert's mail could not be kept: {error}” · “alerts: whether a start was mailed in the last 24 hours could not be read, so it is mailed: {error}” · “alerts: the alerts past their keeping stay for now: {error}” · “alerts: the platform's resource could not be read: {the cluster's words}” |
+
+In portal-api's log, {kind} is `part-not-ready`, `volume-full`, `certificate-ends`,
+`no-good-backup` or `update-failed`, and {about} the alert's subject: the part's name, the
+disk's filesystem id (the volume's name where it reports none), `certificate`, `backups`
+or `update`. {an alert} is “an alert” or
+“an alert's end”. {reason} is why the mail server did not take it (`unreachable`,
+`encryption`, `certificate`, `sign-in`, `sender`, `recipient`, `timeout` or `answered`),
+or the code of why mail is not ready. {who} is the admin's username, and {error} the error as Go
+words it. No line holds an address, a title or a text.
 
 ### Words of backups and restoring
 
