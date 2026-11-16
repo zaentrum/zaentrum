@@ -247,6 +247,11 @@ flowchart LR
 A version folder is finished by its `.complete` marker: without it, the package
 is incomplete and neither the database nor a rebuild will use it.
 
+A mend, like a checksum fill, rewrites `checksums.sha256` (the mended init's
+line), `package.json` (its digests and `mends`) and `.complete`, and closes the
+chain again; it changes only the boxes of a rendition's init segment, of the
+kinds the package schema lists.
+
 Projections carry no checksums, on purpose: `metadata.json` and `person.json`
 are replaced whole, so a checksums file beside them would be wrong after the next
 projection. Images need none either: each is named by the hash of its bytes, so
