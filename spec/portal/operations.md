@@ -593,6 +593,14 @@ down; sizes are written as the storage page writes them. A date in a title or
 a text is written as a mail writes it, in UTC. The routes answer the values
 beside the sentences.
 
+A disk's alert is about its first volume, in the order library, databases,
+backups, event broker. The filesystem id only says at each check which
+volumes are one disk: an id that changes neither ends an alert nor starts
+one. While the phase is `Restoring`, no alert about a part or about the
+update starts or ends. A check writes every start and every end before it
+sends a mail, so a mail server that does not answer delays no alert, and a
+check that fails stops no later one.
+
 An alert whose subject stops being watched while it is active ends at the
 next check, with a sentence that says so: a part that was stopped or is gone,
 a certificate the platform no longer serves, backups switched off, a volume
@@ -696,7 +704,8 @@ All are for admins.
 
 `kind` is `part-not-ready`, `volume-full`, `certificate-ends`,
 `no-good-backup` or `update-failed`. `about` is the part's name, the disk's
-filesystem id, `certificate`, `backups` or `update`. `link` is a path of the
+first volume as the status names it (`media`, `postgres-data`, `backups` or
+`kafka`), `certificate`, `backups` or `update`. `link` is a path of the
 portal, which a mail completes with the public address. `title` and `text`
 come with `values`, what filled them in. `mail` has a `state`, one for each
 sentence of the **mail** column (`sent`, `sending`, `not-set-up`, `off`,
@@ -1403,13 +1412,14 @@ A title has at most 80 characters and a text at most 280.
 | Alert | Title | Text | When it ends |
 |---|---|---|---|
 | A part is not ready | “A part is not ready: {part}” | “{part} has not been ready for more than {minutes} minutes. Open operator to see why.” | “{part} is ready again.” · “{part} was stopped, so it is not watched now.” · “{part} is no longer a part of the platform.” |
-| A volume is almost full | “A volume is almost full: {volumes}” | “The {volumes} volume is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” · on one disk: “The disk of {volumes} is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” | “The {volumes} volume is at {percent} %.” · “The disk of {volumes} is at {percent} %.” · “The {volumes} volume is not measured any more.” |
+| A volume is almost full | “A volume is almost full: {volumes}” | “The {volumes} volume is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” · on one disk: “The disk of {volumes} is {percent} % full: {free} of {size} are free. Open storage to see what takes the room.” | “The {volumes} volume is at {percent} %.” · “The disk of {volumes} is at {percent} %.” · “The {volumes} volume is not measured any more.” · “The disk of {volumes} is not measured any more.” |
 | The certificate ends soon | “The certificate ends in {days} days” · “The certificate has ended” | “The platform's certificate ends on {date}. After that browsers warn and the apps stop connecting. Renew it.” · “The platform's certificate ended on {date}. Browsers warn and the apps do not connect. Renew it.” | “The certificate now ends on {date}.” · “The platform serves no certificate of its own now.” |
-| No good backup | “The last backup failed” · “No backup for {days} days” | “The backup of {date} failed. The newest good one is from {date}. Open backups to see why.” · with none: “The backup of {date} failed. There is no good backup yet. Open backups to see why.” · “The newest backup is from {date}. Open backups to see why none was made since.” · none was ever made: “No backup has been made since the platform was installed on {date}. Open backups to see why.” | “A backup was made on {date}.” · “Backups are off, so they are not watched now.” · “The databases run outside the platform now, so their backups are not watched here.” |
+| No good backup | “The last backup failed” · “No backup for {days} days” | “The backup of {date} failed. The newest good one is from {date}. Open backups to see why.” · with none: “The backup of {date} failed. There is no good backup yet. Open backups to see why.” · “The newest backup is from {date}. Open backups to see why none was made since.” · none was ever made: “No backup has been made since the platform was installed on {date}. Open backups to see why.” | “A backup was made on {date}.” · no start holds any more and none was made: “The backups are within the setting again.” · “Backups are off, so they are not watched now.” · “The databases run outside the platform now, so their backups are not watched here.” |
 | An update failed | “The update to {version} did not finish” · where the version is the one last checked: “The rollout of {version} did not finish” · “The check after the update to {version} failed” · on one machine: “The update to {version} was undone” · “The update to {version} did not start” | “These parts could not start: {parts}. What ran before keeps running where it can. Open operator to see why.” · one part: “This part could not start: {part}. What ran before keeps running where it can. Open operator to see why.” · more parts than fit: “These parts could not start: {parts} and {n} more. What ran before keeps running where it can. Open operator to see why.” · no part named: “The rollout did not finish. What ran before keeps running where it can. Open operator to see why.” · “{failed} of {total} checks failed: {checks}. Open operator to see the checks.” · a check without a result: “The check could not reach a result. Open operator to see why.” · “The update to {version} did not pass its check, so the machine went back to {version}. Open operator to see the checks.” · “{the updater's reason} Open operator to see more.” | “The update to {version} has finished.” · “The rollout of {version} has finished.” · “The check has passed.” · “The update to {version} is done.” |
 
 The volumes' names in an alert are “library”, “databases”, “backups” and
-“event broker”, joined with commas and “and”. {minutes} is the setting, and
+“event broker”, joined with commas and “and”. {minutes} is the setting as it
+was when the alert started, and
 {parts} are named as the status names them. A count of one is written in the
 singular: “1 day”, “1 minute”, “1 part is not ready”, “1 address”. A value
 that would take a title past 80 characters or a text past 280 is cut, and ends
@@ -1434,7 +1444,7 @@ as a space, in a title, a text and a log line alike.
 
 In portal-api's log, {kind} is `part-not-ready`, `volume-full`, `certificate-ends`,
 `no-good-backup` or `update-failed`, and {about} the alert's subject: the part's name, the
-disk's filesystem id (the volume's name where it reports none), `certificate`, `backups`
+disk's first volume, `certificate`, `backups`
 or `update`. {an alert} is “an alert” or
 “an alert's end”. {reason} is why the mail server did not take it (`unreachable`,
 `encryption`, `certificate`, `sign-in`, `sender`, `recipient`, `timeout` or `answered`),
