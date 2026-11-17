@@ -176,6 +176,51 @@ the menu becomes:
 | Audio | English · English — commentary: *first title* · English — commentary: *second title* |
 | Subtitles | Off · English · English SDH · English — forced only |
 
+## The package's timeline
+
+Unlike the rules above, this is what the packager does today. Every track,
+sidecar and script of a package counts time from the same 0: **the first frame
+of its video**. An original's own clock may start elsewhere — a transport
+stream's a second or more before its picture, a file whose audio leads the
+picture, a Matroska AAC track a few milliseconds early by its codec delay — and
+the packager moves every rendition, subtitle file and styled script by the
+distance from that start to the first frame, so that all of them meet there.
+
+- **Audio before the first frame.** A track that starts before it — an
+  encoder's priming, a lead over the picture — still starts before 0 in the
+  package's MP4, and the file's edit list trims what lies before 0.
+- **Picture against sound.** The picture and the sound of a package start where
+  the source's did against each other: neither is moved against the other.
+- **Subtitles before the first frame.** No subtitle event has a time before 0.
+  An event that is over at 0 or before is left out; one that starts before 0
+  and ends after it starts at 0 and keeps its end.
+
+| Format | Left out | Starts at 0 |
+|---|---|---|
+| WebVTT (`.vtt`) | A cue that ends at 0 or before. | A cue across 0; its end and settings are as they were. |
+| ASS/SSA script (`.ass`) | A `Dialogue` or `Comment` line that ends at 0 or before. | A line across 0; the rest of the line is as it was. |
+| PGS (`.sup`) | The display sets before 0 up to the last one before 0 that a decoder can start from (an epoch start or an acquisition point) — all of them where nothing shows at 0 and the next set can be decoded on its own. | That set and the ones after it before 0, in their order, so what shows at 0 is what showed there. |
+| VobSub (`.idx` and `.sub`) | An entry whose subpicture is over at 0 or before, at its own stop or at the next entry. | An entry across 0; its subpicture's display times move by as much, so it ends where it ended. |
+
+Subtitle files that came with the original count from the original's start, as
+a player counts them, and are moved and kept from 0 in the same way. A file
+that nothing moves — from an original whose first frame is its start, with no
+event before it — is written exactly as before.
+
+### Not yet
+
+- **ASS animation across 0.** An event that now starts at 0 keeps its override
+  tags as they were; its animation and fade times (`\t`, `\move`, `\fad`)
+  count from its start, so they run that much earlier.
+- **Packages made before picture against sound held.** A package of a Matroska
+  source whose video has B-frames, made before this held, starts its picture
+  one B-frame delay early against its sound (about 83 ms at 24 frames a
+  second). Its video's init segment can be mended in place, without the
+  original and without encoding again.
+- **Trickplay.** The scrub thumbnails are taken from the original's start, not
+  its first frame, so they can be off by as much as the distance between the
+  two.
+
 ## Quality
 
 - **A quality ladder** is several entries in `renditions.video[]` of one package,
