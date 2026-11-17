@@ -97,6 +97,16 @@ Every repository's workflow runs its build and its tests on every pull request
 and on the main branch. A repository without a test gets one that at least
 builds it and starts it.
 
+What never belongs in a public repository is checked, not only read for. One
+check, kept in the organisation's shared repository, runs in every repository's
+workflow on every pull request and on the main branch. It reads every tracked
+text file, hidden ones included, for the names of any one installation (its
+hosts, its storage, its people) and, in code and configuration, for the
+vocabulary of acquiring content. A repository names the paths the check leaves
+out in its own workflow, each with its reason beside it: the reference demo's
+published deployment is one. The check carries its own test cases and fails
+when one of them no longer trips.
+
 ## Where an image comes from
 
 Every image and every file a release publishes can be traced to the source it
@@ -149,6 +159,7 @@ library format, which are published contracts already.
 | T.C4 | Images signed, with the record of their build and a list of what they hold | Images, Docs | no workflow signs an image or publishes what it holds; the operator's workflows switch the build's record off | the section Where an image comes from: every image and file a release publishes is signed by its workflow with the build system's own identity, carries the build's record and the list of its packages; the release check fails without them; [releases](../../docs/releases.md) says in one command each how to check a signature and read the record and the list | approved |
 | T.C5 | The typefaces in the apps' own bundles | Web, Samsung TV, Portal, Catalog console | each loads its two typefaces from a public font service in its page's head | the section What the apps call: the font files are in each app's bundle and its page asks no other host for them; [what the apps send](../../docs/releases.md#what-the-apps-send) no longer names a font service | approved |
 | T.C6 | The addon interfaces, each with a version | Docs | the pages under extending describe the interfaces; none has a version, and nothing says what may change | Recommended: the section What an addon builds on: one table in [extending](../../docs/extending/README.md) with each interface's name, version and whether it is settled; for a settled one the three rules (a breaking change takes a new version, the version before is served one further release, the notes announce it a release ahead); the other choice is to promise nothing until version 1 of the platform | approved |
+| T.C7 | The neutrality check in every repository | Images | seven repositories check it in their own workflows, each with its own copy of the rules, two of them reading only some kinds of file; nineteen have no check, while [architecture](../../docs/architecture.md) says the boundary is enforced by CI | the section Changing it: one check in the organisation's shared repository, called by every repository's workflow on every pull request and on the main branch; every tracked text file, hidden ones included; a repository's exceptions named in its own workflow, each with its reason; the check's own test cases run with it | approved |
 
 ## States
 

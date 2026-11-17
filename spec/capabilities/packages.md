@@ -138,7 +138,7 @@ flowchart LR
 <!-- generated: packages -->
 |  | Package | After | Changes | proposed | approved | built | verified |
 |---|---|---|---|---|---|---|---|
-| 1 | [Groundwork in every repository](#groundwork-in-every-repository) | — | 4 | 0 | 3 | 1 | 0 |
+| 1 | [Groundwork in every repository](#groundwork-in-every-repository) | — | 5 | 0 | 4 | 1 | 0 |
 | 2 | [The design system's missing parts](#the-design-systems-missing-parts) | — | — | — | — | — | — |
 | 3 | [The frame, and the design system in the apps](#the-frame-and-the-design-system-in-the-apps) | Groundwork in every repository, The design system's missing parts | 11 | 0 | 11 | 0 | 0 |
 | 4 | [Every text from the message catalogue, in the person's language](#every-text-from-the-message-catalogue-in-the-persons-language) | The frame, and the design system in the apps | 5 | 0 | 5 | 0 | 0 |
@@ -176,7 +176,7 @@ flowchart LR
 <!-- generated: by-package -->
 ## Groundwork in every repository
 
-Each repository says how it is built, tested and changed, runs its tests on every change, and signs what it releases; the message catalogue and its check, and a browser in each web repository's tests, come with it. Nothing is built before it.
+Each repository says how it is built, tested and changed, runs its tests and the neutrality check on every change, and signs its releases; the message catalogue with its check and a browser in each web repository's tests come too. Nothing is built before it.
 
 | No. | Change | Where | Status |
 |---|---|---|---|
@@ -184,6 +184,7 @@ Each repository says how it is built, tested and changed, runs its tests on ever
 | [T.C2](../platform/trust.md#changes) | A guide to contributing, and each repository's own | Docs | approved |
 | [T.C3](../platform/trust.md#changes) | Every repository's tests on every change | Images | approved |
 | [T.C4](../platform/trust.md#changes) | Images signed, with the record of their build and a list of what they hold | Images, Docs | approved |
+| [T.C7](../platform/trust.md#changes) | The neutrality check in every repository | Images | approved |
 
 ## The design system's missing parts
 
