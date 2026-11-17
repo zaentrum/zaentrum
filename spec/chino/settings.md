@@ -466,10 +466,11 @@ Figure 16.11: Settings on a TV, at 960 × 540 dp.
    has no list for a TV; picking one closes it, and so does Back.
 3. **The text** under the row, as on a computer.
 4. **binge watching** and the groups after it follow below. The page scrolls as
-   the focus goes down, and OK flips a switch.
+   the focus goes down, and OK flips a switch. A switch that is busy shows its
+   choice and takes no press.
 
-A TV has no downloads: server, feedback and about follow binge watching, as on
-a phone.
+A TV has no downloads: watchlist, where the server has it (section 16.4.7),
+then server, feedback and about follow binge watching, as on a phone.
 
 ## 16.4 What settings holds
 
@@ -674,7 +675,11 @@ The group **watchlist** comes after binge watching. Separate movies and shows
 is the design system's switch, its line as the hint; what it does to the lists
 is specified in section 8.8.1 of [chapter 8](./watchlist.md). The group shows
 only where the server keeps the setting and can fill a list by kind; elsewhere
-it is left out. The figures of section 16.3 don't draw the group.
+it is left out. While the account's choice is being read, the switch is busy
+and shows the choice last known on the device, off where there is none. Where
+that read failed, the switch shows that choice and works, and the lists follow
+it until the choice is read again. The figures of section 16.3 don't draw the
+group.
 
 ## 16.5 The account
 
@@ -993,6 +998,8 @@ Figure 16.23: The report was sent, on a computer.
 | The app's language is being saved | The select is busy, and shows the choice |
 | It couldn't be saved | The design system's error banner under the field: “Couldn't save the language.” and the cause's sentence ([chapter 17](./errors.md)); the select and the app go back to the language as it was |
 | The server keeps no language for an account | The choice is kept on the device, and the text under the field ends after its first sentence |
+| Separate movies and shows is being read | The switch is busy, and shows the choice last known on the device, off where there is none |
+| It couldn't be read | The switch shows that choice and works; the lists follow it until the choice is read again |
 | Separate movies and shows is being saved | The switch is busy, and shows the choice |
 | It couldn't be saved | The design system's error banner under the switch: “Couldn't save the setting.” and the cause's sentence ([chapter 17](./errors.md)); the switch goes back, and the banner stays until the switch is used again |
 

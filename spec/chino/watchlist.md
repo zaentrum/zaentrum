@@ -391,12 +391,14 @@ Off, the watchlist is as figures 8.5 to 8.9 draw it. On:
 - **On the watchlist**, each list keeps its name and its count as its heading,
   with two rows under it: **movies · 4**, the list's movies, then
   **shows · 3**, its shows and the episodes saved on their own, each episode
-  with its code on its card. The heading's count is the sum of its rows'. Each
-  row ends with **see all**, which opens the list.
+  with its code on its card. The heading's count is the list's own, the titles
+  it holds; each row's is its own answer's. Each row ends with **see all**,
+  which opens the list.
 - **A row with nothing in it is left out.** A list of movies alone shows its
   movies row alone under its heading; a list with nothing in it shows what it
   shows with the setting off (section 8.10). A row that couldn't load shows as
-  one row does there.
+  one row does there, under its name without a count, and is tried again by
+  itself.
 - **A list opened** is split the same way: **movies · 4** over its movies, then
   **shows · 3** over its shows. Its count, rename list and delete list stay
   where they are.
