@@ -39,6 +39,7 @@ import json
 import os
 import re
 import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -227,6 +228,118 @@ def image_published(image, tag):
             return r.status == 200
     except (urllib.error.URLError, ValueError, OSError):
         return False
+
+
+# ── where an image or a file comes from ───────────────────────────────────────
+#
+# Every image a release publishes is signed by the workflow that built it, with
+# the build system's own identity (cosign, keyless), and carries the build's own
+# record and the list of its packages (BuildKit's attestations). Every file
+# carries a signed record of its build (GitHub's attestations); an archive, the
+# list of the packages its binaries hold as well. finish fails when one lacks any.
+
+ISSUER = "https://token.actions.githubusercontent.com"
+PROVENANCE = {"https://slsa.dev/provenance/v0.2", "https://slsa.dev/provenance/v1"}
+SPDX = "https://spdx.dev/Document"
+SPDX_V23 = "https://spdx.dev/Document/v2.3"
+ARCHIVES = (".tar.gz", ".zip")
+
+
+def tool_problems():
+    """What this machine lacks to check where the release's images and files come from."""
+    problems = []
+    if not shutil.which("cosign"):
+        problems.append("cosign is not on the PATH: finish checks every image's signature with it (cosign 3 or newer)")
+    if run(["gh", "attestation", "--help"], check=False).returncode != 0:
+        problems.append("this gh has no `gh attestation`: finish checks every release file's record with it")
+    return problems
+
+
+def registry_manifest(image, ref, token):
+    req = urllib.request.Request(
+        f"https://ghcr.io/v2/{ORG}/{image}/manifests/{ref}",
+        headers={"Authorization": f"Bearer {token}", "Accept": ACCEPT})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.load(r)
+
+
+def image_attestations(image, tag):
+    """What the build attached to ghcr.io/zaentrum/<image>:<tag>, per platform:
+    {"linux/amd64": {predicate type, …}, …}. A platform with no attestation
+    manifest maps to an empty set; an image that is one manifest, not an index,
+    to {"": set()}."""
+    try:
+        url = f"https://ghcr.io/token?scope=repository:{ORG}/{image}:pull"
+        with urllib.request.urlopen(url, timeout=20) as r:
+            token = json.load(r).get("token", "")
+        index = registry_manifest(image, tag, token)
+    except (urllib.error.URLError, ValueError, OSError):
+        return {"": set()}
+    manifests = index.get("manifests")
+    if manifests is None:
+        return {"": set()}
+    platforms, kinds = {}, {}
+    for m in manifests:
+        ann = m.get("annotations") or {}
+        if ann.get("vnd.docker.reference.type") == "attestation-manifest":
+            try:
+                att = registry_manifest(image, m["digest"], token)
+            except (urllib.error.URLError, ValueError, OSError):
+                continue
+            kinds[ann.get("vnd.docker.reference.digest", "")] = {
+                (layer.get("annotations") or {}).get("in-toto.io/predicate-type", "")
+                for layer in att.get("layers", [])}
+        else:
+            p = m.get("platform") or {}
+            platforms[m["digest"]] = "/".join(x for x in (p.get("os"), p.get("architecture"), p.get("variant")) if x)
+    return {name: kinds.get(digest, set()) for digest, name in platforms.items()} or {"": set()}
+
+
+def regex_quoted(s):
+    """A repository name or a version as a literal in cosign's regular expression."""
+    return s.replace(".", r"\.")
+
+
+def image_signed(repo, image, tag, version):
+    """Whether cosign finds a signature on ghcr.io/zaentrum/<image>:<tag> made by
+    a workflow of github.com/zaentrum/<repo> that ran on the tag <version>."""
+    identity = (rf"^https://github\.com/{ORG}/{regex_quoted(repo)}/\.github/workflows/[^@]+"
+                rf"@refs/tags/{regex_quoted(version)}$")
+    r = run(["cosign", "verify", f"ghcr.io/{ORG}/{image}:{tag}",
+             "--certificate-oidc-issuer", ISSUER, "--certificate-identity-regexp", identity], check=False)
+    return r.returncode == 0
+
+
+def image_origin(repo, image, tag, version, cosign=True):
+    """What ghcr.io/zaentrum/<image>:<tag> lacks of what traces it to its source."""
+    ref = f"ghcr.io/{ORG}/{image}:{tag}"
+    problems = []
+    for platform, kinds in sorted(image_attestations(image, tag).items()):
+        where = f" ({platform})" if platform else ""
+        if not kinds & PROVENANCE:
+            problems.append(f"{ref}{where} carries no record of its build")
+        if not any(k.startswith(SPDX) for k in kinds):
+            problems.append(f"{ref}{where} carries no list of the packages it holds")
+    if cosign and not image_signed(repo, image, tag, version):
+        problems.append(f"{ref} is not signed by a workflow of {ORG}/{repo} on {version}")
+    return problems
+
+
+def asset_origin(repo, name, version):
+    """What a file of <repo>'s GitHub release <version> lacks: a record of its
+    build signed by the repository's workflow, and for an archive the list of
+    the packages it holds."""
+    with tempfile.TemporaryDirectory() as d:
+        r = run(["gh", "release", "download", version, "-R", f"{ORG}/{repo}", "-p", name, "-D", d], check=False)
+        if r.returncode != 0:
+            return [f"{repo}'s release {version}: {name} could not be downloaded to be checked"]
+        verify = ["gh", "attestation", "verify", os.path.join(d, name), "--repo", f"{ORG}/{repo}"]
+        problems = []
+        if run(verify, check=False).returncode != 0:
+            problems.append(f"{repo}'s release {version}: {name} has no record of its build signed by its workflow")
+        if name.endswith(ARCHIVES) and run(verify + ["--predicate-type", SPDX_V23], check=False).returncode != 0:
+            problems.append(f"{repo}'s release {version}: {name} has no list of the packages it holds")
+        return problems
 
 
 # ── one repository's state ────────────────────────────────────────────────────
@@ -434,6 +547,12 @@ def cmd_check(args):
     states = [inspect(args.root, c, args.version, not args.no_fetch, args.base) for c in components(args)]
     ready = report(states, args.version)
     front_door_note(args)
+    tools = tool_problems()
+    if tools:
+        print("\nthis machine, for finish:")
+        for p in tools:
+            print(f"  {p}")
+        ready = False
     print("\nready to tag." if ready else "")
     return 0 if ready else 1
 
@@ -581,15 +700,19 @@ def wait_for_builds(root, version, comps, timeout_min, interval=60):
 
 
 def verify_artifacts(version, comps):
-    """Every image at the release's tags, and every release asset. Returns the
-    problems."""
-    problems = []
+    """Every image at the release's tags, and every release asset: published,
+    and traced to its source (signed, with the record of its build and the list
+    of what it holds). Returns the problems."""
+    problems = tool_problems()
+    cosign = bool(shutil.which("cosign"))
     tags = [version] if is_prerelease(version) else [version, minor_of(version)]
     for c in comps:
         for image in c.images:
             for tag in tags:
                 if not image_published(image, tag):
                     problems.append(f"ghcr.io/{ORG}/{image}:{tag} is not published")
+                    continue
+                problems += image_origin(c.name, image, tag, version, cosign)
         if c.assets:
             try:
                 rel = gh_json("release", "view", version, "-R", f"{ORG}/{c.name}", "--json", "assets,isDraft")
@@ -602,6 +725,8 @@ def verify_artifacts(version, comps):
                 name = asset.format(v=version[1:])
                 if name not in have:
                     problems.append(f"{c.name}'s release {version} has no {name}")
+                else:
+                    problems += asset_origin(c.name, name, version)
     return problems
 
 
@@ -765,13 +890,15 @@ def cmd_finish(args):
     # 3. what they published
     problems = verify_artifacts(version, comps)
     if problems:
-        print("\nnot published:" if not args.dry_run else "\nnot published yet (expected before the tags are pushed):")
+        print("\nnot published, or not traced to its source:" if not args.dry_run
+              else "\nnot published yet (expected before the tags are pushed):")
         for p in problems:
             print(f"  {p}")
         if not args.dry_run:
             raise Failure("the release is incomplete: stable stays where it is")
     else:
-        print("\nevery image and release asset is published.")
+        print("\nevery image and release asset is published, signed by its workflow, with the record of its build"
+              " and the list of what it holds.")
 
     # 4. stable -> the release, in this repository, tagged. A pre-release is
     # published, never served: stable stays, and this repository stays untagged.

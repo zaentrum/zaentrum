@@ -27,6 +27,8 @@ jobs:
         run: python3 scripts/check-spec.py
       - name: the capability model and the architecture (every capability, setting, component, connection and claim; their tables)
         run: python3 scripts/capabilities.py --check
+      - name: the scripts' own tests (release.py's check of where an image or a file comes from)
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
 
   site:
     runs-on: ubuntu-latest

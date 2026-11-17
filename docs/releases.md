@@ -92,6 +92,50 @@ kubectl apply -f https://github.com/zaentrum/zaentrum-operator/releases/download
 curl -fsSL https://raw.githubusercontent.com/zaentrum/zae/main/install.sh | sh
 ```
 
+### Where an image or a file comes from
+
+Every image a release publishes is signed by the workflow that built it, with
+the build system's own identity for that repository: there is no key, and none
+to lose. Each image carries the record of its build (the repository, the commit
+and the workflow run) and the list of the packages it holds. One command each,
+here for `chino-api` at `vX.Y.Z`. Any other image works the same way, with the
+repository that publishes it (the table above) in the signature's check:
+
+```sh
+# the signature: made by a workflow of zaentrum/chino-api, on the tag vX.Y.Z
+cosign verify ghcr.io/zaentrum/chino-api:vX.Y.Z \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp '^https://github\.com/zaentrum/chino-api/\.github/workflows/[^@]+@refs/tags/vX\.Y\.Z$'
+
+# the record of its build: vcs.source and vcs.revision are the repository and
+# the commit, runDetails.builder.id the workflow run
+docker buildx imagetools inspect ghcr.io/zaentrum/chino-api:vX.Y.Z --format '{{ json .Provenance.SLSA }}'
+
+# the list of the packages it holds (SPDX)
+docker buildx imagetools inspect ghcr.io/zaentrum/chino-api:vX.Y.Z --format '{{ json .SBOM.SPDX }}'
+```
+
+An image for both processors (`zae`, `sample-addon`) has a record and a list
+for each: `--format '{{ json (index .Provenance "linux/amd64").SLSA }}'`, and
+the same with `.SBOM` and `.SPDX`.
+
+The files of a release carry a signed record of their build too, and the CLI's
+archives the list of the packages their binaries hold. These are checked with
+the GitHub CLI, signed in with any account:
+
+```sh
+# the record, and its signature by the repository's workflow
+gh attestation verify operator-install.yaml --repo zaentrum/zaentrum-operator
+gh attestation verify zae_X.Y.Z_linux_amd64.tar.gz --repo zaentrum/zae
+
+# the list of the packages an archive holds
+gh attestation verify zae_X.Y.Z_linux_amd64.tar.gz --repo zaentrum/zae \
+  --predicate-type https://spdx.dev/Document/v2.3 --format json --jq '.[].verificationResult.statement.predicate'
+```
+
+The install file holds no packages of its own: the images it names each carry
+their own list.
+
 ## Cutting a release
 
 [`scripts/release.py`](https://github.com/zaentrum/zaentrum/blob/main/scripts/release.py) does every step from a directory
@@ -110,6 +154,11 @@ its CI green at that commit, and its release workflows on `main`:
 ```sh
 scripts/release.py check vX.Y.Z
 ```
+
+`check` also wants on this machine what `finish` checks with:
+[cosign](https://docs.sigstore.dev/cosign/system_config/installation/) 3 or
+newer for the images' signatures, and a `gh` with `gh attestation` for the
+files' records.
 
 **3. Tag.** Annotated tags on each repository's `main` — the services, `zae`,
 `sample-addon` and the operator; this repository is tagged last, by `finish`:
@@ -133,7 +182,9 @@ repository's release workflows on the tag by hand (`gh workflow run`), and
 `finish` counts those runs like the others.
 
 **4. Finish.** Wait for every one of those builds, check that every image and
-release asset is published, then move `stable`: commit `releases.json` here
+release asset is published and [traced to its source](#where-an-image-or-a-file-comes-from):
+signed by its workflow, with the record of its build and, for an image or an
+archive, the list of what it holds. Then move `stable`: commit `releases.json` here
 with `stable` on the release, tag that commit, and draft the release notes —
 per repository, from its commits since its previous release (the pre-releases
 on the way are left out; a summary for its first), and one for the platform:
