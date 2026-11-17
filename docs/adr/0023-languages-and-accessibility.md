@@ -127,7 +127,7 @@ flowchart LR
    ```
 
    - `error` is the code: lowercase words joined by underscores. It is part of the route's contract and is listed where the server describes its interface. A GraphQL error carries it as `extensions.code`, with `extensions.values`.
-   - `values` are numbers and names.
+   - `values` are numbers and names. A code that needs none sends no `values`, and an app reads a missing one as empty.
    - `detail` is a line of English for the log and for **details**. It is never the message.
 
    An app shows the catalogue's text for a code it knows, under the key `error.` and the code. A code it does not know reads as the cause of its HTTP status ([chapter 17](../../spec/chino/errors.md)), so an app older than its server still says something true. No app reads the words of an answer, to show them or to tell cases apart. A code is needed only where the status leaves two cases open, or where a screen has a sentence of its own for the case; every other failure stays a status and a line of detail.

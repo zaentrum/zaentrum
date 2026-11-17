@@ -831,6 +831,12 @@ Figure 16.19: Change server, on a phone.
 progress, lists, likes and watch history there, and the sign-in itself. It
 can't be undone, so it always asks first, in the dialog of figure 16.20.
 
+Once the server has begun to delete an account it keeps nothing more for it.
+What a device that is still signed in sends during the deletion or after it,
+a watch position or a title saved to a list, is refused, and that device signs
+the account out. To refuse it, the server keeps the deleted account's id for
+an hour, longer than a sign-in's token lives, and nothing else of the account.
+
 ![Figure 16.20: Delete account, on a computer](./img/settings-delete-account-computer.png)
 
 Figure 16.20: Delete account, on a computer.
