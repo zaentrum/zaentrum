@@ -275,6 +275,7 @@ What a person keeps to watch, in lists of their own, and what they watched. Spec
 |---|---|---|---|---|---|---|
 | Put a title on the Watchlist, or take it off | person | built | built | built | built | [6.5.2](../chino/title-actions.md#652-add-to-list), [8.1](../chino/watchlist.md#81-purpose) |
 | See the Watchlist and one's own lists, and open one with all its titles | person | built | built | built | built | [8.3](../chino/watchlist.md#83-the-watchlist-on-a-computer), [8.6](../chino/watchlist.md#86-a-list), [8.8](../chino/watchlist.md#88-what-a-list-holds) |
+| See every list's movies and shows apart | person | no | no | no | no | [8.8.1](../chino/watchlist.md#881-movies-and-shows-apart), [16.4.7](../chino/settings.md#1647-watchlist) |
 | Put a title in one's own lists, or take it out of them | person | built | built | built | no | [6.5.2](../chino/title-actions.md#652-add-to-list) |
 | Create a list of one's own | person | built | built | built | built | [8.7.1](../chino/watchlist.md#871-creating-a-list), [8.7.4](../chino/watchlist.md#874-names-and-limits) |
 | Start a new list from a title's page, with the title in it | person | built | built | built | no | [6.5.2](../chino/title-actions.md#652-add-to-list), [8.7.1](../chino/watchlist.md#871-creating-a-list) |
@@ -301,6 +302,7 @@ What a person keeps to watch, in lists of their own, and what they watched. Spec
 |---|---|---|---|---|
 | `keep-on-watchlist` | 6.C8, 6.C9, 6.C20 | — | `chino-api PUT /api/v1/me/watchlist/{id}`, `chino-api DELETE /api/v1/me/watchlist/{id}`, `chino-api GET /api/v1/me/watchlist` and 2 more | — |
 | `see-lists` | 8.C1, 8.C2, 8.C3, 8.C9, 8.C10, 8.C11, 8.C12, 8.C15, 8.C16 | — | `chino-api GET /api/v1/me/watchlists`, `chino-api GET /api/v1/me/watchlists/{listId}` | `watchlist-shelf-size` |
+| `see-lists-by-kind` | 8.C18, 16.C25 | build | — | `watchlist-by-kind` |
 | `put-title-in-lists` | 6.C8, 6.C9, 6.C10 | build | `chino-api PUT /api/v1/me/watchlists/{listId}/items/{itemId}`, `chino-api DELETE /api/v1/me/watchlists/{listId}/items/{itemId}`, `chino-api GET /api/v1/me/watchlists/memberships` | — |
 | `create-list` | 8.C4, 8.C5, 8.C17 | — | `chino-api POST /api/v1/me/watchlists` | `list-name-length`, `lists-per-account` |
 | `create-list-from-title` | 6.C10 | build | `chino-api POST /api/v1/me/watchlists`, `chino-api PUT /api/v1/me/watchlists/{listId}/items/{itemId}` | `list-name-length`, `lists-per-account` |

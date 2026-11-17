@@ -382,6 +382,37 @@ TV the focus is on **create list**.
 - The lists belong to the account, so they are the same in every app: a title
   added on a phone is in the watchlist on the TV.
 
+### 8.8.1 Movies and shows apart
+
+A setting of the account, **Separate movies and shows** (section 16.4.7 of
+[chapter 16](./settings.md)), splits every list into its movies and its shows.
+Off, the watchlist is as figures 8.5 to 8.9 draw it. On:
+
+- **On the watchlist**, each list keeps its name and its count as its heading,
+  with two rows under it: **movies · 4**, the list's movies, then
+  **shows · 3**, its shows and the episodes saved on their own, each episode
+  with its code on its card. The heading's count is the sum of its rows'. Each
+  row ends with **see all**, which opens the list.
+- **A row with nothing in it is left out.** A list of movies alone shows its
+  movies row alone under its heading; a list with nothing in it shows what it
+  shows with the setting off (section 8.10). A row that couldn't load shows as
+  one row does there.
+- **A list opened** is split the same way: **movies · 4** over its movies, then
+  **shows · 3** over its shows. Its count, rename list and delete list stay
+  where they are.
+- **The order** is the same in every list and every app: movies first, then
+  shows; within a row, the one added last first, as in section 8.8.
+- **On a TV**, up and down move from row to row, a list's two rows included,
+  and each row keeps the card it was left on. The rows' names take no focus;
+  the list's heading does, as without the setting.
+- **What goes where.** A movie is in the movies row; a show, and an episode
+  saved on its own, in the shows row, and so is anything else a list could
+  hold, so that nothing a list holds is left out.
+
+The setting goes with the account, to every device it signs in on. Where the
+server can't keep it or can't fill a list by kind, settings offer no such
+setting, and the watchlist is as with it off.
+
 ## 8.9 Changes
 
 Every difference between section 8.2 and the target is one change in the
@@ -412,6 +443,7 @@ picker on a title's page is [chapter 6](./title-actions.md)'s.
 | 8.C15 | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | Web, Phone app: a spinner alone. Android TV: “Loading your lists…”. Samsung TV: a spinner with it. Both: a row “Loading…” | grey blocks in the shape of two rows (section 8.10) | approved |
 | 8.C16 | Couldn't load: the lists, or one row | Phone app, Android TV, Samsung TV | Phone app: “couldn't load your watchlists” for the whole view when one row couldn't load. Android TV, Samsung TV: a row that couldn't load looks empty. Samsung TV: “Couldn't load your lists.”, without try again | figure 8.13, the design system's empty state, its couldn't-load kind, when the lists couldn't load; a row that couldn't load keeps its name, and in place of its cards the empty state at its small size says “couldn't load this list”, with the reason and try again (section 8.10) | approved |
 | 8.C17 | The server counts characters | the server | 1 to 60 bytes, so a name with accents ends before 60 characters | 1 to 60 characters, as the field counts them (section 8.7.4) | approved |
+| 8.C18 | Movies and shows apart in every list | Web, Phone app, Android TV, Samsung TV, the server | each list is one row of its movies, shows and episodes together; a list can't be asked for by kind | Section 8.8.1: with Separate movies and shows on (change 16.C25), every list on the watchlist and opened is split into its movies and its shows, a row or a part each, under the list's heading and count. chino-api answers a list by kind, `GET /api/v1/me/watchlists/{listId}?kind=movie` or `?kind=series`, the latter with episodes and every other kind, and the counts by kind, `GET /api/v1/me/watchlists?include=counts` as `counts: {"movie": 4, "series": 3}`; it says so in `/api/config` as `features.watchlist_kinds`, and without it the apps draw every list as with the setting off. A row shows at most as many cards as a row does today. Brought forward and approved by the owner on 17 November 2026 | approved |
 
 ## 8.10 States
 
@@ -461,6 +493,7 @@ Figure 8.13: The watchlist when the lists couldn't load, on a TV.
 | The view | watchlist · create list |
 | A row's name | Watchlist · 5 · Sunday nights · 4 |
 | The last card of a row | see all |
+| A list by kind | movies · 4 · shows · 3 |
 | A card | the name, the year and the menu button, named after the title for screen readers, “actions for Sintel”; an episode: the show's name and “S01E03 · Llamigos” |
 | An empty row | nothing in your Watchlist yet · nothing in Sunday nights yet · Add titles with the bookmark on a title's page. · Add titles with the arrow beside the bookmark on a title's page. |
 | A list | the back arrow, named “back” for screen readers · Sunday nights · 4 titles · 1 title · rename list · delete list |

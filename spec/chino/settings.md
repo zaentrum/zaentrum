@@ -653,6 +653,18 @@ The iOS app does this as the Android app does:
 **about** holds the app's version, so the person can tell the people who run
 the server which one they have when something goes wrong.
 
+### 16.4.7 Watchlist
+
+| Setting | The line under it | At first |
+|---|---|---|
+| Separate movies and shows | Every list shows its movies in one row and its shows in another. Your choice goes with your account, to every device you sign in on. | off |
+
+The group **watchlist** comes after binge watching. Separate movies and shows
+is the design system's switch, its line as the hint; what it does to the lists
+is specified in section 8.8.1 of [chapter 8](./watchlist.md). The group shows
+only where the server keeps the setting and can fill a list by kind; elsewhere
+it is left out. The figures of section 16.3 don't draw the group.
+
 ## 16.5 The account
 
 The account page says who is signed in, holds what ends a sign-in, and lists
@@ -914,6 +926,7 @@ Where settings and the account open from belongs to [chapter 2](./frame.md)
 | 16.C22 | sign-in and security | Web, Phone app | no app leads to the server's own page for a password, a second factor and one's sign-ins; a password is changed there alone, and nothing says so | section 16.5.8: on the account page **sign-in and security**, a button, over “Change your password, add a second step to your sign-in, and see where you're signed in. This opens the server's sign-in service.”; it opens the address the server names in its configuration, `accountUrl` (P.C15), on the web in a new tab and in the phone app in the phone's browser; not shown on a server that names none, in the phone app while the phone holds two accounts or more, and on a TV | approved |
 | 16.C23 | The app's language | Web, Phone app, Android TV, Samsung TV | no setting: every app is in English whatever the device's language; the group language is to hold Audio and Subtitles alone, and every setting is kept on the device | section 16.4.1: **App language**, the first field of the group language, the design system's select: “Same as the phone” (the tablet, the TV, on the web the browser), then each language the app has by its own name, “Deutsch”, “English”; the app speaks the choice, else the first of the device's languages it has, else English, and before anyone is signed in the device's; a choice applies at once and is kept with the account (16.C24), so the next device speaks it; the app names its language when it opens the sign-in page (`ui_locales`) and first in `Accept-Language`; on a server that keeps no language the choice stays on the device. Built after 2.C13 and 16.C24 | approved |
 | 16.C24 | chino-api keeps the app's language and answers with codes | Server | chino-api keeps nothing of a person's settings, and `GET /api/v1/me` answers the subject alone. `DELETE /api/v1/me` answers a refusal or a failure with a sentence for the person in `message`, portal-api's among them. Every other failure is a line of English text, and two are read for a word: `POST /api/v1/me/watchlists` and `PATCH /api/v1/me/watchlists/{listId}` (“name exists” and “too many lists”, both 409), and the sign-in check of every route (“invalid token: …”); `POST /api/v1/feedback` says “feedback not configured” with 503 | chino-api: `GET /api/v1/me/settings` answers `{"language": "de"}`, with `null` while nothing is chosen; `PATCH /api/v1/me/settings` sets it or, with `null`, clears it, and answers the settings; any language tag of at most 35 characters is kept, another value is 400 `language_invalid`; kept by the account's subject, deleted with its data. A failure that is a case of its own answers `{"error": code, "values": {…}, "detail": "…"}` and no `message` (ADR-0023, part 4): `list_name_taken` with `name`, `list_limit` with `limit`, `account_last_admin`, `account_identity_admin`, `account_deletion_unavailable`, `feedback_off`, `token_audience`. portal-api names why it refuses to delete an account (`DELETE /api/portal/me`: `last_admin`, `identity_admin`), and chino-api passes that on. The codes are listed in chino-api's `openapi.yaml`. Every other failure keeps its status and its line | approved |
+| 16.C25 | The watchlist group: Separate movies and shows | Web, Phone app, Android TV, Samsung TV, the server | no app has the setting, and chino-api keeps nothing of a person's settings | Section 16.4.7: the group watchlist after binge watching, with Separate movies and shows, off at first, kept by the account; section 8.8.1 and change 8.C18 say what it does. chino-api keeps it as `watchlist_by_kind` in the store of change 16.C24: `GET /api/v1/me/settings` answers `{"watchlist_by_kind": false}` and `PATCH /api/v1/me/settings` sets it and answers the settings, kept by the account's subject and deleted with its data, a field the store doesn't know refused by its name. This change brings the store's server half with this one field; 16.C24 adds `language` to it in its own turn. The apps offer the group where `/api/config` says `features.watchlist_kinds`, which a server with this store says too. Brought forward and approved by the owner on 17 November 2026 | approved |
 
 ## 16.8 States
 
@@ -969,14 +982,17 @@ Figure 16.23: The report was sent, on a computer.
 | The app's language is being saved | The select is busy, and shows the choice |
 | It couldn't be saved | The design system's error banner under the field: “Couldn't save the language.” and the cause's sentence ([chapter 17](./errors.md)); the select and the app go back to the language as it was |
 | The server keeps no language for an account | The choice is kept on the device, and the text under the field ends after its first sentence |
+| Separate movies and shows is being saved | The switch is busy, and shows the choice |
+| It couldn't be saved | The design system's error banner under the switch: “Couldn't save the setting.” and the cause's sentence ([chapter 17](./errors.md)); the switch goes back, and the banner stays until the switch is used again |
 
 ## 16.9 Words
 
 | Where | Text |
 |---|---|
-| Settings | settings · account (TV) · language · binge watching · downloads · server · feedback · about |
+| Settings | settings · account (TV) · language · binge watching · watchlist · downloads · server · feedback · about |
 | Language | Audio · Original · Subtitles · off · their two texts in section 16.4.1 |
 | Binge watching | Auto-skip intros · Skips the intro and the recap on every episode after the first one you watch in a row. · Auto-play next episode · Starts the next episode when the credits roll. Off, the up next card waits until you play it. · Countdown · Seconds the player counts down before it skips the intro or the recap, or starts the next episode. · 1 s to 15 s · 3 s |
+| Watchlist | watchlist · Separate movies and shows · Every list shows its movies in one row and its shows in another. Your choice goes with your account, to every device you sign in on. · Couldn't save the setting. |
 | Downloads | Download quality · Medium (720p) · About 932 MB an hour. · in the phone's list: Medium (720p) · about 932 MB an hour · Download over Wi-Fi only ([chapter 13](./downloads.md)) |
 | Server | Connected to media.example.com. · change server |
 | Feedback | Reports go to the people who run this server, with details of the app and the device. Crashes and playback failures are reported on their own. · report a bug |

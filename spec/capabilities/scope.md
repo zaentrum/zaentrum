@@ -42,8 +42,8 @@ the targets, and the decision records the changes rest on.
 <!-- generated: ready -->
 | Of the capabilities |  |
 |---|---|
-| Capabilities that are not built | 219 |
-| a numbered change builds them | 181 |
+| Capabilities that are not built | 220 |
+| a numbered change builds them | 182 |
 | to be built, the change still to write | 0 |
 | left for later | 34 |
 | left to an addon | 3 |
@@ -52,9 +52,9 @@ the targets, and the decision records the changes rest on.
 
 | Of the changes |  |
 |---|---|
-| Numbered changes | 446 |
+| Numbered changes | 448 |
 | proposed | 0 |
-| approved | 444 |
+| approved | 446 |
 | built | 1 |
 | verified | 0 |
 | withdrawn | 1 |

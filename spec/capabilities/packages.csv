@@ -11,6 +11,7 @@ browse,Movies and shows,frame ; errors ; words,5.*,"The library by kind, with it
 title-page,The title page,frame ; errors ; words,6.*,"A film or a show, and what can be done with it."
 people-pages,People,frame ; errors ; words,7.*,A person and what of theirs the library has.
 lists,Watchlist and lists,frame ; errors ; words,8.*,The watchlist and named lists.
+lists-by-kind,Movies and shows apart in the lists,groundwork,8.C18 ; 16.C25,"A setting of the account splits every list into its movies and its shows. Brought forward by the owner on 17 November 2026: it builds on the phone and TV apps and the server as they are, with no web screen yet."
 search,Search,frame ; errors ; words,9.*,The one search and its results.
 zap,Zap,frame ; errors ; words,10.*,Zapping through scenes of the library.
 player,The player,frame ; errors ; words,11.*,"Watching, and the player's controls and menus; what the player tells the server; a title's 5.1 track."

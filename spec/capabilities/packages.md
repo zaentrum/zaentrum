@@ -45,6 +45,7 @@ flowchart LR
   p_title_page["The title page"]
   p_people_pages["People"]
   p_lists["Watchlist and lists"]
+  p_lists_by_kind["Movies and shows apart in the lists"]
   p_search["Search"]
   p_zap["Zap"]
   p_player["The player"]
@@ -89,6 +90,7 @@ flowchart LR
   p_frame --> p_lists
   p_errors --> p_lists
   p_words --> p_lists
+  p_groundwork --> p_lists_by_kind
   p_frame --> p_search
   p_errors --> p_search
   p_words --> p_search
@@ -150,27 +152,28 @@ flowchart LR
 | 10 | [The title page](#the-title-page) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 25 | 0 | 25 | 0 | 0 |
 | 11 | [People](#people) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 11 | 0 | 11 | 0 | 0 |
 | 12 | [Watchlist and lists](#watchlist-and-lists) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 17 | 0 | 17 | 0 | 0 |
-| 13 | [Search](#search) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 15 | 0 | 15 | 0 | 0 |
-| 14 | [Zap](#zap) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 21 | 0 | 21 | 0 | 0 |
-| 15 | [The player](#the-player) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 52 | 0 | 52 | 0 | 0 |
-| 16 | [Subtitles](#subtitles) | The player | 11 | 0 | 11 | 0 | 0 |
-| 17 | [Downloads and offline](#downloads-and-offline) | The title page | 6 | 0 | 6 | 0 | 0 |
-| 18 | [Casting](#casting) | The player, Subtitles | 9 | 0 | 9 | 0 | 0 |
-| 19 | [Notifications](#notifications) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 13 | 0 | 13 | 0 | 0 |
-| 20 | [Settings and account](#settings-and-account) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 20 | 0 | 20 | 0 | 0 |
-| 21 | [The apps in their devices' stores](#the-apps-in-their-devices-stores) | The frame, and the design system in the apps | 1 | 0 | 1 | 0 | 0 |
-| 22 | [The portal's home page](#the-portals-home-page) | Groundwork in every repository, The design system's missing parts | 17 | 0 | 17 | 0 | 0 |
-| 23 | [Reaching it at home](#reaching-it-at-home) | Groundwork in every repository | 16 | 0 | 16 | 0 | 0 |
-| 24 | [The household's machine: installing and updating](#the-households-machine-installing-and-updating) | Groundwork in every repository | 22 | 0 | 22 | 0 | 0 |
-| 25 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 21 | 0 | 0 |
-| 26 | [A restore at the first run, and backups off one machine](#a-restore-at-the-first-run-and-backups-off-one-machine) | Running the platform: mail, alerts, backups, storage, The household's machine: installing and updating | 2 | 0 | 2 | 0 | 0 |
-| 27 | [The library](#the-library) | Groundwork in every repository | 14 | 0 | 14 | 0 | 0 |
-| 28 | [The catalog console](#the-catalog-console) | The library, The design system's missing parts | 25 | 0 | 25 | 0 | 0 |
-| 29 | [Details and artwork beside the files](#details-and-artwork-beside-the-files) | The catalog console | 3 | 0 | 3 | 0 | 0 |
-| 30 | [Collections in the apps](#collections-in-the-apps) | The library, Movies and shows, The title page | 5 | 0 | 5 | 0 | 0 |
-| 31 | [People and what they may do](#people-and-what-they-may-do) | Running the platform: mail, alerts, backups, storage, The library, The portal's home page, Getting started, Settings and account | 21 | 0 | 21 | 0 | 0 |
-| 32 | [The portal and the consoles in the person's language](#the-portal-and-the-consoles-in-the-persons-language) | Every text from the message catalogue, in the person's language, The portal's home page, The catalog console | 3 | 0 | 3 | 0 | 0 |
-| 33 | [What an open product owes](#what-an-open-product-owes) | Groundwork in every repository | 2 | 0 | 2 | 0 | 0 |
+| 13 | [Movies and shows apart in the lists](#movies-and-shows-apart-in-the-lists) | Groundwork in every repository | 2 | 0 | 2 | 0 | 0 |
+| 14 | [Search](#search) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 15 | 0 | 15 | 0 | 0 |
+| 15 | [Zap](#zap) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 21 | 0 | 21 | 0 | 0 |
+| 16 | [The player](#the-player) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 52 | 0 | 52 | 0 | 0 |
+| 17 | [Subtitles](#subtitles) | The player | 11 | 0 | 11 | 0 | 0 |
+| 18 | [Downloads and offline](#downloads-and-offline) | The title page | 6 | 0 | 6 | 0 | 0 |
+| 19 | [Casting](#casting) | The player, Subtitles | 9 | 0 | 9 | 0 | 0 |
+| 20 | [Notifications](#notifications) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 13 | 0 | 13 | 0 | 0 |
+| 21 | [Settings and account](#settings-and-account) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 20 | 0 | 20 | 0 | 0 |
+| 22 | [The apps in their devices' stores](#the-apps-in-their-devices-stores) | The frame, and the design system in the apps | 1 | 0 | 1 | 0 | 0 |
+| 23 | [The portal's home page](#the-portals-home-page) | Groundwork in every repository, The design system's missing parts | 17 | 0 | 17 | 0 | 0 |
+| 24 | [Reaching it at home](#reaching-it-at-home) | Groundwork in every repository | 16 | 0 | 16 | 0 | 0 |
+| 25 | [The household's machine: installing and updating](#the-households-machine-installing-and-updating) | Groundwork in every repository | 22 | 0 | 22 | 0 | 0 |
+| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 21 | 0 | 0 |
+| 27 | [A restore at the first run, and backups off one machine](#a-restore-at-the-first-run-and-backups-off-one-machine) | Running the platform: mail, alerts, backups, storage, The household's machine: installing and updating | 2 | 0 | 2 | 0 | 0 |
+| 28 | [The library](#the-library) | Groundwork in every repository | 14 | 0 | 14 | 0 | 0 |
+| 29 | [The catalog console](#the-catalog-console) | The library, The design system's missing parts | 25 | 0 | 25 | 0 | 0 |
+| 30 | [Details and artwork beside the files](#details-and-artwork-beside-the-files) | The catalog console | 3 | 0 | 3 | 0 | 0 |
+| 31 | [Collections in the apps](#collections-in-the-apps) | The library, Movies and shows, The title page | 5 | 0 | 5 | 0 | 0 |
+| 32 | [People and what they may do](#people-and-what-they-may-do) | Running the platform: mail, alerts, backups, storage, The library, The portal's home page, Getting started, Settings and account | 21 | 0 | 21 | 0 | 0 |
+| 33 | [The portal and the consoles in the person's language](#the-portal-and-the-consoles-in-the-persons-language) | Every text from the message catalogue, in the person's language, The portal's home page, The catalog console | 3 | 0 | 3 | 0 | 0 |
+| 34 | [What an open product owes](#what-an-open-product-owes) | Groundwork in every repository | 2 | 0 | 2 | 0 | 0 |
 <!-- end: packages -->
 
 <!-- generated: by-package -->
@@ -402,6 +405,15 @@ The watchlist and named lists. After: [The frame, and the design system in the a
 | [8.C15](../chino/watchlist.md#89-changes) | Loading: grey blocks | Web, Phone app, Android TV, Samsung TV | approved |
 | [8.C16](../chino/watchlist.md#89-changes) | Couldn't load: the lists, or one row | Phone app, Android TV, Samsung TV | approved |
 | [8.C17](../chino/watchlist.md#89-changes) | The server counts characters | the server | approved |
+
+## Movies and shows apart in the lists
+
+A setting of the account splits every list into its movies and its shows. Brought forward by the owner on 17 November 2026: it builds on the phone and TV apps and the server as they are, with no web screen yet. After: [Groundwork in every repository](#groundwork-in-every-repository).
+
+| No. | Change | Where | Status |
+|---|---|---|---|
+| [8.C18](../chino/watchlist.md#89-changes) | Movies and shows apart in every list | Web, Phone app, Android TV, Samsung TV, the server | approved |
+| [16.C25](../chino/settings.md#167-changes) | The watchlist group: Separate movies and shows | Web, Phone app, Android TV, Samsung TV, the server | approved |
 
 ## Search
 

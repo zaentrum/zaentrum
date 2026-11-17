@@ -30,7 +30,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 | env | 65 | 64 | 0 | 0 | 1 | 13 |
 | catalog | 43 | 0 | 43 | 0 | 0 | 3 |
 | registry | 5 | 0 | 5 | 0 | 0 | 0 |
-| app | 8 | 0 | 0 | 8 | 0 | 0 |
+| app | 9 | 0 | 0 | 9 | 0 | 0 |
 | code | 126 | 0 | 0 | 0 | 126 | 8 |
 <!-- end: summary -->
 
@@ -39,7 +39,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 <!-- generated: proposals -->
 | Proposal | Settings |
 |---|---|
-| keep | 204 |
+| keep | 205 |
 | setting | 3 |
 | shared | 24 |
 | person | 1 |
@@ -51,6 +51,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 <!-- generated: choices-chino -->
 | Setting | Who | Where | Default (values) | Proposal |
 |---|---|---|---|---|
+| Whether every list shows its movies and its shows apart `watchlist-by-kind`, for `see-lists-by-kind` | person | app | off in every app (on, off) | keep |
 | The audio language titles start in `audio-language`, for `set-play-languages`, `choose-audio` | person | app | web English; phone English; androidtv English; samsung Original (Original, or a language) | keep |
 | The subtitle language that comes on when the audio is in another `subtitle-language`, for `set-play-languages`, `choose-subtitles`, `switch-on-subtitles` | person | app | web English; phone off; androidtv off; samsung off (off, or one of the server's subtitle languages) | keep |
 | Whether the player skips intros and recaps by itself `auto-skip-intros`, for `auto-skip-intro`, `set-binge-watching` | person | app | on in every app (on, off) | keep |
@@ -63,6 +64,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 | How many warm-ups chino-stream runs at once for zap and the next episode `zap-warm-slots`, for `zap-through-titles`, `play-next-episode` | operator | env | 2 (a number) | keep |
 | Whether a person with an age cap sees titles that have no age rating `unrated-for-capped`, for `limit-to-age-cap`, `cap-person-rating` | admin | catalog | — (on, off) | — |
 
+- `watchlist-by-kind`: Kept by the account on the server (change 16.C25), the same on every device
 - `audio-language`: 16.C18: Original first everywhere; Original plays the file's default track, as the catalog keeps no original language
 - `subtitle-language`: Samsung offers eight fixed languages; 16.C18: the device's language where the server offers it, else off
 - `auto-skip-intros`: the phone app's player doesn't read it
