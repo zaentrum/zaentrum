@@ -394,7 +394,8 @@ Off, the watchlist is as figures 8.5 to 8.9 draw it. On:
   with its code on its card. The heading's count is the list's own, the titles
   it holds; each row's is its own answer's. Each row ends with **see all**,
   which opens the list.
-- **A row with nothing in it is left out.** A list of movies alone shows its
+- **A row with nothing in it is left out**, and so is one with no card to
+  draw. A list of movies alone shows its
   movies row alone under its heading; a list with nothing in it shows what it
   shows with the setting off (section 8.10). A row that couldn't load shows as
   one row does there, under its name without a count, and is tried again by
@@ -419,7 +420,10 @@ Off, the watchlist is as figures 8.5 to 8.9 draw it. On:
 
 The setting goes with the account, to every device it signs in on. Where the
 server can't keep it or can't fill a list by kind, settings offer no such
-setting, and the watchlist is as with it off.
+setting, and the watchlist is as with it off. The watchlist does not wait for
+the account's choice to be read: it is drawn with the choice last known on the
+device, and again where the answer differs (section 16.4.7 of
+[chapter 16](./settings.md)).
 
 ## 8.9 Changes
 
