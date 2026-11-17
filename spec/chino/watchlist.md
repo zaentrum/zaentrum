@@ -407,7 +407,9 @@ Off, the watchlist is as figures 8.5 to 8.9 draw it. On:
   the list's heading does, as without the setting.
 - **What goes where.** A movie is in the movies row; a show, and an episode
   saved on its own, in the shows row, and so is anything else a list could
-  hold, so that nothing a list holds is left out.
+  hold, so that nothing a list holds is left out. A title whose kind the
+  catalog can't say at that moment is in the shows row until it can; a list by
+  kind couldn't load only when the catalog can say none of its titles' kinds.
 
 The setting goes with the account, to every device it signs in on. Where the
 server can't keep it or can't fill a list by kind, settings offer no such
