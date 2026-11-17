@@ -1121,10 +1121,10 @@ disk:
 
 | Row | Is |
 |---|---|
-| **packages** | the sum of every title's package |
-| **originals kept** | the sum of every title's originals that are on disk |
+| **packages** | the sum of every title's package: the one in use, not one being built or replaced |
+| **originals kept** | the sum of every original that is on disk: a title's, and an extra's once the extra has its package |
 | **extras** | the sum of every extra's package, and of its file while it waits to be packaged |
-| **everything else** | what is used on the library's disk and is none of the three, nor a database or a backup where those are on the same disk: arrivals, the trash, the records and their images, files the catalog does not know and, on a disk the library shares, whatever else is on it |
+| **everything else** | what is used on the library's disk and is none of the three, nor a database or a backup where those are on the same disk: arrivals no title has yet, the trash, a package being built or replaced, the records and their images, files the catalog does not know and, on a disk the library shares, whatever else is on it |
 
 The catalog's writer answers the three sums and the largest titles in one
 query, `libraryStorage`, for admins:
@@ -1134,6 +1134,29 @@ query, `libraryStorage`, for admins:
 | `packagesBytes`, `originalsBytes`, `extrasBytes` | the three sums |
 | `titles` | how many movies and shows have a file or a package |
 | `largest(limit, offset)` | the movies and shows ordered by what they take, the largest first: `id`, `title`, `type` (`movie`, `series`), `year`, `packageBytes`, `originalBytes`, `totalBytes`. A show is one row with the sum of its episodes; a title's extras count with it. `limit` is 50 by default and 200 at most |
+
+The sums are of what the catalog has recorded. Nothing walks the disk.
+
+- A title is a movie, an episode or a music track, and all three count in the
+  sums. `titles` and `largest` are of movies and shows.
+- An original counts while the catalog has it on disk, as the catalog
+  console's own figure for a title has it: every source that is present or
+  kept beside a newer one, one that still lies in the arrivals included. One
+  on its way to the trash does not count.
+- An extra counts while it is not removed.
+- In a row of `largest`, `packageBytes` is the title's packages and its
+  extras' packages, `originalBytes` its originals and its extras' files,
+  waiting or kept, and `totalBytes` the two. A show's row adds up its
+  episodes, an episode that another's file covers once. A figure is 0 where
+  there is none.
+- `titles` counts every movie and show that takes anything: a file or a
+  package of its own, of its episodes or of its extras. `largest` lists
+  exactly those, by `totalBytes`, the largest first, and by `id` where two
+  take the same.
+- An episode with no show above it counts in the sums and has no row.
+- `limit` and `offset` follow the catalog's other lists: a limit outside 1 to
+  200 is 50, an offset below 0 is 0. No value is refused, and a caller who is
+  no admin gets the catalog's own refusal.
 
 ### The databases
 
@@ -1504,7 +1527,7 @@ words it. No line holds an address, a title or a text.
 |---|---|
 | The page | storage · volumes · library · databases · largest titles |
 | The volumes | volume · size · used · free · measured · “library” · “databases” · “backups” · “event broker” · “one disk: {volumes}” · “not measured” · measure now |
-| The library | packages · originals kept · extras · everything else · “Arrivals, the trash, the records and their images, and whatever else is on this disk.” |
+| The library | packages · originals kept · extras · everything else · “Arrivals, the trash, packages being replaced, the records and their images, and whatever else is on this disk.” |
 | The databases | “catalog” · “apps” · “identity” · “portal” |
 | The largest titles | title · kind · package · original · total · “movie” · “show” · show more |
 | The measuring failed | “The volumes could not be measured.”, with the operator's reason under **details** |
