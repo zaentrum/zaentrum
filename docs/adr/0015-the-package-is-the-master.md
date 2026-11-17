@@ -72,6 +72,8 @@ flowchart LR
 
    An original in fields stays as well, until its package is progressive in fact (Found on 16 November 2026, below).
 
+   An original whose video the package copies stays as well, until the package's record proves the copy whole: every picture the same, unit for unit, and shown at its time (Found on 17 November 2026, below).
+
    Nothing is kept for ever. A source that can't meet the spec (an audio track whose channel layout can't be known, say) is acquired again into the same title, which keeps its id, history and ratings.
 3. **The players play everything the master carries.** The subtitles stay as they are, so each client draws pictures and styled subtitles itself. A subtitle is never turned into text to suit a client: no text recognition.
 
@@ -114,3 +116,13 @@ Video in fields has twice as many moments as frames. Deinterlaced at its field r
 Nor is any other original in fields retired for now, whatever was done to make its package progressive. Three rounds of review each found a source for which the package was said to be whole and was not: film with a part in video, a cadence that changes at a cut, a title examined only in places. Whether a package made from fields holds every moment of its source cannot yet be said for every source, and a wrong yes deletes the only copy. So an original that is marked as fields, or found to hold them, stays; the package's record says what was found and what was done, as information. Such originals are few. They are released by a later decision, when a package made from fields can be shown whole.
 
 **Closed captions.** The master carries the captions that are in the video, and the gate compares them. Found the same day: no record so far can say whether an original carries captions, since they are told only by decoding pictures, and whether a package still holds all of them cannot be told reliably by sampling it: a package can show captions at every place looked at and have lost a fifth of them. So until captions can be compared whole, the rule is the simple one: an original that carries closed captions, or whose captions are not known, is not retired. It is read at several places across its length, and a read that fails or lands elsewhere than it aimed is not known.
+
+### Found on 17 November 2026
+
+A package that copies its original's video was taken to hold that video whole, and its original was retired on the pipeline's own word that it had copied. Nothing compared the two.
+
+- A comparison at a few places in the title and of the package's structure finds a missing part, a wrong start and another track. It does not find a unit dropped from the stream, a part made again with the same timing, or a changed bit: it sees a few thousandths of the title's pictures.
+- A comparison of every picture finds each of those. Both sides are read once, without decoding: the access units in decoding order, each compared as it is, with only what is no content left out (the framing, the delimiters and filler, and where the parameter sets are repeated).
+- Equal pictures can still be shown at the wrong time, so the times are compared as well, each picture's with its original's.
+
+Until a package's record carries that proof, the original of a copy is not retired: the deletion gate keeps it, and so does any run in front of the gate. A source of a kind the comparison was not tested with counts as not proven. The proof is kept with the package, so that it still holds when the original is gone.
