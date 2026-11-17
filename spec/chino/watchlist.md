@@ -410,6 +410,10 @@ Off, the watchlist is as figures 8.5 to 8.9 draw it. On:
   hold, so that nothing a list holds is left out. A title whose kind the
   catalog can't say at that moment is in the shows row until it can; a list by
   kind couldn't load only when the catalog can say none of its titles' kinds.
+- **Row by row.** An app asks for a list's two rows one after the other.
+  Where the catalog says a title's kind between the two answers, that title
+  is in neither row or in both until the list is loaded again; an app draws
+  each answer as it came and does not mend one by the other.
 
 The setting goes with the account, to every device it signs in on. Where the
 server can't keep it or can't fill a list by kind, settings offer no such
