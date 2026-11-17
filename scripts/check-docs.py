@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Validate docs/ and spec/ before they ship: every relative link must point at a
 file that exists, and every #anchor into a page must match a heading there.
+A heading may not carry an explicit {#id}: nothing that shows these pages reads
+one.
 
 This exists because the docs have already lied twice in ways a reader paid
 for: a section described a setup API that no service implements, and a schema
@@ -20,7 +22,10 @@ REPO = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 # the documentation and the specification; spec/ is checked once it exists
 TREES = [t for t in (os.path.join(REPO, "docs"), os.path.join(REPO, "spec")) if os.path.isdir(t)]
 LINK_RE = re.compile(r"\]\(([^)\s]+)\)")
-HEADING_RE = re.compile(r"^#{1,6}\s+(.*?)\s*(?:\{#([^}]+)\})?\s*$")
+HEADING_RE = re.compile(r"^#{1,6}\s+(.*?)\s*$")
+# "## Title {#id}": neither GitHub nor the docs site reads it. Both print it as
+# text and make the anchor from the whole line, so a link to "#id" is broken.
+EXPLICIT_ANCHOR_RE = re.compile(r"\{#[^}]+\}\s*$")
 
 
 def slug(text):
@@ -47,8 +52,6 @@ def anchors_of(path):
         m = HEADING_RE.match(line)
         if not m:
             continue
-        if m.group(2):  # explicit {#anchor}
-            out.add(m.group(2))
         out.add(slug(m.group(1)))
     return out
 
@@ -72,6 +75,10 @@ def main():
                 continue
             if in_fence:
                 continue
+            if HEADING_RE.match(line) and EXPLICIT_ANCHOR_RE.search(line):
+                print(f"EXPLICIT ANCHOR {os.path.relpath(f, REPO)}:{lineno} -> {line.strip()}"
+                      " (it prints as text; the anchor is made from the heading's words)")
+                fail = 1
             for target in LINK_RE.findall(line):
                 if target.startswith(("http://", "https://", "mailto:")):
                     continue

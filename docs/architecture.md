@@ -119,7 +119,7 @@ console and admin API with it; without it the console answers through a
 port-forward only. The [`/api/ingest`](./extending/ingest.md) of
 `katalog-manager` answers in the cluster, not on the public host.
 
-## Scope — the neutral line {#scope}
+## Scope — the neutral line
 
 Zaentrum ships **only** the neutral platform. The hard boundary: anything that
 knows *how content was acquired* lives outside the platform's repos, as an
@@ -141,7 +141,7 @@ the IP problem and is against store and host policy. The boundary is enforced
 by CI (a neutrality gate greps for internal hostnames and acquisition
 vocabulary), not just by review.
 
-## Extending — code plugs into seams {#extending}
+## Extending — code plugs into seams
 
 The neutral line does **not** mean Zaentrum can't grow capability. It means
 capability beyond the neutral core arrives as an **addon**: out-of-tree code
@@ -166,7 +166,7 @@ database rows record *state* while events drive the *handoff*. The
 public integration surface, not an internal detail. Rationale:
 [ADR-0005](./adr/0005-kafka-event-bus-and-schema-contracts.md).
 
-## License {#license}
+## License
 
 **[MPL-2.0](https://github.com/zaentrum/zaentrum-operator/blob/main/LICENSE).**
 The clients ship to mobile app stores, which constrained the choice: strong
