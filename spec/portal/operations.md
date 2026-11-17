@@ -778,10 +778,35 @@ A set does not hold:
 - **On its schedule**, as today: `spec.backup.schedule`, every day at
   midnight by default, the newest `spec.backup.retention` kept, 7 by default.
 - **On request.** The annotation `zaentrum.io/backup-request` on the
-  resource, with a value the operator has not answered, starts one backup at
-  once from the schedule's own job. It is not started while another backup
-  or a restore runs, and it is refused where backups are off.
-  `status.backup.request` is the value answered.
+  resource, with a value the operator has not answered, starts one backup
+  from the schedule's own job: the same script, the same mounts and the same
+  label, so that whatever reads the backups reads this one too.
+  - **It waits** while another backup runs, or while a restore stops the
+    platform or has it stopped, and starts once neither does. A backup that
+    ran meanwhile does not answer it. It waits too while the resource is
+    refused, until the resource is corrected.
+  - **The schedule stands still** from the request to its answer, so that
+    the schedule's run and the one asked for never write at once: the
+    schedule is stopped first, and the backup starts on a pass that finds it
+    stopped and no backup running. A run the schedule missed meanwhile
+    follows once the one asked for has ended.
+  - **The answer.** `status.backup.request` is the value answered: the
+    backup it started has ended, well or not, and has been read, so that the
+    last backup and the `Backup` condition are that run's; or the request
+    was refused. Until then the request waits or runs.
+  - **Refused** where the platform makes no backups. With backups off, and
+    while the databases are not on a volume of their own, the `Backup`
+    condition says that the backup asked for is not made, for as long as the
+    annotation holds that value and no backup carries it. With external
+    databases there is no `Backup` condition: the request is answered, and
+    the operator's log says why.
+  - **The job** is the platform's own and goes with it, carries the
+    request's value, and is named `zaentrum-backup-` and five random
+    characters. The operator keeps the newest job asked for and deletes the
+    ones before it. Turning backups off does not stop one that runs.
+  - **While a backup runs**, the schedule's or one asked for,
+    `status.backup.running` is its job's name, so that what cannot list jobs
+    knows of it.
 - **Before an update.** Before the operator applies another version than the
   one that runs, where backups are on, it makes a backup and applies the
   update when the backup has ended, after 30 minutes at the latest. A backup
@@ -1199,7 +1224,7 @@ starts with “Recommended” holds a choice that is the owner's.
 | R.C8 | Alerts are raised | Server | portal-api reads the phase, the parts and the self-check from the status when an admin opens the operator page; it compares nothing and keeps nothing | portal-api: section Alerts: every 60 seconds it reads the status, starts and ends the five alerts by the rules of When an alert starts and ends, keeps them in a table of its own for 90 days, mails them by the rules of By mail with the words of the section Words, and serves `GET /api/portal/alerts`, `PATCH /api/portal/alerts/settings`, `POST /api/portal/alerts/{id}/read` and `POST /api/portal/alerts/read-all` | approved |
 | R.C9 | Alerts in the bell and on a page | Portal | the bell shows what addons told the person; no page shows what is wrong | section Alerts, In the bell and The alerts page: the bell lists an admin's alerts above the notices, under **alerts**, each with **open**, and counts the unseen ones; the tile alerts in the settings group and the page at `/portal/alerts`, with what is watched, its thresholds and **save**, and the alerts of the last 90 days | approved |
 | R.C10 | A backup says what made it, and a restore checks it | Operator | a dump holds the roles, the four databases and their checksums; nothing in it names the platform or the version that made it; the restore refuses a dump with any other file | sections Backups, The set, and Restoring, The version rule: each set also holds `backup.json`, listed in `SHA256SUMS`, written from a ConfigMap the operator keeps; the restore takes a set with or without it; the operator applies the version rule before it stops anything and refuses with the words of the section Words; the annotation `zaentrum.io/restore-any-version`, holding the set's name, lifts the rule for a version that cannot be compared, never for a newer release | approved |
-| R.C11 | A backup on request | Operator | a backup runs on its schedule alone | section Backups, When a backup is made: the annotation `zaentrum.io/backup-request`, with a value not yet answered, starts one backup from the schedule's own job, unless a backup or a restore runs; `status.backup.request` holds the value answered; where backups are off it is refused and the `Backup` condition says so | approved |
+| R.C11 | A backup on request | Operator | a backup runs on its schedule alone | section Backups, When a backup is made: the annotation `zaentrum.io/backup-request`, with a value not yet answered, starts one backup from the schedule's own job once no backup and no restore runs, the schedule standing still meanwhile; `status.backup.request` holds the value answered, and `status.backup.running` the job of a backup that runs; where the platform makes no backups it is refused, and the `Backup` condition says so where there is one | approved |
 | R.C12 | A backup before an update | Operator | an update is applied at once; the newest dump is up to a day old | Recommended: section Backups, When a backup is made: before the operator applies another version than the one that runs, where backups are on, it makes a backup and applies the update when that has ended, after 30 minutes at the latest; a failure does not stop the update and shows in the `Backup` condition; not on a one-machine install, whose updater keeps its own copy; the other choice is no backup before an update, with **back up now** left to the admin | approved |
 | R.C13 | A restore brings the identity provider in step | Operator | after a restore the realm job writes the sign-in addresses and the people client's secret; the identity provider's own admin and the `zaentrum-manager` client keep the password and the secret of the dump, so a dump of another install locks the operator's jobs out | Recommended: section Restoring, What a restore does, step 6: after every restore, with the bundled identity provider, the provider's own admin signs in with this install's Secret `zaentrum-keycloak-admin` and the `zaentrum-manager` client has the secret of Secret `zaentrum-keycloak`; an account whose password the platform keeps in a Secret of its own has this install's, and every person keeps the password the set holds; then the realm job runs as today; proven first as [ADR-0020](../../docs/adr/0020-backup-restore-and-moving.md#to-prove-first) says; the other choice is the platform's Secrets in every set, sealed with a passphrase the admin keeps | approved |
 | R.C14 | Backups through portal-api | Server | portal-api reads nothing of `status.backup`; a backup is set, and a restore asked for, in the resource with `kubectl` | portal-api: section Backups, The backups' interface: `GET /api/portal/backups`, `PATCH /api/portal/backups`, `POST /api/portal/backups`, `POST /api/portal/backups/look` and `POST /api/portal/backups/{name}/restore`, which takes the platform's name as typed and sets the operator's annotations | approved |
@@ -1508,6 +1533,9 @@ words it. No line holds an address, a title or a text.
 | No backup yet | no backups yet · “The first backup runs at {time}.” · “Moving from another machine? Copy its backups into this claim, then look again.” |
 | The settings' dialog | backup settings · back up on a schedule · how often · “every day” · “every 12 hours” · “every 6 hours” · “every week” · “another schedule” · schedule · “A cron schedule, in the cluster's time zone.” · keep · “The newest backups are kept. Older ones are deleted.” · claim · “The claim that holds the backups. Empty: the platform's own.” |
 | **back up now** | “A backup was made: {size}.” · “The backup failed: {reason}” · “A backup already runs.” |
+| The `Backup` condition | as today: “the bundled Postgres is not backed up: spec.backup.enabled is false” · “the bundled Postgres keeps its data on an emptyDir and is not backed up: backups start once it is on its claim (spec.storage.postgres.migrate), or with spec.backup.enabled true” · “no backup has run yet: the first runs on the schedule {schedule}” · “{job} runs the first backup” · “{job} failed: {reason}; the latest that succeeded wrote {dump}, {time}” · “{job} failed: {reason}; no backup has succeeded yet” · “{dump}: {n} databases, {size}; {n} dumps kept, {free} free” |
+| A backup asked for where none is made | added to the condition's first sentence: “; the backup asked for is not made: set spec.backup.enabled to true and ask again with a new value” · added to its second: “; the backup asked for is not made” |
+| The operator's log, a backup on request | “backups: started a backup on request” · “backups: the backup asked for waits” · “backups: the backup asked for is refused: backups are off” · “backups: the backup asked for is refused: the databases are external” · “backups: the backup asked for has ended” |
 | The restore's dialog | restore from {date}? · “The platform goes down for a few minutes.” · “Its databases are set back to this backup: the accounts, the watch history, the lists, the catalog and the portal's settings as they were then. Everything written since is lost.” · “The library's files are not set back.” · “Whoever signed in after this backup was made signs in again.” · another platform's: “This backup is from another platform. Afterwards, sign in with an account of that platform.” · “Restore although its version is unknown.” · “Restore although its version, {version}, cannot be compared with this platform's.” · “This backup was made by {version}, which is newer than this platform ({version}). Update the platform first.” · “type the platform's name, {name}, to restore” |
 | Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
 | The restore has ended | “The restore has ended. Sign in to see how it went.” |
