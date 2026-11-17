@@ -1,0 +1,18 @@
+# The organisation's shared neutrality check, on every pull request and on
+# main: this repository's other workflows run on one of the two alone, or on
+# some paths only.
+name: neutrality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  neutrality:
+    permissions:
+      contents: read
+    uses: zaentrum/.github/.github/workflows/neutrality.yml@v1
