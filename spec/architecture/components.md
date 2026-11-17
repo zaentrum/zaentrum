@@ -30,7 +30,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
 | `zaentrum-portal` | the portal: its launchpad, its settings and the consoles of addons | web | runs | [zaentrum-portal](https://github.com/zaentrum/zaentrum-portal) | `zaentrum-portal` | 42 | 9 | ADR-0001, ADR-0010, ADR-0023, ADR-0016, ADR-0017, ADR-0018, ADR-0019, ADR-0020 |
-| `portal-api` | the portal's API: the registry, people, addons, running the platform | service | runs | [zaentrum-portal/server/](https://github.com/zaentrum/zaentrum-portal/tree/main/server) | `portal-api` | 51 | 46 | ADR-0001, ADR-0009, ADR-0010, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0018, ADR-0019, ADR-0020 |
+| `portal-api` | the portal's API: the registry, people, addons, running the platform | service | runs | [zaentrum-portal/server/](https://github.com/zaentrum/zaentrum-portal/tree/main/server) | `portal-api` | 52 | 51 | ADR-0001, ADR-0009, ADR-0010, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0018, ADR-0019, ADR-0020 |
 | `katalog-manager-ui` | the catalog console | web | runs | [katalog-manager-ui](https://github.com/zaentrum/katalog-manager-ui) | `katalog-manager-ui`, `katalog-manage-ui` | 21 | 4 | ADR-0023, ADR-0016, ADR-0021 |
 
 - `portal-api`: Built from the portal's repository, its server/, as an image of its own
@@ -92,7 +92,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 23 | 70 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
+| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 25 | 76 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
 | `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011, ADR-0016, ADR-0017, ADR-0020, ADR-0021 |
 | `appliance` | the one-container install: a cluster of its own, the operator and a resource | appliance | ships | — | — | — | — | ADR-0006, ADR-0008, ADR-0016, ADR-0017 |
 
@@ -126,7 +126,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 |---|---|---|---|---|---|---|---|---|
 | `zaentrum` | the front door: the docs, the specification, the releases | docs | beside | [zaentrum](https://github.com/zaentrum/zaentrum) | — | — | — | ADR-0006 |
 | `zaentrum-site` | the site: the product page, the docs and the specification | docs | beside | [zaentrum.github.io](https://github.com/zaentrum/zaentrum.github.io) | — | — | — | — |
-| `shared-files` | the files every repository shares: the security policy and the guide to contributing | docs | beside | [.github](https://github.com/zaentrum/.github) | — | 1 | — | — |
+| `shared-files` | the files every repository shares: the security policy and the guide to contributing | docs | beside | [.github](https://github.com/zaentrum/.github) | — | 2 | — | — |
 | `schemas` | the event contracts | contracts | beside | [schemas](https://github.com/zaentrum/schemas) | — | — | — | ADR-0005 |
 | `sample-addon` | the reference addon | addon | beside | [sample-addon](https://github.com/zaentrum/sample-addon) | — | — | — | ADR-0001 |
 

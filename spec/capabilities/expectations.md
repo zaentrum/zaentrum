@@ -108,14 +108,14 @@ For the goal [Share it with a household](../goals/README.md#share-it-with-a-hous
 | Invite people | partly | build | [`invite-person`](./portal.md#people-and-roles) partial, [`accept-invite`](./portal.md#people-and-roles) built | — |
 | Rights for each person: which libraries, downloads, quality | partly | build | [`set-person-rights`](./portal.md#people-and-roles) no, [`cap-person-rating`](./portal.md#people-and-roles) partial, [`limit-to-age-cap`](./chino.md#the-title-page) built | — |
 | Lock a profile on a shared TV | not there | build | [`lock-account`](./chino.md#connecting-and-signing-in) no | — |
-| Reset a forgotten password by oneself | not there | build | [`reset-own-password`](./chino.md#connecting-and-signing-in) no | — |
+| Reset a forgotten password by oneself | partly | build | [`reset-own-password`](./chino.md#connecting-and-signing-in) partial | — |
 | A second factor at sign-in | not there | build | [`use-second-factor`](./chino.md#connecting-and-signing-in) no | — |
 | See one's devices and sign one out | not there | build | [`see-own-devices`](./chino.md#settings-and-account) no | — |
 | Limit streams or bandwidth for a person | not there | build | [`limit-streams`](./portal.md#people-and-roles) no | — |
 | See who is watching now, and what was watched over time | partly | build; later: `see-watch-statistics` | [`see-who-is-watching`](./portal.md#people-and-roles) no, [`see-watch-statistics`](./portal.md#people-and-roles) no, [`report-playback-quality`](./chino.md#the-player) partial | — |
 | Sign in with an identity provider one already runs | partly | build | [`choose-identity`](./platform.md#installing-and-configuring) partial | — |
 | Delete one's account and what the server keeps of it | there | — | [`delete-account`](./chino.md#settings-and-account) built | — |
-| Reach people outside the app: a push, a mail | partly | build; later: `get-push-notification`, `notifications` | [`get-push-notification`](./chino.md#notifications) no, [`mail-person`](./portal.md#people-and-roles) no, [`notify-person`](./portal.md#addons) built, [`notifications`](../architecture/components.md#chinos-services) idle | — |
+| Reach people outside the app: a push, a mail | partly | build; later: `get-push-notification`, `notifications` | [`get-push-notification`](./chino.md#notifications) no, [`mail-person`](./portal.md#people-and-roles) partial, [`notify-person`](./portal.md#addons) built, [`notifications`](../architecture/components.md#chinos-services) idle | — |
 
 ## Run it oneself
 
@@ -157,5 +157,5 @@ For the goal [Trust it](../goals/README.md#trust-it).
 | Report a security hole in private | there | — | [`report-security-hole`](./platform.md#releases-one-can-trust) built | — |
 | Check where an image comes from and what it holds | not there | build | [`trace-image-to-source`](./platform.md#releases-one-can-trust) no | — |
 | The apps send nothing to anyone but the server | partly | build | [`call-only-the-server`](./platform.md#releases-one-can-trust) partial | — |
-| Change it and have the change taken in | not there | build | [`contribute-change`](./platform.md#releases-one-can-trust) no | — |
+| Change it and have the change taken in | there | — | [`contribute-change`](./platform.md#releases-one-can-trust) built | — |
 <!-- end: expectations -->

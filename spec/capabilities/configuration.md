@@ -26,8 +26,8 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 <!-- generated: summary -->
 | Changed in | Settings | operator | admin | person | nobody | of them wiring |
 |---|---|---|---|---|---|---|
-| resource | 66 | 57 | 8 | 0 | 1 | 20 |
-| env | 65 | 64 | 0 | 0 | 1 | 13 |
+| resource | 72 | 63 | 8 | 0 | 1 | 21 |
+| env | 66 | 64 | 0 | 0 | 2 | 14 |
 | catalog | 43 | 0 | 43 | 0 | 0 | 3 |
 | registry | 5 | 0 | 5 | 0 | 0 | 0 |
 | app | 9 | 0 | 0 | 9 | 0 | 0 |
@@ -39,7 +39,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 <!-- generated: proposals -->
 | Proposal | Settings |
 |---|---|
-| keep | 205 |
+| keep | 212 |
 | setting | 3 |
 | shared | 24 |
 | person | 1 |
@@ -99,6 +99,11 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 | The chart an addon installs: its reference, version and digest `addon-chart`, for `install-addon-chart` | admin | resource | none (an oci:// or https:// reference; a version; a sha256 digest) | keep |
 | The values an addon's chart is rendered with `addon-values`, for `install-addon-chart` | admin | resource | none (JSON; Secrets or ConfigMaps, by key or path) | keep |
 | Whether an addon is only planned, with nothing applied `addon-plan-only`, for `install-addon-chart` | admin | resource | off (on, off) | keep |
+| The mail server the platform sends through, its port and its encryption `mail-server`, for `set-up-mail`, `mail-person` | operator | resource | none: no mail is sent; 587 with starttls (a host name; a port; starttls, tls or none) | keep |
+| The sender's address and name on every mail `mail-sender`, for `set-up-mail`, `mail-person` | operator | resource | none; zaentrum (an address; a name) | keep |
+| Further addresses that get every alert mail `alert-mail-to`, for `alert-admins` | operator | resource | none (at most 10 addresses) | keep |
+| When an alert starts: a part not ready, a volume full, the certificate ending, the newest good backup old `alert-thresholds`, for `review-alerts`, `alert-admins` | operator | resource | 10 minutes; 90 %; 14 days; 2 days (1 to 1440 minutes; 50 to 99 %; 1 to 90 days; 1 to 30 days) | keep |
+| Whether alerts are mailed `alert-mail-switch`, for `alert-admins` | operator | resource | on, where mail is set up (on, off) | keep |
 
 - `invite-lifetime`: the People page says it in days
 - `notification-retention`: older ones are swept at start and every hour
@@ -117,6 +122,11 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 - `addon-chart`: A fetched archive that does not match the digest is refused
 - `addon-values`: Applied in order: chart defaults, generated, values, valuesFrom, then the operator's zaentrum block
 - `addon-plan-only`: The portal and zae add an addon suspended, show status.plan, then apply it
+- `mail-server`: portal-api and the bundled identity provider send through the same server
+- `mail-sender`: A server without a sender is refused
+- `alert-mail-to`: Beside every admin with an address. Read from change R.C8 on: nothing is mailed before it
+- `alert-thresholds`: The resource holds no defaults; one left out means its default
+- `alert-mail-switch`: Read from change R.C8 on: nothing is mailed before it
 <!-- end: choices-portal -->
 
 ## Choices: the catalog and the pipeline
@@ -589,4 +599,6 @@ apps fix the same thing, the default names each app's value.
 | Where the live worker listens, the media it reads, its worker processes' program, sockets and GPU `live-worker-wiring` | env | `LIVE_WORKER_LISTEN`, `LIVE_WORKER_MEDIA_ROOTS`, `LIVE_WORKER_SLOT_BIN`, `LIVE_WORKER_SOCKET_DIR` and 1 more |
 | Accounts chino-api's admin routes accept by their subject, besides the admin role `admin-subjects` | env | `ADMIN_SUBJECTS` |
 | The folder the CLI keeps its sign-ins in `cli-config-folder` | env | `XDG_CONFIG_HOME` |
+| The name and the password the platform signs in to the mail server with `mail-sign-in` | resource | `Zaentrum.spec.mail.user`, `Zaentrum.spec.mail.secretName`, `PORTAL_MAIL_USERNAME`, `PORTAL_MAIL_PASSWORD` and 1 more |
+| The portal's own address, in the links a mail carries `portal-public-address` | env | `PORTAL_PUBLIC_URL` |
 <!-- end: wiring -->

@@ -140,7 +140,7 @@ flowchart LR
 <!-- generated: packages -->
 |  | Package | After | Changes | proposed | approved | built | verified |
 |---|---|---|---|---|---|---|---|
-| 1 | [Groundwork in every repository](#groundwork-in-every-repository) | — | 5 | 0 | 4 | 1 | 0 |
+| 1 | [Groundwork in every repository](#groundwork-in-every-repository) | — | 5 | 0 | 2 | 3 | 0 |
 | 2 | [The design system's missing parts](#the-design-systems-missing-parts) | — | — | — | — | — | — |
 | 3 | [The frame, and the design system in the apps](#the-frame-and-the-design-system-in-the-apps) | Groundwork in every repository, The design system's missing parts | 11 | 0 | 11 | 0 | 0 |
 | 4 | [Every text from the message catalogue, in the person's language](#every-text-from-the-message-catalogue-in-the-persons-language) | The frame, and the design system in the apps | 5 | 0 | 5 | 0 | 0 |
@@ -165,7 +165,7 @@ flowchart LR
 | 23 | [The portal's home page](#the-portals-home-page) | Groundwork in every repository, The design system's missing parts | 17 | 0 | 17 | 0 | 0 |
 | 24 | [Reaching it at home](#reaching-it-at-home) | Groundwork in every repository | 16 | 0 | 16 | 0 | 0 |
 | 25 | [The household's machine: installing and updating](#the-households-machine-installing-and-updating) | Groundwork in every repository | 22 | 0 | 22 | 0 | 0 |
-| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 21 | 0 | 0 |
+| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 17 | 4 | 0 |
 | 27 | [A restore at the first run, and backups off one machine](#a-restore-at-the-first-run-and-backups-off-one-machine) | Running the platform: mail, alerts, backups, storage, The household's machine: installing and updating | 2 | 0 | 2 | 0 | 0 |
 | 28 | [The library](#the-library) | Groundwork in every repository | 14 | 0 | 14 | 0 | 0 |
 | 29 | [The catalog console](#the-catalog-console) | The library, The design system's missing parts | 25 | 0 | 25 | 0 | 0 |
@@ -184,8 +184,8 @@ Each repository says how it is built, tested and changed, runs its tests and the
 | No. | Change | Where | Status |
 |---|---|---|---|
 | [T.C1](../platform/trust.md#changes) | A security policy in every repository | Docs | built |
-| [T.C2](../platform/trust.md#changes) | A guide to contributing, and each repository's own | Docs | approved |
-| [T.C3](../platform/trust.md#changes) | Every repository's tests on every change | Images | approved |
+| [T.C2](../platform/trust.md#changes) | A guide to contributing, and each repository's own | Docs | built |
+| [T.C3](../platform/trust.md#changes) | Every repository's tests on every change | Images | built |
 | [T.C4](../platform/trust.md#changes) | Images signed, with the record of their build and a list of what they hold | Images, Docs | approved |
 | [T.C7](../platform/trust.md#changes) | The neutrality check in every repository | Images | approved |
 
@@ -709,12 +709,12 @@ Mail through a server the admin names, alerts to the admins, backups and restore
 | No. | Change | Where | Status |
 |---|---|---|---|
 | [H.C19](../portal/home.md#changes) | Tiles for mail, alerts, backups and storage | Server | approved |
-| [R.C1](../portal/operations.md#changes) | Mail settings in the platform's resource | Operator | approved |
-| [R.C2](../portal/operations.md#changes) | portal-api sends mail | Server | approved |
+| [R.C1](../portal/operations.md#changes) | Mail settings in the platform's resource | Operator | built |
+| [R.C2](../portal/operations.md#changes) | portal-api sends mail | Server | built |
 | [R.C3](../portal/operations.md#changes) | The mail page | Portal | approved |
 | [R.C4](../portal/operations.md#changes) | An address, and the invite by mail | Server, Portal | approved |
-| [R.C5](../portal/operations.md#changes) | “Forgot password?” only where mail is ready | Operator | approved |
-| [R.C6](../portal/operations.md#changes) | The status says since when, and until when | Operator | approved |
+| [R.C5](../portal/operations.md#changes) | “Forgot password?” only where mail is ready | Operator | built |
+| [R.C6](../portal/operations.md#changes) | The status says since when, and until when | Operator | built |
 | [R.C7](../portal/operations.md#changes) | The volumes are measured | Operator | approved |
 | [R.C8](../portal/operations.md#changes) | Alerts are raised | Server | approved |
 | [R.C9](../portal/operations.md#changes) | Alerts in the bell and on a page | Portal | approved |

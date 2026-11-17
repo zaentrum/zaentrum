@@ -58,7 +58,7 @@ transcoder,katalog-manager,calls,claims and results,wire:zaentrum-operator:trans
 transcoder,keycloak,signs in,a service's token,wire:zaentrum-operator:transcoder OIDC_TOKEN_URL;env:transcoder:OIDC_TOKEN_URL,
 transcoder,media,writes,,wire:zaentrum-operator:transcoder volume media,
 packager,kafka,consumes,catalog.item.transcoded;catalog.extra.transcoded,wire:zaentrum-operator:packager CONSUME_TOPIC;wire:zaentrum-operator:packager EXTRAS_GROUP_ID;wire:zaentrum-operator:packager KAFKA_BROKERS;env:packager:CONSUME_TOPIC;env:packager:KAFKA_BROKERS,
-packager,katalog-manager,calls,packaging complete,wire:zaentrum-operator:packager KATALOG_API_URL;env:packager:KATALOG_API_URL,"It publishes nothing: katalog-manager announces the package"
+packager,katalog-manager,calls,packaging complete,wire:zaentrum-operator:packager KATALOG_API_URL;env:packager:KATALOG_API_URL,It publishes nothing: katalog-manager announces the package
 packager,keycloak,signs in,a service's token,wire:zaentrum-operator:packager OIDC_TOKEN_URL;env:packager:OIDC_TOKEN_URL,
 packager,media,writes,,wire:zaentrum-operator:packager volume media,
 subtitler,katalog-manager,calls,the attach endpoint,env:subtitler:KATALOG_URL,
@@ -72,3 +72,4 @@ zae,keycloak,manages,the self-test's account,wire:zaentrum-operator:zaentrum-ver
 demo-seed,media,writes,,wire:zaentrum-operator:seed-demo-content volume media;wire:zaentrum-operator:scan-catalog volume media;wire:zaentrum-operator:enqueue-processing volume media,
 demo-seed,katalog-manager,calls,a scan,wire:zaentrum-operator:scan-catalog MANAGER_SECRET,
 demo-seed,postgres,writes,katalog,wire:zaentrum-operator:enqueue-processing PGUSER,Queues the pipeline's first steps in the catalog's database itself
+portal-api,zaentrum-portal,links,/portal,env:zaentrum-portal:PORTAL_PUBLIC_URL,The portal's address in the links of an invite or a notice mail

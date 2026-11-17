@@ -119,7 +119,7 @@ What an open product owes the people who run it, check it and build on it. Speci
 | Call nothing but the server one was given, unless the person starts it | system | partial | partial | partial | partial | partial | partial | [platform trust](../platform/trust.md) |
 
 - Report a security hole in private, and get an answer: one security policy, in the organisation's shared repository; private reporting on in every repository
-- Change the platform and have the change taken in: a guide, and tests on every change: a guide in the operator's repository alone; most repositories run their tests on pull requests
+- Change the platform and have the change taken in: a guide, and tests on every change: a guide in the organisation's shared repository and an AGENTS.md in each; every repository's tests run on its pull requests
 - Check that an image is the project's, and see what it was built from and what it holds: no image is signed, and none carries a list of what it holds
 - Keep every repository free of one installation's names, checked on every change: seven repositories check it, two of them only some kinds of file; the others rely on review
 - Call nothing but the server one was given, unless the person starts it: the web apps load their typefaces from a public font service; the phone and Android TV apps an avatar from an outside service
@@ -127,7 +127,7 @@ What an open product owes the people who run it, check it and build on it. Speci
 | Key | Changes | Next | Served by | Settings |
 |---|---|---|---|---|
 | `report-security-hole` | T.C1 | — | `.github` | — |
-| `contribute-change` | T.C2, T.C3 | build | — | — |
+| `contribute-change` | T.C2, T.C3 | — | `.github` | — |
 | `trace-image-to-source` | T.C4 | build | — | — |
 | `keep-code-neutral` | T.C7 | build | — | — |
 | `call-only-the-server` | T.C5, 3.C13 | build | — | — |

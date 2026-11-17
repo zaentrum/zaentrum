@@ -93,8 +93,8 @@ constant:analyzer:rules.SUPPORT_SHARE,constant,analyzer,rules.SUPPORT_SHARE,0.03
 constant:analyzer:rules.SUPPORT_TOLERANCE,constant,analyzer,rules.SUPPORT_TOLERANCE,0.004,,src/analyzer/pipelines/picture/rules.py:58
 constant:analyzer:rules.SYMMETRY,constant,analyzer,rules.SYMMETRY,0.006,,src/analyzer/pipelines/picture/rules.py:65
 constant:analyzer:rules.SYMMETRY_MIN,constant,analyzer,rules.SYMMETRY_MIN,4,,src/analyzer/pipelines/picture/rules.py:66
-constant:analyzer:silence.MIN_SILENCE_SECONDS,constant,analyzer,silence.MIN_SILENCE_SECONDS,1.5,,src/analyzer/pipelines/silence.py:26
-constant:analyzer:silence.NOISE_THRESHOLD_DB,constant,analyzer,silence.NOISE_THRESHOLD_DB,-30,,src/analyzer/pipelines/silence.py:28
+constant:analyzer:silence.MIN_SILENCE_SECONDS,constant,analyzer,silence.MIN_SILENCE_SECONDS,1.5,,src/analyzer/pipelines/silence.py:25
+constant:analyzer:silence.NOISE_THRESHOLD_DB,constant,analyzer,silence.NOISE_THRESHOLD_DB,-30,,src/analyzer/pipelines/silence.py:27
 constant:analyzer:sources.CALIBRATION,constant,analyzer,sources.CALIBRATION,24,,src/analyzer/pipelines/picture/sources.py:96
 constant:analyzer:sources.CALIBRATION_MIN,constant,analyzer,sources.CALIBRATION_MIN,8,,src/analyzer/pipelines/picture/sources.py:97
 constant:analyzer:sources.CLOSE_MAX_GAPS,constant,analyzer,sources.CLOSE_MAX_GAPS,4,,src/analyzer/pipelines/picture/sources.py:122
@@ -454,8 +454,8 @@ constant:chino-stream:manifest.CurrentVersion,constant,chino-stream,manifest.Cur
 constant:chino-stream:matroska.headFrames,constant,chino-stream,matroska.headFrames,48,,internal/streamcopy/matroska.go:42
 constant:chino-stream:matroska.leadingLimit,constant,chino-stream,matroska.leadingLimit,64,,internal/streamcopy/matroska.go:543
 constant:chino-stream:names.titleWordsMax,constant,chino-stream,names.titleWordsMax,40,,internal/play/names.go:109
-constant:chino-stream:packaged.maxWarmAudio,constant,chino-stream,packaged.maxWarmAudio,8,,internal/play/packaged.go:740
-constant:chino-stream:packaged.packagedCacheBudgetBytes,constant,chino-stream,packaged.packagedCacheBudgetBytes,512 * 1024 * 1024,,internal/play/packaged.go:491
+constant:chino-stream:packaged.maxWarmAudio,constant,chino-stream,packaged.maxWarmAudio,8,,internal/play/packaged.go:1030
+constant:chino-stream:packaged.packagedCacheBudgetBytes,constant,chino-stream,packaged.packagedCacheBudgetBytes,512 * 1024 * 1024,,internal/play/packaged.go:770
 constant:chino-stream:passthrough.passTargetSec,constant,chino-stream,passthrough.passTargetSec,6.0,,internal/play/passthrough.go:40
 constant:chino-stream:picturearea.pictureShapeApart,constant,chino-stream,picturearea.pictureShapeApart,1.01,,internal/play/picturearea.go:34
 constant:chino-stream:remuxcopy.copyIndexCacheSize,constant,chino-stream,remuxcopy.copyIndexCacheSize,4,,internal/play/remuxcopy.go:97
@@ -560,6 +560,7 @@ constant:chino-web:qoe.MOVED_SEC,constant,chino-web,qoe.MOVED_SEC,0.05,,src/lib/
 constant:chino-web:qoe.RESUME_FROM_SEC,constant,chino-web,qoe.RESUME_FROM_SEC,1,,src/lib/qoe.ts:139
 constant:chino-web:settings.BINGE_CONTINUATION_WINDOW_MS,constant,chino-web,settings.BINGE_CONTINUATION_WINDOW_MS,6 * 3600 * 1000,,src/lib/settings.ts:56
 constant:chino-web:signInAgain.JUST_SIGNED_IN_MS,constant,chino-web,signInAgain.JUST_SIGNED_IN_MS,60_000,,src/lib/signInAgain.ts:16
+constant:chino-web:streamTokenCache.EXPIRY_MARGIN_MS,constant,chino-web,streamTokenCache.EXPIRY_MARGIN_MS,60_000,,src/lib/streamTokenCache.ts:10
 constant:chino-web:subtitleLook.EDGE,constant,chino-web,subtitleLook.EDGE,0.05,,src/lib/subtitleLook.ts:48
 constant:chino-web:subtitleLook.SUBTITLE_BOTTOM,constant,chino-web,subtitleLook.SUBTITLE_BOTTOM,0.08,,src/lib/subtitleLook.ts:35
 constant:chino-web:subtitleLook.SUBTITLE_LINE_HEIGHT,constant,chino-web,subtitleLook.SUBTITLE_LINE_HEIGHT,1.25,,src/lib/subtitleLook.ts:44
@@ -723,17 +724,17 @@ constant:packager:libv2_records.HEAD_BYTES,constant,packager,libv2_records.HEAD_
 constant:packager:libv2_records.HEAD_TIMEOUT,constant,packager,libv2_records.HEAD_TIMEOUT,120,,src/packager/libv2_records.py:146
 constant:packager:libv2_records.LIBV2_RECORDS,constant,packager,libv2_records.LIBV2_RECORDS,10,,src/packager/libv2_records.py:101
 constant:packager:libv2_records.MAX_COVERED,constant,packager,libv2_records.MAX_COVERED,10,,src/packager/libv2_records.py:326
-constant:packager:packager.MANIFEST_VERSION,constant,packager,packager.MANIFEST_VERSION,2,,src/packager/packager.py:184
-constant:packager:packager.OLD_PACKAGE_GRACE_SECONDS,constant,packager,packager.OLD_PACKAGE_GRACE_SECONDS,600.0,,src/packager/packager.py:153
-constant:packager:packager.SEGMENT_SECONDS,constant,packager,packager.SEGMENT_SECONDS,6,,src/packager/packager.py:165
-constant:packager:packager.STALE_STAGING_SECONDS,constant,packager,packager.STALE_STAGING_SECONDS,24 * 3600.0,,src/packager/packager.py:158
-constant:packager:packager.STEREO_LOUDNESS,constant,packager,packager.STEREO_LOUDNESS,-20.0,,src/packager/packager.py:271
-constant:packager:packager.SURROUND_CHANNELS,constant,packager,packager.SURROUND_CHANNELS,6,,src/packager/packager.py:350
-constant:packager:packager.TRICKPLAY_GRID_COLS,constant,packager,packager.TRICKPLAY_GRID_COLS,10,,src/packager/packager.py:440
-constant:packager:packager.TRICKPLAY_GRID_ROWS,constant,packager,packager.TRICKPLAY_GRID_ROWS,10,,src/packager/packager.py:441
-constant:packager:packager.TRICKPLAY_INTERVAL_SEC,constant,packager,packager.TRICKPLAY_INTERVAL_SEC,10,,src/packager/packager.py:437
-constant:packager:packager.TRICKPLAY_THUMB_HEIGHT,constant,packager,packager.TRICKPLAY_THUMB_HEIGHT,180,,src/packager/packager.py:439
-constant:packager:packager.TRICKPLAY_THUMB_WIDTH,constant,packager,packager.TRICKPLAY_THUMB_WIDTH,320,,src/packager/packager.py:438
+constant:packager:packager.MANIFEST_VERSION,constant,packager,packager.MANIFEST_VERSION,2,,src/packager/packager.py:185
+constant:packager:packager.OLD_PACKAGE_GRACE_SECONDS,constant,packager,packager.OLD_PACKAGE_GRACE_SECONDS,600.0,,src/packager/packager.py:154
+constant:packager:packager.SEGMENT_SECONDS,constant,packager,packager.SEGMENT_SECONDS,6,,src/packager/packager.py:166
+constant:packager:packager.STALE_STAGING_SECONDS,constant,packager,packager.STALE_STAGING_SECONDS,24 * 3600.0,,src/packager/packager.py:159
+constant:packager:packager.STEREO_LOUDNESS,constant,packager,packager.STEREO_LOUDNESS,-20.0,,src/packager/packager.py:272
+constant:packager:packager.SURROUND_CHANNELS,constant,packager,packager.SURROUND_CHANNELS,6,,src/packager/packager.py:351
+constant:packager:packager.TRICKPLAY_GRID_COLS,constant,packager,packager.TRICKPLAY_GRID_COLS,10,,src/packager/packager.py:441
+constant:packager:packager.TRICKPLAY_GRID_ROWS,constant,packager,packager.TRICKPLAY_GRID_ROWS,10,,src/packager/packager.py:442
+constant:packager:packager.TRICKPLAY_INTERVAL_SEC,constant,packager,packager.TRICKPLAY_INTERVAL_SEC,10,,src/packager/packager.py:438
+constant:packager:packager.TRICKPLAY_THUMB_HEIGHT,constant,packager,packager.TRICKPLAY_THUMB_HEIGHT,180,,src/packager/packager.py:440
+constant:packager:packager.TRICKPLAY_THUMB_WIDTH,constant,packager,packager.TRICKPLAY_THUMB_WIDTH,320,,src/packager/packager.py:439
 constant:packager:rules.REPORT_INTERVAL_SECONDS,constant,packager,rules.REPORT_INTERVAL_SECONDS,600.0,,src/packager/rules.py:69
 constant:subtitler:asr.SAMPLE_RATE,constant,subtitler,asr.SAMPLE_RATE,16000,,src/subtitler/asr.py:28
 constant:subtitler:ocr.GARBAGE_MIN,constant,subtitler,ocr.GARBAGE_MIN,3,,src/subtitler/ocr.py:86
@@ -795,12 +796,15 @@ constant:zae:values.maxNameLen,constant,zae,values.maxNameLen,40,,internal/addon
 constant:zaentrum-operator:addon.MaxNameLength,constant,zaentrum-operator,addon.MaxNameLength,40,,operator/internal/addon/addon.go:69
 constant:zaentrum-operator:backup.maxBackupDumps,constant,zaentrum-operator,backup.maxBackupDumps,50,,operator/internal/controller/backup.go:43
 constant:zaentrum-operator:database.migrationSwitchWindow,constant,zaentrum-operator,database.migrationSwitchWindow,5 * time.Minute,,operator/internal/controller/database.go:64
-constant:zaentrum-operator:fetch.DefaultRefTTL,constant,zaentrum-operator,fetch.DefaultRefTTL,5 * time.Minute,,operator/internal/addon/fetch.go:30
-constant:zaentrum-operator:fetch.FetchTimeout,constant,zaentrum-operator,fetch.FetchTimeout,30 * time.Second,,operator/internal/addon/fetch.go:27
+constant:zaentrum-operator:databases_rules.DatabaseHostMaxLength,constant,zaentrum-operator,databases_rules.DatabaseHostMaxLength,253,,operator/api/v1alpha1/databases_rules.go:42
+constant:zaentrum-operator:databases_rules.DatabaseNameMaxLength,constant,zaentrum-operator,databases_rules.DatabaseNameMaxLength,63,,operator/api/v1alpha1/databases_rules.go:22
+constant:zaentrum-operator:fetch.DefaultRefTTL,constant,zaentrum-operator,fetch.DefaultRefTTL,5 * time.Minute,,operator/internal/addon/fetch.go:31
+constant:zaentrum-operator:fetch.FetchTimeout,constant,zaentrum-operator,fetch.FetchTimeout,30 * time.Second,,operator/internal/addon/fetch.go:28
+constant:zaentrum-operator:mail.mailSecretGrace,constant,zaentrum-operator,mail.mailSecretGrace,10 * time.Minute,,operator/internal/controller/mail.go:49
 constant:zaentrum-operator:prune.unservedRecheck,constant,zaentrum-operator,prune.unservedRecheck,10 * time.Minute,,operator/internal/controller/prune.go:64
-constant:zaentrum-operator:realm.realmRetryAfter,constant,zaentrum-operator,realm.realmRetryAfter,10 * time.Minute,,operator/internal/controller/realm.go:62
+constant:zaentrum-operator:realm.realmRetryAfter,constant,zaentrum-operator,realm.realmRetryAfter,10 * time.Minute,,operator/internal/controller/realm.go:64
 constant:zaentrum-operator:self.shortDigestLen,constant,zaentrum-operator,self.shortDigestLen,12,,operator/internal/controller/self.go:70
-constant:zaentrum-operator:templates.RestoreRefusedExitCode,constant,zaentrum-operator,templates.RestoreRefusedExitCode,3,,operator/internal/templates/templates.go:539
+constant:zaentrum-operator:templates.RestoreRefusedExitCode,constant,zaentrum-operator,templates.RestoreRefusedExitCode,3,,operator/internal/templates/templates.go:568
 constant:zaentrum-operator:updates.fetchTimeout,constant,zaentrum-operator,updates.fetchTimeout,10 * time.Second,,operator/internal/updates/updates.go:39
 constant:zaentrum-operator:verify.maxVerifyChecks,constant,zaentrum-operator,verify.maxVerifyChecks,40,,operator/internal/controller/verify.go:89
 constant:zaentrum-operator:verify.maxVerifyDetail,constant,zaentrum-operator,verify.maxVerifyDetail,200,,operator/internal/controller/verify.go:90
@@ -838,8 +842,8 @@ constant:zaentrum-portal:addons.maxComponentSummary,constant,zaentrum-portal,add
 constant:zaentrum-portal:addons.maxComponents,constant,zaentrum-portal,addons.maxComponents,16,,server/internal/api/addons.go:136
 constant:zaentrum-portal:addons.maxSectionTitle,constant,zaentrum-portal,addons.maxSectionTitle,60,,server/internal/api/addons.go:139
 constant:zaentrum-portal:addons.maxSetupSections,constant,zaentrum-portal,addons.maxSetupSections,16,,server/internal/api/addons.go:137
-constant:zaentrum-portal:api.maxAudience,constant,zaentrum-portal,api.maxAudience,32,,server/internal/api/api.go:912
-constant:zaentrum-portal:api.maxAudienceRole,constant,zaentrum-portal,api.maxAudienceRole,255,,server/internal/api/api.go:913
+constant:zaentrum-portal:api.maxAudience,constant,zaentrum-portal,api.maxAudience,32,,server/internal/api/api.go:919
+constant:zaentrum-portal:api.maxAudienceRole,constant,zaentrum-portal,api.maxAudienceRole,255,,server/internal/api/api.go:920
 constant:zaentrum-portal:appproxy.proxyTimeout,constant,zaentrum-portal,appproxy.proxyTimeout,60 * time.Second,,server/internal/api/appproxy.go:63
 constant:zaentrum-portal:browse.cellCap,constant,zaentrum-portal,browse.cellCap,400,,server/internal/dbbrowse/browse.go:25
 constant:zaentrum-portal:browse.defaultLimit,constant,zaentrum-portal,browse.defaultLimit,100,,server/internal/dbbrowse/browse.go:23
@@ -853,6 +857,15 @@ constant:zaentrum-portal:client.callTimeout,constant,zaentrum-portal,client.call
 constant:zaentrum-portal:client.pageSize,constant,zaentrum-portal,client.pageSize,100,,server/internal/keycloak/client.go:34
 constant:zaentrum-portal:confirm.MAX_REPLICAS,constant,zaentrum-portal,confirm.MAX_REPLICAS,20,,src/lib/confirm.ts:34
 constant:zaentrum-portal:invites.inviteKept,constant,zaentrum-portal,invites.inviteKept,90 * 24 * time.Hour,,server/internal/store/invites.go:25
+constant:zaentrum-portal:mail.ConnectTimeout,constant,zaentrum-portal,mail.ConnectTimeout,10 * time.Second,,server/internal/mail/mail.go:62
+constant:zaentrum-portal:mail.MaxAlertsTo,constant,zaentrum-portal,mail.MaxAlertsTo,10,,server/internal/mail/mail.go:59
+constant:zaentrum-portal:mail.MaxFromName,constant,zaentrum-portal,mail.MaxFromName,60,,server/internal/mail/mail.go:57
+constant:zaentrum-portal:mail.Timeout,constant,zaentrum-portal,mail.Timeout,30 * time.Second,,server/internal/mail/mail.go:63
+constant:zaentrum-portal:mail.maxServerWords,constant,zaentrum-portal,mail.maxServerWords,300,,server/internal/mail/mail.go:497
+constant:zaentrum-portal:message.MaxAddress,constant,zaentrum-portal,message.MaxAddress,254,,server/internal/mail/message.go:46
+constant:zaentrum-portal:message.foldAt,constant,zaentrum-portal,message.foldAt,78,,server/internal/mail/message.go:169
+constant:zaentrum-portal:message.lineMax,constant,zaentrum-portal,message.lineMax,998,,server/internal/mail/message.go:170
+constant:zaentrum-portal:message.wordMax,constant,zaentrum-portal,message.wordMax,75,,server/internal/mail/message.go:171
 constant:zaentrum-portal:notices.MINUTE,constant,zaentrum-portal,notices.MINUTE,60_000,,src/lib/notices.ts:83
 constant:zaentrum-portal:notices.NOTICE_POLL_MS,constant,zaentrum-portal,notices.NOTICE_POLL_MS,60_000,,src/lib/notices.ts:33
 constant:zaentrum-portal:notices.NoticesKept,constant,zaentrum-portal,notices.NoticesKept,100,,server/internal/store/notices.go:23
@@ -869,14 +882,14 @@ constant:zaentrum-portal:oidc.principalKey,constant,zaentrum-portal,oidc.princip
 constant:zaentrum-portal:password.MaxPassword,constant,zaentrum-portal,password.MaxPassword,256,,server/internal/people/password.go:22
 constant:zaentrum-portal:people.DAY,constant,zaentrum-portal,people.DAY,24 * 60 * 60 * 1000,,src/lib/people.ts:103
 constant:zaentrum-portal:people.MAX_RATING,constant,zaentrum-portal,people.MAX_RATING,21,,src/lib/people.ts:88
-constant:zaentrum-portal:people.MaxRating,constant,zaentrum-portal,people.MaxRating,21,,server/internal/people/people.go:49
-constant:zaentrum-portal:people.inviteIPBurst,constant,zaentrum-portal,people.inviteIPBurst,20,,server/internal/api/people.go:70
-constant:zaentrum-portal:people.inviteIPEvery,constant,zaentrum-portal,people.inviteIPEvery,15 * time.Second,,server/internal/api/people.go:71
-constant:zaentrum-portal:people.inviteTokenBurst,constant,zaentrum-portal,people.inviteTokenBurst,10,,server/internal/api/people.go:72
-constant:zaentrum-portal:people.inviteTokenEvery,constant,zaentrum-portal,people.inviteTokenEvery,time.Minute,,server/internal/api/people.go:73
-constant:zaentrum-portal:people.maxName,constant,zaentrum-portal,people.maxName,100,,server/internal/people/people.go:269
-constant:zaentrum-portal:people.maxUsername,constant,zaentrum-portal,people.maxUsername,64,,server/internal/people/people.go:268
-constant:zaentrum-portal:people.minUsername,constant,zaentrum-portal,people.minUsername,3,,server/internal/people/people.go:267
+constant:zaentrum-portal:people.MaxRating,constant,zaentrum-portal,people.MaxRating,21,,server/internal/people/people.go:56
+constant:zaentrum-portal:people.inviteIPBurst,constant,zaentrum-portal,people.inviteIPBurst,20,,server/internal/api/people.go:108
+constant:zaentrum-portal:people.inviteIPEvery,constant,zaentrum-portal,people.inviteIPEvery,15 * time.Second,,server/internal/api/people.go:109
+constant:zaentrum-portal:people.inviteTokenBurst,constant,zaentrum-portal,people.inviteTokenBurst,10,,server/internal/api/people.go:110
+constant:zaentrum-portal:people.inviteTokenEvery,constant,zaentrum-portal,people.inviteTokenEvery,time.Minute,,server/internal/api/people.go:111
+constant:zaentrum-portal:people.maxName,constant,zaentrum-portal,people.maxName,100,,server/internal/people/people.go:278
+constant:zaentrum-portal:people.maxUsername,constant,zaentrum-portal,people.maxUsername,64,,server/internal/people/people.go:277
+constant:zaentrum-portal:people.minUsername,constant,zaentrum-portal,people.minUsername,3,,server/internal/people/people.go:276
 constant:zaentrum-portal:ratelimit.maxKeys,constant,zaentrum-portal,ratelimit.maxKeys,100_000,,server/internal/ratelimit/ratelimit.go:16
 constant:zaentrum-portal:setup.STALE_SCAN_MS,constant,zaentrum-portal,setup.STALE_SCAN_MS,30 * 60 * 1000,,src/lib/setup.ts:235
 constant:zaentrum-portal:setup.maxTMDBKey,constant,zaentrum-portal,setup.maxTMDBKey,4096,,server/internal/api/setup.go:54
@@ -968,10 +981,10 @@ env:katalog-api:KATALOG_API_ADDR,env,katalog-api,KATALOG_API_ADDR,:8080,,interna
 env:katalog-api:KATALOG_API_OIDC_AUDIENCE,env,katalog-api,KATALOG_API_OIDC_AUDIENCE,katalog,,internal/config/config.go:20
 env:katalog-api:KATALOG_API_OIDC_ISSUER,env,katalog-api,KATALOG_API_OIDC_ISSUER,https://sso.example.com/realms/your-realm,,internal/config/config.go:19
 env:katalog-api:KATALOG_API_PG_URL,env,katalog-api,KATALOG_API_PG_URL,,,internal/config/config.go:18
-env:katalog-ingest:KAFKA_BROKERS,env,katalog-ingest,KAFKA_BROKERS,platform-kafka-kafka-bootstrap.platform-event-streaming.svc:9093,,cmd/server/main.go:27
-env:katalog-ingest:KATALOG_API_URL,env,katalog-ingest,KATALOG_API_URL,http://katalog-api.stube.svc.cluster.local,,cmd/server/main.go:28
+env:katalog-ingest:KAFKA_BROKERS,env,katalog-ingest,KAFKA_BROKERS,kafka:9092,,cmd/server/main.go:27
+env:katalog-ingest:KATALOG_API_URL,env,katalog-ingest,KATALOG_API_URL,http://katalog-api,,cmd/server/main.go:28
 env:katalog-ingest:KATALOG_INGEST_ADDR,env,katalog-ingest,KATALOG_INGEST_ADDR,:8080,,cmd/server/main.go:26
-env:katalog-ingest:KATALOG_MANAGER_API_URL,env,katalog-ingest,KATALOG_MANAGER_API_URL,http://katalog-manager-api.stube.svc.cluster.local,,cmd/server/main.go:29
+env:katalog-ingest:KATALOG_MANAGER_API_URL,env,katalog-ingest,KATALOG_MANAGER_API_URL,http://katalog-manager-api,,cmd/server/main.go:29
 env:katalog-manager:ARRIVALS_ROOT,env,katalog-manager,ARRIVALS_ROOT,,,internal/config/config.go:432
 env:katalog-manager:AUTH_DISABLED,env,katalog-manager,AUTH_DISABLED,false,,internal/config/config.go:419
 env:katalog-manager:CATALOG_EVENTS_ENABLED,env,katalog-manager,CATALOG_EVENTS_ENABLED,"= KAFKA_BROKERS != """"",,internal/config/config.go:452
@@ -1115,82 +1128,97 @@ env:transcoder:X264_PRESET,env,transcoder,X264_PRESET,medium,,src/transcoder/con
 env:transcoder:X265_CRF,env,transcoder,X265_CRF,24,,src/transcoder/config.py:150
 env:transcoder:X265_PRESET,env,transcoder,X265_PRESET,medium,,src/transcoder/config.py:149
 env:zae:XDG_CONFIG_HOME,env,zae,XDG_CONFIG_HOME,,,internal/creds/creds.go:81
-env:zaentrum-operator:KUBERNETES_SERVICE_HOST,env,zaentrum-operator,KUBERNETES_SERVICE_HOST,,,operator/internal/addon/fetch.go:299
+env:zaentrum-operator:KUBERNETES_SERVICE_HOST,env,zaentrum-operator,KUBERNETES_SERVICE_HOST,,,operator/internal/addon/fetch.go:319
 env:zaentrum-operator:PIN_DIGESTS,env,zaentrum-operator,PIN_DIGESTS,,,operator/main.go:96
 env:zaentrum-operator:RELEASES_URL,env,zaentrum-operator,RELEASES_URL,,,operator/main.go:87
-env:zaentrum-portal:AUTH_DISABLED,env,zaentrum-portal,AUTH_DISABLED,false,,server/internal/config/config.go:178
-env:zaentrum-portal:CHINO_PUBLIC_URL,env,zaentrum-portal,CHINO_PUBLIC_URL,,,server/internal/config/config.go:197
-env:zaentrum-portal:DATABASE_PASSWORD,env,zaentrum-portal,DATABASE_PASSWORD,,,server/internal/config/config.go:173
-env:zaentrum-portal:DATABASE_URL,env,zaentrum-portal,DATABASE_URL,,,server/internal/config/config.go:171
-env:zaentrum-portal:DATABASE_USER,env,zaentrum-portal,DATABASE_USER,,,server/internal/config/config.go:172
-env:zaentrum-portal:KAFKA_BROKERS,env,zaentrum-portal,KAFKA_BROKERS,,,server/internal/config/config.go:193
-env:zaentrum-portal:KAFKA_CERT_DIR,env,zaentrum-portal,KAFKA_CERT_DIR,,,server/internal/config/config.go:194
-env:zaentrum-portal:KAFKA_TLS_DIR,env,zaentrum-portal,KAFKA_TLS_DIR,,,server/internal/config/config.go:194
-env:zaentrum-portal:KAFKA_TOPIC_PREFIX,env,zaentrum-portal,KAFKA_TOPIC_PREFIX,stube.,,server/internal/config/config.go:195
-env:zaentrum-portal:KUBERNETES_SERVICE_HOST,env,zaentrum-portal,KUBERNETES_SERVICE_HOST,,,server/internal/k8s/client.go:94
-env:zaentrum-portal:KUBERNETES_SERVICE_PORT,env,zaentrum-portal,KUBERNETES_SERVICE_PORT,,,server/internal/k8s/client.go:95
+env:zaentrum-portal:AUTH_DISABLED,env,zaentrum-portal,AUTH_DISABLED,false,,server/internal/config/config.go:202
+env:zaentrum-portal:CHINO_PUBLIC_URL,env,zaentrum-portal,CHINO_PUBLIC_URL,,,server/internal/config/config.go:221
+env:zaentrum-portal:DATABASE_PASSWORD,env,zaentrum-portal,DATABASE_PASSWORD,,,server/internal/config/config.go:197
+env:zaentrum-portal:DATABASE_URL,env,zaentrum-portal,DATABASE_URL,,,server/internal/config/config.go:195
+env:zaentrum-portal:DATABASE_USER,env,zaentrum-portal,DATABASE_USER,,,server/internal/config/config.go:196
+env:zaentrum-portal:KAFKA_BROKERS,env,zaentrum-portal,KAFKA_BROKERS,,,server/internal/config/config.go:217
+env:zaentrum-portal:KAFKA_CERT_DIR,env,zaentrum-portal,KAFKA_CERT_DIR,,,server/internal/config/config.go:218
+env:zaentrum-portal:KAFKA_TLS_DIR,env,zaentrum-portal,KAFKA_TLS_DIR,,,server/internal/config/config.go:218
+env:zaentrum-portal:KAFKA_TOPIC_PREFIX,env,zaentrum-portal,KAFKA_TOPIC_PREFIX,stube.,,server/internal/config/config.go:219
+env:zaentrum-portal:KUBERNETES_SERVICE_HOST,env,zaentrum-portal,KUBERNETES_SERVICE_HOST,,,server/internal/k8s/client.go:95
+env:zaentrum-portal:KUBERNETES_SERVICE_PORT,env,zaentrum-portal,KUBERNETES_SERVICE_PORT,,,server/internal/k8s/client.go:96
 env:zaentrum-portal:NFS_ROOT,env,zaentrum-portal,NFS_ROOT,,,server/internal/operator/platform.go:136
-env:zaentrum-portal:OIDC_AUDIENCE,env,zaentrum-portal,OIDC_AUDIENCE,chino,,server/internal/config/config.go:176
-env:zaentrum-portal:OIDC_AUDIENCE_REQUIRED,env,zaentrum-portal,OIDC_AUDIENCE_REQUIRED,false → issuer-only,,server/internal/config/config.go:177
-env:zaentrum-portal:OIDC_ISSUER,env,zaentrum-portal,OIDC_ISSUER,,,server/internal/config/config.go:175
-env:zaentrum-portal:PG_URL,env,zaentrum-portal,PG_URL,,,server/internal/config/config.go:171
-env:zaentrum-portal:PORT,env,zaentrum-portal,PORT,8080,,server/internal/config/config.go:170
-env:zaentrum-portal:PORTAL_ACCOUNT_DELETION_TOKEN,env,zaentrum-portal,PORTAL_ACCOUNT_DELETION_TOKEN,,,server/internal/config/config.go:211
-env:zaentrum-portal:PORTAL_ADDON_PLURAL,env,zaentrum-portal,PORTAL_ADDON_PLURAL,zaentrumaddons,,server/internal/config/config.go:191
-env:zaentrum-portal:PORTAL_ADDON_ROLE,env,zaentrum-portal,PORTAL_ADDON_ROLE,zaentrum-addon,,server/internal/config/config.go:181
-env:zaentrum-portal:PORTAL_ADMIN_CLIENTS,env,zaentrum-portal,PORTAL_ADMIN_CLIENTS,"""zaentrum-web,<CLIClientID>""",,server/internal/config/config.go:183
-env:zaentrum-portal:PORTAL_ADMIN_ROLE,env,zaentrum-portal,PORTAL_ADMIN_ROLE,zaentrum-admin,,server/internal/config/config.go:180
-env:zaentrum-portal:PORTAL_ADMIN_STACK,env,zaentrum-portal,PORTAL_ADMIN_STACK,"portal-api,zaentrum-portal,keycloak,postgres,katalog-manager-api",,server/internal/config/config.go:187
-env:zaentrum-portal:PORTAL_CHINO_API_URL,env,zaentrum-portal,PORTAL_CHINO_API_URL,,,server/internal/config/config.go:212
-env:zaentrum-portal:PORTAL_CLI_CLIENT_ID,env,zaentrum-portal,PORTAL_CLI_CLIENT_ID,zae,,server/internal/config/config.go:168
-env:zaentrum-portal:PORTAL_INSTANCE_SELECTOR,env,zaentrum-portal,PORTAL_INSTANCE_SELECTOR,""""" = all in ns",,server/internal/config/config.go:185
-env:zaentrum-portal:PORTAL_INVITE_TTL,env,zaentrum-portal,PORTAL_INVITE_TTL,168h,,server/internal/config/config.go:209
-env:zaentrum-portal:PORTAL_KATALOG_MANAGER_URL,env,zaentrum-portal,PORTAL_KATALOG_MANAGER_URL,http://katalog-manager-api,,server/internal/config/config.go:199
-env:zaentrum-portal:PORTAL_NAMESPACE,env,zaentrum-portal,PORTAL_NAMESPACE,,,server/internal/k8s/client.go:98
-env:zaentrum-portal:PORTAL_NOTICE_RETENTION,env,zaentrum-portal,PORTAL_NOTICE_RETENTION,2160h — 90 days,,server/internal/config/config.go:214
-env:zaentrum-portal:PORTAL_OPERATOR_GROUP,env,zaentrum-portal,PORTAL_OPERATOR_GROUP,zaentrum.io,,server/internal/config/config.go:188
-env:zaentrum-portal:PORTAL_OPERATOR_PLURAL,env,zaentrum-portal,PORTAL_OPERATOR_PLURAL,zaentrums,,server/internal/config/config.go:190
-env:zaentrum-portal:PORTAL_OPERATOR_VERSION,env,zaentrum-portal,PORTAL_OPERATOR_VERSION,v1alpha1,,server/internal/config/config.go:189
-env:zaentrum-portal:PORTAL_PASSWORD_POLICY,env,zaentrum-portal,PORTAL_PASSWORD_POLICY,length(8),,server/internal/config/config.go:208
-env:zaentrum-portal:PORTAL_PEOPLE_CLIENT_ID,env,zaentrum-portal,PORTAL_PEOPLE_CLIENT_ID,,,server/internal/config/config.go:203
-env:zaentrum-portal:PORTAL_PEOPLE_CLIENT_SECRET,env,zaentrum-portal,PORTAL_PEOPLE_CLIENT_SECRET,,,server/internal/config/config.go:204
-env:zaentrum-portal:PORTAL_PEOPLE_HIDDEN,env,zaentrum-portal,PORTAL_PEOPLE_HIDDEN,zaentrum-verify,,server/internal/config/config.go:206
-env:zaentrum-portal:PORTAL_PEOPLE_KEYCLOAK_URL,env,zaentrum-portal,PORTAL_PEOPLE_KEYCLOAK_URL,,,server/internal/config/config.go:201
-env:zaentrum-portal:PORTAL_PEOPLE_MANAGE_URL,env,zaentrum-portal,PORTAL_PEOPLE_MANAGE_URL,,,server/internal/config/config.go:205
-env:zaentrum-portal:PORTAL_PEOPLE_REALM,env,zaentrum-portal,PORTAL_PEOPLE_REALM,zaentrum,,server/internal/config/config.go:202
-env:zaentrum-portal:PORTAL_PROTECT,env,zaentrum-portal,PORTAL_PROTECT,"postgres,kafka,valkey,keycloak",,server/internal/config/config.go:186
-env:zaentrum-portal:PORTAL_USER_ROLE,env,zaentrum-portal,PORTAL_USER_ROLE,zaentrum-user,,server/internal/config/config.go:207
+env:zaentrum-portal:OIDC_AUDIENCE,env,zaentrum-portal,OIDC_AUDIENCE,chino,,server/internal/config/config.go:200
+env:zaentrum-portal:OIDC_AUDIENCE_REQUIRED,env,zaentrum-portal,OIDC_AUDIENCE_REQUIRED,false → issuer-only,,server/internal/config/config.go:201
+env:zaentrum-portal:OIDC_ISSUER,env,zaentrum-portal,OIDC_ISSUER,,,server/internal/config/config.go:199
+env:zaentrum-portal:PG_URL,env,zaentrum-portal,PG_URL,,,server/internal/config/config.go:195
+env:zaentrum-portal:PORT,env,zaentrum-portal,PORT,8080,,server/internal/config/config.go:194
+env:zaentrum-portal:PORTAL_ACCOUNT_DELETION_TOKEN,env,zaentrum-portal,PORTAL_ACCOUNT_DELETION_TOKEN,,,server/internal/config/config.go:235
+env:zaentrum-portal:PORTAL_ADDON_PLURAL,env,zaentrum-portal,PORTAL_ADDON_PLURAL,zaentrumaddons,,server/internal/config/config.go:215
+env:zaentrum-portal:PORTAL_ADDON_ROLE,env,zaentrum-portal,PORTAL_ADDON_ROLE,zaentrum-addon,,server/internal/config/config.go:205
+env:zaentrum-portal:PORTAL_ADMIN_CLIENTS,env,zaentrum-portal,PORTAL_ADMIN_CLIENTS,"""zaentrum-web,<CLIClientID>""",,server/internal/config/config.go:207
+env:zaentrum-portal:PORTAL_ADMIN_ROLE,env,zaentrum-portal,PORTAL_ADMIN_ROLE,zaentrum-admin,,server/internal/config/config.go:204
+env:zaentrum-portal:PORTAL_ADMIN_STACK,env,zaentrum-portal,PORTAL_ADMIN_STACK,"portal-api,zaentrum-portal,keycloak,postgres,katalog-manager-api",,server/internal/config/config.go:211
+env:zaentrum-portal:PORTAL_CHINO_API_URL,env,zaentrum-portal,PORTAL_CHINO_API_URL,,,server/internal/config/config.go:236
+env:zaentrum-portal:PORTAL_CLI_CLIENT_ID,env,zaentrum-portal,PORTAL_CLI_CLIENT_ID,zae,,server/internal/config/config.go:192
+env:zaentrum-portal:PORTAL_INSTANCE_SELECTOR,env,zaentrum-portal,PORTAL_INSTANCE_SELECTOR,""""" = all in ns",,server/internal/config/config.go:209
+env:zaentrum-portal:PORTAL_INVITE_TTL,env,zaentrum-portal,PORTAL_INVITE_TTL,168h,,server/internal/config/config.go:233
+env:zaentrum-portal:PORTAL_KATALOG_MANAGER_URL,env,zaentrum-portal,PORTAL_KATALOG_MANAGER_URL,http://katalog-manager-api,,server/internal/config/config.go:223
+env:zaentrum-portal:PORTAL_MAIL_ALERTS_TO,env,zaentrum-portal,PORTAL_MAIL_ALERTS_TO,,,server/internal/config/config.go:246
+env:zaentrum-portal:PORTAL_MAIL_ENCRYPTION,env,zaentrum-portal,PORTAL_MAIL_ENCRYPTION,starttls,,server/internal/config/config.go:243
+env:zaentrum-portal:PORTAL_MAIL_FROM,env,zaentrum-portal,PORTAL_MAIL_FROM,,,server/internal/config/config.go:244
+env:zaentrum-portal:PORTAL_MAIL_FROM_NAME,env,zaentrum-portal,PORTAL_MAIL_FROM_NAME,zaentrum,,server/internal/config/config.go:245
+env:zaentrum-portal:PORTAL_MAIL_HOST,env,zaentrum-portal,PORTAL_MAIL_HOST,,,server/internal/config/config.go:241
+env:zaentrum-portal:PORTAL_MAIL_PASSWORD,env,zaentrum-portal,PORTAL_MAIL_PASSWORD,,,server/internal/config/config.go:248
+env:zaentrum-portal:PORTAL_MAIL_PORT,env,zaentrum-portal,PORTAL_MAIL_PORT,"587 with starttls, 465 with tls, 25 with none",,server/internal/config/config.go:242
+env:zaentrum-portal:PORTAL_MAIL_SECRET,env,zaentrum-portal,PORTAL_MAIL_SECRET,,,server/internal/config/config.go:250
+env:zaentrum-portal:PORTAL_MAIL_USERNAME,env,zaentrum-portal,PORTAL_MAIL_USERNAME,,,server/internal/config/config.go:247
+env:zaentrum-portal:PORTAL_NAMESPACE,env,zaentrum-portal,PORTAL_NAMESPACE,,,server/internal/k8s/client.go:99
+env:zaentrum-portal:PORTAL_NOTICE_RETENTION,env,zaentrum-portal,PORTAL_NOTICE_RETENTION,2160h — 90 days,,server/internal/config/config.go:238
+env:zaentrum-portal:PORTAL_OPERATOR_GROUP,env,zaentrum-portal,PORTAL_OPERATOR_GROUP,zaentrum.io,,server/internal/config/config.go:212
+env:zaentrum-portal:PORTAL_OPERATOR_PLURAL,env,zaentrum-portal,PORTAL_OPERATOR_PLURAL,zaentrums,,server/internal/config/config.go:214
+env:zaentrum-portal:PORTAL_OPERATOR_VERSION,env,zaentrum-portal,PORTAL_OPERATOR_VERSION,v1alpha1,,server/internal/config/config.go:213
+env:zaentrum-portal:PORTAL_PASSWORD_POLICY,env,zaentrum-portal,PORTAL_PASSWORD_POLICY,length(8),,server/internal/config/config.go:232
+env:zaentrum-portal:PORTAL_PEOPLE_CLIENT_ID,env,zaentrum-portal,PORTAL_PEOPLE_CLIENT_ID,,,server/internal/config/config.go:227
+env:zaentrum-portal:PORTAL_PEOPLE_CLIENT_SECRET,env,zaentrum-portal,PORTAL_PEOPLE_CLIENT_SECRET,,,server/internal/config/config.go:228
+env:zaentrum-portal:PORTAL_PEOPLE_HIDDEN,env,zaentrum-portal,PORTAL_PEOPLE_HIDDEN,zaentrum-verify,,server/internal/config/config.go:230
+env:zaentrum-portal:PORTAL_PEOPLE_KEYCLOAK_URL,env,zaentrum-portal,PORTAL_PEOPLE_KEYCLOAK_URL,,,server/internal/config/config.go:225
+env:zaentrum-portal:PORTAL_PEOPLE_MANAGE_URL,env,zaentrum-portal,PORTAL_PEOPLE_MANAGE_URL,,,server/internal/config/config.go:229
+env:zaentrum-portal:PORTAL_PEOPLE_REALM,env,zaentrum-portal,PORTAL_PEOPLE_REALM,zaentrum,,server/internal/config/config.go:226
+env:zaentrum-portal:PORTAL_PROTECT,env,zaentrum-portal,PORTAL_PROTECT,"postgres,kafka,valkey,keycloak",,server/internal/config/config.go:210
+env:zaentrum-portal:PORTAL_PUBLIC_URL,env,zaentrum-portal,PORTAL_PUBLIC_URL,,,server/internal/config/config.go:251
+env:zaentrum-portal:PORTAL_USER_ROLE,env,zaentrum-portal,PORTAL_USER_ROLE,zaentrum-user,,server/internal/config/config.go:231
 env:zaentrum-portal:SCANNER_NFS_ROOT,env,zaentrum-portal,SCANNER_NFS_ROOT,,,server/internal/operator/platform.go:136
-env:zaentrum-portal:SERVER_PORT,env,zaentrum-portal,SERVER_PORT,8080,,server/internal/config/config.go:170
-env:zaentrum-portal:SPRING_DATASOURCE_PASSWORD,env,zaentrum-portal,SPRING_DATASOURCE_PASSWORD,,,server/internal/config/config.go:173
-env:zaentrum-portal:SPRING_DATASOURCE_URL,env,zaentrum-portal,SPRING_DATASOURCE_URL,,,server/internal/config/config.go:171
-env:zaentrum-portal:SPRING_DATASOURCE_USERNAME,env,zaentrum-portal,SPRING_DATASOURCE_USERNAME,,,server/internal/config/config.go:172
-env:zaentrum-portal:SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,env,zaentrum-portal,SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,,,server/internal/config/config.go:175
+env:zaentrum-portal:SERVER_PORT,env,zaentrum-portal,SERVER_PORT,8080,,server/internal/config/config.go:194
+env:zaentrum-portal:SPRING_DATASOURCE_PASSWORD,env,zaentrum-portal,SPRING_DATASOURCE_PASSWORD,,,server/internal/config/config.go:197
+env:zaentrum-portal:SPRING_DATASOURCE_URL,env,zaentrum-portal,SPRING_DATASOURCE_URL,,,server/internal/config/config.go:195
+env:zaentrum-portal:SPRING_DATASOURCE_USERNAME,env,zaentrum-portal,SPRING_DATASOURCE_USERNAME,,,server/internal/config/config.go:196
+env:zaentrum-portal:SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,env,zaentrum-portal,SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,,,server/internal/config/config.go:199
 env:zaentrum-portal:VITE_PORTAL_API,env,zaentrum-portal,VITE_PORTAL_API,,,src/lib/api.ts:7
+field:zaentrum-operator:Zaentrum.spec.alerts.backupAgeDays,field,zaentrum-operator,Zaentrum.spec.alerts.backupAgeDays,2,"BackupAgeDays is how many days old the newest good backup may be before its alert starts, 1 to 30; a backup that failed starts it at once.",operator/api/v1alpha1/zaentrum_types.go:355
+field:zaentrum-operator:Zaentrum.spec.alerts.certificateDays,field,zaentrum-operator,Zaentrum.spec.alerts.certificateDays,14,"CertificateDays is how many days before the platform's certificate (spec.tls) ends its alert starts, 1 to 90; a certificate that has ended starts it too.",operator/api/v1alpha1/zaentrum_types.go:347
+field:zaentrum-operator:Zaentrum.spec.alerts.mail,field,zaentrum-operator,Zaentrum.spec.alerts.mail,true,"Mail says whether alerts are mailed where mail is set up (spec.mail): to every admin whose account is enabled and has an address, and to every address of spe…",operator/api/v1alpha1/zaentrum_types.go:362
+field:zaentrum-operator:Zaentrum.spec.alerts.partNotReadyMinutes,field,zaentrum-operator,Zaentrum.spec.alerts.partNotReadyMinutes,10,"PartNotReadyMinutes is how many minutes a part of the platform is not ready before its alert starts, 1 to 1440.",operator/api/v1alpha1/zaentrum_types.go:332
+field:zaentrum-operator:Zaentrum.spec.alerts.volumeFullPercent,field,zaentrum-operator,Zaentrum.spec.alerts.volumeFullPercent,90,"VolumeFullPercent is how full a volume is, in per cent, when its alert starts, 50 to 99.",operator/api/v1alpha1/zaentrum_types.go:339
 field:zaentrum-operator:Zaentrum.spec.backup.claimName,field,zaentrum-operator,Zaentrum.spec.backup.claimName,,"ClaimName names an existing claim to keep the dumps on instead — one kept from an earlier install, to restore from; none is created then.",operator/api/v1alpha1/zaentrum_types.go:255
 field:zaentrum-operator:Zaentrum.spec.backup.className,field,zaentrum-operator,Zaentrum.spec.backup.className,the bundled Postgres's — storage,ClassName is that claim's StorageClass.,operator/api/v1alpha1/zaentrum_types.go:250
 field:zaentrum-operator:Zaentrum.spec.backup.enabled,field,zaentrum-operator,Zaentrum.spec.backup.enabled,,Enabled runs the backups.,operator/api/v1alpha1/zaentrum_types.go:229
 field:zaentrum-operator:Zaentrum.spec.backup.retention,field,zaentrum-operator,Zaentrum.spec.backup.retention,7,"Retention is how many dumps are kept, newest first: once a backup is complete, older dumps beyond it are removed.",operator/api/v1alpha1/zaentrum_types.go:240
 field:zaentrum-operator:Zaentrum.spec.backup.schedule,field,zaentrum-operator,Zaentrum.spec.backup.schedule,@daily,"Schedule is when a backup runs, as a CronJob schedule in the time zone of the cluster's controller manager.",operator/api/v1alpha1/zaentrum_types.go:234
 field:zaentrum-operator:Zaentrum.spec.backup.size,field,zaentrum-operator,Zaentrum.spec.backup.size,5Gi,"Size of the claim backups, ReadWriteOnce.",operator/api/v1alpha1/zaentrum_types.go:244
-field:zaentrum-operator:Zaentrum.spec.channel,field,zaentrum-operator,Zaentrum.spec.channel,stable,Channel selects the release train (consumed by Stage-2 auto-update).,operator/api/v1alpha1/zaentrum_types.go:614
-field:zaentrum-operator:Zaentrum.spec.databases.chino,field,zaentrum-operator,Zaentrum.spec.databases.chino,chino,,operator/api/v1alpha1/zaentrum_types.go:544
-field:zaentrum-operator:Zaentrum.spec.databases.external.host,field,zaentrum-operator,Zaentrum.spec.databases.external.host,,"Host of the shared cluster, e.g.",operator/api/v1alpha1/zaentrum_types.go:567
-field:zaentrum-operator:Zaentrum.spec.databases.external.port,field,zaentrum-operator,Zaentrum.spec.databases.external.port,5432,,operator/api/v1alpha1/zaentrum_types.go:570
-field:zaentrum-operator:Zaentrum.spec.databases.external.sslmode,field,zaentrum-operator,Zaentrum.spec.databases.external.sslmode,require,,operator/api/v1alpha1/zaentrum_types.go:573
-field:zaentrum-operator:Zaentrum.spec.databases.katalog,field,zaentrum-operator,Zaentrum.spec.databases.katalog,katalog,,operator/api/v1alpha1/zaentrum_types.go:547
-field:zaentrum-operator:Zaentrum.spec.databases.keycloak,field,zaentrum-operator,Zaentrum.spec.databases.keycloak,keycloak,,operator/api/v1alpha1/zaentrum_types.go:550
-field:zaentrum-operator:Zaentrum.spec.databases.mode,field,zaentrum-operator,Zaentrum.spec.databases.mode,perApp,"Mode is ""perApp"" (a DB per service), ""single"", or ""external"" (shared cluster).",operator/api/v1alpha1/zaentrum_types.go:541
-field:zaentrum-operator:Zaentrum.spec.databases.portal,field,zaentrum-operator,Zaentrum.spec.databases.portal,portal,,operator/api/v1alpha1/zaentrum_types.go:553
-field:zaentrum-operator:Zaentrum.spec.eventStreaming.bootstrap,field,zaentrum-operator,Zaentrum.spec.eventStreaming.bootstrap,,"Bootstrap is the external bootstrap server list, e.g.",operator/api/v1alpha1/zaentrum_types.go:500
-field:zaentrum-operator:Zaentrum.spec.eventStreaming.certSecret,field,zaentrum-operator,Zaentrum.spec.eventStreaming.certSecret,,CertSecret names a secret IN THIS NAMESPACE holding user.crt/user.key/ ca.crt (a copied KafkaUser secret) for mTLS; empty = plaintext.,operator/api/v1alpha1/zaentrum_types.go:505
-field:zaentrum-operator:Zaentrum.spec.eventStreaming.groupPrefix,field,zaentrum-operator,Zaentrum.spec.eventStreaming.groupPrefix,,GroupPrefix is the per-instance consumer-group namespace on a shared broker (e.g.,operator/api/v1alpha1/zaentrum_types.go:522
-field:zaentrum-operator:Zaentrum.spec.eventStreaming.mode,field,zaentrum-operator,Zaentrum.spec.eventStreaming.mode,bundled,"Mode is ""bundled"" (default) or ""external"". One of: bundled, external.",operator/api/v1alpha1/zaentrum_types.go:495
-field:zaentrum-operator:Zaentrum.spec.eventStreaming.topicPrefix,field,zaentrum-operator,Zaentrum.spec.eventStreaming.topicPrefix,"""stube.""",TopicPrefix is the per-tenant topic namespace on a shared cluster (e.g.,operator/api/v1alpha1/zaentrum_types.go:511
-field:zaentrum-operator:Zaentrum.spec.features.gpu,field,zaentrum-operator,Zaentrum.spec.features.gpu,false,GPU enables hardware (NVENC) transcoding on the stream plane.,operator/api/v1alpha1/zaentrum_types.go:263
-field:zaentrum-operator:Zaentrum.spec.features.kafka,field,zaentrum-operator,Zaentrum.spec.features.kafka,true,Kafka enables the bundled single-node event-stream broker.,operator/api/v1alpha1/zaentrum_types.go:268
-field:zaentrum-operator:Zaentrum.spec.features.pipeline,field,zaentrum-operator,Zaentrum.spec.features.pipeline,false,Pipeline enables the media pipeline (analyzer/packager/transcoder/katalog-ingest).,operator/api/v1alpha1/zaentrum_types.go:273
-field:zaentrum-operator:Zaentrum.spec.hostname,field,zaentrum-operator,Zaentrum.spec.hostname,zaentrum.localhost,Hostname is the public host: issuer host + ingress host + KC_HOSTNAME.,operator/api/v1alpha1/zaentrum_types.go:624
+field:zaentrum-operator:Zaentrum.spec.channel,field,zaentrum-operator,Zaentrum.spec.channel,stable,Channel selects the release train (consumed by Stage-2 auto-update).,operator/api/v1alpha1/zaentrum_types.go:738
+field:zaentrum-operator:Zaentrum.spec.databases.chino,field,zaentrum-operator,Zaentrum.spec.databases.chino,chino,,operator/api/v1alpha1/zaentrum_types.go:653
+field:zaentrum-operator:Zaentrum.spec.databases.external.host,field,zaentrum-operator,Zaentrum.spec.databases.external.host,,"Host of the shared cluster, e.g.",operator/api/v1alpha1/zaentrum_types.go:690
+field:zaentrum-operator:Zaentrum.spec.databases.external.port,field,zaentrum-operator,Zaentrum.spec.databases.external.port,5432,,operator/api/v1alpha1/zaentrum_types.go:693
+field:zaentrum-operator:Zaentrum.spec.databases.external.sslmode,field,zaentrum-operator,Zaentrum.spec.databases.external.sslmode,require,"One of: """", disable, allow, prefer, require, verify-ca, verify-full.",operator/api/v1alpha1/zaentrum_types.go:697
+field:zaentrum-operator:Zaentrum.spec.databases.katalog,field,zaentrum-operator,Zaentrum.spec.databases.katalog,katalog,,operator/api/v1alpha1/zaentrum_types.go:658
+field:zaentrum-operator:Zaentrum.spec.databases.keycloak,field,zaentrum-operator,Zaentrum.spec.databases.keycloak,keycloak,Keycloak is the name of Keycloak's database.,operator/api/v1alpha1/zaentrum_types.go:667
+field:zaentrum-operator:Zaentrum.spec.databases.mode,field,zaentrum-operator,Zaentrum.spec.databases.mode,perApp,"Mode is ""perApp"" (a DB per service), ""single"", or ""external"" (shared cluster).",operator/api/v1alpha1/zaentrum_types.go:648
+field:zaentrum-operator:Zaentrum.spec.databases.portal,field,zaentrum-operator,Zaentrum.spec.databases.portal,portal,Portal is the name of the portal's database.,operator/api/v1alpha1/zaentrum_types.go:675
+field:zaentrum-operator:Zaentrum.spec.eventStreaming.bootstrap,field,zaentrum-operator,Zaentrum.spec.eventStreaming.bootstrap,,"Bootstrap is the external bootstrap server list, e.g.",operator/api/v1alpha1/zaentrum_types.go:607
+field:zaentrum-operator:Zaentrum.spec.eventStreaming.certSecret,field,zaentrum-operator,Zaentrum.spec.eventStreaming.certSecret,,CertSecret names a secret IN THIS NAMESPACE holding user.crt/user.key/ ca.crt (a copied KafkaUser secret) for mTLS; empty = plaintext.,operator/api/v1alpha1/zaentrum_types.go:612
+field:zaentrum-operator:Zaentrum.spec.eventStreaming.groupPrefix,field,zaentrum-operator,Zaentrum.spec.eventStreaming.groupPrefix,,GroupPrefix is the per-instance consumer-group namespace on a shared broker (e.g.,operator/api/v1alpha1/zaentrum_types.go:629
+field:zaentrum-operator:Zaentrum.spec.eventStreaming.mode,field,zaentrum-operator,Zaentrum.spec.eventStreaming.mode,bundled,"Mode is ""bundled"" (default) or ""external"". One of: bundled, external.",operator/api/v1alpha1/zaentrum_types.go:602
+field:zaentrum-operator:Zaentrum.spec.eventStreaming.topicPrefix,field,zaentrum-operator,Zaentrum.spec.eventStreaming.topicPrefix,"""stube.""",TopicPrefix is the per-tenant topic namespace on a shared cluster (e.g.,operator/api/v1alpha1/zaentrum_types.go:618
+field:zaentrum-operator:Zaentrum.spec.features.gpu,field,zaentrum-operator,Zaentrum.spec.features.gpu,false,GPU enables hardware (NVENC) transcoding on the stream plane.,operator/api/v1alpha1/zaentrum_types.go:370
+field:zaentrum-operator:Zaentrum.spec.features.kafka,field,zaentrum-operator,Zaentrum.spec.features.kafka,true,Kafka enables the bundled single-node event-stream broker.,operator/api/v1alpha1/zaentrum_types.go:375
+field:zaentrum-operator:Zaentrum.spec.features.pipeline,field,zaentrum-operator,Zaentrum.spec.features.pipeline,false,Pipeline enables the media pipeline (analyzer/packager/transcoder/katalog-ingest).,operator/api/v1alpha1/zaentrum_types.go:380
+field:zaentrum-operator:Zaentrum.spec.hostname,field,zaentrum-operator,Zaentrum.spec.hostname,zaentrum.localhost,Hostname is the public host: issuer host + ingress host + KC_HOSTNAME.,operator/api/v1alpha1/zaentrum_types.go:748
 field:zaentrum-operator:Zaentrum.spec.identity.audience,field,zaentrum-operator,Zaentrum.spec.identity.audience,chino,Audience is the expected token audience services validate against.,operator/api/v1alpha1/zaentrum_types.go:80
 field:zaentrum-operator:Zaentrum.spec.identity.clientId,field,zaentrum-operator,Zaentrum.spec.identity.clientId,chino-web,ClientID is the public OIDC client id the web SPA authenticates as.,operator/api/v1alpha1/zaentrum_types.go:59
 field:zaentrum-operator:Zaentrum.spec.identity.exposeAdminConsole,field,zaentrum-operator,Zaentrum.spec.identity.exposeAdminConsole,,"ExposeAdminConsole publishes the bundled Keycloak's admin console and its admin API on the public host, under /auth/admin.",operator/api/v1alpha1/zaentrum_types.go:102
@@ -1200,31 +1228,39 @@ field:zaentrum-operator:Zaentrum.spec.identity.loginTheme,field,zaentrum-operato
 field:zaentrum-operator:Zaentrum.spec.identity.mobileClientId,field,zaentrum-operator,Zaentrum.spec.identity.mobileClientId,,"MobileClientID is the public client the phone and tablet apps sign in through: the authorization code with PKCE (S256) in the system browser, returning to cl…",operator/api/v1alpha1/zaentrum_types.go:75
 field:zaentrum-operator:Zaentrum.spec.identity.mode,field,zaentrum-operator,Zaentrum.spec.identity.mode,bundled,"Mode is ""bundled"" (ship Keycloak) or ""external"" (federate).",operator/api/v1alpha1/zaentrum_types.go:49
 field:zaentrum-operator:Zaentrum.spec.identity.tvClientId,field,zaentrum-operator,Zaentrum.spec.identity.tvClientId,,"TVClientID is the public client the TV apps sign in through, with the device authorization grant and PKCE (S256); chino-api advertises it in /api/config.",operator/api/v1alpha1/zaentrum_types.go:66
-field:zaentrum-operator:Zaentrum.spec.imagePullSecrets,field,zaentrum-operator,Zaentrum.spec.imagePullSecrets,,ImagePullSecrets are added to every workload (private registries).,operator/api/v1alpha1/zaentrum_types.go:698
-field:zaentrum-operator:Zaentrum.spec.keycloak.image,field,zaentrum-operator,Zaentrum.spec.keycloak.image,"""quay.io/keycloak/keycloak:26.0.7""",Image is the bundled Keycloak container image.,operator/api/v1alpha1/zaentrum_types.go:581
-field:zaentrum-operator:Zaentrum.spec.liveWorker.enabled,field,zaentrum-operator,Zaentrum.spec.liveWorker.enabled,false,"Enabled renders the live worker: the Deployment and the Service live-worker, and chino-stream's LIVE_WORKER_URL and LIVE_WORKER_MODE.",operator/api/v1alpha1/zaentrum_types.go:347
-field:zaentrum-operator:Zaentrum.spec.liveWorker.gpu.enabled,field,zaentrum-operator,Zaentrum.spec.liveWorker.gpu.enabled,,"Enabled asks for the GPU, the default: nvidia.com/gpu, the toleration and the node selector below, the worker's CUDA backend and NVIDIA_DRIVER_CAPABILITIES=a…",operator/api/v1alpha1/zaentrum_types.go:405
-field:zaentrum-operator:Zaentrum.spec.liveWorker.gpu.nodeSelector,field,zaentrum-operator,Zaentrum.spec.liveWorker.gpu.nodeSelector,"the transcoder's, nvidia",NodeSelector picks the nodes the worker runs on.,operator/api/v1alpha1/zaentrum_types.go:410
-field:zaentrum-operator:Zaentrum.spec.liveWorker.gpu.tolerations,field,zaentrum-operator,Zaentrum.spec.liveWorker.gpu.tolerations,"the transcoder's, the nvidia",Tolerations are the taints it tolerates.,operator/api/v1alpha1/zaentrum_types.go:415
-field:zaentrum-operator:Zaentrum.spec.liveWorker.mode,field,zaentrum-operator,Zaentrum.spec.liveWorker.mode,off,"Mode is chino-stream's LIVE_WORKER_MODE. One of: off, shadow, on.",operator/api/v1alpha1/zaentrum_types.go:357
-field:zaentrum-operator:Zaentrum.spec.liveWorker.resources,field,zaentrum-operator,Zaentrum.spec.liveWorker.resources,,Resources of the live-worker container.,operator/api/v1alpha1/zaentrum_types.go:368
-field:zaentrum-operator:Zaentrum.spec.liveWorker.slots.cpu,field,zaentrum-operator,Zaentrum.spec.liveWorker.slots.cpu,2,"CPU is how many audio and subtitle jobs run at once (LIVE_WORKER_CPU_SLOTS); without GPU slots, video too.",operator/api/v1alpha1/zaentrum_types.go:394
-field:zaentrum-operator:Zaentrum.spec.liveWorker.slots.gpu,field,zaentrum-operator,Zaentrum.spec.liveWorker.slots.gpu,4,"GPU is how many video encodes run at once (LIVE_WORKER_GPU_SLOTS), each slot holding one hardware encode session; the pods sharing a GPU, the transcoder's in…",operator/api/v1alpha1/zaentrum_types.go:387
-field:zaentrum-operator:Zaentrum.spec.network.issuerHostAliasIP,field,zaentrum-operator,Zaentrum.spec.network.issuerHostAliasIP,,IssuerHostAliasIP adds a hostAliases entry (this IP → the public host) to the OIDC validators so in-cluster token validation reaches an edge-terminated HTTPS…,operator/api/v1alpha1/zaentrum_types.go:424
-field:zaentrum-operator:Zaentrum.spec.partOf,field,zaentrum-operator,Zaentrum.spec.partOf,the namespace,PartOf sets the app.kubernetes.io/part-of label value (default: the namespace).,operator/api/v1alpha1/zaentrum_types.go:702
-field:zaentrum-operator:Zaentrum.spec.pipeline.encoder,field,zaentrum-operator,Zaentrum.spec.pipeline.encoder,gpu,"Encoder is where the transcoder encodes. One of: gpu, cpu.",operator/api/v1alpha1/zaentrum_types.go:289
-field:zaentrum-operator:Zaentrum.spec.pipeline.extraLadder,field,zaentrum-operator,Zaentrum.spec.pipeline.extraLadder,,"ExtraLadder is the ladder for a title's extras (trailers, featurettes) (EXTRA_LADDER); empty: the transcoder's default, 720p and 480p H.264.",operator/api/v1alpha1/zaentrum_types.go:305
-field:zaentrum-operator:Zaentrum.spec.pipeline.hlsSubtitles,field,zaentrum-operator,Zaentrum.spec.pipeline.hlsSubtitles,,HLSSubtitles names the WebVTT subtitle renditions in the HLS master playlist (the packager's HLS_SUBTITLES).,operator/api/v1alpha1/zaentrum_types.go:326
-field:zaentrum-operator:Zaentrum.spec.pipeline.ladder,field,zaentrum-operator,Zaentrum.spec.pipeline.ladder,one rendition a title,"Ladder adds renditions per title (the transcoder's LADDER): rungs separated by commas, each source or a height such as 720p, optionally with a codec (hevc, h…",operator/api/v1alpha1/zaentrum_types.go:298
-field:zaentrum-operator:Zaentrum.spec.pipeline.preferredLanguages,field,zaentrum-operator,Zaentrum.spec.pipeline.preferredLanguages,the order of the catalog's language list,"PreferredLanguages orders which audio language is the default, e.g.",operator/api/v1alpha1/zaentrum_types.go:332
-field:zaentrum-operator:Zaentrum.spec.pipeline.segmentSeconds,field,zaentrum-operator,Zaentrum.spec.pipeline.segmentSeconds,"theirs, 6","SegmentSeconds is the length of an HLS segment, and so the transcoder's keyframe interval: SEGMENT_SECONDS of both workers.",operator/api/v1alpha1/zaentrum_types.go:312
-field:zaentrum-operator:Zaentrum.spec.pipeline.surroundAudio,field,zaentrum-operator,Zaentrum.spec.pipeline.surroundAudio,off,"SurroundAudio adds a 5.1 rendition of each surround track beside its stereo one (the packager's SURROUND_AUDIO): off, eac3 or ac3. One of: off, eac3, ac3.",operator/api/v1alpha1/zaentrum_types.go:320
-field:zaentrum-operator:Zaentrum.spec.replicas,field,zaentrum-operator,Zaentrum.spec.replicas,,"Replicas overrides the replica count of individual app-tier Deployments by name, e.g.",operator/api/v1alpha1/zaentrum_types.go:710
-field:zaentrum-operator:Zaentrum.spec.routing.hosts.chino,field,zaentrum-operator,Zaentrum.spec.routing.hosts.chino,,"Chino is the host serving the chino SPA at ""/"", e.g.",operator/api/v1alpha1/zaentrum_types.go:484
-field:zaentrum-operator:Zaentrum.spec.routing.mode,field,zaentrum-operator,Zaentrum.spec.routing.mode,pathRouted,"Mode is ""pathRouted"" (everything on Hostname — profile B1, the default) or ""subdomains"" (chino gets its own host serving the SPA at /; additive — the path-ro…",operator/api/v1alpha1/zaentrum_types.go:473
-field:zaentrum-operator:Zaentrum.spec.routing.provisionIngress,field,zaentrum-operator,Zaentrum.spec.routing.provisionIngress,true,ProvisionIngress renders a plain-Kubernetes Ingress.,operator/api/v1alpha1/zaentrum_types.go:461
-field:zaentrum-operator:Zaentrum.spec.routing.provisionRoutes,field,zaentrum-operator,Zaentrum.spec.routing.provisionRoutes,false,ProvisionRoutes renders OpenShift Routes (single-origin paths).,operator/api/v1alpha1/zaentrum_types.go:465
-field:zaentrum-operator:Zaentrum.spec.secrets.external,field,zaentrum-operator,Zaentrum.spec.secrets.external,,External means the platform's Secrets are pre-created (e.g.,operator/api/v1alpha1/zaentrum_types.go:533
+field:zaentrum-operator:Zaentrum.spec.imagePullSecrets,field,zaentrum-operator,Zaentrum.spec.imagePullSecrets,,ImagePullSecrets are added to every workload (private registries).,operator/api/v1alpha1/zaentrum_types.go:834
+field:zaentrum-operator:Zaentrum.spec.keycloak.image,field,zaentrum-operator,Zaentrum.spec.keycloak.image,"""quay.io/keycloak/keycloak:26.0.7""",Image is the bundled Keycloak container image.,operator/api/v1alpha1/zaentrum_types.go:705
+field:zaentrum-operator:Zaentrum.spec.liveWorker.enabled,field,zaentrum-operator,Zaentrum.spec.liveWorker.enabled,false,"Enabled renders the live worker: the Deployment and the Service live-worker, and chino-stream's LIVE_WORKER_URL and LIVE_WORKER_MODE.",operator/api/v1alpha1/zaentrum_types.go:454
+field:zaentrum-operator:Zaentrum.spec.liveWorker.gpu.enabled,field,zaentrum-operator,Zaentrum.spec.liveWorker.gpu.enabled,,"Enabled asks for the GPU, the default: nvidia.com/gpu, the toleration and the node selector below, the worker's CUDA backend and NVIDIA_DRIVER_CAPABILITIES=a…",operator/api/v1alpha1/zaentrum_types.go:512
+field:zaentrum-operator:Zaentrum.spec.liveWorker.gpu.nodeSelector,field,zaentrum-operator,Zaentrum.spec.liveWorker.gpu.nodeSelector,"the transcoder's, nvidia",NodeSelector picks the nodes the worker runs on.,operator/api/v1alpha1/zaentrum_types.go:517
+field:zaentrum-operator:Zaentrum.spec.liveWorker.gpu.tolerations,field,zaentrum-operator,Zaentrum.spec.liveWorker.gpu.tolerations,"the transcoder's, the nvidia",Tolerations are the taints it tolerates.,operator/api/v1alpha1/zaentrum_types.go:522
+field:zaentrum-operator:Zaentrum.spec.liveWorker.mode,field,zaentrum-operator,Zaentrum.spec.liveWorker.mode,off,"Mode is chino-stream's LIVE_WORKER_MODE. One of: off, shadow, on.",operator/api/v1alpha1/zaentrum_types.go:464
+field:zaentrum-operator:Zaentrum.spec.liveWorker.resources,field,zaentrum-operator,Zaentrum.spec.liveWorker.resources,,Resources of the live-worker container.,operator/api/v1alpha1/zaentrum_types.go:475
+field:zaentrum-operator:Zaentrum.spec.liveWorker.slots.cpu,field,zaentrum-operator,Zaentrum.spec.liveWorker.slots.cpu,2,"CPU is how many audio and subtitle jobs run at once (LIVE_WORKER_CPU_SLOTS); without GPU slots, video too.",operator/api/v1alpha1/zaentrum_types.go:501
+field:zaentrum-operator:Zaentrum.spec.liveWorker.slots.gpu,field,zaentrum-operator,Zaentrum.spec.liveWorker.slots.gpu,4,"GPU is how many video encodes run at once (LIVE_WORKER_GPU_SLOTS), each slot holding one hardware encode session; the pods sharing a GPU, the transcoder's in…",operator/api/v1alpha1/zaentrum_types.go:494
+field:zaentrum-operator:Zaentrum.spec.mail.alertsTo,field,zaentrum-operator,Zaentrum.spec.mail.alertsTo,,AlertsTo are at most 10 addresses that get every alert mail.,operator/api/v1alpha1/zaentrum_types.go:319
+field:zaentrum-operator:Zaentrum.spec.mail.encryption,field,zaentrum-operator,Zaentrum.spec.mail.encryption,starttls,"Encryption is how the connection to the server is encrypted: starttls, the default, after the greeting; tls from the start; none not at all. One of: starttls…",operator/api/v1alpha1/zaentrum_types.go:285
+field:zaentrum-operator:Zaentrum.spec.mail.from,field,zaentrum-operator,Zaentrum.spec.mail.from,,From is the sender's address.,operator/api/v1alpha1/zaentrum_types.go:290
+field:zaentrum-operator:Zaentrum.spec.mail.fromName,field,zaentrum-operator,Zaentrum.spec.mail.fromName,zaentrum,"FromName is the sender's name as a mail program shows it, at most 60 characters.",operator/api/v1alpha1/zaentrum_types.go:297
+field:zaentrum-operator:Zaentrum.spec.mail.host,field,zaentrum-operator,Zaentrum.spec.mail.host,no mail is sent,"Host is the name of the SMTP server, e.g.",operator/api/v1alpha1/zaentrum_types.go:272
+field:zaentrum-operator:Zaentrum.spec.mail.port,field,zaentrum-operator,Zaentrum.spec.mail.port,"587 with starttls, 465 with tls, 25 with none","Port is the SMTP server's port, 1 to 65535.",operator/api/v1alpha1/zaentrum_types.go:279
+field:zaentrum-operator:Zaentrum.spec.mail.secretName,field,zaentrum-operator,Zaentrum.spec.mail.secretName,,"SecretName names a Secret in the platform's namespace with the key password, the password of user: a name a Secret can have, lowercase letters, digits, hyphe…",operator/api/v1alpha1/zaentrum_types.go:313
+field:zaentrum-operator:Zaentrum.spec.mail.user,field,zaentrum-operator,Zaentrum.spec.mail.user,the platform does not sign in,User is the name the platform signs in to the server with.,operator/api/v1alpha1/zaentrum_types.go:303
+field:zaentrum-operator:Zaentrum.spec.network.issuerHostAliasIP,field,zaentrum-operator,Zaentrum.spec.network.issuerHostAliasIP,,IssuerHostAliasIP adds a hostAliases entry (this IP → the public host) to the OIDC validators so in-cluster token validation reaches an edge-terminated HTTPS…,operator/api/v1alpha1/zaentrum_types.go:531
+field:zaentrum-operator:Zaentrum.spec.partOf,field,zaentrum-operator,Zaentrum.spec.partOf,the namespace,PartOf sets the app.kubernetes.io/part-of label value (default: the namespace).,operator/api/v1alpha1/zaentrum_types.go:838
+field:zaentrum-operator:Zaentrum.spec.pipeline.encoder,field,zaentrum-operator,Zaentrum.spec.pipeline.encoder,gpu,"Encoder is where the transcoder encodes. One of: gpu, cpu.",operator/api/v1alpha1/zaentrum_types.go:396
+field:zaentrum-operator:Zaentrum.spec.pipeline.extraLadder,field,zaentrum-operator,Zaentrum.spec.pipeline.extraLadder,,"ExtraLadder is the ladder for a title's extras (trailers, featurettes) (EXTRA_LADDER); empty: the transcoder's default, 720p and 480p H.264.",operator/api/v1alpha1/zaentrum_types.go:412
+field:zaentrum-operator:Zaentrum.spec.pipeline.hlsSubtitles,field,zaentrum-operator,Zaentrum.spec.pipeline.hlsSubtitles,,HLSSubtitles names the WebVTT subtitle renditions in the HLS master playlist (the packager's HLS_SUBTITLES).,operator/api/v1alpha1/zaentrum_types.go:433
+field:zaentrum-operator:Zaentrum.spec.pipeline.ladder,field,zaentrum-operator,Zaentrum.spec.pipeline.ladder,one rendition a title,"Ladder adds renditions per title (the transcoder's LADDER): rungs separated by commas, each source or a height such as 720p, optionally with a codec (hevc, h…",operator/api/v1alpha1/zaentrum_types.go:405
+field:zaentrum-operator:Zaentrum.spec.pipeline.preferredLanguages,field,zaentrum-operator,Zaentrum.spec.pipeline.preferredLanguages,the order of the catalog's language list,"PreferredLanguages orders which audio language is the default, e.g.",operator/api/v1alpha1/zaentrum_types.go:439
+field:zaentrum-operator:Zaentrum.spec.pipeline.segmentSeconds,field,zaentrum-operator,Zaentrum.spec.pipeline.segmentSeconds,"theirs, 6","SegmentSeconds is the length of an HLS segment, and so the transcoder's keyframe interval: SEGMENT_SECONDS of both workers.",operator/api/v1alpha1/zaentrum_types.go:419
+field:zaentrum-operator:Zaentrum.spec.pipeline.surroundAudio,field,zaentrum-operator,Zaentrum.spec.pipeline.surroundAudio,off,"SurroundAudio adds a 5.1 rendition of each surround track beside its stereo one (the packager's SURROUND_AUDIO): off, eac3 or ac3. One of: off, eac3, ac3.",operator/api/v1alpha1/zaentrum_types.go:427
+field:zaentrum-operator:Zaentrum.spec.replicas,field,zaentrum-operator,Zaentrum.spec.replicas,,"Replicas overrides the replica count of individual app-tier Deployments by name, e.g.",operator/api/v1alpha1/zaentrum_types.go:846
+field:zaentrum-operator:Zaentrum.spec.routing.hosts.chino,field,zaentrum-operator,Zaentrum.spec.routing.hosts.chino,,"Chino is the host serving the chino SPA at ""/"", e.g.",operator/api/v1alpha1/zaentrum_types.go:591
+field:zaentrum-operator:Zaentrum.spec.routing.mode,field,zaentrum-operator,Zaentrum.spec.routing.mode,pathRouted,"Mode is ""pathRouted"" (everything on Hostname — profile B1, the default) or ""subdomains"" (chino gets its own host serving the SPA at /; additive — the path-ro…",operator/api/v1alpha1/zaentrum_types.go:580
+field:zaentrum-operator:Zaentrum.spec.routing.provisionIngress,field,zaentrum-operator,Zaentrum.spec.routing.provisionIngress,true,ProvisionIngress renders a plain-Kubernetes Ingress.,operator/api/v1alpha1/zaentrum_types.go:568
+field:zaentrum-operator:Zaentrum.spec.routing.provisionRoutes,field,zaentrum-operator,Zaentrum.spec.routing.provisionRoutes,false,ProvisionRoutes renders OpenShift Routes (single-origin paths).,operator/api/v1alpha1/zaentrum_types.go:572
+field:zaentrum-operator:Zaentrum.spec.secrets.external,field,zaentrum-operator,Zaentrum.spec.secrets.external,,External means the platform's Secrets are pre-created (e.g.,operator/api/v1alpha1/zaentrum_types.go:640
 field:zaentrum-operator:Zaentrum.spec.storage.className,field,zaentrum-operator,Zaentrum.spec.storage.className,,ClassName is an optional StorageClass for all platform PVCs.,operator/api/v1alpha1/zaentrum_types.go:114
 field:zaentrum-operator:Zaentrum.spec.storage.kafkaNode,field,zaentrum-operator,Zaentrum.spec.storage.kafkaNode,,"KafkaNode pins the bundled Kafka broker to a node (kubernetes.io/hostname), required when KafkaPVC is a node-local volume.",operator/api/v1alpha1/zaentrum_types.go:139
 field:zaentrum-operator:Zaentrum.spec.storage.kafkaPvc,field,zaentrum-operator,Zaentrum.spec.storage.kafkaPvc,,KafkaPVC names a pre-created PVC to back the bundled Kafka broker's log dir so topics survive a pod restart/reschedule.,operator/api/v1alpha1/zaentrum_types.go:134
@@ -1239,11 +1275,11 @@ field:zaentrum-operator:Zaentrum.spec.tls.issuerRef.group,field,zaentrum-operato
 field:zaentrum-operator:Zaentrum.spec.tls.issuerRef.kind,field,zaentrum-operator,Zaentrum.spec.tls.issuerRef.kind,Issuer,"Kind is Issuer or ClusterIssuer. One of: Issuer, ClusterIssuer.",operator/api/v1alpha1/zaentrum_types.go:204
 field:zaentrum-operator:Zaentrum.spec.tls.issuerRef.name,field,zaentrum-operator,Zaentrum.spec.tls.issuerRef.name,,Name of the Issuer (in the platform's namespace) or ClusterIssuer.,operator/api/v1alpha1/zaentrum_types.go:199
 field:zaentrum-operator:Zaentrum.spec.tls.secretName,field,zaentrum-operator,Zaentrum.spec.tls.secretName,zaentrum-tls,"SecretName is a kubernetes.io/tls Secret in the platform's namespace, with tls.crt (the certificate and its chain) and tls.key, for hostname and, in subdomai…",operator/api/v1alpha1/zaentrum_types.go:186
-field:zaentrum-operator:Zaentrum.spec.update.mode,field,zaentrum-operator,Zaentrum.spec.update.mode,manual,"Mode is ""manual"" (default) or ""auto"".",operator/api/v1alpha1/zaentrum_types.go:589
-field:zaentrum-operator:Zaentrum.spec.verification.enabled,field,zaentrum-operator,Zaentrum.spec.verification.enabled,true,"Enabled runs the checks after every update that leaves the platform Ready, and whenever the zaentrum.io/verify-request annotation changes.",operator/api/v1alpha1/zaentrum_types.go:606
-field:zaentrum-operator:Zaentrum.spec.version,field,zaentrum-operator,Zaentrum.spec.version,latest,Version is the image tag applied to every ghcr.io/zaentrum/* image.,operator/api/v1alpha1/zaentrum_types.go:619
-field:zaentrum-operator:Zaentrum.spec.vpn.clusterCIDRs,field,zaentrum-operator,Zaentrum.spec.vpn.clusterCIDRs,,"ClusterCIDRs are the cluster's pod and service networks, e.g.",operator/api/v1alpha1/zaentrum_types.go:454
-field:zaentrum-operator:Zaentrum.spec.vpn.proxy,field,zaentrum-operator,Zaentrum.spec.vpn.proxy,,"Proxy is the VPN's SOCKS5 proxy: a socks5:// or socks5h:// URL with a host — a DNS name, an IPv4 address or an IPv6 one in brackets — and a port, and nothing…",operator/api/v1alpha1/zaentrum_types.go:445
+field:zaentrum-operator:Zaentrum.spec.update.mode,field,zaentrum-operator,Zaentrum.spec.update.mode,manual,"Mode is ""manual"" (default) or ""auto"".",operator/api/v1alpha1/zaentrum_types.go:713
+field:zaentrum-operator:Zaentrum.spec.verification.enabled,field,zaentrum-operator,Zaentrum.spec.verification.enabled,true,"Enabled runs the checks after every update that leaves the platform Ready, and whenever the zaentrum.io/verify-request annotation changes.",operator/api/v1alpha1/zaentrum_types.go:730
+field:zaentrum-operator:Zaentrum.spec.version,field,zaentrum-operator,Zaentrum.spec.version,latest,Version is the image tag applied to every ghcr.io/zaentrum/* image.,operator/api/v1alpha1/zaentrum_types.go:743
+field:zaentrum-operator:Zaentrum.spec.vpn.clusterCIDRs,field,zaentrum-operator,Zaentrum.spec.vpn.clusterCIDRs,,"ClusterCIDRs are the cluster's pod and service networks, e.g.",operator/api/v1alpha1/zaentrum_types.go:561
+field:zaentrum-operator:Zaentrum.spec.vpn.proxy,field,zaentrum-operator,Zaentrum.spec.vpn.proxy,,"Proxy is the VPN's SOCKS5 proxy: a socks5:// or socks5h:// URL with a host — a DNS name, an IPv4 address or an IPv6 one in brackets — and a port, and nothing…",operator/api/v1alpha1/zaentrum_types.go:552
 field:zaentrum-operator:ZaentrumAddon.spec.chart.digest,field,zaentrum-operator,ZaentrumAddon.spec.chart.digest,,Digest pins the exact chart archive; a fetched archive that does not match is refused.,operator/api/v1alpha1/zaentrumaddon_types.go:42
 field:zaentrum-operator:ZaentrumAddon.spec.chart.ref,field,zaentrum-operator,ZaentrumAddon.spec.chart.ref,,Ref is an OCI chart reference (oci://registry/path/chart) or a direct https link to a chart archive (https://host/path/chart-1.2.0.tgz).,operator/api/v1alpha1/zaentrumaddon_types.go:31
 field:zaentrum-operator:ZaentrumAddon.spec.chart.version,field,zaentrum-operator,ZaentrumAddon.spec.chart.version,,"Version is the chart version — the tag of an oci ref, where it is required.",operator/api/v1alpha1/zaentrumaddon_types.go:36
@@ -1368,97 +1404,97 @@ repo:zaentrum:zaentrum,repo,zaentrum,zaentrum,active,"Zaentrum — install, rele
 repo:zaentrum-operator:zaentrum-operator,repo,zaentrum-operator,zaentrum-operator,active,Self-hosted media platform — neutral media server + clients (chino video; musig/tv planned).,
 repo:zaentrum-portal:zaentrum-portal,repo,zaentrum-portal,zaentrum-portal,active,zaentrum — launchpad shell for the neutral self-hosted media platform (React + Vite + @nalet/design-system). Bring your own server.,
 repo:zaentrum.github.io:zaentrum.github.io,repo,zaentrum.github.io,zaentrum.github.io,active,"The zaentrum site: the product page, and the docs built from zaentrum/zaentrum's docs/ folder",
-route:chino-api:DELETE /api/v1/admin/accounts/{sub}/data,route,chino-api,DELETE /api/v1/admin/accounts/{sub}/data,,,internal/http/router.go:204
-route:chino-api:DELETE /api/v1/me,route,chino-api,DELETE /api/v1/me,,,internal/http/router.go:98
-route:chino-api:DELETE /api/v1/me/items/{id}/watched,route,chino-api,DELETE /api/v1/me/items/{id}/watched,,,internal/http/router.go:117
-route:chino-api:DELETE /api/v1/me/likes/{id},route,chino-api,DELETE /api/v1/me/likes/{id},,,internal/http/router.go:183
-route:chino-api:DELETE /api/v1/me/watchlist/{id},route,chino-api,DELETE /api/v1/me/watchlist/{id},,,internal/http/router.go:177
-route:chino-api:DELETE /api/v1/me/watchlists/{listId},route,chino-api,DELETE /api/v1/me/watchlists/{listId},,,internal/http/router.go:167
-route:chino-api:DELETE /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,DELETE /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:169
-route:chino-api:DELETE /api/v1/notices/{noticeId},route,chino-api,DELETE /api/v1/notices/{noticeId},,,internal/http/router.go:147
-route:chino-api:GET /api/config,route,chino-api,GET /api/config,,,internal/http/router.go:48
+route:chino-api:DELETE /api/v1/admin/accounts/{sub}/data,route,chino-api,DELETE /api/v1/admin/accounts/{sub}/data,,,internal/http/router.go:207
+route:chino-api:DELETE /api/v1/me,route,chino-api,DELETE /api/v1/me,,,internal/http/router.go:101
+route:chino-api:DELETE /api/v1/me/items/{id}/watched,route,chino-api,DELETE /api/v1/me/items/{id}/watched,,,internal/http/router.go:120
+route:chino-api:DELETE /api/v1/me/likes/{id},route,chino-api,DELETE /api/v1/me/likes/{id},,,internal/http/router.go:186
+route:chino-api:DELETE /api/v1/me/watchlist/{id},route,chino-api,DELETE /api/v1/me/watchlist/{id},,,internal/http/router.go:180
+route:chino-api:DELETE /api/v1/me/watchlists/{listId},route,chino-api,DELETE /api/v1/me/watchlists/{listId},,,internal/http/router.go:170
+route:chino-api:DELETE /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,DELETE /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:172
+route:chino-api:DELETE /api/v1/notices/{noticeId},route,chino-api,DELETE /api/v1/notices/{noticeId},,,internal/http/router.go:150
+route:chino-api:GET /api/config,route,chino-api,GET /api/config,,,internal/http/router.go:51
 route:chino-api:GET /api/healthz,route,chino-api,GET /api/healthz,,,internal/http/router.go:39
-route:chino-api:GET /api/openapi.yaml,route,chino-api,GET /api/openapi.yaml,,,internal/http/router.go:43
-route:chino-api:GET /api/v1/admin/items/{id}/package,route,chino-api,GET /api/v1/admin/items/{id}/package,,,internal/http/router.go:200
-route:chino-api:GET /api/v1/events,route,chino-api,GET /api/v1/events,,,internal/http/router.go:216
-route:chino-api:GET /api/v1/extensions,route,chino-api,GET /api/v1/extensions,,,internal/http/router.go:138
-route:chino-api:GET /api/v1/genres,route,chino-api,GET /api/v1/genres,,,internal/http/router.go:128
-route:chino-api:GET /api/v1/items,route,chino-api,GET /api/v1/items,,,internal/http/router.go:108
-route:chino-api:GET /api/v1/items/{id},route,chino-api,GET /api/v1/items/{id},,,internal/http/router.go:113
-route:chino-api:GET /api/v1/items/{id}/backdrop,route,chino-api,GET /api/v1/items/{id}/backdrop,,,internal/http/router.go:248
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:334
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:335
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:336
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/info,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/info,,,internal/http/router.go:318
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,,,internal/http/router.go:317
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,,,internal/http/router.go:331
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,,,internal/http/router.go:332
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,,,internal/http/router.go:333
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:320
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:321
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:322
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,,,internal/http/router.go:319
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:323
-route:chino-api:GET /api/v1/items/{id}/play,route,chino-api,GET /api/v1/items/{id}/play,,,internal/http/router.go:254
-route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:284
-route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:285
-route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:286
-route:chino-api:GET /api/v1/items/{id}/play/info,route,chino-api,GET /api/v1/items/{id}/play/info,,,internal/http/router.go:255
-route:chino-api:GET /api/v1/items/{id}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/play/master.m3u8,,,internal/http/router.go:261
-route:chino-api:GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,route,chino-api,GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,,,internal/http/router.go:341
-route:chino-api:GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,route,chino-api,GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,,,internal/http/router.go:306
-route:chino-api:GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,route,chino-api,GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,,,internal/http/router.go:305
-route:chino-api:GET /api/v1/items/{id}/play/{quality}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{quality}/index.m3u8,,,internal/http/router.go:280
-route:chino-api:GET /api/v1/items/{id}/play/{quality}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{quality}/init.mp4,,,internal/http/router.go:281
-route:chino-api:GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,,,internal/http/router.go:282
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:293
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:294
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,,,internal/http/router.go:292
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:295
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,,,internal/http/router.go:300
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:301
-route:chino-api:GET /api/v1/items/{id}/poster,route,chino-api,GET /api/v1/items/{id}/poster,,,internal/http/router.go:247
-route:chino-api:GET /api/v1/items/{id}/progress,route,chino-api,GET /api/v1/items/{id}/progress,,,internal/http/router.go:153
-route:chino-api:GET /api/v1/items/{id}/segments,route,chino-api,GET /api/v1/items/{id}/segments,,,internal/http/router.go:119
-route:chino-api:GET /api/v1/items/{id}/similar,route,chino-api,GET /api/v1/items/{id}/similar,,,internal/http/router.go:120
-route:chino-api:GET /api/v1/items/{id}/subtitles,route,chino-api,GET /api/v1/items/{id}/subtitles,,,internal/http/router.go:129
-route:chino-api:GET /api/v1/me,route,chino-api,GET /api/v1/me,,,internal/http/router.go:95
-route:chino-api:GET /api/v1/me/continue-watching,route,chino-api,GET /api/v1/me/continue-watching,,,internal/http/router.go:99
-route:chino-api:GET /api/v1/me/likes,route,chino-api,GET /api/v1/me/likes,,,internal/http/router.go:181
-route:chino-api:GET /api/v1/me/watched,route,chino-api,GET /api/v1/me/watched,,,internal/http/router.go:118
-route:chino-api:GET /api/v1/me/watchlist,route,chino-api,GET /api/v1/me/watchlist,,,internal/http/router.go:175
-route:chino-api:GET /api/v1/me/watchlists,route,chino-api,GET /api/v1/me/watchlists,,,internal/http/router.go:162
-route:chino-api:GET /api/v1/me/watchlists/memberships,route,chino-api,GET /api/v1/me/watchlists/memberships,,,internal/http/router.go:164
-route:chino-api:GET /api/v1/me/watchlists/{listId},route,chino-api,GET /api/v1/me/watchlists/{listId},,,internal/http/router.go:165
-route:chino-api:GET /api/v1/notices,route,chino-api,GET /api/v1/notices,,,internal/http/router.go:144
-route:chino-api:GET /api/v1/people,route,chino-api,GET /api/v1/people,,,internal/http/router.go:124
-route:chino-api:GET /api/v1/people/{id},route,chino-api,GET /api/v1/people/{id},,,internal/http/router.go:125
-route:chino-api:GET /api/v1/people/{id}/profile,route,chino-api,GET /api/v1/people/{id}/profile,,,internal/http/router.go:250
-route:chino-api:GET /api/v1/play/fonts/{id}.,route,chino-api,GET /api/v1/play/fonts/{id}.,,,internal/http/router.go:354
-route:chino-api:GET /api/v1/play/packaged-ids,route,chino-api,GET /api/v1/play/packaged-ids,,,internal/http/router.go:272
-route:chino-api:GET /api/v1/play/subs/{id}.ass,route,chino-api,GET /api/v1/play/subs/{id}.ass,,,internal/http/router.go:352
-route:chino-api:GET /api/v1/play/subs/{id}.vtt,route,chino-api,GET /api/v1/play/subs/{id}.vtt,,,internal/http/router.go:346
-route:chino-api:GET /api/v1/play/zap-feed,route,chino-api,GET /api/v1/play/zap-feed,,,internal/http/router.go:279
-route:chino-api:GET /api/v1/search,route,chino-api,GET /api/v1/search,,,internal/http/router.go:112
-route:chino-api:GET /api/v1/series/{id}/episodes,route,chino-api,GET /api/v1/series/{id}/episodes,,,internal/http/router.go:126
-route:chino-api:GET /api/v1/series/{id}/next-episode,route,chino-api,GET /api/v1/series/{id}/next-episode,,,internal/http/router.go:127
-route:chino-api:GET /api/v1/subtitles/languages,route,chino-api,GET /api/v1/subtitles/languages,,,internal/http/router.go:133
-route:chino-api:GET /metrics,route,chino-api,GET /metrics,,,internal/http/router.go:53
-route:chino-api:PATCH /api/v1/me/watchlists/{listId},route,chino-api,PATCH /api/v1/me/watchlists/{listId},,,internal/http/router.go:166
-route:chino-api:POST /api/v1/admin/items/{id}/package,route,chino-api,POST /api/v1/admin/items/{id}/package,,,internal/http/router.go:199
-route:chino-api:POST /api/v1/feedback,route,chino-api,POST /api/v1/feedback,,,internal/http/router.go:190
-route:chino-api:POST /api/v1/items/{id}/play/prewarm,route,chino-api,POST /api/v1/items/{id}/play/prewarm,,,internal/http/router.go:265
-route:chino-api:POST /api/v1/items/{id}/progress,route,chino-api,POST /api/v1/items/{id}/progress,,,internal/http/router.go:154
-route:chino-api:POST /api/v1/me/available,route,chino-api,POST /api/v1/me/available,,,internal/http/router.go:107
-route:chino-api:POST /api/v1/me/items/{id}/watched,route,chino-api,POST /api/v1/me/items/{id}/watched,,,internal/http/router.go:116
-route:chino-api:POST /api/v1/me/stream-token,route,chino-api,POST /api/v1/me/stream-token,,,internal/http/router.go:103
-route:chino-api:POST /api/v1/me/watchlists,route,chino-api,POST /api/v1/me/watchlists,,,internal/http/router.go:163
-route:chino-api:POST /api/v1/notices/read-all,route,chino-api,POST /api/v1/notices/read-all,,,internal/http/router.go:145
-route:chino-api:POST /api/v1/notices/{noticeId}/read,route,chino-api,POST /api/v1/notices/{noticeId}/read,,,internal/http/router.go:146
-route:chino-api:POST /api/v1/play/events,route,chino-api,POST /api/v1/play/events,,,internal/http/router.go:229
-route:chino-api:PUT /api/v1/me/likes/{id},route,chino-api,PUT /api/v1/me/likes/{id},,,internal/http/router.go:182
-route:chino-api:PUT /api/v1/me/watchlist/{id},route,chino-api,PUT /api/v1/me/watchlist/{id},,,internal/http/router.go:176
-route:chino-api:PUT /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,PUT /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:168
+route:chino-api:GET /api/openapi.yaml,route,chino-api,GET /api/openapi.yaml,,,internal/http/router.go:46
+route:chino-api:GET /api/v1/admin/items/{id}/package,route,chino-api,GET /api/v1/admin/items/{id}/package,,,internal/http/router.go:203
+route:chino-api:GET /api/v1/events,route,chino-api,GET /api/v1/events,,,internal/http/router.go:219
+route:chino-api:GET /api/v1/extensions,route,chino-api,GET /api/v1/extensions,,,internal/http/router.go:141
+route:chino-api:GET /api/v1/genres,route,chino-api,GET /api/v1/genres,,,internal/http/router.go:131
+route:chino-api:GET /api/v1/items,route,chino-api,GET /api/v1/items,,,internal/http/router.go:111
+route:chino-api:GET /api/v1/items/{id},route,chino-api,GET /api/v1/items/{id},,,internal/http/router.go:116
+route:chino-api:GET /api/v1/items/{id}/backdrop,route,chino-api,GET /api/v1/items/{id}/backdrop,,,internal/http/router.go:251
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:337
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:338
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:339
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/info,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/info,,,internal/http/router.go:321
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,,,internal/http/router.go:320
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,,,internal/http/router.go:334
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,,,internal/http/router.go:335
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,,,internal/http/router.go:336
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:323
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:324
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:325
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,,,internal/http/router.go:322
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:326
+route:chino-api:GET /api/v1/items/{id}/play,route,chino-api,GET /api/v1/items/{id}/play,,,internal/http/router.go:257
+route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:287
+route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:288
+route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:289
+route:chino-api:GET /api/v1/items/{id}/play/info,route,chino-api,GET /api/v1/items/{id}/play/info,,,internal/http/router.go:258
+route:chino-api:GET /api/v1/items/{id}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/play/master.m3u8,,,internal/http/router.go:264
+route:chino-api:GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,route,chino-api,GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,,,internal/http/router.go:344
+route:chino-api:GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,route,chino-api,GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,,,internal/http/router.go:309
+route:chino-api:GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,route,chino-api,GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,,,internal/http/router.go:308
+route:chino-api:GET /api/v1/items/{id}/play/{quality}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{quality}/index.m3u8,,,internal/http/router.go:283
+route:chino-api:GET /api/v1/items/{id}/play/{quality}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{quality}/init.mp4,,,internal/http/router.go:284
+route:chino-api:GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,,,internal/http/router.go:285
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:296
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:297
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,,,internal/http/router.go:295
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:298
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,,,internal/http/router.go:303
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:304
+route:chino-api:GET /api/v1/items/{id}/poster,route,chino-api,GET /api/v1/items/{id}/poster,,,internal/http/router.go:250
+route:chino-api:GET /api/v1/items/{id}/progress,route,chino-api,GET /api/v1/items/{id}/progress,,,internal/http/router.go:156
+route:chino-api:GET /api/v1/items/{id}/segments,route,chino-api,GET /api/v1/items/{id}/segments,,,internal/http/router.go:122
+route:chino-api:GET /api/v1/items/{id}/similar,route,chino-api,GET /api/v1/items/{id}/similar,,,internal/http/router.go:123
+route:chino-api:GET /api/v1/items/{id}/subtitles,route,chino-api,GET /api/v1/items/{id}/subtitles,,,internal/http/router.go:132
+route:chino-api:GET /api/v1/me,route,chino-api,GET /api/v1/me,,,internal/http/router.go:98
+route:chino-api:GET /api/v1/me/continue-watching,route,chino-api,GET /api/v1/me/continue-watching,,,internal/http/router.go:102
+route:chino-api:GET /api/v1/me/likes,route,chino-api,GET /api/v1/me/likes,,,internal/http/router.go:184
+route:chino-api:GET /api/v1/me/watched,route,chino-api,GET /api/v1/me/watched,,,internal/http/router.go:121
+route:chino-api:GET /api/v1/me/watchlist,route,chino-api,GET /api/v1/me/watchlist,,,internal/http/router.go:178
+route:chino-api:GET /api/v1/me/watchlists,route,chino-api,GET /api/v1/me/watchlists,,,internal/http/router.go:165
+route:chino-api:GET /api/v1/me/watchlists/memberships,route,chino-api,GET /api/v1/me/watchlists/memberships,,,internal/http/router.go:167
+route:chino-api:GET /api/v1/me/watchlists/{listId},route,chino-api,GET /api/v1/me/watchlists/{listId},,,internal/http/router.go:168
+route:chino-api:GET /api/v1/notices,route,chino-api,GET /api/v1/notices,,,internal/http/router.go:147
+route:chino-api:GET /api/v1/people,route,chino-api,GET /api/v1/people,,,internal/http/router.go:127
+route:chino-api:GET /api/v1/people/{id},route,chino-api,GET /api/v1/people/{id},,,internal/http/router.go:128
+route:chino-api:GET /api/v1/people/{id}/profile,route,chino-api,GET /api/v1/people/{id}/profile,,,internal/http/router.go:253
+route:chino-api:GET /api/v1/play/fonts/{id}.,route,chino-api,GET /api/v1/play/fonts/{id}.,,,internal/http/router.go:357
+route:chino-api:GET /api/v1/play/packaged-ids,route,chino-api,GET /api/v1/play/packaged-ids,,,internal/http/router.go:275
+route:chino-api:GET /api/v1/play/subs/{id}.ass,route,chino-api,GET /api/v1/play/subs/{id}.ass,,,internal/http/router.go:355
+route:chino-api:GET /api/v1/play/subs/{id}.vtt,route,chino-api,GET /api/v1/play/subs/{id}.vtt,,,internal/http/router.go:349
+route:chino-api:GET /api/v1/play/zap-feed,route,chino-api,GET /api/v1/play/zap-feed,,,internal/http/router.go:282
+route:chino-api:GET /api/v1/search,route,chino-api,GET /api/v1/search,,,internal/http/router.go:115
+route:chino-api:GET /api/v1/series/{id}/episodes,route,chino-api,GET /api/v1/series/{id}/episodes,,,internal/http/router.go:129
+route:chino-api:GET /api/v1/series/{id}/next-episode,route,chino-api,GET /api/v1/series/{id}/next-episode,,,internal/http/router.go:130
+route:chino-api:GET /api/v1/subtitles/languages,route,chino-api,GET /api/v1/subtitles/languages,,,internal/http/router.go:136
+route:chino-api:GET /metrics,route,chino-api,GET /metrics,,,internal/http/router.go:56
+route:chino-api:PATCH /api/v1/me/watchlists/{listId},route,chino-api,PATCH /api/v1/me/watchlists/{listId},,,internal/http/router.go:169
+route:chino-api:POST /api/v1/admin/items/{id}/package,route,chino-api,POST /api/v1/admin/items/{id}/package,,,internal/http/router.go:202
+route:chino-api:POST /api/v1/feedback,route,chino-api,POST /api/v1/feedback,,,internal/http/router.go:193
+route:chino-api:POST /api/v1/items/{id}/play/prewarm,route,chino-api,POST /api/v1/items/{id}/play/prewarm,,,internal/http/router.go:268
+route:chino-api:POST /api/v1/items/{id}/progress,route,chino-api,POST /api/v1/items/{id}/progress,,,internal/http/router.go:157
+route:chino-api:POST /api/v1/me/available,route,chino-api,POST /api/v1/me/available,,,internal/http/router.go:110
+route:chino-api:POST /api/v1/me/items/{id}/watched,route,chino-api,POST /api/v1/me/items/{id}/watched,,,internal/http/router.go:119
+route:chino-api:POST /api/v1/me/stream-token,route,chino-api,POST /api/v1/me/stream-token,,,internal/http/router.go:106
+route:chino-api:POST /api/v1/me/watchlists,route,chino-api,POST /api/v1/me/watchlists,,,internal/http/router.go:166
+route:chino-api:POST /api/v1/notices/read-all,route,chino-api,POST /api/v1/notices/read-all,,,internal/http/router.go:148
+route:chino-api:POST /api/v1/notices/{noticeId}/read,route,chino-api,POST /api/v1/notices/{noticeId}/read,,,internal/http/router.go:149
+route:chino-api:POST /api/v1/play/events,route,chino-api,POST /api/v1/play/events,,,internal/http/router.go:232
+route:chino-api:PUT /api/v1/me/likes/{id},route,chino-api,PUT /api/v1/me/likes/{id},,,internal/http/router.go:185
+route:chino-api:PUT /api/v1/me/watchlist/{id},route,chino-api,PUT /api/v1/me/watchlist/{id},,,internal/http/router.go:179
+route:chino-api:PUT /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,PUT /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:171
 route:chino-stream:GET /api/play/fonts/{fontID}.,route,chino-stream,GET /api/play/fonts/{fontID}.,,,internal/http/router.go:200
 route:chino-stream:GET /api/play/packaged-ids,route,chino-stream,GET /api/play/packaged-ids,,,internal/http/router.go:164
 route:chino-stream:GET /api/play/subs/{subID}.ass,route,chino-stream,GET /api/play/subs/{subID}.ass,,,internal/http/router.go:198
@@ -1602,15 +1638,16 @@ route:zaentrum-portal:ANY /api/portal/apps/{key}/*,route,zaentrum-portal,ANY /ap
 route:zaentrum-portal:DELETE /api/portal/addon-charts/{name},route,zaentrum-portal,DELETE /api/portal/addon-charts/{name},,,server/internal/api/api.go:211
 route:zaentrum-portal:DELETE /api/portal/addons/{key},route,zaentrum-portal,DELETE /api/portal/addons/{key},,,server/internal/api/api.go:202
 route:zaentrum-portal:DELETE /api/portal/apps/{key},route,zaentrum-portal,DELETE /api/portal/apps/{key},,,server/internal/api/api.go:217
-route:zaentrum-portal:DELETE /api/portal/extensions/{key},route,zaentrum-portal,DELETE /api/portal/extensions/{key},,,server/internal/api/api.go:285
+route:zaentrum-portal:DELETE /api/portal/extensions/{key},route,zaentrum-portal,DELETE /api/portal/extensions/{key},,,server/internal/api/api.go:292
+route:zaentrum-portal:DELETE /api/portal/mail,route,zaentrum-portal,DELETE /api/portal/mail,,,server/internal/api/api.go:281
 route:zaentrum-portal:DELETE /api/portal/me,route,zaentrum-portal,DELETE /api/portal/me,,,server/internal/api/api.go:175
 route:zaentrum-portal:DELETE /api/portal/me/notices/{id},route,zaentrum-portal,DELETE /api/portal/me/notices/{id},,,server/internal/api/api.go:188
 route:zaentrum-portal:DELETE /api/portal/people/{id},route,zaentrum-portal,DELETE /api/portal/people/{id},,,server/internal/api/api.go:270
 route:zaentrum-portal:DELETE /api/portal/setup/complete,route,zaentrum-portal,DELETE /api/portal/setup/complete,,,server/internal/api/api.go:260
 route:zaentrum-portal:DELETE /api/portal/spaces/{key},route,zaentrum-portal,DELETE /api/portal/spaces/{key},,,server/internal/api/api.go:222
 route:zaentrum-portal:DELETE /api/portal/tiles/{key},route,zaentrum-portal,DELETE /api/portal/tiles/{key},,,server/internal/api/api.go:227
-route:zaentrum-portal:GET /actuator/health/liveness,route,zaentrum-portal,GET /actuator/health/liveness,,,server/cmd/server/main.go:122
-route:zaentrum-portal:GET /actuator/health/readiness,route,zaentrum-portal,GET /actuator/health/readiness,,,server/cmd/server/main.go:123
+route:zaentrum-portal:GET /actuator/health/liveness,route,zaentrum-portal,GET /actuator/health/liveness,,,server/cmd/server/main.go:123
+route:zaentrum-portal:GET /actuator/health/readiness,route,zaentrum-portal,GET /actuator/health/readiness,,,server/cmd/server/main.go:124
 route:zaentrum-portal:GET /api/portal/addon-charts,route,zaentrum-portal,GET /api/portal/addon-charts,,,server/internal/api/api.go:207
 route:zaentrum-portal:GET /api/portal/addon-charts/{name},route,zaentrum-portal,GET /api/portal/addon-charts/{name},,,server/internal/api/api.go:209
 route:zaentrum-portal:GET /api/portal/addons,route,zaentrum-portal,GET /api/portal/addons,,,server/internal/api/api.go:199
@@ -1624,9 +1661,10 @@ route:zaentrum-portal:GET /api/portal/debug/kafka/topology,route,zaentrum-portal
 route:zaentrum-portal:GET /api/portal/debug/logs,route,zaentrum-portal,GET /api/portal/debug/logs,,,server/internal/api/api.go:242
 route:zaentrum-portal:GET /api/portal/debug/pods,route,zaentrum-portal,GET /api/portal/debug/pods,,,server/internal/api/api.go:241
 route:zaentrum-portal:GET /api/portal/debug/support-bundle,route,zaentrum-portal,GET /api/portal/debug/support-bundle,,,server/internal/api/api.go:253
-route:zaentrum-portal:GET /api/portal/extensions,route,zaentrum-portal,GET /api/portal/extensions,,,server/internal/api/api.go:282
+route:zaentrum-portal:GET /api/portal/extensions,route,zaentrum-portal,GET /api/portal/extensions,,,server/internal/api/api.go:289
 route:zaentrum-portal:GET /api/portal/invites/{token},route,zaentrum-portal,GET /api/portal/invites/{token},,,server/internal/api/api.go:162
 route:zaentrum-portal:GET /api/portal/launchpad,route,zaentrum-portal,GET /api/portal/launchpad,,,server/internal/api/api.go:170
+route:zaentrum-portal:GET /api/portal/mail,route,zaentrum-portal,GET /api/portal/mail,,,server/internal/api/api.go:279
 route:zaentrum-portal:GET /api/portal/me,route,zaentrum-portal,GET /api/portal/me,,,server/internal/api/api.go:171
 route:zaentrum-portal:GET /api/portal/me/notices,route,zaentrum-portal,GET /api/portal/me/notices,,,server/internal/api/api.go:184
 route:zaentrum-portal:GET /api/portal/notices,route,zaentrum-portal,GET /api/portal/notices,,,server/internal/api/api.go:275
@@ -1637,10 +1675,10 @@ route:zaentrum-portal:GET /api/portal/setup/complete,route,zaentrum-portal,GET /
 route:zaentrum-portal:GET /api/portal/slots/{slot},route,zaentrum-portal,GET /api/portal/slots/{slot},,,server/internal/api/api.go:178
 route:zaentrum-portal:GET /api/portal/spaces,route,zaentrum-portal,GET /api/portal/spaces,,,server/internal/api/api.go:219
 route:zaentrum-portal:GET /api/portal/tiles,route,zaentrum-portal,GET /api/portal/tiles,,,server/internal/api/api.go:224
-route:zaentrum-portal:GET /healthz,route,zaentrum-portal,GET /healthz,,,server/cmd/server/main.go:121
+route:zaentrum-portal:GET /healthz,route,zaentrum-portal,GET /healthz,,,server/cmd/server/main.go:122
 route:zaentrum-portal:PATCH /api/portal/addon-charts/{name},route,zaentrum-portal,PATCH /api/portal/addon-charts/{name},,,server/internal/api/api.go:210
 route:zaentrum-portal:PATCH /api/portal/apps/{key},route,zaentrum-portal,PATCH /api/portal/apps/{key},,,server/internal/api/api.go:216
-route:zaentrum-portal:PATCH /api/portal/extensions/{key},route,zaentrum-portal,PATCH /api/portal/extensions/{key},,,server/internal/api/api.go:284
+route:zaentrum-portal:PATCH /api/portal/extensions/{key},route,zaentrum-portal,PATCH /api/portal/extensions/{key},,,server/internal/api/api.go:291
 route:zaentrum-portal:PATCH /api/portal/operator,route,zaentrum-portal,PATCH /api/portal/operator,,,server/internal/api/api.go:232
 route:zaentrum-portal:PATCH /api/portal/people/{id},route,zaentrum-portal,PATCH /api/portal/people/{id},,,server/internal/api/api.go:269
 route:zaentrum-portal:PATCH /api/portal/spaces/{key},route,zaentrum-portal,PATCH /api/portal/spaces/{key},,,server/internal/api/api.go:221
@@ -1649,8 +1687,9 @@ route:zaentrum-portal:POST /api/portal/addon-charts,route,zaentrum-portal,POST /
 route:zaentrum-portal:POST /api/portal/addon-charts/{name}/install,route,zaentrum-portal,POST /api/portal/addon-charts/{name}/install,,,server/internal/api/api.go:212
 route:zaentrum-portal:POST /api/portal/addons,route,zaentrum-portal,POST /api/portal/addons,,,server/internal/api/api.go:200
 route:zaentrum-portal:POST /api/portal/apps,route,zaentrum-portal,POST /api/portal/apps,,,server/internal/api/api.go:215
-route:zaentrum-portal:POST /api/portal/extensions,route,zaentrum-portal,POST /api/portal/extensions,,,server/internal/api/api.go:283
+route:zaentrum-portal:POST /api/portal/extensions,route,zaentrum-portal,POST /api/portal/extensions,,,server/internal/api/api.go:290
 route:zaentrum-portal:POST /api/portal/invites/{token},route,zaentrum-portal,POST /api/portal/invites/{token},,,server/internal/api/api.go:163
+route:zaentrum-portal:POST /api/portal/mail/test,route,zaentrum-portal,POST /api/portal/mail/test,,,server/internal/api/api.go:282
 route:zaentrum-portal:POST /api/portal/me/notices,route,zaentrum-portal,POST /api/portal/me/notices,,,server/internal/api/api.go:185
 route:zaentrum-portal:POST /api/portal/me/notices/read-all,route,zaentrum-portal,POST /api/portal/me/notices/read-all,,,server/internal/api/api.go:186
 route:zaentrum-portal:POST /api/portal/me/notices/{id}/read,route,zaentrum-portal,POST /api/portal/me/notices/{id}/read,,,server/internal/api/api.go:187
@@ -1666,6 +1705,7 @@ route:zaentrum-portal:POST /api/portal/setup/library/scan,route,zaentrum-portal,
 route:zaentrum-portal:POST /api/portal/setup/metadata,route,zaentrum-portal,POST /api/portal/setup/metadata,,,server/internal/api/api.go:261
 route:zaentrum-portal:POST /api/portal/spaces,route,zaentrum-portal,POST /api/portal/spaces,,,server/internal/api/api.go:220
 route:zaentrum-portal:POST /api/portal/tiles,route,zaentrum-portal,POST /api/portal/tiles,,,server/internal/api/api.go:225
+route:zaentrum-portal:PUT /api/portal/mail,route,zaentrum-portal,PUT /api/portal/mail,,,server/internal/api/api.go:280
 screen:chino-androidtv:AccountPickerScreen,screen,chino-androidtv,AccountPickerScreen,,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/auth/AccountPickerScreen.kt:1
 screen:chino-androidtv:BrowseScreen,screen,chino-androidtv,BrowseScreen,,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/browse/BrowseScreen.kt:1
 screen:chino-androidtv:ChinoTvNavHost,screen,chino-androidtv,ChinoTvNavHost,,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/navigation/ChinoTvNavHost.kt:1
@@ -1760,15 +1800,15 @@ service:zaentrum-operator:kafka,service,zaentrum-operator,kafka,kafka,9092→cli
 service:zaentrum-operator:katalog-api,service,zaentrum-operator,katalog-api,katalog-api,80→8080,operator/platform/chart/templates/katalog-api.yaml:89
 service:zaentrum-operator:katalog-ingest,service,zaentrum-operator,katalog-ingest,katalog-ingest,80→8080,operator/platform/chart/templates/pipeline.yaml:484
 service:zaentrum-operator:katalog-manage-ui,service,zaentrum-operator,katalog-manage-ui,katalog-manage-ui,80→8080,operator/platform/chart/templates/katalog-manage-ui.yaml:66
-service:zaentrum-operator:katalog-manager-api,service,zaentrum-operator,katalog-manager-api,katalog-manager-api,80→8080,operator/platform/chart/templates/katalog-manager-api.yaml:212
+service:zaentrum-operator:katalog-manager-api,service,zaentrum-operator,katalog-manager-api,katalog-manager-api,80→8080,operator/platform/chart/templates/katalog-manager-api.yaml:225
 service:zaentrum-operator:katalog-manager-ui,service,zaentrum-operator,katalog-manager-ui,katalog-manager-ui,80→8080,operator/platform/chart/templates/katalog-manager-ui.yaml:66
-service:zaentrum-operator:keycloak,service,zaentrum-operator,keycloak,keycloak,80→http,operator/platform/chart/templates/keycloak.yaml:239
+service:zaentrum-operator:keycloak,service,zaentrum-operator,keycloak,keycloak,80→http,operator/platform/chart/templates/keycloak.yaml:251
 service:zaentrum-operator:live-worker,service,zaentrum-operator,live-worker,live-worker,80→http,operator/platform/chart/templates/live-worker.yaml:150
 service:zaentrum-operator:packager,service,zaentrum-operator,packager,packager,80→8080,operator/platform/chart/templates/pipeline.yaml:159
-service:zaentrum-operator:portal-api,service,zaentrum-operator,portal-api,portal-api,80→8080,operator/platform/chart/templates/portal-api.yaml:165
-service:zaentrum-operator:postgres,service,zaentrum-operator,postgres,postgres,5432→pg,operator/platform/chart/templates/data.yaml:72
+service:zaentrum-operator:portal-api,service,zaentrum-operator,portal-api,portal-api,80→8080,operator/platform/chart/templates/portal-api.yaml:211
+service:zaentrum-operator:postgres,service,zaentrum-operator,postgres,postgres,5432→pg,operator/platform/chart/templates/data.yaml:80
 service:zaentrum-operator:transcoder,service,zaentrum-operator,transcoder,transcoder,80→8080,operator/platform/chart/templates/pipeline.yaml:305
-service:zaentrum-operator:valkey,service,zaentrum-operator,valkey,valkey,6379→valkey,operator/platform/chart/templates/data.yaml:99
+service:zaentrum-operator:valkey,service,zaentrum-operator,valkey,valkey,6379→valkey,operator/platform/chart/templates/data.yaml:107
 service:zaentrum-operator:zaentrum-portal,service,zaentrum-operator,zaentrum-portal,zaentrum-portal,80→http,operator/platform/chart/templates/zaentrum-portal.yaml:52
 setting:katalog-manager:chapters.backfill,setting,katalog-manager,chapters.backfill,off,On or off (the default): whether titles are read at all.,internal/chapters/backfill.go:48
 setting:katalog-manager:chapters.backfill.inflight,setting,katalog-manager,chapters.backfill.inflight,1,How many titles may be handed out and not reported at once (1).,internal/chapters/backfill.go:54
@@ -1837,7 +1877,7 @@ tab:zaentrum-portal:SettingsConsole spaces,tab,zaentrum-portal,SettingsConsole s
 tab:zaentrum-portal:SettingsConsole tiles,tab,zaentrum-portal,SettingsConsole tiles,,,src/settings/SettingsConsole.tsx:79
 volume:zaentrum-operator:backups,volume,zaentrum-operator,backups,5Gi,ReadWriteOnce; not with databases.mode external,operator/platform/chart/templates/backup.yaml:22
 volume:zaentrum-operator:media,volume,zaentrum-operator,media,50Gi,ReadWriteOnce,operator/platform/chart/templates/media-pvc.yaml:7
-volume:zaentrum-operator:postgres-data,volume,zaentrum-operator,postgres-data,10Gi,ReadWriteOnce; not with databases.mode external,operator/platform/chart/templates/data.yaml:82
+volume:zaentrum-operator:postgres-data,volume,zaentrum-operator,postgres-data,10Gi,ReadWriteOnce; not with databases.mode external,operator/platform/chart/templates/data.yaml:90
 wire:zaentrum-operator:analyzer CLAIM_BATCH_SIZE,wire,zaentrum-operator,analyzer CLAIM_BATCH_SIZE,2,,operator/platform/chart/templates/pipeline.yaml:84
 wire:zaentrum-operator:analyzer CONSUME_TOPIC,wire,zaentrum-operator,analyzer CONSUME_TOPIC,stube.catalog.item.enriched,,operator/platform/chart/templates/pipeline.yaml:80
 wire:zaentrum-operator:analyzer ENABLE_WHISPER,wire,zaentrum-operator,analyzer ENABLE_WHISPER,false,,operator/platform/chart/templates/pipeline.yaml:92
@@ -1931,51 +1971,52 @@ wire:zaentrum-operator:katalog-ingest KATALOG_API_URL,wire,zaentrum-operator,kat
 wire:zaentrum-operator:katalog-ingest KATALOG_INGEST_ADDR,wire,zaentrum-operator,katalog-ingest KATALOG_INGEST_ADDR,:8080,,operator/platform/chart/templates/pipeline.yaml:514
 wire:zaentrum-operator:katalog-ingest KATALOG_MANAGER_API_URL,wire,zaentrum-operator,katalog-ingest KATALOG_MANAGER_API_URL,http://katalog-manager-api,,operator/platform/chart/templates/pipeline.yaml:518
 wire:zaentrum-operator:katalog-manage-ui BASE_PATH,wire,zaentrum-operator,katalog-manage-ui BASE_PATH,/katalog-manage/,,operator/platform/chart/templates/katalog-manage-ui.yaml:41
-wire:zaentrum-operator:katalog-manager-api CDS_INDEX_PAGE_ENABLED,wire,zaentrum-operator,katalog-manager-api CDS_INDEX_PAGE_ENABLED,true,,operator/platform/chart/templates/katalog-manager-api.yaml:86
-wire:zaentrum-operator:katalog-manager-api CHAPTERSDB_ENABLED,wire,zaentrum-operator,katalog-manager-api CHAPTERSDB_ENABLED,false,,operator/platform/chart/templates/katalog-manager-api.yaml:154
+wire:zaentrum-operator:katalog-manager-api CDS_INDEX_PAGE_ENABLED,wire,zaentrum-operator,katalog-manager-api CDS_INDEX_PAGE_ENABLED,true,,operator/platform/chart/templates/katalog-manager-api.yaml:97
+wire:zaentrum-operator:katalog-manager-api CHAPTERSDB_ENABLED,wire,zaentrum-operator,katalog-manager-api CHAPTERSDB_ENABLED,false,,operator/platform/chart/templates/katalog-manager-api.yaml:167
 wire:zaentrum-operator:katalog-manager-api KAFKA_BROKERS,wire,zaentrum-operator,katalog-manager-api KAFKA_BROKERS,kafka:9092,,operator/platform/chart/templates/katalog-manager-api.yaml:4
-wire:zaentrum-operator:katalog-manager-api KAFKA_ENRICHER_GROUP,wire,zaentrum-operator,katalog-manager-api KAFKA_ENRICHER_GROUP,katalog-enricher,,operator/platform/chart/templates/katalog-manager-api.yaml:146
-wire:zaentrum-operator:katalog-manager-api KAFKA_GROUP_ID,wire,zaentrum-operator,katalog-manager-api KAFKA_GROUP_ID,zaentrum-demo,,operator/platform/chart/templates/katalog-manager-api.yaml:143
-wire:zaentrum-operator:katalog-manager-api KAFKA_TLS_CA,wire,zaentrum-operator,katalog-manager-api KAFKA_TLS_CA,,,operator/platform/chart/templates/katalog-manager-api.yaml:148
-wire:zaentrum-operator:katalog-manager-api KAFKA_TLS_CERT,wire,zaentrum-operator,katalog-manager-api KAFKA_TLS_CERT,,,operator/platform/chart/templates/katalog-manager-api.yaml:150
-wire:zaentrum-operator:katalog-manager-api KAFKA_TLS_KEY,wire,zaentrum-operator,katalog-manager-api KAFKA_TLS_KEY,,,operator/platform/chart/templates/katalog-manager-api.yaml:152
+wire:zaentrum-operator:katalog-manager-api KAFKA_ENRICHER_GROUP,wire,zaentrum-operator,katalog-manager-api KAFKA_ENRICHER_GROUP,katalog-enricher,,operator/platform/chart/templates/katalog-manager-api.yaml:159
+wire:zaentrum-operator:katalog-manager-api KAFKA_GROUP_ID,wire,zaentrum-operator,katalog-manager-api KAFKA_GROUP_ID,zaentrum-demo,,operator/platform/chart/templates/katalog-manager-api.yaml:156
+wire:zaentrum-operator:katalog-manager-api KAFKA_TLS_CA,wire,zaentrum-operator,katalog-manager-api KAFKA_TLS_CA,,,operator/platform/chart/templates/katalog-manager-api.yaml:161
+wire:zaentrum-operator:katalog-manager-api KAFKA_TLS_CERT,wire,zaentrum-operator,katalog-manager-api KAFKA_TLS_CERT,,,operator/platform/chart/templates/katalog-manager-api.yaml:163
+wire:zaentrum-operator:katalog-manager-api KAFKA_TLS_KEY,wire,zaentrum-operator,katalog-manager-api KAFKA_TLS_KEY,,,operator/platform/chart/templates/katalog-manager-api.yaml:165
 wire:zaentrum-operator:katalog-manager-api KAFKA_TOPIC_PREFIX,wire,zaentrum-operator,katalog-manager-api KAFKA_TOPIC_PREFIX,stube.,,operator/platform/chart/templates/katalog-manager-api.yaml:4
-wire:zaentrum-operator:katalog-manager-api KATALOG_AUDIENCE,wire,zaentrum-operator,katalog-manager-api KATALOG_AUDIENCE,chino,,operator/platform/chart/templates/katalog-manager-api.yaml:90
-wire:zaentrum-operator:katalog-manager-api KEYCLOAK_KATALOG_CLIENT_ID,wire,zaentrum-operator,katalog-manager-api KEYCLOAK_KATALOG_CLIENT_ID,zaentrum-manager,,operator/platform/chart/templates/katalog-manager-api.yaml:111
-wire:zaentrum-operator:katalog-manager-api KEYCLOAK_KATALOG_CLIENT_SECRET,wire,zaentrum-operator,katalog-manager-api KEYCLOAK_KATALOG_CLIENT_SECRET,secret zaentrum-keycloak client-secret,,operator/platform/chart/templates/katalog-manager-api.yaml:117
-wire:zaentrum-operator:katalog-manager-api NFS_ROOT,wire,zaentrum-operator,katalog-manager-api NFS_ROOT,/var/lib/katalog/media,,operator/platform/chart/templates/katalog-manager-api.yaml:132
+wire:zaentrum-operator:katalog-manager-api KATALOG_AUDIENCE,wire,zaentrum-operator,katalog-manager-api KATALOG_AUDIENCE,chino,,operator/platform/chart/templates/katalog-manager-api.yaml:101
+wire:zaentrum-operator:katalog-manager-api KEYCLOAK_KATALOG_CLIENT_ID,wire,zaentrum-operator,katalog-manager-api KEYCLOAK_KATALOG_CLIENT_ID,zaentrum-manager,,operator/platform/chart/templates/katalog-manager-api.yaml:124
+wire:zaentrum-operator:katalog-manager-api KEYCLOAK_KATALOG_CLIENT_SECRET,wire,zaentrum-operator,katalog-manager-api KEYCLOAK_KATALOG_CLIENT_SECRET,secret zaentrum-keycloak client-secret,,operator/platform/chart/templates/katalog-manager-api.yaml:130
+wire:zaentrum-operator:katalog-manager-api NFS_ROOT,wire,zaentrum-operator,katalog-manager-api NFS_ROOT,/var/lib/katalog/media,,operator/platform/chart/templates/katalog-manager-api.yaml:145
 wire:zaentrum-operator:katalog-manager-api PGPASSWORD,wire,zaentrum-operator,katalog-manager-api PGPASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/katalog-manager-api.yaml:71
 wire:zaentrum-operator:katalog-manager-api PGUSER,wire,zaentrum-operator,katalog-manager-api PGUSER,secret zaentrum-db user,,operator/platform/chart/templates/katalog-manager-api.yaml:69
-wire:zaentrum-operator:katalog-manager-api SERVER_PORT,wire,zaentrum-operator,katalog-manager-api SERVER_PORT,8080,,operator/platform/chart/templates/katalog-manager-api.yaml:84
-wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_PASSWORD,wire,zaentrum-operator,katalog-manager-api SPRING_DATASOURCE_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/katalog-manager-api.yaml:103
-wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_URL,wire,zaentrum-operator,katalog-manager-api SPRING_DATASOURCE_URL,jdbc:postgresql://postgres:5432/katalog,,operator/platform/chart/templates/katalog-manager-api.yaml:92
-wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_USERNAME,wire,zaentrum-operator,katalog-manager-api SPRING_DATASOURCE_USERNAME,secret zaentrum-db user,,operator/platform/chart/templates/katalog-manager-api.yaml:98
-wire:zaentrum-operator:katalog-manager-api SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,wire,zaentrum-operator,katalog-manager-api SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,http://zaentrum.localhost/auth/realms/zaentrum,,operator/platform/chart/templates/katalog-manager-api.yaml:88
-wire:zaentrum-operator:katalog-manager-api STREAM_SIGNING_KEY,wire,zaentrum-operator,katalog-manager-api STREAM_SIGNING_KEY,secret zaentrum-stream-signing key,,operator/platform/chart/templates/katalog-manager-api.yaml:156
-wire:zaentrum-operator:katalog-manager-api TMDB_API_KEY,wire,zaentrum-operator,katalog-manager-api TMDB_API_KEY,secret katalog-tmdb api-key,,operator/platform/chart/templates/katalog-manager-api.yaml:134
+wire:zaentrum-operator:katalog-manager-api SERVER_PORT,wire,zaentrum-operator,katalog-manager-api SERVER_PORT,8080,,operator/platform/chart/templates/katalog-manager-api.yaml:95
+wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_PASSWORD,wire,zaentrum-operator,katalog-manager-api SPRING_DATASOURCE_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/katalog-manager-api.yaml:116
+wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_URL,wire,zaentrum-operator,katalog-manager-api SPRING_DATASOURCE_URL,jdbc:postgresql://postgres:5432/katalog,,operator/platform/chart/templates/katalog-manager-api.yaml:103
+wire:zaentrum-operator:katalog-manager-api SPRING_DATASOURCE_USERNAME,wire,zaentrum-operator,katalog-manager-api SPRING_DATASOURCE_USERNAME,secret zaentrum-db user,,operator/platform/chart/templates/katalog-manager-api.yaml:111
+wire:zaentrum-operator:katalog-manager-api SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,wire,zaentrum-operator,katalog-manager-api SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI,http://zaentrum.localhost/auth/realms/zaentrum,,operator/platform/chart/templates/katalog-manager-api.yaml:99
+wire:zaentrum-operator:katalog-manager-api STREAM_SIGNING_KEY,wire,zaentrum-operator,katalog-manager-api STREAM_SIGNING_KEY,secret zaentrum-stream-signing key,,operator/platform/chart/templates/katalog-manager-api.yaml:169
+wire:zaentrum-operator:katalog-manager-api TMDB_API_KEY,wire,zaentrum-operator,katalog-manager-api TMDB_API_KEY,secret katalog-tmdb api-key,,operator/platform/chart/templates/katalog-manager-api.yaml:147
 wire:zaentrum-operator:katalog-manager-api volume media,wire,zaentrum-operator,katalog-manager-api volume media,/var/lib/katalog,,operator/platform/chart/templates/katalog-manager-api.yaml:4
 wire:zaentrum-operator:katalog-manager-ui BASE_PATH,wire,zaentrum-operator,katalog-manager-ui BASE_PATH,/katalog/,,operator/platform/chart/templates/katalog-manager-ui.yaml:41
-wire:zaentrum-operator:keycloak DEMO_USER_PASSWORD,wire,zaentrum-operator,keycloak DEMO_USER_PASSWORD,secret zaentrum-demo-user password,,operator/platform/chart/templates/keycloak.yaml:198
-wire:zaentrum-operator:keycloak KC_DB,wire,zaentrum-operator,keycloak KC_DB,postgres,,operator/platform/chart/templates/keycloak.yaml:117
-wire:zaentrum-operator:keycloak KC_DB_PASSWORD,wire,zaentrum-operator,keycloak KC_DB_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/keycloak.yaml:134
-wire:zaentrum-operator:keycloak KC_DB_URL_DATABASE,wire,zaentrum-operator,keycloak KC_DB_URL_DATABASE,keycloak,,operator/platform/chart/templates/keycloak.yaml:130
-wire:zaentrum-operator:keycloak KC_DB_URL_HOST,wire,zaentrum-operator,keycloak KC_DB_URL_HOST,postgres,,operator/platform/chart/templates/keycloak.yaml:120
-wire:zaentrum-operator:keycloak KC_DB_USERNAME,wire,zaentrum-operator,keycloak KC_DB_USERNAME,secret zaentrum-db user,,operator/platform/chart/templates/keycloak.yaml:132
-wire:zaentrum-operator:keycloak KC_HEALTH_ENABLED,wire,zaentrum-operator,keycloak KC_HEALTH_ENABLED,true,,operator/platform/chart/templates/keycloak.yaml:167
-wire:zaentrum-operator:keycloak KC_HOSTNAME,wire,zaentrum-operator,keycloak KC_HOSTNAME,configmap zaentrum-keycloak-config KC_HOSTNAME,,operator/platform/chart/templates/keycloak.yaml:151
-wire:zaentrum-operator:keycloak KC_HOSTNAME_ADMIN,wire,zaentrum-operator,keycloak KC_HOSTNAME_ADMIN,http://localhost:8080/auth,,operator/platform/chart/templates/keycloak.yaml:163
-wire:zaentrum-operator:keycloak KC_HOSTNAME_STRICT,wire,zaentrum-operator,keycloak KC_HOSTNAME_STRICT,false,,operator/platform/chart/templates/keycloak.yaml:155
-wire:zaentrum-operator:keycloak KC_HTTP_ENABLED,wire,zaentrum-operator,keycloak KC_HTTP_ENABLED,true,,operator/platform/chart/templates/keycloak.yaml:137
-wire:zaentrum-operator:keycloak KC_HTTP_RELATIVE_PATH,wire,zaentrum-operator,keycloak KC_HTTP_RELATIVE_PATH,/auth,,operator/platform/chart/templates/keycloak.yaml:141
-wire:zaentrum-operator:keycloak KC_PROXY_HEADERS,wire,zaentrum-operator,keycloak KC_PROXY_HEADERS,xforwarded,,operator/platform/chart/templates/keycloak.yaml:145
-wire:zaentrum-operator:keycloak KC_SPI_THEME_CACHE_THEMES,wire,zaentrum-operator,keycloak KC_SPI_THEME_CACHE_THEMES,false,,operator/platform/chart/templates/keycloak.yaml:171
-wire:zaentrum-operator:keycloak KC_SPI_THEME_STATIC_MAX_AGE,wire,zaentrum-operator,keycloak KC_SPI_THEME_STATIC_MAX_AGE,-1,,operator/platform/chart/templates/keycloak.yaml:173
-wire:zaentrum-operator:keycloak KEYCLOAK_ADMIN,wire,zaentrum-operator,keycloak KEYCLOAK_ADMIN,secret zaentrum-keycloak-admin username,,operator/platform/chart/templates/keycloak.yaml:179
-wire:zaentrum-operator:keycloak KEYCLOAK_ADMIN_PASSWORD,wire,zaentrum-operator,keycloak KEYCLOAK_ADMIN_PASSWORD,secret zaentrum-keycloak-admin password,,operator/platform/chart/templates/keycloak.yaml:181
-wire:zaentrum-operator:keycloak PGPASSWORD,wire,zaentrum-operator,keycloak PGPASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/keycloak.yaml:82
-wire:zaentrum-operator:keycloak PGUSER,wire,zaentrum-operator,keycloak PGUSER,secret zaentrum-db user,,operator/platform/chart/templates/keycloak.yaml:80
-wire:zaentrum-operator:keycloak ZAENTRUM_ADMIN_PASSWORD,wire,zaentrum-operator,keycloak ZAENTRUM_ADMIN_PASSWORD,secret zaentrum-keycloak-admin realm-admin-password,,operator/platform/chart/templates/keycloak.yaml:193
-wire:zaentrum-operator:keycloak ZAENTRUM_MANAGER_SECRET,wire,zaentrum-operator,keycloak ZAENTRUM_MANAGER_SECRET,secret zaentrum-keycloak client-secret,,operator/platform/chart/templates/keycloak.yaml:191
+wire:zaentrum-operator:keycloak DATABASE,wire,zaentrum-operator,keycloak DATABASE,keycloak,,operator/platform/chart/templates/keycloak.yaml:84
+wire:zaentrum-operator:keycloak DEMO_USER_PASSWORD,wire,zaentrum-operator,keycloak DEMO_USER_PASSWORD,secret zaentrum-demo-user password,,operator/platform/chart/templates/keycloak.yaml:210
+wire:zaentrum-operator:keycloak KC_DB,wire,zaentrum-operator,keycloak KC_DB,postgres,,operator/platform/chart/templates/keycloak.yaml:129
+wire:zaentrum-operator:keycloak KC_DB_PASSWORD,wire,zaentrum-operator,keycloak KC_DB_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/keycloak.yaml:146
+wire:zaentrum-operator:keycloak KC_DB_URL_DATABASE,wire,zaentrum-operator,keycloak KC_DB_URL_DATABASE,keycloak,,operator/platform/chart/templates/keycloak.yaml:142
+wire:zaentrum-operator:keycloak KC_DB_URL_HOST,wire,zaentrum-operator,keycloak KC_DB_URL_HOST,postgres,,operator/platform/chart/templates/keycloak.yaml:132
+wire:zaentrum-operator:keycloak KC_DB_USERNAME,wire,zaentrum-operator,keycloak KC_DB_USERNAME,secret zaentrum-db user,,operator/platform/chart/templates/keycloak.yaml:144
+wire:zaentrum-operator:keycloak KC_HEALTH_ENABLED,wire,zaentrum-operator,keycloak KC_HEALTH_ENABLED,true,,operator/platform/chart/templates/keycloak.yaml:179
+wire:zaentrum-operator:keycloak KC_HOSTNAME,wire,zaentrum-operator,keycloak KC_HOSTNAME,configmap zaentrum-keycloak-config KC_HOSTNAME,,operator/platform/chart/templates/keycloak.yaml:163
+wire:zaentrum-operator:keycloak KC_HOSTNAME_ADMIN,wire,zaentrum-operator,keycloak KC_HOSTNAME_ADMIN,http://localhost:8080/auth,,operator/platform/chart/templates/keycloak.yaml:175
+wire:zaentrum-operator:keycloak KC_HOSTNAME_STRICT,wire,zaentrum-operator,keycloak KC_HOSTNAME_STRICT,false,,operator/platform/chart/templates/keycloak.yaml:167
+wire:zaentrum-operator:keycloak KC_HTTP_ENABLED,wire,zaentrum-operator,keycloak KC_HTTP_ENABLED,true,,operator/platform/chart/templates/keycloak.yaml:149
+wire:zaentrum-operator:keycloak KC_HTTP_RELATIVE_PATH,wire,zaentrum-operator,keycloak KC_HTTP_RELATIVE_PATH,/auth,,operator/platform/chart/templates/keycloak.yaml:153
+wire:zaentrum-operator:keycloak KC_PROXY_HEADERS,wire,zaentrum-operator,keycloak KC_PROXY_HEADERS,xforwarded,,operator/platform/chart/templates/keycloak.yaml:157
+wire:zaentrum-operator:keycloak KC_SPI_THEME_CACHE_THEMES,wire,zaentrum-operator,keycloak KC_SPI_THEME_CACHE_THEMES,false,,operator/platform/chart/templates/keycloak.yaml:183
+wire:zaentrum-operator:keycloak KC_SPI_THEME_STATIC_MAX_AGE,wire,zaentrum-operator,keycloak KC_SPI_THEME_STATIC_MAX_AGE,-1,,operator/platform/chart/templates/keycloak.yaml:185
+wire:zaentrum-operator:keycloak KEYCLOAK_ADMIN,wire,zaentrum-operator,keycloak KEYCLOAK_ADMIN,secret zaentrum-keycloak-admin username,,operator/platform/chart/templates/keycloak.yaml:191
+wire:zaentrum-operator:keycloak KEYCLOAK_ADMIN_PASSWORD,wire,zaentrum-operator,keycloak KEYCLOAK_ADMIN_PASSWORD,secret zaentrum-keycloak-admin password,,operator/platform/chart/templates/keycloak.yaml:193
+wire:zaentrum-operator:keycloak PGPASSWORD,wire,zaentrum-operator,keycloak PGPASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/keycloak.yaml:88
+wire:zaentrum-operator:keycloak PGUSER,wire,zaentrum-operator,keycloak PGUSER,secret zaentrum-db user,,operator/platform/chart/templates/keycloak.yaml:86
+wire:zaentrum-operator:keycloak ZAENTRUM_ADMIN_PASSWORD,wire,zaentrum-operator,keycloak ZAENTRUM_ADMIN_PASSWORD,secret zaentrum-keycloak-admin realm-admin-password,,operator/platform/chart/templates/keycloak.yaml:205
+wire:zaentrum-operator:keycloak ZAENTRUM_MANAGER_SECRET,wire,zaentrum-operator,keycloak ZAENTRUM_MANAGER_SECRET,secret zaentrum-keycloak client-secret,,operator/platform/chart/templates/keycloak.yaml:203
 wire:zaentrum-operator:live-worker LD_LIBRARY_PATH,wire,zaentrum-operator,live-worker LD_LIBRARY_PATH,/opt/ffmpeg/lib:/usr/local/nvidia/lib64:/usr/local/nvidia/lib,,operator/platform/chart/templates/live-worker.yaml:98
 wire:zaentrum-operator:live-worker LIVE_WORKER_CPU_SLOTS,wire,zaentrum-operator,live-worker LIVE_WORKER_CPU_SLOTS,2,,operator/platform/chart/templates/live-worker.yaml:87
 wire:zaentrum-operator:live-worker LIVE_WORKER_GPU_SLOTS,wire,zaentrum-operator,live-worker LIVE_WORKER_GPU_SLOTS,4,,operator/platform/chart/templates/live-worker.yaml:85
@@ -1997,28 +2038,29 @@ wire:zaentrum-operator:packager OIDC_CLIENT_ID,wire,zaentrum-operator,packager O
 wire:zaentrum-operator:packager OIDC_CLIENT_SECRET,wire,zaentrum-operator,packager OIDC_CLIENT_SECRET,secret zaentrum-keycloak client-secret,,operator/platform/chart/templates/pipeline.yaml:202
 wire:zaentrum-operator:packager OIDC_TOKEN_URL,wire,zaentrum-operator,packager OIDC_TOKEN_URL,http://keycloak/auth/realms/zaentrum/protocol/openid-connect/token,,operator/platform/chart/templates/pipeline.yaml:198
 wire:zaentrum-operator:packager volume media,wire,zaentrum-operator,packager volume media,/var/lib/katalog,,operator/platform/chart/templates/pipeline.yaml:159
-wire:zaentrum-operator:portal-api DB_PASSWORD,wire,zaentrum-operator,portal-api DB_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/portal-api.yaml:124
-wire:zaentrum-operator:portal-api DB_USER,wire,zaentrum-operator,portal-api DB_USER,secret zaentrum-db user,,operator/platform/chart/templates/portal-api.yaml:119
+wire:zaentrum-operator:portal-api DATABASE,wire,zaentrum-operator,portal-api DATABASE,portal,,operator/platform/chart/templates/portal-api.yaml:65
+wire:zaentrum-operator:portal-api DB_PASSWORD,wire,zaentrum-operator,portal-api DB_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/portal-api.yaml:135
+wire:zaentrum-operator:portal-api DB_USER,wire,zaentrum-operator,portal-api DB_USER,secret zaentrum-db user,,operator/platform/chart/templates/portal-api.yaml:130
 wire:zaentrum-operator:portal-api KAFKA_BROKERS,wire,zaentrum-operator,portal-api KAFKA_BROKERS,kafka:9092,,operator/platform/chart/templates/portal-api.yaml:4
 wire:zaentrum-operator:portal-api KAFKA_TOPIC_PREFIX,wire,zaentrum-operator,portal-api KAFKA_TOPIC_PREFIX,stube.,,operator/platform/chart/templates/portal-api.yaml:4
-wire:zaentrum-operator:portal-api OIDC_AUDIENCE,wire,zaentrum-operator,portal-api OIDC_AUDIENCE,chino,,operator/platform/chart/templates/portal-api.yaml:77
-wire:zaentrum-operator:portal-api OIDC_ISSUER,wire,zaentrum-operator,portal-api OIDC_ISSUER,http://zaentrum.localhost/auth/realms/zaentrum,,operator/platform/chart/templates/portal-api.yaml:75
-wire:zaentrum-operator:portal-api PGPASSWORD,wire,zaentrum-operator,portal-api PGPASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/portal-api.yaml:58
-wire:zaentrum-operator:portal-api PGUSER,wire,zaentrum-operator,portal-api PGUSER,secret zaentrum-db user,,operator/platform/chart/templates/portal-api.yaml:56
-wire:zaentrum-operator:portal-api PG_URL,wire,zaentrum-operator,portal-api PG_URL,postgres://$(DB_USER):$(DB_PASSWORD)@postgres:5432/portal?sslmode=disable,,operator/platform/chart/templates/portal-api.yaml:129
-wire:zaentrum-operator:portal-api PORTAL_ACCOUNT_DELETION_TOKEN,wire,zaentrum-operator,portal-api PORTAL_ACCOUNT_DELETION_TOKEN,secret zaentrum-people deletion-token,,operator/platform/chart/templates/portal-api.yaml:114
-wire:zaentrum-operator:portal-api PORTAL_ADMIN_ROLE,wire,zaentrum-operator,portal-api PORTAL_ADMIN_ROLE,zaentrum-admin,,operator/platform/chart/templates/portal-api.yaml:79
-wire:zaentrum-operator:portal-api PORTAL_CHINO_API_URL,wire,zaentrum-operator,portal-api PORTAL_CHINO_API_URL,http://chino-api,,operator/platform/chart/templates/portal-api.yaml:116
-wire:zaentrum-operator:portal-api PORTAL_PASSWORD_POLICY,wire,zaentrum-operator,portal-api PORTAL_PASSWORD_POLICY,length(8) and notUsername and notEmail,,operator/platform/chart/templates/portal-api.yaml:108
-wire:zaentrum-operator:portal-api PORTAL_PEOPLE_CLIENT_ID,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_CLIENT_ID,zaentrum-people,,operator/platform/chart/templates/portal-api.yaml:102
-wire:zaentrum-operator:portal-api PORTAL_PEOPLE_CLIENT_SECRET,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_CLIENT_SECRET,secret zaentrum-people client-secret,,operator/platform/chart/templates/portal-api.yaml:104
-wire:zaentrum-operator:portal-api PORTAL_PEOPLE_KEYCLOAK_URL,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_KEYCLOAK_URL,http://keycloak:80/auth,,operator/platform/chart/templates/portal-api.yaml:98
-wire:zaentrum-operator:portal-api PORTAL_PEOPLE_REALM,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_REALM,zaentrum,,operator/platform/chart/templates/portal-api.yaml:100
-wire:zaentrum-operator:portal-api SERVER_PORT,wire,zaentrum-operator,portal-api SERVER_PORT,8080,,operator/platform/chart/templates/portal-api.yaml:73
-wire:zaentrum-operator:postgres PGDATA,wire,zaentrum-operator,postgres PGDATA,/var/lib/postgresql/data/pgdata,,operator/platform/chart/templates/data.yaml:50
-wire:zaentrum-operator:postgres POSTGRES_DB,wire,zaentrum-operator,postgres POSTGRES_DB,zaentrum,,operator/platform/chart/templates/data.yaml:47
-wire:zaentrum-operator:postgres POSTGRES_PASSWORD,wire,zaentrum-operator,postgres POSTGRES_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/data.yaml:45
-wire:zaentrum-operator:postgres POSTGRES_USER,wire,zaentrum-operator,postgres POSTGRES_USER,secret zaentrum-db user,,operator/platform/chart/templates/data.yaml:43
+wire:zaentrum-operator:portal-api OIDC_AUDIENCE,wire,zaentrum-operator,portal-api OIDC_AUDIENCE,chino,,operator/platform/chart/templates/portal-api.yaml:88
+wire:zaentrum-operator:portal-api OIDC_ISSUER,wire,zaentrum-operator,portal-api OIDC_ISSUER,http://zaentrum.localhost/auth/realms/zaentrum,,operator/platform/chart/templates/portal-api.yaml:86
+wire:zaentrum-operator:portal-api PGPASSWORD,wire,zaentrum-operator,portal-api PGPASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/portal-api.yaml:69
+wire:zaentrum-operator:portal-api PGUSER,wire,zaentrum-operator,portal-api PGUSER,secret zaentrum-db user,,operator/platform/chart/templates/portal-api.yaml:67
+wire:zaentrum-operator:portal-api PG_URL,wire,zaentrum-operator,portal-api PG_URL,postgres://$(DB_USER):$(DB_PASSWORD)@postgres:5432/portal?sslmode=disable,,operator/platform/chart/templates/portal-api.yaml:140
+wire:zaentrum-operator:portal-api PORTAL_ACCOUNT_DELETION_TOKEN,wire,zaentrum-operator,portal-api PORTAL_ACCOUNT_DELETION_TOKEN,secret zaentrum-people deletion-token,,operator/platform/chart/templates/portal-api.yaml:125
+wire:zaentrum-operator:portal-api PORTAL_ADMIN_ROLE,wire,zaentrum-operator,portal-api PORTAL_ADMIN_ROLE,zaentrum-admin,,operator/platform/chart/templates/portal-api.yaml:90
+wire:zaentrum-operator:portal-api PORTAL_CHINO_API_URL,wire,zaentrum-operator,portal-api PORTAL_CHINO_API_URL,http://chino-api,,operator/platform/chart/templates/portal-api.yaml:127
+wire:zaentrum-operator:portal-api PORTAL_PASSWORD_POLICY,wire,zaentrum-operator,portal-api PORTAL_PASSWORD_POLICY,length(8) and notUsername and notEmail,,operator/platform/chart/templates/portal-api.yaml:119
+wire:zaentrum-operator:portal-api PORTAL_PEOPLE_CLIENT_ID,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_CLIENT_ID,zaentrum-people,,operator/platform/chart/templates/portal-api.yaml:113
+wire:zaentrum-operator:portal-api PORTAL_PEOPLE_CLIENT_SECRET,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_CLIENT_SECRET,secret zaentrum-people client-secret,,operator/platform/chart/templates/portal-api.yaml:115
+wire:zaentrum-operator:portal-api PORTAL_PEOPLE_KEYCLOAK_URL,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_KEYCLOAK_URL,http://keycloak:80/auth,,operator/platform/chart/templates/portal-api.yaml:109
+wire:zaentrum-operator:portal-api PORTAL_PEOPLE_REALM,wire,zaentrum-operator,portal-api PORTAL_PEOPLE_REALM,zaentrum,,operator/platform/chart/templates/portal-api.yaml:111
+wire:zaentrum-operator:portal-api SERVER_PORT,wire,zaentrum-operator,portal-api SERVER_PORT,8080,,operator/platform/chart/templates/portal-api.yaml:84
+wire:zaentrum-operator:postgres PGDATA,wire,zaentrum-operator,postgres PGDATA,/var/lib/postgresql/data/pgdata,,operator/platform/chart/templates/data.yaml:58
+wire:zaentrum-operator:postgres POSTGRES_DB,wire,zaentrum-operator,postgres POSTGRES_DB,zaentrum,,operator/platform/chart/templates/data.yaml:55
+wire:zaentrum-operator:postgres POSTGRES_PASSWORD,wire,zaentrum-operator,postgres POSTGRES_PASSWORD,secret zaentrum-db password,,operator/platform/chart/templates/data.yaml:53
+wire:zaentrum-operator:postgres POSTGRES_USER,wire,zaentrum-operator,postgres POSTGRES_USER,secret zaentrum-db user,,operator/platform/chart/templates/data.yaml:51
 wire:zaentrum-operator:postgres volume postgres-data,wire,zaentrum-operator,postgres volume postgres-data,/var/lib/postgresql/data,,operator/platform/chart/templates/data.yaml:14
 wire:zaentrum-operator:scan-catalog MANAGER_SECRET,wire,zaentrum-operator,scan-catalog MANAGER_SECRET,secret zaentrum-keycloak client-secret,,operator/platform/chart/templates/jobs.yaml:81
 wire:zaentrum-operator:scan-catalog volume media,wire,zaentrum-operator,scan-catalog volume media,/var/lib/katalog read-only,,operator/platform/chart/templates/jobs.yaml:67
@@ -2047,29 +2089,30 @@ wire:zaentrum-operator:zaentrum-backup PGPASSWORD,wire,zaentrum-operator,zaentru
 wire:zaentrum-operator:zaentrum-backup PGUSER,wire,zaentrum-operator,zaentrum-backup PGUSER,secret zaentrum-db user,,operator/platform/chart/templates/backup.yaml:91
 wire:zaentrum-operator:zaentrum-backup RETENTION,wire,zaentrum-operator,zaentrum-backup RETENTION,7,,operator/platform/chart/templates/backup.yaml:97
 wire:zaentrum-operator:zaentrum-backup volume backups,wire,zaentrum-operator,zaentrum-backup volume backups,/backups,,operator/platform/chart/templates/backup.yaml:24
-wire:zaentrum-operator:zaentrum-realm AUDIENCE_CLIENTS,wire,zaentrum-operator,zaentrum-realm AUDIENCE_CLIENTS,chino-mobile chino-tv chino-web zae zaentrum-web,,operator/platform/chart/templates/realm.yaml:120
-wire:zaentrum-operator:zaentrum-realm AUDIENCE_MAPPER_CONFIG,wire,zaentrum-operator,zaentrum-realm AUDIENCE_MAPPER_CONFIG,access.token.claim=true id.token.claim=false included.custom.audience=chino introspection.token.claim=true userinfo.token.claim=false,,operator/platform/chart/templates/realm.yaml:124
-wire:zaentrum-operator:zaentrum-realm AUDIENCE_MAPPER_JSON,wire,zaentrum-operator,zaentrum-realm AUDIENCE_MAPPER_JSON,"{""config"":{""access.token.claim"":""true"",""id.token.claim"":""false"",""included.custom.audience"":""chino"",""introspection.token.claim"":""true"",""userinfo.token.claim"":…",,operator/platform/chart/templates/realm.yaml:122
-wire:zaentrum-operator:zaentrum-realm DEMO_USER_PASSWORD,wire,zaentrum-operator,zaentrum-realm DEMO_USER_PASSWORD,secret zaentrum-demo-user password,,operator/platform/chart/templates/realm.yaml:131
-wire:zaentrum-operator:zaentrum-realm HOME,wire,zaentrum-operator,zaentrum-realm HOME,/tmp,,operator/platform/chart/templates/realm.yaml:137
-wire:zaentrum-operator:zaentrum-realm KC_ADMIN_USER,wire,zaentrum-operator,zaentrum-realm KC_ADMIN_USER,secret zaentrum-keycloak-admin username,,operator/platform/chart/templates/realm.yaml:61
-wire:zaentrum-operator:zaentrum-realm KC_CLI_PASSWORD,wire,zaentrum-operator,zaentrum-realm KC_CLI_PASSWORD,secret zaentrum-keycloak-admin password,,operator/platform/chart/templates/realm.yaml:64
-wire:zaentrum-operator:zaentrum-realm KC_OPTS,wire,zaentrum-operator,zaentrum-realm KC_OPTS,-XX:TieredStopAtLevel=1 -XX:+UseSerialGC -XX:-UsePerfData -XX:MaxRAMPercentage=50,,operator/platform/chart/templates/realm.yaml:140
-wire:zaentrum-operator:zaentrum-realm KC_SERVER,wire,zaentrum-operator,zaentrum-realm KC_SERVER,http://keycloak:80/auth,,operator/platform/chart/templates/realm.yaml:59
-wire:zaentrum-operator:zaentrum-realm MASTER_FRONTEND_URL,wire,zaentrum-operator,zaentrum-realm MASTER_FRONTEND_URL,http://localhost:8080/auth,,operator/platform/chart/templates/realm.yaml:135
-wire:zaentrum-operator:zaentrum-realm PASSWORD_POLICY,wire,zaentrum-operator,zaentrum-realm PASSWORD_POLICY,length(8) and notUsername and notEmail,,operator/platform/chart/templates/realm.yaml:127
-wire:zaentrum-operator:zaentrum-realm PEOPLE_CLIENT,wire,zaentrum-operator,zaentrum-realm PEOPLE_CLIENT,zaentrum-people,,operator/platform/chart/templates/realm.yaml:89
-wire:zaentrum-operator:zaentrum-realm PEOPLE_CLIENT_JSON,wire,zaentrum-operator,zaentrum-realm PEOPLE_CLIENT_JSON,"{""attributes"":{""client_credentials.use_refresh_token"":""false"",""oauth2.device.authorization.grant.enabled"":""false"",""use.refresh.tokens"":""false""},""bearerOnly"":…",,operator/platform/chart/templates/realm.yaml:91
-wire:zaentrum-operator:zaentrum-realm PEOPLE_CLIENT_SECRET,wire,zaentrum-operator,zaentrum-realm PEOPLE_CLIENT_SECRET,secret zaentrum-people client-secret,,operator/platform/chart/templates/realm.yaml:97
-wire:zaentrum-operator:zaentrum-realm PEOPLE_ROLES,wire,zaentrum-operator,zaentrum-realm PEOPLE_ROLES,manage-users query-users view-users,,operator/platform/chart/templates/realm.yaml:95
-wire:zaentrum-operator:zaentrum-realm PEOPLE_SETTINGS,wire,zaentrum-operator,zaentrum-realm PEOPLE_SETTINGS,publicClient=false serviceAccountsEnabled=true standardFlowEnabled=false implicitFlowEnabled=false directAccessGrantsEnabled=false oauth2.device.authorizatio…,,operator/platform/chart/templates/realm.yaml:93
-wire:zaentrum-operator:zaentrum-realm PROFILE_ATTRIBUTE,wire,zaentrum-operator,zaentrum-realm PROFILE_ATTRIBUTE,"{""displayName"":""Rating Cap"",""multivalued"":false,""name"":""max_rating"",""permissions"":{""edit"":[""admin""],""view"":[""admin""]},""validations"":{""integer"":{""max"":21,""min…",,operator/platform/chart/templates/realm.yaml:111
-wire:zaentrum-operator:zaentrum-realm PROFILE_ATTRIBUTE_CHECK,wire,zaentrum-operator,zaentrum-realm PROFILE_ATTRIBUTE_CHECK,"{""name"":""max_rating"",""validations"":{""integer"":{""max"":21,""min"":0}},""permissions"":{""view"":[""admin""],""edit"":[""admin""]},""multivalued"":false}",,operator/platform/chart/templates/realm.yaml:113
-wire:zaentrum-operator:zaentrum-realm RATING_CLIENTS,wire,zaentrum-operator,zaentrum-realm RATING_CLIENTS,chino-mobile chino-tv chino-web zae zaentrum-web,,operator/platform/chart/templates/realm.yaml:105
-wire:zaentrum-operator:zaentrum-realm RATING_MAPPER_CONFIG,wire,zaentrum-operator,zaentrum-realm RATING_MAPPER_CONFIG,access.token.claim=true aggregate.attrs=false claim.name=max_rating id.token.claim=false introspection.token.claim=true jsonType.label=int multivalued=false…,,operator/platform/chart/templates/realm.yaml:109
-wire:zaentrum-operator:zaentrum-realm RATING_MAPPER_JSON,wire,zaentrum-operator,zaentrum-realm RATING_MAPPER_JSON,"{""config"":{""access.token.claim"":""true"",""aggregate.attrs"":""false"",""claim.name"":""max_rating"",""id.token.claim"":""false"",""introspection.token.claim"":""true"",""jsonT…",,operator/platform/chart/templates/realm.yaml:107
-wire:zaentrum-operator:zaentrum-realm REALM_CLIENTS,wire,zaentrum-operator,zaentrum-realm REALM_CLIENTS,chino-mobile|cloud.nalet.chino:/oauth/callback||+|publicClient=true standardFlowEnabled=true implicitFlowEnabled=false directAccessGrantsEnabled=false oauth2…,,operator/platform/chart/templates/realm.yaml:71
-wire:zaentrum-operator:zaentrum-realm REALM_CLIENT_JSON,wire,zaentrum-operator,zaentrum-realm REALM_CLIENT_JSON,"chino-mobile {""attributes"":{""oauth2.device.authorization.grant.enabled"":""false"",""pkce.code.challenge.method"":""S256"",""post.logout.redirect.uris"":""+""},""bearerO…",,operator/platform/chart/templates/realm.yaml:78
+wire:zaentrum-operator:zaentrum-realm AUDIENCE_CLIENTS,wire,zaentrum-operator,zaentrum-realm AUDIENCE_CLIENTS,chino-mobile chino-tv chino-web zae zaentrum-web,,operator/platform/chart/templates/realm.yaml:132
+wire:zaentrum-operator:zaentrum-realm AUDIENCE_MAPPER_CONFIG,wire,zaentrum-operator,zaentrum-realm AUDIENCE_MAPPER_CONFIG,access.token.claim=true id.token.claim=false included.custom.audience=chino introspection.token.claim=true userinfo.token.claim=false,,operator/platform/chart/templates/realm.yaml:136
+wire:zaentrum-operator:zaentrum-realm AUDIENCE_MAPPER_JSON,wire,zaentrum-operator,zaentrum-realm AUDIENCE_MAPPER_JSON,"{""config"":{""access.token.claim"":""true"",""id.token.claim"":""false"",""included.custom.audience"":""chino"",""introspection.token.claim"":""true"",""userinfo.token.claim"":…",,operator/platform/chart/templates/realm.yaml:134
+wire:zaentrum-operator:zaentrum-realm DEMO_USER_PASSWORD,wire,zaentrum-operator,zaentrum-realm DEMO_USER_PASSWORD,secret zaentrum-demo-user password,,operator/platform/chart/templates/realm.yaml:148
+wire:zaentrum-operator:zaentrum-realm EMAIL_THEME,wire,zaentrum-operator,zaentrum-realm EMAIL_THEME,zaentrum,,operator/platform/chart/templates/realm.yaml:144
+wire:zaentrum-operator:zaentrum-realm HOME,wire,zaentrum-operator,zaentrum-realm HOME,/tmp,,operator/platform/chart/templates/realm.yaml:181
+wire:zaentrum-operator:zaentrum-realm KC_ADMIN_USER,wire,zaentrum-operator,zaentrum-realm KC_ADMIN_USER,secret zaentrum-keycloak-admin username,,operator/platform/chart/templates/realm.yaml:73
+wire:zaentrum-operator:zaentrum-realm KC_CLI_PASSWORD,wire,zaentrum-operator,zaentrum-realm KC_CLI_PASSWORD,secret zaentrum-keycloak-admin password,,operator/platform/chart/templates/realm.yaml:76
+wire:zaentrum-operator:zaentrum-realm KC_OPTS,wire,zaentrum-operator,zaentrum-realm KC_OPTS,-XX:TieredStopAtLevel=1 -XX:+UseSerialGC -XX:-UsePerfData -XX:MaxRAMPercentage=50,,operator/platform/chart/templates/realm.yaml:184
+wire:zaentrum-operator:zaentrum-realm KC_SERVER,wire,zaentrum-operator,zaentrum-realm KC_SERVER,http://keycloak:80/auth,,operator/platform/chart/templates/realm.yaml:71
+wire:zaentrum-operator:zaentrum-realm MASTER_FRONTEND_URL,wire,zaentrum-operator,zaentrum-realm MASTER_FRONTEND_URL,http://localhost:8080/auth,,operator/platform/chart/templates/realm.yaml:152
+wire:zaentrum-operator:zaentrum-realm PASSWORD_POLICY,wire,zaentrum-operator,zaentrum-realm PASSWORD_POLICY,length(8) and notUsername and notEmail,,operator/platform/chart/templates/realm.yaml:139
+wire:zaentrum-operator:zaentrum-realm PEOPLE_CLIENT,wire,zaentrum-operator,zaentrum-realm PEOPLE_CLIENT,zaentrum-people,,operator/platform/chart/templates/realm.yaml:101
+wire:zaentrum-operator:zaentrum-realm PEOPLE_CLIENT_JSON,wire,zaentrum-operator,zaentrum-realm PEOPLE_CLIENT_JSON,"{""attributes"":{""client_credentials.use_refresh_token"":""false"",""oauth2.device.authorization.grant.enabled"":""false"",""use.refresh.tokens"":""false""},""bearerOnly"":…",,operator/platform/chart/templates/realm.yaml:103
+wire:zaentrum-operator:zaentrum-realm PEOPLE_CLIENT_SECRET,wire,zaentrum-operator,zaentrum-realm PEOPLE_CLIENT_SECRET,secret zaentrum-people client-secret,,operator/platform/chart/templates/realm.yaml:109
+wire:zaentrum-operator:zaentrum-realm PEOPLE_ROLES,wire,zaentrum-operator,zaentrum-realm PEOPLE_ROLES,manage-users query-users view-users,,operator/platform/chart/templates/realm.yaml:107
+wire:zaentrum-operator:zaentrum-realm PEOPLE_SETTINGS,wire,zaentrum-operator,zaentrum-realm PEOPLE_SETTINGS,publicClient=false serviceAccountsEnabled=true standardFlowEnabled=false implicitFlowEnabled=false directAccessGrantsEnabled=false oauth2.device.authorizatio…,,operator/platform/chart/templates/realm.yaml:105
+wire:zaentrum-operator:zaentrum-realm PROFILE_ATTRIBUTE,wire,zaentrum-operator,zaentrum-realm PROFILE_ATTRIBUTE,"{""displayName"":""Rating Cap"",""multivalued"":false,""name"":""max_rating"",""permissions"":{""edit"":[""admin""],""view"":[""admin""]},""validations"":{""integer"":{""max"":21,""min…",,operator/platform/chart/templates/realm.yaml:123
+wire:zaentrum-operator:zaentrum-realm PROFILE_ATTRIBUTE_CHECK,wire,zaentrum-operator,zaentrum-realm PROFILE_ATTRIBUTE_CHECK,"{""name"":""max_rating"",""validations"":{""integer"":{""max"":21,""min"":0}},""permissions"":{""view"":[""admin""],""edit"":[""admin""]},""multivalued"":false}",,operator/platform/chart/templates/realm.yaml:125
+wire:zaentrum-operator:zaentrum-realm RATING_CLIENTS,wire,zaentrum-operator,zaentrum-realm RATING_CLIENTS,chino-mobile chino-tv chino-web zae zaentrum-web,,operator/platform/chart/templates/realm.yaml:117
+wire:zaentrum-operator:zaentrum-realm RATING_MAPPER_CONFIG,wire,zaentrum-operator,zaentrum-realm RATING_MAPPER_CONFIG,access.token.claim=true aggregate.attrs=false claim.name=max_rating id.token.claim=false introspection.token.claim=true jsonType.label=int multivalued=false…,,operator/platform/chart/templates/realm.yaml:121
+wire:zaentrum-operator:zaentrum-realm RATING_MAPPER_JSON,wire,zaentrum-operator,zaentrum-realm RATING_MAPPER_JSON,"{""config"":{""access.token.claim"":""true"",""aggregate.attrs"":""false"",""claim.name"":""max_rating"",""id.token.claim"":""false"",""introspection.token.claim"":""true"",""jsonT…",,operator/platform/chart/templates/realm.yaml:119
+wire:zaentrum-operator:zaentrum-realm REALM_CLIENTS,wire,zaentrum-operator,zaentrum-realm REALM_CLIENTS,chino-mobile|cloud.nalet.chino:/oauth/callback||+|publicClient=true standardFlowEnabled=true implicitFlowEnabled=false directAccessGrantsEnabled=false oauth2…,,operator/platform/chart/templates/realm.yaml:83
+wire:zaentrum-operator:zaentrum-realm REALM_CLIENT_JSON,wire,zaentrum-operator,zaentrum-realm REALM_CLIENT_JSON,"chino-mobile {""attributes"":{""oauth2.device.authorization.grant.enabled"":""false"",""pkce.code.challenge.method"":""S256"",""post.logout.redirect.uris"":""+""},""bearerO…",,operator/platform/chart/templates/realm.yaml:90
 wire:zaentrum-operator:zaentrum-verify HOME,wire,zaentrum-operator,zaentrum-verify HOME,/tmp,,operator/platform/chart/templates/tests/verify.yaml:102
 wire:zaentrum-operator:zaentrum-verify KC_ADMIN_USER,wire,zaentrum-operator,zaentrum-verify KC_ADMIN_USER,secret zaentrum-keycloak-admin username,,operator/platform/chart/templates/tests/verify.yaml:91
 wire:zaentrum-operator:zaentrum-verify KC_CLI_PASSWORD,wire,zaentrum-operator,zaentrum-verify KC_CLI_PASSWORD,secret zaentrum-keycloak-admin password,,operator/platform/chart/templates/tests/verify.yaml:94
@@ -2095,12 +2138,12 @@ workload:zaentrum-operator:keycloak,workload,zaentrum-operator,keycloak,quay.io/
 workload:zaentrum-operator:live-worker,workload,zaentrum-operator,live-worker,ghcr.io/zaentrum/live-worker,"Deployment, with liveWorker.enabled true",operator/platform/chart/templates/live-worker.yaml:43
 workload:zaentrum-operator:packager,workload,zaentrum-operator,packager,ghcr.io/zaentrum/packager,"Deployment, with features.pipeline true",operator/platform/chart/templates/pipeline.yaml:159
 workload:zaentrum-operator:portal-api,workload,zaentrum-operator,portal-api,ghcr.io/zaentrum/portal-api postgres:16-alpine,Deployment,operator/platform/chart/templates/portal-api.yaml:4
-workload:zaentrum-operator:postgres,workload,zaentrum-operator,postgres,postgres:16-alpine,"Deployment, not with databases.mode external",operator/platform/chart/templates/data.yaml:28
+workload:zaentrum-operator:postgres,workload,zaentrum-operator,postgres,postgres:16-alpine,"Deployment, not with databases.mode external",operator/platform/chart/templates/data.yaml:36
 workload:zaentrum-operator:scan-catalog,workload,zaentrum-operator,scan-catalog,curlimages/curl:8.11.0,"Job, with jobs.seed true",operator/platform/chart/templates/jobs.yaml:67
 workload:zaentrum-operator:seed-demo-content,workload,zaentrum-operator,seed-demo-content,curlimages/curl:8.11.0,"Job, with jobs.seed true",operator/platform/chart/templates/jobs.yaml:10
 workload:zaentrum-operator:transcoder,workload,zaentrum-operator,transcoder,ghcr.io/zaentrum/transcoder,"Deployment, with features.pipeline true",operator/platform/chart/templates/pipeline.yaml:305
-workload:zaentrum-operator:valkey,workload,zaentrum-operator,valkey,valkey/valkey:8-alpine,Deployment,operator/platform/chart/templates/data.yaml:99
+workload:zaentrum-operator:valkey,workload,zaentrum-operator,valkey,valkey/valkey:8-alpine,Deployment,operator/platform/chart/templates/data.yaml:107
 workload:zaentrum-operator:zaentrum-backup,workload,zaentrum-operator,zaentrum-backup,postgres:16-alpine,"CronJob, not with databases.mode external",operator/platform/chart/templates/backup.yaml:41
 workload:zaentrum-operator:zaentrum-portal,workload,zaentrum-operator,zaentrum-portal,ghcr.io/zaentrum/zaentrum-portal,Deployment,operator/platform/chart/templates/zaentrum-portal.yaml:4
-workload:zaentrum-operator:zaentrum-realm,workload,zaentrum-operator,zaentrum-realm,quay.io/keycloak/keycloak:26.0.7,"Job, not with identity.mode external",operator/platform/chart/templates/realm.yaml:23
+workload:zaentrum-operator:zaentrum-realm,workload,zaentrum-operator,zaentrum-realm,quay.io/keycloak/keycloak:26.0.7,"Job, not with identity.mode external",operator/platform/chart/templates/realm.yaml:28
 workload:zaentrum-operator:zaentrum-verify,workload,zaentrum-operator,zaentrum-verify,ghcr.io/zaentrum/zae quay.io/keycloak/keycloak:26.0.7,Job,operator/platform/chart/templates/tests/verify.yaml:43

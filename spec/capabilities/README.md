@@ -137,27 +137,27 @@ model, each reference, change and id resolved, written by the same program.
 <!-- generated: overview -->
 | Part | Capabilities | In a chapter | Only in the docs | Nowhere | With a change | Served by nothing |
 |---|---|---|---|---|---|---|
-| [chino](./chino.md) | 151 | 136 | 3 | 12 | 144 | 17 |
-| [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 23 |
+| [chino](./chino.md) | 151 | 136 | 3 | 12 | 144 | 16 |
+| [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 20 |
 | [the catalog and the pipeline](./catalog.md) | 54 | 22 | 18 | 14 | 22 | 14 |
-| [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 15 |
+| [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 14 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 308 | 219 | 46 | 43 | 230 | 70 |
+| all | 308 | 219 | 46 | 43 | 230 | 65 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
-| Web | 84 | 18 | 24 | 180 | 2 |
-| Phone | 76 | 36 | 30 | 164 | 2 |
+| Web | 84 | 19 | 23 | 180 | 2 |
+| Phone | 76 | 37 | 29 | 164 | 2 |
 | Android TV | 79 | 23 | 27 | 177 | 2 |
 | Samsung TV | 44 | 31 | 53 | 178 | 2 |
-| Portal | 37 | 8 | 45 | 214 | 4 |
+| Portal | 37 | 10 | 43 | 214 | 4 |
 | Catalog console | 14 | 8 | 27 | 255 | 4 |
 | CLI | 21 | 2 | 51 | 234 | 0 |
-| Resource | 30 | 1 | 14 | 263 | 0 |
+| Resource | 30 | 3 | 12 | 263 | 0 |
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
-| 448 | 432 | 16 | 0 | 446 | 1 | 0 |
+| 448 | 432 | 16 | 0 | 440 | 7 | 0 |
 <!-- end: overview -->
 
 ## What is expected of it
@@ -176,13 +176,13 @@ a decision record rules it out.
 | [Listen to music, audiobooks and podcasts](./expectations.md#listen-to-music-audiobooks-and-podcasts) | 2 | 0 | 0 | 2 | 0 | 0 |
 | [Watch live channels](./expectations.md#watch-live-channels) | 1 | 0 | 0 | 1 | 0 | 0 |
 | [Keep the library](./expectations.md#keep-the-library) | 12 | 1 | 5 | 5 | 0 | 1 |
-| [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 5 | 5 | 0 | 0 |
+| [Share it with a household](./expectations.md#share-it-with-a-household) | 11 | 1 | 6 | 4 | 0 | 0 |
 | [Run it oneself](./expectations.md#run-it-oneself) | 12 | 2 | 6 | 4 | 0 | 0 |
 | [Make it one's own](./expectations.md#make-it-ones-own) | 5 | 2 | 1 | 2 | 0 | 0 |
-| [Trust it](./expectations.md#trust-it) | 4 | 1 | 1 | 2 | 0 | 0 |
-| all | 61 | 7 | 27 | 25 | 1 | 1 |
+| [Trust it](./expectations.md#trust-it) | 4 | 2 | 1 | 1 | 0 | 0 |
+| all | 61 | 8 | 28 | 23 | 1 | 1 |
 
-Nothing serves 70 of the 308 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 65 of the 308 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
@@ -190,15 +190,15 @@ Nothing serves 70 of the 308 capabilities yet: no app or face has them, and no s
 <!-- generated: inventory -->
 | What the code offers | Rows | Claimed by |  |
 |---|---|---|---|
-| HTTP routes | 298 | a capability |  |
+| HTTP routes | 302 | a capability |  |
 | GraphQL operations | 71 | a capability |  |
 | screens | 86 | a capability |  |
 | tabs | 24 | a capability |  |
 | CLI commands | 30 | a capability |  |
-| fields of the operator's resources | 87 | a setting |  |
-| environment variables | 280 | a setting |  |
+| fields of the operator's resources | 100 | a setting |  |
+| environment variables | 290 | a setting |  |
 | the catalog's settings | 41 | a setting |  |
-| constants in the code | 858 | listed | 279 in a setting |
+| constants in the code | 871 | listed | 279 in a setting |
 
 From the main branch of 18 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them; the organisation has 32, each listed as well.
 <!-- end: inventory -->

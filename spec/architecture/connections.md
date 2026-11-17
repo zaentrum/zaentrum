@@ -27,6 +27,7 @@ events on the bus, and the stores. Each is a row of
 | `portal-api` | manages | `kubernetes` | the platform's parts | Its parts, the Zaentrum resource, addons |
 | `portal-api` | links | `chino-web` | /chino | The launchpad's tile for chino |
 | `portal-api` | links | `keycloak` | where people are managed | The identity provider's own console, when people aren't the portal's to manage |
+| `portal-api` | links | `zaentrum-portal` | /portal | The portal's address in the links of an invite or a notice mail |
 | `zaentrum-portal` | calls | `chino-api` | /api/config | The client to sign in with |
 | `zaentrum-portal` | calls | `portal-api` | /api/portal | — |
 | `zaentrum-portal` | signs in | `keycloak` | — | — |

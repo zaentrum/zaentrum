@@ -27,7 +27,7 @@ Reaching a server, signing in on each kind of device, keeping several accounts o
 | Add the web app to a phone's home screen | person | built | — | — | — | — | — | — |
 | Find the servers on the home network without typing an address | person | — | no | no | no | — | — | [platform home](../platform/home.md) |
 | Get the app from the device's own store | person | — | no | no | no | — | — | [Publishing the apps](../../docs/releases.md#publishing-the-apps) |
-| Reset a forgotten password by oneself | person | no | no | — | — | no | — | [First run](../../docs/self-hosting.md#first-run), [portal operations](../portal/operations.md) |
+| Reset a forgotten password by oneself | person | partial | partial | — | — | partial | — | [First run](../../docs/self-hosting.md#first-run), [portal operations](../portal/operations.md) |
 | Sign in with a second factor | person | no | no | — | — | no | — | [First run](../../docs/self-hosting.md#first-run), [portal people](../portal/people.md) |
 | Lock an account on a shared device behind a code | person | — | no | no | no | — | — | [portal people](../portal/people.md) |
 | Refuse a server over plain http unless its address is a home address | system | no | partial | partial | no | no | no | [platform home](../platform/home.md) |
@@ -48,7 +48,7 @@ Reaching a server, signing in on each kind of device, keeping several accounts o
 - Add the web app to a phone's home screen: a hint where the browser offers no install of its own; once closed it stays away
 - Find the servers on the home network without typing an address: every app asks for an address; nothing announces a server on the network
 - Get the app from the device's own store: no app is in a public store yet; each is built from its repository
-- Reset a forgotten password by oneself: the sign-in page offers it; the bundled identity provider has no mail server to send the link with
+- Reset a forgotten password by oneself: offered on the sign-in page where mail is set up; the security tab and the one sign-in entry are not built
 - Sign in with a second factor: left to the identity provider's console; no app or console of the platform offers it
 - Lock an account on a shared device behind a code: switching accounts asks for nothing, so a rating cap ends at the account chooser
 - Refuse a server over plain http unless its address is a home address: the Android apps refuse plain http altogether; the Samsung TV app tries it for any address; none knows a home address

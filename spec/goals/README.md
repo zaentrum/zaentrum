@@ -93,14 +93,14 @@ flowchart TD
 <!-- generated: goals -->
 | Goal | Is | Needs | Expected of it | Capabilities | Qualities |
 |---|---|---|---|---|---|
-| [Watch films and shows](#watch-films-and-shows) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 14: 9 partly, 4 not there, 1 not checked | 151 in 15 areas, 17 served by nothing | 5, 5 with a target, 5 approved |
+| [Watch films and shows](#watch-films-and-shows) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 14: 9 partly, 4 not there, 1 not checked | 151 in 15 areas, 16 served by nothing | 5, 5 with a target, 5 approved |
 | [Listen to music, audiobooks and podcasts](#listen-to-music-audiobooks-and-podcasts) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 2: 2 not there | 2 in 1 area, 1 served by nothing | — |
 | [Watch live channels](#watch-live-channels) | what people want | [Keep the library](#keep-the-library), [Share it with a household](#share-it-with-a-household), [Run it oneself](#run-it-oneself) | 1: 1 not there | 1 in 1 area | — |
 | [Keep the library](#keep-the-library) | what that takes | [Run it oneself](#run-it-oneself) | 12: 1 there, 5 partly, 5 not there, 1 decided otherwise | 54 in 3 areas, 14 served by nothing | 4, 4 with a target, 4 approved |
-| [Share it with a household](#share-it-with-a-household) | what that takes | [Run it oneself](#run-it-oneself) | 11: 1 there, 5 partly, 5 not there | 17 in 1 area, 10 served by nothing | 2, 2 with a target, 2 approved |
-| [Run it oneself](#run-it-oneself) | what that takes | [Trust it](#trust-it) | 12: 2 there, 6 partly, 4 not there | 66 in 4 areas, 23 served by nothing | 5, 5 with a target, 5 approved |
+| [Share it with a household](#share-it-with-a-household) | what that takes | [Run it oneself](#run-it-oneself) | 11: 1 there, 6 partly, 4 not there | 17 in 1 area, 9 served by nothing | 2, 2 with a target, 2 approved |
+| [Run it oneself](#run-it-oneself) | what that takes | [Trust it](#trust-it) | 12: 2 there, 6 partly, 4 not there | 66 in 4 areas, 21 served by nothing | 5, 5 with a target, 5 approved |
 | [Make it one's own](#make-it-ones-own) | what being open adds | [Run it oneself](#run-it-oneself) | 5: 2 there, 1 partly, 2 not there | 12 in 1 area, 2 served by nothing | 1, 1 with a target, 1 approved |
-| [Trust it](#trust-it) | what being open adds | — | 4: 1 there, 1 partly, 2 not there | 5 in 1 area, 3 served by nothing | 4, 4 with a target, 4 approved |
+| [Trust it](#trust-it) | what being open adds | — | 4: 2 there, 1 partly, 1 not there | 5 in 1 area, 2 served by nothing | 4, 4 with a target, 4 approved |
 <!-- end: goals -->
 
 <!-- generated: by-goal -->
@@ -159,7 +159,7 @@ To watch or listen, the platform has to know what the household owns: take it in
 
 A household is several people: each signs in, sees what they may, and keeps a place, lists and a history of their own. It needs: [Run it oneself](#run-it-oneself). Needed by: [Watch films and shows](#watch-films-and-shows), [Listen to music, audiobooks and podcasts](#listen-to-music-audiobooks-and-podcasts), [Watch live channels](#watch-live-channels).
 
-- **Expected of it:** [11 expectations](../capabilities/expectations.md#share-it-with-a-household): 1 there, 5 partly, 5 not there.
+- **Expected of it:** [11 expectations](../capabilities/expectations.md#share-it-with-a-household): 1 there, 6 partly, 4 not there.
 - **Capabilities:** [People and roles](../capabilities/portal.md#people-and-roles) (17).
 - **Served by:** `zaentrum-portal`, `portal-api`, `chino-api`.
 
@@ -200,7 +200,7 @@ The platform leaves things out on purpose; anyone adds them as an addon, without
 
 Anyone can see what it does, check it, change it, and count on it staying open. Needed by: [Run it oneself](#run-it-oneself).
 
-- **Expected of it:** [4 expectations](../capabilities/expectations.md#trust-it): 1 there, 1 partly, 2 not there.
+- **Expected of it:** [4 expectations](../capabilities/expectations.md#trust-it): 2 there, 1 partly, 1 not there.
 - **Capabilities:** [Releases one can trust](../capabilities/platform.md#releases-one-can-trust) (5).
 - **Served by:** `shared-files`.
 

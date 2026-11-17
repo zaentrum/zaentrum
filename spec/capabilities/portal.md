@@ -126,7 +126,7 @@ Who may use the platform: people, their roles, invites. Specified in [portal peo
 | Limit how many streams a person plays at once | admin | — | — | — | — | no | no | [portal people](../portal/people.md) |
 | See who is watching what right now, and stop a stream | admin | — | — | — | — | no | no | [portal people](../portal/people.md) |
 | See what was watched over time: by title, by person, by device | admin | — | — | — | — | no | — | — |
-| Send a person a mail: an invite, a reset link, a notice | system | — | — | — | — | no | — | [First run](../../docs/self-hosting.md#first-run), [portal operations](../portal/operations.md) |
+| Send a person a mail: an invite, a reset link, a notice | system | — | — | — | — | partial | — | [First run](../../docs/self-hosting.md#first-run), [portal operations](../portal/operations.md) |
 | Bring people, their watch history and their lists from another media server | admin | — | — | — | — | no | no | — |
 | End one of one's own streams on another device, to play here | person | no | no | no | no | — | — | [portal people](../portal/people.md) |
 | Clear a person's account code, so that they can set a new one | admin | — | — | — | — | no | — | [portal people](../portal/people.md) |
@@ -142,7 +142,7 @@ Who may use the platform: people, their roles, invites. Specified in [portal peo
 - Delete a person's account, with their data in the apps: their app data first, then the account, its invites and notifications; without the deletion token the app data stays
 - Say what each person may do: which libraries, downloads and the highest quality: a person has a role and a rating cap, nothing finer
 - See what was watched over time: by title, by person, by device: the apps send how playback went; no page shows it
-- Send a person a mail: an invite, a reset link, a notice: the platform sends no mail; an invite link is handed over by hand
+- Send a person a mail: an invite, a reset link, a notice: the identity provider sends the reset link, portal-api an invite to an address; no page sets an address or sends the invite
 - Give a person an e-mail address, for their invite and a forgotten password: a person is made with no address
 
 | Key | Changes | Next | Served by | Settings |
@@ -190,8 +190,8 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 | Update the operator itself, and the one-container install, from the portal or the CLI | admin | no | no | — | [updating the operator](../../docs/updating-the-operator.md), [platform install](../platform/install.md) |
 | Call the platform's APIs from a script with a token of one's own | admin | no | no | — | — |
 | Tell another service when something happens: a title added, a title played | admin | no | — | — | [events](../../docs/extending/events.md) |
-| Name the mail server the platform sends through, and test it | admin | no | — | no | [portal operations](../portal/operations.md) |
-| See what is wrong now and was in the last 90 days, and set the thresholds | admin | no | — | no | [portal operations](../portal/operations.md) |
+| Name the mail server the platform sends through, and test it | admin | no | — | partial | [portal operations](../portal/operations.md) |
+| See what is wrong now and was in the last 90 days, and set the thresholds | admin | no | — | partial | [portal operations](../portal/operations.md) |
 | Measure each volume's size and free space, every hour and on request | system | — | — | no | [portal operations](../portal/operations.md) |
 | Go back to the version before when an update fails the platform's own check | system | no | no | — | [platform install](../platform/install.md) |
 | Refuse an update whose image the project did not sign | system | — | no | — | [platform install](../platform/install.md) |
@@ -214,7 +214,8 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 - Update the operator itself, and the one-container install, from the portal or the CLI: a cluster admin applies each release's manifest; the one-container install is replaced
 - Call the platform's APIs from a script with a token of one's own: the CLI signs in by a code in a browser; no token is issued to keep
 - Tell another service when something happens: a title added, a title played: events are on the bus for addons; nothing calls an address outside
-- Name the mail server the platform sends through, and test it: the platform sends no mail
+- Name the mail server the platform sends through, and test it: the resource names the mail server and portal-api and the bundled identity provider send through it; no page sets it up or sends a test mail
+- See what is wrong now and was in the last 90 days, and set the thresholds: the resource holds the thresholds, its status what is wrong now; nothing keeps the last 90 days, and no page shows them
 - Measure each volume's size and free space, every hour and on request: the status says nothing of how full a volume is
 - Go back to the version before when an update fails the platform's own check: on one machine; nothing undoes an update today
 - Refuse an update whose image the project did not sign: holds once releases are signed
@@ -240,8 +241,8 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 | `update-operator` | I.C15, I.C16, I.C17, I.C18, I.C19 | build, the rest ruled out | — | — |
 | `use-personal-token` | — | later | — | — |
 | `send-webhooks` | — | an addon's | — | — |
-| `set-up-mail` | R.C1, R.C2, R.C3 | build | — | — |
-| `review-alerts` | R.C6, R.C8, R.C9 | build | — | — |
+| `set-up-mail` | R.C1, R.C2, R.C3 | build | `Zaentrum.spec.mail.host`, `Zaentrum.spec.mail.port`, `Zaentrum.spec.mail.encryption` and 8 more | — |
+| `review-alerts` | R.C6, R.C8, R.C9 | build | `Zaentrum.spec.alerts.partNotReadyMinutes`, `Zaentrum.spec.alerts.volumeFullPercent`, `Zaentrum.spec.alerts.certificateDays` and 2 more | — |
 | `measure-volumes` | R.C7 | build | — | — |
 | `undo-failed-update` | I.C16, I.C17, I.C18 | build | — | — |
 | `verify-update-image` | I.C16, T.C4 | build | — | — |

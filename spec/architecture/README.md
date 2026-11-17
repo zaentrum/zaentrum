@@ -173,12 +173,12 @@ to render the chart.
 | calls | 28 | 23 | 5 |
 | signs in | 15 | 14 | 1 |
 | manages | 5 | 2 | 3 |
-| links | 2 | 0 | 2 |
+| links | 3 | 0 | 3 |
 | publishes | 4 | 4 | 0 |
 | consumes | 6 | 6 | 0 |
 | writes | 10 | 10 | 0 |
 | reads | 3 | 3 | 0 |
-| all | 73 | 62 | 11 |
+| all | 74 | 62 | 12 |
 
 | What the chart runs, and the code | Rows | Claimed by |
 |---|---|---|
@@ -186,7 +186,7 @@ to render the chart.
 | volumes | 3 | a component |
 | services | 18 | listed: each leads to a workload |
 | paths of the Ingress | 11 | listed: each leads to a workload |
-| wires | 242 | 44 lead to another component, each a connection's via |
+| wires | 245 | 44 lead to another component, each a connection's via |
 | repositories of the organisation | 32 | a component: 28 active, 4 archived |
 
 | Decision records | Accepted | Proposed |
@@ -212,7 +212,6 @@ a change to the code, to a decision, or to the model.
 | named for another | `analyzer`, `katalog-manager` | analyzer's KATALOG_API_URL is named for katalog-api, and leads to katalog-manager | `analyzer KATALOG_API_URL` |
 | named for another | `transcoder`, `katalog-manager` | transcoder's KATALOG_API_URL is named for katalog-api, and leads to katalog-manager | `transcoder KATALOG_API_URL` |
 | named for another | `packager`, `katalog-manager` | packager's KATALOG_API_URL is named for katalog-api, and leads to katalog-manager | `packager KATALOG_API_URL` |
-| outside default | `katalog-ingest` | katalog-ingest's KAFKA_BROKERS defaults to a service in another namespace of one cluster, not to one the platform runs | `KAFKA_BROKERS` |
 | the demo in the product | `katalog-ingest` | katalog-ingest's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-ingest KAFKA_GROUP_ID` |
 | the demo in the product | `katalog-manager` | katalog-manager's KAFKA_GROUP_ID is zaentrum-demo: a name of the reference demo, set by the chart every install uses | `katalog-manager-api KAFKA_GROUP_ID` |
 | the demo in the product | `keycloak` | keycloak's DEMO_USER_PASSWORD comes from the secret zaentrum-demo-user: a name of the reference demo, set by the chart every install uses | `keycloak DEMO_USER_PASSWORD` |
@@ -223,7 +222,7 @@ a change to the code, to a decision, or to the model.
 | decided, not built | `zaentrum-operator`, `keycloak`, `appliance`, `chino-web`, `zaentrum-portal`, `portal-api`, `katalog-manager-ui`, `chino-mobile`, `chino-androidtv`, `chino-tizen`, `zae` | ADR-0016 is accepted, and nothing serves reach-on-home-network and find-server-on-network and reach-from-outside, which it governs | — |
 | decided, not built | `zaentrum-operator`, `appliance`, `transcoder`, `live-worker`, `zae`, `portal-api`, `zaentrum-portal` | ADR-0017 is accepted, and nothing serves run-on-arm and encode-on-other-gpus and create-first-admin and update-operator, which it governs | — |
 | decided, not built | `keycloak`, `portal-api`, `zaentrum-portal`, `chino-api`, `chino-stream`, `chino-web`, `chino-mobile`, `chino-androidtv`, `chino-tizen` | ADR-0018 is accepted, and nothing serves set-person-rights and limit-streams and see-who-is-watching and lock-account and use-second-factor and see-own-devices, which it governs | — |
-| decided, not built | `zaentrum-operator`, `portal-api`, `zaentrum-portal`, `keycloak`, `notifications` | ADR-0019 is accepted, and nothing serves mail-person and alert-admins and reset-own-password and get-push-notification and send-webhooks, which it governs | — |
+| decided, not built | `zaentrum-operator`, `portal-api`, `zaentrum-portal`, `keycloak`, `notifications` | ADR-0019 is accepted, and nothing serves alert-admins and get-push-notification and send-webhooks, which it governs | — |
 | decided, not built | `zaentrum-operator`, `portal-api`, `zaentrum-portal`, `zae`, `postgres` | ADR-0020 is accepted, and nothing serves move-platform and back-up-library, which it governs | — |
 | decided, not built | `katalog-manager`, `katalog-api`, `chino-api`, `zaentrum-operator`, `zae`, `katalog-manager-ui` | ADR-0021 is accepted, and nothing serves keep-several-libraries and add-library-folder and scan-by-itself and read-local-metadata and curate-collections and see-collections and export-title and enrich-without-own-key, which it governs | — |
 <!-- end: findings -->
