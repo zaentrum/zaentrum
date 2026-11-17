@@ -678,7 +678,10 @@ only where the server keeps the setting and can fill a list by kind; elsewhere
 it is left out. While the account's choice is being read, the switch is busy
 and shows the choice last known on the device, off where there is none. Where
 that read failed, the switch shows that choice and works, and the lists follow
-it until the choice is read again. The figures of section 16.3 don't draw the
+it until the choice is read again. A device forgets that choice when the
+account leaves it: at a sign-out, where the account is removed from a TV or
+deleted, and at a change of server. The group's heading is written in the case
+the page's other groups have. The figures of section 16.3 don't draw the
 group.
 
 ## 16.5 The account
