@@ -531,10 +531,18 @@ def build_states(comp, path, version):
     for wf in comp.workflows:
         text = git(path, "show", f"{version}:.github/workflows/{wf}", check=False) or ""
         name = workflow_name(text, wf)
+        fields = "status,conclusion,createdAt,url,event,displayTitle"
         runs = gh_json("run", "list", "-R", f"{ORG}/{comp.name}", "--workflow", wf, "--branch", version,
-                       "-L", "20", "--json", "status,conclusion,createdAt,url,event")
+                       "-L", "20", "--json", fields)
         # The tag's push, or a run started by hand on the tag (a [skip ci] commit's)
         runs = [r for r in runs if r.get("event") in ("push", "workflow_dispatch")]
+        # …or a run started by hand on main FOR the tag. A tag carries the
+        # workflow it was pushed with, so a fault in the steps is mended on
+        # main, and a workflow that takes the tag as an input then builds the
+        # tag's source with main's steps. Such a run is titled "<workflow> <tag>".
+        for_tag = gh_json("run", "list", "-R", f"{ORG}/{comp.name}", "--workflow", wf, "--branch", "main",
+                          "--event", "workflow_dispatch", "-L", "20", "--json", fields)
+        runs += [r for r in for_tag if r.get("displayTitle") == f"{name} {version}"]
         if not runs:
             out.append((name, "missing", "", ""))
             continue

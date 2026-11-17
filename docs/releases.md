@@ -153,6 +153,19 @@ is fixed, if it was outside the code (`gh run rerun <id> --failed`), and run
 `finish` again. A fix in the code is a new patch release. Never move a pushed
 tag: an image built from it may already be pulled somewhere.
 
+A fault in a workflow's own steps cannot be mended on the tag, which carries
+the workflow it was pushed with, and re-running the run repeats it. Where the
+workflow takes the tag as an input, as `zae`'s `release` does, mend the steps
+on `main` and start the workflow there for the tag:
+
+```sh
+gh workflow run release.yml -R zaentrum/zae --ref main -f tag=vX.Y.Z
+```
+
+That run builds the tag's source with main's steps and is titled
+`release vX.Y.Z`; `finish` counts it like a run on the tag, the latest of
+them deciding.
+
 ## Trying a release before production
 
 A pre-release, `vX.Y.Z-rc.N`, is cut like a release — `check`, `tag --push`,
