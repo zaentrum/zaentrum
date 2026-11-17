@@ -208,7 +208,7 @@ Keeping it running: its parts, updates, checks, logs, events, its database, a su
 - Download a support bundle for a bug report, credentials scrubbed: logs, parts and operator state, the bus, the registry, settings; any section left out; the portal adds the browser's
 - Set up a fresh platform through a first-run checklist, and mark it done: metadata key, library and a scan, media pipeline, https for devices, people; shown to admins until marked done; settings reopens it
 - Sign in with the CLI by a code in any browser, see who one is, sign out: device grant with PKCE; a session per instance, renewed by itself; logout revokes it at the issuer; ZAE_TOKEN for scripts
-- Report each service's liveness, readiness and metrics, and the API's description: for probes and scrapers; portal-api's own /healthz and /actuator/health/* are not in the inventory
+- Report each service's liveness, readiness and metrics, and the API's description: for probes and for what collects the metrics; portal-api's own /healthz and /actuator/health/* are not in the inventory
 - Tell the admins when a part fails, a volume fills or a certificate nears its end: the portal shows a part's state to whoever looks; nothing is sent
 - Choose the first administrator's name and password in the browser: the first sign-in is admin, with a one-time password read from a secret of the cluster
 - Update the operator itself, and the one-container install, from the portal or the CLI: a cluster admin applies each release's manifest; the one-container install is replaced
