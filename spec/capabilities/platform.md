@@ -122,7 +122,7 @@ What an open product owes the people who run it, check it and build on it. Speci
 - Report a security hole in private, and get an answer: one security policy, in the organisation's shared repository; private reporting on in every repository
 - Change the platform and have the change taken in: a guide, and tests on every change: a guide in the organisation's shared repository and an AGENTS.md in each; every repository's tests run on its pull requests
 - Check that an image is the project's, and see what it was built from and what it holds: no image is signed, and none carries a list of what it holds
-- Keep every repository free of other products' names and of acquisition, on every change: the organisation's shared check, called by every repository but katalog-manager, which has none; three still run an older copy beside it
+- Keep every repository free of other products' names and of acquisition, on every change: the shared check, called by every repository; it reads for no installation's own names; three still run an older copy beside it
 - Call nothing but the server one was given, unless the person starts it: the web apps load their typefaces from a public font service; the phone and Android TV apps an avatar from an outside service
 
 | Key | Changes | Next | Served by | Settings |

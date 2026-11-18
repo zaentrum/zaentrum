@@ -28,24 +28,29 @@ built: they are what lets a change by anyone, a person or an agent, be checked.
 
 ## As built
 
-As of 15 November 2026, from the main branch of the organisation's
+As of 18 November 2026, from the main branch of the organisation's
 repositories.
 
-- **Reporting a hole.** No repository has a security policy. Nothing says
-  where a report goes, what is in scope, or when an answer comes.
-- **Changing it.** The operator's repository has a guide to contributing; no
-  other has one, and no repository says, for a person or an agent, how it is
-  built and tested. Every service and app repository has tests, and all but the
-  catalog console's run a workflow on every pull request; the catalog console's
-  one workflow builds its image on the main branch only. Six repositories
-  that hold a service have no test: the two scaffolds of each later product,
-  the idle notifications service, and catalog ingest.
-- **Where an image comes from.** No workflow signs an image, and none
-  publishes a list of what an image holds. The operator's repository switches
-  the build's own record off (`provenance: false`) in each of its image
-  workflows. A release is a set of tags over every repository
-  ([releases](../../docs/releases.md)); nothing in it lets an install check
-  that an image is the project's.
+- **Reporting a hole.** One security policy, in the organisation's shared
+  repository, shows in every repository. It says what a report can be about
+  and what happens to one. Private reporting is switched on in all 28
+  repositories.
+- **Changing it.** One guide to contributing is in the organisation's shared
+  repository, and every repository has its own `AGENTS.md`, which says, for a
+  person or an agent, how it is built, tested and run and what its tests leave
+  unchecked. Every repository runs a workflow on every pull request that
+  builds it and runs its tests; the six that hold a service and had no test
+  have one that builds them and starts them. Every repository calls the
+  organisation's one neutrality check, with one set of rules: other media
+  products, download tools and the vocabulary of acquiring content. It does
+  not read for the names of any one installation. Three repositories also
+  still run an older copy of their own beside it.
+- **Where an image comes from.** The image workflows of fifteen repositories
+  sign what they push, with the build system's own identity, and attach the
+  build's record and a list of what the image holds; the operator's workflows
+  no longer switch the record off. [Releases](../../docs/releases.md) says in
+  one command each how to check a signature and read the record and the list.
+  The four scaffolds of the later products build images that are not signed.
 - **What the apps call.** The web, the Samsung TV app, the portal and the
   catalog console load their two typefaces from a public font service, in
   their page's head. The phone and Android TV apps fetch an avatar from an
