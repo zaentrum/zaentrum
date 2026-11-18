@@ -785,15 +785,19 @@ A set does not hold:
     platform or has it stopped, and starts once neither does. A backup that
     ran meanwhile does not answer it. It waits too while the resource is
     refused, until the resource is corrected.
-  - **The schedule stands still** from the request to its answer, so that
-    the schedule's run and the one asked for never write at once: the
-    schedule is stopped first, and the backup starts on a pass that finds it
-    stopped and no backup running. A run the schedule missed meanwhile
-    follows once the one asked for has ended.
+  - **The schedule stands still** from the request to its answer, and for as
+    long as a backup asked for runs, whatever has become of its request
+    meanwhile, so that the schedule's run and the one asked for never write
+    at once: the schedule is stopped first, and the backup starts on a pass
+    that finds it stopped and no backup running. A run the schedule missed
+    meanwhile follows once the one asked for has ended.
   - **The answer.** `status.backup.request` is the value answered: the
     backup it started has ended, well or not, and has been read, so that the
     last backup and the `Backup` condition are that run's; or the request
-    was refused. Until then the request waits or runs.
+    was refused. Until then the request waits or runs. A run that could not
+    be read on a pass is read on the next; one whose job is gone before it
+    was read is answered as not read, and no second backup is started for
+    it.
   - **Refused** where the platform makes no backups. With backups off, and
     while the databases are not on a volume of their own, the `Backup`
     condition says that the backup asked for is not made, for as long as the
@@ -802,8 +806,9 @@ A set does not hold:
     the operator's log says why.
   - **The job** is the platform's own and goes with it, carries the
     request's value, and is named `zaentrum-backup-` and five random
-    characters. The operator keeps the newest job asked for and deletes the
-    ones before it. Turning backups off does not stop one that runs.
+    characters. The operator keeps the newest job asked for that has ended
+    and deletes the ones before it once that one has been read. Turning
+    backups off does not stop one that runs.
   - **While a backup runs**, the schedule's or one asked for,
     `status.backup.running` is its job's name, so that what cannot list jobs
     knows of it.
