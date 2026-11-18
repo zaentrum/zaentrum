@@ -285,6 +285,16 @@ def match(ids, inventory, kinds, where, column):
     return hit
 
 
+def clashing(inventory):
+    """the ids the inventory gives to more than one row, in their order"""
+    seen, out = set(), []
+    for r in inventory:
+        if r['id'] in seen and r['id'] not in out:
+            out.append(r['id'])
+        seen.add(r['id'])
+    return out
+
+
 def check(areas, caps, settings, inventory):
     area_keys = {}
     for a in areas:
@@ -356,6 +366,8 @@ def check(areas, caps, settings, inventory):
             set_claims[r['id']].append(s['key'])
         if len(s['note']) > 140:
             problem(w, 'note is longer than 140 characters')
+    for i in clashing(inventory):
+        problem(f'inventory.csv {i}', 'one id names more than one thing in the code: the inventory has to tell them apart')
     for r in inventory:
         if r['kind'] in CLAIMED_BY_CAPABILITY and not claimed.get(r['id']):
             problem(f'inventory.csv {r["id"]}', f'no capability claims it ({r["where"]})')

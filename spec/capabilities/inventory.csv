@@ -635,9 +635,6 @@ constant:katalog-api:search.minTypoWord,constant,katalog-api,search.minTypoWord,
 constant:katalog-api:search.minWordsQuery,constant,katalog-api,search.minWordsQuery,3,,internal/store/search.go:58
 constant:katalog-api:search.searchEvery,constant,katalog-api,search.searchEvery,15 * time.Second,,internal/store/search.go:114
 constant:katalog-api:search.typoSimilarity,constant,katalog-api,search.typoSimilarity,0.5,,internal/store/search.go:66
-constant:katalog-manager:backfill.DefaultInflight,constant,katalog-manager,backfill.DefaultInflight,2,,internal/captions/backfill.go:80
-constant:katalog-manager:backfill.DefaultLease,constant,katalog-manager,backfill.DefaultLease,10 * time.Minute,,internal/captions/backfill.go:82
-constant:katalog-manager:backfill.DefaultRate,constant,katalog-manager,backfill.DefaultRate,600,,internal/captions/backfill.go:81
 constant:katalog-manager:backfill.DefaultRecords,constant,katalog-manager,backfill.DefaultRecords,3600,,internal/chapters/backfill.go:73
 constant:katalog-manager:backfill.FirstBackoff,constant,katalog-manager,backfill.FirstBackoff,time.Hour,,internal/captions/backfill.go:550
 constant:katalog-manager:backfill.MaxBackoff,constant,katalog-manager,backfill.MaxBackoff,7 * 24 * time.Hour,,internal/captions/backfill.go:551
@@ -645,7 +642,6 @@ constant:katalog-manager:backfill.MeasureAgainAfter,constant,katalog-manager,bac
 constant:katalog-manager:backfill.ReleaseWait,constant,katalog-manager,backfill.ReleaseWait,15 * time.Minute,,internal/captions/backfill.go:552
 constant:katalog-manager:backfill.UnknownAgain,constant,katalog-manager,backfill.UnknownAgain,30 * 24 * time.Hour,,internal/picture/backfill.go:275
 constant:katalog-manager:backfill.backfillBatch,constant,katalog-manager,backfill.backfillBatch,500,,internal/sourceprobe/backfill.go:20
-constant:katalog-manager:backfill.candidates,constant,katalog-manager,backfill.candidates,8,,internal/captions/backfill.go:265
 constant:katalog-manager:backfill.recordsPerClaim,constant,katalog-manager,backfill.recordsPerClaim,50,,internal/chapters/backfill.go:321
 constant:katalog-manager:captions.MinWindowFrames,constant,katalog-manager,captions.MinWindowFrames,24,,internal/library/captions.go:381
 constant:katalog-manager:captions.WindowAtStart,constant,katalog-manager,captions.WindowAtStart,true,,internal/library/captions.go:463
@@ -655,6 +651,10 @@ constant:katalog-manager:captions.WindowPlaceSlack,constant,katalog-manager,capt
 constant:katalog-manager:captions.WindowTail,constant,katalog-manager,captions.WindowTail,30.0,,internal/library/captions.go:471
 constant:katalog-manager:captions.atSlack,constant,katalog-manager,captions.atSlack,1e-3,,internal/library/captions.go:613
 constant:katalog-manager:captions.maxWindows,constant,katalog-manager,captions.maxWindows,64,,internal/captions/captions.go:271
+constant:katalog-manager:captions/backfill.DefaultInflight,constant,katalog-manager,captions/backfill.DefaultInflight,2,,internal/captions/backfill.go:80
+constant:katalog-manager:captions/backfill.DefaultLease,constant,katalog-manager,captions/backfill.DefaultLease,10 * time.Minute,,internal/captions/backfill.go:82
+constant:katalog-manager:captions/backfill.DefaultRate,constant,katalog-manager,captions/backfill.DefaultRate,600,,internal/captions/backfill.go:81
+constant:katalog-manager:captions/backfill.candidates,constant,katalog-manager,captions/backfill.candidates,8,,internal/captions/backfill.go:265
 constant:katalog-manager:catalogsearch.catalogSearchLock,constant,katalog-manager,catalogsearch.catalogSearchLock,49,,internal/store/catalogsearch.go:183
 constant:katalog-manager:changes.maxChangeDays,constant,katalog-manager,changes.maxChangeDays,14,,internal/tmdb/changes.go:29
 constant:katalog-manager:changes.maxChangePages,constant,katalog-manager,changes.maxChangePages,500,,internal/tmdb/changes.go:31
@@ -664,6 +664,10 @@ constant:katalog-manager:chapters.MaxFailures,constant,katalog-manager,chapters.
 constant:katalog-manager:chapters.ReleaseWait,constant,katalog-manager,chapters.ReleaseWait,15 * time.Minute,,internal/chapters/chapters.go:66
 constant:katalog-manager:chapters.SettledWait,constant,katalog-manager,chapters.SettledWait,24 * time.Hour,,internal/chapters/chapters.go:67
 constant:katalog-manager:chapters.TitleMax,constant,katalog-manager,chapters.TitleMax,120,,internal/chapters/chapters.go:71
+constant:katalog-manager:chapters/backfill.DefaultInflight,constant,katalog-manager,chapters/backfill.DefaultInflight,1,,internal/chapters/backfill.go:71
+constant:katalog-manager:chapters/backfill.DefaultLease,constant,katalog-manager,chapters/backfill.DefaultLease,30 * time.Minute,,internal/chapters/backfill.go:74
+constant:katalog-manager:chapters/backfill.DefaultRate,constant,katalog-manager,chapters/backfill.DefaultRate,120,,internal/chapters/backfill.go:72
+constant:katalog-manager:chapters/backfill.candidates,constant,katalog-manager,chapters/backfill.candidates,8,,internal/chapters/backfill.go:317
 constant:katalog-manager:check.TokenCheckTimeout,constant,katalog-manager,check.TokenCheckTimeout,4 * time.Second,,internal/tmdb/check.go:21
 constant:katalog-manager:cleanup.legacyBatch,constant,katalog-manager,cleanup.legacyBatch,500,,internal/library/cleanup.go:37
 constant:katalog-manager:compliance.batch,constant,katalog-manager,compliance.batch,200,,internal/compliance/compliance.go:64
@@ -687,6 +691,10 @@ constant:katalog-manager:picture.FirstRelease,constant,katalog-manager,picture.F
 constant:katalog-manager:picture.MaxBackoff,constant,katalog-manager,picture.MaxBackoff,7 * 24 * time.Hour,,internal/picture/picture.go:264
 constant:katalog-manager:picture.MaxRelease,constant,katalog-manager,picture.MaxRelease,24 * time.Hour,,internal/picture/picture.go:266
 constant:katalog-manager:picture.leaseSlack,constant,katalog-manager,picture.leaseSlack,time.Minute,,internal/picture/picture.go:280
+constant:katalog-manager:picture/backfill.DefaultInflight,constant,katalog-manager,picture/backfill.DefaultInflight,1,,internal/picture/backfill.go:79
+constant:katalog-manager:picture/backfill.DefaultLease,constant,katalog-manager,picture/backfill.DefaultLease,6 * time.Hour,,internal/picture/backfill.go:81
+constant:katalog-manager:picture/backfill.DefaultRate,constant,katalog-manager,picture/backfill.DefaultRate,240,,internal/picture/backfill.go:80
+constant:katalog-manager:picture/backfill.candidates,constant,katalog-manager,picture/backfill.candidates,8,,internal/picture/backfill.go:339
 constant:katalog-manager:project.ProjectorInterval,constant,katalog-manager,project.ProjectorInterval,15 * time.Second,,internal/library/project.go:35
 constant:katalog-manager:project.projectorBatch,constant,katalog-manager,project.projectorBatch,200,,internal/library/project.go:38
 constant:katalog-manager:project.refreshWait,constant,katalog-manager,project.refreshWait,30 * time.Second,,internal/library/project.go:635
@@ -888,14 +896,16 @@ constant:zaentrum-portal:browse.cellCap,constant,zaentrum-portal,browse.cellCap,
 constant:zaentrum-portal:browse.defaultLimit,constant,zaentrum-portal,browse.defaultLimit,100,,server/internal/dbbrowse/browse.go:23
 constant:zaentrum-portal:browse.maxLimit,constant,zaentrum-portal,browse.maxLimit,500,,server/internal/dbbrowse/browse.go:24
 constant:zaentrum-portal:browse.queryTimeout,constant,zaentrum-portal,browse.queryTimeout,6 * time.Second,,server/internal/dbbrowse/browse.go:26
+constant:zaentrum-portal:chino/client.callTimeout,constant,zaentrum-portal,chino/client.callTimeout,15 * time.Second,,server/internal/chino/client.go:30
 constant:zaentrum-portal:clidiscovery.capabilityVersion,constant,zaentrum-portal,clidiscovery.capabilityVersion,1,,server/internal/api/clidiscovery.go:37
 constant:zaentrum-portal:clidiscovery.discoveryTTL,constant,zaentrum-portal,clidiscovery.discoveryTTL,30 * time.Second,,server/internal/api/clidiscovery.go:83
 constant:zaentrum-portal:client.CountLimit,constant,zaentrum-portal,client.CountLimit,200,,server/internal/katalog/client.go:30
 constant:zaentrum-portal:client.MaxUsers,constant,zaentrum-portal,client.MaxUsers,2000,,server/internal/keycloak/client.go:38
-constant:zaentrum-portal:client.callTimeout,constant,zaentrum-portal,client.callTimeout,15 * time.Second,,server/internal/chino/client.go:30
 constant:zaentrum-portal:client.pageSize,constant,zaentrum-portal,client.pageSize,100,,server/internal/keycloak/client.go:34
 constant:zaentrum-portal:confirm.MAX_REPLICAS,constant,zaentrum-portal,confirm.MAX_REPLICAS,20,,src/lib/confirm.ts:34
 constant:zaentrum-portal:invites.inviteKept,constant,zaentrum-portal,invites.inviteKept,90 * 24 * time.Hour,,server/internal/store/invites.go:25
+constant:zaentrum-portal:katalog/client.callTimeout,constant,zaentrum-portal,katalog/client.callTimeout,6 * time.Second,,server/internal/katalog/client.go:34
+constant:zaentrum-portal:keycloak/client.callTimeout,constant,zaentrum-portal,keycloak/client.callTimeout,10 * time.Second,,server/internal/keycloak/client.go:31
 constant:zaentrum-portal:mail.ConnectTimeout,constant,zaentrum-portal,mail.ConnectTimeout,10 * time.Second,,server/internal/mail/mail.go:62
 constant:zaentrum-portal:mail.MaxAlertsTo,constant,zaentrum-portal,mail.MaxAlertsTo,10,,server/internal/mail/mail.go:59
 constant:zaentrum-portal:mail.MaxFromName,constant,zaentrum-portal,mail.MaxFromName,60,,server/internal/mail/mail.go:57

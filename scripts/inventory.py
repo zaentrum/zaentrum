@@ -22,7 +22,12 @@ Kinds:
   field     a field of the operator's resources (spec.…), with its default
   env       an environment variable a service or an app reads
   setting   a setting of the catalog's settings table
-  constant  a number, a duration, a switch or a list fixed in the code
+  constant  a number, a duration, a switch or a list fixed in the code, named by
+            its file's base name and its own (backfill.DefaultRate), and by
+            its directory too where files of one base name in other
+            directories hold one of that name (captions/backfill.DefaultRate);
+            one the inventory cannot tell apart is a row of its own under the
+            one id, which the check counts as a problem
 
 What the operator's platform chart runs, from `helm template` of the chart at the
 commit (helm must be installed), with the values a plain install has and with
@@ -107,12 +112,21 @@ class Repo:
 
 
 rows = {}
+# clashes are constants left under an id another constant holds: two of the
+# same name in one file, or in files of one name in directories of one name.
+# Each is written as a row of its own under that id, which the check counts as
+# a problem.
+clashes = []
 
 
 def add(kind, repo, name, path, line, value='', note=''):
     rid = f'{kind}:{repo.name}:{name}'
     if rid in rows:
         old = rows[rid]
+        if kind == 'constant' and value and old['value'] and clean(value) != old['value']:
+            clashes.append({'id': rid, 'kind': kind, 'repo': repo.name, 'name': name, 'value': clean(value),
+                            'note': clean(note), 'where': f'{path}:{line}'})
+            return
         if not old['value'] and value:
             old['value'] = value
         if not old['note'] and note:
@@ -457,6 +471,13 @@ def const_value(v):
 
 
 def constants(repo):
+    """the repository's constants, each named by its file's base name and its
+    own, and by its package's directory too where that name clashes: where
+    files of one base name in directories of other names hold constants of one
+    name, each is named by its directory, as `captions/backfill.DefaultRate`
+    and `chapters/backfill.DefaultRate`. Twins of one file in one package, such
+    as an Android and an iOS file, keep the one name."""
+    found = []
     for f in repo.code('.ts', '.tsx', '.kt', '.go', '.py'):
         text = repo.text(f)
         stem = os.path.splitext(os.path.basename(f))[0].replace('.android', '').replace('.ios', '')
@@ -486,7 +507,15 @@ def constants(repo):
                 if m:
                     name, value = m.group(1), const_value(m.group(2))
             if name and value is not None and NUMERIC.match(value.replace(' ', ' ')):
-                add('constant', repo, f'{stem}.{name}', f, i, value)
+                found.append((f'{stem}.{name}', f, i, value))
+    dirs = {}
+    for short, f, _, _ in found:
+        dirs.setdefault(short, set()).add(os.path.basename(os.path.dirname(f)))
+    for short, f, i, value in found:
+        name = short
+        if len(dirs[short]) > 1:
+            name = f'{os.path.basename(os.path.dirname(f))}/{short}'
+        add('constant', repo, name, f, i, value)
 
 
 # ------------------------------------------------- YAML, as helm writes it
@@ -899,7 +928,7 @@ def main():
     if a.fetch:
         fetch(a.src)
     sources = build(a.src)
-    items = sorted(rows.values(), key=lambda r: (r['kind'], r['repo'], r['name']))
+    items = sorted(list(rows.values()) + clashes, key=lambda r: (r['kind'], r['repo'], r['name'], r['where']))
     outputs = [write_csv(OUT, ['id', 'kind', 'repo', 'name', 'value', 'note', 'where'], items),
                write_csv(SOURCES, ['repo', 'commit'], sources)]
     if a.check:

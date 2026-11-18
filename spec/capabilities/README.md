@@ -198,13 +198,17 @@ Nothing serves 63 of the 309 capabilities yet: no app or face has them, and no s
 | fields of the operator's resources | 100 | a setting |  |
 | environment variables | 290 | a setting |  |
 | the catalog's settings | 46 | a setting |  |
-| constants in the code | 912 | listed | 276 in a setting |
+| constants in the code | 922 | listed | 285 in a setting |
 
 From the main branch of 18 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them; the organisation has 32, each listed as well.
 <!-- end: inventory -->
 
 Constants are listed, not claimed: the ones a person notices, or that an admin
 might want to change, are settings with “Where” code; the rest are the code's own.
+A constant is named by its file's base name and its own, and by its directory
+too where files of one base name in other directories hold one of that name
+(`captions/backfill.DefaultRate`, `chapters/backfill.DefaultRate`); an id the
+inventory gives to more than one row is a problem of the check.
 The inventory also lists what the operator's chart runs, how it sets each part up,
 and the organisation's repositories: the [architecture](../architecture/README.md)
 claims those.
