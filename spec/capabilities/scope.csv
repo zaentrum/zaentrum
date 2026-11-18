@@ -29,6 +29,7 @@ decide-superseded,later,approved,whoever runs the platform retires chosen origin
 reencode-queue,later,approved,the rules view shows the queue's counts and pace; clearing it stays with the API
 take-in-title,later,approved,the platform's own work; the console needs no screen for it beyond what a title's files tab shows
 measure-picture-area,later,approved,the platform's own work; the console needs no screen for it beyond what a title's files tab shows
+read-closed-captions,later,approved,"the platform's own work; how far the reading is stays with the API, and the console needs no screen for it"
 package-extras,later,approved,the platform's own work; the console needs no screen for it beyond what a title's files tab shows
 backfill-source-facts,later,approved,a repair run once through the API; it needs no screen
 read-chapters,later,approved,"the chapters tab lists a title's chapters; how far the reading is, and settling a title that can't be read, stay with the API"

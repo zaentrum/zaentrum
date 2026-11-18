@@ -123,7 +123,8 @@ constant:analyzer:subtitles.RECAP_DEFAULT_DURATION_MS,constant,analyzer,subtitle
 constant:analyzer:subtitles.RECAP_WINDOW_MS,constant,analyzer,subtitles.RECAP_WINDOW_MS,5 * 60 * 1000,,src/analyzer/pipelines/subtitles.py:72
 constant:analyzer:tidb.TIDB_CONFIDENCE,constant,analyzer,tidb.TIDB_CONFIDENCE,0.98,,src/analyzer/pipelines/tidb.py:47
 constant:analyzer:worker.HEARTBEAT_SECONDS,constant,analyzer,worker.HEARTBEAT_SECONDS,600.0,,src/analyzer/worker.py:54
-constant:chino-androidtv:AccountDeletion.MAX_MESSAGE,constant,chino-androidtv,AccountDeletion.MAX_MESSAGE,300,,app/src/main/kotlin/cloud/nalet/chino/tv/data/AccountDeletion.kt:70
+constant:chino-androidtv:AccountDeleted.CODE_BYTES,constant,chino-androidtv,AccountDeleted.CODE_BYTES,4_096L,,app/src/main/kotlin/cloud/nalet/chino/tv/data/api/AccountDeleted.kt:14
+constant:chino-androidtv:AccountDeletion.MAX_MESSAGE,constant,chino-androidtv,AccountDeletion.MAX_MESSAGE,300,,app/src/main/kotlin/cloud/nalet/chino/tv/data/AccountDeletion.kt:72
 constant:chino-androidtv:AutoAdvance.MIN_PLAYED_MS,constant,chino-androidtv,AutoAdvance.MIN_PLAYED_MS,10_000L,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/player/AutoAdvance.kt:21
 constant:chino-androidtv:BrowseViewModel.PAGE_SIZE,constant,chino-androidtv,BrowseViewModel.PAGE_SIZE,48,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/browse/BrowseViewModel.kt:244
 constant:chino-androidtv:BugReporter.MAX_AUTO_PER_SESSION,constant,chino-androidtv,BugReporter.MAX_AUTO_PER_SESSION,3,,app/src/main/kotlin/cloud/nalet/chino/tv/feedback/BugReporter.kt:166
@@ -131,7 +132,7 @@ constant:chino-androidtv:CatalogSearch.PAGE_SIZE,constant,chino-androidtv,Catalo
 constant:chino-androidtv:CatalogSearch.PEOPLE_LIMIT,constant,chino-androidtv,CatalogSearch.PEOPLE_LIMIT,12,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/search/CatalogSearch.kt:36
 constant:chino-androidtv:DetailScreen.OVERVIEW_LINES,constant,chino-androidtv,DetailScreen.OVERVIEW_LINES,4,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/detail/DetailScreen.kt:1290
 constant:chino-androidtv:DetailScreen.SUBTITLE_LINES,constant,chino-androidtv,DetailScreen.SUBTITLE_LINES,3,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/detail/DetailScreen.kt:1294
-constant:chino-androidtv:EventQueue.QUEUE_FLUSH_MS,constant,chino-androidtv,EventQueue.QUEUE_FLUSH_MS,30_000L,,app/src/main/kotlin/cloud/nalet/chino/tv/data/telemetry/EventQueue.kt:9
+constant:chino-androidtv:EventQueue.QUEUE_FLUSH_MS,constant,chino-androidtv,EventQueue.QUEUE_FLUSH_MS,30_000L,,app/src/main/kotlin/cloud/nalet/chino/tv/data/telemetry/EventQueue.kt:7
 constant:chino-androidtv:LibraryViewModel.HERO_POOL_SIZE,constant,chino-androidtv,LibraryViewModel.HERO_POOL_SIZE,8,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/library/LibraryViewModel.kt:426
 constant:chino-androidtv:LibraryViewModel.HERO_ROTATE_MS,constant,chino-androidtv,LibraryViewModel.HERO_ROTATE_MS,12_000L,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/library/LibraryViewModel.kt:427
 constant:chino-androidtv:LibraryViewModel.HOME_RAIL_SIZE,constant,chino-androidtv,LibraryViewModel.HOME_RAIL_SIZE,20,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/library/LibraryViewModel.kt:422
@@ -174,6 +175,7 @@ constant:chino-androidtv:SupSubtitles.MAX_PLANE_PIXELS,constant,chino-androidtv,
 constant:chino-androidtv:SupSubtitles.SUP_HEADER,constant,chino-androidtv,SupSubtitles.SUP_HEADER,13,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/player/SupSubtitles.kt:605
 constant:chino-androidtv:SupSubtitles.WINDOW,constant,chino-androidtv,SupSubtitles.WINDOW,64 * 1024,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/player/SupSubtitles.kt:280
 constant:chino-androidtv:Theme.UI_SCALE,constant,chino-androidtv,Theme.UI_SCALE,0.75f,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/theme/Theme.kt:32
+constant:chino-androidtv:Toast.TOAST_MS,constant,chino-androidtv,Toast.TOAST_MS,5_000L,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/theme/Toast.kt:20
 constant:chino-androidtv:TokenManager.REFRESH_SLACK_MS,constant,chino-androidtv,TokenManager.REFRESH_SLACK_MS,60_000L,,app/src/main/kotlin/cloud/nalet/chino/tv/data/auth/TokenManager.kt:131
 constant:chino-androidtv:WatchlistViewModel.HUB_SHELF_CAP,constant,chino-androidtv,WatchlistViewModel.HUB_SHELF_CAP,12,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/watchlist/WatchlistViewModel.kt:29
 constant:chino-androidtv:ZapFeed.EPSILON,constant,chino-androidtv,ZapFeed.EPSILON,0.6,,app/src/main/kotlin/cloud/nalet/chino/tv/ui/zap/ZapFeed.kt:132
@@ -219,7 +221,7 @@ constant:chino-api:feedback.feedbackDedupWindow,constant,chino-api,feedback.feed
 constant:chino-api:feedback.feedbackRateLimit,constant,chino-api,feedback.feedbackRateLimit,5,,internal/http/feedback.go:32
 constant:chino-api:feedback.feedbackRateWindow,constant,chino-api,feedback.feedbackRateWindow,10 * time.Minute,,internal/http/feedback.go:33
 constant:chino-api:feedback.maxSubjectRunes,constant,chino-api,feedback.maxSubjectRunes,120,,internal/http/feedback.go:30
-constant:chino-api:files.fileAskTimeout,constant,chino-api,files.fileAskTimeout,3 * time.Second,,internal/http/files.go:20
+constant:chino-api:files.fileAskTimeout,constant,chino-api,files.fileAskTimeout,3 * time.Second,,internal/http/files.go:19
 constant:chino-api:files.fileTTL,constant,chino-api,files.fileTTL,time.Minute,,internal/katalog/files.go:21
 constant:chino-api:finished.MinResumeSec,constant,chino-api,finished.MinResumeSec,30,,internal/store/finished.go:31
 constant:chino-api:finished.finishedTailMinSec,constant,chino-api,finished.finishedTailMinSec,120,,internal/store/finished.go:26
@@ -231,7 +233,10 @@ constant:chino-api:kinds.kindRequests,constant,chino-api,kinds.kindRequests,8,,i
 constant:chino-api:kinds.kindTTL,constant,chino-api,kinds.kindTTL,time.Hour,,internal/katalog/kinds.go:23
 constant:chino-api:kinds.kindWait,constant,chino-api,kinds.kindWait,5 * time.Second,,internal/katalog/kinds.go:58
 constant:chino-api:kinds.maxKindAsks,constant,chino-api,kinds.maxKindAsks,500,,internal/katalog/kinds.go:51
-constant:chino-api:logline.Max,constant,chino-api,logline.Max,256,,internal/logline/logline.go:19
+constant:chino-api:logline.Max,constant,chino-api,logline.Max,256,,internal/logline/logline.go:20
+constant:chino-api:oidc.discoveryLogEvery,constant,chino-api,oidc.discoveryLogEvery,time.Minute,,internal/auth/oidc.go:66
+constant:chino-api:oidc.discoveryRetry,constant,chino-api,oidc.discoveryRetry,time.Second,,internal/auth/oidc.go:63
+constant:chino-api:oidc.issuerTimeout,constant,chino-api,oidc.issuerTimeout,10 * time.Second,,internal/auth/oidc.go:60
 constant:chino-api:qoe.maxBandwidthMbps,constant,chino-api,qoe.maxBandwidthMbps,10_000,,internal/metrics/qoe.go:72
 constant:chino-api:qoe.maxRebufferSeconds,constant,chino-api,qoe.maxRebufferSeconds,3600,,internal/metrics/qoe.go:71
 constant:chino-api:qoe.maxStartupSeconds,constant,chino-api,qoe.maxStartupSeconds,600,,internal/metrics/qoe.go:70
@@ -247,9 +252,9 @@ constant:chino-api:search.searchPeopleN,constant,chino-api,search.searchPeopleN,
 constant:chino-api:series.fileDurationWait,constant,chino-api,series.fileDurationWait,3 * time.Second,,internal/http/series.go:71
 constant:chino-api:settings.maxSettingsBody,constant,chino-api,settings.maxSettingsBody,4096,,internal/http/settings.go:27
 constant:chino-api:stream_token.streamTokenTTL,constant,chino-api,stream_token.streamTokenTTL,6 * time.Hour,,internal/http/stream_token.go:15
-constant:chino-api:subtitle_languages.languagesFresh,constant,chino-api,subtitle_languages.languagesFresh,5 * time.Minute,,internal/http/subtitle_languages.go:37
-constant:chino-api:subtitle_languages.languagesStale,constant,chino-api,subtitle_languages.languagesStale,time.Hour,,internal/http/subtitle_languages.go:41
-constant:chino-api:subtitle_languages.languagesTimeout,constant,chino-api,subtitle_languages.languagesTimeout,5 * time.Second,,internal/http/subtitle_languages.go:44
+constant:chino-api:subtitle_languages.languagesFresh,constant,chino-api,subtitle_languages.languagesFresh,5 * time.Minute,,internal/http/subtitle_languages.go:35
+constant:chino-api:subtitle_languages.languagesStale,constant,chino-api,subtitle_languages.languagesStale,time.Hour,,internal/http/subtitle_languages.go:39
+constant:chino-api:subtitle_languages.languagesTimeout,constant,chino-api,subtitle_languages.languagesTimeout,5 * time.Second,,internal/http/subtitle_languages.go:42
 constant:chino-api:telemetry.maxTelemetryBody,constant,chino-api,telemetry.maxTelemetryBody,256 * 1024,,internal/http/telemetry.go:16
 constant:chino-api:watchlists.maxListName,constant,chino-api,watchlists.maxListName,60,,internal/http/watchlists.go:30
 constant:chino-api:watchlists.maxListsPerUser,constant,chino-api,watchlists.maxListsPerUser,50,,internal/store/watchlists.go:35
@@ -260,10 +265,10 @@ constant:chino-mobile:AndroidDownloads.NOTIFY_REQUEST,constant,chino-mobile,Andr
 constant:chino-mobile:AndroidDownloads.NO_ANSWER_RETRIES,constant,chino-mobile,AndroidDownloads.NO_ANSWER_RETRIES,3,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/downloads/AndroidDownloads.kt:916
 constant:chino-mobile:AndroidDownloadsPlatform.MAX_RUNS,constant,chino-mobile,AndroidDownloadsPlatform.MAX_RUNS,12,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/downloads/AndroidDownloadsPlatform.kt:201
 constant:chino-mobile:AndroidDownloadsPlatform.NETWORK_SETTLE_MS,constant,chino-mobile,AndroidDownloadsPlatform.NETWORK_SETTLE_MS,1_500L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/downloads/AndroidDownloadsPlatform.kt:171
-constant:chino-mobile:ApiErrors.MAX_PERSON_MESSAGE,constant,chino-mobile,ApiErrors.MAX_PERSON_MESSAGE,300,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/ApiErrors.kt:43
-constant:chino-mobile:ApiErrors.MAX_SERVER_MESSAGE,constant,chino-mobile,ApiErrors.MAX_SERVER_MESSAGE,200,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/ApiErrors.kt:40
-constant:chino-mobile:AppContainer.REACH_CONNECT_TIMEOUT_MS,constant,chino-mobile,AppContainer.REACH_CONNECT_TIMEOUT_MS,3_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/AppContainer.kt:561
-constant:chino-mobile:AppContainer.REACH_TIMEOUT_MS,constant,chino-mobile,AppContainer.REACH_TIMEOUT_MS,4_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/AppContainer.kt:562
+constant:chino-mobile:ApiErrors.MAX_PERSON_MESSAGE,constant,chino-mobile,ApiErrors.MAX_PERSON_MESSAGE,300,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/ApiErrors.kt:46
+constant:chino-mobile:ApiErrors.MAX_SERVER_MESSAGE,constant,chino-mobile,ApiErrors.MAX_SERVER_MESSAGE,200,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/ApiErrors.kt:43
+constant:chino-mobile:AppContainer.REACH_CONNECT_TIMEOUT_MS,constant,chino-mobile,AppContainer.REACH_CONNECT_TIMEOUT_MS,3_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/AppContainer.kt:672
+constant:chino-mobile:AppContainer.REACH_TIMEOUT_MS,constant,chino-mobile,AppContainer.REACH_TIMEOUT_MS,4_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/AppContainer.kt:673
 constant:chino-mobile:AuthScreenModel.SERVER_CHECK_MS,constant,chino-mobile,AuthScreenModel.SERVER_CHECK_MS,4_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/auth/AuthScreenModel.kt:118
 constant:chino-mobile:BrowseOffline.MAX_LISTS,constant,chino-mobile,BrowseOffline.MAX_LISTS,12,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/browse/BrowseOffline.kt:24
 constant:chino-mobile:BugReporter.MAX_AUTO_PER_SESSION,constant,chino-mobile,BugReporter.MAX_AUTO_PER_SESSION,3,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/feedback/BugReporter.kt:163
@@ -294,7 +299,7 @@ constant:chino-mobile:CastTracks.MASTER_AUDIO_ID,constant,chino-mobile,CastTrack
 constant:chino-mobile:CastTracks.MASTER_TRACK_ID,constant,chino-mobile,CastTracks.MASTER_TRACK_ID,-1L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/cast/CastTracks.kt:216
 constant:chino-mobile:CatalogueSearch.SEARCH_PEOPLE,constant,chino-mobile,CatalogueSearch.SEARCH_PEOPLE,12,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/search/CatalogueSearch.kt:36
 constant:chino-mobile:CatalogueSearch.SEARCH_TITLES,constant,chino-mobile,CatalogueSearch.SEARCH_TITLES,40,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/search/CatalogueSearch.kt:33
-constant:chino-mobile:ChinoApi.PLAY_INFO_TIMEOUT_MS,constant,chino-mobile,ChinoApi.PLAY_INFO_TIMEOUT_MS,8_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/ChinoApi.kt:878
+constant:chino-mobile:ChinoApi.PLAY_INFO_TIMEOUT_MS,constant,chino-mobile,ChinoApi.PLAY_INFO_TIMEOUT_MS,8_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/ChinoApi.kt:891
 constant:chino-mobile:ChinoCast.ERROR_SETTLE_MS,constant,chino-mobile,ChinoCast.ERROR_SETTLE_MS,400L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/cast/ChinoCast.kt:827
 constant:chino-mobile:ChinoCast.LEAVE_WRITE_WAIT_MS,constant,chino-mobile,ChinoCast.LEAVE_WRITE_WAIT_MS,5_000L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/cast/ChinoCast.kt:834
 constant:chino-mobile:ChinoCast.LOAD_ID_BYTES,constant,chino-mobile,ChinoCast.LOAD_ID_BYTES,8,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/cast/ChinoCast.kt:850
@@ -307,8 +312,8 @@ constant:chino-mobile:ChinoCast.START_RETRY_MS,constant,chino-mobile,ChinoCast.S
 constant:chino-mobile:ChinoCast.TRACKS_TIMEOUT_MS,constant,chino-mobile,ChinoCast.TRACKS_TIMEOUT_MS,10_000L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/cast/ChinoCast.kt:837
 constant:chino-mobile:ChinoCast.WRITER_WAIT_MS,constant,chino-mobile,ChinoCast.WRITER_WAIT_MS,10_000L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/cast/ChinoCast.kt:830
 constant:chino-mobile:ChinoDownloadService.NOTIFICATION_ID,constant,chino-mobile,ChinoDownloadService.NOTIFICATION_ID,7301,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/downloads/ChinoDownloadService.kt:73
-constant:chino-mobile:DetailScreen.OFFLINE_RECHECK_MS,constant,chino-mobile,DetailScreen.OFFLINE_RECHECK_MS,15_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/detail/DetailScreen.kt:724
-constant:chino-mobile:DetailScreen.REFRESH_ON_RETURN_DELAY_MS,constant,chino-mobile,DetailScreen.REFRESH_ON_RETURN_DELAY_MS,500L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/detail/DetailScreen.kt:721
+constant:chino-mobile:DetailScreen.OFFLINE_RECHECK_MS,constant,chino-mobile,DetailScreen.OFFLINE_RECHECK_MS,15_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/detail/DetailScreen.kt:726
+constant:chino-mobile:DetailScreen.REFRESH_ON_RETURN_DELAY_MS,constant,chino-mobile,DetailScreen.REFRESH_ON_RETURN_DELAY_MS,500L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/detail/DetailScreen.kt:723
 constant:chino-mobile:DownloadBook.MAX_AVAILABLE_IDS,constant,chino-mobile,DownloadBook.MAX_AVAILABLE_IDS,500,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/downloads/DownloadBook.kt:215
 constant:chino-mobile:DownloadBook.MAX_TITLE_BY_TITLE,constant,chino-mobile,DownloadBook.MAX_TITLE_BY_TITLE,100,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/downloads/DownloadBook.kt:253
 constant:chino-mobile:DownloadBook.STOP_NONE,constant,chino-mobile,DownloadBook.STOP_NONE,0,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/downloads/DownloadBook.kt:21
@@ -337,8 +342,8 @@ constant:chino-mobile:DownloadsSection.RECHECK_MS,constant,chino-mobile,Download
 constant:chino-mobile:DownloadsSection.STORAGE_REFRESH_MS,constant,chino-mobile,DownloadsSection.STORAGE_REFRESH_MS,3_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/downloads/DownloadsSection.kt:463
 constant:chino-mobile:HeroPool.HERO_CANDIDATES,constant,chino-mobile,HeroPool.HERO_CANDIDATES,40,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/home/HeroPool.kt:26
 constant:chino-mobile:HeroPool.HERO_POOL_SIZE,constant,chino-mobile,HeroPool.HERO_POOL_SIZE,8,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/home/HeroPool.kt:23
-constant:chino-mobile:HttpClientFactory.API_CONNECT_TIMEOUT_MS,constant,chino-mobile,HttpClientFactory.API_CONNECT_TIMEOUT_MS,5_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/HttpClientFactory.kt:78
-constant:chino-mobile:HttpClientFactory.API_SOCKET_TIMEOUT_MS,constant,chino-mobile,HttpClientFactory.API_SOCKET_TIMEOUT_MS,8_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/HttpClientFactory.kt:79
+constant:chino-mobile:HttpClientFactory.API_CONNECT_TIMEOUT_MS,constant,chino-mobile,HttpClientFactory.API_CONNECT_TIMEOUT_MS,5_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/HttpClientFactory.kt:98
+constant:chino-mobile:HttpClientFactory.API_SOCKET_TIMEOUT_MS,constant,chino-mobile,HttpClientFactory.API_SOCKET_TIMEOUT_MS,8_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/api/HttpClientFactory.kt:99
 constant:chino-mobile:IosPlaybackController.STARTUP_DEADLINE_MS,constant,chino-mobile,IosPlaybackController.STARTUP_DEADLINE_MS,20_000L,,shared/src/iosMain/kotlin/cloud/nalet/chino/mobile/ui/player/IosPlaybackController.kt:25
 constant:chino-mobile:IosPlayerChrome.AIRPLAY_GLYPH_INSET_PT,constant,chino-mobile,IosPlayerChrome.AIRPLAY_GLYPH_INSET_PT,4.0,,shared/src/iosMain/kotlin/cloud/nalet/chino/mobile/ui/player/IosPlayerChrome.kt:463
 constant:chino-mobile:IosSignInLauncher.CANCELED_LOGIN_CODE,constant,chino-mobile,IosSignInLauncher.CANCELED_LOGIN_CODE,1L,,shared/src/iosMain/kotlin/cloud/nalet/chino/mobile/data/auth/IosSignInLauncher.kt:204
@@ -365,8 +370,8 @@ constant:chino-mobile:PlaybackProgress.SEEK_LANDING_SLACK_SEC,constant,chino-mob
 constant:chino-mobile:PlaybackRecovery.IN_PLACE_TRIES,constant,chino-mobile,PlaybackRecovery.IN_PLACE_TRIES,3,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlaybackRecovery.kt:31
 constant:chino-mobile:PlaybackRecovery.RECOVERED_AFTER_MS,constant,chino-mobile,PlaybackRecovery.RECOVERED_AFTER_MS,30_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlaybackRecovery.kt:110
 constant:chino-mobile:PlayerRules.SEEK_STEP_MS,constant,chino-mobile,PlayerRules.SEEK_STEP_MS,10_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlayerRules.kt:241
-constant:chino-mobile:PlayerScreen.DOWNLOAD_LANGUAGES_WAIT_MS,constant,chino-mobile,PlayerScreen.DOWNLOAD_LANGUAGES_WAIT_MS,1_500L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlayerScreen.android.kt:892
-constant:chino-mobile:PlayerScreen.MORE_LANGUAGES_IN_VIEW,constant,chino-mobile,PlayerScreen.MORE_LANGUAGES_IN_VIEW,3,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlayerScreen.android.kt:3579
+constant:chino-mobile:PlayerScreen.DOWNLOAD_LANGUAGES_WAIT_MS,constant,chino-mobile,PlayerScreen.DOWNLOAD_LANGUAGES_WAIT_MS,1_500L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlayerScreen.android.kt:896
+constant:chino-mobile:PlayerScreen.MORE_LANGUAGES_IN_VIEW,constant,chino-mobile,PlayerScreen.MORE_LANGUAGES_IN_VIEW,3,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/ui/player/PlayerScreen.android.kt:3590
 constant:chino-mobile:ProgressQueue.MAX_ATTEMPTS,constant,chino-mobile,ProgressQueue.MAX_ATTEMPTS,10,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/downloads/ProgressQueue.kt:97
 constant:chino-mobile:QuestionDialog.DISABLED_ALPHA,constant,chino-mobile,QuestionDialog.DISABLED_ALPHA,0.45f,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/components/QuestionDialog.kt:242
 constant:chino-mobile:ServerReach.SERVER_LOOK_MS,constant,chino-mobile,ServerReach.SERVER_LOOK_MS,15_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/downloads/ServerReach.kt:144
@@ -385,7 +390,8 @@ constant:chino-mobile:SupSubtitles.SUP_HEADER,constant,chino-mobile,SupSubtitles
 constant:chino-mobile:SupSubtitles.WINDOW,constant,chino-mobile,SupSubtitles.WINDOW,64 * 1024,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/ui/player/SupSubtitles.kt:280
 constant:chino-mobile:TitleFiles.RETRY_S,constant,chino-mobile,TitleFiles.RETRY_S,30L,,shared/src/androidMain/kotlin/cloud/nalet/chino/mobile/downloads/TitleFiles.kt:228
 constant:chino-mobile:Toast.TOAST_MS,constant,chino-mobile,Toast.TOAST_MS,5_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/components/Toast.kt:113
-constant:chino-mobile:TokenManager.REFRESH_SLACK_MS,constant,chino-mobile,TokenManager.REFRESH_SLACK_MS,60_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/auth/TokenManager.kt:89
+constant:chino-mobile:TokenManager.KEPT_RENEWED,constant,chino-mobile,TokenManager.KEPT_RENEWED,16,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/auth/TokenManager.kt:117
+constant:chino-mobile:TokenManager.REFRESH_SLACK_MS,constant,chino-mobile,TokenManager.REFRESH_SLACK_MS,60_000L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/data/auth/TokenManager.kt:113
 constant:chino-mobile:WatchlistScreenModel.HUB_SHELF_CAP,constant,chino-mobile,WatchlistScreenModel.HUB_SHELF_CAP,12,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/watchlist/WatchlistScreenModel.kt:26
 constant:chino-mobile:ZapAmbientLight.AMBIENT_COLS,constant,chino-mobile,ZapAmbientLight.AMBIENT_COLS,16,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/zap/ZapAmbientLight.kt:118
 constant:chino-mobile:ZapAmbientLight.AMBIENT_FADE_MS,constant,chino-mobile,ZapAmbientLight.AMBIENT_FADE_MS,1800L,,shared/src/commonMain/kotlin/cloud/nalet/chino/mobile/ui/zap/ZapAmbientLight.kt:125
@@ -537,15 +543,17 @@ constant:chino-web:HeroSection.ROTATE_MS,constant,chino-web,HeroSection.ROTATE_M
 constant:chino-web:HeroSection.SETTLE_MS,constant,chino-web,HeroSection.SETTLE_MS,320,,src/components/HeroSection.tsx:42
 constant:chino-web:HeroSection.TRAILERS_ON_HERO,constant,chino-web,HeroSection.TRAILERS_ON_HERO,false,,src/components/HeroSection.tsx:39
 constant:chino-web:MoviesSection.PAGE_SIZE,constant,chino-web,MoviesSection.PAGE_SIZE,48,,src/components/sections/MoviesSection.tsx:10
-constant:chino-web:PlayerPage.STARTUP_DEADLINE_MS,constant,chino-web,PlayerPage.STARTUP_DEADLINE_MS,20_000,,src/components/PlayerPage.tsx:309
+constant:chino-web:PlayerPage.STARTUP_DEADLINE_MS,constant,chino-web,PlayerPage.STARTUP_DEADLINE_MS,20_000,,src/components/PlayerPage.tsx:311
 constant:chino-web:SeriesSection.PAGE_SIZE,constant,chino-web,SeriesSection.PAGE_SIZE,48,,src/components/sections/SeriesSection.tsx:10
 constant:chino-web:WatchlistSection.SHELF_CAP,constant,chino-web,WatchlistSection.SHELF_CAP,12,,src/components/sections/WatchlistSection.tsx:42
 constant:chino-web:ZapCard.DWELL_NOISE_FLOOR_MS,constant,chino-web,ZapCard.DWELL_NOISE_FLOOR_MS,100,,src/components/zap/ZapCard.tsx:62
-constant:chino-web:ZapSection.DWELL_MS,constant,chino-web,ZapSection.DWELL_MS,8000,,src/components/sections/ZapSection.tsx:35
-constant:chino-web:ZapSection.FAST_SKIP_MS,constant,chino-web,ZapSection.FAST_SKIP_MS,2000,,src/components/sections/ZapSection.tsx:34
-constant:chino-web:ZapSection.PREWARM_DEBOUNCE_MS,constant,chino-web,ZapSection.PREWARM_DEBOUNCE_MS,500,,src/components/sections/ZapSection.tsx:18
-constant:chino-web:account.MAX_MESSAGE,constant,chino-web,account.MAX_MESSAGE,300,,src/lib/account.ts:57
+constant:chino-web:ZapSection.DWELL_MS,constant,chino-web,ZapSection.DWELL_MS,8000,,src/components/sections/ZapSection.tsx:36
+constant:chino-web:ZapSection.FAST_SKIP_MS,constant,chino-web,ZapSection.FAST_SKIP_MS,2000,,src/components/sections/ZapSection.tsx:35
+constant:chino-web:ZapSection.PREWARM_DEBOUNCE_MS,constant,chino-web,ZapSection.PREWARM_DEBOUNCE_MS,500,,src/components/sections/ZapSection.tsx:19
+constant:chino-web:account.MAX_MESSAGE,constant,chino-web,account.MAX_MESSAGE,300,,src/lib/account.ts:59
+constant:chino-web:account.RENEW_BELOW_SEC,constant,chino-web,account.RENEW_BELOW_SEC,30,,src/lib/account.ts:101
 constant:chino-web:continueWatching.UNKNOWN_LENGTH_SEC,constant,chino-web,continueWatching.UNKNOWN_LENGTH_SEC,86_400,,src/lib/continueWatching.ts:13
+constant:chino-web:deletedAccountWatch.MAX_BODY_BYTES,constant,chino-web,deletedAccountWatch.MAX_BODY_BYTES,4096,,src/lib/deletedAccountWatch.ts:24
 constant:chino-web:errorReporter.MAX_AUTO_REPORTS_PER_SESSION,constant,chino-web,errorReporter.MAX_AUTO_REPORTS_PER_SESSION,3,,src/lib/errorReporter.ts:29
 constant:chino-web:heldFrame.HAVE_CURRENT_DATA,constant,chino-web,heldFrame.HAVE_CURRENT_DATA,2,,src/lib/heldFrame.ts:18
 constant:chino-web:heroPool.HERO_POOL_SIZE,constant,chino-web,heroPool.HERO_POOL_SIZE,8,,src/lib/heroPool.ts:10
@@ -571,7 +579,7 @@ constant:chino-web:playerMenus.MENU_ROW_REM,constant,chino-web,playerMenus.MENU_
 constant:chino-web:qoe.BANDWIDTH_EVERY_MS,constant,chino-web,qoe.BANDWIDTH_EVERY_MS,30_000,,src/lib/qoe.ts:203
 constant:chino-web:qoe.MOVED_SEC,constant,chino-web,qoe.MOVED_SEC,0.05,,src/lib/qoe.ts:268
 constant:chino-web:qoe.RESUME_FROM_SEC,constant,chino-web,qoe.RESUME_FROM_SEC,1,,src/lib/qoe.ts:139
-constant:chino-web:settings.BINGE_CONTINUATION_WINDOW_MS,constant,chino-web,settings.BINGE_CONTINUATION_WINDOW_MS,6 * 3600 * 1000,,src/lib/settings.ts:56
+constant:chino-web:settings.BINGE_CONTINUATION_WINDOW_MS,constant,chino-web,settings.BINGE_CONTINUATION_WINDOW_MS,6 * 3600 * 1000,,src/lib/settings.ts:59
 constant:chino-web:signInAgain.JUST_SIGNED_IN_MS,constant,chino-web,signInAgain.JUST_SIGNED_IN_MS,60_000,,src/lib/signInAgain.ts:16
 constant:chino-web:streamTokenCache.EXPIRY_MARGIN_MS,constant,chino-web,streamTokenCache.EXPIRY_MARGIN_MS,60_000,,src/lib/streamTokenCache.ts:10
 constant:chino-web:subtitleLook.EDGE,constant,chino-web,subtitleLook.EDGE,0.05,,src/lib/subtitleLook.ts:48
@@ -581,7 +589,7 @@ constant:chino-web:subtitleLook.SUBTITLE_LINE_WIDTH,constant,chino-web,subtitleL
 constant:chino-web:subtitleLook.SUBTITLE_TEXT_SIZE,constant,chino-web,subtitleLook.SUBTITLE_TEXT_SIZE,0.0533,,src/lib/subtitleLook.ts:28
 constant:chino-web:useCatalogEvents.DEBOUNCE_MS,constant,chino-web,useCatalogEvents.DEBOUNCE_MS,1500,,src/hooks/useCatalogEvents.ts:15
 constant:chino-web:useDeviceCaps.REFINE_TIMEOUT_MS,constant,chino-web,useDeviceCaps.REFINE_TIMEOUT_MS,1000,,src/hooks/useDeviceCaps.ts:47
-constant:chino-web:useHeroPool.CACHE_TTL_MS,constant,chino-web,useHeroPool.CACHE_TTL_MS,60 * 60 * 1000,,src/hooks/useHeroPool.ts:54
+constant:chino-web:useHeroPool.CACHE_TTL_MS,constant,chino-web,useHeroPool.CACHE_TTL_MS,60 * 60 * 1000,,src/hooks/useHeroPool.ts:55
 constant:chino-web:usePictureLayers.LIFT_MS,constant,chino-web,usePictureLayers.LIFT_MS,150,,src/hooks/usePictureLayers.ts:36
 constant:chino-web:usePictureLayers.ZOOM_MS,constant,chino-web,usePictureLayers.ZOOM_MS,250,,src/hooks/usePictureLayers.ts:33
 constant:chino-web:useZapFeed.EPSILON,constant,chino-web,useZapFeed.EPSILON,0.6,,src/hooks/useZapFeed.ts:14
@@ -627,15 +635,26 @@ constant:katalog-api:search.minTypoWord,constant,katalog-api,search.minTypoWord,
 constant:katalog-api:search.minWordsQuery,constant,katalog-api,search.minWordsQuery,3,,internal/store/search.go:58
 constant:katalog-api:search.searchEvery,constant,katalog-api,search.searchEvery,15 * time.Second,,internal/store/search.go:114
 constant:katalog-api:search.typoSimilarity,constant,katalog-api,search.typoSimilarity,0.5,,internal/store/search.go:66
-constant:katalog-manager:backfill.DefaultInflight,constant,katalog-manager,backfill.DefaultInflight,1,,internal/chapters/backfill.go:70
-constant:katalog-manager:backfill.DefaultLease,constant,katalog-manager,backfill.DefaultLease,30 * time.Minute,,internal/chapters/backfill.go:73
-constant:katalog-manager:backfill.DefaultRate,constant,katalog-manager,backfill.DefaultRate,120,,internal/chapters/backfill.go:71
-constant:katalog-manager:backfill.DefaultRecords,constant,katalog-manager,backfill.DefaultRecords,3600,,internal/chapters/backfill.go:72
-constant:katalog-manager:backfill.MeasureAgainAfter,constant,katalog-manager,backfill.MeasureAgainAfter,24 * time.Hour,,internal/picture/backfill.go:274
-constant:katalog-manager:backfill.UnknownAgain,constant,katalog-manager,backfill.UnknownAgain,30 * 24 * time.Hour,,internal/picture/backfill.go:273
+constant:katalog-manager:backfill.DefaultInflight,constant,katalog-manager,backfill.DefaultInflight,2,,internal/captions/backfill.go:80
+constant:katalog-manager:backfill.DefaultLease,constant,katalog-manager,backfill.DefaultLease,10 * time.Minute,,internal/captions/backfill.go:82
+constant:katalog-manager:backfill.DefaultRate,constant,katalog-manager,backfill.DefaultRate,600,,internal/captions/backfill.go:81
+constant:katalog-manager:backfill.DefaultRecords,constant,katalog-manager,backfill.DefaultRecords,3600,,internal/chapters/backfill.go:73
+constant:katalog-manager:backfill.FirstBackoff,constant,katalog-manager,backfill.FirstBackoff,time.Hour,,internal/captions/backfill.go:550
+constant:katalog-manager:backfill.MaxBackoff,constant,katalog-manager,backfill.MaxBackoff,7 * 24 * time.Hour,,internal/captions/backfill.go:551
+constant:katalog-manager:backfill.MeasureAgainAfter,constant,katalog-manager,backfill.MeasureAgainAfter,24 * time.Hour,,internal/picture/backfill.go:276
+constant:katalog-manager:backfill.ReleaseWait,constant,katalog-manager,backfill.ReleaseWait,15 * time.Minute,,internal/captions/backfill.go:552
+constant:katalog-manager:backfill.UnknownAgain,constant,katalog-manager,backfill.UnknownAgain,30 * 24 * time.Hour,,internal/picture/backfill.go:275
 constant:katalog-manager:backfill.backfillBatch,constant,katalog-manager,backfill.backfillBatch,500,,internal/sourceprobe/backfill.go:20
-constant:katalog-manager:backfill.candidates,constant,katalog-manager,backfill.candidates,8,,internal/chapters/backfill.go:316
-constant:katalog-manager:backfill.recordsPerClaim,constant,katalog-manager,backfill.recordsPerClaim,50,,internal/chapters/backfill.go:320
+constant:katalog-manager:backfill.candidates,constant,katalog-manager,backfill.candidates,8,,internal/captions/backfill.go:265
+constant:katalog-manager:backfill.recordsPerClaim,constant,katalog-manager,backfill.recordsPerClaim,50,,internal/chapters/backfill.go:321
+constant:katalog-manager:captions.MinWindowFrames,constant,katalog-manager,captions.MinWindowFrames,24,,internal/library/captions.go:381
+constant:katalog-manager:captions.WindowAtStart,constant,katalog-manager,captions.WindowAtStart,true,,internal/library/captions.go:463
+constant:katalog-manager:captions.WindowKeyframeSlack,constant,katalog-manager,captions.WindowKeyframeSlack,30.0,,internal/library/captions.go:392
+constant:katalog-manager:captions.WindowPackets,constant,katalog-manager,captions.WindowPackets,48,,internal/library/captions.go:474
+constant:katalog-manager:captions.WindowPlaceSlack,constant,katalog-manager,captions.WindowPlaceSlack,15.0,,internal/library/captions.go:386
+constant:katalog-manager:captions.WindowTail,constant,katalog-manager,captions.WindowTail,30.0,,internal/library/captions.go:471
+constant:katalog-manager:captions.atSlack,constant,katalog-manager,captions.atSlack,1e-3,,internal/library/captions.go:613
+constant:katalog-manager:captions.maxWindows,constant,katalog-manager,captions.maxWindows,64,,internal/captions/captions.go:271
 constant:katalog-manager:catalogsearch.catalogSearchLock,constant,katalog-manager,catalogsearch.catalogSearchLock,49,,internal/store/catalogsearch.go:183
 constant:katalog-manager:changes.maxChangeDays,constant,katalog-manager,changes.maxChangeDays,14,,internal/tmdb/changes.go:29
 constant:katalog-manager:changes.maxChangePages,constant,katalog-manager,changes.maxChangePages,500,,internal/tmdb/changes.go:31
@@ -659,15 +678,15 @@ constant:katalog-manager:extras.WaitTimeout,constant,katalog-manager,extras.Wait
 constant:katalog-manager:extras.batch,constant,katalog-manager,extras.batch,200,,internal/extras/extras.go:63
 constant:katalog-manager:files.fileSlots,constant,katalog-manager,files.fileSlots,2,,internal/chapters/files.go:35
 constant:katalog-manager:library.recordContract,constant,katalog-manager,library.recordContract,1,,internal/rest/library.go:33
-constant:katalog-manager:main.catalogSearchRetry,constant,katalog-manager,main.catalogSearchRetry,10 * time.Minute,,cmd/server/main.go:544
+constant:katalog-manager:main.catalogSearchRetry,constant,katalog-manager,main.catalogSearchRetry,10 * time.Minute,,cmd/server/main.go:562
 constant:katalog-manager:migration.mtimeTolerance,constant,katalog-manager,migration.mtimeTolerance,time.Millisecond,,internal/library/migration.go:268
-constant:katalog-manager:oidc.principalKey,constant,katalog-manager,oidc.principalKey,0,,internal/auth/oidc.go:41
-constant:katalog-manager:picture.CostlyRuns,constant,katalog-manager,picture.CostlyRuns,3,,internal/picture/picture.go:292
-constant:katalog-manager:picture.FirstBackoff,constant,katalog-manager,picture.FirstBackoff,time.Hour,,internal/picture/picture.go:276
-constant:katalog-manager:picture.FirstRelease,constant,katalog-manager,picture.FirstRelease,15 * time.Minute,,internal/picture/picture.go:278
-constant:katalog-manager:picture.MaxBackoff,constant,katalog-manager,picture.MaxBackoff,7 * 24 * time.Hour,,internal/picture/picture.go:277
-constant:katalog-manager:picture.MaxRelease,constant,katalog-manager,picture.MaxRelease,24 * time.Hour,,internal/picture/picture.go:279
-constant:katalog-manager:picture.leaseSlack,constant,katalog-manager,picture.leaseSlack,time.Minute,,internal/picture/picture.go:293
+constant:katalog-manager:oidc.principalKey,constant,katalog-manager,oidc.principalKey,0,,internal/auth/oidc.go:45
+constant:katalog-manager:picture.CostlyRuns,constant,katalog-manager,picture.CostlyRuns,3,,internal/picture/picture.go:279
+constant:katalog-manager:picture.FirstBackoff,constant,katalog-manager,picture.FirstBackoff,time.Hour,,internal/picture/picture.go:263
+constant:katalog-manager:picture.FirstRelease,constant,katalog-manager,picture.FirstRelease,15 * time.Minute,,internal/picture/picture.go:265
+constant:katalog-manager:picture.MaxBackoff,constant,katalog-manager,picture.MaxBackoff,7 * 24 * time.Hour,,internal/picture/picture.go:264
+constant:katalog-manager:picture.MaxRelease,constant,katalog-manager,picture.MaxRelease,24 * time.Hour,,internal/picture/picture.go:266
+constant:katalog-manager:picture.leaseSlack,constant,katalog-manager,picture.leaseSlack,time.Minute,,internal/picture/picture.go:280
 constant:katalog-manager:project.ProjectorInterval,constant,katalog-manager,project.ProjectorInterval,15 * time.Second,,internal/library/project.go:35
 constant:katalog-manager:project.projectorBatch,constant,katalog-manager,project.projectorBatch,200,,internal/library/project.go:38
 constant:katalog-manager:project.refreshWait,constant,katalog-manager,project.refreshWait,30 * time.Second,,internal/library/project.go:635
@@ -677,12 +696,15 @@ constant:katalog-manager:ratings.releaseTheatrical,constant,katalog-manager,rati
 constant:katalog-manager:ratings.unratedEvery,constant,katalog-manager,ratings.unratedEvery,30 * time.Second,,internal/rest/ratings.go:23
 constant:katalog-manager:replace.pathLockWait,constant,katalog-manager,replace.pathLockWait,30 * time.Second,,internal/itemactions/replace.go:509
 constant:katalog-manager:report.maxPage,constant,katalog-manager,report.maxPage,500,,internal/compliance/report.go:19
-constant:katalog-manager:retire.lockPoll,constant,katalog-manager,retire.lockPoll,50 * time.Millisecond,,internal/library/retire.go:128
+constant:katalog-manager:retire.lockPoll,constant,katalog-manager,retire.lockPoll,50 * time.Millisecond,,internal/library/retire.go:135
+constant:katalog-manager:retire.maxWaiting,constant,katalog-manager,retire.maxWaiting,100,,internal/library/retire.go:565
+constant:katalog-manager:retire_extras.ExtrasGated,constant,katalog-manager,retire_extras.ExtrasGated,true,,internal/library/retire_extras.go:33
+constant:katalog-manager:retire_extras.maxExtrasLooked,constant,katalog-manager,retire_extras.maxExtrasLooked,1000,,internal/library/retire_extras.go:65
 constant:katalog-manager:retire_list.MaxList,constant,katalog-manager,retire_list.MaxList,10000,,internal/library/retire_list.go:83
 constant:katalog-manager:retire_list.runErrors,constant,katalog-manager,retire_list.runErrors,5,,internal/library/retire_list.go:90
 constant:katalog-manager:retire_list.titleTries,constant,katalog-manager,retire_list.titleTries,3,,internal/library/retire_list.go:89
-constant:katalog-manager:retire_superseded.chainDepth,constant,katalog-manager,retire_superseded.chainDepth,64,,internal/library/retire_superseded.go:183
-constant:katalog-manager:retire_superseded.supersededRetry,constant,katalog-manager,retire_superseded.supersededRetry,time.Hour,,internal/library/retire_superseded.go:92
+constant:katalog-manager:retire_superseded.chainDepth,constant,katalog-manager,retire_superseded.chainDepth,64,,internal/library/retire_superseded.go:196
+constant:katalog-manager:retire_superseded.supersededRetry,constant,katalog-manager,retire_superseded.supersededRetry,time.Hour,,internal/library/retire_superseded.go:95
 constant:katalog-manager:retry.batch,constant,katalog-manager,retry.batch,200,,internal/retry/retry.go:73
 constant:katalog-manager:roles.movieCastCap,constant,katalog-manager,roles.movieCastCap,12,,internal/tmdb/roles.go:34
 constant:katalog-manager:roles.otherRoleCap,constant,katalog-manager,roles.otherRoleCap,10,,internal/tmdb/roles.go:36
@@ -692,8 +714,8 @@ constant:katalog-manager:service.refresh,constant,katalog-manager,service.refres
 constant:katalog-manager:service.rematch,constant,katalog-manager,service.rematch,true,,internal/tmdb/service.go:206
 constant:katalog-manager:settings.defaultNightly,constant,katalog-manager,settings.defaultNightly,3 * time.Hour,,internal/compliance/settings.go:38
 constant:katalog-manager:settings.defaultReaders,constant,katalog-manager,settings.defaultReaders,4,,internal/compliance/settings.go:33
-constant:katalog-manager:settings.defaultReencode,constant,katalog-manager,settings.defaultReencode,4,,internal/library/settings.go:102
-constant:katalog-manager:settings.defaultRetireNum,constant,katalog-manager,settings.defaultRetireNum,30,,internal/library/settings.go:101
+constant:katalog-manager:settings.defaultReencode,constant,katalog-manager,settings.defaultReencode,4,,internal/library/settings.go:107
+constant:katalog-manager:settings.defaultRetireNum,constant,katalog-manager,settings.defaultRetireNum,30,,internal/library/settings.go:106
 constant:katalog-manager:settings.maxReaders,constant,katalog-manager,settings.maxReaders,64,,internal/compliance/settings.go:34
 constant:katalog-manager:sourcetracks.maxErrors,constant,katalog-manager,sourcetracks.maxErrors,20,,internal/sourcetracks/sourcetracks.go:174
 constant:katalog-manager:stream.clientBuffer,constant,katalog-manager,stream.clientBuffer,16,,internal/stream/stream.go:27
@@ -807,8 +829,8 @@ constant:zae:signin.maxHops,constant,zae,signin.maxHops,8,,internal/doctor/signi
 constant:zae:upgrade.restoreTimeout,constant,zae,upgrade.restoreTimeout,30 * time.Second,,internal/addon/upgrade.go:20
 constant:zae:values.maxNameLen,constant,zae,values.maxNameLen,40,,internal/addon/values.go:22
 constant:zaentrum-operator:addon.MaxNameLength,constant,zaentrum-operator,addon.MaxNameLength,40,,operator/internal/addon/addon.go:69
-constant:zaentrum-operator:backup.maxBackupDumps,constant,zaentrum-operator,backup.maxBackupDumps,50,,operator/internal/controller/backup.go:47
-constant:zaentrum-operator:backuprequest.maxLoggedRequest,constant,zaentrum-operator,backuprequest.maxLoggedRequest,64,,operator/internal/controller/backuprequest.go:67
+constant:zaentrum-operator:backup.maxBackupDumps,constant,zaentrum-operator,backup.maxBackupDumps,50,,operator/internal/controller/backup.go:48
+constant:zaentrum-operator:backuprequest.maxLoggedRequest,constant,zaentrum-operator,backuprequest.maxLoggedRequest,64,,operator/internal/controller/backuprequest.go:68
 constant:zaentrum-operator:database.migrationSwitchWindow,constant,zaentrum-operator,database.migrationSwitchWindow,5 * time.Minute,,operator/internal/controller/database.go:64
 constant:zaentrum-operator:databases_rules.DatabaseHostMaxLength,constant,zaentrum-operator,databases_rules.DatabaseHostMaxLength,253,,operator/api/v1alpha1/databases_rules.go:42
 constant:zaentrum-operator:databases_rules.DatabaseNameMaxLength,constant,zaentrum-operator,databases_rules.DatabaseNameMaxLength,63,,operator/api/v1alpha1/databases_rules.go:22
@@ -819,6 +841,9 @@ constant:zaentrum-operator:prune.unservedRecheck,constant,zaentrum-operator,prun
 constant:zaentrum-operator:realm.realmRetryAfter,constant,zaentrum-operator,realm.realmRetryAfter,10 * time.Minute,,operator/internal/controller/realm.go:64
 constant:zaentrum-operator:self.shortDigestLen,constant,zaentrum-operator,self.shortDigestLen,12,,operator/internal/controller/self.go:70
 constant:zaentrum-operator:templates.RestoreRefusedExitCode,constant,zaentrum-operator,templates.RestoreRefusedExitCode,3,,operator/internal/templates/templates.go:575
+constant:zaentrum-operator:updatebackup.stopDeadline,constant,zaentrum-operator,updatebackup.stopDeadline,1,,operator/internal/controller/updatebackup.go:104
+constant:zaentrum-operator:updatebackup.updateBackupWait,constant,zaentrum-operator,updatebackup.updateBackupWait,30 * time.Minute,,operator/internal/controller/updatebackup.go:89
+constant:zaentrum-operator:updatebackup.updateStopWait,constant,zaentrum-operator,updatebackup.updateStopWait,5 * time.Minute,,operator/internal/controller/updatebackup.go:92
 constant:zaentrum-operator:updates.fetchTimeout,constant,zaentrum-operator,updates.fetchTimeout,10 * time.Second,,operator/internal/updates/updates.go:39
 constant:zaentrum-operator:verify.maxVerifyChecks,constant,zaentrum-operator,verify.maxVerifyChecks,40,,operator/internal/controller/verify.go:89
 constant:zaentrum-operator:verify.maxVerifyDetail,constant,zaentrum-operator,verify.maxVerifyDetail,200,,operator/internal/controller/verify.go:90
@@ -943,34 +968,34 @@ env:analyzer:TIDB_ENABLED,env,analyzer,TIDB_ENABLED,true,,src/analyzer/pipelines
 env:analyzer:WHISPER_COMPUTE_TYPE,env,analyzer,WHISPER_COMPUTE_TYPE,float16,,src/analyzer/config.py:61
 env:analyzer:WHISPER_DEVICE,env,analyzer,WHISPER_DEVICE,cuda,,src/analyzer/config.py:60
 env:analyzer:WHISPER_MODEL,env,analyzer,WHISPER_MODEL,medium,,src/analyzer/config.py:59
-env:chino-api:ACCOUNT_DELETION_TOKEN,env,chino-api,ACCOUNT_DELETION_TOKEN,,,internal/config/config.go:182
-env:chino-api:ADDR,env,chino-api,ADDR,:8080,,internal/config/config.go:152
-env:chino-api:ADMIN_ROLE,env,chino-api,ADMIN_ROLE,,,internal/config/config.go:161
-env:chino-api:ADMIN_SUBJECTS,env,chino-api,ADMIN_SUBJECTS,,,internal/config/config.go:162
-env:chino-api:ANALYZER_BASE_URL,env,chino-api,ANALYZER_BASE_URL,,,internal/config/config.go:159
-env:chino-api:ARTWORK_BASE_URL,env,chino-api,ARTWORK_BASE_URL,http://katalog-manager-api.stube.svc.cluster.local,,internal/config/config.go:158
-env:chino-api:DOWNLOADS_ENABLED,env,chino-api,DOWNLOADS_ENABLED,true,,internal/config/config.go:176
-env:chino-api:KAFKA_BROKERS,env,chino-api,KAFKA_BROKERS,,,internal/config/config.go:178
-env:chino-api:KAFKA_CERT_DIR,env,chino-api,KAFKA_CERT_DIR,,,internal/config/config.go:179
-env:chino-api:KAFKA_TOPIC_PREFIX,env,chino-api,KAFKA_TOPIC_PREFIX,stube.,,internal/config/config.go:180
-env:chino-api:KATALOG_BASE_URL,env,chino-api,KATALOG_BASE_URL,http://katalog-api.stube.svc.cluster.local,,internal/config/config.go:156
-env:chino-api:KATALOG_MANAGER_URL,env,chino-api,KATALOG_MANAGER_URL,,,internal/config/config.go:159
-env:chino-api:OIDC_AUDIENCE,env,chino-api,OIDC_AUDIENCE,chino-web,,internal/config/config.go:154
-env:chino-api:OIDC_CLIENT_ID_MOBILE,env,chino-api,OIDC_CLIENT_ID_MOBILE,chino,,internal/config/config.go:166
-env:chino-api:OIDC_CLIENT_ID_PORTAL,env,chino-api,OIDC_CLIENT_ID_PORTAL,zaentrum-web,,internal/config/config.go:168
-env:chino-api:OIDC_CLIENT_ID_TV,env,chino-api,OIDC_CLIENT_ID_TV,chino,,internal/config/config.go:165
-env:chino-api:OIDC_CLIENT_ID_WEB,env,chino-api,OIDC_CLIENT_ID_WEB,chino,,internal/config/config.go:167
-env:chino-api:OIDC_ENABLED,env,chino-api,OIDC_ENABLED,true,,internal/config/config.go:155
-env:chino-api:OIDC_ISSUER,env,chino-api,OIDC_ISSUER,https://sso.example/realms/zaentrum,,internal/config/config.go:153
-env:chino-api:OPENPROJECT_BUG_TYPE_ID,env,chino-api,OPENPROJECT_BUG_TYPE_ID,7,,internal/config/config.go:174
-env:chino-api:OPENPROJECT_PROJECT_ID,env,chino-api,OPENPROJECT_PROJECT_ID,36,,internal/config/config.go:173
-env:chino-api:OPENPROJECT_TOKEN,env,chino-api,OPENPROJECT_TOKEN,,,internal/config/config.go:172
-env:chino-api:OPENPROJECT_URL,env,chino-api,OPENPROJECT_URL,https://openproject.example,,internal/config/config.go:171
-env:chino-api:PG_URL,env,chino-api,PG_URL,,,internal/config/config.go:163
-env:chino-api:PORTAL_BASE_URL,env,chino-api,PORTAL_BASE_URL,http://portal-api,,internal/config/config.go:160
-env:chino-api:PUBLIC_BASE_URL,env,chino-api,PUBLIC_BASE_URL,,,internal/config/config.go:169
-env:chino-api:STREAM_BASE_URL,env,chino-api,STREAM_BASE_URL,http://chino-stream.stube.svc.cluster.local,,internal/config/config.go:157
-env:chino-api:STREAM_SIGNING_KEY,env,chino-api,STREAM_SIGNING_KEY,,,internal/config/config.go:164
+env:chino-api:ACCOUNT_DELETION_TOKEN,env,chino-api,ACCOUNT_DELETION_TOKEN,,,internal/config/config.go:183
+env:chino-api:ADDR,env,chino-api,ADDR,:8080,,internal/config/config.go:153
+env:chino-api:ADMIN_ROLE,env,chino-api,ADMIN_ROLE,,,internal/config/config.go:162
+env:chino-api:ADMIN_SUBJECTS,env,chino-api,ADMIN_SUBJECTS,,,internal/config/config.go:163
+env:chino-api:ANALYZER_BASE_URL,env,chino-api,ANALYZER_BASE_URL,,,internal/config/config.go:160
+env:chino-api:ARTWORK_BASE_URL,env,chino-api,ARTWORK_BASE_URL,http://katalog-manager-api.stube.svc.cluster.local,,internal/config/config.go:159
+env:chino-api:DOWNLOADS_ENABLED,env,chino-api,DOWNLOADS_ENABLED,true,,internal/config/config.go:177
+env:chino-api:KAFKA_BROKERS,env,chino-api,KAFKA_BROKERS,,,internal/config/config.go:179
+env:chino-api:KAFKA_CERT_DIR,env,chino-api,KAFKA_CERT_DIR,,,internal/config/config.go:180
+env:chino-api:KAFKA_TOPIC_PREFIX,env,chino-api,KAFKA_TOPIC_PREFIX,stube.,,internal/config/config.go:181
+env:chino-api:KATALOG_BASE_URL,env,chino-api,KATALOG_BASE_URL,http://katalog-api.stube.svc.cluster.local,,internal/config/config.go:157
+env:chino-api:KATALOG_MANAGER_URL,env,chino-api,KATALOG_MANAGER_URL,,,internal/config/config.go:160
+env:chino-api:OIDC_AUDIENCE,env,chino-api,OIDC_AUDIENCE,chino-web,,internal/config/config.go:155
+env:chino-api:OIDC_CLIENT_ID_MOBILE,env,chino-api,OIDC_CLIENT_ID_MOBILE,chino,,internal/config/config.go:167
+env:chino-api:OIDC_CLIENT_ID_PORTAL,env,chino-api,OIDC_CLIENT_ID_PORTAL,zaentrum-web,,internal/config/config.go:169
+env:chino-api:OIDC_CLIENT_ID_TV,env,chino-api,OIDC_CLIENT_ID_TV,chino,,internal/config/config.go:166
+env:chino-api:OIDC_CLIENT_ID_WEB,env,chino-api,OIDC_CLIENT_ID_WEB,chino,,internal/config/config.go:168
+env:chino-api:OIDC_ENABLED,env,chino-api,OIDC_ENABLED,true,,internal/config/config.go:156
+env:chino-api:OIDC_ISSUER,env,chino-api,OIDC_ISSUER,https://sso.example/realms/zaentrum,,internal/config/config.go:154
+env:chino-api:OPENPROJECT_BUG_TYPE_ID,env,chino-api,OPENPROJECT_BUG_TYPE_ID,7,,internal/config/config.go:175
+env:chino-api:OPENPROJECT_PROJECT_ID,env,chino-api,OPENPROJECT_PROJECT_ID,36,,internal/config/config.go:174
+env:chino-api:OPENPROJECT_TOKEN,env,chino-api,OPENPROJECT_TOKEN,,,internal/config/config.go:173
+env:chino-api:OPENPROJECT_URL,env,chino-api,OPENPROJECT_URL,https://openproject.example,,internal/config/config.go:172
+env:chino-api:PG_URL,env,chino-api,PG_URL,,,internal/config/config.go:164
+env:chino-api:PORTAL_BASE_URL,env,chino-api,PORTAL_BASE_URL,http://portal-api,,internal/config/config.go:161
+env:chino-api:PUBLIC_BASE_URL,env,chino-api,PUBLIC_BASE_URL,,,internal/config/config.go:170
+env:chino-api:STREAM_BASE_URL,env,chino-api,STREAM_BASE_URL,http://chino-stream.stube.svc.cluster.local,,internal/config/config.go:158
+env:chino-api:STREAM_SIGNING_KEY,env,chino-api,STREAM_SIGNING_KEY,,,internal/config/config.go:165
 env:chino-stream:AUTH_ENABLED,env,chino-stream,AUTH_ENABLED,true,,cmd/chino-stream/main.go:113
 env:chino-stream:FFMPEG_BIN,env,chino-stream,FFMPEG_BIN,ffmpeg,,cmd/chino-stream/main.go:114
 env:chino-stream:FFMPEG_MAX_CONCURRENT,env,chino-stream,FFMPEG_MAX_CONCURRENT,,,internal/play/hls.go:1527
@@ -1306,77 +1331,78 @@ field:zaentrum-operator:ZaentrumAddon.spec.valuesFrom[].name,field,zaentrum-oper
 field:zaentrum-operator:ZaentrumAddon.spec.valuesFrom[].optional,field,zaentrum-operator,ZaentrumAddon.spec.valuesFrom[].optional,,Optional tolerates a missing object or key.,operator/api/v1alpha1/zaentrumaddon_types.go:72
 field:zaentrum-operator:ZaentrumAddon.spec.valuesFrom[].targetPath,field,zaentrum-operator,ZaentrumAddon.spec.valuesFrom[].targetPath,,TargetPath sets this dotted values path (e.g.,operator/api/v1alpha1/zaentrumaddon_types.go:68
 field:zaentrum-operator:ZaentrumAddon.spec.valuesFrom[].valuesKey,field,zaentrum-operator,ZaentrumAddon.spec.valuesFrom[].valuesKey,values,ValuesKey is the data key to read.,operator/api/v1alpha1/zaentrumaddon_types.go:62
-graphql:katalog-manager:mutation acceptChapterReads,graphql,katalog-manager,mutation acceptChapterReads,,,internal/graph/schema.graphql:2054
-graphql:katalog-manager:mutation addExtra,graphql,katalog-manager,mutation addExtra,,,internal/graph/schema.graphql:1418
-graphql:katalog-manager:mutation backfillEpisodeBackdrops,graphql,katalog-manager,mutation backfillEpisodeBackdrops,,,internal/graph/schema.graphql:1258
-graphql:katalog-manager:mutation backfillRatings,graphql,katalog-manager,mutation backfillRatings,,,internal/graph/schema.graphql:1240
-graphql:katalog-manager:mutation backfillSourceProbes,graphql,katalog-manager,mutation backfillSourceProbes,,,internal/graph/schema.graphql:1265
-graphql:katalog-manager:mutation backfillSourceSizes,graphql,katalog-manager,mutation backfillSourceSizes,,,internal/graph/schema.graphql:1271
-graphql:katalog-manager:mutation backfillSourceTracks,graphql,katalog-manager,mutation backfillSourceTracks,,,internal/graph/schema.graphql:1277
-graphql:katalog-manager:mutation clearReencodeQueue,graphql,katalog-manager,mutation clearReencodeQueue,,,internal/graph/schema.graphql:1307
-graphql:katalog-manager:mutation clearSecretSetting,graphql,katalog-manager,mutation clearSecretSetting,,,internal/graph/schema.graphql:1399
-graphql:katalog-manager:mutation createItem,graphql,katalog-manager,mutation createItem,,,internal/graph/schema.graphql:1374
-graphql:katalog-manager:mutation createSetting,graphql,katalog-manager,mutation createSetting,,,internal/graph/schema.graphql:1389
-graphql:katalog-manager:mutation decideSupersededOriginal,graphql,katalog-manager,mutation decideSupersededOriginal,,,internal/graph/schema.graphql:1214
-graphql:katalog-manager:mutation deleteItem,graphql,katalog-manager,mutation deleteItem,,,internal/graph/schema.graphql:1382
-graphql:katalog-manager:mutation deleteSetting,graphql,katalog-manager,mutation deleteSetting,,,internal/graph/schema.graphql:1391
-graphql:katalog-manager:mutation enrichOne,graphql,katalog-manager,mutation enrichOne,,,internal/graph/schema.graphql:1217
-graphql:katalog-manager:mutation enrichPending,graphql,katalog-manager,mutation enrichPending,,,internal/graph/schema.graphql:1221
-graphql:katalog-manager:mutation holdOriginal,graphql,katalog-manager,mutation holdOriginal,,,internal/graph/schema.graphql:1210
-graphql:katalog-manager:mutation identify,graphql,katalog-manager,mutation identify,,,internal/graph/schema.graphql:1220
-graphql:katalog-manager:mutation packageExtra,graphql,katalog-manager,mutation packageExtra,,,internal/graph/schema.graphql:1433
-graphql:katalog-manager:mutation packageExtras,graphql,katalog-manager,mutation packageExtras,,,internal/graph/schema.graphql:1435
-graphql:katalog-manager:mutation packageItem,graphql,katalog-manager,mutation packageItem,,,internal/graph/schema.graphql:1370
-graphql:katalog-manager:mutation queueRework,graphql,katalog-manager,mutation queueRework,,,internal/graph/schema.graphql:1749
-graphql:katalog-manager:mutation queueReworkMatching,graphql,katalog-manager,mutation queueReworkMatching,,,internal/graph/schema.graphql:1761
-graphql:katalog-manager:mutation reencodeItem,graphql,katalog-manager,mutation reencodeItem,,,internal/graph/schema.graphql:1303
-graphql:katalog-manager:mutation refreshCompliance,graphql,katalog-manager,mutation refreshCompliance,,,internal/graph/schema.graphql:1765
-graphql:katalog-manager:mutation refreshPeople,graphql,katalog-manager,mutation refreshPeople,,,internal/graph/schema.graphql:1232
-graphql:katalog-manager:mutation removeExtra,graphql,katalog-manager,mutation removeExtra,,,internal/graph/schema.graphql:1425
-graphql:katalog-manager:mutation replaceSource,graphql,katalog-manager,mutation replaceSource,,,internal/graph/schema.graphql:1368
-graphql:katalog-manager:mutation retireOriginals,graphql,katalog-manager,mutation retireOriginals,,,internal/graph/schema.graphql:1883
-graphql:katalog-manager:mutation retryFailed,graphql,katalog-manager,mutation retryFailed,,,internal/graph/schema.graphql:1289
-graphql:katalog-manager:mutation retryNotFound,graphql,katalog-manager,mutation retryNotFound,,,internal/graph/schema.graphql:1278
-graphql:katalog-manager:mutation retryStep,graphql,katalog-manager,mutation retryStep,,,internal/graph/schema.graphql:1286
-graphql:katalog-manager:mutation revertChapterReplacement,graphql,katalog-manager,mutation revertChapterReplacement,,,internal/graph/schema.graphql:2059
-graphql:katalog-manager:mutation setItemGenres,graphql,katalog-manager,mutation setItemGenres,,,internal/graph/schema.graphql:1383
-graphql:katalog-manager:mutation setItemTags,graphql,katalog-manager,mutation setItemTags,,,internal/graph/schema.graphql:1384
-graphql:katalog-manager:mutation setMinAgeOverride,graphql,katalog-manager,mutation setMinAgeOverride,,,internal/graph/schema.graphql:1244
-graphql:katalog-manager:mutation setSecretSetting,graphql,katalog-manager,mutation setSecretSetting,,,internal/graph/schema.graphql:1396
-graphql:katalog-manager:mutation setTrackLanguage,graphql,katalog-manager,mutation setTrackLanguage,,,internal/graph/schema.graphql:1257
-graphql:katalog-manager:mutation stopRetireRun,graphql,katalog-manager,mutation stopRetireRun,,,internal/graph/schema.graphql:1886
-graphql:katalog-manager:mutation triggerScan,graphql,katalog-manager,mutation triggerScan,,,internal/graph/schema.graphql:1216
-graphql:katalog-manager:mutation updateItem,graphql,katalog-manager,mutation updateItem,,,internal/graph/schema.graphql:1375
-graphql:katalog-manager:mutation updateSetting,graphql,katalog-manager,mutation updateSetting,,,internal/graph/schema.graphql:1390
-graphql:katalog-manager:mutation validateItem,graphql,katalog-manager,mutation validateItem,,,internal/graph/schema.graphql:1371
-graphql:katalog-manager:query activity,graphql,katalog-manager,query activity,,,internal/graph/schema.graphql:1160
-graphql:katalog-manager:query albums,graphql,katalog-manager,query albums,,,internal/graph/schema.graphql:1148
-graphql:katalog-manager:query catalogStats,graphql,katalog-manager,query catalogStats,,,internal/graph/schema.graphql:1153
-graphql:katalog-manager:query chapterReads,graphql,katalog-manager,query chapterReads,,,internal/graph/schema.graphql:2045
-graphql:katalog-manager:query deletedItems,graphql,katalog-manager,query deletedItems,,,internal/graph/schema.graphql:1171
-graphql:katalog-manager:query enrichStatus,graphql,katalog-manager,query enrichStatus,,,internal/graph/schema.graphql:1166
-graphql:katalog-manager:query enrichmentStatusCodes,graphql,katalog-manager,query enrichmentStatusCodes,,,internal/graph/schema.graphql:1167
-graphql:katalog-manager:query episodes,graphql,katalog-manager,query episodes,,,internal/graph/schema.graphql:1147
-graphql:katalog-manager:query genres,graphql,katalog-manager,query genres,,,internal/graph/schema.graphql:1163
-graphql:katalog-manager:query item,graphql,katalog-manager,query item,,,internal/graph/schema.graphql:1139
-graphql:katalog-manager:query items,graphql,katalog-manager,query items,,,internal/graph/schema.graphql:1144
-graphql:katalog-manager:query libraryCompliance,graphql,katalog-manager,query libraryCompliance,,,internal/graph/schema.graphql:1737
-graphql:katalog-manager:query movies,graphql,katalog-manager,query movies,,,internal/graph/schema.graphql:1145
-graphql:katalog-manager:query people,graphql,katalog-manager,query people,,,internal/graph/schema.graphql:1164
-graphql:katalog-manager:query person,graphql,katalog-manager,query person,,,internal/graph/schema.graphql:1165
-graphql:katalog-manager:query pictureAreas,graphql,katalog-manager,query pictureAreas,,,internal/graph/schema.graphql:1971
-graphql:katalog-manager:query pipelineRules,graphql,katalog-manager,query pipelineRules,,,internal/graph/schema.graphql:1731
-graphql:katalog-manager:query processingOverview,graphql,katalog-manager,query processingOverview,,,internal/graph/schema.graphql:1180
-graphql:katalog-manager:query referenceSync,graphql,katalog-manager,query referenceSync,,,internal/graph/schema.graphql:1175
-graphql:katalog-manager:query replaceSourceDone,graphql,katalog-manager,query replaceSourceDone,,,internal/graph/schema.graphql:1133
-graphql:katalog-manager:query retireRun,graphql,katalog-manager,query retireRun,,,internal/graph/schema.graphql:1865
-graphql:katalog-manager:query retryPolicy,graphql,katalog-manager,query retryPolicy,,,internal/graph/schema.graphql:1183
-graphql:katalog-manager:query scanJob,graphql,katalog-manager,query scanJob,,,internal/graph/schema.graphql:1155
-graphql:katalog-manager:query scanJobs,graphql,katalog-manager,query scanJobs,,,internal/graph/schema.graphql:1156
-graphql:katalog-manager:query searchItems,graphql,katalog-manager,query searchItems,,,internal/graph/schema.graphql:1150
-graphql:katalog-manager:query series,graphql,katalog-manager,query series,,,internal/graph/schema.graphql:1146
-graphql:katalog-manager:query settings,graphql,katalog-manager,query settings,,,internal/graph/schema.graphql:1162
-graphql:katalog-manager:query supersededOriginals,graphql,katalog-manager,query supersededOriginals,,,internal/graph/schema.graphql:1138
+graphql:katalog-manager:mutation acceptChapterReads,graphql,katalog-manager,mutation acceptChapterReads,,,internal/graph/schema.graphql:2056
+graphql:katalog-manager:mutation addExtra,graphql,katalog-manager,mutation addExtra,,,internal/graph/schema.graphql:1420
+graphql:katalog-manager:mutation backfillEpisodeBackdrops,graphql,katalog-manager,mutation backfillEpisodeBackdrops,,,internal/graph/schema.graphql:1260
+graphql:katalog-manager:mutation backfillRatings,graphql,katalog-manager,mutation backfillRatings,,,internal/graph/schema.graphql:1242
+graphql:katalog-manager:mutation backfillSourceProbes,graphql,katalog-manager,mutation backfillSourceProbes,,,internal/graph/schema.graphql:1267
+graphql:katalog-manager:mutation backfillSourceSizes,graphql,katalog-manager,mutation backfillSourceSizes,,,internal/graph/schema.graphql:1273
+graphql:katalog-manager:mutation backfillSourceTracks,graphql,katalog-manager,mutation backfillSourceTracks,,,internal/graph/schema.graphql:1279
+graphql:katalog-manager:mutation clearReencodeQueue,graphql,katalog-manager,mutation clearReencodeQueue,,,internal/graph/schema.graphql:1309
+graphql:katalog-manager:mutation clearSecretSetting,graphql,katalog-manager,mutation clearSecretSetting,,,internal/graph/schema.graphql:1401
+graphql:katalog-manager:mutation createItem,graphql,katalog-manager,mutation createItem,,,internal/graph/schema.graphql:1376
+graphql:katalog-manager:mutation createSetting,graphql,katalog-manager,mutation createSetting,,,internal/graph/schema.graphql:1391
+graphql:katalog-manager:mutation decideSupersededOriginal,graphql,katalog-manager,mutation decideSupersededOriginal,,,internal/graph/schema.graphql:1216
+graphql:katalog-manager:mutation deleteItem,graphql,katalog-manager,mutation deleteItem,,,internal/graph/schema.graphql:1384
+graphql:katalog-manager:mutation deleteSetting,graphql,katalog-manager,mutation deleteSetting,,,internal/graph/schema.graphql:1393
+graphql:katalog-manager:mutation enrichOne,graphql,katalog-manager,mutation enrichOne,,,internal/graph/schema.graphql:1219
+graphql:katalog-manager:mutation enrichPending,graphql,katalog-manager,mutation enrichPending,,,internal/graph/schema.graphql:1223
+graphql:katalog-manager:mutation holdOriginal,graphql,katalog-manager,mutation holdOriginal,,,internal/graph/schema.graphql:1212
+graphql:katalog-manager:mutation identify,graphql,katalog-manager,mutation identify,,,internal/graph/schema.graphql:1222
+graphql:katalog-manager:mutation packageExtra,graphql,katalog-manager,mutation packageExtra,,,internal/graph/schema.graphql:1435
+graphql:katalog-manager:mutation packageExtras,graphql,katalog-manager,mutation packageExtras,,,internal/graph/schema.graphql:1437
+graphql:katalog-manager:mutation packageItem,graphql,katalog-manager,mutation packageItem,,,internal/graph/schema.graphql:1372
+graphql:katalog-manager:mutation queueRework,graphql,katalog-manager,mutation queueRework,,,internal/graph/schema.graphql:1751
+graphql:katalog-manager:mutation queueReworkMatching,graphql,katalog-manager,mutation queueReworkMatching,,,internal/graph/schema.graphql:1763
+graphql:katalog-manager:mutation reencodeItem,graphql,katalog-manager,mutation reencodeItem,,,internal/graph/schema.graphql:1305
+graphql:katalog-manager:mutation refreshCompliance,graphql,katalog-manager,mutation refreshCompliance,,,internal/graph/schema.graphql:1767
+graphql:katalog-manager:mutation refreshPeople,graphql,katalog-manager,mutation refreshPeople,,,internal/graph/schema.graphql:1234
+graphql:katalog-manager:mutation removeExtra,graphql,katalog-manager,mutation removeExtra,,,internal/graph/schema.graphql:1427
+graphql:katalog-manager:mutation replaceSource,graphql,katalog-manager,mutation replaceSource,,,internal/graph/schema.graphql:1370
+graphql:katalog-manager:mutation retireOriginals,graphql,katalog-manager,mutation retireOriginals,,,internal/graph/schema.graphql:1885
+graphql:katalog-manager:mutation retryFailed,graphql,katalog-manager,mutation retryFailed,,,internal/graph/schema.graphql:1291
+graphql:katalog-manager:mutation retryNotFound,graphql,katalog-manager,mutation retryNotFound,,,internal/graph/schema.graphql:1280
+graphql:katalog-manager:mutation retryStep,graphql,katalog-manager,mutation retryStep,,,internal/graph/schema.graphql:1288
+graphql:katalog-manager:mutation revertChapterReplacement,graphql,katalog-manager,mutation revertChapterReplacement,,,internal/graph/schema.graphql:2061
+graphql:katalog-manager:mutation setItemGenres,graphql,katalog-manager,mutation setItemGenres,,,internal/graph/schema.graphql:1385
+graphql:katalog-manager:mutation setItemTags,graphql,katalog-manager,mutation setItemTags,,,internal/graph/schema.graphql:1386
+graphql:katalog-manager:mutation setMinAgeOverride,graphql,katalog-manager,mutation setMinAgeOverride,,,internal/graph/schema.graphql:1246
+graphql:katalog-manager:mutation setSecretSetting,graphql,katalog-manager,mutation setSecretSetting,,,internal/graph/schema.graphql:1398
+graphql:katalog-manager:mutation setTrackLanguage,graphql,katalog-manager,mutation setTrackLanguage,,,internal/graph/schema.graphql:1259
+graphql:katalog-manager:mutation stopRetireRun,graphql,katalog-manager,mutation stopRetireRun,,,internal/graph/schema.graphql:1888
+graphql:katalog-manager:mutation triggerScan,graphql,katalog-manager,mutation triggerScan,,,internal/graph/schema.graphql:1218
+graphql:katalog-manager:mutation updateItem,graphql,katalog-manager,mutation updateItem,,,internal/graph/schema.graphql:1377
+graphql:katalog-manager:mutation updateSetting,graphql,katalog-manager,mutation updateSetting,,,internal/graph/schema.graphql:1392
+graphql:katalog-manager:mutation validateItem,graphql,katalog-manager,mutation validateItem,,,internal/graph/schema.graphql:1373
+graphql:katalog-manager:query activity,graphql,katalog-manager,query activity,,,internal/graph/schema.graphql:1162
+graphql:katalog-manager:query albums,graphql,katalog-manager,query albums,,,internal/graph/schema.graphql:1150
+graphql:katalog-manager:query captionReads,graphql,katalog-manager,query captionReads,,,internal/graph/schema.graphql:2118
+graphql:katalog-manager:query catalogStats,graphql,katalog-manager,query catalogStats,,,internal/graph/schema.graphql:1155
+graphql:katalog-manager:query chapterReads,graphql,katalog-manager,query chapterReads,,,internal/graph/schema.graphql:2047
+graphql:katalog-manager:query deletedItems,graphql,katalog-manager,query deletedItems,,,internal/graph/schema.graphql:1173
+graphql:katalog-manager:query enrichStatus,graphql,katalog-manager,query enrichStatus,,,internal/graph/schema.graphql:1168
+graphql:katalog-manager:query enrichmentStatusCodes,graphql,katalog-manager,query enrichmentStatusCodes,,,internal/graph/schema.graphql:1169
+graphql:katalog-manager:query episodes,graphql,katalog-manager,query episodes,,,internal/graph/schema.graphql:1149
+graphql:katalog-manager:query genres,graphql,katalog-manager,query genres,,,internal/graph/schema.graphql:1165
+graphql:katalog-manager:query item,graphql,katalog-manager,query item,,,internal/graph/schema.graphql:1141
+graphql:katalog-manager:query items,graphql,katalog-manager,query items,,,internal/graph/schema.graphql:1146
+graphql:katalog-manager:query libraryCompliance,graphql,katalog-manager,query libraryCompliance,,,internal/graph/schema.graphql:1739
+graphql:katalog-manager:query movies,graphql,katalog-manager,query movies,,,internal/graph/schema.graphql:1147
+graphql:katalog-manager:query people,graphql,katalog-manager,query people,,,internal/graph/schema.graphql:1166
+graphql:katalog-manager:query person,graphql,katalog-manager,query person,,,internal/graph/schema.graphql:1167
+graphql:katalog-manager:query pictureAreas,graphql,katalog-manager,query pictureAreas,,,internal/graph/schema.graphql:1973
+graphql:katalog-manager:query pipelineRules,graphql,katalog-manager,query pipelineRules,,,internal/graph/schema.graphql:1733
+graphql:katalog-manager:query processingOverview,graphql,katalog-manager,query processingOverview,,,internal/graph/schema.graphql:1182
+graphql:katalog-manager:query referenceSync,graphql,katalog-manager,query referenceSync,,,internal/graph/schema.graphql:1177
+graphql:katalog-manager:query replaceSourceDone,graphql,katalog-manager,query replaceSourceDone,,,internal/graph/schema.graphql:1135
+graphql:katalog-manager:query retireRun,graphql,katalog-manager,query retireRun,,,internal/graph/schema.graphql:1867
+graphql:katalog-manager:query retryPolicy,graphql,katalog-manager,query retryPolicy,,,internal/graph/schema.graphql:1185
+graphql:katalog-manager:query scanJob,graphql,katalog-manager,query scanJob,,,internal/graph/schema.graphql:1157
+graphql:katalog-manager:query scanJobs,graphql,katalog-manager,query scanJobs,,,internal/graph/schema.graphql:1158
+graphql:katalog-manager:query searchItems,graphql,katalog-manager,query searchItems,,,internal/graph/schema.graphql:1152
+graphql:katalog-manager:query series,graphql,katalog-manager,query series,,,internal/graph/schema.graphql:1148
+graphql:katalog-manager:query settings,graphql,katalog-manager,query settings,,,internal/graph/schema.graphql:1164
+graphql:katalog-manager:query supersededOriginals,graphql,katalog-manager,query supersededOriginals,,,internal/graph/schema.graphql:1140
 path:zaentrum-operator:/,path,zaentrum-operator,/,zaentrum-portal,"service zaentrum-portal:80, Prefix",operator/platform/chart/templates/ingress.yaml:20
 path:zaentrum-operator:/api,path,zaentrum-operator,/api,chino-api,"service chino-api:80, Prefix",operator/platform/chart/templates/ingress.yaml:20
 path:zaentrum-operator:/api/manage,path,zaentrum-operator,/api/manage,katalog-manager-api,"service katalog-manager-api:80, Prefix",operator/platform/chart/templates/ingress.yaml:20
@@ -1420,100 +1446,100 @@ repo:zaentrum:zaentrum,repo,zaentrum,zaentrum,active,"Zaentrum — install, rele
 repo:zaentrum-operator:zaentrum-operator,repo,zaentrum-operator,zaentrum-operator,active,Self-hosted media platform — neutral media server + clients (chino video; musig/tv planned).,
 repo:zaentrum-portal:zaentrum-portal,repo,zaentrum-portal,zaentrum-portal,active,zaentrum — launchpad shell for the neutral self-hosted media platform (React + Vite + @nalet/design-system). Bring your own server.,
 repo:zaentrum.github.io:zaentrum.github.io,repo,zaentrum.github.io,zaentrum.github.io,active,"The zaentrum site: the product page, and the docs built from zaentrum/zaentrum's docs/ folder",
-route:chino-api:DELETE /api/v1/admin/accounts/{sub}/data,route,chino-api,DELETE /api/v1/admin/accounts/{sub}/data,,,internal/http/router.go:219
-route:chino-api:DELETE /api/v1/admin/accounts/{sub}/deleted,route,chino-api,DELETE /api/v1/admin/accounts/{sub}/deleted,,,internal/http/router.go:222
-route:chino-api:DELETE /api/v1/me,route,chino-api,DELETE /api/v1/me,,,internal/http/router.go:106
-route:chino-api:DELETE /api/v1/me/items/{id}/watched,route,chino-api,DELETE /api/v1/me/items/{id}/watched,,,internal/http/router.go:129
-route:chino-api:DELETE /api/v1/me/likes/{id},route,chino-api,DELETE /api/v1/me/likes/{id},,,internal/http/router.go:198
-route:chino-api:DELETE /api/v1/me/watchlist/{id},route,chino-api,DELETE /api/v1/me/watchlist/{id},,,internal/http/router.go:192
-route:chino-api:DELETE /api/v1/me/watchlists/{listId},route,chino-api,DELETE /api/v1/me/watchlists/{listId},,,internal/http/router.go:182
-route:chino-api:DELETE /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,DELETE /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:184
-route:chino-api:DELETE /api/v1/notices/{noticeId},route,chino-api,DELETE /api/v1/notices/{noticeId},,,internal/http/router.go:159
-route:chino-api:GET /api/config,route,chino-api,GET /api/config,,,internal/http/router.go:56
-route:chino-api:GET /api/healthz,route,chino-api,GET /api/healthz,,,internal/http/router.go:42
-route:chino-api:GET /api/openapi.yaml,route,chino-api,GET /api/openapi.yaml,,,internal/http/router.go:49
-route:chino-api:GET /api/v1/admin/items/{id}/package,route,chino-api,GET /api/v1/admin/items/{id}/package,,,internal/http/router.go:215
-route:chino-api:GET /api/v1/events,route,chino-api,GET /api/v1/events,,,internal/http/router.go:234
-route:chino-api:GET /api/v1/extensions,route,chino-api,GET /api/v1/extensions,,,internal/http/router.go:150
-route:chino-api:GET /api/v1/genres,route,chino-api,GET /api/v1/genres,,,internal/http/router.go:140
-route:chino-api:GET /api/v1/items,route,chino-api,GET /api/v1/items,,,internal/http/router.go:120
-route:chino-api:GET /api/v1/items/{id},route,chino-api,GET /api/v1/items/{id},,,internal/http/router.go:125
-route:chino-api:GET /api/v1/items/{id}/backdrop,route,chino-api,GET /api/v1/items/{id}/backdrop,,,internal/http/router.go:266
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:352
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:353
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:354
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/info,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/info,,,internal/http/router.go:336
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,,,internal/http/router.go:335
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,,,internal/http/router.go:349
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,,,internal/http/router.go:350
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,,,internal/http/router.go:351
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:338
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:339
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:340
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,,,internal/http/router.go:337
-route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:341
-route:chino-api:GET /api/v1/items/{id}/play,route,chino-api,GET /api/v1/items/{id}/play,,,internal/http/router.go:272
-route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:302
-route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:303
-route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:304
-route:chino-api:GET /api/v1/items/{id}/play/info,route,chino-api,GET /api/v1/items/{id}/play/info,,,internal/http/router.go:273
-route:chino-api:GET /api/v1/items/{id}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/play/master.m3u8,,,internal/http/router.go:279
-route:chino-api:GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,route,chino-api,GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,,,internal/http/router.go:359
-route:chino-api:GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,route,chino-api,GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,,,internal/http/router.go:324
-route:chino-api:GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,route,chino-api,GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,,,internal/http/router.go:323
-route:chino-api:GET /api/v1/items/{id}/play/{quality}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{quality}/index.m3u8,,,internal/http/router.go:298
-route:chino-api:GET /api/v1/items/{id}/play/{quality}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{quality}/init.mp4,,,internal/http/router.go:299
-route:chino-api:GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,,,internal/http/router.go:300
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:311
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:312
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,,,internal/http/router.go:310
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:313
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,,,internal/http/router.go:318
-route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:319
-route:chino-api:GET /api/v1/items/{id}/poster,route,chino-api,GET /api/v1/items/{id}/poster,,,internal/http/router.go:265
-route:chino-api:GET /api/v1/items/{id}/progress,route,chino-api,GET /api/v1/items/{id}/progress,,,internal/http/router.go:165
-route:chino-api:GET /api/v1/items/{id}/segments,route,chino-api,GET /api/v1/items/{id}/segments,,,internal/http/router.go:131
-route:chino-api:GET /api/v1/items/{id}/similar,route,chino-api,GET /api/v1/items/{id}/similar,,,internal/http/router.go:132
-route:chino-api:GET /api/v1/items/{id}/subtitles,route,chino-api,GET /api/v1/items/{id}/subtitles,,,internal/http/router.go:141
-route:chino-api:GET /api/v1/me,route,chino-api,GET /api/v1/me,,,internal/http/router.go:103
-route:chino-api:GET /api/v1/me/continue-watching,route,chino-api,GET /api/v1/me/continue-watching,,,internal/http/router.go:111
-route:chino-api:GET /api/v1/me/likes,route,chino-api,GET /api/v1/me/likes,,,internal/http/router.go:196
-route:chino-api:GET /api/v1/me/settings,route,chino-api,GET /api/v1/me/settings,,,internal/http/router.go:109
-route:chino-api:GET /api/v1/me/watched,route,chino-api,GET /api/v1/me/watched,,,internal/http/router.go:130
-route:chino-api:GET /api/v1/me/watchlist,route,chino-api,GET /api/v1/me/watchlist,,,internal/http/router.go:190
-route:chino-api:GET /api/v1/me/watchlists,route,chino-api,GET /api/v1/me/watchlists,,,internal/http/router.go:177
-route:chino-api:GET /api/v1/me/watchlists/memberships,route,chino-api,GET /api/v1/me/watchlists/memberships,,,internal/http/router.go:179
-route:chino-api:GET /api/v1/me/watchlists/{listId},route,chino-api,GET /api/v1/me/watchlists/{listId},,,internal/http/router.go:180
-route:chino-api:GET /api/v1/notices,route,chino-api,GET /api/v1/notices,,,internal/http/router.go:156
-route:chino-api:GET /api/v1/people,route,chino-api,GET /api/v1/people,,,internal/http/router.go:136
-route:chino-api:GET /api/v1/people/{id},route,chino-api,GET /api/v1/people/{id},,,internal/http/router.go:137
-route:chino-api:GET /api/v1/people/{id}/profile,route,chino-api,GET /api/v1/people/{id}/profile,,,internal/http/router.go:268
-route:chino-api:GET /api/v1/play/fonts/{id}.,route,chino-api,GET /api/v1/play/fonts/{id}.,,,internal/http/router.go:372
-route:chino-api:GET /api/v1/play/packaged-ids,route,chino-api,GET /api/v1/play/packaged-ids,,,internal/http/router.go:290
-route:chino-api:GET /api/v1/play/subs/{id}.ass,route,chino-api,GET /api/v1/play/subs/{id}.ass,,,internal/http/router.go:370
-route:chino-api:GET /api/v1/play/subs/{id}.vtt,route,chino-api,GET /api/v1/play/subs/{id}.vtt,,,internal/http/router.go:364
-route:chino-api:GET /api/v1/play/zap-feed,route,chino-api,GET /api/v1/play/zap-feed,,,internal/http/router.go:297
-route:chino-api:GET /api/v1/search,route,chino-api,GET /api/v1/search,,,internal/http/router.go:124
-route:chino-api:GET /api/v1/series/{id}/episodes,route,chino-api,GET /api/v1/series/{id}/episodes,,,internal/http/router.go:138
-route:chino-api:GET /api/v1/series/{id}/next-episode,route,chino-api,GET /api/v1/series/{id}/next-episode,,,internal/http/router.go:139
-route:chino-api:GET /api/v1/subtitles/languages,route,chino-api,GET /api/v1/subtitles/languages,,,internal/http/router.go:145
-route:chino-api:GET /metrics,route,chino-api,GET /metrics,,,internal/http/router.go:61
-route:chino-api:PATCH /api/v1/me/settings,route,chino-api,PATCH /api/v1/me/settings,,,internal/http/router.go:110
-route:chino-api:PATCH /api/v1/me/watchlists/{listId},route,chino-api,PATCH /api/v1/me/watchlists/{listId},,,internal/http/router.go:181
-route:chino-api:POST /api/v1/admin/items/{id}/package,route,chino-api,POST /api/v1/admin/items/{id}/package,,,internal/http/router.go:214
-route:chino-api:POST /api/v1/feedback,route,chino-api,POST /api/v1/feedback,,,internal/http/router.go:205
-route:chino-api:POST /api/v1/items/{id}/play/prewarm,route,chino-api,POST /api/v1/items/{id}/play/prewarm,,,internal/http/router.go:283
-route:chino-api:POST /api/v1/items/{id}/progress,route,chino-api,POST /api/v1/items/{id}/progress,,,internal/http/router.go:166
-route:chino-api:POST /api/v1/me/available,route,chino-api,POST /api/v1/me/available,,,internal/http/router.go:119
-route:chino-api:POST /api/v1/me/items/{id}/watched,route,chino-api,POST /api/v1/me/items/{id}/watched,,,internal/http/router.go:128
-route:chino-api:POST /api/v1/me/stream-token,route,chino-api,POST /api/v1/me/stream-token,,,internal/http/router.go:115
-route:chino-api:POST /api/v1/me/watchlists,route,chino-api,POST /api/v1/me/watchlists,,,internal/http/router.go:178
-route:chino-api:POST /api/v1/notices/read-all,route,chino-api,POST /api/v1/notices/read-all,,,internal/http/router.go:157
-route:chino-api:POST /api/v1/notices/{noticeId}/read,route,chino-api,POST /api/v1/notices/{noticeId}/read,,,internal/http/router.go:158
-route:chino-api:POST /api/v1/play/events,route,chino-api,POST /api/v1/play/events,,,internal/http/router.go:247
-route:chino-api:PUT /api/v1/me/likes/{id},route,chino-api,PUT /api/v1/me/likes/{id},,,internal/http/router.go:197
-route:chino-api:PUT /api/v1/me/watchlist/{id},route,chino-api,PUT /api/v1/me/watchlist/{id},,,internal/http/router.go:191
-route:chino-api:PUT /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,PUT /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:183
+route:chino-api:DELETE /api/v1/admin/accounts/{sub}/data,route,chino-api,DELETE /api/v1/admin/accounts/{sub}/data,,,internal/http/router.go:221
+route:chino-api:DELETE /api/v1/admin/accounts/{sub}/deleted,route,chino-api,DELETE /api/v1/admin/accounts/{sub}/deleted,,,internal/http/router.go:224
+route:chino-api:DELETE /api/v1/me,route,chino-api,DELETE /api/v1/me,,,internal/http/router.go:108
+route:chino-api:DELETE /api/v1/me/items/{id}/watched,route,chino-api,DELETE /api/v1/me/items/{id}/watched,,,internal/http/router.go:131
+route:chino-api:DELETE /api/v1/me/likes/{id},route,chino-api,DELETE /api/v1/me/likes/{id},,,internal/http/router.go:200
+route:chino-api:DELETE /api/v1/me/watchlist/{id},route,chino-api,DELETE /api/v1/me/watchlist/{id},,,internal/http/router.go:194
+route:chino-api:DELETE /api/v1/me/watchlists/{listId},route,chino-api,DELETE /api/v1/me/watchlists/{listId},,,internal/http/router.go:184
+route:chino-api:DELETE /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,DELETE /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:186
+route:chino-api:DELETE /api/v1/notices/{noticeId},route,chino-api,DELETE /api/v1/notices/{noticeId},,,internal/http/router.go:161
+route:chino-api:GET /api/config,route,chino-api,GET /api/config,,,internal/http/router.go:58
+route:chino-api:GET /api/healthz,route,chino-api,GET /api/healthz,,,internal/http/router.go:44
+route:chino-api:GET /api/openapi.yaml,route,chino-api,GET /api/openapi.yaml,,,internal/http/router.go:51
+route:chino-api:GET /api/v1/admin/items/{id}/package,route,chino-api,GET /api/v1/admin/items/{id}/package,,,internal/http/router.go:217
+route:chino-api:GET /api/v1/events,route,chino-api,GET /api/v1/events,,,internal/http/router.go:236
+route:chino-api:GET /api/v1/extensions,route,chino-api,GET /api/v1/extensions,,,internal/http/router.go:152
+route:chino-api:GET /api/v1/genres,route,chino-api,GET /api/v1/genres,,,internal/http/router.go:142
+route:chino-api:GET /api/v1/items,route,chino-api,GET /api/v1/items,,,internal/http/router.go:122
+route:chino-api:GET /api/v1/items/{id},route,chino-api,GET /api/v1/items/{id},,,internal/http/router.go:127
+route:chino-api:GET /api/v1/items/{id}/backdrop,route,chino-api,GET /api/v1/items/{id}/backdrop,,,internal/http/router.go:268
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:354
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:355
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:356
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/info,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/info,,,internal/http/router.go:338
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/master.m3u8,,,internal/http/router.go:337
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/index.m3u8,,,internal/http/router.go:351
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/init.mp4,,,internal/http/router.go:352
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{quality:(high|medium|low)}/{seg:[0-9]+}.m4s,,,internal/http/router.go:353
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:340
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:341
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:342
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:[vas][0-9]+}/playlist.m3u8,,,internal/http/router.go:339
+route:chino-api:GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/extras/{extraId}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:343
+route:chino-api:GET /api/v1/items/{id}/play,route,chino-api,GET /api/v1/items/{id}/play,,,internal/http/router.go:274
+route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/index.m3u8,,,internal/http/router.go:304
+route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/init.mp4,,,internal/http/router.go:305
+route:chino-api:GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/audio/{audioIdx:[0-9]+}/{seg:[0-9]+}.m4s,,,internal/http/router.go:306
+route:chino-api:GET /api/v1/items/{id}/play/info,route,chino-api,GET /api/v1/items/{id}/play/info,,,internal/http/router.go:275
+route:chino-api:GET /api/v1/items/{id}/play/master.m3u8,route,chino-api,GET /api/v1/items/{id}/play/master.m3u8,,,internal/http/router.go:281
+route:chino-api:GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,route,chino-api,GET /api/v1/items/{id}/play/subtitles/{streamIndex}.vtt,,,internal/http/router.go:361
+route:chino-api:GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,route,chino-api,GET /api/v1/items/{id}/play/trickplay/sprite-{n:[0-9]+}.jpg,,,internal/http/router.go:326
+route:chino-api:GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,route,chino-api,GET /api/v1/items/{id}/play/trickplay/thumbnails.vtt,,,internal/http/router.go:325
+route:chino-api:GET /api/v1/items/{id}/play/{quality}/index.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{quality}/index.m3u8,,,internal/http/router.go:300
+route:chino-api:GET /api/v1/items/{id}/play/{quality}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{quality}/init.mp4,,,internal/http/router.go:301
+route:chino-api:GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{quality}/{seg:[0-9]+}.m4s,,,internal/http/router.go:302
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/iframes.m3u8,,,internal/http/router.go:313
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/init.mp4,,,internal/http/router.go:314
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/playlist.m3u8,,,internal/http/router.go:312
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,route,chino-api,GET /api/v1/items/{id}/play/{rendId:[va][0-9]+}/seg-{seg:[0-9]+}.m4s,,,internal/http/router.go:315
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/playlist.m3u8,,,internal/http/router.go:320
+route:chino-api:GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,route,chino-api,GET /api/v1/items/{id}/play/{rendId:s[0-9]+}/seg-{seg:[0-9]+}.vtt,,,internal/http/router.go:321
+route:chino-api:GET /api/v1/items/{id}/poster,route,chino-api,GET /api/v1/items/{id}/poster,,,internal/http/router.go:267
+route:chino-api:GET /api/v1/items/{id}/progress,route,chino-api,GET /api/v1/items/{id}/progress,,,internal/http/router.go:167
+route:chino-api:GET /api/v1/items/{id}/segments,route,chino-api,GET /api/v1/items/{id}/segments,,,internal/http/router.go:133
+route:chino-api:GET /api/v1/items/{id}/similar,route,chino-api,GET /api/v1/items/{id}/similar,,,internal/http/router.go:134
+route:chino-api:GET /api/v1/items/{id}/subtitles,route,chino-api,GET /api/v1/items/{id}/subtitles,,,internal/http/router.go:143
+route:chino-api:GET /api/v1/me,route,chino-api,GET /api/v1/me,,,internal/http/router.go:105
+route:chino-api:GET /api/v1/me/continue-watching,route,chino-api,GET /api/v1/me/continue-watching,,,internal/http/router.go:113
+route:chino-api:GET /api/v1/me/likes,route,chino-api,GET /api/v1/me/likes,,,internal/http/router.go:198
+route:chino-api:GET /api/v1/me/settings,route,chino-api,GET /api/v1/me/settings,,,internal/http/router.go:111
+route:chino-api:GET /api/v1/me/watched,route,chino-api,GET /api/v1/me/watched,,,internal/http/router.go:132
+route:chino-api:GET /api/v1/me/watchlist,route,chino-api,GET /api/v1/me/watchlist,,,internal/http/router.go:192
+route:chino-api:GET /api/v1/me/watchlists,route,chino-api,GET /api/v1/me/watchlists,,,internal/http/router.go:179
+route:chino-api:GET /api/v1/me/watchlists/memberships,route,chino-api,GET /api/v1/me/watchlists/memberships,,,internal/http/router.go:181
+route:chino-api:GET /api/v1/me/watchlists/{listId},route,chino-api,GET /api/v1/me/watchlists/{listId},,,internal/http/router.go:182
+route:chino-api:GET /api/v1/notices,route,chino-api,GET /api/v1/notices,,,internal/http/router.go:158
+route:chino-api:GET /api/v1/people,route,chino-api,GET /api/v1/people,,,internal/http/router.go:138
+route:chino-api:GET /api/v1/people/{id},route,chino-api,GET /api/v1/people/{id},,,internal/http/router.go:139
+route:chino-api:GET /api/v1/people/{id}/profile,route,chino-api,GET /api/v1/people/{id}/profile,,,internal/http/router.go:270
+route:chino-api:GET /api/v1/play/fonts/{id}.,route,chino-api,GET /api/v1/play/fonts/{id}.,,,internal/http/router.go:374
+route:chino-api:GET /api/v1/play/packaged-ids,route,chino-api,GET /api/v1/play/packaged-ids,,,internal/http/router.go:292
+route:chino-api:GET /api/v1/play/subs/{id}.ass,route,chino-api,GET /api/v1/play/subs/{id}.ass,,,internal/http/router.go:372
+route:chino-api:GET /api/v1/play/subs/{id}.vtt,route,chino-api,GET /api/v1/play/subs/{id}.vtt,,,internal/http/router.go:366
+route:chino-api:GET /api/v1/play/zap-feed,route,chino-api,GET /api/v1/play/zap-feed,,,internal/http/router.go:299
+route:chino-api:GET /api/v1/search,route,chino-api,GET /api/v1/search,,,internal/http/router.go:126
+route:chino-api:GET /api/v1/series/{id}/episodes,route,chino-api,GET /api/v1/series/{id}/episodes,,,internal/http/router.go:140
+route:chino-api:GET /api/v1/series/{id}/next-episode,route,chino-api,GET /api/v1/series/{id}/next-episode,,,internal/http/router.go:141
+route:chino-api:GET /api/v1/subtitles/languages,route,chino-api,GET /api/v1/subtitles/languages,,,internal/http/router.go:147
+route:chino-api:GET /metrics,route,chino-api,GET /metrics,,,internal/http/router.go:63
+route:chino-api:PATCH /api/v1/me/settings,route,chino-api,PATCH /api/v1/me/settings,,,internal/http/router.go:112
+route:chino-api:PATCH /api/v1/me/watchlists/{listId},route,chino-api,PATCH /api/v1/me/watchlists/{listId},,,internal/http/router.go:183
+route:chino-api:POST /api/v1/admin/items/{id}/package,route,chino-api,POST /api/v1/admin/items/{id}/package,,,internal/http/router.go:216
+route:chino-api:POST /api/v1/feedback,route,chino-api,POST /api/v1/feedback,,,internal/http/router.go:207
+route:chino-api:POST /api/v1/items/{id}/play/prewarm,route,chino-api,POST /api/v1/items/{id}/play/prewarm,,,internal/http/router.go:285
+route:chino-api:POST /api/v1/items/{id}/progress,route,chino-api,POST /api/v1/items/{id}/progress,,,internal/http/router.go:168
+route:chino-api:POST /api/v1/me/available,route,chino-api,POST /api/v1/me/available,,,internal/http/router.go:121
+route:chino-api:POST /api/v1/me/items/{id}/watched,route,chino-api,POST /api/v1/me/items/{id}/watched,,,internal/http/router.go:130
+route:chino-api:POST /api/v1/me/stream-token,route,chino-api,POST /api/v1/me/stream-token,,,internal/http/router.go:117
+route:chino-api:POST /api/v1/me/watchlists,route,chino-api,POST /api/v1/me/watchlists,,,internal/http/router.go:180
+route:chino-api:POST /api/v1/notices/read-all,route,chino-api,POST /api/v1/notices/read-all,,,internal/http/router.go:159
+route:chino-api:POST /api/v1/notices/{noticeId}/read,route,chino-api,POST /api/v1/notices/{noticeId}/read,,,internal/http/router.go:160
+route:chino-api:POST /api/v1/play/events,route,chino-api,POST /api/v1/play/events,,,internal/http/router.go:249
+route:chino-api:PUT /api/v1/me/likes/{id},route,chino-api,PUT /api/v1/me/likes/{id},,,internal/http/router.go:199
+route:chino-api:PUT /api/v1/me/watchlist/{id},route,chino-api,PUT /api/v1/me/watchlist/{id},,,internal/http/router.go:193
+route:chino-api:PUT /api/v1/me/watchlists/{listId}/items/{itemId},route,chino-api,PUT /api/v1/me/watchlists/{listId}/items/{itemId},,,internal/http/router.go:185
 route:chino-stream:GET /api/play/fonts/{fontID}.,route,chino-stream,GET /api/play/fonts/{fontID}.,,,internal/http/router.go:200
 route:chino-stream:GET /api/play/packaged-ids,route,chino-stream,GET /api/play/packaged-ids,,,internal/http/router.go:164
 route:chino-stream:GET /api/play/subs/{subID}.ass,route,chino-stream,GET /api/play/subs/{subID}.ass,,,internal/http/router.go:198
@@ -1589,61 +1615,63 @@ route:katalog-manager:ANY /api/manage/graphql,route,katalog-manager,ANY /api/man
 route:katalog-manager:ANY /api/manage/query,route,katalog-manager,ANY /api/manage/query,,,cmd/server/routes.go:27
 route:katalog-manager:ANY /graphql,route,katalog-manager,ANY /graphql,,,cmd/server/routes.go:24
 route:katalog-manager:ANY /query,route,katalog-manager,ANY /query,,,cmd/server/routes.go:23
-route:katalog-manager:DELETE /api/chapters/items/{itemId},route,katalog-manager,DELETE /api/chapters/items/{itemId},,,internal/rest/rest.go:122
-route:katalog-manager:DELETE /api/library/items/{itemId}/subtitles/{subtitleId},route,katalog-manager,DELETE /api/library/items/{itemId}/subtitles/{subtitleId},,,internal/rest/rest.go:203
-route:katalog-manager:DELETE /api/segments/items/{itemId},route,katalog-manager,DELETE /api/segments/items/{itemId},,,internal/rest/rest.go:116
-route:katalog-manager:GET /actuator/health/liveness,route,katalog-manager,GET /actuator/health/liveness,,,cmd/server/main.go:395
-route:katalog-manager:GET /actuator/health/readiness,route,katalog-manager,GET /actuator/health/readiness,,,cmd/server/main.go:396
-route:katalog-manager:GET /api/analyze/extras/{id},route,katalog-manager,GET /api/analyze/extras/{id},,,internal/rest/rest.go:130
-route:katalog-manager:GET /api/analyze/items/{id},route,katalog-manager,GET /api/analyze/items/{id},,,internal/rest/rest.go:103
-route:katalog-manager:GET /api/analyze/items/{id}/siblings,route,katalog-manager,GET /api/analyze/items/{id}/siblings,,,internal/rest/rest.go:108
-route:katalog-manager:GET /api/analyze/items/{id}/steps,route,katalog-manager,GET /api/analyze/items/{id}/steps,,,internal/rest/rest.go:104
-route:katalog-manager:GET /api/artwork/person/{personId}/profile,route,katalog-manager,GET /api/artwork/person/{personId}/profile,,,internal/rest/rest.go:88
-route:katalog-manager:GET /api/artwork/{itemId}/{kind},route,katalog-manager,GET /api/artwork/{itemId}/{kind},,,internal/rest/rest.go:77
-route:katalog-manager:GET /api/chapters/items/{itemId},route,katalog-manager,GET /api/chapters/items/{itemId},,,internal/rest/rest.go:121
-route:katalog-manager:GET /api/library/items/{itemId}/subtitles,route,katalog-manager,GET /api/library/items/{itemId}/subtitles,,,internal/rest/rest.go:201
-route:katalog-manager:GET /api/library/reencode,route,katalog-manager,GET /api/library/reencode,,,internal/rest/rest.go:156
-route:katalog-manager:GET /api/library/subtitles/languages,route,katalog-manager,GET /api/library/subtitles/languages,,,internal/rest/rest.go:193
-route:katalog-manager:GET /api/manage/artwork/person/{personId}/profile,route,katalog-manager,GET /api/manage/artwork/person/{personId}/profile,,,internal/rest/rest.go:89
-route:katalog-manager:GET /api/manage/artwork/{itemId}/{kind},route,katalog-manager,GET /api/manage/artwork/{itemId}/{kind},,,internal/rest/rest.go:86
-route:katalog-manager:GET /api/manage/compliance.csv,route,katalog-manager,GET /api/manage/compliance.csv,,,internal/rest/rest.go:178
+route:katalog-manager:DELETE /api/chapters/items/{itemId},route,katalog-manager,DELETE /api/chapters/items/{itemId},,,internal/rest/rest.go:124
+route:katalog-manager:DELETE /api/library/items/{itemId}/subtitles/{subtitleId},route,katalog-manager,DELETE /api/library/items/{itemId}/subtitles/{subtitleId},,,internal/rest/rest.go:211
+route:katalog-manager:DELETE /api/segments/items/{itemId},route,katalog-manager,DELETE /api/segments/items/{itemId},,,internal/rest/rest.go:118
+route:katalog-manager:GET /actuator/health/liveness,route,katalog-manager,GET /actuator/health/liveness,,,cmd/server/main.go:408
+route:katalog-manager:GET /actuator/health/readiness,route,katalog-manager,GET /actuator/health/readiness,,,cmd/server/main.go:409
+route:katalog-manager:GET /api/analyze/extras/{id},route,katalog-manager,GET /api/analyze/extras/{id},,,internal/rest/rest.go:132
+route:katalog-manager:GET /api/analyze/items/{id},route,katalog-manager,GET /api/analyze/items/{id},,,internal/rest/rest.go:105
+route:katalog-manager:GET /api/analyze/items/{id}/siblings,route,katalog-manager,GET /api/analyze/items/{id}/siblings,,,internal/rest/rest.go:110
+route:katalog-manager:GET /api/analyze/items/{id}/steps,route,katalog-manager,GET /api/analyze/items/{id}/steps,,,internal/rest/rest.go:106
+route:katalog-manager:GET /api/artwork/person/{personId}/profile,route,katalog-manager,GET /api/artwork/person/{personId}/profile,,,internal/rest/rest.go:90
+route:katalog-manager:GET /api/artwork/{itemId}/{kind},route,katalog-manager,GET /api/artwork/{itemId}/{kind},,,internal/rest/rest.go:79
+route:katalog-manager:GET /api/chapters/items/{itemId},route,katalog-manager,GET /api/chapters/items/{itemId},,,internal/rest/rest.go:123
+route:katalog-manager:GET /api/library/items/{itemId}/subtitles,route,katalog-manager,GET /api/library/items/{itemId}/subtitles,,,internal/rest/rest.go:209
+route:katalog-manager:GET /api/library/reencode,route,katalog-manager,GET /api/library/reencode,,,internal/rest/rest.go:158
+route:katalog-manager:GET /api/library/subtitles/languages,route,katalog-manager,GET /api/library/subtitles/languages,,,internal/rest/rest.go:201
+route:katalog-manager:GET /api/manage/artwork/person/{personId}/profile,route,katalog-manager,GET /api/manage/artwork/person/{personId}/profile,,,internal/rest/rest.go:91
+route:katalog-manager:GET /api/manage/artwork/{itemId}/{kind},route,katalog-manager,GET /api/manage/artwork/{itemId}/{kind},,,internal/rest/rest.go:88
+route:katalog-manager:GET /api/manage/compliance.csv,route,katalog-manager,GET /api/manage/compliance.csv,,,internal/rest/rest.go:186
 route:katalog-manager:GET /api/manage/stream,route,katalog-manager,GET /api/manage/stream,,,cmd/server/routes.go:30
-route:katalog-manager:GET /api/picture/extras/{id},route,katalog-manager,GET /api/picture/extras/{id},,,internal/rest/rest.go:163
-route:katalog-manager:GET /api/picture/items/{id},route,katalog-manager,GET /api/picture/items/{id},,,internal/rest/rest.go:161
-route:katalog-manager:GET /api/play/{itemId},route,katalog-manager,GET /api/play/{itemId},,,internal/rest/rest.go:90
-route:katalog-manager:GET /api/settings,route,katalog-manager,GET /api/settings,,,internal/rest/rest.go:136
-route:katalog-manager:GET /api/subtitles/items/{itemId},route,katalog-manager,GET /api/subtitles/items/{itemId},,,internal/rest/rest.go:91
-route:katalog-manager:GET /api/subtitles/{subId},route,katalog-manager,GET /api/subtitles/{subId},,,internal/rest/rest.go:92
-route:katalog-manager:GET /compliance.csv,route,katalog-manager,GET /compliance.csv,,,internal/rest/rest.go:179
-route:katalog-manager:GET /healthz,route,katalog-manager,GET /healthz,,,cmd/server/main.go:394
-route:katalog-manager:POST /api/analyze/items/{id}/fail,route,katalog-manager,POST /api/analyze/items/{id}/fail,,,internal/rest/rest.go:107
-route:katalog-manager:POST /api/analyze/items/{id}/steps/skip,route,katalog-manager,POST /api/analyze/items/{id}/steps/skip,,,internal/rest/rest.go:105
-route:katalog-manager:POST /api/analyze/series/{id}/reset,route,katalog-manager,POST /api/analyze/series/{id}/reset,,,internal/rest/rest.go:109
-route:katalog-manager:POST /api/chapters/claim,route,katalog-manager,POST /api/chapters/claim,,,internal/rest/rest.go:123
-route:katalog-manager:POST /api/extras,route,katalog-manager,POST /api/extras,,,internal/rest/rest.go:189
-route:katalog-manager:POST /api/extras/{id}/packaging-complete,route,katalog-manager,POST /api/extras/{id}/packaging-complete,,,internal/rest/rest.go:132
-route:katalog-manager:POST /api/ingest,route,katalog-manager,POST /api/ingest,,,internal/rest/rest.go:185
-route:katalog-manager:POST /api/items/{id}/package,route,katalog-manager,POST /api/items/{id}/package,,,internal/rest/rest.go:170
-route:katalog-manager:POST /api/items/{id}/packaging-complete,route,katalog-manager,POST /api/items/{id}/packaging-complete,,,internal/rest/rest.go:126
-route:katalog-manager:POST /api/items/{id}/takein,route,katalog-manager,POST /api/items/{id}/takein,,,internal/rest/rest.go:173
-route:katalog-manager:POST /api/library/items/{itemId}/subtitles,route,katalog-manager,POST /api/library/items/{itemId}/subtitles,,,internal/rest/rest.go:202
-route:katalog-manager:POST /api/library/migrations/{run}/adopt,route,katalog-manager,POST /api/library/migrations/{run}/adopt,,,internal/rest/rest.go:142
-route:katalog-manager:POST /api/library/migrations/{run}/checksums,route,katalog-manager,POST /api/library/migrations/{run}/checksums,,,internal/rest/rest.go:145
-route:katalog-manager:POST /api/library/migrations/{run}/names,route,katalog-manager,POST /api/library/migrations/{run}/names,,,internal/rest/rest.go:144
-route:katalog-manager:POST /api/library/migrations/{run}/revert,route,katalog-manager,POST /api/library/migrations/{run}/revert,,,internal/rest/rest.go:143
-route:katalog-manager:POST /api/library/migrations/{run}/subtitles,route,katalog-manager,POST /api/library/migrations/{run}/subtitles,,,internal/rest/rest.go:146
-route:katalog-manager:POST /api/library/projections,route,katalog-manager,POST /api/library/projections,,,internal/rest/rest.go:152
-route:katalog-manager:POST /api/library/reencode,route,katalog-manager,POST /api/library/reencode,,,internal/rest/rest.go:155
-route:katalog-manager:POST /api/library/styled,route,katalog-manager,POST /api/library/styled,,,internal/rest/rest.go:149
-route:katalog-manager:POST /api/picture/claim,route,katalog-manager,POST /api/picture/claim,,,internal/rest/rest.go:165
-route:katalog-manager:PUT /api/analyze/extras/{id}/steps/{step},route,katalog-manager,PUT /api/analyze/extras/{id}/steps/{step},,,internal/rest/rest.go:131
-route:katalog-manager:PUT /api/analyze/items/{id}/steps/{step},route,katalog-manager,PUT /api/analyze/items/{id}/steps/{step},,,internal/rest/rest.go:106
-route:katalog-manager:PUT /api/analyze/rules/{worker},route,katalog-manager,PUT /api/analyze/rules/{worker},,,internal/rest/rest.go:112
-route:katalog-manager:PUT /api/artwork/{itemId}/{kind},route,katalog-manager,PUT /api/artwork/{itemId}/{kind},,,internal/rest/rest.go:98
-route:katalog-manager:PUT /api/chapters/items/{itemId},route,katalog-manager,PUT /api/chapters/items/{itemId},,,internal/rest/rest.go:120
-route:katalog-manager:PUT /api/picture/extras/{id},route,katalog-manager,PUT /api/picture/extras/{id},,,internal/rest/rest.go:164
-route:katalog-manager:PUT /api/picture/items/{id},route,katalog-manager,PUT /api/picture/items/{id},,,internal/rest/rest.go:162
-route:katalog-manager:PUT /api/segments/items/{itemId},route,katalog-manager,PUT /api/segments/items/{itemId},,,internal/rest/rest.go:115
+route:katalog-manager:GET /api/picture/extras/{id},route,katalog-manager,GET /api/picture/extras/{id},,,internal/rest/rest.go:165
+route:katalog-manager:GET /api/picture/items/{id},route,katalog-manager,GET /api/picture/items/{id},,,internal/rest/rest.go:163
+route:katalog-manager:GET /api/play/{itemId},route,katalog-manager,GET /api/play/{itemId},,,internal/rest/rest.go:92
+route:katalog-manager:GET /api/settings,route,katalog-manager,GET /api/settings,,,internal/rest/rest.go:138
+route:katalog-manager:GET /api/subtitles/items/{itemId},route,katalog-manager,GET /api/subtitles/items/{itemId},,,internal/rest/rest.go:93
+route:katalog-manager:GET /api/subtitles/{subId},route,katalog-manager,GET /api/subtitles/{subId},,,internal/rest/rest.go:94
+route:katalog-manager:GET /compliance.csv,route,katalog-manager,GET /compliance.csv,,,internal/rest/rest.go:187
+route:katalog-manager:GET /healthz,route,katalog-manager,GET /healthz,,,cmd/server/main.go:407
+route:katalog-manager:POST /api/analyze/items/{id}/fail,route,katalog-manager,POST /api/analyze/items/{id}/fail,,,internal/rest/rest.go:109
+route:katalog-manager:POST /api/analyze/items/{id}/steps/skip,route,katalog-manager,POST /api/analyze/items/{id}/steps/skip,,,internal/rest/rest.go:107
+route:katalog-manager:POST /api/analyze/series/{id}/reset,route,katalog-manager,POST /api/analyze/series/{id}/reset,,,internal/rest/rest.go:111
+route:katalog-manager:POST /api/captions/claim,route,katalog-manager,POST /api/captions/claim,,,internal/rest/rest.go:172
+route:katalog-manager:POST /api/chapters/claim,route,katalog-manager,POST /api/chapters/claim,,,internal/rest/rest.go:125
+route:katalog-manager:POST /api/extras,route,katalog-manager,POST /api/extras,,,internal/rest/rest.go:197
+route:katalog-manager:POST /api/extras/{id}/packaging-complete,route,katalog-manager,POST /api/extras/{id}/packaging-complete,,,internal/rest/rest.go:134
+route:katalog-manager:POST /api/ingest,route,katalog-manager,POST /api/ingest,,,internal/rest/rest.go:193
+route:katalog-manager:POST /api/items/{id}/package,route,katalog-manager,POST /api/items/{id}/package,,,internal/rest/rest.go:178
+route:katalog-manager:POST /api/items/{id}/packaging-complete,route,katalog-manager,POST /api/items/{id}/packaging-complete,,,internal/rest/rest.go:128
+route:katalog-manager:POST /api/items/{id}/takein,route,katalog-manager,POST /api/items/{id}/takein,,,internal/rest/rest.go:181
+route:katalog-manager:POST /api/library/items/{itemId}/subtitles,route,katalog-manager,POST /api/library/items/{itemId}/subtitles,,,internal/rest/rest.go:210
+route:katalog-manager:POST /api/library/migrations/{run}/adopt,route,katalog-manager,POST /api/library/migrations/{run}/adopt,,,internal/rest/rest.go:144
+route:katalog-manager:POST /api/library/migrations/{run}/checksums,route,katalog-manager,POST /api/library/migrations/{run}/checksums,,,internal/rest/rest.go:147
+route:katalog-manager:POST /api/library/migrations/{run}/names,route,katalog-manager,POST /api/library/migrations/{run}/names,,,internal/rest/rest.go:146
+route:katalog-manager:POST /api/library/migrations/{run}/revert,route,katalog-manager,POST /api/library/migrations/{run}/revert,,,internal/rest/rest.go:145
+route:katalog-manager:POST /api/library/migrations/{run}/subtitles,route,katalog-manager,POST /api/library/migrations/{run}/subtitles,,,internal/rest/rest.go:148
+route:katalog-manager:POST /api/library/projections,route,katalog-manager,POST /api/library/projections,,,internal/rest/rest.go:154
+route:katalog-manager:POST /api/library/reencode,route,katalog-manager,POST /api/library/reencode,,,internal/rest/rest.go:157
+route:katalog-manager:POST /api/library/styled,route,katalog-manager,POST /api/library/styled,,,internal/rest/rest.go:151
+route:katalog-manager:POST /api/picture/claim,route,katalog-manager,POST /api/picture/claim,,,internal/rest/rest.go:167
+route:katalog-manager:PUT /api/analyze/extras/{id}/steps/{step},route,katalog-manager,PUT /api/analyze/extras/{id}/steps/{step},,,internal/rest/rest.go:133
+route:katalog-manager:PUT /api/analyze/items/{id}/steps/{step},route,katalog-manager,PUT /api/analyze/items/{id}/steps/{step},,,internal/rest/rest.go:108
+route:katalog-manager:PUT /api/analyze/rules/{worker},route,katalog-manager,PUT /api/analyze/rules/{worker},,,internal/rest/rest.go:114
+route:katalog-manager:PUT /api/artwork/{itemId}/{kind},route,katalog-manager,PUT /api/artwork/{itemId}/{kind},,,internal/rest/rest.go:100
+route:katalog-manager:PUT /api/captions/sources/{sourceId},route,katalog-manager,PUT /api/captions/sources/{sourceId},,,internal/rest/rest.go:173
+route:katalog-manager:PUT /api/chapters/items/{itemId},route,katalog-manager,PUT /api/chapters/items/{itemId},,,internal/rest/rest.go:122
+route:katalog-manager:PUT /api/picture/extras/{id},route,katalog-manager,PUT /api/picture/extras/{id},,,internal/rest/rest.go:166
+route:katalog-manager:PUT /api/picture/items/{id},route,katalog-manager,PUT /api/picture/items/{id},,,internal/rest/rest.go:164
+route:katalog-manager:PUT /api/segments/items/{itemId},route,katalog-manager,PUT /api/segments/items/{itemId},,,internal/rest/rest.go:117
 route:live-worker:GET /healthz,route,live-worker,GET /healthz,,,internal/supervisor/http.go:38
 route:live-worker:GET /metrics,route,live-worker,GET /metrics,,,internal/supervisor/http.go:49
 route:live-worker:GET /readyz,route,live-worker,GET /readyz,,,internal/supervisor/http.go:41
@@ -1829,12 +1857,17 @@ service:zaentrum-operator:postgres,service,zaentrum-operator,postgres,postgres,5
 service:zaentrum-operator:transcoder,service,zaentrum-operator,transcoder,transcoder,80→8080,operator/platform/chart/templates/pipeline.yaml:305
 service:zaentrum-operator:valkey,service,zaentrum-operator,valkey,valkey,6379→valkey,operator/platform/chart/templates/data.yaml:107
 service:zaentrum-operator:zaentrum-portal,service,zaentrum-operator,zaentrum-portal,zaentrum-portal,80→http,operator/platform/chart/templates/zaentrum-portal.yaml:52
+setting:katalog-manager:captions.backfill,setting,katalog-manager,captions.backfill,on,On (the default) or off: whether originals are handed out at all.,internal/captions/backfill.go:59
+setting:katalog-manager:captions.backfill.inflight,setting,katalog-manager,captions.backfill.inflight,2,How many originals may be handed out and not reported at once (2).,internal/captions/backfill.go:67
+setting:katalog-manager:captions.backfill.lease,setting,katalog-manager,captions.backfill.lease,,How long an original handed out is the worker's before it is taken for lost (10m: a read of its first packets takes seconds).,internal/captions/backfill.go:74
+setting:katalog-manager:captions.backfill.rate,setting,katalog-manager,captions.backfill.rate,,How many hand-outs there are an hour at most (600; an original handed out again counts again); 0 hands out none.,internal/captions/backfill.go:70
+setting:katalog-manager:captions.backfill.window,setting,katalog-manager,captions.backfill.window,,"When originals are handed out, a daily span ""HH:MM-HH:MM"" in UTC (it may cross midnight): an installation can keep the reads out of the hours its library is…",internal/captions/backfill.go:64
 setting:katalog-manager:chapters.backfill,setting,katalog-manager,chapters.backfill,off,On or off (the default): whether titles are read at all.,internal/chapters/backfill.go:48
-setting:katalog-manager:chapters.backfill.inflight,setting,katalog-manager,chapters.backfill.inflight,1,How many titles may be handed out and not reported at once (1).,internal/chapters/backfill.go:54
-setting:katalog-manager:chapters.backfill.lease,setting,katalog-manager,chapters.backfill.lease,,"How long a title handed out is the worker's before it is taken for lost (30m: a header read takes seconds, the analyzer gives one two minutes).",internal/chapters/backfill.go:64
-setting:katalog-manager:chapters.backfill.rate,setting,katalog-manager,chapters.backfill.rate,120,How many titles are handed out an hour at most (120); 0 hands out none.,internal/chapters/backfill.go:57
-setting:katalog-manager:chapters.backfill.records,setting,katalog-manager,chapters.backfill.records,3600,"How many source records the catalog reads an hour at most (3600); 0 reads none, and every title goes to the analyzer.",internal/chapters/backfill.go:60
-setting:katalog-manager:chapters.backfill.window,setting,katalog-manager,chapters.backfill.window,,"When, ""HH:MM-HH:MM"" in UTC (22:00-17:00, which crosses midnight: never from 17:00 to 22:00); empty, any time.",internal/chapters/backfill.go:51
+setting:katalog-manager:chapters.backfill.inflight,setting,katalog-manager,chapters.backfill.inflight,1,How many titles may be handed out and not reported at once (1).,internal/chapters/backfill.go:55
+setting:katalog-manager:chapters.backfill.lease,setting,katalog-manager,chapters.backfill.lease,,"How long a title handed out is the worker's before it is taken for lost (30m: a header read takes seconds, the analyzer gives one two minutes).",internal/chapters/backfill.go:65
+setting:katalog-manager:chapters.backfill.rate,setting,katalog-manager,chapters.backfill.rate,120,How many titles are handed out an hour at most (120); 0 hands out none.,internal/chapters/backfill.go:58
+setting:katalog-manager:chapters.backfill.records,setting,katalog-manager,chapters.backfill.records,3600,"How many source records the catalog reads an hour at most (3600); 0 reads none, and every title goes to the analyzer.",internal/chapters/backfill.go:61
+setting:katalog-manager:chapters.backfill.window,setting,katalog-manager,chapters.backfill.window,,"When titles are read, a daily span ""HH:MM-HH:MM"" in UTC (it may cross midnight): an installation can keep the reads out of the hours its library is watched.",internal/chapters/backfill.go:52
 setting:katalog-manager:compliance.nightly,setting,katalog-manager,compliance.nightly,,"When every title is checked again each day, ""HH:MM"" in the service's local time (03:00), or off: from the facts the check keeps of their records, reading aga…",internal/compliance/settings.go:28
 setting:katalog-manager:compliance.pass,setting,katalog-manager,compliance.pass,on,On (the default) or off: whether the background pass checks the titles that need it.,internal/compliance/settings.go:21
 setting:katalog-manager:compliance.readers,setting,katalog-manager,compliance.readers,4,How many records the pass reads at once (4).,internal/compliance/settings.go:23
@@ -1846,12 +1879,12 @@ setting:katalog-manager:library.originals,setting,katalog-manager,library.origin
 setting:katalog-manager:library.reencode.inflight,setting,katalog-manager,library.reencode.inflight,4,How many titles of the queue may be sent and not done at once (4): the sweep sends no more while they are encoded.,internal/library/settings.go:54
 setting:katalog-manager:library.reencode.rate,setting,katalog-manager,library.reencode.rate,4,How many titles of the re-encode queue the sweep sends a pass at most (4); 0 sends none.,internal/library/settings.go:51
 setting:katalog-manager:library.reencode.window,setting,katalog-manager,library.reencode.window,,"When the queue is sent, ""HH:MM-HH:MM"" in the service's local time (""23:00-07:00"" crosses midnight); empty, any time.",internal/library/settings.go:57
-setting:katalog-manager:library.replace.clients,setting,katalog-manager,library.replace.clients,,"Names the addons that may give a title another file (replaceSource), and have its old original go: the OIDC clients of their service accounts (a token's azp)…",internal/library/settings.go:85
+setting:katalog-manager:library.replace.clients,setting,katalog-manager,library.replace.clients,,"Names the addons that may give a title another file (replaceSource), and have its old original go: the OIDC clients of their service accounts (a token's azp)…",internal/library/settings.go:90
 setting:katalog-manager:library.retire.delay,setting,katalog-manager,library.retire.delay,10m,How long a version is complete at least before the original it was made from is retired (10m).,internal/library/settings.go:30
 setting:katalog-manager:library.retire.list,setting,katalog-manager,library.retire.list,,"What an admin's list of originals to retire may do (retireOriginals): off (no list runs, and one that runs stops), dry-run (the default: a list says what it…",internal/library/settings.go:62
 setting:katalog-manager:library.retire.list.maxAge,setting,katalog-manager,library.retire.list.maxAge,24h,"How long a dry run's word on its titles holds for a run of them (24h): a run of an older dry run is refused, and a title its dry run checked longer ago is no…",internal/library/settings.go:66
 setting:katalog-manager:library.retire.rate,setting,katalog-manager,library.retire.rate,30,How many originals the retire job retires a minute at most (30).,internal/library/settings.go:33
-setting:katalog-manager:library.superseded.accept,setting,katalog-manager,library.superseded.accept,,"What the retire job may give up of a superseded original against its title's master (the deletion gate's names, by commas or spaces) before it retires it on…",internal/library/settings.go:79
+setting:katalog-manager:library.superseded.accept,setting,katalog-manager,library.superseded.accept,,"What the retire job may give up of a superseded original against its title's master (the deletion gate's names, by commas or spaces) before it retires it on…",internal/library/settings.go:84
 setting:katalog-manager:library.superseded.delay,setting,katalog-manager,library.superseded.delay,,"How long the master of an original another file took the place of (superseded) is complete at least before the retire job retires that original (7d), so that…",internal/library/settings.go:72
 setting:katalog-manager:library.superseded.grace,setting,katalog-manager,library.superseded.grace,24h,How long a superseded version stays before it is removed (24h).,internal/library/settings.go:45
 setting:katalog-manager:library.trash.grace,setting,katalog-manager,library.trash.grace,24h,How long a retired original stays in the trash (24h); 0 unlinks it at once.,internal/library/settings.go:48
@@ -1862,10 +1895,10 @@ setting:katalog-manager:omdb.api_key,setting,katalog-manager,omdb.api_key,,"secr
 setting:katalog-manager:packager.keep_original_if_single,setting,katalog-manager,packager.keep_original_if_single,,,internal/compliance/audio.go:54
 setting:katalog-manager:packager.language_whitelist,setting,katalog-manager,packager.language_whitelist,,"The settings that name the instance's subtitle languages, the first one set deciding: its own (ADR-0014), else the languages its players show.",internal/compliance/audio.go:53
 setting:katalog-manager:picture.backfill,setting,katalog-manager,picture.backfill,off,On or off (the default): whether titles are handed out at all.,internal/picture/backfill.go:58
-setting:katalog-manager:picture.backfill.inflight,setting,katalog-manager,picture.backfill.inflight,1,How many titles may be handed out and not reported at once (1).,internal/picture/backfill.go:64
-setting:katalog-manager:picture.backfill.lease,setting,katalog-manager,picture.backfill.lease,,"How long a title handed out is the worker's before it is taken for lost (6h: the whole measurement of a 3-hour 4K remux, with room to spare).",internal/picture/backfill.go:71
-setting:katalog-manager:picture.backfill.rate,setting,katalog-manager,picture.backfill.rate,240,How many titles are handed out an hour at most (240); 0 hands out none.,internal/picture/backfill.go:67
-setting:katalog-manager:picture.backfill.window,setting,katalog-manager,picture.backfill.window,,"When, ""HH:MM-HH:MM"" in UTC (22:00-17:00, which crosses midnight: never from 17:00 to 22:00); empty, any time.",internal/picture/backfill.go:61
+setting:katalog-manager:picture.backfill.inflight,setting,katalog-manager,picture.backfill.inflight,1,How many titles may be handed out and not reported at once (1).,internal/picture/backfill.go:66
+setting:katalog-manager:picture.backfill.lease,setting,katalog-manager,picture.backfill.lease,,"How long a title handed out is the worker's before it is taken for lost (6h: the whole measurement of a 3-hour 4K remux, with room to spare).",internal/picture/backfill.go:73
+setting:katalog-manager:picture.backfill.rate,setting,katalog-manager,picture.backfill.rate,240,How many titles are handed out an hour at most (240); 0 hands out none.,internal/picture/backfill.go:69
+setting:katalog-manager:picture.backfill.window,setting,katalog-manager,picture.backfill.window,,"When titles are handed out, a daily span ""HH:MM-HH:MM"" in UTC (it may cross midnight): an installation can keep the measurements out of the hours its library…",internal/picture/backfill.go:63
 setting:katalog-manager:ratings.countries,setting,katalog-manager,ratings.countries,,"Lists the countries whose certifications rate a title, in the order they are asked (Countries).",internal/ratings/ratings.go:23
 setting:katalog-manager:ratings.unrated_for_capped,setting,katalog-manager,ratings.unrated_for_capped,,"Says whether a viewer with a cap is served the titles nothing rates: show, or hide (the default, and anything else).",internal/ratings/ratings.go:28
 setting:katalog-manager:subtitles.languages,setting,katalog-manager,subtitles.languages,,"The settings that name the instance's subtitle languages, the first one set deciding: its own (ADR-0014), else the languages its players show.",internal/rest/attached.go:325

@@ -28,7 +28,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 |---|---|---|---|---|---|---|
 | resource | 72 | 63 | 8 | 0 | 1 | 21 |
 | env | 66 | 64 | 0 | 0 | 2 | 14 |
-| catalog | 43 | 0 | 43 | 0 | 0 | 3 |
+| catalog | 48 | 0 | 48 | 0 | 0 | 3 |
 | registry | 5 | 0 | 5 | 0 | 0 | 0 |
 | app | 9 | 0 | 0 | 9 | 0 | 0 |
 | code | 126 | 0 | 0 | 0 | 126 | 8 |
@@ -39,7 +39,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 <!-- generated: proposals -->
 | Proposal | Settings |
 |---|---|
-| keep | 212 |
+| keep | 217 |
 | setting | 3 |
 | shared | 24 |
 | person | 1 |
@@ -156,16 +156,21 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 | How many records the compliance pass reads at once `compliance-readers`, for `check-compliance` | admin | catalog | 4 (a number, 1 to 64) | keep |
 | When every title is checked again each day `compliance-nightly`, for `check-compliance` | admin | catalog | 03:00 (HH:MM, the service's local time; off) | keep |
 | Whether the catalog hands out titles that miss their chapters to be read `chapters-backfill`, for `read-chapters` | admin | catalog | off (on, off) | keep |
-| When the chapter backfill hands titles out `chapters-backfill-window`, for `read-chapters` | admin | catalog | 22:00-17:00 UTC (HH:MM-HH:MM in UTC; empty, any time) | keep |
+| When the chapter backfill hands titles out `chapters-backfill-window`, for `read-chapters` | admin | catalog | any time (HH:MM-HH:MM in UTC; empty, any time) | keep |
 | How many titles the chapter backfill may have out and not reported at once `chapters-backfill-inflight`, for `read-chapters` | admin | catalog | 1 (a number, 1 or more) | keep |
 | How many titles the chapter backfill hands out an hour `chapters-backfill-rate`, for `read-chapters` | admin | catalog | 120 an hour (a number; 0 none) | keep |
 | How many source records the catalog reads chapters from an hour `chapters-backfill-records`, for `read-chapters` | admin | catalog | 3600 an hour (a number; 0 none, every title to the analyzer) | keep |
 | How long a title handed out for its chapters is the worker's before it counts as lost `chapters-backfill-lease`, for `read-chapters` | admin | catalog | 30 min (a duration) | keep |
 | Whether the catalog hands out titles without a picture area to be measured `picture-backfill`, for `measure-picture-area` | admin | catalog | off (on, off) | keep |
-| When the picture backfill hands titles out `picture-backfill-window`, for `measure-picture-area` | admin | catalog | 22:00-17:00 UTC (HH:MM-HH:MM in UTC; empty, any time) | keep |
+| When the picture backfill hands titles out `picture-backfill-window`, for `measure-picture-area` | admin | catalog | any time (HH:MM-HH:MM in UTC; empty, any time) | keep |
 | How many titles the picture backfill may have out and not reported at once `picture-backfill-inflight`, for `measure-picture-area` | admin | catalog | 1 (a number, 1 or more) | keep |
 | How many titles the picture backfill hands out an hour `picture-backfill-rate`, for `measure-picture-area` | admin | catalog | 240 an hour (a number; 0 none) | keep |
 | How long a title handed out to be measured is the worker's before it counts as lost `picture-backfill-lease`, for `measure-picture-area` | admin | catalog | 6 h (a duration) | keep |
+| Whether the catalog hands out originals to be read for closed captions `captions-backfill`, for `read-closed-captions` | admin | catalog | on (on, off) | keep |
+| When the captions backfill hands originals out `captions-backfill-window`, for `read-closed-captions` | admin | catalog | any time (HH:MM-HH:MM in UTC; empty, any time) | keep |
+| How many originals the captions backfill may have out and not reported at once `captions-backfill-inflight`, for `read-closed-captions` | admin | catalog | 2 (a number, 1 or more) | keep |
+| How many originals the captions backfill hands out an hour `captions-backfill-rate`, for `read-closed-captions` | admin | catalog | 600 an hour (a number; 0 none) | keep |
+| How long an original handed out to be read is the worker's before it counts as lost `captions-backfill-lease`, for `read-closed-captions` | admin | catalog | 10 min (a duration) | keep |
 | The countries whose certifications rate a title by age, in the order asked `ratings-countries`, for `enrich-titles`, `edit-title` | admin | catalog | CH, DE, US (country codes, ISO 3166-1) | keep |
 | The languages whose audio and subtitle tracks the apps list; others are packaged hidden `shown-languages`, for `package-title`, `check-compliance`, `make-subtitles` | admin | catalog | none: every track listed (a list of language codes) | keep |
 | Whether a title whose every track is in a hidden language lists them all `keep-single-language`, for `package-title` | admin | catalog | on (on, off) | keep |
@@ -225,8 +230,8 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 - `reencode-window`: Local time, where the backfills' windows are UTC
 - `retire-list-mode`: The inventory's value column holds a parse slip; dry-run is the code's default
 - `compliance-pass`: Off, the report keeps what the last pass found
-- `chapters-backfill-window`: Unset, never from 17:00 to 22:00 UTC; set empty, any time
-- `picture-backfill-window`: Unset, never from 17:00 to 22:00 UTC; set empty, any time
+- `captions-backfill`: Off, an original is kept until its captions are read
+- `captions-backfill-rate`: An original handed out again counts again
 - `ratings-countries`: The inventory's value column holds a parse slip; CH, DE, US is the code's default
 - `shown-languages`: packager.language_whitelist: not in the inventory. Also the default of the languages to make subtitles in
 - `keep-single-language`: packager.keep_original_if_single: not in the inventory

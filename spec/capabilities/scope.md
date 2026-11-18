@@ -43,9 +43,9 @@ the targets, and the decision records the changes rest on.
 | Of the capabilities |  |
 |---|---|
 | Capabilities that are not built | 219 |
-| a numbered change builds them | 181 |
+| a numbered change builds them | 180 |
 | to be built, the change still to write | 0 |
-| left for later | 34 |
+| left for later | 35 |
 | left to an addon | 3 |
 | ruled out | 1 |
 | nothing says | 0 |
@@ -54,16 +54,16 @@ the targets, and the decision records the changes rest on.
 |---|---|
 | Numbered changes | 448 |
 | proposed | 0 |
-| approved | 438 |
-| built | 9 |
+| approved | 437 |
+| built | 10 |
 | verified | 0 |
 | withdrawn | 1 |
 
 | Of the proposals |  |
 |---|---|
-| Rows of scope.csv | 57 |
+| Rows of scope.csv | 58 |
 | proposed | 0 |
-| approved | 57 |
+| approved | 58 |
 | Qualities | 21 |
 | with a target | 21 |
 | with an approved target | 21 |
@@ -133,7 +133,7 @@ Approving the change takes the recommendation.
 | [N.C10](../platform/home.md#changes) | The Samsung TV app keeps plain http to home addresses | Samsung TV | approved |
 | [N.C12](../platform/home.md#changes) | The one-machine install announces itself | Images | approved |
 | [P.C12](../portal/people.md#changes) | A stream needs a session | Server | approved |
-| [R.C12](../portal/operations.md#changes) | A backup before an update | Operator | approved |
+| [R.C12](../portal/operations.md#changes) | A backup before an update | Operator | built |
 | [R.C13](../portal/operations.md#changes) | A restore brings the identity provider in step | Operator | approved |
 | [T.C6](../platform/trust.md#changes) | The addon interfaces, each with a version | Docs | approved |
 <!-- end: choices -->
@@ -184,6 +184,7 @@ None.
 | Read a title's chapters from its original, and of titles that miss them at a set pace | `read-chapters` | [Preparing titles to play](./catalog.md#preparing-titles-to-play) | the chapters tab lists a title's chapters; how far the reading is, and settling a title that can't be read, stay with the API | approved |
 | Settle titles whose chapters can't be read, or put back chapters a read replaced | `settle-chapter-reads` | [Preparing titles to play](./catalog.md#preparing-titles-to-play) | the chapters tab lists a title's chapters; how far the reading is, and settling a title that can't be read, stay with the API | approved |
 | Measure the picture inside a title's frame, and of titles that lack it at a set pace | `measure-picture-area` | [Preparing titles to play](./catalog.md#preparing-titles-to-play) | the platform's own work; the console needs no screen for it beyond what a title's files tab shows | approved |
+| Read whether a title's original carries closed captions, at a set pace | `read-closed-captions` | [Preparing titles to play](./catalog.md#preparing-titles-to-play) | the platform's own work; how far the reading is stays with the API, and the console needs no screen for it | approved |
 | Encode and package a title's extras on a chain of their own | `package-extras` | [Preparing titles to play](./catalog.md#preparing-titles-to-play) | the platform's own work; the console needs no screen for it beyond what a title's files tab shows | approved |
 | Pin the platform to a version, or follow its channel again | `pin-version` | [Installing and configuring](./platform.md#installing-and-configuring) | the CLI and the resource pin any version; the portal offers the update at hand, which is what an admin needs there | approved |
 | Publish the bundled identity provider's admin console on the public host | `expose-identity-console` | [Installing and configuring](./platform.md#installing-and-configuring) | a choice of whoever installs the platform, made in its resource | approved |

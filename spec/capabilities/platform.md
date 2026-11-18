@@ -43,7 +43,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 | See which encoder the workers run with, and why not the one asked for | admin | no | no | no | [platform install](../platform/install.md) |
 | See where the backups are, how old and how large the newest is, and each one's version | admin | no | no | — | [portal operations](../portal/operations.md) |
 | Make a backup of the bundled databases now, without waiting for the schedule | admin | no | no | built | [portal operations](../portal/operations.md) |
-| Back up the bundled databases before an update is applied | system | — | — | no | [portal operations](../portal/operations.md) |
+| Back up the bundled databases before an update is applied | system | — | — | built | [portal operations](../portal/operations.md) |
 | Copy the backups of a one-machine install to a folder outside it, and back | operator | — | no | — | [portal operations](../portal/operations.md) |
 
 - Pin the platform to a version, or follow its channel again: A tag pins every image; latest follows the channel. Portal shows the version and pins only the offered update
@@ -72,6 +72,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 - Mount further volumes for the library's folders: the chart mounts one claim for the library
 - See where the backups are, how old and how large the newest is, and each one's version: the status lists the last good backup's dumps; no page or command shows them
 - Make a backup of the bundled databases now, without waiting for the schedule: asked with the annotation zaentrum.io/backup-request, answered in status.backup.request; no page or command asks for one
+- Back up the bundled databases before an update is applied: another version waits for a backup of the one that runs: stopped at 30 minutes and applied by 35 at the latest; not on the all-in-one image
 
 | Key | Changes | Next | Served by | Settings |
 |---|---|---|---|---|
@@ -104,7 +105,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 | `see-encoder-in-use` | I.C4, I.C8 | build | — | — |
 | `see-backups` | R.C10, R.C14, R.C15, R.C18 | build | — | — |
 | `back-up-now` | R.C11, R.C14, R.C15, R.C18 | build | `Zaentrum.spec.backup.enabled` | `backup-switch` |
-| `back-up-before-update` | R.C12 | build | — | — |
+| `back-up-before-update` | R.C12 | — | `Zaentrum.spec.backup.enabled` | `backup-switch` |
 | `copy-backups-off-machine` | R.C19 | build | — | — |
 
 ## Releases one can trust

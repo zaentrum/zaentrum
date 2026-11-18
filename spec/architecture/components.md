@@ -53,7 +53,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
 | `katalog-api` | the catalog's read side | service | runs | [katalog-api](https://github.com/zaentrum/katalog-api) | `katalog-api` | 32 | 8 | ADR-0003, ADR-0012, ADR-0021 |
-| `katalog-manager` | the catalog's only writer: scan, ingest, enrichment, the management API | service | runs | [katalog-manager](https://github.com/zaentrum/katalog-manager) | `katalog-manager-api` | 37 | 75 | ADR-0001, ADR-0003, ADR-0005, ADR-0012, ADR-0015, ADR-0023, ADR-0021 |
+| `katalog-manager` | the catalog's only writer: scan, ingest, enrichment, the management API | service | runs | [katalog-manager](https://github.com/zaentrum/katalog-manager) | `katalog-manager-api` | 38 | 80 | ADR-0001, ADR-0003, ADR-0005, ADR-0012, ADR-0015, ADR-0023, ADR-0021 |
 | `katalog-ingest` | the ingest scheduler | worker | runs | [katalog-ingest](https://github.com/zaentrum/katalog-ingest) | `katalog-ingest` | 1 | 3 | — |
 
 - `katalog-manager`: Runs as katalog-manager-api, the name of the service it replaced
@@ -92,7 +92,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 26 | 76 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
+| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 27 | 76 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
 | `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011, ADR-0016, ADR-0017, ADR-0020, ADR-0021 |
 | `appliance` | the one-container install: a cluster of its own, the operator and a resource | appliance | ships | — | — | — | — | ADR-0006, ADR-0008, ADR-0016, ADR-0017 |
 
