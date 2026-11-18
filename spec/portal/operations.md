@@ -814,9 +814,9 @@ A set does not hold:
     knows of it.
 - **Before an update.** Before the operator applies another version than the
   one that runs, where backups are on, it makes a backup and applies the
-  update when the backup has ended, after 30 minutes at the latest. A backup
-  that fails does not stop the update; the `Backup` condition says that it
-  failed. Not on a one-machine install: there the updater keeps a copy of
+  update when the backup has ended. It waits 30 minutes at the most, and up
+  to five more for a backup it then stops. A backup that fails does not stop
+  the update; the `Backup` condition says that it failed. Not on a one-machine install: there the updater keeps a copy of
   the databases' files itself while it updates
   ([Installing and updating](../platform/install.md)).
   - **Another version** is another tag than the one that runs. New images
@@ -835,7 +835,10 @@ A set does not hold:
     back, whichever version it then waits to apply. A backup that still runs
     when they are over is stopped and counts as one that failed, so that no
     set is written while the databases change under it; the update is
-    applied without a backup, and the `Backup` condition says so.
+    applied without a backup, and the `Backup` condition says so. The update
+    is applied once the stopped backup no longer runs, five minutes later at
+    the latest. Where no backup could be started in the 30 minutes, the
+    update is applied without one, and the operator's log says so.
   - **During a restore** the update waits for the restore to end, and the
     30 minutes start then.
 
@@ -1559,7 +1562,7 @@ words it. No line holds an address, a title or a text.
 | **back up now** | “A backup was made: {size}.” · “The backup failed: {reason}” · “A backup already runs.” |
 | The `Backup` condition | as today: “the bundled Postgres is not backed up: spec.backup.enabled is false” · “the bundled Postgres keeps its data on an emptyDir and is not backed up: backups start once it is on its claim (spec.storage.postgres.migrate), or with spec.backup.enabled true” · “no backup has run yet: the first runs on the schedule {schedule}” · “{job} runs the first backup” · “{job} failed: {reason}; the latest that succeeded wrote {dump}, {time}” · “{job} failed: {reason}; no backup has succeeded yet” · “{dump}: {n} databases, {size}; {n} dumps kept, {free} free” |
 | A backup asked for where none is made | added to the condition's first sentence: “; the backup asked for is not made: set spec.backup.enabled to true and ask again with a new value” · added to its second: “; the backup asked for is not made” |
-| A backup before an update | added to the condition's sentence while the update waits: “; {job} backs up {version} before the update to {target}: the update is applied once it has ended, by {time} at the latest” · after it, added to the sentence of a backup that succeeded: “; made before the update to {target}” · one that failed: “{job} failed: {reason}; the update to {target} was applied all the same; the latest that succeeded wrote {dump}, {time}” · one that was stopped: “{job} had not ended after 30 minutes and was stopped; the update to {target} was applied without a backup; the latest that succeeded wrote {dump}, {time}” · each of the two with none that succeeded: “…; no backup has succeeded yet” |
+| A backup before an update | added to the condition's sentence while the update waits: “; {job} backs up {version} before the update to {target}: the update is applied once it has ended; a backup that still runs at {time} is stopped” · after it, added to the sentence of a backup that succeeded: “; made before the update to {target}” · one that failed: “{job} failed: {reason}; the update to {target} was applied all the same; the latest that succeeded wrote {dump}, {time}” · one that was stopped: “{job} had not ended after 30 minutes and was stopped; the update to {target} was applied without a backup; the latest that succeeded wrote {dump}, {time}” · each of the two with none that succeeded: “…; no backup has succeeded yet” |
 | The operator's log, a backup on request | “backups: started a backup on request” · “backups: the backup asked for waits” · “backups: the backup asked for is refused: backups are off” · “backups: the backup asked for is refused: the databases are external” · “backups: the backup asked for has ended” · “backups: the backup asked for is answered as not read: its Job is gone before it was read” · “backups: the status did not keep the answer to the backup asked for: the resource's CRD may not serve status.backup.request” · “backups: a run could not be read; status stays as it is” · “backups: the runs could not be listed; status stays as it is” · “backups: a Job asked for before could not be removed; trying again” |
 | The restore's dialog | restore from {date}? · “The platform goes down for a few minutes.” · “Its databases are set back to this backup: the accounts, the watch history, the lists, the catalog and the portal's settings as they were then. Everything written since is lost.” · “The library's files are not set back.” · “Whoever signed in after this backup was made signs in again.” · another platform's: “This backup is from another platform. Afterwards, sign in with an account of that platform.” · “Restore although its version is unknown.” · “Restore although its version, {version}, cannot be compared with this platform's.” · “This backup was made by {version}, which is newer than this platform ({version}). Update the platform first.” · “type the platform's name, {name}, to restore” |
 | Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
