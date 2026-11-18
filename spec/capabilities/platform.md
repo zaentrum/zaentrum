@@ -42,7 +42,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 | Check a machine before installing: processor, cores, memory, disk, container runtime | operator | — | no | — | [platform install](../platform/install.md) |
 | See which encoder the workers run with, and why not the one asked for | admin | no | no | no | [platform install](../platform/install.md) |
 | See where the backups are, how old and how large the newest is, and each one's version | admin | no | no | — | [portal operations](../portal/operations.md) |
-| Make a backup of the bundled databases now, without waiting for the schedule | admin | no | no | no | [portal operations](../portal/operations.md) |
+| Make a backup of the bundled databases now, without waiting for the schedule | admin | no | no | built | [portal operations](../portal/operations.md) |
 | Back up the bundled databases before an update is applied | system | — | — | no | [portal operations](../portal/operations.md) |
 | Copy the backups of a one-machine install to a folder outside it, and back | operator | — | no | — | [portal operations](../portal/operations.md) |
 
@@ -71,6 +71,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 - Move the platform to another machine with its people, settings, history and library: a dump restores into the install that made it; nothing carries an install over
 - Mount further volumes for the library's folders: the chart mounts one claim for the library
 - See where the backups are, how old and how large the newest is, and each one's version: the status lists the last good backup's dumps; no page or command shows them
+- Make a backup of the bundled databases now, without waiting for the schedule: asked with the annotation zaentrum.io/backup-request, answered in status.backup.request; no page or command asks for one
 
 | Key | Changes | Next | Served by | Settings |
 |---|---|---|---|---|
@@ -102,7 +103,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 | `check-machine-before-install` | I.C9, I.C11 | build | — | — |
 | `see-encoder-in-use` | I.C4, I.C8 | build | — | — |
 | `see-backups` | R.C10, R.C14, R.C15, R.C18 | build | — | — |
-| `back-up-now` | R.C11, R.C14, R.C15, R.C18 | build | — | — |
+| `back-up-now` | R.C11, R.C14, R.C15, R.C18 | build | `Zaentrum.spec.backup.enabled` | `backup-switch` |
 | `back-up-before-update` | R.C12 | build | — | — |
 | `copy-backups-off-machine` | R.C19 | build | — | — |
 
@@ -121,7 +122,7 @@ What an open product owes the people who run it, check it and build on it. Speci
 - Report a security hole in private, and get an answer: one security policy, in the organisation's shared repository; private reporting on in every repository
 - Change the platform and have the change taken in: a guide, and tests on every change: a guide in the organisation's shared repository and an AGENTS.md in each; every repository's tests run on its pull requests
 - Check that an image is the project's, and see what it was built from and what it holds: no image is signed, and none carries a list of what it holds
-- Keep every repository free of other products' names and of acquisition, on every change: seven repositories check it, two of them only some kinds of file; the others rely on review
+- Keep every repository free of other products' names and of acquisition, on every change: the organisation's shared check, called by every repository but katalog-manager, which has none; three still run an older copy beside it
 - Call nothing but the server one was given, unless the person starts it: the web apps load their typefaces from a public font service; the phone and Android TV apps an avatar from an outside service
 
 | Key | Changes | Next | Served by | Settings |

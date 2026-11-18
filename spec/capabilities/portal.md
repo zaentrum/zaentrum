@@ -153,7 +153,7 @@ Who may use the platform: people, their roles, invites. Specified in [portal peo
 | `accept-invite` | — | — | `zaentrum-portal GET /api/portal/invites/{token}`, `zaentrum-portal POST /api/portal/invites/{token}` | `invite-lifetime` |
 | `change-person` | P.C2, P.C3, P.C14 | build, the rest later | `zaentrum-portal PATCH /api/portal/people/{id}` | `user-role`, `person-name-length` |
 | `cap-person-rating` | P.C3, P.C4, P.C16, 3.C16, 3.C17 | build, the rest later | `zaentrum-portal POST /api/portal/people`, `zaentrum-portal PATCH /api/portal/people/{id}` | `rating-cap-range`, `unrated-for-capped` |
-| `delete-person` | — | later | `zaentrum-portal DELETE /api/portal/people/{id}`, `chino-api DELETE /api/v1/admin/accounts/{sub}/data` | `admin-subjects` |
+| `delete-person` | — | later | `zaentrum-portal DELETE /api/portal/people/{id}`, `chino-api DELETE /api/v1/admin/accounts/{sub}/data`, `chino-api DELETE /api/v1/admin/accounts/{sub}/deleted` | `admin-subjects` |
 | `set-person-rights` | P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, 17.C16 | build | — | — |
 | `limit-streams` | P.C7, P.C8, P.C9, P.C12, 17.C16 | build | — | — |
 | `see-who-is-watching` | P.C7, P.C9, P.C10, P.C11, P.C12 | build | — | — |

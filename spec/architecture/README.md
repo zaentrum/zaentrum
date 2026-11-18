@@ -186,7 +186,7 @@ to render the chart.
 | volumes | 3 | a component |
 | services | 18 | listed: each leads to a workload |
 | paths of the Ingress | 11 | listed: each leads to a workload |
-| wires | 245 | 44 lead to another component, each a connection's via |
+| wires | 246 | 44 lead to another component, each a connection's via |
 | repositories of the organisation | 32 | a component: 28 active, 4 archived |
 
 | Decision records | Accepted | Proposed |

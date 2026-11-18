@@ -12,8 +12,8 @@ columns is on the [front page](./README.md#how-to-read-it).
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
 | `chino-web` | the web app | web | runs | [chino-web](https://github.com/zaentrum/chino-web) | `chino-web` | 88 | 24 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
-| `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 100 | 25 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
-| `chino-androidtv` | the Android TV app | app | ships | [chino-androidtv](https://github.com/zaentrum/chino-androidtv) | — | 87 | 21 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 101 | 25 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-androidtv` | the Android TV app | app | ships | [chino-androidtv](https://github.com/zaentrum/chino-androidtv) | — | 88 | 21 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
 | `chino-tizen` | the Samsung TV app | app | ships | [chino-tizen](https://github.com/zaentrum/chino-tizen) | — | 74 | 20 | ADR-0023, ADR-0016, ADR-0018 |
 | `chino-tvos` | an app for Apple TV | app | missing | — | — | — | — | — |
 | `chino-webos` | an app for LG TVs | app | missing | — | — | — | — | — |
@@ -40,7 +40,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `chino-api` | chino's API, for every app | service | runs | [chino-api](https://github.com/zaentrum/chino-api) | `chino-api` | 88 | 24 | ADR-0001, ADR-0005, ADR-0022, ADR-0023, ADR-0018, ADR-0021 |
+| `chino-api` | chino's API, for every app | service | runs | [chino-api](https://github.com/zaentrum/chino-api) | `chino-api` | 89 | 24 | ADR-0001, ADR-0005, ADR-0022, ADR-0023, ADR-0018, ADR-0021 |
 | `chino-stream` | the stream origin: packages and the renditions made while playing | service | runs | [chino-stream](https://github.com/zaentrum/chino-stream) | `chino-stream` | 12 | 15 | ADR-0002, ADR-0004, ADR-0013, ADR-0018 |
 | `live-worker` | warm GPU workers for the renditions made while playing | service | runs | [live-worker](https://github.com/zaentrum/live-worker) | `live-worker` | 2 | 15 | ADR-0013, ADR-0017 |
 | `notifications` | push to the apps | service | idle | [notifications](https://github.com/zaentrum/notifications) | — | — | — | ADR-0019 |
@@ -92,7 +92,7 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 25 | 76 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
+| `zaentrum-operator` | the operator: the Zaentrum resource, the platform chart, addons | operator | runs | [zaentrum-operator](https://github.com/zaentrum/zaentrum-operator) | — | 26 | 76 | ADR-0006, ADR-0007, ADR-0008, ADR-0009, ADR-0011, ADR-0023, ADR-0016, ADR-0017, ADR-0019, ADR-0020, ADR-0021 |
 | `zae` | the zae CLI; the platform's self-test runs it | cli | ships | [zae](https://github.com/zaentrum/zae) | `zaentrum-verify` | 23 | 9 | ADR-0006, ADR-0011, ADR-0016, ADR-0017, ADR-0020, ADR-0021 |
 | `appliance` | the one-container install: a cluster of its own, the operator and a resource | appliance | ships | — | — | — | — | ADR-0006, ADR-0008, ADR-0016, ADR-0017 |
 

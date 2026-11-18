@@ -291,7 +291,7 @@ portal's registry), `app` or `code`. A **choice** is a value someone decides;
 | The nodes the live worker runs on, and the taints it tolerates `live-worker-placement`, for `enable-live-worker` | operator | resource | the transcoder's GPU placement (node labels; tolerations) | keep |
 | The live worker container's CPU, memory and GPU `live-worker-resources`, for `enable-live-worker` | operator | resource | GPU: 1 CPU, 2Gi to 4 CPUs, 8Gi and one GPU; CPU: 500m, 1Gi (resource requests and limits) | keep |
 | Hardware encoding on the stream plane, as the resource names it `stream-gpu`, for `enable-live-worker` | nobody | resource | off (on, off) | — |
-| Whether the bundled databases are backed up `backup-switch`, for `schedule-backups` | operator | resource | on where the database is on a claim (on, off) | keep |
+| Whether the bundled databases are backed up `backup-switch`, for `schedule-backups`, `back-up-now` | operator | resource | on where the database is on a claim (on, off) | keep |
 | When a backup runs `backup-schedule`, for `schedule-backups` | operator | resource | @daily (a cron schedule) | keep |
 | How many dumps are kept `backup-retention`, for `schedule-backups` | operator | resource | 7 (1 or more) | keep |
 | The size of the backups' claim `backup-volume-size`, for `schedule-backups` | operator | resource | 5Gi (a quantity) | keep |

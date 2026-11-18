@@ -165,13 +165,13 @@ flowchart LR
 | 23 | [The portal's home page](#the-portals-home-page) | Groundwork in every repository, The design system's missing parts | 17 | 0 | 17 | 0 | 0 |
 | 24 | [Reaching it at home](#reaching-it-at-home) | Groundwork in every repository | 16 | 0 | 16 | 0 | 0 |
 | 25 | [The household's machine: installing and updating](#the-households-machine-installing-and-updating) | Groundwork in every repository | 22 | 0 | 22 | 0 | 0 |
-| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 17 | 4 | 0 |
+| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 16 | 5 | 0 |
 | 27 | [A restore at the first run, and backups off one machine](#a-restore-at-the-first-run-and-backups-off-one-machine) | Running the platform: mail, alerts, backups, storage, The household's machine: installing and updating | 2 | 0 | 2 | 0 | 0 |
 | 28 | [The library](#the-library) | Groundwork in every repository | 14 | 0 | 14 | 0 | 0 |
 | 29 | [The catalog console](#the-catalog-console) | The library, The design system's missing parts | 25 | 0 | 25 | 0 | 0 |
 | 30 | [Details and artwork beside the files](#details-and-artwork-beside-the-files) | The catalog console | 3 | 0 | 3 | 0 | 0 |
 | 31 | [Collections in the apps](#collections-in-the-apps) | The library, Movies and shows, The title page | 5 | 0 | 5 | 0 | 0 |
-| 32 | [People and what they may do](#people-and-what-they-may-do) | Running the platform: mail, alerts, backups, storage, The library, The portal's home page, Getting started, Settings and account | 21 | 0 | 21 | 0 | 0 |
+| 32 | [People and what they may do](#people-and-what-they-may-do) | Running the platform: mail, alerts, backups, storage, The library, The portal's home page, Getting started, Settings and account | 21 | 0 | 20 | 1 | 0 |
 | 33 | [The portal and the consoles in the person's language](#the-portal-and-the-consoles-in-the-persons-language) | Every text from the message catalogue, in the person's language, The portal's home page, The catalog console | 3 | 0 | 3 | 0 | 0 |
 | 34 | [What an open product owes](#what-an-open-product-owes) | Groundwork in every repository | 2 | 0 | 2 | 0 | 0 |
 <!-- end: packages -->
@@ -719,7 +719,7 @@ Mail through a server the admin names, alerts to the admins, backups and restore
 | [R.C8](../portal/operations.md#changes) | Alerts are raised | Server | approved |
 | [R.C9](../portal/operations.md#changes) | Alerts in the bell and on a page | Portal | approved |
 | [R.C10](../portal/operations.md#changes) | A backup says what made it, and a restore checks it | Operator | approved |
-| [R.C11](../portal/operations.md#changes) | A backup on request | Operator | approved |
+| [R.C11](../portal/operations.md#changes) | A backup on request | Operator | built |
 | [R.C12](../portal/operations.md#changes) | A backup before an update | Operator | approved |
 | [R.C13](../portal/operations.md#changes) | A restore brings the identity provider in step | Operator | approved |
 | [R.C14](../portal/operations.md#changes) | Backups through portal-api | Server | approved |
@@ -840,7 +840,7 @@ Rights for each person, the account's code on a shared device, sign-in and secur
 | [P.C13](../portal/people.md#changes) | The account lock on the server | Server | approved |
 | [P.C14](../portal/people.md#changes) | The security tab: clearing a code, removing a second factor | Server, Portal | approved |
 | [P.C15](../portal/people.md#changes) | Sign-in and security: one address, one entry | Operator, Server, Portal | approved |
-| [P.C16](../portal/people.md#changes) | A new stream pass when the account changes | Web, Android TV | approved |
+| [P.C16](../portal/people.md#changes) | A new stream pass when the account changes | Web, Android TV | built |
 
 ## The portal and the consoles in the person's language
 

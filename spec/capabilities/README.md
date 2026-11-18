@@ -140,24 +140,24 @@ model, each reference, change and id resolved, written by the same program.
 | [chino](./chino.md) | 151 | 136 | 3 | 12 | 144 | 16 |
 | [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 20 |
 | [the catalog and the pipeline](./catalog.md) | 54 | 22 | 18 | 14 | 22 | 14 |
-| [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 14 |
+| [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 13 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 308 | 219 | 46 | 43 | 230 | 65 |
+| all | 308 | 219 | 46 | 43 | 230 | 64 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
 | Web | 84 | 19 | 23 | 180 | 2 |
-| Phone | 76 | 37 | 29 | 164 | 2 |
-| Android TV | 79 | 23 | 27 | 177 | 2 |
+| Phone | 77 | 37 | 28 | 164 | 2 |
+| Android TV | 80 | 23 | 26 | 177 | 2 |
 | Samsung TV | 44 | 31 | 53 | 178 | 2 |
 | Portal | 37 | 10 | 43 | 214 | 4 |
 | Catalog console | 14 | 8 | 27 | 255 | 4 |
 | CLI | 21 | 2 | 51 | 234 | 0 |
-| Resource | 30 | 3 | 12 | 263 | 0 |
+| Resource | 31 | 3 | 11 | 263 | 0 |
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
-| 448 | 432 | 16 | 0 | 440 | 7 | 0 |
+| 448 | 432 | 16 | 0 | 438 | 9 | 0 |
 <!-- end: overview -->
 
 ## What is expected of it
@@ -182,7 +182,7 @@ a decision record rules it out.
 | [Trust it](./expectations.md#trust-it) | 4 | 2 | 1 | 1 | 0 | 0 |
 | all | 61 | 8 | 28 | 23 | 1 | 1 |
 
-Nothing serves 65 of the 308 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 64 of the 308 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
@@ -190,7 +190,7 @@ Nothing serves 65 of the 308 capabilities yet: no app or face has them, and no s
 <!-- generated: inventory -->
 | What the code offers | Rows | Claimed by |  |
 |---|---|---|---|
-| HTTP routes | 302 | a capability |  |
+| HTTP routes | 305 | a capability |  |
 | GraphQL operations | 71 | a capability |  |
 | screens | 86 | a capability |  |
 | tabs | 24 | a capability |  |
@@ -198,7 +198,7 @@ Nothing serves 65 of the 308 capabilities yet: no app or face has them, and no s
 | fields of the operator's resources | 100 | a setting |  |
 | environment variables | 290 | a setting |  |
 | the catalog's settings | 41 | a setting |  |
-| constants in the code | 871 | listed | 279 in a setting |
+| constants in the code | 887 | listed | 279 in a setting |
 
 From the main branch of 18 repositories, as [inventory-sources.csv](./inventory-sources.csv) names them; the organisation has 32, each listed as well.
 <!-- end: inventory -->
