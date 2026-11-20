@@ -221,6 +221,34 @@ event before it — is written exactly as before.
   its first frame, so they can be off by as much as the distance between the
   two.
 
+## Fields
+
+The master is progressive (ADR-0015). A source in fields is never copied as
+it is and never encoded with its fields woven into its frames. It is judged
+by its pictures, and its package's `scan` ([manifest](./manifest.md#fields))
+says what they hold and what was done:
+
+- **Video in fields** is deinterlaced, at the frame rate (the default: every
+  second moment of the motion dropped) or at the field rate (every moment
+  kept).
+- **A 3:2 film** is brought back to its own frames (`inverse-telecine`)
+  where its cadence holds through the whole title. Where it does not, and
+  for a film in fields at its own rate, film and video mixed, and a source
+  whose pictures tell nothing, the fields are put back into whole frames,
+  every frame kept (`field-matched`).
+- **Whole frames marked as fields** are left as they are, never softened.
+- **HEVC coded as field pictures** is copied as it is (`fields-kept`).
+
+An original marked as fields, or found to hold them, is not retired,
+whatever its package's `scan` says: whether a package made from fields
+holds every moment of its source cannot yet be shown for every source.
+
+### Not yet
+
+- **Field-rate deinterlacing** is not the default until the live rendition,
+  the players and the encoder's bit rate under the caps allow it.
+- **HEVC field pictures** play as they are, each a field, half as tall.
+
 ## Quality
 
 - **A quality ladder** is several entries in `renditions.video[]` of one package,
@@ -299,6 +327,8 @@ stateDiagram-v2
   a package records it.
 - **Delete only when that list is empty.** Otherwise re-package first, so the
   package carries what matters, and check again.
+- An original marked as fields, or found to hold them, is not deleted,
+  whatever its package's `scan` says ([fields](#fields)).
 - Deleting an original removes its file from the version folder. The source record
   stays in the manifest with `state: deleted`, `path: null`,
   `deletedAt` and `deletionReason`; `truth.kind` becomes `package` and the
