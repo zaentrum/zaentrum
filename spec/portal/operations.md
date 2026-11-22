@@ -138,7 +138,12 @@ and writes Deployments, Jobs, CronJobs, Secrets, ConfigMaps and claims, and
 it reads pods. So it knows the size a claim asks for and the size it is bound
 to, and it reads the certificate's Secret on every pass. It holds no
 permission on nodes. How full a volume is, only its node knows, and the
-operator cannot ask it.
+operator cannot ask it. So it has each volume measured by a short job that
+mounts it read-only, every hour and when the annotation
+`zaentrum.io/storage-request` asks: `status.storage` holds each claim's size,
+what is free and its filesystem's id, and the size of each database;
+`status.backup.sets` lists the sets on the backups' claim; the condition
+`StorageMeasured` says what was found. No page shows any of it.
 
 ### Backups and restoring today
 
@@ -544,8 +549,26 @@ short job that mounts it:
   library's (`media`), the backups', and the event broker's where it has a
   claim. Each runs every hour, started by the operator, never two runs of one
   job at once, mounts its claim read-only, and reports the filesystem's size, what an ordinary
-  writer can still use of it, and the filesystem's id. The backups' hourly
-  run is skipped while a backup runs.
+  writer can still use of it, and the filesystem's id.
+- **The backups' claim has one reader or writer at a time.** No run of the
+  backups' job starts while a backup runs or may start: while the schedule is
+  held for a backup, a backup asked for waits, an update is held back for the
+  backup before it, a backup job has not ended (one being deleted among
+  them), or one has failed while its pod still runs. The other way round, a
+  backup asked for and the backup before an update wait for a run of the
+  backups' job, and the schedule is held while one runs. That hold comes one
+  pass after the run starts, about ten seconds: a backup the schedule starts
+  in that time, which for a run that ends within it is the whole run, runs
+  beside the reader. The backup is not affected. On a claim only one node
+  can mount, the later of the two pods waits for the other; on a shared
+  claim the reader may list a set that is being written or removed with a
+  wrong size or as not whole, and the run that follows the backup corrects
+  it.
+- **A run holds its claim until its pod has ended**, and no new run of a job
+  starts before that, also where the run has failed. It never holds it past
+  its deadline of 10 minutes and its pod's grace of 30 seconds: a run that
+  has not ended by then, as on a node that is gone, is removed and counted
+  as failed, and holds nothing from then on.
 - The library's job also asks the bundled Postgres for the size of each
   platform database, and for the size, the free space and the filesystem id
   of the volume its data is on: the database server reads those itself, for
@@ -575,17 +598,20 @@ short job that mounts it:
   | `status.storage.databases[]` | `name` (the database's key: `chino`, `katalog`, `keycloak`, `portal`), `bytes` |
   | `status.storage.request` | the last `zaentrum.io/storage-request` answered |
   | `status.backup.sets[]` | `name`, `bytes`, `version`, `whole`, `own`, `versionRule` (what the version rule says of the set now: `ok`, `newer` or `not-comparable`), newest first |
-  | the condition `StorageMeasured` | `Measured`, or `Failed` with the job's reason; absent until the first job has ended. What a failed run did measure is written, and the other figures stay, with their time |
+  | the condition `StorageMeasured` | `Measured`, or `Failed` with the job's reason; absent until the first job has ended or a request was answered without the backups' claim. What a failed run did measure is written, and the other figures stay, with their time |
 
 - The annotation `zaentrum.io/storage-request` on the resource, with a value
   the operator has not answered, starts every measuring job at once. The
   operator also measures the backups' claim when a backup has ended. A
   request is answered, in `status.storage.request`, once every job it
   started has ended and been read; a pass that cannot read a claim or a run
-  answers nothing and reads again.
+  answers nothing and reads again. While a backup runs or may start, a
+  request starts no run of the backups' job and is answered without it: the
+  condition then says that the backups' claim was not measured and that its
+  figures stay, until a run of that claim has ended since.
 - No measuring job starts while a restore runs, and a restore waits for one
-  that still runs on the backups' claim. A request made meanwhile is
-  answered after the restore.
+  that still runs on the backups' claim, or whose pod still runs, as at its
+  deadline. A request made meanwhile is answered after the restore.
 
 Two volumes that report the same filesystem id are on one disk: they have one
 size and one free space, and they are one alert. The id is the filesystem's
@@ -806,15 +832,17 @@ A set does not hold:
   resource, with a value the operator has not answered, starts one backup
   from the schedule's own job: the same script, the same mounts and the same
   label, so that whatever reads the backups reads this one too.
-  - **It waits** while another backup runs, or while a restore stops the
-    platform or has it stopped, and starts once neither does. A backup that
+  - **It waits** while another backup runs, while a measuring job reads the
+    backups' claim, or while a restore stops the platform or has it stopped,
+    and starts once none does. A backup that
     ran meanwhile does not answer it. It waits too while the resource is
     refused, until the resource is corrected.
   - **The schedule stands still** from the request to its answer, and for as
     long as a backup asked for runs, whatever has become of its request
     meanwhile, so that the schedule's run and the one asked for never write
     at once: the schedule is stopped first, and the backup starts on a pass
-    that finds it stopped and no backup running. A run the schedule missed
+    that finds it stopped and no backup running. It stands still too while
+    a measuring job reads the backups' claim. A run the schedule missed
     meanwhile follows once the one asked for has ended.
   - **The answer.** `status.backup.request` is the value answered: the
     backup it started has ended, well or not, and has been read, so that the
@@ -869,7 +897,9 @@ A set does not hold:
     as the update is applied, and a set it still finishes is not said to be
     made before the update. Where no backup could be started in the 30
     minutes, the update is applied without one, and the operator's log says
-    so.
+    so. A measuring job that reads the backups' claim as the update is first
+    held back is waited for inside the 30 minutes: it ends within ten and a
+    half minutes, and none starts while the update waits.
   - **During a restore** the update waits for the restore to end, and the
     30 minutes start then.
 
@@ -1514,7 +1544,7 @@ comes from the resource; a password is never in them.
 | The realm job's summary: mail | written: “the realm sends mail through {host}:{port} now” · as it was: “the realm sends mail through {host}:{port}” · cleared: “the realm sends no mail now” · the Secret missing: “the realm's mail settings stay as they were until Secret {secretName} holds the password” · a user and no Secret: “the realm's mail settings stay as they were until spec.mail names a Secret for the password of {user}” |
 | The realm job's summary: the password reset | switched on: “the sign-in page offers a password reset now” · switched off: “the sign-in page offers no password reset now: the realm sends no mail” · a realm without an email theme given the chart's: “the realm's email theme is {theme} now” |
 | A failed run of the realm job | “cannot read the mail settings of realm {realm}: {kcadm's last line}” · “cannot clear the mail settings of realm {realm}: {kcadm's last line}” · “cannot set the mail settings of realm {realm}: {kcadm's last line}” · “cannot read realm {realm}: {kcadm's last line}” · “cannot set the email theme of realm {realm}: {kcadm's last line}” · “cannot switch the password reset of realm {realm}: {kcadm's last line}” · from the chart's values alone: “mail.encryption is {value}: use starttls, tls or none” |
-| The condition `StorageMeasured` | `Measured`: “{claim} {free} free of {size}” for each disk, claims on one disk as “{claim} and {claim} on one disk: {free} free of {size}”, then “the databases take {size}”, then “{n} sets on {claim}”, “1 set on {claim}” or “{n} sets on {claim}, the newest {m} listed”, joined by “; ”, and where the database server may not read its own volume “the databases' volume is not measured: {psql's ERROR line}” · `Failed`: “{job} failed: {reason}; the figures of {time} stay” · where the status holds no figure of that job's at all: “{job} failed: {reason}; nothing is measured yet” · where the run measured a part and nothing is kept from before for the rest: “{job} failed: {reason}” · the ending is kept whole however long the reason is |
+| The condition `StorageMeasured` | `Measured`: “{claim} {free} free of {size}” for each disk, claims on one disk as “{claim} and {claim} on one disk: {free} free of {size}”, then “the databases take {size}”, then “{n} sets on {claim}”, “1 set on {claim}” or “{n} sets on {claim}, the newest {m} listed”, joined by “; ”, and where the database server may not read its own volume “the databases' volume is not measured: {psql's ERROR line}” · `Failed`: “{job} failed: {reason}; the figures of {time} stay” · where the status holds no figure of that job's at all: “{job} failed: {reason}; nothing is measured yet” · where the run measured a part and nothing is kept from before for the rest: “{job} failed: {reason}” · a run removed at its deadline: “{job} failed: {job} had not ended at its deadline and was removed; …” · where a request was answered while a backup held the backups' claim, added at the end and kept whole, until a run of that claim has ended since: “{claim} was not measured: a backup holds it; the figures of {time} stay”, or “…; nothing is measured yet” where it has no figure · the ending is kept whole however long the reason is |
 | The {reason} of a measuring that failed | “{dir} is not a directory this measuring can read” · “cannot read the filesystem at {dir}” · “the Postgres at {host} does not answer” · “Secret zaentrum-db holds no user and password” · “the Postgres has no database {db}” · “the measuring stopped at line {n} of measure-volume.sh; the Job log says why” · where the job left none: “there is no claim {claim}” · “{job} has not started: {why}” · “{job} is gone before it was read” · “{job} left no report the operator can read” |
 | The backup job's log | “postgres-backup: the ConfigMap zaentrum-backup holds no record of the platform: the set is made without backup.json” |
 | The measuring job's log | “measure: {dir}: {size} bytes, {free} free, filesystem {id}” · “measure: the databases take {bytes} bytes” · “measure: {n} sets, the newest {m} reported” · “measure: {name}: its backup.json cannot be read, so it is listed without a version” · “measure: {name}: its backup.json names a version of more than 128 characters, so it is listed without a version” |
@@ -1596,7 +1626,8 @@ words it. No line holds an address, a title or a text.
 | A backup asked for where none is made | added to the condition's first sentence: “; the backup asked for is not made: set spec.backup.enabled to true and ask again with a new value” · added to its second: “; the backup asked for is not made” |
 | A backup before an update | added to the condition's sentence while the update waits: “; {job} backs up {version} before the update to {target}: the update is applied once it has ended; a backup that still runs at {time} is stopped” · after it, added to the sentence of a backup that succeeded: “; made before the update to {target}” · one that failed: “{job} failed: {reason}; the update to {target} was applied all the same; the latest that succeeded wrote {dump}, {time}” · one that was stopped: “{job} had not ended after 30 minutes and was stopped; the update to {target} was applied without a backup; the latest that succeeded wrote {dump}, {time}” · one the operator stopped, where the update was taken back meanwhile: “{job} failed: stopped; the latest that succeeded wrote {dump}, {time}”, never the summary of a set its pod still finished · each of the three with none that succeeded: “…; no backup has succeeded yet” |
 | The operator's log, a backup on request | “backups: started a backup on request” · “backups: the backup asked for waits” · “backups: the backup asked for is refused: backups are off” · “backups: the backup asked for is refused: the databases are external” · “backups: the backup asked for has ended” · “backups: the backup asked for is answered as not read: its Job is gone before it was read” · “backups: the status did not keep the answer to the backup asked for: the resource's CRD may not serve status.backup.request” · “backups: a run could not be read; status stays as it is” · “backups: the runs could not be listed; status stays as it is” · “backups: a Job asked for before could not be removed; trying again” |
-| The operator's log, a backup before an update | “update: {target} waits for a backup of the version that runs” · “update: backing up before applying {target}” · “update: the backup before {target} waits for the schedule to stand still” · “update: the backup before {target} could not be started; trying again” · “update: the backup that runs could not be marked as the one before {target}; trying again” · “update: the backup before {target} has ended; applying it” · “update: the backup before {target} failed; applying it” · “update: the backup before {target} has not ended in 30 minutes; stopped it and applying” · “update: the backup before {target} could not be stopped; trying again” · “update: the stopped backup before {target} has ended; applying it” · “update: the backup before {target} has not ended in 35 minutes; applying it” · “update: the backup before {target} still runs after 35 minutes; stopped it” · “update: a backup that is being deleted has not ended; the update to {target} waits for it” · “update: no backup before {target} could be started in 30 minutes; applying it without one” · “update: the backups' Jobs could not be listed; the update waits” · “update: the backups' Jobs could not be listed in 35 minutes; applying {target} without a backup” · “update: the backup before {target} could not be marked as made before it; trying again” · “update: a backup that has ended still has a pod that runs; the update to {target} waits for it” · “update: the backups' Jobs could not be listed; the backup before {target} is marked on a pass after” · a request that waits behind it: “backups: the backup asked for waits”, for “the update to {target} and the backup before it” |
+| The operator's log, a backup before an update | “update: {target} waits for a backup of the version that runs” · “update: backing up before applying {target}” · “update: the backup before {target} waits for the schedule to stand still” · “update: the backup before {target} could not be started; trying again” · “update: the backup that runs could not be marked as the one before {target}; trying again” · “update: the backup before {target} has ended; applying it” · “update: the backup before {target} failed; applying it” · “update: the backup before {target} has not ended in 30 minutes; stopped it and applying” · “update: the backup before {target} could not be stopped; trying again” · “update: the stopped backup before {target} has ended; applying it” · “update: the backup before {target} has not ended in 35 minutes; applying it” · “update: the backup before {target} still runs after 35 minutes; stopped it” · “update: a backup that is being deleted has not ended; the update to {target} waits for it” · “update: no backup before {target} could be started in 30 minutes; applying it without one” · “update: the backup before {target} waits for the backups' claim to be measured” · “update: the backups' Jobs could not be listed; the update waits” · “update: the backups' Jobs could not be listed in 35 minutes; applying {target} without a backup” · “update: the backup before {target} could not be marked as made before it; trying again” · “update: a backup that has ended still has a pod that runs; the update to {target} waits for it” · “update: the backups' Jobs could not be listed; the backup before {target} is marked on a pass after” · a request that waits behind it: “backups: the backup asked for waits”, for “the update to {target} and the backup before it” |
+| The operator's log, measuring | “storage: removed a run that had not ended at its deadline” · “storage: a run past its deadline could not be removed” · “storage: the measuring runs could not be listed; status stays as it is” |
 | The restore's dialog | restore from {date}? · “The platform goes down for a few minutes.” · “Its databases are set back to this backup: the accounts, the watch history, the lists, the catalog and the portal's settings as they were then. Everything written since is lost.” · “The library's files are not set back.” · “Whoever signed in after this backup was made signs in again.” · another platform's: “This backup is from another platform. Afterwards, sign in with an account of that platform.” · “Restore although its version is unknown.” · “Restore although its version, {version}, cannot be compared with this platform's.” · “This backup was made by {version}, which is newer than this platform ({version}). Update the platform first.” · “type the platform's name, {name}, to restore” |
 | Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
 | The restore has ended | “The restore has ended. Sign in to see how it went.” |
