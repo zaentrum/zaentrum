@@ -166,7 +166,7 @@ A household is several people: each signs in, sees what they may, and keeps a pl
 | It has to | Quality | Measured by | Today | Target | Says so |
 |---|---|---|---|---|---|
 | A child sees only what it may | security | ways around a rating cap | one: switching accounts on a shared device asks for nothing | none: on a shared device an account without a cap is behind a code | — |
-| Someone who forgot a password is back in soon | interaction capability | who resets it, and how | an admin, with a new invite link from the people page; nothing is sent | the person, by a link sent by mail, where mail is set up; else an admin, in the portal | [First run](../../docs/self-hosting.md#first-run) |
+| Someone who forgot a password is back in soon | interaction capability | who resets it, and how | by a mailed link where mail is set up and the account has an address, which no page sets; else an admin, with a new invite link | the person, by a link sent by mail, where mail is set up; else an admin, in the portal | [First run](../../docs/self-hosting.md#first-run) |
 
 ## Run it oneself
 
@@ -180,7 +180,7 @@ Somebody runs it: installs it, makes it reachable, keeps it up to date, backs it
 |---|---|---|---|---|---|
 | Someone who has not seen it installs it in an evening | flexibility | time from nothing to a film on the TV | not measured; a TV or a phone needs a name and an https certificate of one's own first | 30 minutes from the install command to a film on a TV at home, with no name or certificate of one's own | [A. One-command appliance](../../docs/self-hosting.md#a-one-command-appliance) |
 | It runs on the machine a household has | flexibility | the processors it runs on, and the memory it takes | amd64 alone; no smallest machine is named | amd64 and arm64; 4 cores and 8 GB of memory named as the smallest machine, and tested on it | [Appliance](../../docs/prerequisites.md#appliance) |
-| An update never leaves it broken | reliability | what follows an update that fails | the platform checks itself after each update; nothing says how one is undone | an update that fails its own check goes back to the version before by itself, and says so | [updating](../../docs/updating.md) |
+| An update never leaves it broken | reliability | what follows an update that fails | the platform checks itself after each update and, where backups are on, backs up before one; nothing says how one is undone | an update that fails its own check goes back to the version before by itself, and says so | [updating](../../docs/updating.md) |
 | After a dead disk it is back, with little lost | reliability | time and loss to a working platform on another machine | the bundled databases restore into the install that made them; there is no way to another machine | working on another machine within an hour, a day lost at most, from a backup kept apart | [zaentrum-operator, README.md](https://github.com/zaentrum/zaentrum-operator/blob/main/operator/README.md#backups-of-the-bundled-postgres-specbackup) |
 | Whoever runs it learns of a failure before the household does | reliability | how a failure reaches them | it is shown in the portal to whoever looks; nothing is sent | a mail and a notice to the admins within 15 minutes of a part failing, a volume filling or a backup missing | — |
 
@@ -207,9 +207,9 @@ Anyone can see what it does, check it, change it, and count on it staying open. 
 | It has to | Quality | Measured by | Today | Target | Says so |
 |---|---|---|---|---|---|
 | A security hole can be reported in private | security | a policy that says where and how | a security policy in every repository, private reporting on, an answer within 7 days | a security policy in every repository, with private reporting on and an answer within 7 days | — |
-| Every image can be traced to the source it was built from | security | signatures, a record of each build, a list of what an image holds | none of the three | every released image signed, with the record of its build and the list of what it holds published | — |
+| Every image can be traced to the source it was built from | security | signatures, a record of each build, a list of what an image holds | the images fifteen repositories build from the main branch are signed, with the build's record and list; no release carries them yet | every released image signed, with the record of its build and the list of what it holds published | — |
 | What the apps send stays with whoever runs the server | security | what leaves the apps for anyone else | nothing to their publisher; an avatar service, a font service and Google Cast are called | nothing but to the server, and to what the person starts themselves, such as casting; avatars and fonts come from the server | [What the apps send](../../docs/releases.md#what-the-apps-send) |
-| A stranger can change it and have the change taken in | maintainability | a guide to contributing, and tests that run on every change | tests in the services' repositories; a guide in the operator's alone | a guide to contributing in every repository, and its tests run on every change | — |
+| A stranger can change it and have the change taken in | maintainability | a guide to contributing, and tests that run on every change | one guide to contributing shows in every repository, each has an AGENTS.md of its own; every repository's tests run on its pull requests | a guide to contributing in every repository, and its tests run on every change | — |
 <!-- end: by-goal -->
 
 ## The files

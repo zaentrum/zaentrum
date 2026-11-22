@@ -43,7 +43,7 @@ and moving.
 
 ## As built
 
-This section says what the platform does as of 15 November 2026, as the code
+This section says what the platform does as of 22 November 2026, as the code
 of each repository's main branch has it.
 
 ### The pages and commands for running the platform
@@ -71,24 +71,35 @@ instance from outside. It reaches the platform through portal-api's routes
 with a sign-in of its own; it never talks to the cluster.
 
 None of these pages or commands shows a backup, a volume or a certificate, and
-none sends anything.
+none sets up mail or sends anything.
 
-### No mail is sent
+### Mail is set up in the resource, and no page sends it
 
-- **Nothing sends mail.** No repository holds code that talks to a mail
-  server, and the platform's resource has no field for one.
+- **The platform's resource names the mail server.** `spec.mail` holds the
+  server, the sender, the Secret with the password and who alerts go to
+  ([the settings](#the-settings)). The operator gives them to portal-api, has
+  the realm job write them into the bundled realm, and says `NotSetUp`,
+  `SecretMissing` or `Configured` in the condition `Mail`. No page sets mail
+  up: it is set in the resource.
+- **portal-api can send mail.** It holds a mail client and serves `GET`,
+  `PUT` and `DELETE /api/portal/mail` and `POST /api/portal/mail/test`. The
+  portal has no mail page and the CLI no command that calls them. While mail
+  is not set up nothing is sent, and every answer says so.
 - **An invite is handed over by hand.** An admin adds a person on the People
   page with a name, a username, a role and a rating cap; no address is asked
   for. The page then shows the person's invite link once, in a dialog, with
   “Send Mia this link: with it they choose their own password, then sign in on
   any app with their username.” and **Copy Invite Link**. The link works once,
-  for 7 days (`PORTAL_INVITE_TTL`).
-- **A forgotten password needs an admin.** The bundled identity provider's
-  realm is made with password reset allowed, so its sign-in page shows “Forgot
-  password?”. The realm has no mail server, so the link that page promises
-  cannot be sent. The person asks an admin, who makes them a new invite link
-  on the People page, or resets the password in the identity provider's own
-  console.
+  for 7 days (`PORTAL_INVITE_TTL`). portal-api's routes take an address and
+  mail the link when asked ([people and addresses](#people-and-addresses));
+  the page has neither the field nor the switch.
+- **A forgotten password needs mail, or an admin.** The chart's realm is made
+  with the password reset off; the realm job switches it on where mail is set
+  up and off where it is not. With it the sign-in page shows “Forgot
+  password?”, and the bundled identity provider mails the link to the
+  account's address; an account without an address gets none, and no page
+  sets one. Without it the page says “Forgot your password? Ask an admin for a
+  new invite link.”, and the admin makes one on the People page.
 - **The first admin has a placeholder address**, at the domain
   `zaentrum.local`, from the realm's import.
 - **The repository `notifications` is an idle scaffold.** Its README calls it
@@ -105,17 +116,20 @@ every 30 seconds:
 | In the status | Says |
 |---|---|
 | `phase` | `Reconciling`, `Progressing`, `Ready`, `Degraded` when a rollout has given up, `Restoring`, `Error` |
-| `components[]` | each part's name and image and whether it is ready; not since when |
+| `components[]` | each part's name and image, whether it is ready, since when it is not (`notReadySince`), and whether its rollout has given up (`stalled`) |
 | the condition `Ready` | why not: `ComponentsNotReady`, `RolloutStalled` with the parts' names, `Restoring` |
 | `verification` and the condition `Verified` | the self-check after each update and on request: the checks of `zae doctor` from outside. Its check `tls` warns when the certificate it is served ends within 14 days |
 | the condition `TLS` | how the hosts are served. With a certificate of the platform's own, the date it ends on is inside the sentence |
-| `backup` and the conditions `Backup` and `Restore` | the newest dump, the last failure, the dumps kept, and where a restore stands |
+| `certificate` | with a certificate of the platform's own: when it ends (`notAfter`) and the names it is for |
+| the condition `Mail` | whether mail is set up: `NotSetUp`, `SecretMissing` or `Configured` |
+| `backup` and the conditions `Backup` and `Restore` | the newest dump, the last failure, the dumps kept, the backup that runs, the request answered last, and where a restore stands |
 | `currentVersion`, `availableUpdate` | the version applied, and a newer one on the channel |
 
 The portal's operator page shows the phase, the parts and the self-check.
 portal-api reads neither the backups nor the certificate from the status.
-Nothing compares any of it with a limit, and nothing is sent: an admin learns
-of a failure by opening the page. The platform itself puts nothing into the
+The resource holds the thresholds of the five alerts (`spec.alerts`), each
+refused outside its range. Nothing compares anything with them yet, and
+nothing is sent: an admin learns of a failure by opening the page. The platform itself puts nothing into the
 bell: a notice comes from an installed addon, is for one person, and cannot
 be addressed to the admins.
 
@@ -137,6 +151,16 @@ operator cannot ask it.
 - **When.** Every day at midnight (`spec.backup.schedule`, `@daily`), in the
   time zone of the cluster. A run that was missed while the cluster was down
   still runs within six hours.
+- **On request.** The annotation `zaentrum.io/backup-request` on the
+  platform's resource, with a value not yet answered, starts one backup from
+  the schedule's own job once no backup and no restore runs. Where the
+  platform makes no backups it is refused.
+- **Before an update.** Where backups are on, the operator makes a backup
+  before it applies another version than the one that runs, and applies the
+  update when the backup has ended. A backup that still runs after 30 minutes
+  is stopped, and the update is applied at 35 minutes at the latest. A failed
+  backup does not stop the update; the condition `Backup` says so. Not on a
+  one-machine install, whose updater keeps its own copy.
 - **Where.** A dump is a directory on the claim `backups` (`spec.backup.size`,
   5Gi; or an existing claim named in `spec.backup.claimName`), named after the
   moment it began, in UTC, such as `2026-11-15T00-00-05Z`. It holds
@@ -146,7 +170,8 @@ operator cannot ask it.
 - **What a dump does not say.** Nothing in it names the platform or the
   version that made it, and it does not hold the platform's resource.
 - **What the status says.** `status.backup` has `lastSuccess`, `lastDump`,
-  `lastFailure`, the names of the `dumps` and the last `job`. The condition
+  `lastFailure`, the names of the `dumps`, the last `job`, the job of a backup
+  that runs (`running`) and the request answered last (`request`). The condition
   `Backup` is `Succeeded` with the dump's size and the claim's free space,
   `Failed` with the run's reason, `Disabled`, or `Scheduled` before the first
   run.
@@ -165,7 +190,7 @@ operator cannot ask it.
   refuses a dump that holds any file besides the roles, the four databases
   and the checksums.
 - **Who can do it.** Whoever may change the resource with `kubectl`. The
-  portal and the CLI show no backup and start no restore.
+  portal and the CLI show no backup, ask for none and start no restore.
 - **What a dump leaves out.** The platform's Secrets, the library's files,
   the event broker's log and the cache.
 

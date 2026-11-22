@@ -43,7 +43,7 @@ person gets once mail is set up, and what happens without it.
 
 ## As built
 
-This section says what the platform does as of 15 November 2026, as the code
+This section says what the platform does as of 22 November 2026, as the code
 of `zaentrum-portal`, `zaentrum-operator`, `chino-api`, `chino-stream`,
 `katalog-api`, `katalog-manager` and the four chino apps has it at their main
 branches.
@@ -59,7 +59,8 @@ An account has a username (3 to 64 characters: letters a to z, digits, and
 `.`, `_` and `-` between them; it never changes), a name of up to 100
 characters, a role and a switch. The role is admin or user: everyone holds the
 realm role `zaentrum-user`, and an admin `zaentrum-admin` as well. An account
-can hold an email address; the page shows it and cannot set it.
+can hold an email address; the page shows it and cannot set it, while
+portal-api's routes can.
 
 The People page, `/portal/people`, is for admins. It is headed “People”, over
 “One account per person: their role, a child's rating cap, their invite
@@ -73,10 +74,10 @@ There is no page for one person, no search and no filter.
 | Route of portal-api | What it does |
 |---|---|
 | `GET /api/portal/people` | everyone, at most 2,000 accounts, by name, each with the state of their newest invite; and the mode: `bundled`, `external` or `unavailable` |
-| `POST /api/portal/people` | adds a person, enabled and without a password, from `username`, `displayName`, `role` and `maxRating`; answers their first invite link |
-| `PATCH /api/portal/people/{id}` | changes `displayName`, `role`, `maxRating` (null removes the cap) and `enabled` |
+| `POST /api/portal/people` | adds a person, enabled and without a password, from `username`, `displayName`, `email`, `role` and `maxRating`; answers their first invite link, mailed to their address with `sendInvite` |
+| `PATCH /api/portal/people/{id}` | changes `displayName`, `email` (empty removes the address), `role`, `maxRating` (null removes the cap) and `enabled` |
 | `DELETE /api/portal/people/{id}` | deletes what chino-api keeps of the person, then the account, then their invites and notices |
-| `POST /api/portal/people/{id}/invite` | a new invite link; the older ones stop working |
+| `POST /api/portal/people/{id}/invite` | a new invite link, mailed to their address with `send`; the older ones stop working |
 | `GET` and `POST /api/portal/invites/{token}` | without a sign-in: whose invite it is, and setting the password, once |
 
 portal-api keeps four rules. The last enabled admin stays an admin and stays
@@ -95,7 +96,9 @@ portal-api refuses every change.
 An invite link is `/portal/invite/` followed by a token of 32 random bytes.
 portal-api keeps the token's SHA-256, never the token. A link holds for 7 days
 (`PORTAL_INVITE_TTL`), works once, and is shown once, in a dialog with **Copy
-Invite Link**. The admin hands it over by hand: the platform sends no mail.
+Invite Link**. The admin hands it over by hand: the page asks for no address
+and cannot send the link, though portal-api's routes mail it when asked
+([mail](./operations.md#people-and-addresses)).
 The person opens it without signing in and chooses a password under the
 realm's policy: at least 8 characters, not the username, not the email
 address. A new link stops the older ones, and switching an account off revokes
@@ -106,10 +109,13 @@ a new password and clears a lockout from failed sign-ins. It is refused for
 the admin's own account, for an account that is switched off and for one that
 administers Keycloak.
 
-The sign-in page shows “Forgot password?”, because the realm allows password
-resets. The realm has no mail server, so the link it promises is never sent.
-The documentation sends an admin to Keycloak's admin console for password
-resets and second factors, and that console is not on the public host.
+The sign-in page shows “Forgot password?” only where mail is set up in the
+platform's resource: the realm is made with the password reset off, and the
+realm job switches it on with mail. The link goes to the account's address,
+and an account without one gets none. Without mail the page says “Forgot your
+password? Ask an admin for a new invite link.” The documentation still sends
+an admin to Keycloak's admin console for password resets and second factors,
+and that console is not on the public host.
 
 ### The rating cap, the one right
 
