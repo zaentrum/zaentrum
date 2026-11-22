@@ -195,6 +195,15 @@ scripts/release.py finish vX.Y.Z --push             # …and pushes main and the
 scripts/release.py finish vX.Y.Z --publish-notes    # …and drafts the GitHub releases with the notes
 ```
 
+`finish` reads the drafted notes for what a public release must not name:
+other media products and the tools and words of acquiring content. It names
+the lines to review, and `--publish-notes` drafts no release whose notes hold
+one. The script holds nothing of any one installation. To have the notes read
+for names of your own too, such as your hosts, keep them in a file outside
+every repository, a line each as a name, a tab and a regular expression, and
+name it with `--names-file` or in `RELEASE_NAMES_FILE`. A file that is named
+and cannot be read stops the run.
+
 From the push on, every install on `stable` sees the release: a new one starts
 on it, a manual one reports it, an auto one moves to it.
 

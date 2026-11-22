@@ -765,21 +765,49 @@ def render_releases(doc):
 AREA = re.compile(r"^([A-Za-z][\w ./()&+-]{0,40}?):\s+(.+)$")
 
 # The public repositories' neutrality rules, for notes made of commit subjects:
-# no internal hostnames, no other media products, no acquisition tools or
-# vocabulary. Put together from pieces, as the repositories' own gates are, so
-# this file does not name what it looks for.
-_HOSTS = "|".join(re.escape(a + "." + b) for a, b in (("nalet", "cloud"), ("implentic", "com")))
+# no other media products, no acquisition tools or vocabulary. Put together
+# from pieces, so this file does not name what it looks for. It holds nothing
+# of any one installation: whoever makes a release names a file of their own
+# patterns (--names-file, or RELEASE_NAMES_FILE), kept outside every repository.
 _WORDS = "|".join([
     "jelly" "fin", "pl" "ex", "em" "by", "ko" "di",
     "nz" "bget", "qbit" "tor" "rent", "jdown" "loader", "odown" "loader", "so" "narr", "ra" "darr",
     "prow" "larr", "jack" "ett", "trans" "mission", "del" "uge", "download[-_]?gate" "way",
     "use" "net", "nz" "b", "tor" "rent", "trac" "ker", "index" "er", "scrap" "er",
 ])
-UNNEUTRAL = re.compile(rf"({_HOSTS})|(^|[^0-9A-Za-z])({_WORDS})([^0-9A-Za-z]|$)", re.I)
+UNNEUTRAL = re.compile(rf"(^|[^0-9A-Za-z])({_WORDS})([^0-9A-Za-z]|$)", re.I)
+OWN_NAMES = []      # the patterns of --names-file, set once by main
+
+
+def own_names(path):
+    """The patterns of a names file: a line a pattern, as a name, a tab and a
+    regular expression, read without case; an empty line and one that starts
+    with # are skipped. A file that cannot be read, or a line that is no
+    pattern, fails the run: a check that reads nothing must not pass."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            lines = f.read().splitlines()
+    except OSError as e:
+        raise Failure(f"the names file {path} cannot be read: {e.strerror or e}")
+    out = []
+    for n, line in enumerate(lines, 1):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        name, tab, pattern = line.partition("\t")
+        try:
+            if not (tab and name.strip() and pattern):
+                raise re.error("it is not a name, a tab and a pattern")
+            out.append(re.compile(pattern, re.I))
+        except re.error as e:
+            raise Failure(f"the names file {path}, line {n}: {e}")
+    if not out:
+        raise Failure(f"the names file {path} holds no pattern")
+    return out
 
 
 def unneutral_lines(text):
-    return [line for line in text.splitlines() if UNNEUTRAL.search(line)]
+    return [line for line in text.splitlines()
+            if UNNEUTRAL.search(line) or any(rx.search(line) for rx in OWN_NAMES)]
 
 
 def commits(path, rng):
@@ -1052,6 +1080,9 @@ def main(argv=None):
     p.add_argument("--notes-dir", help="finish: where to draft the notes (default: a new temporary directory)")
     p.add_argument("--publish-notes", action="store_true",
                    help="finish: draft GitHub releases with the notes where none exists")
+    p.add_argument("--names-file", default=os.environ.get("RELEASE_NAMES_FILE"), metavar="FILE",
+                   help="finish: a file of your own patterns the notes must not match, a line each as a name, "
+                        "a tab and a regular expression (default: $RELEASE_NAMES_FILE)")
     args = p.parse_args(argv)
     args.root = os.path.abspath(args.root)
     if not SEMVER.match(args.version):
@@ -1066,6 +1097,7 @@ def main(argv=None):
         if not (SEMVER.match(args.base) and is_prerelease(args.base) and args.base.split("-")[0] == args.version):
             p.error(f"--from takes a pre-release of {args.version} ({args.version}-rc.N), not {args.base}")
     try:
+        OWN_NAMES[:] = own_names(args.names_file) if args.names_file else []
         run(["gh", "auth", "status"])
         return {"check": cmd_check, "tag": cmd_tag, "finish": cmd_finish}[args.step](args)
     except Failure as e:

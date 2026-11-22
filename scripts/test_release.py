@@ -11,6 +11,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from unittest import mock
 
@@ -170,6 +171,68 @@ class TestTC4TheMachineThatChecks(unittest.TestCase):
         with mock.patch.object(release.shutil, "which", lambda name: "/usr/bin/" + name), \
                 mock.patch.object(release, "run", lambda cmd, cwd=None, check=True: done(0)):
             self.assertEqual(release.tool_problems(), [])
+
+
+
+class TestWhatTheNotesMustNotName(unittest.TestCase):
+    """The notes' check: the public rule of words, and the patterns of a file
+    of one's own, which this repository does not hold."""
+
+    def setUp(self):
+        self.addCleanup(release.OWN_NAMES.clear)
+        self.dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.dir.cleanup)
+
+    def names(self, text):
+        path = os.path.join(self.dir.name, "names")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        return path
+
+    def test_the_rule_of_words_flags_a_product_and_no_longer_word(self):
+        product = "pl" "ex"
+        notes = f"- player: reads a {product} library\n- catalog: a complex query is faster\n"
+        self.assertEqual([f"- player: reads a {product} library"], release.unneutral_lines(notes))
+
+    def test_without_a_names_file_no_host_is_looked_for(self):
+        self.assertEqual([], release.unneutral_lines("- docs: the database is at db.example.org\n"))
+
+    def test_a_names_file_adds_its_patterns_without_case(self):
+        release.OWN_NAMES[:] = release.own_names(self.names(
+            "# what is ours\n\nhost\t[a-z0-9.-]*\\.example\\.org\nmachine\t\\bbox[0-9]{2}\\b\n"))
+        notes = "- docs: the database is at DB.Example.org\n- fix: box07 restarts\n- fix: a boxed set plays\n"
+        self.assertEqual(["- docs: the database is at DB.Example.org", "- fix: box07 restarts"],
+                         release.unneutral_lines(notes))
+
+    def test_a_names_file_that_reads_as_nothing_fails(self):
+        for text, said in (("# only a comment\n\n", "holds no pattern"),
+                           ("host db.example.org\n", "line 1"),
+                           ("host\t(\n", "line 1"),
+                           ("\tdb\n", "line 1")):
+            with self.subTest(text=text):
+                with self.assertRaises(release.Failure) as e:
+                    release.own_names(self.names(text))
+                self.assertIn(said, str(e.exception))
+        with self.assertRaises(release.Failure) as e:
+            release.own_names(os.path.join(self.dir.name, "missing"))
+        self.assertIn("cannot be read", str(e.exception))
+
+    def test_a_names_file_that_cannot_be_read_stops_the_run_before_anything(self):
+        err = io.StringIO()
+        with mock.patch.object(release, "run", side_effect=AssertionError("nothing may run")), \
+                contextlib.redirect_stderr(err):
+            code = release.main(["finish", "v9.9.9", "--names-file", os.path.join(self.dir.name, "missing")])
+        self.assertEqual(1, code)
+        self.assertIn("cannot be read", err.getvalue())
+
+    def test_the_names_file_comes_from_the_environment_too(self):
+        path = self.names("host\tdb\\.example\\.org\n")
+        seen = []
+        with mock.patch.dict(os.environ, {"RELEASE_NAMES_FILE": path}), \
+                mock.patch.object(release, "run"), \
+                mock.patch.object(release, "cmd_check", side_effect=lambda args: seen.append(len(release.OWN_NAMES)) or 0):
+            self.assertEqual(0, release.main(["check", "v9.9.9"]))
+        self.assertEqual([1], seen)
 
 
 if __name__ == "__main__":
