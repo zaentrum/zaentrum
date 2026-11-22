@@ -140,7 +140,7 @@ flowchart LR
 <!-- generated: packages -->
 |  | Package | After | Changes | proposed | approved | built | verified |
 |---|---|---|---|---|---|---|---|
-| 1 | [Groundwork in every repository](#groundwork-in-every-repository) | — | 5 | 0 | 2 | 3 | 0 |
+| 1 | [Groundwork in every repository](#groundwork-in-every-repository) | — | 5 | 0 | 1 | 4 | 0 |
 | 2 | [The design system's missing parts](#the-design-systems-missing-parts) | — | — | — | — | — | — |
 | 3 | [The frame, and the design system in the apps](#the-frame-and-the-design-system-in-the-apps) | Groundwork in every repository, The design system's missing parts | 11 | 0 | 11 | 0 | 0 |
 | 4 | [Every text from the message catalogue, in the person's language](#every-text-from-the-message-catalogue-in-the-persons-language) | The frame, and the design system in the apps | 5 | 0 | 5 | 0 | 0 |
@@ -187,7 +187,7 @@ Each repository says how it is built, tested and changed, runs its tests and the
 | [T.C2](../platform/trust.md#changes) | A guide to contributing, and each repository's own | Docs | built |
 | [T.C3](../platform/trust.md#changes) | Every repository's tests on every change | Images | built |
 | [T.C4](../platform/trust.md#changes) | Images signed, with the record of their build and a list of what they hold | Images, Docs | approved |
-| [T.C7](../platform/trust.md#changes) | The neutrality check in every repository | Images | approved |
+| [T.C7](../platform/trust.md#changes) | The neutrality check in every repository | Images | built |
 
 ## The design system's missing parts
 

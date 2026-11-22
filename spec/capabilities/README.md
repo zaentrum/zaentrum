@@ -140,9 +140,9 @@ model, each reference, change and id resolved, written by the same program.
 | [chino](./chino.md) | 151 | 136 | 3 | 12 | 144 | 16 |
 | [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 20 |
 | [the catalog and the pipeline](./catalog.md) | 55 | 22 | 19 | 14 | 22 | 14 |
-| [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 12 |
+| [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 11 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 309 | 219 | 47 | 43 | 230 | 63 |
+| all | 309 | 219 | 47 | 43 | 230 | 62 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
@@ -157,7 +157,7 @@ model, each reference, change and id resolved, written by the same program.
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
-| 448 | 432 | 16 | 0 | 437 | 10 | 0 |
+| 448 | 432 | 16 | 0 | 436 | 11 | 0 |
 <!-- end: overview -->
 
 ## What is expected of it
@@ -182,7 +182,7 @@ a decision record rules it out.
 | [Trust it](./expectations.md#trust-it) | 4 | 2 | 1 | 1 | 0 | 0 |
 | all | 61 | 8 | 28 | 23 | 1 | 1 |
 
-Nothing serves 63 of the 309 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 62 of the 309 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers
