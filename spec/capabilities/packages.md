@@ -165,7 +165,7 @@ flowchart LR
 | 23 | [The portal's home page](#the-portals-home-page) | Groundwork in every repository, The design system's missing parts | 17 | 0 | 17 | 0 | 0 |
 | 24 | [Reaching it at home](#reaching-it-at-home) | Groundwork in every repository | 16 | 0 | 16 | 0 | 0 |
 | 25 | [The household's machine: installing and updating](#the-households-machine-installing-and-updating) | Groundwork in every repository | 22 | 0 | 22 | 0 | 0 |
-| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 15 | 6 | 0 |
+| 26 | [Running the platform: mail, alerts, backups, storage](#running-the-platform-mail-alerts-backups-storage) | Groundwork in every repository | 21 | 0 | 14 | 7 | 0 |
 | 27 | [A restore at the first run, and backups off one machine](#a-restore-at-the-first-run-and-backups-off-one-machine) | Running the platform: mail, alerts, backups, storage, The household's machine: installing and updating | 2 | 0 | 2 | 0 | 0 |
 | 28 | [The library](#the-library) | Groundwork in every repository | 14 | 0 | 14 | 0 | 0 |
 | 29 | [The catalog console](#the-catalog-console) | The library, The design system's missing parts | 25 | 0 | 25 | 0 | 0 |
@@ -718,7 +718,7 @@ Mail through a server the admin names, alerts to the admins, backups and restore
 | [R.C7](../portal/operations.md#changes) | The volumes are measured | Operator | approved |
 | [R.C8](../portal/operations.md#changes) | Alerts are raised | Server | approved |
 | [R.C9](../portal/operations.md#changes) | Alerts in the bell and on a page | Portal | approved |
-| [R.C10](../portal/operations.md#changes) | A backup says what made it, and a restore checks it | Operator | approved |
+| [R.C10](../portal/operations.md#changes) | A backup says what made it, and a restore checks it | Operator | built |
 | [R.C11](../portal/operations.md#changes) | A backup on request | Operator | built |
 | [R.C12](../portal/operations.md#changes) | A backup before an update | Operator | built |
 | [R.C13](../portal/operations.md#changes) | A restore brings the identity provider in step | Operator | approved |

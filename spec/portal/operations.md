@@ -172,8 +172,11 @@ what is free and its filesystem's id, and the size of each database;
   `globals.sql` (the database's roles but the superuser), one file for each
   database in pg_dump's custom format, and `SHA256SUMS`. The newest 7 stay
   (`spec.backup.retention`). The claim is kept when the platform is deleted.
-- **What a dump does not say.** Nothing in it names the platform or the
-  version that made it, and it does not hold the platform's resource.
+- **What a set says of itself.** Each set also holds `backup.json`, listed
+  in `SHA256SUMS`: the platform's name, uid and version, the operator's
+  version, the databases, the resource's `spec` as it was, the names of the
+  Secrets it refers to, never a value, and the addons ([the set](#the-set)).
+  A set made before that, or in an install without the operator, has none.
 - **What the status says.** `status.backup` has `lastSuccess`, `lastDump`,
   `lastFailure`, the names of the `dumps`, the last `job`, the job of a backup
   that runs (`running`) and the request answered last (`request`). The condition
@@ -191,9 +194,14 @@ what is free and its filesystem's id, and the size of each database;
   database; the parts start again and the realm job runs over the restored
   realm. The phase is `Restoring` meanwhile and the platform is down.
   `status.backup.restore` and the condition `Restore` say where it stands:
-  `Stopping`, `Running`, `Succeeded`, `Failed` or `Refused`. The restore
-  refuses a dump that holds any file besides the roles, the four databases
-  and the checksums.
+  `Stopping`, `Running`, `Succeeded`, `Failed` or `Refused`. Before
+  anything stops, the operator holds the set to the version that runs
+  ([the version rule](#the-version-rule)): a set made by a newer release is
+  refused, and so is one whose version cannot be compared, unless the
+  annotation `zaentrum.io/restore-any-version` names it. A set that is not
+  listed in `status.backup.sets` is read from the claim first. The restore
+  refuses a dump that holds any file besides the roles, the four databases,
+  the checksums and `backup.json`.
 - **Who can do it.** Whoever may change the resource with `kubectl`. The
   portal and the CLI show no backup, ask for none and start no restore.
 - **What a dump leaves out.** The platform's Secrets, the library's files,
@@ -813,7 +821,11 @@ file's first field: `name` and `uid` are the resource's, `version` is the
 version that runs, as `status.currentVersion` has it, and `createdAt` is when
 the run began. A URL in the file, an addon's chart or one in the resource, is
 written without its user, its password and its query, so that no credential
-kept in a URL reaches a set. Where the ConfigMap is missing, as in an install without the
+kept in a URL reaches a set. A value that cannot be read as URLs of hosts, or
+that holds a user and a password, is written as “(left out)”; a mail address
+and an image pinned by its digest stay as they are. Addons that cannot be
+listed when the record is written keep the last list known; where none is
+known the file holds `null` for them, never an empty list. Where the ConfigMap is missing, as in an install without the
 operator, the set is made without `backup.json` and the job's log says so.
 
 A set does not hold:
@@ -1312,7 +1324,7 @@ starts with “Recommended” holds a choice that is the owner's.
 | R.C7 | The volumes are measured | Operator | nothing measures a volume; a backup's run reports the free space of the backups' claim inside the `Backup` condition's sentence | section Alerts, Measuring: one measuring job for each claim, every hour, on the annotation `zaentrum.io/storage-request` and, for the backups' claim, after each backup; the library's also asks the bundled Postgres; the operator writes `status.storage.volumes[]`, `status.storage.databases[]`, `status.storage.request`, `status.backup.sets[]` and the condition `StorageMeasured`; proven first as [ADR-0019](../../docs/adr/0019-mail-and-alerts.md#to-prove-first) says | approved |
 | R.C8 | Alerts are raised | Server | portal-api reads the phase, the parts and the self-check from the status when an admin opens the operator page; it compares nothing and keeps nothing | portal-api: section Alerts: every 60 seconds it reads the status, starts and ends the five alerts by the rules of When an alert starts and ends, keeps them in a table of its own for 90 days, mails them by the rules of By mail with the words of the section Words, and serves `GET /api/portal/alerts`, `PATCH /api/portal/alerts/settings`, `POST /api/portal/alerts/{id}/read` and `POST /api/portal/alerts/read-all` | approved |
 | R.C9 | Alerts in the bell and on a page | Portal | the bell shows what addons told the person; no page shows what is wrong | section Alerts, In the bell and The alerts page: the bell lists an admin's alerts above the notices, under **alerts**, each with **open**, and counts the unseen ones; the tile alerts in the settings group and the page at `/portal/alerts`, with what is watched, its thresholds and **save**, and the alerts of the last 90 days | approved |
-| R.C10 | A backup says what made it, and a restore checks it | Operator | a dump holds the roles, the four databases and their checksums; nothing in it names the platform or the version that made it; the restore refuses a dump with any other file | sections Backups, The set, and Restoring, The version rule: each set also holds `backup.json`, listed in `SHA256SUMS`, written from a ConfigMap the operator keeps; the restore takes a set with or without it; the operator applies the version rule before it stops anything and refuses with the words of the section Words; the annotation `zaentrum.io/restore-any-version`, holding the set's name, lifts the rule for a version that cannot be compared, never for a newer release | approved |
+| R.C10 | A backup says what made it, and a restore checks it | Operator | a dump holds the roles, the four databases and their checksums; nothing in it names the platform or the version that made it; the restore refuses a dump with any other file | sections Backups, The set, and Restoring, The version rule: each set also holds `backup.json`, listed in `SHA256SUMS`, written from a ConfigMap the operator keeps; the restore takes a set with or without it; the operator applies the version rule before it stops anything and refuses with the words of the section Words; the annotation `zaentrum.io/restore-any-version`, holding the set's name, lifts the rule for a version that cannot be compared, never for a newer release | built |
 | R.C11 | A backup on request | Operator | a backup runs on its schedule alone | section Backups, When a backup is made: the annotation `zaentrum.io/backup-request`, with a value not yet answered, starts one backup from the schedule's own job once no backup and no restore runs, the schedule standing still meanwhile; `status.backup.request` holds the value answered, and `status.backup.running` the job of a backup that runs; where the platform makes no backups it is refused, and the `Backup` condition says so where there is one | built |
 | R.C12 | A backup before an update | Operator | an update is applied at once; the newest dump is up to a day old | Recommended: section Backups, When a backup is made: before the operator applies another version than the one that runs, where backups are on, it makes a backup and applies the update when that has ended, after 30 minutes at the latest, stopping a backup that still runs then; a failure does not stop the update and shows in the `Backup` condition; another version is another tag; not on a one-machine install, whose updater keeps its own copy; the other choice is no backup before an update, with **back up now** left to the admin | built |
 | R.C13 | A restore brings the identity provider in step | Operator | after a restore the realm job writes the sign-in addresses and the people client's secret; the identity provider's own admin and the `zaentrum-manager` client keep the password and the secret of the dump, so a dump of another install locks the operator's jobs out | Recommended: section Restoring, What a restore does, step 6: after every restore, with the bundled identity provider, the provider's own admin signs in with this install's Secret `zaentrum-keycloak-admin` and the `zaentrum-manager` client has the secret of Secret `zaentrum-keycloak`; an account whose password the platform keeps in a Secret of its own has this install's, and every person keeps the password the set holds; then the realm job runs as today; proven first as [ADR-0020](../../docs/adr/0020-backup-restore-and-moving.md#to-prove-first) says; the other choice is the platform's Secrets in every set, sealed with a passphrase the admin keeps | approved |
@@ -1632,7 +1644,7 @@ words it. No line holds an address, a title or a text.
 | Restoring | restoring · “The platform is down while its databases are set back. This takes a few minutes.” · “Keep this page open, or come back later.” |
 | The restore has ended | “The restore has ended. Sign in to see how it went.” |
 | **the last restore** | “Restored from {date}, on {date}.” · “The restore from {date} was refused: {reason} Nothing was changed.”, where {reason} is by the condition's reason “It was made by {version}, which is newer than this platform ({version}).”, “Its version cannot be compared with this platform's.”, “There is no backups' claim to restore from.”, “The backups' claim does not hold it.”, “The backups' claim could not be read.” or “It did not pass the restore's check.” · “The restore from {date} failed: {reason} Restore again.” · “none” |
-| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): to restore it all the same, set zaentrum.io/restore-any-version to {name} and ask again with a new value; nothing was changed” · “refused: there is no set {name} on the claim {claim} (it holds: {newest names}); nothing was changed” · “refused: there is no claim {claim} to restore from; nothing was changed”, as today · “refused: the claim {claim} is not bound to a volume yet; nothing was changed” · “refused: the claim {claim} could not be read, so the version of {name} is not known: {reason}; nothing was changed”, where {reason} is the measuring's or “{job} has not ended in 2 minutes” · {newest names} are up to 10 names joined by “, ”, or “none” · the ending “; nothing was changed” is kept whole however long a {reason} is · while the claim is read: “the restore of {name} starts once the claim {claim} has been read: its version is checked before anything stops” |
+| The operator's refusals | “refused: {name} was made by {version}, which is newer than this platform ({version}): update the platform first; nothing was changed” · “refused: the version of {name} cannot be compared with this platform's ({version}): to restore it all the same, set zaentrum.io/restore-any-version to {name} and ask again with a new value; nothing was changed” · “refused: there is no set {name} on the claim {claim} (it holds: {newest names}); nothing was changed” · “refused: there is no claim {claim} to restore from; nothing was changed”, as today · “refused: the claim {claim} is not bound to a volume yet; nothing was changed” · “refused: the claim {claim} could not be read, so the version of {name} is not known: {reason}; nothing was changed”, where {reason} is the measuring's, “{job} has not ended in 2 minutes”, “the backup {job} runs”, “a backup is about to start” or “the backups' Jobs could not be listed” · {newest names} are up to 10 names joined by “, ”, or “none” · the ending “; nothing was changed” is kept whole however long a {reason} is · while the claim is read: “the restore of {name} starts once the claim {claim} has been read: its version is checked before anything stops” · while something could not be read: “the restore of {name} waits: {why}; it is read again”, where {why} is “the claim {claim} could not be read”, “the measuring runs could not be listed” or “{job} could not be read” |
 | Not run by the operator | “This platform is not run by the operator, so its backups cannot be read from here.” |
 | Couldn't load | couldn't load the backups · try again |
 | The setup checklist, and the first-run page | “Moving from another machine?” · restore from a backup |

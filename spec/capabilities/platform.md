@@ -59,8 +59,8 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 - Encode titles on an NVIDIA GPU or on the CPU: gpu: NVENC on a node offering nvidia.com/gpu; cpu: x264/x265 anywhere. The setup checklist reads features.gpu instead
 - Choose the renditions, segments, audio and subtitles the packages get: Empty fields keep each worker's own default; a change reaches new packages only. Of these fields the docs name only surroundAudio
 - Run the live worker for the encodes made while a title plays: Mode off, shadow or on; GPU or CPU slots. Without it chino-stream encodes itself, on the CPU; features.gpu changes nothing
-- Back up the bundled databases on a schedule, keeping the newest dumps: Bundled Postgres only; on by default where it is on a claim. Each dump carries its checksums; status.backup lists them
-- Restore the bundled databases from one of their dumps: Asked with the annotation zaentrum.io/restore-request naming a dump: clients stop, it is checked, restored, restarted
+- Back up the bundled databases on a schedule, keeping the newest dumps: Bundled Postgres only; on by default on a claim. Each set carries its checksums and says what made it; status.backup lists them
+- Restore the bundled databases from one of their dumps: Asked with the annotation zaentrum.io/restore-request naming a set: its version is checked before anything stops, then it is restored
 - Choose the release channel, and whether its updates apply themselves: stable: the newest release; edge: latest. manual reports status.availableUpdate; auto rolls to it
 - Give addons a VPN their pods reach the internet through: Pods labelled zaentrum.io/vpn reach only the cluster networks directly; addons get the proxy in their values. No platform pod uses it
 - Provide the platform's secrets yourself instead of generated ones: Off: the operator generates each Secret once and never rotates it; on: it makes, reads and reports none
@@ -70,7 +70,7 @@ The platform as an operator installs it: identity, storage, addresses, certifica
 - Encode on an Intel or AMD graphics chip: the encoders are NVIDIA's and the CPU's
 - Move the platform to another machine with its people, settings, history and library: a dump restores into the install that made it; nothing carries an install over
 - Mount further volumes for the library's folders: the chart mounts one claim for the library
-- See where the backups are, how old and how large the newest is, and each one's version: the status lists the last good backup's dumps; no page or command shows them
+- See where the backups are, how old and how large the newest is, and each one's version: the status lists the sets on the claim with their version; no page or command shows them
 - Make a backup of the bundled databases now, without waiting for the schedule: asked with the annotation zaentrum.io/backup-request, answered in status.backup.request; no page or command asks for one
 - Back up the bundled databases before an update is applied: another version waits for a backup of the one that runs: stopped at 30 minutes and applied by 35 at the latest; not on the all-in-one image
 
