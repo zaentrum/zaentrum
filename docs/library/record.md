@@ -84,6 +84,7 @@ movies/<aa>/<itemId>/
     checksums.sha256              covers the files above, written with them
   versions/<versionId>/
     version.json                  what this version is, written once
+    original.<ext>                the original, from when it is taken in until it is deleted
     hls/  subs/  trickplay/       the package
     checksums.sha256              version.json and every package file
     package.json                  what the package contains, and the hash of checksums.sha256
@@ -102,18 +103,28 @@ people/<aa>/<personId>/
   <hash>.jpg                      images named by content hash, written once
 
 .work/                            not the record
-  incoming/                       arrivals: originals waiting to be packaged
+  incoming/                       arrivals: originals until the first record of their title is made
   extras/                         extras' originals taken in, waiting the same way
   inbox/  staging/                the transcoder's handoff, the packager's folders under construction
   trash/                          deleted originals during a grace period
   quarantine/  migration/         a sweep's quarantine; a migration's staged records and plans
 ```
 
-The format can also hold an original inside its version or extra folder — a
-library built by its tools from a copy may keep one — but the platform never
-does: a version it writes keeps none (`originalFiles` is empty) and its package
-is canonical, and an extra it writes keeps only its package and says, in
-`packagedFrom`, what it was made from.
+A version folder is the one place its media lives: its original, the package
+made from it, or both. An original waits among the arrivals only until the
+first record of its title is made. Then it is renamed into its version folder
+as `original.<ext>`, with the package where one was made, or alone: a version
+taken in before anything packaged it holds `version.json` and its original, and
+its package is added to it later. The original stays there until its package is
+recorded and verified and the deletion gate lets it go: an original that has
+closed captions, whose captions are not known, or that is in fields is kept
+([ADR-0015](../adr/0015-the-package-is-the-master.md)). An `original-deleted`
+event records a deletion and what the package does not carry of the original,
+and `version.json` keeps naming the file. A re-package is a new version folder
+that keeps no original (`originalFiles` is empty), its package canonical; the
+original stays in the version that holds it, and a version folder that still
+holds an original is never removed. An extra the platform takes in keeps only
+its package and says, in `packagedFrom`, what it was made from.
 
 These changes against v1 carry the model:
 
