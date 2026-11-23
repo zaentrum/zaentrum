@@ -275,7 +275,7 @@ What a person keeps to watch, in lists of their own, and what they watched. Spec
 |---|---|---|---|---|---|---|
 | Put a title on the Watchlist, or take it off | person | built | built | built | built | [6.5.2](../chino/title-actions.md#652-add-to-list), [8.1](../chino/watchlist.md#81-purpose) |
 | See the Watchlist and one's own lists, and open one with all its titles | person | built | built | built | built | [8.3](../chino/watchlist.md#83-the-watchlist-on-a-computer), [8.6](../chino/watchlist.md#86-a-list), [8.8](../chino/watchlist.md#88-what-a-list-holds) |
-| See every list's movies and shows apart | person | no | built | built | no | [8.8.1](../chino/watchlist.md#881-movies-and-shows-apart), [16.4.7](../chino/settings.md#1647-watchlist) |
+| See every list's movies and shows apart | person | built | built | built | no | [8.8.1](../chino/watchlist.md#881-movies-and-shows-apart), [16.4.7](../chino/settings.md#1647-watchlist) |
 | Put a title in one's own lists, or take it out of them | person | built | built | built | no | [6.5.2](../chino/title-actions.md#652-add-to-list) |
 | Create a list of one's own | person | built | built | built | built | [8.7.1](../chino/watchlist.md#871-creating-a-list), [8.7.4](../chino/watchlist.md#874-names-and-limits) |
 | Start a new list from a title's page, with the title in it | person | built | built | built | no | [6.5.2](../chino/title-actions.md#652-add-to-list), [8.7.1](../chino/watchlist.md#871-creating-a-list) |
@@ -288,7 +288,7 @@ What a person keeps to watch, in lists of their own, and what they watched. Spec
 
 - Put a title on the Watchlist, or take it off: the bookmark on a title's page and its episode rows; Samsung: a “+” for the default list, none on episodes Zap saves to it too.
 - See the Watchlist and one's own lists, and open one with all its titles: a row each, the Watchlist first, then by creation; the same lists in every app
-- See every list's movies and shows apart: the phone and Android TV apps split every list where the server answers by kind; the web and the Samsung TV app have no setting
+- See every list's movies and shows apart: the web, the phone and Android TV apps split every list where the server answers by kind; the Samsung TV app has no setting
 - Put a title in one's own lists, or take it out of them: the list picker beside the bookmark; Samsung has none
 - Create a list of one's own: a name unique in the account; the web shows a refusal as “request failed (409)”, Android TV drops it silently
 - Start a new list from a title's page, with the title in it: “new list…” in the list picker; Samsung has no picker

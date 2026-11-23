@@ -146,7 +146,7 @@ model, each reference, change and id resolved, written by the same program.
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
-| Web | 84 | 19 | 23 | 181 | 2 |
+| Web | 85 | 19 | 22 | 181 | 2 |
 | Phone | 77 | 37 | 28 | 165 | 2 |
 | Android TV | 80 | 23 | 26 | 178 | 2 |
 | Samsung TV | 44 | 31 | 53 | 179 | 2 |
