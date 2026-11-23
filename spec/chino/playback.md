@@ -197,6 +197,7 @@ qualities.
 | previous, next episode | only where there is one | only where there is one | both on every episode; at a season's ends they do nothing | next only, on every episode |
 | Hiding the controls | after 3 s playing, 8 s paused; held by an open menu | after 4 s, 8 s; held by a menu, a drag and TalkBack's focus | after 4 s, 8 s; held by a menu | after 3.5 s; never while paused |
 | A tap on the picture | shows the controls, and hides them when they show | shows them, never hides them | — | — |
+| A double tap on the picture | not found: two taps, each taken as a single one | not found: two taps, each taken as a single one | — | — |
 | The seek bar | a round handle; intro blue, credits amber, recap green, a sponsor red; chapters as thin ticks | a round handle; intro yellow, credits orange, recap purple; chapters a band | a square handle; intro amber, recap grey, credits red; chapters a green band | a square handle; nothing loaded shown; intro and recap blue, credits amber; chapters a band |
 | The still over the seek bar | every title, on hover and during a drag: “Intro · 1:30” | ready-made titles only, while pressed: “Intro · 1:30” | ready-made titles only, while the bar has the focus | ready-made titles only, always while the controls show, without a time |
 | Seeking | a click; a drag seeks all along, by touch too | a drag seeks where the finger lets go | ← → 10 s on the focused bar | the bar takes no focus: ← → 10 s with the controls hidden |
@@ -292,14 +293,17 @@ and on, and f is fullscreen. Every key the player answers to shows the
 controls, wherever the focus is. Esc closes an open menu or the audio and
 subtitles panel, and with neither open it leaves a trailer. With a mouse, a
 click on the picture plays or pauses; on a touch screen a tap only shows the
-controls (section 11.6).
+controls (section 11.6), and a double tap goes back or forward 10 seconds
+(section 11.4.4).
 
 ## 11.4 The player on a phone
 
-The phone plays upright and sideways, and the player turns with it. Figure 11.5
-shows it upright and figure 11.6 sideways, as most people watch. The parts are
-those of figure 11.4; the numbers mark where the phone differs, and section
-11.4.3 says what happens when the phone is turned.
+The phone plays upright and sideways. In the phone app a title opens sideways,
+as most people watch, and from then on the player turns with the phone. Figure
+11.5 shows it upright and figure 11.6 sideways. The parts are those of figure
+11.4; the numbers mark where the phone differs, section 11.4.3 says how a title
+opens and what happens when the phone is turned, and section 11.4.4 what a
+double tap does.
 
 ### 11.4.1 Held upright
 
@@ -311,7 +315,8 @@ Figure 11.5: The player on a phone held upright, at 360 × 780 dp.
    where it needs them, so an episode keeps its name.
 2. **The picture**, across the width, in the middle. Upright it always fits:
    two fingers spread apart don't fill the screen (section 11.11). A tap on it
-   shows the controls, and a tap while they show hides them.
+   shows the controls, and a tap while they show hides them; a double tap goes
+   back or forward 10 seconds (section 11.4.4).
 3. **The first row**: play or pause and the volume on the left; previous and
    next episode and fullscreen on the right. While the volume's slider is open,
    it takes the place of previous and next episode, and they come back when it
@@ -344,8 +349,9 @@ Figure 11.6: The player on a phone held sideways, at 780 × 360 dp.
    so the bar has room for its buttons; the phone's own buttons set the volume
    as well.
 3. **The picture.** A tap on it shows the controls, and a tap on the picture
-   while they show hides them. Two fingers spread apart fill the screen with
-   the picture and brought together fit it again (section 11.11).
+   while they show hides them; a double tap goes back or forward 10 seconds
+   (section 11.4.4). Two fingers spread apart fill the screen with the picture
+   and brought together fit it again (section 11.11).
 4. **exit fullscreen.** Held sideways the player is full screen, so the last
    button is exit fullscreen, and it turns the player upright.
 
@@ -359,13 +365,27 @@ The web on a phone has the layout of figure 11.6 without cast and without the
 slider: there, the speaker turns the sound off and on, held either way, and the
 phone's own buttons set the volume.
 
-### 11.4.3 Turning the phone
+### 11.4.3 Opening sideways, and turning the phone
 
-The player turns with the phone, and turning it never interrupts the title: it
-plays on, or stays paused, where it was, with its audio, subtitles, quality and
-speed; an open menu stays open at its button, and the audio and subtitles panel
-stays open too ([chapter 12](./subtitles.md)).
+In the phone app a title opens sideways. After that the player turns with the
+phone, and turning it never interrupts the title: it plays on, or stays paused,
+where it was, with its audio, subtitles, quality and speed; an open menu stays
+open at its button, and the audio and subtitles panel stays open too
+([chapter 12](./subtitles.md)).
 
+- **As a title opens**, the phone app turns the player sideways and full
+  screen, however the phone is held and whatever the phone's own setting for
+  turning says, and the person turns the phone to follow it. Either way round
+  is right: the player follows the phone between its two sideways positions.
+  The title doesn't wait for the turn; it starts as it would upright. Once
+  the phone has been turned sideways, the player turns with it as the next
+  points say. A title that starts from the player itself, the next episode
+  among them, keeps the way the player stands at that moment. Leaving the
+  player gives the app back as the phone is held. This is for a phone, a
+  screen whose short side is less than 600 dp: a tablet, and a phone unfolded
+  to a tablet's size, opens as it is held, because from Android 16 on the
+  system doesn't let an app turn a large screen. The web never turns the
+  page, so there a title opens as the phone is held.
 - **Turned sideways**, the player goes full screen by itself. The phone app
   hides the status and navigation bars. The web asks the browser for full
   screen on a phone, a screen whose short side is 600 px or less, and only when
@@ -378,13 +398,52 @@ stays open too ([chapter 12](./subtitles.md)).
   when the phone is turned sideways again during the same title. The web
   leaves the full screen it went into when the phone was turned; it never
   holds the page sideways, so the page can turn back. A full screen someone
-  asked for with **fullscreen** stays.
+  asked for with **fullscreen** stays. Where the phone's own setting holds
+  apps upright, turning the phone changes nothing in the phone app: the player
+  stays as it stands until **exit fullscreen** or **fullscreen** is pressed.
 - **fullscreen**, in the phone app held upright, turns the player sideways and
   full screen, and the person turns the phone to follow it. From then on the
   player turns with the phone again: turned back upright, it leaves full
   screen. Held sideways, the button is **exit fullscreen**, and it turns the
-  player upright. On the web, **fullscreen** and **exit fullscreen** only ask
-  the browser for full screen and leave it, without turning the page.
+  player upright, where it stays until the phone is turned sideways again or
+  **fullscreen** is pressed. On the web, **fullscreen** and **exit
+  fullscreen** only ask the browser for full screen and leave it, without
+  turning the page.
+
+### 11.4.4 A double tap: 10 seconds back or forward
+
+On a touch screen, two taps on the picture, the second within 0.3 seconds of
+the first and in the same half, skip 10 seconds: back in the picture's left
+half, forward in its right half. It works in the phone app and on the web
+wherever the picture is touched, upright and sideways, whether the controls
+show or not. Figure 11.13 shows it.
+
+- **More taps add up.** Each further tap in the same half within 0.6 seconds
+  of the last adds 10 seconds, and the player seeks once more, to the sum:
+  four taps go 30 seconds.
+- **The mark**, in the middle of the half that was tapped: the design system's
+  icon for rewind or fast forward, with the seconds so far under it, “−10 s”
+  or “+30 s”. It comes with the second tap and goes 0.6 seconds after the
+  last. The rest of the picture isn't dimmed.
+- **The controls stay as they were.** A double tap neither shows nor hides
+  them; where they show, their time to hide starts again. A single tap still
+  shows or hides them (section 11.6), once the 0.3 seconds a second tap may
+  take have passed.
+- **Only the picture.** A tap on the bars or on a button is what it was. While
+  a menu, the audio and subtitles panel or a card of section 11.8 is open, a
+  tap is that part's. A tap in the left half and then one in the right half
+  are two single taps.
+- **At the ends.** Back never goes before the start. Forward stops a second
+  before the end, so the skip itself never ends a title; what follows there
+  is up next's (section 11.8.3).
+- **With a screen reader**, a double tap is the reader's own gesture for
+  pressing what has the focus, so it skips nothing: the seek bar's steps of 10
+  seconds are its way (section 11.18).
+- A skip by double tap is a seek like any other: the place is saved as after
+  a seek (section 11.7), and the server is told nothing more.
+
+A mouse has no double click of its own: each click on the picture plays or
+pauses, as before, and ← and → are the computer's 10 seconds.
 
 ## 11.5 The player on a TV
 
@@ -442,7 +501,8 @@ a menu is open, while the person drags the seek bar or the volume, and while a
 screen reader's focus is on one of them, so it never loses the control it is
 on. While the audio and subtitles panel is open they step back, and they come
 back when it closes. A tap on the picture while they show hides them; a tap on
-the bars, between their buttons too, keeps them. They come and go with a short
+the bars, between their buttons too, keeps them. A double tap on the picture
+leaves them as they were (section 11.4.4). They come and go with a short
 fade; the subtitles rise above them while they show and come back down when
 they hide ([chapter 12](./subtitles.md)).
 
@@ -968,7 +1028,7 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C5 | Android TV: previous and next only where there is one | Android TV | both on every episode; at a season's ends they do nothing | previous episode only for an episode with one before it, next episode only for one with one after it (figure 11.4, part 4) | approved |
 | 11.C6 | Web on a phone: no volume slider | Web | the slider shows from 768 px wide, so a phone held sideways mostly has it (figure 11.3) | on a phone, a screen whose short side is 600 px or less, no slider, held either way: the speaker turns the sound off and on (section 11.4.2) | approved |
 | 11.C7 | Upright: two rows and the title on a line of its own | Web, Phone app (Android) | one row, which an episode's buttons make wider than a 360-wide phone; the title on one line, cut. iOS has the two rows already | figure 11.5; while the volume's slider is open, it takes the place of previous and next episode | approved |
-| 11.C8 | The phone app's fullscreen turns the player | Phone app | Android: fullscreen hides the system bars and doesn't turn the player, and held sideways the button still offers fullscreen. iOS: fullscreen turns the player sideways and exit fullscreen upright, but a phone turned sideways by hand still offers fullscreen | upright, fullscreen turns the player sideways, and then it turns with the phone again; held sideways, however it got there, the button is exit fullscreen and turns it upright (section 11.4.3) | approved |
+| 11.C8 | The phone app's fullscreen turns the player | Phone app | Android: fullscreen hides the system bars and doesn't turn the player, and held sideways the button still offers fullscreen. iOS: fullscreen turns the player sideways and exit fullscreen upright, but a phone turned sideways by hand still offers fullscreen | upright, fullscreen turns the player sideways, and then it turns with the phone again; held sideways, however it got there, the button is exit fullscreen and turns it upright, where it stays until the phone is turned sideways again or fullscreen is pressed (section 11.4.3) | approved |
 | 11.C9 | Web: turning a phone back upright leaves full screen | Web | turned sideways, a phone asks for full screen and holds the page sideways, so where the browser holds it, turning back upright doesn't leave full screen | ask for full screen without holding the page sideways; turned back upright, leave only the full screen it went into when the phone was turned, never one asked for with fullscreen (section 11.4.3) | approved |
 | 11.C10 | iOS: AirPlay at the top | Phone app (iOS) | AirPlay and picture in picture sit in the bar after quality; held sideways, playback info comes before previous and next episode | AirPlay at the right of the top, in cast's place; picture in picture after settings; previous, next, playback info and fullscreen as in figure 11.4 (section 11.12) | approved |
 | 11.C11 | Samsung TV: the top and the row | Samsung TV | no top: the code and the episode's name above the seek bar, back the first button of the row; no home, volume, speed, previous episode or playback info; quality with a gauge; the seek bar takes no focus | figure 11.7: back, home and the title with its show at the top; play, the volume, audio and subtitles, speed, settings, previous and next episode and playback info in the row; the seek bar a focus stop | approved |
@@ -1013,11 +1073,13 @@ subtitles to [chapter 12](./subtitles.md).
 | 11.C50 | A 5.1 track: where it is listed and where it starts | Phone app (Android), Android TV | every app has code that asks the server for a title's 5.1 tracks and lists them beside the stereo ones; where it asks and which track starts differ. Web: asks where the browser says it decodes the codec, and starts on the 5.1 one; where the browser plays the stream itself, the browser picks. Phone app (Android): asks where a decoder or the output plays the codec; its player picks which starts. Phone app (iOS): asks where iOS says it plays the codec; the system's player picks, by where the sound goes. Android TV: asks where the TV decodes E-AC-3 or its output takes it as it is, and starts on the 5.1 one only where the output takes it, else on the stereo one; it asks the output about E-AC-3 alone, also where the tracks are AC-3. Samsung TV: asks on every TV its own player plays on, without asking the TV, and starts on the 5.1 one | Recommended: section 11.14.1: a 5.1 track is listed where the device plays its codec, and a title starts on it only where the device says its sound goes out in more than two channels, else on the stereo track, as Android TV has it today. Phone app (Android): the 5.1 track first where the output takes it as it is, or the phone's spatial sound is on for the output, and the stereo one otherwise, by a rule of the app's own. Android TV: the output asked about the codec the tracks are in, AC-3 as well as E-AC-3. The web's own player and the Samsung TV, which can't say where their sound goes, start on the 5.1 track as today. The rows' names are section 12.6's (11.C30). The other choice is the 5.1 track first wherever the device decodes it, which leaves folding it down to the device | approved |
 | 11.C51 | A 5.1 track checked on real devices | Web, Phone app, Android TV, Samsung TV | which apps play a 5.1 track, and how it sounds, is known from their code alone: no device has been listened to | section 11.14.2: the test title, a channel named in turn, plays on each device of the section's table, with E-AC-3 tracks and with AC-3 ones; what the device offered, which track started and what was heard goes into section 11.2.6, one row a device; an app stops naming the codec on a kind of device that claims it and plays silence, the wrong channels, or sound out of step with the picture; done when every row is filled | approved |
 | 11.C52 | Phone app: how playback went, to the server | Phone app | the phone app tells the server of picks, retries, skips and failures, one event a request, with the device's details; of the five kinds that measure playback it sends none, but on iOS a `startup_timeout` without its mode and phase | section 11.13.2, as Android TV has it: the five events with the web's names and fields, within a session's limits, sent together, named `chino-mobile-android` or `chino-mobile-ios`, without the device's details | approved |
+| 11.C53 | A phone's player opens sideways | Phone app | a title opens as the phone is held: upright, where the phone's own setting holds apps upright, and then only fullscreen (iOS) or nothing (Android) turns it | Recommended: on a phone, a screen whose short side is less than 600 dp, a title opens sideways and full screen, whatever the phone's setting for turning says; a title started from the player keeps the way it stands; a tablet opens as it is held (section 11.4.3) | approved |
+| 11.C54 | A double tap skips 10 seconds | Web, Phone app | not found: two taps are two single taps | Recommended: on a touch screen, a double tap in the picture's left half goes back 10 seconds and one in its right half forward, more taps adding up, with the mark of figure 11.13; the controls stay as they were (section 11.4.4) | approved |
 
 ## 11.17 States
 
 The player is drawn in figures 11.4 to 11.7 while a title plays. Figures 11.11
-and 11.12 show the states in between.
+and 11.12 show the states in between, and figure 11.13 a double tap.
 
 ![Figure 11.11: A title starting, on a phone](./img/player-loading-phone.png)
 
@@ -1073,12 +1135,23 @@ A title that shows no picture within 20 seconds of the player opening, or of
 server within 20 seconds.” Only the time the player is on the screen counts, so
 a tab opened in the background isn't taken for a start that hangs.
 
+![Figure 11.13: A double tap in the picture's right half, on a phone held sideways, at 780 × 360 dp](./img/player-double-tap-phone.png)
+
+Figure 11.13: A double tap in the picture's right half, on a phone held
+sideways, at 780 × 360 dp.
+
+1. **The mark** of a double tap: fast forward and the seconds so far, in the
+   middle of the half that was tapped. The controls were hidden, and stay
+   hidden (section 11.4.4).
+
 | State | What the player shows |
 |---|---|
 | Starting | Figure 11.11 |
 | Converting as it plays | After 5 seconds of a start, the line of figure 11.11 says so: “Converting the video for this browser” |
 | Waiting while it plays | The panel of figure 11.11 with the line for what it does, over the picture |
 | The quality changed by itself | Figure 11.10, with the line of section 11.13 |
+| A double tap on the picture, on a touch screen | Figure 11.13: the mark in the half that was tapped, for 0.6 seconds after the last tap; the controls as they were |
+| A double tap back within the first 10 seconds, or forward within the last 10 | The title's start, or a second before its end; the mark says the seconds asked for |
 | A start that hangs | After 20 seconds without a picture, figure 11.12 with “Nothing playable came from the server within 20 seconds.” |
 | Couldn't play | Figure 11.12, with the sentence for the cause and the report's number |
 | The title isn't in the library anymore | “this title isn't in the library anymore”, with **back** ([chapter 17](./errors.md)) |
@@ -1096,6 +1169,7 @@ a tab opened in the background isn't taken for a start that hangs.
 | The menus' headers | quality · subtitle timing · speed; the panel's are in [chapter 12](./subtitles.md) |
 | The menus' rows | Original · Auto · “Auto · Medium (720p)” · the names of section 11.9 · − · + · “0.00s”, “+0.25s”, “−0.50s” · reset · 0.5x · 0.75x · normal · 1.25x · 1.5x · 1.75x · 2x |
 | Skip | skip intro · skip recap · skip credits |
+| A double tap's mark | −10 s · +10 s · the seconds added up: −20 s, +30 s |
 | Auto-skip | Skipping the intro in 3 seconds. · Skipping the recap in 3 seconds. · skip now · watch the intro · watch the recap · Skipped the intro. · Skipped the intro and the recap. · watch from the start |
 | Up next | up next · “S01E04 · Triangular Diplomacy” · Starts in 3 seconds. · play now · cancel |
 | The quality notices | the four lines of section 11.13 |

@@ -199,14 +199,15 @@ Figure 9.5: Search on a computer, at 1280 × 800.
    it from anywhere, except while the person is typing in another field. As
    soon as it holds a letter, the results take the page's place, and no view
    in the rail is current.
-2. **cast & crew**: the people whose names match, in one line of cards. A card
-   shows the photo, or the initials where the catalog has no photo, the name,
-   and how many of their titles the library has: “1 title”. It opens the
-   person's page ([chapter 7](./person.md)).
-3. **titles**: the movies, shows and episodes that match, in one grid, the best
+2. **titles**: the movies, shows and episodes that match, in one grid, the best
    match first, whatever its kind. The cards are those of movies and shows
    ([chapter 5](./browse.md)), with their status marks and the button of
-   their menu.
+   their menu. The titles come first: most searches are for a movie or a
+   show.
+3. **cast & crew**: the people whose names match, under the titles, in one
+   line of cards. A card shows the photo, or the initials where the catalog
+   has no photo, the name, and how many of their titles the library has:
+   “1 title”. It opens the person's page ([chapter 7](./person.md)).
 
 Esc in the field empties it and brings back the page the person was on, and so
 does choosing a view in the rail. The address holds the words, so a reload, or
@@ -246,9 +247,10 @@ Figure 9.7: Search on a phone held upright, at 360 × 780 dp.
 1. **×**, the design system's quiet icon button at the field's end, empties
    the field and brings the page back. The field stays open, with the
    keyboard, for other words.
-2. **cast & crew** is one line that scrolls sideways, with a card and a part of
-   the next in view, so the people never push the titles far down.
-3. **titles**, three to a line, as in movies and shows.
+2. **titles**, three to a line, as in movies and shows. They come first, so
+   no person stands between the field and the titles.
+3. **cast & crew** follows under the last title, as one line that scrolls
+   sideways, with a card and a part of the next in view.
 
 The tabs stay under the results, with none of them current, and a tab closes
 the search and opens its view. The web on a phone works as figures 9.6 and
@@ -276,9 +278,10 @@ Figure 9.9 shows the results, with the keyboard closed.
 Figure 9.9: Search on a phone held sideways, at 780 × 360 dp.
 
 1. **The field**, in the slimmer bar, with × to empty it.
-2. **cast & crew**, one line of cards, with more of them in view.
-3. **titles**: the posters keep the size they have upright, so six stand on a
+2. **titles**: the posters keep the size they have upright, so six stand on a
    line; here all four that match.
+3. **cast & crew**, one line of cards under the titles, with more of them in
+   view than upright; here it begins at the foot of the screen.
 4. **The tabs** stand as a rail down the left edge while the keyboard is
    closed ([chapter 2](./frame.md)).
 
@@ -320,8 +323,10 @@ Figure 9.10: Search on a TV, at 960 × 540 dp.
    cards, as here.
 
 The results sit beside the keyboard, so they change in view as the person
-types. Back leaves the search for the view the person came from. The same
-keyboard types a list's name on a TV ([chapter 8](./watchlist.md)).
+types. Where people match as well, **cast & crew** stands under the titles, as
+one line of cards, and down from the last line of titles goes into it. Back
+leaves the search for the view the person came from. The same keyboard types a
+list's name on a TV ([chapter 8](./watchlist.md)).
 
 ## 9.6 What search finds
 
@@ -335,11 +340,15 @@ keyboard types a list's name on a TV ([chapter 8](./watchlist.md)).
   them, then one spelled close to them. A title's description counts only when
   no name matches. People are ranked apart, the same way.
 - Up to 60 titles and 12 people show, the best first.
+- The titles stand first and the people under them, in every app. A group
+  with nothing found is left out with its heading, so where only people match
+  they stand at the top.
 - An episode shows as its show's card, with its code and name under the
   show's name, “S01E01 · Llama Drama”. When the show's own name matches as
   well, its card and the episode's are one.
 - As the results change, a screen reader says how many there are:
-  “3 people, 4 titles”, or “no matches”.
+  “4 titles, 3 people”, or “no matches”, in the order they stand on the
+  screen.
 
 ### 9.6.2 Opening a result, and leaving
 
@@ -364,7 +373,7 @@ frame, the phone's search icon and the search on the TV's rail belong to
 | No. | Change | Apps | Today | Target | Status |
 |---|---|---|---|---|---|
 | 9.C1 | The results in the page, as people type | Web | from the second letter, 0.2 seconds after the last key, a list of up to eight movies and shows under the field, without people (figure 9.1); Enter opens the results page, which doesn't change as people type | Recommended: no list under the field; from the first letter, a quarter of a second after the last key, the results take the page's place and change in place (figure 9.5, section 9.6.1). The posters and the people need the room, and the phone and the TV have no other place for them | approved |
-| 9.C2 | Two groups, cast & crew and titles | Web, Phone app, Android TV, Samsung TV | Web: “9 results for "s"”, counting the people and the titles, “CAST & CREW” in capitals, the titles without a heading (figure 9.2). Phone app, Samsung TV: “Cast & crew”, then “4 results for "s"”, counting the titles. Android TV: “cast & crew”, then “4 results for “s”” | the groups **cast & crew** and **titles**, without a line that counts them; a group with nothing found is left out with its heading (figures 9.5, 9.7) | approved |
+| 9.C2 | Two groups, titles and cast & crew | Web, Phone app, Android TV, Samsung TV | Web: “9 results for "s"”, counting the people and the titles, “CAST & CREW” in capitals, the titles without a heading (figure 9.2). Phone app, Samsung TV: “Cast & crew”, then “4 results for "s"”, counting the titles. Android TV: “cast & crew”, then “4 results for “s”” | the groups **titles** and **cast & crew**, without a line that counts them; a group with nothing found is left out with its heading (figures 9.5, 9.7); their order is 9.C16's | approved |
 | 9.C3 | The people in one line | Web, Phone app, Android TV, Samsung TV | Web: cards three to a line, one below 640 px (figure 9.3). Phone app: one under the other. Every app: “· 1 title” | one line of cards, scrolling sideways on a phone with a card and a part of the next in view; a card says “1 title” (figures 9.5, 9.7) | approved |
 | 9.C4 | The titles' size and number | Web, Phone app | Web: two to a line below 640 px. Phone app: two to a line at 360 dp, three held sideways; at most 40 titles | three to a line upright, six held sideways, at the size of a poster in movies and shows; up to 60 titles and 12 people (figures 9.7, 9.9, section 9.6.1) | approved |
 | 9.C5 | Episodes in search | Web, Phone app, Android TV, Samsung TV | only movies and shows are asked for | an episode as its show's card with the episode under the name, “S01E03 · Llamigos”, opening the show's page on it; one card where the show matched too (figure 9.10, section 9.6.1) | approved |
@@ -376,8 +385,9 @@ frame, the phone's search icon and the search on the TV's rail belong to
 | 9.C11 | Phone app: a tab closes the search | Phone app | choosing a tab keeps the results until the field is empty | a tab closes the search and opens its view; × empties the field and keeps it open, with the keyboard (section 9.4.1) | approved |
 | 9.C12 | Back from a result | Phone app, Android TV, Samsung TV | Phone app: the search runs again, with its spinner. Android TV: the results stay, the focus on the field. Samsung TV: the words are gone | the results as they were, with the words in the field; on a TV the focus on the result that was opened (section 9.6.2) | approved |
 | 9.C13 | The TV's own keyboard beside the results | Android TV, Samsung TV | Android TV: the system's keyboard. Samsung TV: the app's keyboard over the whole screen, hiding the results: 1–0, q–p, a–l and @, z–m and . - /, signs, space, delete and done | Recommended: the app's own keyboard in the page, a to z and 0 to 9 in six columns, then **space** and **delete**, its keys chino's own, as the design system has no keyboard: 42 dp square, 12 dp apart, in the look of its standard buttons, with the results beside it (figure 9.10); the same keyboard types a list's name ([chapter 8](./watchlist.md)) | approved |
-| 9.C14 | A screen reader hears the count | Web, Phone app, Android TV, Samsung TV | not found | “3 people, 4 titles”, or “no matches”, as the results change (section 9.6.1) | approved |
+| 9.C14 | A screen reader hears the count | Web, Phone app, Android TV, Samsung TV | not found | “4 titles, 3 people”, or “no matches”, as the results change, in the order they stand on the screen (section 9.6.1) | approved |
 | 9.C15 | The field's placeholder | Web, Phone app, Android TV, Samsung TV | “Search movies, shows…” in every app; on the web narrower than 768 px it is cut off, “Search movies, sho” | “search movies, shows and people…” on a computer and a TV; “search…” in the phone's field, which opens from the bar's search icon (2.C3, section 9.4.1): lowercase and ending in “…”, as the design system's top bar words a search's placeholder, “search apps…” | approved |
+| 9.C16 | The titles before cast & crew | Web, Phone app, Android TV, Samsung TV | cast & crew stands above the titles in every app; in the phone app up to 12 people stand one under the other, so the titles begin far down the screen | the titles first and cast & crew under them, in every app; where only people match, they stand at the top (figures 9.5, 9.7, 9.9, section 9.6.1) | approved |
 
 ## 9.8 States
 
@@ -389,7 +399,7 @@ Figures 9.11 and 9.12 show the states in between.
 Figure 9.11: Search loading, on a computer.
 
 The first results for new words show nothing for the first 0.4 seconds, and
-after that grey blocks in the shape of a line of people and a line of posters,
+after that grey blocks in the shape of a line of posters and a line of people,
 as the design system's
 [loading and progress](https://nalet.github.io/design-system/patterns/loading-and-progress/)
 describes. Typing on, the results that are there stay at full strength, with a
@@ -432,12 +442,12 @@ stay, under a warning banner that says whose results they are.
 | The field's placeholder on a computer and a TV | search movies, shows and people… |
 | The field's placeholder on a phone | search… |
 | The phone's buttons, for screen readers | search · close search · clear search |
-| The groups | cast & crew · titles |
+| The groups | titles · cast & crew |
 | A person's card | Sergio Hasselbaink · 1 title · 4 titles |
 | A title's card | the name, and the year: 2010 |
 | An episode's card | the show's name, and “S01E01 · Llama Drama” |
 | The TV's keyboard | a–z · 0–9 · space · delete |
-| What a screen reader says as the results change | 3 people, 4 titles · no matches |
+| What a screen reader says as the results change | 4 titles, 3 people · no matches |
 | No matches | no matches · Nothing in the library fits this search. · clear search |
 | Couldn't search | couldn't search the library · Can't reach the server. · try again |
 | Couldn't search for new words | Couldn't search for “sp”; it shows the results for “s”. · try again |

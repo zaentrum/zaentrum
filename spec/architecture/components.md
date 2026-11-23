@@ -11,8 +11,8 @@ columns is on the [front page](./README.md#how-to-read-it).
 
 | Component | Is | Kind | Status | Code | Runs as | Capabilities | Settings | Decisions |
 |---|---|---|---|---|---|---|---|---|
-| `chino-web` | the web app | web | runs | [chino-web](https://github.com/zaentrum/chino-web) | `chino-web` | 88 | 24 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
-| `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 101 | 25 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-web` | the web app | web | runs | [chino-web](https://github.com/zaentrum/chino-web) | `chino-web` | 89 | 24 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
+| `chino-mobile` | the phone and tablet app | app | ships | [chino-mobile](https://github.com/zaentrum/chino-mobile) | — | 103 | 25 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
 | `chino-androidtv` | the Android TV app | app | ships | [chino-androidtv](https://github.com/zaentrum/chino-androidtv) | — | 88 | 21 | ADR-0022, ADR-0023, ADR-0016, ADR-0018 |
 | `chino-tizen` | the Samsung TV app | app | ships | [chino-tizen](https://github.com/zaentrum/chino-tizen) | — | 74 | 20 | ADR-0023, ADR-0016, ADR-0018 |
 | `chino-tvos` | an app for Apple TV | app | missing | — | — | — | — | — |

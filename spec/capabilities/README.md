@@ -137,27 +137,27 @@ model, each reference, change and id resolved, written by the same program.
 <!-- generated: overview -->
 | Part | Capabilities | In a chapter | Only in the docs | Nowhere | With a change | Served by nothing |
 |---|---|---|---|---|---|---|
-| [chino](./chino.md) | 151 | 136 | 3 | 12 | 144 | 16 |
+| [chino](./chino.md) | 153 | 138 | 3 | 12 | 146 | 16 |
 | [the portal](./portal.md) | 64 | 40 | 10 | 14 | 36 | 20 |
 | [the catalog and the pipeline](./catalog.md) | 55 | 22 | 19 | 14 | 22 | 14 |
 | [the platform](./platform.md) | 36 | 19 | 15 | 2 | 26 | 11 |
 | [later products](./platform.md) | 3 | 2 | 0 | 1 | 2 | 1 |
-| all | 309 | 219 | 47 | 43 | 230 | 62 |
+| all | 311 | 221 | 47 | 43 | 232 | 62 |
 
 | App or face | built | partial | no | — | ? |
 |---|---|---|---|---|---|
-| Web | 85 | 19 | 22 | 181 | 2 |
-| Phone | 77 | 37 | 28 | 165 | 2 |
-| Android TV | 80 | 23 | 26 | 178 | 2 |
-| Samsung TV | 44 | 31 | 53 | 179 | 2 |
-| Portal | 37 | 10 | 43 | 215 | 4 |
-| Catalog console | 14 | 8 | 28 | 255 | 4 |
-| CLI | 21 | 2 | 51 | 235 | 0 |
-| Resource | 32 | 3 | 10 | 264 | 0 |
+| Web | 85 | 19 | 23 | 182 | 2 |
+| Phone | 77 | 37 | 30 | 165 | 2 |
+| Android TV | 80 | 23 | 26 | 180 | 2 |
+| Samsung TV | 44 | 31 | 53 | 181 | 2 |
+| Portal | 37 | 10 | 43 | 217 | 4 |
+| Catalog console | 14 | 8 | 28 | 257 | 4 |
+| CLI | 21 | 2 | 51 | 237 | 0 |
+| Resource | 32 | 3 | 10 | 266 | 0 |
 
 | Numbered changes | Named by a capability | Not yet | Proposed | Approved | Built | Verified |
 |---|---|---|---|---|---|---|
-| 448 | 432 | 16 | 0 | 435 | 12 | 0 |
+| 451 | 435 | 16 | 0 | 438 | 12 | 0 |
 <!-- end: overview -->
 
 ## What is expected of it
@@ -182,7 +182,7 @@ a decision record rules it out.
 | [Trust it](./expectations.md#trust-it) | 4 | 2 | 1 | 1 | 0 | 0 |
 | all | 61 | 8 | 28 | 23 | 1 | 1 |
 
-Nothing serves 62 of the 309 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
+Nothing serves 62 of the 311 capabilities yet: no app or face has them, and no screen, route, command, field or setting is theirs.
 <!-- end: expected -->
 
 ## What the code offers

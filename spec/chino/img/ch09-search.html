@@ -32,14 +32,14 @@
   .phone .grid .card:has(> .nc-actionmenu__trigger) .tt { padding-right: 0; }
   .phone .grid .card:has(> .nc-actionmenu__trigger) .st { padding-right: 26px; }
   .phone .grid .card > .nc-actionmenu__trigger { right: -9px; bottom: -9px; }
-  /* the results: cast & crew, then titles */
+  /* the results: titles, then cast & crew */
   .grp { margin-bottom: 32px; }
   .grp .h2 { margin-bottom: 12px; }
   .people { display: flex; gap: 16px; }
   /* on a computer this mark meets its part a little lower down, at a point (.at), so that its
      line passes between the rail's icons: frame.js draws a line level with what it marks */
   .at { position: absolute; left: 0; width: 1px; height: 2px; }
-  .computer .people { position: relative; }
+  .computer .people, .computer .grid { position: relative; }
   .person { flex: none; width: 260px; display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface); border: 1px solid var(--border); }
   .person .ph { width: 48px; height: 48px; flex: none; }
   .person .who { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -118,20 +118,20 @@
   <div class="computer typing" data-view="none" data-query="s" data-co-parts="search:1:top">
     <div class="pg">
       <section class="grp">
-        <h2 class="h2">cast &amp; crew</h2>
-        <div class="people"><i class="at" style="top:56px" data-co="2"></i>
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sacha Goedegebure</span><span class="sb">1 title</span></div></div>
-        </div>
-      </section>
-      <section class="grp">
         <h2 class="h2">titles</h2>
-        <div class="grid">
-          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
+        <div class="grid"><i class="at" style="top:8px" data-co="2"></i>
+          <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
+        </div>
+      </section>
+      <section class="grp">
+        <h2 class="h2">cast &amp; crew</h2>
+        <div class="people"><i class="at" style="top:56px" data-co="3"></i>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sacha Goedegebure</span><span class="sb">1 title</span></div></div>
         </div>
       </section>
     </div>
@@ -179,19 +179,19 @@
     </header>
     <div class="pg">
       <section class="grp">
-        <h2 class="h2">cast &amp; crew</h2>
-        <div class="people">
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
-          <div class="person" data-co="2" data-co-side="right"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
-        </div>
-      </section>
-      <section class="grp">
         <h2 class="h2">titles</h2>
         <div class="grid">
-          <div class="card poster"><div class="img" data-co="3"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
+          <div class="card poster"><div class="img" data-co="2"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
+        </div>
+      </section>
+      <section class="grp">
+        <h2 class="h2">cast &amp; crew</h2>
+        <div class="people">
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
+          <div class="person" data-co="3" data-co-side="right"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
         </div>
       </section>
     </div>
@@ -230,20 +230,20 @@
     </header>
     <div class="pg">
       <section class="grp">
-        <h2 class="h2" data-co="2" data-co-side="right">cast &amp; crew</h2>
-        <div class="people">
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
-          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sacha Goedegebure</span><span class="sb">1 title</span></div></div>
-        </div>
-      </section>
-      <section class="grp">
-        <h2 class="h2" data-co="3" data-co-side="right">titles</h2>
+        <h2 class="h2" data-co="2" data-co-side="right">titles</h2>
         <div class="grid">
           <div class="card poster"><div class="img"><div class="art a2"></div><div class="bar"><i style="width:36%"></i></div></div><div class="tt">Sintel</div><div class="st">2010</div><ds-menubutton size="md" label="actions for Sintel"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art a6"></div><span class="mk wl"><i data-i="bookmark" class="fill s14"></i></span><div class="bar"><i style="width:55%"></i></div></div><div class="tt">Sprite Fright</div><div class="st">2021</div><ds-menubutton size="md" label="actions for Sprite Fright"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art x5"></div></div><div class="tt">Spring</div><div class="st">2019</div><ds-menubutton size="md" label="actions for Spring"></ds-menubutton></div>
           <div class="card poster"><div class="img"><div class="art steel"></div></div><div class="tt">Tears of Steel</div><div class="st">2012</div><ds-menubutton size="md" label="actions for Tears of Steel"></ds-menubutton></div>
+        </div>
+      </section>
+      <section class="grp">
+        <h2 class="h2" data-co="3" data-co-side="right">cast &amp; crew</h2>
+        <div class="people">
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sergio Hasselbaink</span><span class="sb">1 title</span></div></div>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Rogier Schippers</span><span class="sb">1 title</span></div></div>
+          <div class="person"><div class="ph face"></div><div class="who"><span class="nm">Sacha Goedegebure</span><span class="sb">1 title</span></div></div>
         </div>
       </section>
     </div>
@@ -282,14 +282,6 @@
   <div class="computer typing" data-view="none" data-query="s">
     <div class="pg">
       <section class="grp">
-        <div class="sk" style="width:120px;height:16px;margin-bottom:12px"></div>
-        <div class="people">
-          <div class="sk" style="width:260px;height:74px"></div>
-          <div class="sk" style="width:260px;height:74px"></div>
-          <div class="sk" style="width:260px;height:74px"></div>
-        </div>
-      </section>
-      <section class="grp">
         <div class="sk" style="width:64px;height:16px;margin-bottom:12px"></div>
         <div class="grid">
           <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
@@ -299,6 +291,14 @@
           <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
           <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
           <div class="card poster"><div class="img sk"></div><div class="sk ln"></div><div class="sk ln2"></div></div>
+        </div>
+      </section>
+      <section class="grp">
+        <div class="sk" style="width:120px;height:16px;margin-bottom:12px"></div>
+        <div class="people">
+          <div class="sk" style="width:260px;height:74px"></div>
+          <div class="sk" style="width:260px;height:74px"></div>
+          <div class="sk" style="width:260px;height:74px"></div>
         </div>
       </section>
     </div>

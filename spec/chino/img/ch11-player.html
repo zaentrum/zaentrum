@@ -55,6 +55,11 @@
   .vol { width: 96px; height: 4px; background: var(--border-2); position: relative; margin: 0 6px; flex: none; }
   .vol > i { position: absolute; left: 0; top: 0; bottom: 0; width: 80%; background: var(--cloud-blue); }
 
+  /* a double tap's mark: chino's own, on the design system's tokens; the icon and the seconds so far, in the
+     middle of the half that was tapped, without a frame, on a picture darkened under it alone */
+  .dtap { position: absolute; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 8px;
+          padding: 14px 18px; background: rgba(0,0,0,.6); color: var(--fg); font: 600 15px/1 var(--ff-mono); }
+  .dtap.fwd { left: 75%; } .dtap.back { left: 25%; }
   /* a phone: 42 dp buttons 6 dp apart, so each keeps a touch area of 48 dp */
   .phone .top, .phone .btns, .phone .grp { gap: 6px; }
   .phone .top { padding: 12px 12px 36px; }
@@ -385,6 +390,16 @@
         <div class="det" data-co="4"><span class="tg">details</span><span class="tx">the stream ended at 17:23 of 41:23 · packaged · High (1080p)</span></div>
         <ds-button variant="ghost" size="lg">report a bug</ds-button>
       </div>
+    </div>
+  </div>
+</figure>
+
+<!-- Figure 11.13 · a double tap in the picture's right half, on a phone held sideways: the controls hidden, as they were -->
+<figure class="shot" id="player-double-tap-phone">
+  <div class="phone side" data-bar="none" data-tabs="none">
+    <div class="pl">
+      <div class="pic"><div class="art a1"></div></div>
+      <div class="dtap fwd" data-co="1" data-co-side="right"><i data-i="fast-forward" class="s32"></i><span>+10 s</span></div>
     </div>
   </div>
 </figure>

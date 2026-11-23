@@ -153,9 +153,9 @@ flowchart LR
 | 11 | [People](#people) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 11 | 0 | 11 | 0 | 0 |
 | 12 | [Watchlist and lists](#watchlist-and-lists) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 17 | 0 | 17 | 0 | 0 |
 | 13 | [Movies and shows apart in the lists](#movies-and-shows-apart-in-the-lists) | Groundwork in every repository | 2 | 0 | 2 | 0 | 0 |
-| 14 | [Search](#search) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 15 | 0 | 15 | 0 | 0 |
+| 14 | [Search](#search) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 16 | 0 | 16 | 0 | 0 |
 | 15 | [Zap](#zap) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 21 | 0 | 21 | 0 | 0 |
-| 16 | [The player](#the-player) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 52 | 0 | 52 | 0 | 0 |
+| 16 | [The player](#the-player) | The frame, and the design system in the apps, When something goes wrong, Every text from the message catalogue, in the person's language | 54 | 0 | 54 | 0 | 0 |
 | 17 | [Subtitles](#subtitles) | The player | 11 | 0 | 11 | 0 | 0 |
 | 18 | [Downloads and offline](#downloads-and-offline) | The title page | 6 | 0 | 6 | 0 | 0 |
 | 19 | [Casting](#casting) | The player, Subtitles | 9 | 0 | 9 | 0 | 0 |
@@ -422,7 +422,7 @@ The one search and its results. After: [The frame, and the design system in the 
 | No. | Change | Where | Status |
 |---|---|---|---|
 | [9.C1](../chino/search.md#97-changes) | The results in the page, as people type | Web | approved |
-| [9.C2](../chino/search.md#97-changes) | Two groups, cast & crew and titles | Web, Phone app, Android TV, Samsung TV | approved |
+| [9.C2](../chino/search.md#97-changes) | Two groups, titles and cast & crew | Web, Phone app, Android TV, Samsung TV | approved |
 | [9.C3](../chino/search.md#97-changes) | The people in one line | Web, Phone app, Android TV, Samsung TV | approved |
 | [9.C4](../chino/search.md#97-changes) | The titles' size and number | Web, Phone app | approved |
 | [9.C5](../chino/search.md#97-changes) | Episodes in search | Web, Phone app, Android TV, Samsung TV | approved |
@@ -436,6 +436,7 @@ The one search and its results. After: [The frame, and the design system in the 
 | [9.C13](../chino/search.md#97-changes) | The TV's own keyboard beside the results | Android TV, Samsung TV | approved |
 | [9.C14](../chino/search.md#97-changes) | A screen reader hears the count | Web, Phone app, Android TV, Samsung TV | approved |
 | [9.C15](../chino/search.md#97-changes) | The field's placeholder | Web, Phone app, Android TV, Samsung TV | approved |
+| [9.C16](../chino/search.md#97-changes) | The titles before cast & crew | Web, Phone app, Android TV, Samsung TV | approved |
 
 ## Zap
 
@@ -523,6 +524,8 @@ Watching, and the player's controls and menus; what the player tells the server;
 | [11.C50](../chino/playback.md#1116-changes) | A 5.1 track: where it is listed and where it starts | Phone app (Android), Android TV | approved |
 | [11.C51](../chino/playback.md#1116-changes) | A 5.1 track checked on real devices | Web, Phone app, Android TV, Samsung TV | approved |
 | [11.C52](../chino/playback.md#1116-changes) | Phone app: how playback went, to the server | Phone app | approved |
+| [11.C53](../chino/playback.md#1116-changes) | A phone's player opens sideways | Phone app | approved |
+| [11.C54](../chino/playback.md#1116-changes) | A double tap skips 10 seconds | Web, Phone app | approved |
 
 ## Subtitles
 

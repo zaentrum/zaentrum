@@ -329,7 +329,7 @@ Finding a title or a person by name. Specified in [chapter 9](../chino/search.md
 | Use what an addon offers when a search finds nothing | person | built | built | built | built | [9.8](../chino/search.md#98-states) |
 
 - Find a movie or a show by its name: from the top bar of every view; one list for both kinds, ranked by how well the name matches, close spellings too
-- Find a person by name: cast & crew over the titles; the web's list under the field leaves people out
+- Find a person by name: cast & crew stands over the titles today
 - Find an episode by its name: the server finds episodes; every app asks for movies and shows only
 - See the results change while typing: web: eight titles under the field, the results page only on Enter; Samsung's keyboard covers the results
 - Come back to the results as they were after opening one: the phone runs the search again; Android TV keeps them but focuses the field; Samsung forgets the words
@@ -337,8 +337,8 @@ Finding a title or a person by name. Specified in [chapter 9](../chino/search.md
 
 | Key | Changes | Next | Served by | Settings |
 |---|---|---|---|---|
-| `search-titles` | 9.C2, 9.C4, 9.C7, 9.C8, 9.C9, 9.C10, 9.C15 | — | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/items`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
-| `search-people` | 9.C2, 9.C3 | — | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/people`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
+| `search-titles` | 9.C2, 9.C4, 9.C7, 9.C8, 9.C9, 9.C10, 9.C15, 9.C16 | — | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/items`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
+| `search-people` | 9.C2, 9.C3, 9.C16 | — | `chino-api GET /api/v1/search`, `chino-api GET /api/v1/people`, `katalog-api GET /search` and 1 more | `search-result-limits`, `search-spelling-tolerance` |
 | `search-episodes` | 9.C5 | build | `chino-api GET /api/v1/search`, `katalog-api GET /search` | — |
 | `search-as-you-type` | 9.C1, 9.C6, 9.C11, 9.C13 | build | `chino-api GET /api/v1/search` | `search-debounce` |
 | `return-to-results` | 9.C12 | build | — | — |
@@ -390,8 +390,10 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
 | Play a movie or an episode | person | built | built | built | built | [11.3](../chino/playback.md#113-the-player-on-a-computer), [11.4](../chino/playback.md#114-the-player-on-a-phone), [11.5](../chino/playback.md#115-the-player-on-a-tv), [11.6](../chino/playback.md#116-showing-and-hiding-the-controls), [11.17](../chino/playback.md#1117-states), [0002 prepackaged playback](../../docs/adr/0002-prepackaged-playback.md), [0013 live rungs safety net](../../docs/adr/0013-live-rungs-safety-net.md) |
+| Open a title sideways and full screen on a phone | system | — | no | — | — | [11.4.3](../chino/playback.md#1143-opening-sideways-and-turning-the-phone) |
 | Resume a title where it stopped, or start it over | person | partial | built | partial | partial | [11.7](../chino/playback.md#117-play-resume-and-a-finished-title) |
 | Seek within a title, with a still of the moment and its marked parts | person | built | partial | partial | partial | [11.3](../chino/playback.md#113-the-player-on-a-computer), [11.4.2](../chino/playback.md#1142-held-sideways), [11.5](../chino/playback.md#115-the-player-on-a-tv) |
+| Go back or forward 10 seconds with a double tap on the picture | person | no | no | — | — | [11.4.4](../chino/playback.md#1144-a-double-tap-10-seconds-back-or-forward) |
 | Skip the intro, a recap or the credits with one press | person | built | built | built | built | [11.8.1](../chino/playback.md#1181-skip-intro-skip-recap-and-skip-credits) |
 | Skip intros and recaps by themselves on episodes watched in a row | system | partial | no | partial | partial | [11.8.2](../chino/playback.md#1182-auto-skip), [16.4.2](../chino/settings.md#1642-binge-watching) |
 | Go on to the next episode with up next | person | built | partial | partial | partial | [11.8.3](../chino/playback.md#1183-up-next), [11.8.4](../chino/playback.md#1184-going-on-to-the-next-episode) |
@@ -413,8 +415,10 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | Keep a session for every stream: who plays what, on which device | system | — | — | — | — | [portal people](../portal/people.md) |
 
 - Play a movie or an episode: the package, or a version converted as it plays; Samsung has no top and no home; what a start shows differs per app
+- Open a title sideways and full screen on a phone: today a title opens as the phone is held, upright where the phone's own setting holds apps upright; a tablet opens as it is held
 - Resume a title where it stopped, or start it over: saved every 10 s; the web saves no more, Samsung not on pause, Android TV even before a resume landed; the phone keeps it offline
 - Seek within a title, with a still of the moment and its marked parts: the apps show the still for ready-made titles only, Samsung without the time; Samsung's seek bar takes no focus
+- Go back or forward 10 seconds with a double tap on the picture: on a touch screen only: a mouse has no double click, and a screen reader's double tap presses what has the focus
 - Skip the intro, a recap or the credits with one press: the web offers skip credits only without a next episode; Samsung offers a skip for any part, a chapter too
 - Skip intros and recaps by themselves on episodes watched in a row: the web skips the intro only; the phone app's player reads no setting; the TVs skip on every episode, the first too, and credits
 - Go on to the next episode with up next: phone: up next only with auto-play on, without the name; Android TV: a note without buttons; Samsung: no card
@@ -437,8 +441,10 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | Key | Changes | Next | Served by | Settings |
 |---|---|---|---|---|
 | `play-title` | 11.C1, 11.C7, 11.C8, 11.C9, 11.C11, 11.C14, 11.C42, 11.C43 | — | `chino-api POST /api/v1/me/stream-token`, `chino-api GET /api/v1/items/{id}`, `chino-api GET /api/v1/items/{id}/play/info` and 17 more | `stream-token-lifetime`, `controls-hide` |
+| `open-player-sideways` | 11.C53 | build | — | — |
 | `resume-title` | 11.C39, 11.C40 | build | `chino-api GET /api/v1/items/{id}/progress`, `chino-api POST /api/v1/items/{id}/progress` | `progress-save-interval`, `restart-near-end`, `resume-floor`, `watched-rule` |
 | `seek-title` | 11.C15, 11.C16, 11.C17, 11.C18 | build | `chino-api GET /api/v1/items/{id}/play/trickplay/*`, `chino-stream GET /trickplay/*`, `chino-api GET /api/v1/items/{id}/segments` and 1 more | `seek-step` |
+| `skip-by-double-tap` | 11.C54 | build | — | `seek-step` |
 | `skip-intro` | 11.C19 | — | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments` | — |
 | `auto-skip-intro` | 11.C20, 11.C21, 11.C27 | build | `chino-api GET /api/v1/items/{id}/segments`, `katalog-api GET /items/{id}/segments` | `auto-skip-intros`, `binge-countdown`, `binge-window`, `auto-skip-credits` |
 | `play-next-episode` | 11.C22, 11.C23, 11.C24, 11.C25, 11.C26, 11.C28 | build | `chino-api GET /api/v1/series/{id}/next-episode`, `katalog-api GET /series/{id}/episodes`, `chino-api GET /api/v1/items/{id}/segments` and 3 more | `auto-play-next`, `binge-countdown`, `up-next-trigger`, `next-episode-guard`, `next-episode-warm`, `zap-warm-slots` |

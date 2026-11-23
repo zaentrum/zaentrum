@@ -42,8 +42,8 @@ the targets, and the decision records the changes rest on.
 <!-- generated: ready -->
 | Of the capabilities |  |
 |---|---|
-| Capabilities that are not built | 218 |
-| a numbered change builds them | 179 |
+| Capabilities that are not built | 220 |
+| a numbered change builds them | 181 |
 | to be built, the change still to write | 0 |
 | left for later | 35 |
 | left to an addon | 3 |
@@ -52,9 +52,9 @@ the targets, and the decision records the changes rest on.
 
 | Of the changes |  |
 |---|---|
-| Numbered changes | 448 |
+| Numbered changes | 451 |
 | proposed | 0 |
-| approved | 435 |
+| approved | 438 |
 | built | 12 |
 | verified | 0 |
 | withdrawn | 1 |
@@ -106,6 +106,8 @@ Approving the change takes the recommendation.
 | [11.C42](../chino/playback.md#1116-changes) | A title starting: the loader with its line | Web, Phone app, Android TV, Samsung TV | approved |
 | [11.C45](../chino/playback.md#1116-changes) | Couldn't play: one screen, report a bug under details | Web, Phone app, Android TV, Samsung TV | approved |
 | [11.C50](../chino/playback.md#1116-changes) | A 5.1 track: where it is listed and where it starts | Phone app (Android), Android TV | approved |
+| [11.C53](../chino/playback.md#1116-changes) | A phone's player opens sideways | Phone app | approved |
+| [11.C54](../chino/playback.md#1116-changes) | A double tap skips 10 seconds | Web, Phone app | approved |
 | [12.C5](../chino/subtitles.md#1212-changes) | iOS: a subtitle it can't draw is left out | Phone app (iOS) | approved |
 | [14.C8](../chino/casting.md#147-changes) | The cast button in the iOS app | Phone app (iOS) | approved |
 | [14.C9](../chino/casting.md#147-changes) | The cast button on the web | Web, Server | approved |
