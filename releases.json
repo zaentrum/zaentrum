@@ -1,6 +1,10 @@
 {
-  "channels": { "stable": "v0.6.0", "edge": "latest" },
+  "channels": { "stable": "v0.6.1", "edge": "latest" },
   "versions": {
+    "v0.6.1": {
+      "released": "2026-11-24",
+      "notes": "Zaentrum v0.6.1: every image, the operator, its install, the appliance and the zae CLI, tagged together. https://github.com/zaentrum/zaentrum/releases/tag/v0.6.1"
+    },
     "v0.6.0": {
       "released": "2026-11-23",
       "notes": "Zaentrum v0.6.0: every image, the operator, its install, the appliance and the zae CLI, tagged together. https://github.com/zaentrum/zaentrum/releases/tag/v0.6.0"
