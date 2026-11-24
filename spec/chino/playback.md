@@ -413,14 +413,16 @@ open at its button, and the audio and subtitles panel stays open too
 ### 11.4.4 A double tap: 10 seconds back or forward
 
 On a touch screen, two taps on the picture, the second within 0.3 seconds of
-the first and in the same half, skip 10 seconds: back in the picture's left
-half, forward in its right half. It works in the phone app and on the web
-wherever the picture is touched, upright and sideways, whether the controls
-show or not. Figure 11.13 shows it.
+the first and in the same half, skip 10 seconds: back in the left half,
+forward in the right half. The halves are those of the whole area the player
+takes, so a tap on a black bar beside the picture counts with its half. It
+works in the phone app and on the web wherever the picture is touched, upright
+and sideways, whether the controls show or not. Figure 11.13 shows it.
 
 - **More taps add up.** Each further tap in the same half within 0.6 seconds
-  of the last adds 10 seconds, and the player seeks once more, to the sum:
-  four taps go 30 seconds.
+  of the last adds 10 seconds, and the player seeks once more, to the sum,
+  counted from the place the first skip started at: four taps go 30 seconds
+  from there.
 - **The mark**, in the middle of the half that was tapped: the design system's
   icon for rewind or fast forward, with the seconds so far under it, “−10 s”
   or “+30 s”. It comes with the second tap and goes 0.6 seconds after the
@@ -430,12 +432,14 @@ show or not. Figure 11.13 shows it.
   shows or hides them (section 11.6), once the 0.3 seconds a second tap may
   take have passed.
 - **Only the picture.** A tap on the bars or on a button is what it was. While
-  a menu, the audio and subtitles panel or a card of section 11.8 is open, a
-  tap is that part's. A tap in the left half and then one in the right half
-  are two single taps.
+  a menu, the audio and subtitles panel or a card of section 11.8 is open or
+  shows, no tap counts towards a double tap, beside that part too: each is
+  what a single tap was before. A tap in the left half and then one in the
+  right half are two single taps.
 - **At the ends.** Back never goes before the start. Forward stops a second
   before the end, so the skip itself never ends a title; what follows there
-  is up next's (section 11.8.3).
+  is up next's (section 11.8.3). Until the title's length is known, forward
+  does nothing.
 - **With a screen reader**, a double tap is the reader's own gesture for
   pressing what has the focus, so it skips nothing: the seek bar's steps of 10
   seconds are its way (section 11.18).
