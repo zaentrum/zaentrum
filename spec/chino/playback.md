@@ -385,7 +385,9 @@ open at its button, and the audio and subtitles panel stays open too
   screen whose short side is less than 600 dp: a tablet, and a phone unfolded
   to a tablet's size, opens as it is held, because from Android 16 on the
   system doesn't let an app turn a large screen. The web never turns the
-  page, so there a title opens as the phone is held.
+  page, so there a title opens as the phone is held. A title that plays on a
+  TV ([chapter 14](./casting.md)) doesn't turn the phone: the player turns
+  only where the title plays on the phone itself.
 - **Turned sideways**, the player goes full screen by itself. The phone app
   hides the status and navigation bars. The web asks the browser for full
   screen on a phone, a screen whose short side is 600 px or less, and only when

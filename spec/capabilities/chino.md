@@ -390,10 +390,10 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | Capability | Who | Web | Phone | Android TV | Samsung TV | Spec |
 |---|---|---|---|---|---|---|
 | Play a movie or an episode | person | built | built | built | built | [11.3](../chino/playback.md#113-the-player-on-a-computer), [11.4](../chino/playback.md#114-the-player-on-a-phone), [11.5](../chino/playback.md#115-the-player-on-a-tv), [11.6](../chino/playback.md#116-showing-and-hiding-the-controls), [11.17](../chino/playback.md#1117-states), [0002 prepackaged playback](../../docs/adr/0002-prepackaged-playback.md), [0013 live rungs safety net](../../docs/adr/0013-live-rungs-safety-net.md) |
-| Open a title sideways and full screen on a phone | system | — | no | — | — | [11.4.3](../chino/playback.md#1143-opening-sideways-and-turning-the-phone) |
+| Open a title sideways and full screen on a phone | system | — | partial | — | — | [11.4.3](../chino/playback.md#1143-opening-sideways-and-turning-the-phone) |
 | Resume a title where it stopped, or start it over | person | partial | built | partial | partial | [11.7](../chino/playback.md#117-play-resume-and-a-finished-title) |
 | Seek within a title, with a still of the moment and its marked parts | person | built | partial | partial | partial | [11.3](../chino/playback.md#113-the-player-on-a-computer), [11.4.2](../chino/playback.md#1142-held-sideways), [11.5](../chino/playback.md#115-the-player-on-a-tv) |
-| Go back or forward 10 seconds with a double tap on the picture | person | no | no | — | — | [11.4.4](../chino/playback.md#1144-a-double-tap-10-seconds-back-or-forward) |
+| Go back or forward 10 seconds with a double tap on the picture | person | built | partial | — | — | [11.4.4](../chino/playback.md#1144-a-double-tap-10-seconds-back-or-forward) |
 | Skip the intro, a recap or the credits with one press | person | built | built | built | built | [11.8.1](../chino/playback.md#1181-skip-intro-skip-recap-and-skip-credits) |
 | Skip intros and recaps by themselves on episodes watched in a row | system | partial | no | partial | partial | [11.8.2](../chino/playback.md#1182-auto-skip), [16.4.2](../chino/settings.md#1642-binge-watching) |
 | Go on to the next episode with up next | person | built | partial | partial | partial | [11.8.3](../chino/playback.md#1183-up-next), [11.8.4](../chino/playback.md#1184-going-on-to-the-next-episode) |
@@ -415,10 +415,10 @@ Playing a title: resume, quality, audio, skipping, the next episode, the picture
 | Keep a session for every stream: who plays what, on which device | system | — | — | — | — | [portal people](../portal/people.md) |
 
 - Play a movie or an episode: the package, or a version converted as it plays; Samsung has no top and no home; what a start shows differs per app
-- Open a title sideways and full screen on a phone: today a title opens as the phone is held, upright where the phone's own setting holds apps upright; a tablet opens as it is held
+- Open a title sideways and full screen on a phone: built in the Android app; the iOS app still opens a title as the phone is held; a tablet opens as it is held
 - Resume a title where it stopped, or start it over: saved every 10 s; the web saves no more, Samsung not on pause, Android TV even before a resume landed; the phone keeps it offline
 - Seek within a title, with a still of the moment and its marked parts: the apps show the still for ready-made titles only, Samsung without the time; Samsung's seek bar takes no focus
-- Go back or forward 10 seconds with a double tap on the picture: on a touch screen only: a mouse has no double click, and a screen reader's double tap presses what has the focus
+- Go back or forward 10 seconds with a double tap on the picture: touch only; a screen reader's double tap presses what has the focus; on the web and Android, the iOS player doesn't take the taps yet
 - Skip the intro, a recap or the credits with one press: the web offers skip credits only without a next episode; Samsung offers a skip for any part, a chapter too
 - Skip intros and recaps by themselves on episodes watched in a row: the web skips the intro only; the phone app's player reads no setting; the TVs skip on every episode, the first too, and credits
 - Go on to the next episode with up next: phone: up next only with auto-play on, without the name; Android TV: a note without buttons; Samsung: no card
